@@ -1,0 +1,23 @@
+{
+  "name": "matter",
+  "version": "0.0.9",
+  "description": "test",
+  "type": "module",
+  "scripts": {
+    "dev": "node rollup/dev.js",
+    "build": "tsc && rollup --config rollup/rollup.config.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "main": "./dist/main.js",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@svgr/rollup": "^7.0.0",
+    "rollup": "^3.20.2",
+    "rollup-plugin-uglify": "^6.0.4"
+  },
+  "dependencies": {
+    "fre": "^2.6.2"
+  }
+}

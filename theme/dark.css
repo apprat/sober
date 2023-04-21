@@ -1,0 +1,11 @@
+html {
+  --color-primary: 32, 32, 32;
+  --color-secondary: 64, 64, 64;
+  --color-accent: 96, 96, 96;
+  --color-text-primary: 88, 88, 88;
+  --color-text-secondary: 45, 45, 45;
+}
+
+body {
+  background: #f2f2f2;
+}

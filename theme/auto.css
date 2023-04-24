@@ -1,14 +1,9 @@
 html {
-  --color-primary: 26, 115, 232;
+  --color-primary: 56, 106, 32;
   --color-secondary: 64, 64, 64;
-  --color-accent: 26, 115, 232;
-  --color-text-primary: 88, 88, 88;
-  --color-text-secondary: 45, 45, 45;
+  --color-accent: 56, 106, 32;
+  --color-text-primary: 51, 51, 51;
+  --color-text-secondary: 2, 2, 2;
 }
 
 /**1.46 1.33 1.2 1.13 1.06 1 0.93 0.86 0.8 0.73 0.6**/
-
-body {
-  background: #f2f2f2;
-  font-size: 16px;
-}

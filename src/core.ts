@@ -1,11 +1,10 @@
 import { render, useState, useEffect, createElement } from 'fre'
 
-
 export class Base {
   state: object = {}
   property: object = {}
-  setState!: (value?: object, fn?: Function) => void
-  setProperty!: (value?: object, fn?: Function) => void
+  setState!: (value?: object) => Promise<void>
+  setProperty!: (value?: object) => Promise<void>
   shadowRoot!: ShadowRoot
   node!: HTMLElement
   onCreated() { }
@@ -20,17 +19,19 @@ const useComponent = (instance: Base) => {
     const [state, setState] = useState(instance.state)
     instance.state = state
     const callbacks: Function[] = []
-    instance.setState = (value, callback) => {
-      callback && callbacks.push(callback)
+    instance.setState = (value) => new Promise((resolve) => {
+      useEffect(() => () => resolve())
       setState({ ...state, ...value })
-    }
+    })
     const [property, setProperty] = useState(instance.property ?? {})
     instance.property = property
-    instance.setProperty = (value, callback) => {
-      callback && callbacks.push(callback)
-      setProperty({ ...state, ...value })
-    }
-    useEffect(() => () => callbacks.map(callback => callback()))
+    instance.setProperty = (value) => new Promise((resolve) => {
+      useEffect(() => () => resolve())
+      setProperty({ ...property, ...value })
+    })
+    useEffect(() => () => {
+      callbacks.map(callback => callback())
+    })
     return instance.render()
   }
 }
@@ -58,11 +59,13 @@ interface States {
 
 export const define = <
   const N extends string,
-  T extends Base,
-  P = T extends { property: infer P } ? P : never,
-  E = { new(): Partial<P> & HTMLElement }
->(componentName: N, BaseElement: { new(): T }): {
-  Element: E
+  T extends typeof Base,
+  O = T extends { new(): infer K } ? K : {},
+  P = O extends { property: infer K, } ? K : {},
+  E = { new(): Partial<P> & HTMLElement, prototype: HTMLElement },
+  M = Omit<T, 'prototype'>
+>(componentName: N, BaseElement: T): {
+  Element: E & M
   register: (name?: string) => void
   name: N
 } => {
@@ -84,18 +87,26 @@ export const define = <
         if (typeof defaultValue === 'string') return String(value)
         if (typeof defaultValue === 'number') return Number(value)
         if (typeof defaultValue === 'bigint') return BigInt(String(value))
-        if (typeof defaultValue === 'boolean') return Boolean(JSON.parse(String(value ?? true)))
-        if (typeof defaultValue === 'function' && typeof value === 'function') return value.bind(instance)
+        if (typeof defaultValue === 'boolean') {
+          if (value === "") return false
+          if (String(key) === value) return true
+          return Boolean(JSON.parse(String(value)))
+        }
+        if (typeof defaultValue === 'function' && typeof value === 'function') return value.bind(node)
         throw new TypeError()
       }
     }
     const getNewValue = (key: string, value?: PropertyValue) => {
-      if (typeof value === 'function') return states.parseType(key, value)
-      const old = node.getAttribute(key)
-      if (value === undefined && old === null) {
-        node.setAttribute(key, String(states.attrDefaults[key]))
+      if (typeof value === 'function') {
+        states.parseType(key, value)
         return
       }
+      const old = node.getAttribute(key)
+      if (value === undefined && old !== null) {
+        node.removeAttribute(key)
+        return
+      }
+      if (value === undefined && old === null) return states.attrDefaults[key]
       if (old === null || old !== String(value)) {
         node.setAttribute(key, String(value))
         return
@@ -107,7 +118,7 @@ export const define = <
         get: () => instance.property[key],
         set: (value: PropertyValue) => {
           const data = getNewValue(key, value)
-          if (!data) return
+          if (data === undefined) return
           if (states.inited) return instance.setProperty({ [key]: data })
           instance.property[key] = data
         }
@@ -115,6 +126,10 @@ export const define = <
       const value = instance.property[key]
       if (typeof value === 'function') instance.property[key] = value.bind(instance)
       states.attrDefaults[key] = value
+    }
+    for (const name of Object.getOwnPropertyNames(BaseElement)) {
+      if (['length', 'name', 'prototype'].includes(name)) continue
+      node[name] = BaseElement[name]
     }
     maps.set(node, [states, instance])
     await shadowRender(component, shadowRoot)
@@ -125,9 +140,8 @@ export const define = <
     if (states.unmounted) instance.onUnmounted()
     node.dispatchEvent(new Event('load'))
   }
-  const baseElement = new BaseElement()
   class Element extends HTMLElement {
-    static observedAttributes = Object.keys(baseElement.property)
+    static observedAttributes = Object.keys(new BaseElement().property)
     constructor() {
       super()
       const shadowRoot = this.attachShadow({ mode: 'closed' })
@@ -148,14 +162,10 @@ export const define = <
       if (!states.inited) return states.adopted = true
       instance.onAdopted()
     }
-    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
-      this[name] = newValue ?? undefined
-    }
   }
   return {
     Element,
     name: componentName,
-    property: baseElement.property,
     register: (name?: string) => {
       name = name ?? componentName
       !customElements.get(name) && customElements.define(name, Element)

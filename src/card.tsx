@@ -16,8 +16,8 @@ class Component extends Base {
     return <>
       <style jsx>{`
         :host{
-          user-select: none;
           -webkit-user-select: none;
+          user-select: none;
           display: flex;
         }
       `}</style>

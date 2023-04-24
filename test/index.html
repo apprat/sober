@@ -8,22 +8,37 @@
   <link rel="stylesheet" href="../theme/auto.css">
   <style>
     * {
-      margin: 8px;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :not(:defined) {
+      display: none;
+    }
+
+    body {
+      background: #f2f2f2;
+      color: #222;
+      font-weight: 400;
+      margin: 0;
+      font-size: .93rem;
+    }
+
+    m-ripple {
+      margin: 16px;
+      padding: 16px 24px;
     }
   </style>
 </head>
 
 <body>
-  <m-button>
-    BUTTON
-  </m-button>
-  <m-button disabled="true" raised>
-    BUTTON
-  </m-button>
-  <m-button theme="dark" raised>
-    BUTTON
-  </m-button>
-  <m-button raised></m-button>
+  <m-ripple>
+    波纹插槽
+  </m-ripple>
+  <hr>
+  <m-ripple>
+    波纹插槽
+  </m-ripple>
   <script src="../dist/bundle.min.js"></script>
 </body>
 

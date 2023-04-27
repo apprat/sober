@@ -15,6 +15,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "fre",
     "declaration": true,
+    "sourceMap": true,
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "skipLibCheck": true,

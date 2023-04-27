@@ -5,6 +5,7 @@ export interface Property {
 
 class Component extends Base {
   property: Property = {}
+  state = {}
   render() {
     return <>
       <style jsx>{`
@@ -19,4 +20,4 @@ class Component extends Base {
   }
 }
 
-export default define('s-card', Component)
+export default define('s-radio-button', Component)

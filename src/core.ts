@@ -20,14 +20,14 @@ const useComponent = (instance: Base) => {
     instance.state = state
     const callbacks: Function[] = []
     instance.setState = (value) => new Promise((resolve) => {
-      useEffect(() => () => resolve())
       setState({ ...state, ...value })
+      callbacks.push(resolve)
     })
     const [property, setProperty] = useState(instance.property ?? {})
     instance.property = property
     instance.setProperty = (value) => new Promise((resolve) => {
-      useEffect(() => () => resolve())
       setProperty({ ...property, ...value })
+      callbacks.push(resolve)
     })
     useEffect(() => () => {
       callbacks.map(callback => callback())
@@ -46,15 +46,87 @@ const shadowRender = (component: Function, node: Node) => {
   })
 }
 
+const kebabToCamel = (value: string) => value.replace(/-([a-z])/g, (substring, item: string) => item.toUpperCase())
+const camelToKebab = (value: string) => value.replace(/[A-Z]/g, (item) => '-' + item.toLowerCase())
+
 type PropertyValue = string | number | bigint | boolean | Function | undefined
 
-interface States {
-  inited: boolean
-  attrDefaults: { [key: string]: unknown }
-  mounted: boolean
-  unmounted: boolean
-  adopted: boolean
-  parseType: (key: string, value: unknown) => PropertyValue
+class States {
+  inited = false
+  attrDefaults: { [key: string]: PropertyValue } = {}
+  unmounted = false
+  unmount() {
+    this.inited ? this.instance.onUnmounted() : this.unmounted = true
+  }
+  adopted = false
+  adopt() {
+    this.inited ? this.instance.onAdopted() : this.adopted = true
+  }
+  mounted = false
+  mount() {
+    this.inited ? this.instance.onMounted() : this.mounted = true
+  }
+  constructor(public instance: Base) { }
+  private parseType(key: string, value: unknown): PropertyValue {
+    const defaultValue = this.attrDefaults[key]
+    if (typeof defaultValue === 'string') return String(value)
+    if (typeof defaultValue === 'number') return Number(value)
+    if (typeof defaultValue === 'bigint') return BigInt(String(value))
+    if (typeof defaultValue === 'boolean') {
+      if (value === '') return false
+      if (String(key) === value) return true
+      return Boolean(JSON.parse(String(value)))
+    }
+    if (typeof defaultValue === 'function' && typeof value === 'function') return value
+    throw new TypeError()
+  }
+  parsePropertyValue(key: string, value: unknown) {
+    if (typeof value === 'function') return value
+    const kebabKey = camelToKebab(key)
+    const old = this.instance.node.getAttribute(kebabKey)
+    if (value === undefined) {
+      return old === null ? this.attrDefaults[key] : this.instance.node.removeAttribute(kebabKey) as undefined
+    }
+    const strValue = String(value)
+    if (old === null || strValue !== String(old)) return this.instance.node.setAttribute(kebabKey, strValue) as undefined
+    return this.parseType(key, value)
+  }
+}
+
+const elementMaps = new Map<HTMLElement, States>()
+
+const constructor = async (BaseElement: typeof Base, node: HTMLElement, shadowRoot: ShadowRoot) => {
+  const instance = new BaseElement()
+  instance.shadowRoot = shadowRoot
+  instance.node = node
+  const component = useComponent(instance)
+  const states = new States(instance)
+  for (const key in instance.property) {
+    Object.defineProperty(node, key, {
+      get: () => instance.property[key],
+      set: (value: unknown) => {
+        const data = states.parsePropertyValue(key, value)
+        if (data === undefined) return
+        if (states.inited) return instance.setProperty({ [key]: data })
+        instance.property[key] = data
+      }
+    })
+    const value = instance.property[key]
+    if (typeof value === 'function') instance.property[key] = value.bind(instance)
+    states.attrDefaults[key] = value
+  }
+  for (const name of Object.getOwnPropertyNames(BaseElement)) {
+    if (['length', 'name', 'prototype'].includes(name)) continue
+    node[name] = BaseElement[name]
+  }
+  elementMaps.set(node, states)
+  await shadowRender(component, shadowRoot)
+  states.inited = true
+  instance.onCreated()
+  if (states.mounted) instance.onMounted()
+  if (states.adopted) instance.onAdopted()
+  if (states.unmounted) instance.onUnmounted()
+  node.dispatchEvent(new Event('load'))
 }
 
 export const define = <
@@ -69,98 +141,26 @@ export const define = <
   register: (name?: string) => void
   name: N
 } => {
-  const maps = new Map<HTMLElement, [States, Base]>()
-  const constructor = async (node: HTMLElement, shadowRoot: ShadowRoot) => {
-    const instance = new BaseElement()
-    instance.shadowRoot = shadowRoot
-    instance.node = node
-    const component = useComponent(instance)
-    const states: States = {
-      inited: false,
-      attrDefaults: {},
-      mounted: false,
-      unmounted: false,
-      adopted: false,
-      parseType: (key, value) => {
-        const defaultValue = states.attrDefaults[key]
-        if (value === undefined) return defaultValue
-        if (typeof defaultValue === 'string') return String(value)
-        if (typeof defaultValue === 'number') return Number(value)
-        if (typeof defaultValue === 'bigint') return BigInt(String(value))
-        if (typeof defaultValue === 'boolean') {
-          if (value === "") return false
-          if (String(key) === value) return true
-          return Boolean(JSON.parse(String(value)))
-        }
-        if (typeof defaultValue === 'function' && typeof value === 'function') return value.bind(node)
-        throw new TypeError()
-      }
-    }
-    const getNewValue = (key: string, value?: PropertyValue) => {
-      if (typeof value === 'function') {
-        states.parseType(key, value)
-        return
-      }
-      const old = node.getAttribute(key)
-      if (value === undefined && old !== null) {
-        node.removeAttribute(key)
-        return
-      }
-      if (value === undefined && old === null) return states.attrDefaults[key]
-      if (old === null || old !== String(value)) {
-        node.setAttribute(key, String(value))
-        return
-      }
-      return states.parseType(key, value)
-    }
-    for (const key in instance.property) {
-      Object.defineProperty(node, key, {
-        get: () => instance.property[key],
-        set: (value: PropertyValue) => {
-          const data = getNewValue(key, value)
-          if (data === undefined) return
-          if (states.inited) return instance.setProperty({ [key]: data })
-          instance.property[key] = data
-        }
-      })
-      const value = instance.property[key]
-      if (typeof value === 'function') instance.property[key] = value.bind(instance)
-      states.attrDefaults[key] = value
-    }
-    for (const name of Object.getOwnPropertyNames(BaseElement)) {
-      if (['length', 'name', 'prototype'].includes(name)) continue
-      node[name] = BaseElement[name]
-    }
-    maps.set(node, [states, instance])
-    await shadowRender(component, shadowRoot)
-    states.inited = true
-    instance.onCreated()
-    if (states.mounted) instance.onMounted()
-    if (states.adopted) instance.onAdopted()
-    if (states.unmounted) instance.onUnmounted()
-    node.dispatchEvent(new Event('load'))
-  }
+  const attributes: string[] = []
+  for (const key in new BaseElement().property) attributes.push(camelToKebab(key))
   class Element extends HTMLElement {
-    static observedAttributes = Object.keys(new BaseElement().property)
+    static observedAttributes = attributes
     constructor() {
       super()
       const shadowRoot = this.attachShadow({ mode: 'closed' })
-      constructor(this, shadowRoot)
+      constructor(BaseElement, this, shadowRoot)
     }
     connectedCallback() {
-      const [states, instance] = maps.get(this)!
-      if (!states.inited) return states.mounted = true
-      instance.onMounted()
+      elementMaps.get(this)!.mount()
     }
     disconnectedCallback() {
-      const [states, instance] = maps.get(this)!
-      if (!states.inited) return states.unmounted = true
-      instance.onUnmounted()
+      elementMaps.get(this)!.unmount()
     }
     adoptedCallback() {
-      const [states, instance] = maps.get(this)!
-      if (!states.inited) return states.adopted = true
-      instance.onAdopted()
+      elementMaps.get(this)!.adopt()
+    }
+    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+      this[kebabToCamel(name)] = newValue ?? undefined
     }
   }
   return {

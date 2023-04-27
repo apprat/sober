@@ -1,9 +1,21 @@
 html {
-  --color-primary: 56, 106, 32;
-  --color-secondary: 64, 64, 64;
-  --color-accent: 56, 106, 32;
+  --color-primary: 66 133 244;
+  --color-secondary: 66 133 244;
+  --color-accent: 66 133 244;
   --color-text-primary: 51, 51, 51;
   --color-text-secondary: 2, 2, 2;
+  --opacity-ripple: .2;
 }
 
 /**1.46 1.33 1.2 1.13 1.06 1 0.93 0.86 0.8 0.73 0.6**/
+
+@media (prefers-color-scheme: dark) {
+  html {
+    --color-primary: 66 133 244;
+    --color-secondary: 66 133 244;
+    --color-accent: 66 133 244;
+    --color-text-primary: 51, 51, 51;
+    --color-text-secondary: 2, 2, 2;
+    --opacity-ripple: .2;
+  }
+}

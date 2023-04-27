@@ -19,4 +19,4 @@ class Component extends Base {
   }
 }
 
-export default define('s-card', Component)
+export default define('s-time-picker', Component)

@@ -14,9 +14,11 @@ class Component extends Base {
           display: flex;
         }
       `}</style>
-      <slot></slot>
+      <div class="container ">
+        <slot></slot>
+      </div>
     </>
   }
 }
 
-export default define('s-card', Component)
+export default define('s-floating-action-button', Component)

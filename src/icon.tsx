@@ -12,6 +12,13 @@ class Component extends Base {
           -webkit-user-select: none;
           user-select: none;
           display: flex;
+          width: 20px;
+          height: 20px;
+          justify-content: center;
+          align-items: center;
+          fill: currentColor;
+          box-sizing: border-box;
+          color: #666;
         }
       `}</style>
       <slot></slot>
@@ -19,4 +26,4 @@ class Component extends Base {
   }
 }
 
-export default define('s-card', Component)
+export default define('s-icon', Component)

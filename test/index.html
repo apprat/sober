@@ -24,21 +24,155 @@
       font-size: .93rem;
     }
 
-    m-ripple {
+    s-button {
       margin: 16px;
-      padding: 16px 24px;
     }
   </style>
 </head>
 
 <body>
-  <m-ripple>
-    波纹插槽
-  </m-ripple>
+  <s-button type="elevated">
+    <s-icon slot="start">
+      <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M798.293333 832c-35.413333 52.906667-72.96 104.533333-130.133333 105.386667-57.173333 1.28-75.52-33.706667-140.373333-33.706667-65.28 0-85.333333 32.853333-139.52 34.986667-55.893333 2.133333-98.133333-56.32-133.973334-107.946667C181.333333 725.333333 125.44 531.2 200.533333 400.64c37.12-64.853333 103.68-105.813333 175.786667-107.093333 54.613333-0.853333 106.666667 37.12 140.373333 37.12 33.28 0 96.426667-45.653333 162.56-38.826667 27.733333 1.28 105.386667 11.093333 155.306667 84.48-3.84 2.56-92.586667 54.613333-91.733333 162.56 1.28 128.853333 113.066667 171.946667 114.346666 172.373333-1.28 2.986667-17.92 61.44-58.88 120.746667M554.666667 149.333333c31.146667-35.413333 82.773333-62.293333 125.44-64 5.546667 49.92-14.506667 100.266667-44.373334 136.106667-29.44 36.266667-78.08 64.426667-125.866666 60.586667-6.4-49.066667 17.493333-100.266667 44.8-132.693334z">
+        </path>
+        </path>
+      </svg>
+    </s-icon>
+    elevated
+  </s-button>
+  <s-button type="filled">
+    <s-icon slot="start">
+      <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M798.293333 832c-35.413333 52.906667-72.96 104.533333-130.133333 105.386667-57.173333 1.28-75.52-33.706667-140.373333-33.706667-65.28 0-85.333333 32.853333-139.52 34.986667-55.893333 2.133333-98.133333-56.32-133.973334-107.946667C181.333333 725.333333 125.44 531.2 200.533333 400.64c37.12-64.853333 103.68-105.813333 175.786667-107.093333 54.613333-0.853333 106.666667 37.12 140.373333 37.12 33.28 0 96.426667-45.653333 162.56-38.826667 27.733333 1.28 105.386667 11.093333 155.306667 84.48-3.84 2.56-92.586667 54.613333-91.733333 162.56 1.28 128.853333 113.066667 171.946667 114.346666 172.373333-1.28 2.986667-17.92 61.44-58.88 120.746667M554.666667 149.333333c31.146667-35.413333 82.773333-62.293333 125.44-64 5.546667 49.92-14.506667 100.266667-44.373334 136.106667-29.44 36.266667-78.08 64.426667-125.866666 60.586667-6.4-49.066667 17.493333-100.266667 44.8-132.693334z">
+        </path>
+        </path>
+      </svg>
+    </s-icon>
+    filled
+  </s-button>
+  <s-button type="filled-tonal">
+    filled tonal
+    <s-icon slot="end">
+      <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M896 384a42.666667 42.666667 0 0 1 42.666667 42.666667 42.666667 42.666667 0 0 1-42.666667 42.666666h-190.72l-5.546667 51.626667-93.866666 210.773333c-8.533333 21.333333-31.146667 36.266667-57.173334 36.266667H362.666667c-34.133333 0-64-31.146667-64-64V426.666667c0-16.64 6.826667-31.573333 18.346666-42.666667l179.2-209.066667 32.853334 31.573334c8.533333 8.106667 13.653333 19.2 13.653333 31.573333l-1.28 9.386667L469.333333 384h426.666667M85.333333 768v-341.333333h128v341.333333H85.333333z">
+        </path>
+      </svg>
+    </s-icon>
+  </s-button>
+  <s-button type="outlined">
+    <s-icon slot="start">
+      <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M490.666667 938.666667c5.973333 0 11.52 0 17.066666-1.706667A85.76 85.76 0 0 0 576 853.333333h-170.666667a85.333333 85.333333 0 0 0 85.333334 85.333334M768 448c0-130.986667-91.306667-240.64-213.333333-269.653333V149.333333A64 64 0 0 0 490.666667 85.333333 64 64 0 0 0 426.666667 149.333333v29.013334c-122.453333 29.013333-213.333333 138.666667-213.333334 269.653333V682.666667l-85.333333 85.333333v42.666667h725.333333v-42.666667l-85.333333-85.333333m84.053333-256h85.333334c-6.4-136.96-73.813333-257.28-175.786667-334.933334l-61.013333 61.013334C787.626667 213.333333 845.653333 313.6 852.053333 426.666667M280.746667 152.746667L219.733333 91.733333A451.413333 451.413333 0 0 0 42.666667 426.666667h85.333333c7.68-113.066667 65.706667-213.333333 152.746667-273.92z">
+        </path>
+      </svg>
+    </s-icon>
+    outlined
+  </s-button>
+  <s-button type="text">
+    text button
+  </s-button>
   <hr>
-  <m-ripple>
-    波纹插槽
-  </m-ripple>
+  <s-button type="elevated" size="small">
+    elevated button
+  </s-button>
+  <s-button type="filled" size="small">
+    filled button
+  </s-button>
+  <s-button type="filled-tonal" size="small">
+    filled tonal button
+  </s-button>
+  <s-button type="outlined" size="small">
+    outlined button
+  </s-button>
+  <s-button type="text" size="small">
+    text button
+  </s-button>
+  <hr>
+  <s-button type="elevated" size="large">
+    <s-icon slot="start">
+      <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M128 512V288l256-56.32v276.48L128 512m725.333333-384v373.333333l-426.666666 6.4V222.293333L853.333333 128M128 554.666667l256 3.84v290.56l-256-49.066667V554.666667m725.333333 10.666666V938.666667l-426.666666-81.493334V558.933333l426.666666 6.4z">
+        </path>
+      </svg>
+    </s-icon>
+    elevated
+  </s-button>
+  <s-button type="filled" size="large">
+    <s-icon slot="start">
+      <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M128 512V288l256-56.32v276.48L128 512m725.333333-384v373.333333l-426.666666 6.4V222.293333L853.333333 128M128 554.666667l256 3.84v290.56l-256-49.066667V554.666667m725.333333 10.666666V938.666667l-426.666666-81.493334V558.933333l426.666666 6.4z">
+        </path>
+      </svg>
+    </s-icon>
+    filled
+  </s-button>
+  <s-button type="filled-tonal" size="large">
+    filled tonal button
+  </s-button>
+  <s-button type="outlined" size="large">
+    outlined button
+  </s-button>
+  <s-button type="text" size="large">
+    text button
+  </s-button>
+
+  <hr>
+  <hr>
+
+  <s-button type="elevated" disabled="true">
+    elevated button
+  </s-button>
+  <s-button type="filled" disabled="true">
+    filled button
+  </s-button>
+  <s-button type="filled-tonal" disabled="true">
+    filled tonal button
+  </s-button>
+  <s-button type="outlined" disabled="true">
+    outlined button
+  </s-button>
+  <s-button type="text" disabled="true">
+    text button
+  </s-button>
+  <hr>
+  <s-button type="elevated" size="small" disabled="true">
+    elevated button
+  </s-button>
+  <s-button type="filled" size="small" disabled="true">
+    filled button
+  </s-button>
+  <s-button type="filled-tonal" size="small" disabled="true">
+    filled tonal button
+  </s-button>
+  <s-button type="outlined" size="small" disabled="true">
+    outlined button
+  </s-button>
+  <s-button type="text" size="small" disabled="true">
+    text button
+  </s-button>
+  <hr>
+  <s-button type="elevated" size="large" disabled="true">
+    elevated button
+  </s-button>
+  <s-button type="filled" size="large" disabled="true">
+    filled button
+  </s-button>
+  <s-button type="filled-tonal" size="large" disabled="true">
+    filled tonal button
+  </s-button>
+  <s-button type="outlined" size="large" disabled="true">
+    outlined button
+  </s-button>
+  <s-button type="text" size="large" disabled="true">
+    text button
+  </s-button>
   <script src="../dist/bundle.min.js"></script>
 </body>
 

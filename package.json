@@ -1,6 +1,6 @@
 {
-  "name": "test-mtu",
-  "version": "0.0.91",
+  "name": "sober",
+  "version": "0.0.1",
   "description": "test",
   "type": "module",
   "scripts": {

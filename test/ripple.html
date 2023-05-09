@@ -7,9 +7,25 @@
   <title>Test</title>
   <link rel="stylesheet" href="../theme/auto.css">
   <style>
-    a {
+    * {
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :not(:defined) {
+      display: none;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    div>* {
       margin: 8px;
-      display: inline-block;
+    }
+
+    s-ripple {
+      padding: 16px;
     }
   </style>
 </head>
@@ -22,10 +38,14 @@
     </s-button>
   </div>
   <hr>
-  <a href="./ripple.html">Ripple</a>
-  <a href="./button.html">Button</a>
-  <a href="./FAB.html">FAButton</a>
-  <a href="./checkbox.html">Checkbox</a>
+  <div>
+    <s-ripple>
+      Test
+    </s-ripple>
+    <s-ripple x="0" y="0">
+      Test
+    </s-ripple>
+  </div>
 
   <script src="../dist/bundle.min.js"></script>
 </body>

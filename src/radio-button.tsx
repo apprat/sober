@@ -1,23 +1,25 @@
-import { Base, define } from './core'
+import { Component, define } from './core/main'
 
 export interface Property {
 }
 
-class Component extends Base {
-  property: Property = {}
-  state = {}
+class RadioButton extends Component {
+  property: Property = {
+  }
   render() {
     return <>
       <style jsx>{`
         :host{
           -webkit-user-select: none;
           user-select: none;
-          display: flex;
         }
       `}</style>
-      <slot></slot>
+      <div>
+        <slot></slot>
+        <button onClick={() => { }} type="submmit">添加</button>
+      </div>
     </>
   }
 }
 
-export default define('s-radio-button', Component)
+export default define('radio-button', RadioButton)

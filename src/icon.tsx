@@ -1,24 +1,35 @@
-import { Base, define } from './core'
+import { Component, define } from './core/main'
 
 export interface Property {
+  size: 'medium' | 'small' | 'large'
 }
 
-class Component extends Base {
-  property: Property = {}
+class Icon extends Component {
+  property: Property = {
+    size: 'medium'
+  }
   render() {
     return <>
       <style jsx>{`
         :host{
           -webkit-user-select: none;
           user-select: none;
-          display: flex;
-          width: 20px;
-          height: 20px;
+          display: inline-flex;
+          vertical-align: middle;
+          width: 24px;
+          height: 24px;
           justify-content: center;
           align-items: center;
           fill: currentColor;
           box-sizing: border-box;
-          color: #666;
+        }
+        :host([size=small]){
+          width: 20px;
+          height: 20px
+        }
+        :host([size=large]){
+          width: 40px;
+          height: 40px;
         }
       `}</style>
       <slot></slot>
@@ -26,4 +37,4 @@ class Component extends Base {
   }
 }
 
-export default define('s-icon', Component)
+export default define('icon', Icon)

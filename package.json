@@ -1,7 +1,7 @@
 {
   "name": "sober",
-  "version": "0.0.1",
-  "description": "test",
+  "version": "0.0.12",
+  "description": "",
   "type": "module",
   "scripts": {
     "dev": "node rollup/dev.js",
@@ -13,11 +13,7 @@
   "main": "./dist/main.js",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.2",
-    "@svgr/rollup": "^7.0.0",
     "rollup": "^3.20.2",
     "rollup-plugin-uglify": "^6.0.4"
-  },
-  "dependencies": {
-    "fre": "^2.6.2"
   }
 }

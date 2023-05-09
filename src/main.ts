@@ -1,24 +1,26 @@
-import Button, { Property as ButtonProperty } from './button'
-import Card, { Property as CardProperty } from './card'
-import Carousel, { Property as CarouselProperty } from './carousel'
-import Checkbox, { Property as CheckboxProperty } from './checkbox'
-import Chip, { Property as ChipProperty } from './chip'
-import Icon, { Property as IconProperty } from './icon'
+import Button from './button'
+import Icon from './icon'
+import FloatingActionButton from './floating-action-button'
+import Ripple from './ripple'
+import Checkbox from './checkbox'
 
-import Ripple, { Property as RippleProperty } from './ripple'
-
-interface ComponentMap {
-  [Button.name]: ButtonProperty
-  [Card.name]: CardProperty
-  [Carousel.name]: CarouselProperty
-  [Checkbox.name]: CheckboxProperty
-  [Chip.name]: ChipProperty
-  [Icon.name]: IconProperty
-
-  [Ripple.name]: RippleProperty
+const register = () => {
+  return {
+    [Button.name]: Button.register(),
+    [Ripple.name]: Ripple.register(),
+    [FloatingActionButton.name]: FloatingActionButton.register(),
+    [Icon.name]: Icon.register(),
+    [Checkbox.name]: Checkbox.register()
+  }
 }
 
-type PartialValue<T> = { [K in keyof T]: Partial<T[K]> & { [key: string]: unknown } }
+export default register
+
+type ComponentMap<N = ReturnType<typeof register>> = {
+  [K in keyof N]: N[K] extends { new(): infer P & HTMLElement } ? P : never
+}
+
+type PartialValue<T> = { [K in keyof T]: T[K] & { [key: string]: unknown } }
 
 // @ts-ignore Undefined module
 declare module 'vue' {
@@ -33,20 +35,7 @@ declare global {
     }
   }
   interface Document {
-    createElement<K extends keyof ComponentMap>(tagName: K, options?: ElementCreationOptions): Partial<ComponentMap[K]> & HTMLElement
-    getElementsByTagName<K extends keyof ComponentMap>(qualifiedName: K): HTMLCollectionOf<Partial<ComponentMap[K]> & HTMLElement>
-  }
-}
-
-export default () => {
-  Ripple.register()
-  Button.register()
-  Card.register()
-  Icon.register()
-  return {
-    [Ripple.name]: Ripple.Element,
-    [Button.name]: Button.Element,
-    [Card.name]: Card.Element,
-    [Icon.name]: Icon.Element
+    createElement<K extends keyof ComponentMap>(tagName: K, options?: ElementCreationOptions): ComponentMap[K] & HTMLElement
+    getElementsByTagName<K extends keyof ComponentMap>(qualifiedName: K): HTMLCollectionOf<ComponentMap[K] & HTMLElement>
   }
 }

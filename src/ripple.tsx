@@ -1,4 +1,4 @@
-import { Base, define } from './core'
+import { Component, define, Ref } from './core/main'
 
 const pointer = { touched: false }
 {
@@ -12,38 +12,43 @@ export interface Property {
   y: number
 }
 
-class Component extends Base {
+class Ripple extends Component {
   property: Property = { x: NaN, y: NaN }
-  state = { styles: '', pressed: false }
+  state = { pressed: false }
+  refs = {
+    ripple: new Ref()
+  }
   onCreated() {
-    this.node.addEventListener('mousedown', (event) => pointer.touched && event.button !== 2 && this.onTouch(event))
-    this.node.addEventListener('mouseup', () => pointer.touched && this.onUntouch())
-    this.node.addEventListener('mouseleave', () => pointer.touched && this.onUntouch())
-    this.node.addEventListener('touchstart', (event) => this.onTouch(event.changedTouches[0]))
-    this.node.addEventListener('touchend', () => this.onUntouch())
-    this.node.addEventListener('touchcancel', () => this.onUntouch())
+    this.element.addEventListener('mousedown', (event) => pointer.touched && event.button !== 2 && this.onTouch(event))
+    this.element.addEventListener('mouseup', () => pointer.touched && this.onUntouch())
+    this.element.addEventListener('mouseleave', () => pointer.touched && this.onUntouch())
+    this.element.addEventListener('touchstart', (event) => this.onTouch(event.changedTouches[0]))
+    this.element.addEventListener('touchend', () => this.onUntouch())
+    this.element.addEventListener('touchcancel', () => this.onUntouch())
   }
   onTouch(event: { pageX: number, pageY: number }) {
     if (this.state.pressed) return
-    const { offsetWidth, offsetHeight } = this.node
+    const { offsetWidth, offsetHeight } = this.element
     const diameter = Math.pow(Math.pow(offsetHeight, 2) + Math.pow(offsetWidth, 2), 0.5)
     const coordinate = { x: this.property.x, y: this.property.y }
     if (isNaN(coordinate.x) || isNaN(coordinate.y)) {
-      const { left, top } = this.node.getBoundingClientRect()
+      const { left, top } = this.element.getBoundingClientRect()
       const float = { x: event.pageX - left, y: event.pageY - top }
       coordinate.x = ((offsetWidth / 2) - float.x) / -1
       coordinate.y = ((offsetHeight / 2) - float.y) / -1
     }
-    this.setState({ pressed: true, styles: `width:${diameter}px;height:${diameter}px;--x:${coordinate.x}px;--y:${coordinate.y}px;animation:diffusion .3s;` })
-    this.node.dispatchEvent(new Event('focus'))
+    this.state.pressed = true
+    this.refs.ripple.value?.setAttribute('style', `width:${diameter}px;height:${diameter}px;--x:${coordinate.x}px;--y:${coordinate.y}px;animation:diffusion .2s`)
+    this.element.dispatchEvent(new Event('focus'))
   }
   onUntouch() {
     if (!this.state.pressed) return
-    this.setState({ styles: `${this.state.styles};filter: opacity(0);` })
+    this.refs.ripple.value!.style.filter = 'opacity(0)'
     setTimeout(() => {
-      this.node.dispatchEvent(new Event('blur'))
-      this.setState({ styles: '', pressed: false })
-    }, 300)
+      this.state.pressed = false
+      this.element.dispatchEvent(new Event('blur'))
+      this.refs.ripple.value?.removeAttribute('style')
+    }, 200)
   }
   render() {
     return <>
@@ -59,10 +64,10 @@ class Component extends Base {
           content: '';
           background: currentColor;
           filter: opacity(0);
-          transition: filter .3s;
+          transition: filter .2s;
         }
         :host::before,
-        .container{
+        .wrapper{
           position: absolute;
           width: 100%;
           height: 100%;
@@ -78,8 +83,8 @@ class Component extends Base {
           background: currentColor;
           border-radius: 50%;
           flex-shrink: 0;
-          filter: opacity(var(--opacity-ripple));
-          transition: filter .3s;
+          filter: opacity(.2);
+          transition: filter .2s;
         }
         @keyframes diffusion {
           from { transform: translate(var(--x), var(--y)) scale(0); }
@@ -91,12 +96,12 @@ class Component extends Base {
           }
         }
       `}</style>
-      <div class="container">
-        <div class="ripple" style={this.state.styles}></div>
+      <div class="wrapper">
+        <div class="ripple" ref={this.refs.ripple}></div>
       </div>
       <slot></slot>
     </>
   }
 }
 
-export default define('s-ripple', Component)
+export default define('ripple', Ripple)

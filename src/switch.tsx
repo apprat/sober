@@ -11,7 +11,10 @@ class Switch extends Component<Property> {
     checked: false
   }
   onCreated() {
-    this.element.addEventListener('click', () => this.element.checked = !this.element.checked)
+    this.element.addEventListener('click', () => {
+      this.element.checked = !this.element.checked
+      this.element.dispatchEvent(new Event('change'))
+    })
   }
   render() {
     return <>
@@ -24,7 +27,7 @@ class Switch extends Component<Property> {
           vertical-align: middle;
           line-height: 1;
           cursor: pointer;
-          color: var(--s-color-on-surface-variant);
+          color: var(--s-color-on-surface-variant,#49454F);
         }
         :host([disabled=true]){
           pointer-events: none !important;
@@ -40,10 +43,10 @@ class Switch extends Component<Property> {
         }
         :host([checked=true]) .state{
           transform: translateX(16px);
-          background: var(--s-color-primary);
+          background: var(--s-color-primary,#6750A4);
         }
         :host([checked=true]) .thumb{
-          background: var(--s-color-on-primary);
+          background: var(--s-color-on-primary,#FFFFFF);
           transform: scale(1.5) translateX(16px);
         }
         :host(:active) .state{
@@ -55,9 +58,9 @@ class Switch extends Component<Property> {
           width: 52px;
           height: 32px;
           border-radius: 20px;
-          background: var(--s-color-surface-variant);
-          -webkit-box-shadow: 0 0 0 2px inset var(--s-color-outline);
-          box-shadow: 0 0 0 2px inset var(--s-color-outline);
+          --background: var(--s-color-surface-variant,#49454F);
+          -webkit-box-shadow: 0 0 0 2px inset var(--s-color-outline,#79747E);
+          box-shadow: 0 0 0 2px inset var(--s-color-outline,#79747E);
           position: relative;
         }
         .state{
@@ -65,7 +68,7 @@ class Switch extends Component<Property> {
           left: 0;
           width: 40px;
           height: 40px;
-          background: var(--s-color-outline);
+          background: var(--s-color-outline,#79747E);
           filter: opacity(0);
           border-radius: 50%;
           transform: translateX(-4px);
@@ -73,7 +76,7 @@ class Switch extends Component<Property> {
           transition: transform .2s,filter .2s;
         }
         .thumb{
-          background: var(--s-color-outline);
+          background: var(--s-color-outline,#79747E);
           border-radius: 50%;
           width: 16px;
           height: 16px;

@@ -29,6 +29,7 @@ class Checkbox extends Component<Property> {
     this.element.addEventListener('click', () => {
       if (this.property.indeterminate) return this.element.indeterminate = false
       this.element.checked = !this.element.checked
+      this.element.dispatchEvent(new Event('change'))
     })
   }
   onPropertyChanged(name: keyof Property) {
@@ -54,7 +55,7 @@ class Checkbox extends Component<Property> {
           vertical-align: middle;
           line-height: 1;
           cursor: pointer;
-          color: var(--s-color-on-surface-variant);
+          color: var(--s-color-on-surface-variant,#49454F);
         }
         :host([disabled=true]){
           pointer-events: none !important;
@@ -62,7 +63,7 @@ class Checkbox extends Component<Property> {
         }
         :host([checked=true]),
         :host([indeterminate=true]){
-          color: var(--s-color-primary);
+          color: var(--s-color-primary,#6750A4);
         }
         .wrapper{
           display: flex;

@@ -37,7 +37,7 @@ class FAB extends Component {
           font-weight: 500;
           line-height: 1;
           white-space: nowrap;
-          color: var(--s-color-on-primary);
+          color: var(--s-color-on-primary,#FFFFFF);
           background:  var(--s-color-primary);
           -webkit-box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
           box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
@@ -52,12 +52,12 @@ class FAB extends Component {
           display: contents;
         }
         :host([theme=secondary]){
-          color: var(--s-color-on-secondary-container);
-          background: var(--s-color-secondary-container);
+          color: var(--s-color-on-secondary-container,#1D192B);
+          background: var(--s-color-secondary-container,#E8DEF8);
         }
         :host([theme=tertiary]){
-          color: var(--s-color-on-tertiary-container);
-          background: var(--s-color-tertiary-container);
+          color: var(--s-color-on-tertiary-container,#31111D);
+          background: var(--s-color-tertiary-container,#FFD8E4);
         }
         :host([disabled=true]){
           pointer-events: none !important;

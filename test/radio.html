@@ -22,7 +22,6 @@
 
     div>* {
       margin: 8px;
-      color: red;
     }
   </style>
 </head>
@@ -36,12 +35,17 @@
   </div>
   <hr>
   <div>
-    <s-radio-button></s-radio-button>
-    <s-radio-button checked="true">Select Group</s-radio-button>
-
-    <s-radio-button disabled="true"></s-radio-button>
-    <s-radio-button checked="true" disabled="true">Select Group</s-radio-button>
+    <s-radio name="test"></s-radio>
+    <s-radio name="test"></s-radio>
+    <s-radio disabled="true"></s-radio>
+    <s-radio checked="true" disabled="true">Select Group</s-radio>
   </div>
+
+  <!-- <div>
+    <input type="radio" checked="true" name="a" onchange="console.log('change1')">
+    <input type="radio" name="a" onchange="console.log('change2')">
+    <input type="radio" name="a" onchange="console.log('change3')">
+  </div> -->
 
   <script src="../dist/bundle.min.js"></script>
 </body>

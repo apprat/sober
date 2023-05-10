@@ -6,12 +6,14 @@ Ripple.register()
 export interface Property {
   disabled: boolean
   checked: boolean
+  name: string
 }
 
-class RadioButton extends Component<Property> {
+class Radio extends Component<Property> {
   property: Property = {
     disabled: false,
-    checked: false
+    checked: false,
+    name: ''
   }
   refs = {
     iconPath: new Ref()
@@ -23,7 +25,16 @@ class RadioButton extends Component<Property> {
     }
   }
   onCreated() {
-    this.element.addEventListener('click', () => this.element.checked = true)
+    this.element.addEventListener('click', () => {
+      this.element.checked = true
+      if (this.property.name && this.element.parentNode) {
+        this.element.parentNode.querySelectorAll<typeof this.element>(`${this.element.tagName}[name='${this.property.name}']`).forEach((item) => {
+          if (item === this.element) return
+          item.checked = false
+        })
+      }
+      this.element.dispatchEvent(new Event('change'))
+    })
   }
   onPropertyChanged(name: keyof Property) {
     switch (name) {
@@ -43,14 +54,14 @@ class RadioButton extends Component<Property> {
           vertical-align: middle;
           line-height: 1;
           cursor: pointer;
-          color: var(--s-color-on-surface-variant);
+          color: var(--s-color-on-surface-variant,#49454F);
         }
         :host([disabled=true]){
           pointer-events: none !important;
           filter: grayscale(.8) opacity(.6) !important;
         }
         :host([checked=true]){
-          color: var(--s-color-primary);
+          color: var(--s-color-primary,#6750A4);
         }
         .wrapper{
           display: flex;
@@ -78,4 +89,4 @@ class RadioButton extends Component<Property> {
   }
 }
 
-export default define('radio-button', RadioButton)
+export default define('radio', Radio)

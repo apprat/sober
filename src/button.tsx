@@ -32,8 +32,8 @@ class Button extends Component<Property> {
           font-weight: 500;
           line-height: 1;
           white-space: nowrap;
-          background: var(--s-color-primary);
-          color: var(--s-color-on-primary);
+          background: var(--s-color-primary,#6750A4);
+          color: var(--s-color-on-primary,#FFFFFF);
           transition: box-shadow .2s;
           --container-padding: 0 24px;
         }
@@ -48,18 +48,18 @@ class Button extends Component<Property> {
           background:  none;
         }
         :host([theme=filled-tonal]){
-          background: var(--s-color-secondary-container);
-          color: var(--s-color-on-secondary-container);
+          background: var(--s-color-secondary-container,#E8DEF8);
+          color: var(--s-color-on-secondary-container,#1D192B);
         }
         :host([theme=outlined]){
-          -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline);
-          box-shadow: 0 0 0 1px inset var(--s-color-outline);
+          -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline,#79747E);
+          box-shadow: 0 0 0 1px inset var(--s-color-outline,#79747E);
           background: none;
-          color: var(--s-color-primary);
+          color: var(--s-color-primary,#6750A4);
         }
         :host([theme=text]){
           background: none;
-          color: var(--s-color-primary);
+          color: var(--s-color-primary,#6750A4);
           --container-padding: 0 16px;
         }
         :host([size=small]){

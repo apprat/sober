@@ -3,7 +3,7 @@ import Icon from './icon'
 import FloatingActionButton from './floating-action-button'
 import Ripple from './ripple'
 import Checkbox from './checkbox'
-import RadioButton from './radio-button'
+import Radio from './radio'
 import Switch from './switch'
 import Slider from './slider'
 
@@ -13,7 +13,7 @@ const register = () => ({
   [FloatingActionButton.name]: FloatingActionButton.register(),
   [Icon.name]: Icon.register(),
   [Checkbox.name]: Checkbox.register(),
-  [RadioButton.name]: RadioButton.register(),
+  [Radio.name]: Radio.register(),
   [Switch.name]: Switch.register(),
   [Slider.name]: Slider.register()
 })

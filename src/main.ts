@@ -3,16 +3,20 @@ import Icon from './icon'
 import FloatingActionButton from './floating-action-button'
 import Ripple from './ripple'
 import Checkbox from './checkbox'
+import RadioButton from './radio-button'
+import Switch from './switch'
+import Slider from './slider'
 
-const register = () => {
-  return {
-    [Button.name]: Button.register(),
-    [Ripple.name]: Ripple.register(),
-    [FloatingActionButton.name]: FloatingActionButton.register(),
-    [Icon.name]: Icon.register(),
-    [Checkbox.name]: Checkbox.register()
-  }
-}
+const register = () => ({
+  [Button.name]: Button.register(),
+  [Ripple.name]: Ripple.register(),
+  [FloatingActionButton.name]: FloatingActionButton.register(),
+  [Icon.name]: Icon.register(),
+  [Checkbox.name]: Checkbox.register(),
+  [RadioButton.name]: RadioButton.register(),
+  [Switch.name]: Switch.register(),
+  [Slider.name]: Slider.register()
+})
 
 export default register
 

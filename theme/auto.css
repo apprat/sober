@@ -30,6 +30,10 @@ html {
   --s-color-outline: #79747E;
 }
 
+:not(:defined) {
+  display: none;
+}
+
 body {
   font-size: .93rem;
   color: var(--s-color-on-background);

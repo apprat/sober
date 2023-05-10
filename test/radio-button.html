@@ -22,6 +22,7 @@
 
     div>* {
       margin: 8px;
+      color: red;
     }
   </style>
 </head>
@@ -35,11 +36,11 @@
   </div>
   <hr>
   <div>
-    <s-checkbox></s-checkbox>
-    <s-checkbox indeterminate="true">Select Group</s-checkbox>
-    <s-checkbox disabled="true"></s-checkbox>
-    <s-checkbox disabled="true" checked="true"></s-checkbox>
-    <s-checkbox disabled="true" indeterminate="true"></s-checkbox>
+    <s-radio-button></s-radio-button>
+    <s-radio-button checked="true">Select Group</s-radio-button>
+
+    <s-radio-button disabled="true"></s-radio-button>
+    <s-radio-button checked="true" disabled="true">Select Group</s-radio-button>
   </div>
 
   <script src="../dist/bundle.min.js"></script>

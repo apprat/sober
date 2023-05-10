@@ -1,5 +1,11 @@
 ## Sober
-With a build tool like vite webpack, you can import directly
+Sober is a web component UI library written in Typescript, it uses Google Material You design style and can be used in any front-end framework or directly in the browser, plus it supports on-demand introduction and does not have any third-party dependencies
+
+>layout  
+> ![img](//unpkg.com/sober/test/images/layout.png)
+
+>instantiation  
+> ![img](//unpkg.com/sober/test/images/structure.png)
 
 ```js
 import register from 'sober'
@@ -36,7 +42,3 @@ import 'sober/theme/auto.css'
 <link rel="stylesheet" href="//unpkg.com/sober/theme/auto.css" />
 <script src="//unpkg.com/sober/dist/bundle.min.js"></script>
 ```
-
-# fork
-
-Typescript 5.0> and rollup need to be installed after fork

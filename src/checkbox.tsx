@@ -4,12 +4,14 @@ import Ripple from './ripple'
 Ripple.register()
 
 export interface Property {
+  disabled: boolean
   checked: boolean
   indeterminate: false
 }
 
 class Checkbox extends Component<Property> {
   property: Property = {
+    disabled: false,
     checked: false,
     indeterminate: false
   }
@@ -24,7 +26,10 @@ class Checkbox extends Component<Property> {
     }
   }
   onCreated() {
-    this.element.addEventListener('click', () => this.element.checked = !this.element.checked)
+    this.element.addEventListener('click', () => {
+      if (this.property.indeterminate) return this.element.indeterminate = false
+      this.element.checked = !this.element.checked
+    })
   }
   onPropertyChanged(name: keyof Property) {
     switch (name) {
@@ -34,8 +39,7 @@ class Checkbox extends Component<Property> {
         ))
         break
       case 'checked':
-        if (this.property.indeterminate) return this.element.indeterminate = false
-        this.refs.iconPath.value?.setAttribute('d', this.property.checked ? this.state.svgData.checked : this.state.svgData.uncheck)
+        !this.property.indeterminate && this.refs.iconPath.value?.setAttribute('d', this.property.checked ? this.state.svgData.checked : this.state.svgData.uncheck)
         break
     }
   }
@@ -51,6 +55,10 @@ class Checkbox extends Component<Property> {
           line-height: 1;
           cursor: pointer;
           color: var(--s-color-on-surface-variant);
+        }
+        :host([disabled=true]){
+          pointer-events: none !important;
+          filter: grayscale(.8) opacity(.6) !important;
         }
         :host([checked=true]),
         :host([indeterminate=true]){

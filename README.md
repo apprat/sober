@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://gitee.com/apprat/sober/raw/main/images/logo.png" width="128">
+  <img src="https://raw.githubusercontent.com/apprat/sober/main/test/images/logo.png" width="120">
 </p>
 <h1 align="center">Sober</h1>
 <p align="center"><b>Sober</b> is a web component UI library written in Typescript that uses the Google <b>Material You</b> design style</p>
@@ -14,7 +14,7 @@
 <p align="center"><u>Support any framework</u></p>
 
 <p align="center">
-  <img src="https://gitee.com/apprat/sober/raw/main/test/images/preview.png" height="80" />
+  <img src="https://raw.githubusercontent.com/apprat/sober/main/test/images/preview.png" height="80" />
 </p>
 
 

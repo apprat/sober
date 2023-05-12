@@ -1,20 +1,31 @@
 {
   "name": "sober",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Material You design style web component UI library",
   "type": "module",
   "scripts": {
     "dev": "node rollup/dev.js",
     "build": "tsc && rollup --config rollup/rollup.config.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "material you",
+    "material design",
+    "material design3",
+    "web ui-library",
+    "web components",
+    "framework",
+    "web",
+    "ui-library",
+    "tools"
+  ],
+  "homepage": "https://github.com/apprat/sober",
+  "author": "apprat",
+  "repository": "apprat/sober",
   "license": "MIT",
   "main": "./dist/main.js",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.2",
     "rollup": "^3.20.2",
     "rollup-plugin-uglify": "^6.0.4"
-  },
-  "dependencies": {}
+  }
 }

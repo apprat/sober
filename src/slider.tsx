@@ -2,16 +2,19 @@ import { Component, define } from './core/main'
 
 export interface Property {
   disabled: boolean
-  checked: boolean
+  labeled: boolean
+  type: 'continuous' | 'discrete'
+  orientation: 'horizontal' | 'vertical'
 }
 
 class Switch extends Component<Property> {
   property: Property = {
+    type: 'continuous',
     disabled: false,
-    checked: false
+    labeled: false,
+    orientation: 'horizontal'
   }
   onCreated() {
-    this.element.addEventListener('click', () => this.element.checked = !this.element.checked)
   }
   render() {
     return <>
@@ -19,78 +22,60 @@ class Switch extends Component<Property> {
         :host{
           -webkit-user-select: none;
           user-select: none;
-          display: inline-flex;
+          display: block;
           align-items: center;
-          vertical-align: middle;
-          line-height: 1;
           cursor: pointer;
-          color: var(--s-color-on-surface-variant);
+          color: var(--s-color-primary);
+          height: 40px;
         }
         :host([disabled=true]){
           pointer-events: none !important;
-          filter: grayscale(.8) opacity(.4) !important;
+          filter: grayscale(.8) opacity(.6) !important;
         }
-        :host([checked=true]){
-          color: var(--s-color-primary);
-        }
-        :host([checked=true]) .track{
-          background: var(--s-color-primary);
-          -webkit-box-shadow:none;
-          box-shadow: none;
-        }
-        :host([checked=true]) .state{
-          transform: translateX(16px);
-          background: var(--s-color-primary);
-        }
-        :host([checked=true]) .thumb{
-          background: var(--s-color-on-primary);
-          transform: scale(1.5) translateX(16px);
-        }
-        :host(:active) .state{
-          filter: opacity(.2);
+        .wrapper{
+          position: relative;
+          height: 100%;
         }
         .track{
-          display: flex;
-          align-items: center;
-          width: 52px;
-          height: 32px;
-          border-radius: 20px;
-          background: var(--s-color-surface-variant);
-          -webkit-box-shadow: 0 0 0 2px inset var(--s-color-outline);
-          box-shadow: 0 0 0 2px inset var(--s-color-outline);
-          position: relative;
+          width: 100%;
+          height: 4px;
+          background: var(--s-color-on-surface-variant);
+          border-radius: 2px;
+          opacity: .38;
         }
-        .state{
+        .track-active{
           position: absolute;
+          top: 0;
           left: 0;
-          width: 40px;
-          height: 40px;
-          background: var(--s-color-outline);
-          filter: opacity(0);
-          border-radius: 50%;
-          transform: translateX(-4px);
-          transform-origin: left;
-          transition: transform .2s,filter .2s;
+          background: currentColor;
+          width: 50%;
+          height: 4px;
         }
         .thumb{
-          background: var(--s-color-outline);
+          position: absolute;
+          top: -6px;
+          left: 50%;
+          width: 20px;
+          height: 20px;
+          background: currentColor;
           border-radius: 50%;
-          width: 16px;
-          height: 16px;
-          transform: scale(1) translateX(8px);
-          transition: transform .2s;
-          transform-origin: left;
-          position: relative;
         }
-        @media (pointer: fine){
-          :host(:hover) .state{
-            filter: opacity(.2);
-          }
+        .thumb-state{
+          position: absolute;
+          top: -20px;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: currentColor;
+          opacity: .24;
+          left: 49%;
         }
       `}</style>
-      <div class="track">
-        <div class="state"></div>
+      <div class="wrapper">
+        <div class="track"></div>
+        <div class="track-active"></div>
         <div class="thumb"></div>
+        <div class="thumb-state"></div>
       </div>
     </>
   }

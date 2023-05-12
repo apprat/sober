@@ -27,8 +27,8 @@ class Radio extends Component<Property> {
   onCreated() {
     this.element.addEventListener('click', () => {
       this.element.checked = true
-      if (this.property.name && this.element.parentNode) {
-        this.element.parentNode.querySelectorAll<typeof this.element>(`${this.element.tagName}[name='${this.property.name}']`).forEach((item) => {
+      if (this.property.name) {
+        document.querySelectorAll<typeof this.element>(`${this.element.tagName}[name='${this.property.name}']`).forEach((item) => {
           if (item === this.element) return
           item.checked = false
         })
@@ -53,15 +53,17 @@ class Radio extends Component<Property> {
           align-items: center;
           vertical-align: middle;
           line-height: 1;
+          font-size: .875rem;
+          font-weight: 400;
           cursor: pointer;
-          color: var(--s-color-on-surface-variant,#49454F);
+          color: var(--s-color-on-surface-variant);
         }
         :host([disabled=true]){
           pointer-events: none !important;
           filter: grayscale(.8) opacity(.6) !important;
         }
         :host([checked=true]){
-          color: var(--s-color-primary,#6750A4);
+          color: var(--s-color-primary);
         }
         .wrapper{
           display: flex;

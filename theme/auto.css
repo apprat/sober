@@ -1,18 +1,18 @@
 html {
-  --s-color-primary: #6750A4;
+  --s-color-primary: #057CC1;
   --s-color-on-primary: #FFFFFF;
-  --s-color-primary-container: #EADDFF;
-  --s-color-on-primary-container: #21005D;
+  --s-color-primary-container: #CDE5FF;
+  --s-color-on-primary-container: #001D34;
 
-  --s-color-secondary: #625B71;
+  --s-color-secondary: #8492A3;
   --s-color-on-secondary: #FFFFFF;
-  --s-color-secondary-container: #E8DEF8;
-  --s-color-on-secondary-container: #1D192B;
+  --s-color-secondary-container: #D5E4F7;
+  --s-color-on-secondary-container: #0E1D2A;
 
-  --s-color-tertiary: #7D5260;
+  --s-color-tertiary: #895100;
   --s-color-on-tertiary: #FFFFFF;
-  --s-color-tertiary-container: #FFD8E4;
-  --s-color-on-tertiary-container: #31111D;
+  --s-color-tertiary-container: #FFDCB8;
+  --s-color-on-tertiary-container: #2C1700;
 
   --s-color-error: #B3261E;
   --s-color-on-error: #FFFFFF;
@@ -30,31 +30,27 @@ html {
   --s-color-outline: #79747E;
 }
 
-:not(:defined) {
-  display: none;
-}
-
 body {
-  font-size: .93rem;
   color: var(--s-color-on-background);
   background: var(--s-color-background);
+  font-family: system-ui;
 }
 
 body[sober-theme=dark] {
-  --s-color-primary: #D0BCFF;
-  --s-color-on-primary: #381E72;
-  --s-color-primary-container: #4F378B;
-  --s-color-on-primary-container: #EADDFF;
+  --s-color-primary: #9DD67D;
+  --s-color-on-primary: #113800;
+  --s-color-primary-container: #205106;
+  --s-color-on-primary-container: #B8F397;
 
-  --s-color-secondary: #CCC2DC;
-  --s-color-on-secondary: #332D41;
-  --s-color-secondary-container: #4A4458;
-  --s-color-on-secondary-container: #E8DEF8;
+  --s-color-secondary: #BDCBB0;
+  --s-color-on-secondary: #283420;
+  --s-color-secondary-container: #3E4A35;
+  --s-color-on-secondary-container: #D9E7CB;
 
-  --s-color-tertiary: #EFB8C8;
-  --s-color-on-tertiary: #492532;
-  --s-color-tertiary-container: #633B48;
-  --s-color-on-tertiary-container: #FFD8E4;
+  --s-color-tertiary: #A0CFD0;
+  --s-color-on-tertiary: #003738;
+  --s-color-tertiary-container: #1E4E4E;
+  --s-color-on-tertiary-container: #BBEBEC;
 
   --s-color-error: #F2B8B5;
   --s-color-on-error: #601410;

@@ -54,8 +54,10 @@ class Checkbox extends Component<Property> {
           align-items: center;
           vertical-align: middle;
           line-height: 1;
+          font-size: .875rem;
+          font-weight: 400;
           cursor: pointer;
-          color: var(--s-color-on-surface-variant,#49454F);
+          color: var(--s-color-on-surface-variant);
         }
         :host([disabled=true]){
           pointer-events: none !important;
@@ -63,7 +65,7 @@ class Checkbox extends Component<Property> {
         }
         :host([checked=true]),
         :host([indeterminate=true]){
-          color: var(--s-color-primary,#6750A4);
+          color: var(--s-color-primary);
         }
         .wrapper{
           display: flex;

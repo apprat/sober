@@ -1,7 +1,7 @@
 {
   "name": "sober",
   "version": "0.0.14",
-  "description": "",
+  "description": "Material You design style web component UI library",
   "type": "module",
   "scripts": {
     "dev": "node rollup/dev.js",

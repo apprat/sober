@@ -6,7 +6,6 @@ Ripple.register()
 export interface Property {
   disabled: boolean
   type: 'normal' | 'extended'
-  theme: 'primary' | 'secondary ' | 'tertiary'
   size: 'medium' | 'small' | 'large'
   setBehavior(element: HTMLElement): void
 }
@@ -15,7 +14,6 @@ class FAB extends Component {
   property: Property = {
     disabled: false,
     type: 'normal',
-    theme: 'primary',
     size: 'medium',
     setBehavior(this: FAB, element) {
     }
@@ -36,8 +34,10 @@ class FAB extends Component {
           position: relative;
           font-weight: 500;
           line-height: 1;
+          font-size: .875rem;
+          font-weight: 400;
           white-space: nowrap;
-          color: var(--s-color-on-primary,#FFFFFF);
+          color: var(--s-color-on-primary);
           background:  var(--s-color-primary);
           -webkit-box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
           box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
@@ -50,14 +50,6 @@ class FAB extends Component {
         }
         :host([type=extended])>slot{
           display: contents;
-        }
-        :host([theme=secondary]){
-          color: var(--s-color-on-secondary-container,#1D192B);
-          background: var(--s-color-secondary-container,#E8DEF8);
-        }
-        :host([theme=tertiary]){
-          color: var(--s-color-on-tertiary-container,#31111D);
-          background: var(--s-color-tertiary-container,#FFD8E4);
         }
         :host([disabled=true]){
           pointer-events: none !important;

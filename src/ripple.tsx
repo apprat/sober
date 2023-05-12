@@ -83,7 +83,7 @@ class Ripple extends Component {
           background: currentColor;
           border-radius: 50%;
           flex-shrink: 0;
-          filter: opacity(.2);
+          filter: opacity(.24);
           transition: filter .2s;
         }
         @keyframes diffusion {
@@ -92,7 +92,7 @@ class Ripple extends Component {
         }
         @media (pointer: fine){
           :host(:hover)::before{
-            filter: opacity(.06);
+            filter: opacity(.12);
           }
         }
       `}</style>

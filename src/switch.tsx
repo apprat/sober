@@ -25,9 +25,8 @@ class Switch extends Component<Property> {
           display: inline-flex;
           align-items: center;
           vertical-align: middle;
-          line-height: 1;
           cursor: pointer;
-          color: var(--s-color-on-surface-variant,#49454F);
+          color: var(--s-color-on-surface-variant);
         }
         :host([disabled=true]){
           pointer-events: none !important;
@@ -43,14 +42,14 @@ class Switch extends Component<Property> {
         }
         :host([checked=true]) .state{
           transform: translateX(16px);
-          background: var(--s-color-primary,#6750A4);
+          background: var(--s-color-primary);
         }
         :host([checked=true]) .thumb{
-          background: var(--s-color-on-primary,#FFFFFF);
+          background: var(--s-color-on-primary);
           transform: scale(1.5) translateX(16px);
         }
         :host(:active) .state{
-          filter: opacity(.2);
+          filter: opacity(.24);
         }
         .track{
           display: flex;
@@ -58,9 +57,9 @@ class Switch extends Component<Property> {
           width: 52px;
           height: 32px;
           border-radius: 20px;
-          --background: var(--s-color-surface-variant,#49454F);
-          -webkit-box-shadow: 0 0 0 2px inset var(--s-color-outline,#79747E);
-          box-shadow: 0 0 0 2px inset var(--s-color-outline,#79747E);
+          --background: var(--s-color-surface-variant);
+          -webkit-box-shadow: 0 0 0 2px inset var(--s-color-outline);
+          box-shadow: 0 0 0 2px inset var(--s-color-outline);
           position: relative;
         }
         .state{
@@ -68,7 +67,7 @@ class Switch extends Component<Property> {
           left: 0;
           width: 40px;
           height: 40px;
-          background: var(--s-color-outline,#79747E);
+          background: var(--s-color-outline);
           filter: opacity(0);
           border-radius: 50%;
           transform: translateX(-4px);
@@ -76,7 +75,7 @@ class Switch extends Component<Property> {
           transition: transform .2s,filter .2s;
         }
         .thumb{
-          background: var(--s-color-outline,#79747E);
+          background: var(--s-color-outline);
           border-radius: 50%;
           width: 16px;
           height: 16px;
@@ -87,7 +86,7 @@ class Switch extends Component<Property> {
         }
         @media (pointer: fine){
           :host(:hover) .state{
-            filter: opacity(.2);
+            filter: opacity(.12);
           }
         }
       `}</style>

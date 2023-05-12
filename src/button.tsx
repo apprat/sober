@@ -9,7 +9,7 @@ export interface Property {
   size: 'medium' | 'small' | 'large'
 }
 
-class Button extends Component<Property> {
+class Button extends Component {
   property: Property = {
     disabled: false,
     theme: 'filled',
@@ -29,11 +29,12 @@ class Button extends Component<Property> {
           border-radius: 20px;
           text-transform: capitalize;
           position: relative;
-          font-weight: 500;
+          font-size: .875rem;
+          font-weight: 400;
           line-height: 1;
           white-space: nowrap;
-          background: var(--s-color-primary,#6750A4);
-          color: var(--s-color-on-primary,#FFFFFF);
+          background: var(--s-color-primary);
+          color: var(--s-color-on-primary);
           transition: box-shadow .2s;
           --container-padding: 0 24px;
         }
@@ -48,18 +49,18 @@ class Button extends Component<Property> {
           background:  none;
         }
         :host([theme=filled-tonal]){
-          background: var(--s-color-secondary-container,#E8DEF8);
-          color: var(--s-color-on-secondary-container,#1D192B);
+          background: var(--s-color-secondary-container);
+          color: var(--s-color-on-secondary-container);
         }
         :host([theme=outlined]){
-          -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline,#79747E);
-          box-shadow: 0 0 0 1px inset var(--s-color-outline,#79747E);
+          -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline);
+          box-shadow: 0 0 0 1px inset var(--s-color-outline);
           background: none;
-          color: var(--s-color-primary,#6750A4);
+          color: var(--s-color-primary);
         }
         :host([theme=text]){
           background: none;
-          color: var(--s-color-primary,#6750A4);
+          color: var(--s-color-primary);
           --container-padding: 0 16px;
         }
         :host([size=small]){

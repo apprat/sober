@@ -6,6 +6,7 @@ import Checkbox from './checkbox'
 import Radio from './radio'
 import Switch from './switch'
 import Slider from './slider'
+import slider from './slider'
 
 const register = () => ({
   [Button.name]: Button.register(),

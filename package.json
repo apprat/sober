@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node rollup/dev.js",
-    "build": "tsc && rollup --config rollup/rollup.config.js"
+    "build": "npx tsc && npx rollup --config rollup/rollup.config.js"
   },
   "keywords": [
     "material you",
@@ -18,12 +18,12 @@
     "ui-library",
     "tools"
   ],
-  "homepage": "https://github.com/apprat/sober",
   "author": "apprat",
   "repository": "apprat/sober",
   "license": "MIT",
   "main": "./dist/main.js",
   "devDependencies": {
+    "typescript": "^5.0.4",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "rollup": "^3.20.2",
     "rollup-plugin-uglify": "^6.0.4"

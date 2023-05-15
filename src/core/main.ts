@@ -11,7 +11,7 @@ export class Component<T = {}> {
   refs?: { [name: string]: Ref }
   element!: HTMLElement & T
   shadowRoot!: ShadowRoot
-  onPropertyChanged?(name: string, value: PropertyValue): unknown
+  onPropertyChanged?(name: string): unknown
   onCreated?(): unknown
   onMounted?(): unknown
   onUnmounted?(): unknown
@@ -67,7 +67,7 @@ const constructor = (element: HTMLElement, TypeComponent: typeof Component) => {
           if (old === null || String(value) !== old) return element.setAttribute(key, String(value))
         }
         component.property[key] = value
-        component.onPropertyChanged?.(key, value)
+        component.onPropertyChanged?.(key)
       }
     })
   }
@@ -83,7 +83,7 @@ export const define = <
   P = O extends { property: infer K, } ? K : {},
   E = { new(): Partial<P> & HTMLElement, prototype: HTMLElement },
   M = Omit<T, 'prototype'>
->(name: N, TypeComponent: T): { Element: E & M, register: () => E & M, name: `s-${N}` } => {
+>(name: N, TypeComponent: T): { Element: E & M, readonly register: () => E & M, readonly name: `s-${N}` } => {
   const maps = new Map<HTMLElement, State>()
   const attributes = Object.keys(new TypeComponent().property)
   class CustomElement extends HTMLElement {

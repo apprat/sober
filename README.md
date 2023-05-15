@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/apprat/sober/main/test/images/logo.png" width="120">
+  <img src="https://raw.githubusercontent.com/apprat/sober/main/test/images/logo.png" width="100">
 </p>
 <h1 align="center">Sober</h1>
 <p align="center"><b>Sober</b> is a web component UI library written in Typescript that uses the Google <b>Material You</b> design style</p>

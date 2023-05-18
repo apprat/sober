@@ -1,4 +1,4 @@
-import { Component, define, Ref } from './core/main'
+import { Component, define, Ref } from './base/core'
 import Ripple from './ripple'
 
 Ripple.register()
@@ -9,7 +9,7 @@ export interface Property {
   name: string
 }
 
-class Radio extends Component<Property> {
+class RadioButton extends Component<Property> {
   property: Property = {
     disabled: false,
     checked: false,
@@ -91,4 +91,4 @@ class Radio extends Component<Property> {
   }
 }
 
-export default define('radio', Radio)
+export default define('radio-button', RadioButton)

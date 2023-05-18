@@ -6,7 +6,6 @@ export default defineConfig({
   output: {
     file: 'dist/bundle.min.js',
     format: 'umd',
-    name: 'sober',
     sourcemap: true
   },
   plugins: [nodeResolve(), uglify()]

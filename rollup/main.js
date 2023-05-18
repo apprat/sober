@@ -1,3 +1,3 @@
-import register from '../dist/main'
+import { registerAll } from '../dist/base/main'
 
-export default register()
+registerAll()

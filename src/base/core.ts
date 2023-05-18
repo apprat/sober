@@ -19,8 +19,6 @@ export class Component<T = {}> {
   render?(): VNode
 }
 
-//const kebabToCamel = (value: string) => value.replace(/-([a-z])/g, (substring, item: string) => item.toUpperCase())
-//const camelToKebab = (value: string) => value.replace(/[A-Z]/g, (item) => '-' + item.toLowerCase())
 
 class State {
   defaultValues: { [name: string]: PropertyValue } = {}
@@ -82,8 +80,8 @@ export const define = <
   O = T extends { new(): infer K } ? K : {},
   P = O extends { property: infer K, } ? K : {},
   E = { new(): Partial<P> & HTMLElement, prototype: HTMLElement },
-  M = Omit<T, 'prototype'>
->(name: N, TypeComponent: T): { Element: E & M, readonly register: () => E & M, readonly name: `s-${N}` } => {
+  M extends { [name: string]: Function } = {}>
+  (name: N, TypeComponent: T, method?: M): Readonly<{ Element: E, register: () => void, name: `s-${N}` } & M> => {
   const maps = new Map<HTMLElement, State>()
   const attributes = Object.keys(new TypeComponent().property)
   class CustomElement extends HTMLElement {
@@ -105,17 +103,11 @@ export const define = <
       this[name] = newValue ?? undefined
     }
   }
-  for (const name of Object.getOwnPropertyNames(TypeComponent)) {
-    if (['length', 'name', 'prototype'].includes(name)) continue
-    CustomElement[name] = TypeComponent[name]
-  }
   const customName = `s-${name}`
   return {
     Element: CustomElement,
     name: customName,
-    register: () => {
-      !customElements.get(customName) && customElements.define(customName, CustomElement)
-      return CustomElement
-    }
+    register: () => !customElements.get(customName) && customElements.define(customName, CustomElement),
+    ...method
   } as never
 }

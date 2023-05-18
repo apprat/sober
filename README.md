@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/apprat/sober/main/test/images/logo.png" width="100">
+  <img src="https://gitee.com/apprat/sober/raw/main/test/images/logo.png" width="96">
 </p>
 <h1 align="center">Sober</h1>
 <p align="center"><b>Sober</b> is a web component UI library written in Typescript that uses the Google <b>Material You</b> design style</p>
@@ -14,7 +14,7 @@
 <p align="center"><u>Support any framework</u></p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/apprat/sober/main/test/images/preview.png" height="80" />
+  <img src="https://gitee.com/apprat/sober/raw/main/test/images/preview.png" height="80" />
 </p>
 
 
@@ -23,15 +23,15 @@
 $ npm install sober
 ```
 ```js
-import register from 'sober'
+import { registerAll } from 'sober'
 //Load Style
 import 'sober/theme/light.css'
 
 //Use all components
-register()
+registerAll()
 ```
 
-Use a single component
+on-demand introduction
 
 ```js
 import Button from 'sober/dist/button'

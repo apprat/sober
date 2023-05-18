@@ -1,4 +1,4 @@
-import { Component, define } from './core/main'
+import { Component, define } from './base/core'
 import Ripple from './ripple'
 
 Ripple.register()

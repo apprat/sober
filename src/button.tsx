@@ -1,4 +1,4 @@
-import { Component, define } from './core/main'
+import { Component, define } from './base/core'
 import Ripple from './ripple'
 
 Ripple.register()
@@ -122,4 +122,6 @@ class Button extends Component {
   }
 }
 
-export default define('button', Button)
+const dialog = () => { }
+
+export default define('button', Button, { dialog })

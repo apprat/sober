@@ -1,6 +1,6 @@
 {
   "name": "sober",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Material You design style web component UI library",
   "type": "module",
   "scripts": {
@@ -21,7 +21,7 @@
   "author": "apprat",
   "repository": "apprat/sober",
   "license": "MIT",
-  "main": "./dist/main.js",
+  "main": "./dist/base/main.js",
   "devDependencies": {
     "typescript": "^5.0.4",
     "@rollup/plugin-node-resolve": "^15.0.2",

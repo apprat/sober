@@ -1,4 +1,4 @@
-import { Component, define, Ref } from './core/main'
+import { Component, define, Ref } from './base/core'
 
 const pointer = { touched: false }
 {

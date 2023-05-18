@@ -13,7 +13,7 @@
     "rootDir": "./src",
     "noImplicitAny": false,
     "jsx": "react-jsx",
-    "jsxImportSource": "./core",
+    "jsxImportSource": "./base",
     "declaration": true,
     "sourceMap": true,
     "moduleResolution": "Node",

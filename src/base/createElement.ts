@@ -1,4 +1,4 @@
-import { Ref } from './main'
+import { Ref } from './core'
 
 export interface VNode {
   type: string | null

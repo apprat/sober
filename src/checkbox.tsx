@@ -1,4 +1,4 @@
-import { Component, define, Ref } from './base/core'
+import { Component, define, Ref, IntrinsicElement } from './base/core'
 import Ripple from './ripple'
 
 Ripple.register()
@@ -9,7 +9,7 @@ export interface Property {
   indeterminate: false
 }
 
-class Checkbox extends Component<Property> {
+class Constructor extends Component<Property> {
   property: Property = {
     disabled: false,
     checked: false,
@@ -93,4 +93,11 @@ class Checkbox extends Component<Property> {
   }
 }
 
-export default define('checkbox', Checkbox)
+const name = 's-checkbox'
+export default define(name, Constructor)
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends IntrinsicElement<typeof name, Property> { }
+  }
+}

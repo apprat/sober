@@ -1,4 +1,4 @@
-import { Component, define, Ref } from './base/core'
+import { Component, define, Ref, IntrinsicElement } from './base/core'
 import Ripple from './ripple'
 
 Ripple.register()
@@ -9,7 +9,7 @@ export interface Property {
   name: string
 }
 
-class RadioButton extends Component<Property> {
+class Constructor extends Component<Property> {
   property: Property = {
     disabled: false,
     checked: false,
@@ -91,4 +91,11 @@ class RadioButton extends Component<Property> {
   }
 }
 
-export default define('radio-button', RadioButton)
+const name = 's-radio-button'
+export default define(name, Constructor)
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends IntrinsicElement<typeof name, Property> { }
+  }
+}

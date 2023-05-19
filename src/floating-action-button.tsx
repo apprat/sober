@@ -1,4 +1,4 @@
-import { Component, define } from './base/core'
+import { Component, define, IntrinsicElement } from './base/core'
 import Ripple from './ripple'
 
 Ripple.register()
@@ -10,12 +10,12 @@ export interface Property {
   setBehavior(element: HTMLElement): void
 }
 
-class FAB extends Component {
+class Constructor extends Component {
   property: Property = {
     disabled: false,
     type: 'normal',
     size: 'medium',
-    setBehavior(this: FAB, element) {
+    setBehavior(this: Constructor, element) {
     }
   }
   render() {
@@ -102,4 +102,11 @@ class FAB extends Component {
   }
 }
 
-export default define('floating-action-button', FAB)
+const name = 's-floating-action-button'
+export default define(name, Constructor)
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends IntrinsicElement<typeof name, Property> { }
+  }
+}

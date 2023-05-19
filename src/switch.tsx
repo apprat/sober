@@ -1,11 +1,11 @@
-import { Component, define } from './base/core'
+import { Component, define, IntrinsicElement } from './base/core'
 
 export interface Property {
   disabled: boolean
   checked: boolean
 }
 
-class Switch extends Component<Property> {
+class Constructor extends Component<Property> {
   property: Property = {
     disabled: false,
     checked: false
@@ -98,4 +98,11 @@ class Switch extends Component<Property> {
   }
 }
 
-export default define('switch', Switch)
+const name = 's-switch'
+export default define(name, Constructor)
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends IntrinsicElement<typeof name, Property> { }
+  }
+}

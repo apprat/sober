@@ -6,7 +6,8 @@ export default defineConfig({
   output: {
     file: 'dist/bundle.min.js',
     format: 'umd',
-    sourcemap: true
+    sourcemap: true,
+    name: 'Sober'
   },
   plugins: [nodeResolve(), uglify()]
 })

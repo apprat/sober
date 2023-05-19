@@ -24,11 +24,9 @@ $ npm install sober
 ```
 ```js
 import { registerAll } from 'sober'
-//Load Style
-import 'sober/theme/light.css'
+import 'sober/theme/light.css' //load Style Variables
 
-//Use all components
-registerAll()
+registerAll() //register all components
 ```
 
 on-demand introduction

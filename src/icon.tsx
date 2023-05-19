@@ -1,10 +1,10 @@
-import { Component, define } from './base/core'
+import { Component, define, IntrinsicElement } from './base/core'
 
 export interface Property {
   size: 'medium' | 'small' | 'large'
 }
 
-class Icon extends Component {
+class Constructor extends Component {
   property: Property = {
     size: 'medium'
   }
@@ -37,4 +37,11 @@ class Icon extends Component {
   }
 }
 
-export default define('icon', Icon)
+const name = 's-icon'
+export default define(name, Constructor)
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends IntrinsicElement<typeof name, Property> { }
+  }
+}

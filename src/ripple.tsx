@@ -1,4 +1,4 @@
-import { Component, define, Ref } from './base/core'
+import { Component, define, Ref, IntrinsicElement } from './base/core'
 
 const pointer = { touched: false }
 {
@@ -12,7 +12,7 @@ export interface Property {
   y: number
 }
 
-class Ripple extends Component {
+class Constructor extends Component {
   property: Property = { x: NaN, y: NaN }
   state = { pressed: false }
   refs = {
@@ -104,4 +104,11 @@ class Ripple extends Component {
   }
 }
 
-export default define('ripple', Ripple)
+const name = 's-ripple'
+export default define(name, Constructor)
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends IntrinsicElement<typeof name, Property> { }
+  }
+}

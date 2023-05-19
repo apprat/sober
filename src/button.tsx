@@ -1,4 +1,4 @@
-import { Component, define } from './base/core'
+import { Component, define, IntrinsicElement } from './base/core'
 import Ripple from './ripple'
 
 Ripple.register()
@@ -9,7 +9,7 @@ export interface Property {
   size: 'medium' | 'small' | 'large'
 }
 
-class Button extends Component {
+class Constructor extends Component {
   property: Property = {
     disabled: false,
     theme: 'filled',
@@ -121,7 +121,11 @@ class Button extends Component {
     </>
   }
 }
+const name = 's-button'
+export default define(name, Constructor)
 
-const dialog = () => { }
-
-export default define('button', Button, { dialog })
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends IntrinsicElement<typeof name, Property> { }
+  }
+}

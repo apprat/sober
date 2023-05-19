@@ -1,4 +1,9 @@
 import { VNode, createElement } from './createElement'
+import { KebabToCamel } from './utils'
+
+export type IntrinsicElement<N extends string, T extends {}> = {
+  [K in KebabToCamel<N>]: Partial<T> & { [name: string]: any }
+} & { [K in N]: Partial<T> & { [name: string]: any } }
 
 export class Ref<T = HTMLElement> {
   value?: T
@@ -18,7 +23,6 @@ export class Component<T = {}> {
   onAdopted?(): unknown
   render?(): VNode
 }
-
 
 class State {
   defaultValues: { [name: string]: PropertyValue } = {}
@@ -75,13 +79,12 @@ const constructor = (element: HTMLElement, TypeComponent: typeof Component) => {
 }
 
 export const define = <
-  N extends string,
   T extends typeof Component<any>,
   O = T extends { new(): infer K } ? K : {},
   P = O extends { property: infer K, } ? K : {},
   E = { new(): Partial<P> & HTMLElement, prototype: HTMLElement },
   M extends { [name: string]: Function } = {}>
-  (name: N, TypeComponent: T, method?: M): Readonly<{ Element: E, register: () => void, name: `s-${N}` } & M> => {
+  (name: string, TypeComponent: T, method?: M): Readonly<{ Element: E, register: () => void } & M> => {
   const maps = new Map<HTMLElement, State>()
   const attributes = Object.keys(new TypeComponent().property)
   class CustomElement extends HTMLElement {
@@ -103,11 +106,9 @@ export const define = <
       this[name] = newValue ?? undefined
     }
   }
-  const customName = `s-${name}`
   return {
     Element: CustomElement,
-    name: customName,
-    register: () => !customElements.get(customName) && customElements.define(customName, CustomElement),
+    register: () => !customElements.get(name) && customElements.define(name, CustomElement),
     ...method
   } as never
 }

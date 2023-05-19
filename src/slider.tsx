@@ -1,4 +1,4 @@
-import { Component, define, Ref } from './base/core'
+import { Component, define, Ref, IntrinsicElement } from './base/core'
 
 export interface Property {
   disabled: boolean
@@ -11,7 +11,7 @@ export interface Property {
   value: number
 }
 
-class Slider extends Component<Property> {
+class Constructor extends Component<Property> {
   property: Property = {
     type: 'continuous',
     disabled: false,
@@ -137,4 +137,11 @@ class Slider extends Component<Property> {
   }
 }
 
-export default define('slider', Slider)
+const name = 's-slider'
+export default define(name, Constructor)
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends IntrinsicElement<typeof name, Property> { }
+  }
+}

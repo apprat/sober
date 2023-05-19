@@ -1,3 +1,3 @@
 import { registerAll } from '../dist/base/main'
 
-registerAll()
+export default registerAll()

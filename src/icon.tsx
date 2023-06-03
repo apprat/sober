@@ -1,47 +1,40 @@
-import { Component, define, IntrinsicElement } from './base/core'
+import { defineElement, IntrinsicElement } from './base/core'
 
-export interface Property {
-  size: 'medium' | 'small' | 'large'
-}
-
-class Constructor extends Component {
-  property: Property = {
-    size: 'medium'
+const render = () => <>
+  <style jsx>{`
+  :host{
+    -webkit-user-select: none;
+    user-select: none;
+    display: inline-flex;
+    vertical-align: middle;
+    width: 24px;
+    height: 24px;
+    justify-content: center;
+    align-items: center;
+    fill: currentColor;
+    box-sizing: border-box;
   }
-  render() {
-    return <>
-      <style jsx>{`
-        :host{
-          -webkit-user-select: none;
-          user-select: none;
-          display: inline-flex;
-          vertical-align: middle;
-          width: 24px;
-          height: 24px;
-          justify-content: center;
-          align-items: center;
-          fill: currentColor;
-          box-sizing: border-box;
-        }
-        :host([size=small]){
-          width: 20px;
-          height: 20px
-        }
-        :host([size=large]){
-          width: 40px;
-          height: 40px;
-        }
-      `}</style>
-      <slot></slot>
-    </>
+  :host([size=small]){
+    width: 20px;
+    height: 20px
   }
-}
+  :host([size=large]){
+    width: 40px;
+    height: 40px;
+  }
+`}</style>
+  <slot></slot>
+</>
 
 const name = 's-icon'
-export default define(name, Constructor)
+const props = {
+  size: 'medium' as 'medium' | 'small' | 'large'
+}
+
+export default defineElement({ name, props, render })
 
 declare global {
   namespace JSX {
-    interface IntrinsicElements extends IntrinsicElement<typeof name, Property> { }
+    interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
   }
 }

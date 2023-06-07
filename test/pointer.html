@@ -23,23 +23,28 @@
     div>* {
       margin: 8px;
     }
+
+    s-pointer {
+      padding: 16px;
+    }
   </style>
 </head>
 
 <body>
   <div>
-    <!-- <s-button
+    <s-button
       onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
       toggle theme
-    </s-button> -->
+    </s-button>
   </div>
   <hr>
   <div>
-    <s-switch></s-switch>
-    <!-- <s-switch checked="true">Select Group</s-switch>
-    <s-switch disabled="true"></s-switch>
-    <s-switch disabled="true" checked="true"></s-switch>
-    <s-switch disabled="true" indeterminate="true"></s-switch> -->
+    <s-pointer>
+      Test
+    </s-pointer>
+    <s-pointer centered="true">
+      Test
+    </s-pointer>
   </div>
 
   <script src="../dist/bundle.min.js"></script>

@@ -1,21 +1,23 @@
 import Button from '../button'
+import Pointer from '../pointer'
 import Icon from '../icon'
 import FloatingActionButton from '../floating-action-button'
-import Ripple from '../ripple'
 import Checkbox from '../checkbox'
 import RadioButton from '../radio-button'
 import Switch from '../switch'
-import Slider from '../slider'
+import Tab from '../tab'
+import TabItem from '../tab-item'
 
 const components = {
   Button,
-  Ripple,
+  Pointer,
   FloatingActionButton,
   Icon,
   Checkbox,
   RadioButton,
   Switch,
-  Slider
+  Tab,
+  TabItem
 }
 
 export const registerAll = () => {

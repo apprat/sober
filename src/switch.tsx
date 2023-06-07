@@ -1,83 +1,67 @@
-import { defineElement, IntrinsicElement } from './base/core'
+import { defineElement, IntrinsicElement, css } from './base/core'
+import Pointer from './pointer'
 
-const render = () => <>
-  <style jsx>{`
-  :host{
-    -webkit-user-select: none;
-    user-select: none;
-    display: inline-flex;
-    align-items: center;
-    vertical-align: middle;
-    cursor: pointer;
-    color: var(--s-color-on-surface-variant);
-  }
-  :host([disabled=true]){
-    pointer-events: none !important;
-    filter: grayscale(.8) opacity(.4) !important;
-  }
-  :host([checked=true]){
-    color: var(--s-color-primary);
-  }
-  :host([checked=true]) .track{
-    background: var(--s-color-primary);
-    -webkit-box-shadow:none;
-    box-shadow: none;
-  }
-  :host([checked=true]) .state{
-    transform: translateX(16px);
-    background: var(--s-color-primary);
-  }
-  :host([checked=true]) .thumb{
-    background: var(--s-color-on-primary);
-    transform: scale(1.5) translateX(16px);
-  }
-  :host(:active) .state{
-    filter: opacity(.24);
-  }
-  .track{
-    display: flex;
-    align-items: center;
-    width: 52px;
-    height: 32px;
-    border-radius: 20px;
-    --background: var(--s-color-surface-variant);
-    -webkit-box-shadow: 0 0 0 2px inset var(--s-color-outline);
-    box-shadow: 0 0 0 2px inset var(--s-color-outline);
-    position: relative;
-  }
-  .state{
-    position: absolute;
-    left: 0;
-    width: 40px;
-    height: 40px;
-    background: var(--s-color-outline);
-    filter: opacity(0);
-    border-radius: 50%;
-    transform: translateX(-4px);
-    transform-origin: left;
-    transition: transform .2s,filter .2s;
-  }
-  .thumb{
-    background: var(--s-color-outline);
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    transform: scale(1) translateX(8px);
-    transition: transform .2s;
-    transform-origin: left;
-    position: relative;
-  }
-  @media (pointer: fine){
-    :host(:hover) .state{
-      filter: opacity(.12);
-    }
-  }
-  `}</style>
-  <div class="track">
-    <div class="state"></div>
-    <div class="thumb"></div>
-  </div>
-</>
+const style = css`
+:host{
+  -webkit-user-select: none;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  cursor: pointer;
+  position: relative;
+  color: var(--s-color-on-surface-variant);
+}
+:host([disabled=true]){
+  pointer-events: none !important;
+  filter: grayscale(.8) opacity(.4) !important;
+}
+:host([checked=true]){
+  color: var(--s-color-primary);
+}
+:host([checked=true]) .track{
+  background: var(--s-color-primary);
+  -webkit-box-shadow:none;
+  box-shadow: none;
+}
+:host([checked=true]) .thumb{
+  background: var(--s-color-on-primary);
+  transform: scale(1.5) translateX(16px);
+}
+.track{
+  display: flex;
+  align-items: center;
+  width: 52px;
+  height: 32px;
+  border-radius: 20px;
+  --background: var(--s-color-surface-variant);
+  -webkit-box-shadow: 0 0 0 2px inset var(--s-color-outline);
+  box-shadow: 0 0 0 2px inset var(--s-color-outline);
+  position: relative;
+}
+.thumb{
+  background: var(--s-color-outline);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  transform: scale(1) translateX(8px);
+  transition: transform .2s;
+  transform-origin: left;
+  position: relative;
+}
+
+.pointer-wrapper{
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  top: auto !important;
+  transition: transform .2s;
+  transform: translateX(-4px);
+}
+:host([checked=true]) .pointer-wrapper{
+  transform: translateX(16px);
+}
+`
 
 const name = 's-switch'
 const props = {
@@ -86,12 +70,21 @@ const props = {
 }
 
 export default defineElement({
-  name, props, render,
-  created() {
-    this.element.addEventListener('click', () => {
-      this.element.checked = !this.element.checked
-      this.element.dispatchEvent(new Event('change'))
+  name, props,
+  setup() {
+    this.host.addEventListener('click', () => {
+      this.props.checked = !this.props.checked
+      this.host.dispatchEvent(new Event('change'))
     })
+    return {
+      render: () => <>
+        <style>{style}</style>
+        <div class="track">
+          <div class="thumb"></div>
+        </div>
+        <Pointer.fragment centered={true} />
+      </>
+    }
   }
 })
 

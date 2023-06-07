@@ -1,58 +1,59 @@
 import { KebabToCamel } from './utils'
 
+export const css = (text: TemplateStringsArray) => text.join()
+
 export class VNode {
-  constructor(public type: string | null, public props: { [name: string]: unknown }) { }
+  constructor(public type: string | null | ((this: { parentNode: Node }, props: {}) => Element), public props: { [name: string]: unknown }) { }
 }
+
+type CreateElementContainer = { parent: Node, parentNode: Node }
 
 class CreateElement {
   refs: { [name: string]: HTMLElement } = {}
   private marks: { SVG?: boolean } = {}
-  private children(children: unknown) {
-    const elements: Node[] = []
-    if (children === undefined) return elements
-    if (children instanceof VNode) {
-      const node = this.node(children)
-      !Array.isArray(node) ? elements.push(node) : node.forEach((value) => elements.push(value))
-      return elements
-    }
-    if (!Array.isArray(children)) {
-      elements.push(document.createTextNode(String(children)))
-      return elements
-    }
-    children.forEach((item) => {
+  private createChildren(children: unknown, container: CreateElementContainer) {
+    const child = Array.isArray(children) ? children : [children]
+    for (const item of child) {
       if (item instanceof VNode) {
-        const node = this.node(item)
-        !Array.isArray(node) ? elements.push(node) : node.forEach((value) => elements.push(value))
-        return
+        this.create(item, container)
+        continue
       }
-      elements.push(document.createTextNode(String(item)))
-    })
-    return elements
+      container.parent.appendChild(document.createTextNode(String(item)))
+    }
   }
-  private node(vnode: VNode) {
+  private create(vnode: VNode, container: CreateElementContainer) {
+    if (vnode.type === null) throw new TypeError()
+    if (typeof vnode.type === 'function') {
+      container.parent.appendChild(vnode.type.apply({ parentNode: container.parentNode }, [vnode.props]))
+      return
+    }
     if (vnode.type === 'svg') this.marks.SVG = true
-    const el = this.marks.SVG ? document.createElementNS('http://www.w3.org/2000/svg', vnode.type!) : document.createElement(vnode.type!)
-    el.append(...this.children(vnode.props.children))
-    if (this.marks.SVG) this.marks.SVG = false
+    const node = this.marks.SVG ? document.createElementNS('http://www.w3.org/2000/svg', vnode.type) : document.createElement(vnode.type)
+    container.parent.appendChild(node)
     for (const key in vnode.props) {
-      if (key === 'children') continue
       const item = vnode.props[key]
+      if (key === 'children') {
+        this.createChildren(item, { parent: node, parentNode: node })
+        continue
+      }
       if (key.match(/on[A-Z]/g) && typeof item === 'function') {
-        el.addEventListener(key.slice(2).toLocaleLowerCase(), (e) => item(e))
+        node.addEventListener(key.slice(2).toLocaleLowerCase(), (e) => item(e))
         continue
       }
       if (key === 'ref' && typeof item === 'string') {
-        this.refs[item] = el as never
+        this.refs[item] = node as never
         continue
       }
-      el.setAttribute(key, String(item))
+      node.setAttribute(key, String(item))
     }
-    return el
+    if (vnode.type === 'svg') this.marks.SVG = false
   }
-  constructor(vnode: VNode, element: Node) {
-    const elements = vnode.type === null ? this.children(vnode.props.children) : [this.node(vnode)]
+  constructor(vnode: VNode, element: ShadowRoot) {
     const fragment = document.createDocumentFragment()
-    elements.forEach((value) => fragment.append(value))
+    const container: CreateElementContainer = { parent: fragment, parentNode: element.host }
+    if (vnode.type === null) this.createChildren(vnode.props.children as VNode, container)
+    if (typeof vnode.type === 'string') this.create(vnode, container)
+    if (typeof vnode.type === 'function') fragment.appendChild(vnode.type.apply({ parentNode: element }, [vnode.props]))
     element.appendChild(fragment)
   }
 }
@@ -61,10 +62,10 @@ type Prop = string | number | boolean | undefined
 
 class State {
   defaultValues: { [name: string]: Prop } = {}
-  onMounted?(): unknown
-  onUnmounted?(): unknown
-  onAdopted?(): unknown
-  onPropsChanged?(name: string): unknown
+  mounted?: Function
+  unmounted?: Function
+  adopted?: Function
+  changed?: Function
   parseTargetType(value: unknown, target: Prop): Prop {
     switch (typeof target) {
       case 'string':
@@ -81,32 +82,31 @@ class State {
   }
 }
 
-type PrimaryElement<P> = Readonly<{
-  element: HTMLElement & Partial<P>
+type ThisElement<P> = Readonly<{
   shadowRoot: ShadowRoot
+  host: HTMLElement & Partial<P>
   props: P
+  refs: { [name: string]: HTMLElement }
 }>
-
-type AdvancedElement<P, D> = PrimaryElement<P> & D
-type ThisElement<P, D> = AdvancedElement<P, D> & Readonly<{ refs: { [name: string]: HTMLElement } }>
 
 export const defineElement = <
   P extends { [name: string]: Prop } = {},
-  E extends { [name: string]: Function } = {},
-  F extends { [name: string]: Function } | void = void,
-  D = {}
+  E extends {} = {},
+  EF extends { [name: string]: Function } = {}
 >(options: {
   name: string
   props?: P
   expose?: E
-  setup?: (this: PrimaryElement<P>) => D
-  render: (this: AdvancedElement<P, D>) => VNode
-  created?: (this: ThisElement<P, D>) => F
-  mounted?: (this: ThisElement<P, D>) => unknown
-  unmounted?: (this: ThisElement<P, D>) => unknown
-  adopted?: (this: ThisElement<P, D>) => unknown
-  propsChanged?: (this: ThisElement<P, D>, name: keyof P) => unknown
-}): Readonly<{ Element: { new(): Partial<P> & Readonly<F> & HTMLElement, prototype: HTMLElement }, register: () => void } & E> => {
+  setup: (this: ThisElement<P>) => {
+    render: () => VNode
+    created?: () => void
+    mounted?: () => void
+    unmounted?: () => void
+    adopted?: () => void
+    changed?: (name: keyof P) => void
+    expose?: EF
+  }
+}): Readonly<{ Element: { new(): Partial<P> & Readonly<EF> & HTMLElement, prototype: HTMLElement }, register: () => void } & E> => {
   const maps = new Map<HTMLElement, State>()
   const attributes = Object.keys(options.props ?? {})
   class CustomElement extends HTMLElement {
@@ -134,39 +134,39 @@ export const defineElement = <
               if (old === null || String(value) !== old) return this.setAttribute(key, String(value))
             }
             oldProps[key] = value
-            state.onPropsChanged?.(key)
+            state.changed?.(key)
           }
         }
         Object.defineProperty(this, key, descriptor)
         Object.defineProperty(props, key, descriptor)
       }
-      const oldElement = { element: this, shadowRoot, props } as any
-      const setup = options.setup?.apply(oldElement)
-      const thisElement = { element: this, shadowRoot, props, ...setup } as any
-      thisElement.refs = new CreateElement(options.render.apply(thisElement), shadowRoot).refs
-      state.onAdopted = options.adopted?.bind(thisElement)
-      state.onMounted = options.mounted?.bind(thisElement)
-      state.onUnmounted = options.unmounted?.bind(thisElement)
-      state.onPropsChanged = options.propsChanged?.bind(thisElement)
-      const funs = options.created?.apply(thisElement)
-      for (const key in funs) this[key as string] = funs
+      const thisElement = { shadowRoot, host: this, props, refs: {} } as any
+      const setup = options.setup?.apply(thisElement)
+      thisElement.refs = new CreateElement(setup.render(), shadowRoot).refs
+      //
+      state.adopted = setup.adopted?.bind(thisElement)
+      state.mounted = setup.mounted?.bind(thisElement)
+      state.unmounted = setup.unmounted?.bind(thisElement)
+      state.changed = setup.changed?.bind(thisElement)
+      const funs = setup.created?.apply(thisElement)
+      for (const key in setup.expose) this[key as string] = funs
       maps.set(this, state)
     }
     connectedCallback() {
-      maps.get(this)?.onMounted?.()
+      maps.get(this)?.mounted?.()
     }
     disconnectedCallback() {
-      maps.get(this)?.onUnmounted?.()
+      maps.get(this)?.unmounted?.()
     }
     adoptedCallback() {
-      maps.get(this)?.onAdopted?.()
+      maps.get(this)?.adopted?.()
     }
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
       this[name] = newValue ?? undefined
     }
   }
   return {
-    Element: CreateElement,
+    Element: CustomElement,
     register: () => !customElements.get(options.name) && customElements.define(options.name, CustomElement),
     ...options.expose
   } as never

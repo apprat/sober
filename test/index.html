@@ -14,8 +14,9 @@
 
     main {
       border: solid 1px #d6d6d6;
-      margin-top: 40px;
+      margin-top: 8px;
       padding: 8px;
+      display: inline-block;
     }
 
     main>* {
@@ -26,21 +27,25 @@
 
 <body>
   <div>
+    <h1>Base</h1>
+    <a href="./pointer.html">Pointer</a>
+    <a href="./button.html">Button</a>
+    <a href="./FAB.html">FAButton</a>
+    <a href="./checkbox.html">Checkbox</a>
+    <a href="./radio-button.html">Radio Button</a>
+    <a href="./switch.html">Switch</a>
+    <a href="./slider.html">Slider</a>
+    <a href="./tab.html">Tab</a>
+    <h1>
+      unstable
+    </h1>
+    <a href="./ripple.html">Ripple</a>
+  </div>
+  <main>
     <s-button
       onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
-      toggle theme
+      toggle
     </s-button>
-  </div>
-  <hr>
-  <a href="./ripple.html">Ripple</a>
-  <a href="./button.html">Button</a>
-  <a href="./FAB.html">FAButton</a>
-  <a href="./checkbox.html">Checkbox</a>
-  <a href="./radio-button.html">Radio Button</a>
-  <a href="./switch.html">Switch</a>
-  <a href="./slider.html">Slider</a>
-  <main>
-    <s-button>Button</s-button>
     <s-button theme="elevated">Button</s-button>
     <s-floating-action-button size="small">
       <s-icon>

@@ -14,7 +14,7 @@
 <p align="center"><u>Support any framework</u></p>
 
 <p align="center">
-  <img src="https://gitee.com/apprat/sober/raw/main/test/images/preview.png" height="80" />
+  <img src="https://gitee.com/apprat/sober/raw/main/test/images/preview.png" height="140" />
 </p>
 
 
@@ -24,9 +24,9 @@ $ npm install sober
 ```
 ```js
 import { registerAll } from 'sober'
-import 'sober/theme/light.css' //load Style Variables
+import 'sober/themes/light.css'
 
-registerAll() //register all components
+registerAll()
 ```
 
 on-demand introduction
@@ -35,7 +35,7 @@ on-demand introduction
 import Button from 'sober/dist/button'
 
 Button.register()
-//or
+//use
 const button = new Button.Element()
 document.body.appendChild(button)
 button.theme = 'outlined'
@@ -44,6 +44,6 @@ button.theme = 'outlined'
 
 ### Use it directly in the browser
 ```html
-<link rel="stylesheet" href="//unpkg.com/sober/theme/auto.css" />
+<link rel="stylesheet" href="//unpkg.com/sober/themes/auto.css" />
 <script src="//unpkg.com/sober/dist/bundle.min.js"></script>
 ```

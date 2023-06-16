@@ -5,42 +5,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
-  <link rel="stylesheet" href="../theme/auto.css">
+  <link rel="stylesheet" href="./styles/default.css">
   <style>
-    * {
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    :not(:defined) {
-      display: none;
-    }
-
-    body {
-      margin: 0;
-    }
-
-    div>* {
-      margin: 8px;
-    }
   </style>
 </head>
 
 <body>
-  <div>
-    <!-- <s-button
-      onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
-      toggle theme
-    </s-button> -->
-  </div>
-  <hr>
-  <div>
+  <s-floating-action-button type="extended"
+    onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
+    Toggle
+  </s-floating-action-button>
+  <main>
     <s-switch></s-switch>
     <!-- <s-switch checked="true">Select Group</s-switch>
     <s-switch disabled="true"></s-switch>
     <s-switch disabled="true" checked="true"></s-switch>
     <s-switch disabled="true" indeterminate="true"></s-switch> -->
-  </div>
+  </main>
 
   <script src="../dist/bundle.min.js"></script>
 </body>

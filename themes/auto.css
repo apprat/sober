@@ -28,6 +28,7 @@ html {
   --s-color-on-surface-variant: #49454F;
 
   --s-color-outline: #79747E;
+  --s-color-outline-variant: #C4C7C5;
 }
 
 body {
@@ -66,6 +67,7 @@ body[sober-theme=dark] {
   --s-color-on-surface-variant: #CAC4D0;
 
   --s-color-outline: #938F99;
+  --s-color-outline-variant: #444746;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -99,5 +101,6 @@ body[sober-theme=dark] {
     --s-color-on-surface-variant: #CAC4D0;
 
     --s-color-outline: #938F99;
+    --s-color-outline-variant: #444746;
   }
 }

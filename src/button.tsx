@@ -1,5 +1,5 @@
 import { defineElement, IntrinsicElement, css } from './base/core'
-import Pointer from './pointer'
+import { Fragment } from './pointer'
 
 const style = css`
 :host{
@@ -21,6 +21,7 @@ const style = css`
   transition: box-shadow .2s;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
   padding: 0 24px;
 }
 :host([disabled=true]){
@@ -103,7 +104,7 @@ export default defineElement({
         <slot></slot>
         <slot name="end">
         </slot>
-        <Pointer.fragment centered={false} />
+        <Fragment centered={false} />
       </>
     }
   }

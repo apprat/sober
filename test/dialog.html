@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+  <style>
+  </style>
+</head>
+
+<body>
+  <s-fab type="extended"
+    onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
+    Toggle
+  </s-fab>
+  <main>
+    <s-dialog positive="确认" onclose="console.log(event)">
+      <s-button slot="trigger">
+        Checkbox
+      </s-button>
+      <div slot="title">Dialog Choice</div>
+      <!-- <div slot="message">
+        The M3 baseline color scheme uses the same roles and token mapping as user-generated color schemes.
+      </div> -->
+      <s-label>
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 1</div>
+      </s-label>
+      <s-label>
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 2</div>
+      </s-label>
+      <s-label>
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 3</div>
+      </s-label>
+      <s-label>
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 4</div>
+      </s-label>
+      <s-label>
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 5</div>
+      </s-label>
+      <s-label>
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 6</div>
+      </s-label>
+    </s-dialog>
+
+    <s-dialog positive="确认" onclose="console.log(event)">
+      <s-button slot="trigger">
+        Radio-button
+      </s-button>
+      <div slot="title">Dialog Choice</div>
+      <s-label>
+        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
+        <div slot="title">选项 1</div>
+      </s-label>
+      <s-label>
+        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
+        <div slot="title">选项 2</div>
+      </s-label>
+      <s-label>
+        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
+        <div slot="title">选项 3</div>
+      </s-label>
+    </s-dialog>
+  </main>
+
+  <script src="../dist/bundle.min.js"></script>
+</body>
+
+</html>

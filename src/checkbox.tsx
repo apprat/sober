@@ -1,7 +1,5 @@
 import { defineElement, IntrinsicElement, css } from './base/core'
-import Pointer from './pointer'
-
-Pointer.register()
+import { Fragment } from './pointer'
 
 const style = css`
 :host{
@@ -9,11 +7,13 @@ const style = css`
   user-select: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   vertical-align: middle;
-  line-height: 1;
-  font-size: .875rem;
-  font-weight: 400;
   cursor: pointer;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   color: var(--s-color-on-surface-variant);
 }
 :host([disabled=true]){
@@ -23,17 +23,6 @@ const style = css`
 :host([checked=true]),
 :host([indeterminate=true]){
   color: var(--s-color-primary);
-}
-[part=container]{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  color: inherit;
-  overflow: hidden;
-  border-radius: 50%;
-  position: relative;
 }
 .icon{
   width: 24px;
@@ -79,13 +68,10 @@ export default defineElement({
       },
       render: () => <>
         <style>{style}</style>
-        <s-pointer part="container" centered={true}>
-          <div class="hover"></div>
-          <svg class="icon" viewBox="0 0 1024 1024">
-            <path ref="iconPath" d={svgData.uncheck}></path>
-          </svg>
-        </s-pointer>
-        <slot></slot>
+        <svg class="icon" viewBox="0 0 1024 1024">
+          <path ref="iconPath" d={svgData.uncheck}></path>
+        </svg>
+        <Fragment centered={true} />
       </>
     }
   }

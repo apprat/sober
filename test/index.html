@@ -5,49 +5,91 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
-  <link rel="stylesheet" href="../theme/auto.css">
+  <link rel="stylesheet" href="./styles/default.css">
   <style>
-    a {
-      margin: 8px;
-      display: inline-block;
+    table {
+      width: 100%;
+      table-layout: fixed;
     }
 
-    main {
-      border: solid 1px #d6d6d6;
-      margin-top: 8px;
-      padding: 8px;
-      display: inline-block;
-    }
-
-    main>* {
-      margin: 8px;
+    td {
+      height: 48px;
+      padding: 0 24px;
     }
   </style>
 </head>
 
 <body>
   <div>
-    <h1>Base</h1>
+    <table>
+      <tbody>
+        <tr>
+          <td style="background: var(--s-color-primary);color: var(--s-color-on-primary);">primary</td>
+          <td style="background: var(--s-color-on-primary)">on-primary</td>
+          <td style="background: var(--s-color-primary-container);color: var(--s-color-on-primary-container)">
+            primary-container</td>
+          <td style="background: var(--s-color-on-primary-container);color: #fff;">on-primary-container</td>
+        </tr>
+        <tr>
+          <td style="background: var(--s-color-secondary);color: var(--s-color-on-secondary);">secondary</td>
+          <td style="background: var(--s-color-on-secondary)">on-secondary</td>
+          <td style="background: var(--s-color-secondary-container);color: var(--s-color-on-secondary-container);">
+            secondary-container</td>
+          <td style="background: var(--s-color-on-secondary-container);color: #fff;">on-secondary-container</td>
+        </tr>
+        <tr>
+          <td style="background: var(--s-color-tertiary);color: var(--s-color-on-tertiary);">tertiary</td>
+          <td style="background: var(--s-color-on-tertiary)">on-tertiary</td>
+          <td style="background: var(--s-color-tertiary-container);color: var(--s-color-on-tertiary-container);">
+            tertiary-container</td>
+          <td style="background: var(--s-color-on-tertiary-container);color: #fff;">on-tertiary-container</td>
+        </tr>
+        <tr>
+          <td style="background: var(--s-color-error);color: var(--s-color-on-error);">error</td>
+          <td style="background: var(--s-color-on-error)">on-error</td>
+          <td style="background: var(--s-color-error-container);color: var(--s-color-on-error-container);">
+            error-container</td>
+          <td style="background: var(--s-color-on-error-container);color: #fff;">on-error-container</td>
+        </tr>
+        <tr>
+          <td style="background: var(--s-color-surface);color: var(--s-color-on-surface);">surface</td>
+          <td style="background: var(--s-color-on-surface);color: #fff;">on-surface</td>
+        </tr>
+        <tr>
+          <td style="background: var(--s-color-surface-variant);color: var(--s-color-on-surface-variant);">
+            surface-variant</td>
+          <td style="background: var(--s-color-on-surface-variant);color: #fff;">on-surface-variant</td>
+        </tr>
+        <tr>
+          <td style="background: var(--s-color-background);color: var(--s-color-on-background);">background</td>
+          <td style="background: var(--s-color-on-background);color: #fff;">on-background</td>
+        </tr>
+        <tr>
+          <td style="background: var(--s-color-outline)">outline</td>
+          <td style="background: var(--s-color-outline-variant)">outline-variant</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <main>
     <a href="./pointer.html">Pointer</a>
     <a href="./button.html">Button</a>
     <a href="./FAB.html">FAButton</a>
     <a href="./checkbox.html">Checkbox</a>
     <a href="./radio-button.html">Radio Button</a>
     <a href="./switch.html">Switch</a>
-    <a href="./slider.html">Slider</a>
     <a href="./tab.html">Tab</a>
-    <h1>
-      unstable
-    </h1>
-    <a href="./ripple.html">Ripple</a>
-  </div>
+    <a href="./dialog.html">Dialog</a>
+    <a href="./label.html">Label</a>
+  </main>
   <main>
     <s-button
       onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
+      <s-icon slot="start"></s-icon>
       toggle
     </s-button>
     <s-button theme="elevated">Button</s-button>
-    <s-floating-action-button size="small">
+    <s-fab size="small">
       <s-icon>
         <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -55,8 +97,8 @@
           </path>
         </svg>
       </s-icon>
-    </s-floating-action-button>
-    <s-floating-action-button>
+    </s-fab>
+    <s-fab>
       <s-icon>
         <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -64,7 +106,7 @@
           </path>
         </svg>
       </s-icon>
-    </s-floating-action-button>
+    </s-fab>
     <s-checkbox></s-checkbox>
     <s-checkbox checked="true"></s-checkbox>
     <s-checkbox indeterminate="true"></s-checkbox>

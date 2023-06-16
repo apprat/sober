@@ -5,37 +5,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
-  <link rel="stylesheet" href="../theme/auto.css">
+  <link rel="stylesheet" href="./styles/default.css">
   <style>
-    * {
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    :not(:defined) {
-      display: none;
-    }
-
-    body {
-      margin: 0;
-    }
-
-    div>* {
-      margin: 8px;
-    }
   </style>
 </head>
 
 <body>
-  <div>
-    <s-button
-      onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
-      toggle theme
-    </s-button>
-  </div>
-  <hr>
+  <s-floating-action-button type="extended"
+    onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
+    Toggle
+  </s-floating-action-button>
 
-  <div>
+  <main>
     <s-floating-action-button size="small">
       <s-icon>
         <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -55,9 +36,9 @@
       </s-icon>
       compose
     </s-floating-action-button>
-  </div>
+  </main>
 
-  <div>
+  <main>
     <s-floating-action-button>
       <s-icon>
         <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -77,9 +58,9 @@
       </s-icon>
       compose
     </s-floating-action-button>
-  </div>
+  </main>
 
-  <div>
+  <main>
     <s-floating-action-button size="large">
       <s-icon>
         <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -99,7 +80,7 @@
       </s-icon>
       compose
     </s-floating-action-button>
-  </div>
+  </main>
 
   <hr>
 

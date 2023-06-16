@@ -21,6 +21,12 @@ const style = css`
   width: 40px;
   height: 40px;
 }
+.placeholder{
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: currentColor;
+}
 `
 
 const name = 's-icon'
@@ -34,7 +40,9 @@ export default defineElement({
     return {
       render: () => <>
         <style>{style}</style>
-        <slot></slot>
+        <slot>
+          <div class="placeholder"></div>
+        </slot>
       </>
     }
   }

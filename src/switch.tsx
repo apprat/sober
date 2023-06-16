@@ -1,5 +1,5 @@
 import { defineElement, IntrinsicElement, css } from './base/core'
-import Pointer from './pointer'
+import { Fragment } from './pointer'
 
 const style = css`
 :host{
@@ -82,7 +82,7 @@ export default defineElement({
         <div class="track">
           <div class="thumb"></div>
         </div>
-        <Pointer.fragment centered={true} />
+        <Fragment centered={true} />
       </>
     }
   }

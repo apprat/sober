@@ -1,0 +1,37 @@
+@import url('../../themes/auto.css');
+
+* {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:not(:defined) {
+  display: none;
+}
+
+a {
+  margin: 8px;
+  display: inline-block;
+  color: var(--s-color-primary);
+  text-decoration: none;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  padding: 8px;
+  border: solid 1px var(--s-color-outline-variant);
+  margin: 16px;
+}
+
+main>* {
+  margin: 8px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2rem;
+  padding: 12px 16px;
+}

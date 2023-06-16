@@ -92,11 +92,12 @@ type ThisElement<P> = Readonly<{
 export const defineElement = <
   P extends { [name: string]: Prop } = {},
   E extends {} = {},
-  EF extends { [name: string]: Function } = {}
+  EF extends {} = {}
 >(options: {
   name: string
   props?: P
-  expose?: E
+  prototypes?: E
+  dependencies?: { register: () => void }[]
   setup: (this: ThisElement<P>) => {
     render: () => VNode
     created?: () => void
@@ -148,8 +149,8 @@ export const defineElement = <
       state.mounted = setup.mounted?.bind(thisElement)
       state.unmounted = setup.unmounted?.bind(thisElement)
       state.changed = setup.changed?.bind(thisElement)
-      const funs = setup.created?.apply(thisElement)
-      for (const key in setup.expose) this[key as string] = funs
+      setup.created?.apply(thisElement)
+      for (const key in setup.expose) this[key as string] = setup.expose[key]
       maps.set(this, state)
     }
     connectedCallback() {
@@ -167,8 +168,12 @@ export const defineElement = <
   }
   return {
     Element: CustomElement,
-    register: () => !customElements.get(options.name) && customElements.define(options.name, CustomElement),
-    ...options.expose
+    register: () => {
+      if (customElements.get(options.name)) return
+      options.dependencies?.forEach((value) => value.register())
+      customElements.define(options.name, CustomElement)
+    },
+    ...options.prototypes
   } as never
 }
 

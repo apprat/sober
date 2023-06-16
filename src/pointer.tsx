@@ -25,14 +25,14 @@ const publicStyle = css`
   transition: filter .2s;
 }
 .pointer-wrapper.pointer-hover::before{
-  filter: opacity(.14);
+  filter: opacity(.1);
 }
 .pointer-ripple {
   background: currentColor;
   border-radius: 50%;
   flex-shrink: 0;
   transition: filter .2s;
-  filter: opacity(var(--opacity,.24));
+  filter: opacity(var(--opacity,.2));
   width: var(--width, 0);
   height: var(--height, 0);
   animation: var(--animation, none);
@@ -63,7 +63,7 @@ const pointer = { touched: false }
   mediaQueryList.addEventListener('change', ({ matches }) => pointer.touched = matches)
 }
 
-class HoverEvent {
+class PointEvent {
   private state = { pressed: false }
   private onTouch(event: { pageX: number, pageY: number }) {
     if (this.state.pressed) return
@@ -103,7 +103,7 @@ class HoverEvent {
   }
 }
 
-const fragment = function (this: { parentNode: HTMLElement }, options: typeof props) {
+export const Fragment = function (this: { parentNode: HTMLElement }, options: typeof props) {
   const fragment = document.createDocumentFragment()
   const styled = document.createElement('style')
   styled.textContent = publicStyle
@@ -114,15 +114,15 @@ const fragment = function (this: { parentNode: HTMLElement }, options: typeof pr
   const ripple = document.createElement('div')
   ripple.className = 'pointer-ripple'
   wrapper.appendChild(ripple)
-  new HoverEvent(this.parentNode, wrapper, options)
+  new PointEvent(this.parentNode, wrapper, options)
   return fragment
 }
 
 export default defineElement({
-  name, props, expose: { fragment },
+  name, props,
   setup() {
     return {
-      created: () => new HoverEvent(this.host, this.refs.wrapper, this.props),
+      created: () => new PointEvent(this.host, this.refs.wrapper, this.props),
       render: () => <>
         <style>{publicStyle}{style}</style>
         <div class="pointer-wrapper" ref="wrapper">

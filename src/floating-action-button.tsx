@@ -1,5 +1,5 @@
 import { defineElement, IntrinsicElement, css } from './base/core'
-import Pointer from './pointer'
+import { Fragment } from './pointer'
 
 const style = css`
 :host{
@@ -25,9 +25,9 @@ const style = css`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  box-sizing: border-box;
 }
 :host([type=extended]){
-  min-width: 80px;
   padding: 0 16px;
 }
 :host([type=extended])>slot{
@@ -64,7 +64,7 @@ slot[name=end]{
 }
 `
 
-const name = 's-floating-action-button'
+const name = 's-fab'
 const props = {
   disabled: false,
   type: 'normal' as 'normal' | 'extended',
@@ -80,8 +80,7 @@ export default defineElement({
         <slot name="start"></slot>
         <slot></slot>
         <slot name="end"></slot>
-        <div class="hover"></div>
-        <Pointer.fragment centered={false} />
+        <Fragment centered={false} />
       </>
     }
   }

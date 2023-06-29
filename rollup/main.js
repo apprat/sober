@@ -1,3 +1,5 @@
-import { registerAll } from '../dist/base/main'
+import Sober, { registerAll } from '../dist/base/main'
 
-export default registerAll()
+registerAll()
+
+export default Sober

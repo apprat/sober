@@ -27,6 +27,10 @@ html {
   --s-color-surface-variant: #E7E0EC;
   --s-color-on-surface-variant: #49454F;
 
+  --s-color-inverse-primary: #96B9CE;
+  --s-color-inverse-surface: #313033;
+  --s-color-inverse-on-surface: #F4EFF4;
+
   --s-color-outline: #79747E;
   --s-color-outline-variant: #C4C7C5;
 }
@@ -66,26 +70,30 @@ body[sober-theme=dark] {
   --s-color-surface-variant: #49454F;
   --s-color-on-surface-variant: #CAC4D0;
 
+  --s-color-inverse-primary: #419112;
+  --s-color-inverse-surface: #E6E1E5;
+  --s-color-inverse-on-surface: #313033;
+
   --s-color-outline: #938F99;
   --s-color-outline-variant: #444746;
 }
 
 @media (prefers-color-scheme: dark) {
   body {
-    --s-color-primary: #D0BCFF;
-    --s-color-on-primary: #381E72;
-    --s-color-primary-container: #4F378B;
-    --s-color-on-primary-container: #EADDFF;
+    --s-color-primary: #9DD67D;
+    --s-color-on-primary: #113800;
+    --s-color-primary-container: #205106;
+    --s-color-on-primary-container: #B8F397;
 
-    --s-color-secondary: #CCC2DC;
-    --s-color-on-secondary: #332D41;
-    --s-color-secondary-container: #4A4458;
-    --s-color-on-secondary-container: #E8DEF8;
+    --s-color-secondary: #BDCBB0;
+    --s-color-on-secondary: #283420;
+    --s-color-secondary-container: #3E4A35;
+    --s-color-on-secondary-container: #D9E7CB;
 
-    --s-color-tertiary: #EFB8C8;
-    --s-color-on-tertiary: #492532;
-    --s-color-tertiary-container: #633B48;
-    --s-color-on-tertiary-container: #FFD8E4;
+    --s-color-tertiary: #A0CFD0;
+    --s-color-on-tertiary: #003738;
+    --s-color-tertiary-container: #1E4E4E;
+    --s-color-on-tertiary-container: #BBEBEC;
 
     --s-color-error: #F2B8B5;
     --s-color-on-error: #601410;
@@ -99,6 +107,10 @@ body[sober-theme=dark] {
     --s-color-on-surface: #E6E1E5;
     --s-color-surface-variant: #49454F;
     --s-color-on-surface-variant: #CAC4D0;
+
+    --s-color-inverse-primary: #419112;
+    --s-color-inverse-surface: #E6E1E5;
+    --s-color-inverse-on-surface: #313033;
 
     --s-color-outline: #938F99;
     --s-color-outline-variant: #444746;

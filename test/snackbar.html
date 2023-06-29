@@ -16,19 +16,22 @@
     Toggle
   </s-fab>
   <main>
-    <s-radio-button name="test"></s-radio-button>
-    <s-radio-button name="test">Selected</s-radio-button>
-    <s-radio-button disabled="true"></s-radio-button>
-    <s-radio-button checked="true" disabled="true">Select Group</s-radio-button>
+    <s-snackbar>
+      Modal bottom sheets are above
+      <s-button slot="action" onclick="my()">确认</s-button>
+    </s-snackbar>
+    <s-snackbar>
+      在下面的示例中，每个段落中的行框高度都向上舍入到步长单位。中的线框不适合一个步长单元，因此占用两个步长单元，但它仍然在两个步长单元内居中。
+      <s-button slot="action">确认</s-button>
+    </s-snackbar>
   </main>
 
-  <!-- <div>
-    <input type="radio" checked="true" name="a" onchange="console.log('change1')">
-    <input type="radio" name="a" onchange="console.log('change2')">
-    <input type="radio" name="a" onchange="console.log('change3')">
-  </div> -->
-
   <script src="../dist/bundle.min.js"></script>
+  <script>
+    function my() {
+      new Sober.Snackbar.Make('你好').show()
+    }
+  </script>
 </body>
 
 </html>

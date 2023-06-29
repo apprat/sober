@@ -1,4 +1,4 @@
-import { defineElement, IntrinsicElement, css } from './base/core'
+import { defineComponent, IntrinsicElement, css } from './base/core'
 
 const style = css`
 :host{
@@ -34,7 +34,10 @@ const props = {
   size: 'medium' as 'medium' | 'small' | 'large'
 }
 
-export default defineElement({
+/**
+ * @slot anonymous
+ */
+const Component = defineComponent({
   name, props,
   setup() {
     return {
@@ -48,8 +51,16 @@ export default defineElement({
   }
 })
 
+export default Component
+
+type Component = InstanceType<typeof Component>
+
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
+  }
+  interface Document {
+    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
+    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
   }
 }

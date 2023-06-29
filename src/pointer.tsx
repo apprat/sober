@@ -1,4 +1,4 @@
-import { defineElement, IntrinsicElement, css } from './base/core'
+import { defineComponent, IntrinsicElement, css } from './base/core'
 
 const publicStyle = css`
 .pointer-wrapper{
@@ -66,7 +66,7 @@ const pointer = { touched: false }
 class PointEvent {
   private state = { pressed: false }
   private onTouch(event: { pageX: number, pageY: number }) {
-    if (this.state.pressed) return
+    if (!this.element.isConnected || this.state.pressed) return
     const { offsetWidth, offsetHeight } = this.element
     const diameter = Math.pow(Math.pow(offsetHeight, 2) + Math.pow(offsetWidth, 2), 0.5)
     const coordinate = { x: 0, y: 0 }
@@ -83,11 +83,11 @@ class PointEvent {
   private onUntouch() {
     if (!this.state.pressed) return
     this.wrapper.style.setProperty('--opacity', '0')
-    setTimeout(() => {
+    this.wrapper.addEventListener('transitionend', () => {
       this.state.pressed = false
       this.element.dispatchEvent(new Event('blur'))
       this.wrapper.removeAttribute('style')
-    }, 200)
+    }, { once: true })
   }
   constructor(private element: HTMLElement, private wrapper: HTMLElement, private options: typeof props) {
     this.element.addEventListener('mouseover', () => !pointer.touched && this.wrapper.classList.add('pointer-hover'))
@@ -118,7 +118,10 @@ export const Fragment = function (this: { parentNode: HTMLElement }, options: ty
   return fragment
 }
 
-export default defineElement({
+/**
+ * @slot anonymous
+ */
+const Component = defineComponent({
   name, props,
   setup() {
     return {
@@ -134,8 +137,16 @@ export default defineElement({
   }
 })
 
+export default Component
+
+type Component = InstanceType<typeof Component>
+
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
+  }
+  interface Document {
+    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
+    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
   }
 }

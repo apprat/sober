@@ -10,10 +10,10 @@
 </head>
 
 <body>
-  <s-floating-action-button type="extended"
+  <s-fab type="extended"
     onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
     Toggle
-  </s-floating-action-button>
+  </s-fab>
   <main>
     <s-label>
       <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
@@ -41,6 +41,24 @@
     <s-label>
       <s-checkbox slot="start"></s-checkbox>
       <div slot="title">选项 3</div>
+    </s-label>
+  </main>
+
+  <main>
+    <s-label>
+      <s-checkbox slot="start"></s-checkbox>
+      <div slot="title">选项 1</div>
+      <div slot="subtitle">选择多选框</div>
+    </s-label>
+    <s-label>
+      <s-checkbox slot="start"></s-checkbox>
+      <div slot="title">选项 2</div>
+      <div slot="subtitle">选择多选框</div>
+    </s-label>
+    <s-label>
+      <s-checkbox slot="start"></s-checkbox>
+      <div slot="title">选项 3</div>
+      <div slot="subtitle">选择多选框</div>
     </s-label>
   </main>
 

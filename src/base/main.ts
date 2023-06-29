@@ -9,6 +9,7 @@ import Tab from '../tab'
 import TabItem from '../tab-item'
 import Dialog from '../dialog'
 import Label from '../label'
+import Snackbar from '../snackbar'
 
 const components = {
   Button,
@@ -21,14 +22,14 @@ const components = {
   Tab,
   TabItem,
   Dialog,
-  Label
+  Label,
+  Snackbar
 }
 
 export const registerAll = () => {
   for (const key in components) {
     components[key as keyof typeof components].register()
   }
-  return components
 }
 
 export default components
@@ -41,3 +42,5 @@ declare global {
     }
   }
 }
+
+new Snackbar.Make('xx')

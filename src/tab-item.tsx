@@ -1,4 +1,4 @@
-import { defineElement, IntrinsicElement, css } from './base/core'
+import { defineComponent, IntrinsicElement, css } from './base/core'
 import { Fragment } from './pointer'
 
 const style = css`
@@ -36,7 +36,7 @@ const style = css`
   align-items: center;
 }
 ::slotted([slot=text]){
-  padding-top: 2px;
+  padding-top: 3px;
   box-sizing: border-box;
 }
 ::slotted([slot=text]:only-child){
@@ -51,7 +51,10 @@ const props = {
   checked: false,
 }
 
-export default defineElement({
+/**
+ * @slot icon text
+ */
+const Component = defineComponent({
   name, props,
   setup() {
     return {
@@ -65,8 +68,16 @@ export default defineElement({
   }
 })
 
+export default Component
+
+type Component = InstanceType<typeof Component>
+
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
+  }
+  interface Document {
+    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
+    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
   }
 }

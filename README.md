@@ -22,6 +22,7 @@
 ```shell
 $ npm install sober
 ```
+Register all components
 ```js
 import { registerAll } from 'sober'
 import 'sober/themes/light.css'
@@ -29,17 +30,32 @@ import 'sober/themes/light.css'
 registerAll()
 ```
 
-on-demand introduction
+On-demand component introduction
 
 ```js
 import Button from 'sober/dist/button'
 
 Button.register()
-//use
-const button = new Button.Element()
-document.body.appendChild(button)
+//Create and insert elements
+const button = new Button()
 button.theme = 'outlined'
+document.body.appendChild(button)
 ```
+
+Using the JSX in
+```jsx
+import Button from 'sober/dist/button'
+
+Button.register()
+
+function App() {
+  return <div>
+    <s-button theme="text"> Button </s-button>
+  </div>
+}
+```
+> Note **register** only needs to be called once
+
 ---
 
 ### Use it directly in the browser

@@ -1,7 +1,5 @@
-import { defineElement, IntrinsicElement, css } from './base/core'
+import { defineComponent, IntrinsicElement, css } from './base/core'
 import type TabItem from './tab-item'
-
-type TabItem = InstanceType<typeof TabItem.Element>
 
 const style = css`
 :host{
@@ -61,7 +59,11 @@ const props = {
   select: 0
 }
 
-export default defineElement({
+/**
+ * @slot anonymous
+ * @event change
+ */
+const Component = defineComponent({
   name, props,
   setup() {
     const state: { items: TabItem[], item?: TabItem, disableAnimation: boolean } = { items: [], disableAnimation: true }
@@ -90,7 +92,11 @@ export default defineElement({
     }
     const onTabChange = (event: Event) => {
       const target = event.target as unknown as TabItem
-      this.props.select = state.items.indexOf(target)
+      const index = state.items.indexOf(target)
+      if (index !== this.props.select) {
+        this.props.select = state.items.indexOf(target)
+        this.host.dispatchEvent(new Event('change'))
+      }
     }
     const onSlotChange = () => {
       const slot = this.refs.slot as HTMLSlotElement
@@ -114,8 +120,16 @@ export default defineElement({
   }
 })
 
+export default Component
+
+type Component = InstanceType<typeof Component>
+
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
+  }
+  interface Document {
+    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
+    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
   }
 }

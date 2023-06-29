@@ -1,4 +1,4 @@
-import { defineElement, IntrinsicElement, css } from './base/core'
+import { defineComponent, IntrinsicElement, css } from './base/core'
 import { Fragment } from './pointer'
 
 const style = css`
@@ -69,7 +69,10 @@ const props = {
   checked: false
 }
 
-export default defineElement({
+/**
+ * @event change
+ */
+const Component = defineComponent({
   name, props,
   setup() {
     this.host.addEventListener('click', () => {
@@ -88,8 +91,16 @@ export default defineElement({
   }
 })
 
+export default Component
+
+type Component = InstanceType<typeof Component>
+
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
+  }
+  interface Document {
+    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
+    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
   }
 }

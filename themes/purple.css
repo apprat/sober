@@ -27,6 +27,10 @@ html {
   --s-color-surface-variant: #E7E0EC;
   --s-color-on-surface-variant: #49454F;
 
+  --s-color-inverse-primary: #D0BCFF;
+  --s-color-inverse-surface: #313033;
+  --s-color-inverse-on-surface: #F4EFF4;
+
   --s-color-outline: #79747E;
   --s-color-outline-variant: #C4C7C5;
 }

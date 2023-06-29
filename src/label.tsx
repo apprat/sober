@@ -1,4 +1,4 @@
-import { defineElement, IntrinsicElement, css } from './base/core'
+import { defineComponent, IntrinsicElement, css } from './base/core'
 import { Fragment } from './pointer'
 
 const style = css`
@@ -12,8 +12,12 @@ const style = css`
   cursor: pointer;
   padding: 0 8px;
 }
+:host([disabled=true]){
+  pointer-events: none !important;
+  filter: grayscale(.8) opacity(.6) !important;
+}
 .text{
-  padding: 0 8px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,6 +25,18 @@ const style = css`
 }
 ::slotted([slot]){
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  height: 24px;
+  flex-shrink: 0;
+}
+::slotted([slot=title]){
+  font-size: 1rem;
+  color: var(--s-on-surface);
+}
+::slotted([slot=subtitle]){
+  font-size: .75rem;
+  color: var(--s-on-surface-variant);
 }
 `
 
@@ -29,21 +45,22 @@ const props = {
   disabled: false
 }
 
-type ItemElement = { checked: boolean } & HTMLElement
-
-export default defineElement({
+/**
+ * @slot title subtitle start
+ */
+const Component = defineComponent({
   name, props,
   setup() {
     this.host.addEventListener('click', () => {
       const start = this.refs.start as HTMLSlotElement
-      const starNodes = start.assignedNodes() as ItemElement[]
+      const starNodes = start.assignedNodes() as HTMLElement[]
       starNodes.forEach((value) => {
         switch (value.nodeName) {
           case 'S-CHECKBOX':
-            value.checked = !value.checked
+            value?.click()
             break
           case 'S-RADIO-BUTTON':
-            value.click()
+            value?.click()
             break
         }
       })
@@ -62,8 +79,16 @@ export default defineElement({
   }
 })
 
+export default Component
+
+type Component = InstanceType<typeof Component>
+
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
+  }
+  interface Document {
+    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
+    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
   }
 }

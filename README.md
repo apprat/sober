@@ -25,41 +25,57 @@ $ npm install sober
 Register all components
 ```js
 import { registerAll } from 'sober'
-import 'sober/themes/light.css'
+import 'sober/theme/light.css'
 
 registerAll()
 ```
+> registerAll is the recommended way to introduce it, it will register all components
+---
 
-On-demand component introduction
-
+Load individual components as needed
 ```js
-import Button from 'sober/dist/button'
+//mian.js
+import Button from 'sober/button'
 
 Button.register()
-//Create and insert elements
+```
+```js
+//other.js
+import Button from 'sober/button'
+
 const button = new Button()
+button.textContent = 'hello'
 button.theme = 'outlined'
 document.body.appendChild(button)
 ```
+> Sober uses the exports declaration in package.json, you must enable the "moduleResolution": "Bundler" option in tsconfig.json, otherwise the declaration file cannot be found  
 
 Using the JSX in
 ```jsx
-import Button from 'sober/dist/button'
+//mian.js
+import Button from 'sober/button'
 
 Button.register()
-
+```
+```jsx
+//other.js
 function App() {
   return <div>
     <s-button theme="text"> Button </s-button>
   </div>
 }
 ```
-> Note **register** only needs to be called once
 
 ---
 
 ### Use it directly in the browser
 ```html
-<link rel="stylesheet" href="//unpkg.com/sober/themes/auto.css" />
-<script src="//unpkg.com/sober/dist/bundle.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/sober/theme/light.css" />
+<script src="https://unpkg.com/sober/dist/bundle.min.js"></script>
+```
+Introduced directly using the browser, all components are registered and the global variable is **Sober**
+```js
+const button = new Sober.Button()
+button.textContent = 'hello'
+document.body.appendChild(button)
 ```

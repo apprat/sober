@@ -1,46 +1,30 @@
-import { defineComponent, IntrinsicElement, css } from './base/core'
-import { Fragment } from './pointer'
+import { defineComponent, IntrinsicElement } from './core/runtime'
+import { rootStyle } from './fragment/root-style'
+import { defaultStyle } from './fragment/button-style'
+import * as Pointer from './pointer'
 
-const style = css`
+const style = /*css*/`
 :host{
-  -webkit-user-select: none;
-  user-select: none;
-  display: inline-flex;
-  vertical-align: middle;
-  min-height: 40px;
   border-radius: 20px;
-  text-transform: capitalize;
-  position: relative;
-  cursor: pointer;
-  font-size: .875rem;
-  font-weight: 400;
-  line-height: 1;
-  white-space: nowrap;
+  padding: 0 24px;
+  min-height: 40px;
   background: var(--s-color-primary);
   color: var(--s-color-on-primary);
-  transition: box-shadow .2s;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  padding: 0 24px;
-}
-:host([disabled=true]){
-  pointer-events: none !important;
-  filter: grayscale(.8) opacity(.6) !important;
 }
 :host([theme=elevated]){
   -webkit-box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
   box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
   color: var(--s-color-primary);
-  background:  none;
+  background: none;
+  transition: box-shadow .2s;
 }
 :host([theme=filled-tonal]){
   background: var(--s-color-secondary-container);
-  color: var(--s-color-on-secondary-container);
+  color: var(--s-color-primary);
 }
 :host([theme=outlined]){
-  -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline);
-  box-shadow: 0 0 0 1px inset var(--s-color-outline);
+  -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline-variant);
+  box-shadow: 0 0 0 1px inset var(--s-color-outline-variant);
   background: none;
   color: var(--s-color-primary);
 }
@@ -101,13 +85,15 @@ const Component = defineComponent({
   setup() {
     return {
       render: () => <>
+        <style>{rootStyle}</style>
+        <style>{defaultStyle}</style>
         <style>{style}</style>
         <slot name="start">
         </slot>
         <slot></slot>
         <slot name="end">
         </slot>
-        <Fragment centered={false} />
+        <Pointer.Fragment centered={false} />
       </>
     }
   }

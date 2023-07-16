@@ -6,22 +6,26 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
-  <style>
-  </style>
+  <script>
+    const darkStyle = document.createElement('style')
+    darkStyle.textContent = `@import url('../theme/dark.css');`
+    const toggle = () => {
+      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
+    }
+  </script>
 </head>
 
 <body>
-  <s-fab type="extended"
-    onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
+  <s-floating-action-button type="extended" onclick="toggle()">
     Toggle
-  </s-fab>
+  </s-floating-action-button>
   <main>
     <s-snackbar>
-      Modal bottom sheets are above
-      <s-button slot="action" onclick="my()">确认</s-button>
-    </s-snackbar>
-    <s-snackbar>
-      在下面的示例中，每个段落中的行框高度都向上舍入到步长单位。中的线框不适合一个步长单元，因此占用两个步长单元，但它仍然在两个步长单元内居中。
+      <s-button slot="trigger">Show</s-button>
+      <div>
+        无论哪种形式，都会返回一个 MatSnackBarRef。它可以用来关闭快餐栏或在快餐栏关闭时接收通知。 对于只有一个操作的简单消息，当该动作被触发时，MatSnackBarRef 会暴露出一个 Observable。
+        如果你要关闭一个用 openFromComponent 打开的自定义快餐栏，可以在该组件中注入一个 MatSnackBarRef。
+      </div>
       <s-button slot="action">确认</s-button>
     </s-snackbar>
   </main>

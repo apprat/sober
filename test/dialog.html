@@ -6,15 +6,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
-  <style>
-  </style>
+  <script>
+    const darkStyle = document.createElement('style')
+    darkStyle.textContent = `@import url('../theme/dark.css');`
+    const toggle = () => {
+      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
+    }
+  </script>
 </head>
 
 <body>
-  <s-fab type="extended"
-    onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
+  <s-floating-action-button type="extended" onclick="toggle()">
     Toggle
-  </s-fab>
+  </s-floating-action-button>
   <main>
     <s-dialog positive-button="确认" onblur="console.log(event)">
       <s-button slot="trigger">
@@ -205,32 +209,50 @@
       </s-label>
   </main>
   <main>
-    <s-button id="my">自定义</s-button>
+    <s-button onclick="setSingleChoiceItems()">SingleChoiceItems</s-button>
+    <s-button onclick="setMultiChoiceItems()">MultiChoiceItems</s-button>
   </main>
 
   <script src="../dist/bundle.min.js"></script>
   <script>
-    const button = document.querySelector('#my')
-    if (button) {
-      button.addEventListener('click', () => {
-        const builder = new Sober.Dialog.Builder()
-        builder.setTitle('Dialog Builder')
-        builder.setMultiChoiceItems({
-          data: [
-            { title: '选项1', defaultChecked: true },
-            { title: '选项2', disabled: true },
-            { title: '选项3' },
-            { title: '选项4' },
-            { title: '选项5' }
-          ],
-          onPositive: (value) => {
-            console.log(value)
-          }
-        })
-        builder.setPositiveButton('确定')
-        builder.setNegativeButton('取消')
-        builder.show()
+    function setSingleChoiceItems() {
+      const builder = new Sober.Dialog.Builder()
+      builder.setTitle('Dialog Builder')
+      builder.setSingleChoiceItems({
+        data: [
+          { title: '选项1' },
+          { title: '选项2' },
+          { title: '选项3' },
+          { title: '选项4' },
+          { title: '选项5' }
+        ],
+        onPositive: (value) => {
+          console.log(value)
+        }
       })
+      builder.setPositiveButton('确定')
+      builder.setNegativeButton('取消')
+      builder.show()
+    }
+
+    function setMultiChoiceItems() {
+      const builder = new Sober.Dialog.Builder()
+      builder.setTitle('Dialog Builder')
+      builder.setMultiChoiceItems({
+        data: [
+          { title: '选项1', defaultChecked: true },
+          { title: '选项2', disabled: true },
+          { title: '选项3' },
+          { title: '选项4' },
+          { title: '选项5' }
+        ],
+        onPositive: (value) => {
+          console.log(value)
+        }
+      })
+      builder.setPositiveButton('确定')
+      builder.setNegativeButton('取消')
+      builder.show()
     }
   </script>
 </body>

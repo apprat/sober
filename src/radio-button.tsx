@@ -1,14 +1,11 @@
-import { defineComponent, IntrinsicElement, css } from './base/core'
-import { Fragment } from './pointer'
+import { defineComponent, IntrinsicElement } from './core/runtime'
+import { rootStyle } from './fragment/root-style'
+import * as Pointer from './pointer'
 
-const style = css`
+const style = /*css*/`
 :host{
-  -webkit-user-select: none;
-  user-select: none;
-  display: inline-flex;
   align-items: center;
   justify-content: center;
-  vertical-align: middle;
   cursor: pointer;
   color: var(--s-color-on-surface-variant);
   width: 40px;
@@ -68,12 +65,13 @@ const Component = defineComponent({
         }
       },
       render: () => <>
+        <style>{rootStyle}</style>
         <style>{style}</style>
         <div class="hover"></div>
         <svg class="icon" viewBox="0 0 1024 1024">
           <path ref="iconPath" d={svgData.uncheck}></path>
         </svg>
-        <Fragment centered={true} />
+        <Pointer.Fragment centered={true} />
       </>
     }
   }

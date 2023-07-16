@@ -1,6 +1,6 @@
-import { defineComponent, IntrinsicElement, css } from './base/core'
+import { defineComponent, IntrinsicElement } from './core/runtime'
 
-const style = css`
+const style = /*css*/`
 :host{
   -webkit-user-select: none;
   user-select: none;

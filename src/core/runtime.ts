@@ -1,7 +1,5 @@
 import { KebabToCamel, kebabToCamel, camelToKebab } from './utils'
 
-export const css = (text: TemplateStringsArray) => text.join()
-
 export class VNode {
   constructor(public type: string | null | ((this: { parentNode: Node }, props: {}) => Element), public props: { [name: string]: unknown }) { }
 }
@@ -84,19 +82,19 @@ class State {
 
 type ThisComponent<P> = Readonly<{
   shadowRoot: ShadowRoot
-  host: HTMLElement & Partial<P>
+  host: Partial<P> & HTMLElement
   props: P
   refs: { [name: string]: HTMLElement }
 }>
 
 export const defineComponent = <
   P extends { [name: string]: Prop } = {},
-  E extends {} = {},
-  EF extends {} = {}
+  PT extends {} = {},
+  E extends {} = {}
 >(options: {
   name: string
   props?: P
-  prototypes?: E
+  prototypes?: PT
   dependencies?: { register: () => void }[]
   setup: (this: ThisComponent<P>) => {
     render: () => VNode
@@ -105,16 +103,16 @@ export const defineComponent = <
     unmounted?: () => void
     adopted?: () => void
     changed?: (name: keyof P) => void
-    expose?: EF
+    expose?: E
   }
 }): {
-  new(): Partial<P> & Readonly<EF> & HTMLElement
+  new(): Partial<P> & Readonly<E> & HTMLElement
   prototype: HTMLElement
   /**
    * Register this element
    */
   readonly register: () => void
-} & Readonly<E> => {
+} & Readonly<PT> => {
   const maps = new Map<HTMLElement, State>()
   const attributes: string[] = []
   for (const key in options.props) attributes.push(camelToKebab(key))
@@ -158,7 +156,11 @@ export const defineComponent = <
       state.unmounted = setup.unmounted?.bind(thisElement)
       state.changed = setup.changed?.bind(thisElement)
       setup.created?.apply(thisElement)
-      for (const key in setup.expose) this[key as string] = setup.expose[key]
+      for (const key in setup.expose) {
+        Object.defineProperty(this, key, {
+          get: () => setup.expose?.[key]
+        })
+      }
       maps.set(this, state)
     }
     connectedCallback() {
@@ -183,6 +185,7 @@ export const defineComponent = <
   return CustomElement as never
 }
 
-export type IntrinsicElement<N extends string, T extends {}> = {
+export type IntrinsicElement<N extends string, T extends {} = {}> = {
   [K in KebabToCamel<N>]: Partial<T> & { [name: string]: any }
-} & { [K in N]: Partial<T> & { [name: string]: any } }
+} &
+  { [K in N]: Partial<T> & { [name: string]: any } }

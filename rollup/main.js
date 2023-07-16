@@ -1,4 +1,4 @@
-import Sober, { registerAll } from '../dist/base/main'
+import Sober, { registerAll } from '../dist/main'
 
 registerAll()
 

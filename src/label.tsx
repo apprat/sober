@@ -1,10 +1,9 @@
-import { defineComponent, IntrinsicElement, css } from './base/core'
-import { Fragment } from './pointer'
+import { defineComponent, IntrinsicElement } from './core/runtime'
+import { rootStyle } from './fragment/root-style'
+import * as Pointer from './pointer'
 
-const style = css`
+const style = /*css*/`
 :host{
-  -webkit-user-select: none;
-  user-select: none;
   display: flex;
   min-height: 48px;
   align-items: center;
@@ -67,13 +66,14 @@ const Component = defineComponent({
     })
     return {
       render: () => <>
+        <style>{rootStyle}</style>
         <style>{style}</style>
         <slot name="start" ref="start"></slot>
         <div class="text">
           <slot name="title"></slot>
           <slot name="subtitle"></slot>
         </div>
-        <Fragment centered={false} />
+        <Pointer.Fragment centered={false} />
       </>
     }
   }

@@ -1,6 +1,8 @@
-import { defineComponent, IntrinsicElement, css } from './base/core'
+import { defineComponent, IntrinsicElement } from './core/runtime'
+import { rootStyle } from './fragment/root-style'
+import { device } from './core/utils'
 
-const publicStyle = css`
+const publicStyle = /*css*/`
 .pointer-wrapper{
   position: absolute;
   width: 100%;
@@ -33,9 +35,6 @@ const publicStyle = css`
   flex-shrink: 0;
   transition: filter .2s;
   filter: opacity(var(--opacity,.2));
-  width: var(--width, 0);
-  height: var(--height, 0);
-  animation: var(--animation, none);
 }
 @keyframes diffusion {
   0%{ transform: translate(var(--x), var(--y)) scale(0); }
@@ -43,11 +42,8 @@ const publicStyle = css`
 }
 `
 
-const style = css`
+const style = /*css*/`
 :host{
-  -webkit-user-select: none;
-  user-select: none;
-  display: inline-block;
   position: relative;
   cursor: pointer;
 }
@@ -56,50 +52,60 @@ const style = css`
 const name = 's-pointer'
 const props = { centered: false }
 
-const pointer = { touched: false }
-{
-  const mediaQueryList = matchMedia('(pointer:coarse)')
-  pointer.touched = mediaQueryList.matches
-  mediaQueryList.addEventListener('change', ({ matches }) => pointer.touched = matches)
-}
-
 class PointEvent {
-  private state = { pressed: false }
-  private onTouch(event: { pageX: number, pageY: number }) {
-    if (!this.element.isConnected || this.state.pressed) return
+  private state = { pressed: false, runing: false }
+  private ripple: HTMLElement
+  private release() {
+    this.ripple.addEventListener('transitionend', () => {
+      this.dispatched && this.element.dispatchEvent(new Event('blur'))
+      this.ripple.removeAttribute('style')
+      this.state.pressed = false
+    }, { once: true })
+    this.ripple.style.setProperty('filter', 'opacity(0)')
+  }
+  private onTouch(event: { clientX: number, clientY: number }) {
+    if (!this.element.isConnected) return
+    if (this.state.pressed) return
+    this.state.pressed = true
+    this.state.runing = true
     const { offsetWidth, offsetHeight } = this.element
     const diameter = Math.pow(Math.pow(offsetHeight, 2) + Math.pow(offsetWidth, 2), 0.5)
     const coordinate = { x: 0, y: 0 }
     if (!this.options.centered) {
       const { left, top } = this.element.getBoundingClientRect()
-      const float = { x: event.pageX - left, y: event.pageY - top }
+      const float = { x: event.clientX - left, y: event.clientY - top }
       coordinate.x = ((offsetWidth / 2) - float.x) / -1
       coordinate.y = ((offsetHeight / 2) - float.y) / -1
     }
-    this.state.pressed = true
-    this.wrapper.setAttribute('style', `--width:${diameter}px;--height:${diameter}px;--x:${coordinate.x}px;--y:${coordinate.y}px;--animation:diffusion .2s`)
-    this.element.dispatchEvent(new Event('focus'))
+    this.ripple.setAttribute('style', `width:${diameter}px;height:${diameter}px;--x:${coordinate.x}px;--y:${coordinate.y}px;animation:diffusion .2s`)
+    this.dispatched && this.element.dispatchEvent(new Event('focus'))
   }
   private onUntouch() {
     if (!this.state.pressed) return
-    this.wrapper.style.setProperty('--opacity', '0')
-    this.wrapper.addEventListener('transitionend', () => {
-      this.state.pressed = false
-      this.element.dispatchEvent(new Event('blur'))
-      this.wrapper.removeAttribute('style')
-    }, { once: true })
+    if (this.state.runing) {
+      this.ripple.addEventListener('animationend', () => {
+        this.release()
+      }, { once: true })
+      return
+    }
+    this.release()
   }
-  constructor(private element: HTMLElement, private wrapper: HTMLElement, private options: typeof props) {
-    this.element.addEventListener('mouseover', () => !pointer.touched && this.wrapper.classList.add('pointer-hover'))
-    this.element.addEventListener('mousedown', (event) => !pointer.touched && event.button === 0 && this.onTouch(event))
-    this.element.addEventListener('mouseup', () => !pointer.touched && this.onUntouch())
+  constructor(private element: HTMLElement, wrapper: Element, private options: typeof props, private dispatched: boolean) {
+    this.ripple = wrapper.firstChild as HTMLElement
+    this.ripple.addEventListener('animationend', () => this.state.runing = false)
+    this.ripple.addEventListener('animationcancel', () => this.state.runing = false)
+    this.element.addEventListener('mouseover', () => !device.touched && wrapper.classList.add('pointer-hover'))
+    this.element.addEventListener('mousedown', (event) => !device.touched && event.button === 0 && this.onTouch(event))
+    this.element.addEventListener('mouseup', () => !device.touched && this.onUntouch())
     this.element.addEventListener('mouseleave', () => {
-      this.wrapper.classList.remove('pointer-hover')
-      !pointer.touched && this.onUntouch()
+      if (device.touched) return
+      wrapper.classList.remove('pointer-hover')
+      this.onUntouch()
     })
-    this.element.addEventListener('touchstart', (event) => this.onTouch(event.changedTouches[0]))
-    this.element.addEventListener('touchend', () => this.onUntouch())
-    this.element.addEventListener('touchcancel', () => this.onUntouch())
+    //
+    this.element.addEventListener('touchstart', (event) => this.onTouch(event.changedTouches[0]), { passive: true })
+    this.element.addEventListener('touchend', () => this.onUntouch(), { passive: true })
+    this.element.addEventListener('touchcancel', () => this.onUntouch(), { passive: true })
   }
 }
 
@@ -114,7 +120,7 @@ export const Fragment = function (this: { parentNode: HTMLElement }, options: ty
   const ripple = document.createElement('div')
   ripple.className = 'pointer-ripple'
   wrapper.appendChild(ripple)
-  new PointEvent(this.parentNode, wrapper, options)
+  new PointEvent(this.parentNode, wrapper, options, false)
   return fragment
 }
 
@@ -125,9 +131,11 @@ const Component = defineComponent({
   name, props,
   setup() {
     return {
-      created: () => new PointEvent(this.host, this.refs.wrapper, this.props),
+      created: () => new PointEvent(this.host, this.refs.wrapper, this.props, true),
       render: () => <>
-        <style>{publicStyle}{style}</style>
+        <style>{rootStyle}</style>
+        <style>{publicStyle}</style>
+        <style>{style}</style>
         <div class="pointer-wrapper" ref="wrapper">
           <div class="pointer-ripple"></div>
         </div>

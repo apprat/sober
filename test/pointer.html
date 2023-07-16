@@ -11,15 +11,21 @@
       padding: 16px;
     }
   </style>
+  <script>
+    const darkStyle = document.createElement('style')
+    darkStyle.textContent = `@import url('../theme/dark.css');`
+    const toggle = () => {
+      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
+    }
+  </script>
 </head>
 
 <body>
-  <s-fab type="extended"
-    onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
+  <s-floating-action-button type="extended" onclick="toggle()">
     Toggle
-  </s-fab>
+  </s-floating-action-button>
   <main>
-    <s-pointer>
+    <s-pointer style="width: 200px;height: 400px;">
       Test
     </s-pointer>
     <s-pointer centered="true">

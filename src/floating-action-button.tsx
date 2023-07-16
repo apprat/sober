@@ -1,41 +1,37 @@
-import { defineComponent, IntrinsicElement, css } from './base/core'
-import { Fragment } from './pointer'
+import { defineComponent, IntrinsicElement } from './core/runtime'
+import { rootStyle } from './fragment/root-style'
+import { defaultStyle } from './fragment/button-style'
+import * as Pointer from './pointer'
 
-const style = css`
+const style = /*css*/`
 :host{
-  -webkit-user-select: none;
-  user-select: none;
-  display: inline-flex;
-  vertical-align: middle;
-  min-width: 56px;
   height: 56px;
+  min-width: 56px;
   margin: 16px;
   border-radius: 16px;
-  text-transform: capitalize;
-  position: relative;
-  font-weight: 500;
-  line-height: 1;
-  font-size: .875rem;
-  white-space: nowrap;
-  color: var(--s-color-on-primary);
-  background:  var(--s-color-primary);
   -webkit-box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
   box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
+  background: var(--s-color-primary-container);
+  color: var(--s-color-on-primary-container);
   transition: box-shadow .2s;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-sizing: border-box;
+}
+:host([theme=secondary]){
+  background: var(--s-color-secondary-container);
+  color: var(--s-color-on-secondary-container);
+}
+:host([theme=surface]){
+  background: var(--s-color-surface-container-high);
+  color: var(--s-color-primary);
+}
+:host([theme=tertiary]){
+  background: var(--s-color-tertiary-container);
+  color: var(--s-color-on-tertiary-container);
 }
 :host([type=extended]){
   padding: 0 16px;
 }
 :host([type=extended])>slot{
   display: contents;
-}
-:host([disabled=true]){
-  pointer-events: none !important;
-  filter: grayscale(.8) opacity(.6) !important;
 }
 :host([size=small]){
   height: 48px;
@@ -64,11 +60,12 @@ slot[name=end]{
 }
 `
 
-const name = 's-fab'
+const name = 's-floating-action-button'
 const props = {
   disabled: false,
   type: 'normal' as 'normal' | 'extended',
-  size: 'medium' as 'medium' | 'small' | 'large'
+  size: 'medium' as 'medium' | 'small' | 'large',
+  theme: 'primary' as 'primary' | 'secondary' | 'surface' | 'tertiary'
 }
 
 /**
@@ -79,11 +76,13 @@ const Component = defineComponent({
   setup() {
     return {
       render: () => <>
+        <style>{rootStyle}</style>
+        <style>{defaultStyle}</style>
         <style>{style}</style>
         <slot name="start"></slot>
         <slot></slot>
         <slot name="end"></slot>
-        <Fragment centered={false} />
+        <Pointer.Fragment centered={false} />
       </>
     }
   }

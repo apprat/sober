@@ -1,13 +1,10 @@
-import { defineComponent, IntrinsicElement, css } from './base/core'
-import { Fragment } from './pointer'
+import { defineComponent, IntrinsicElement } from './core/runtime'
+import { rootStyle } from './fragment/root-style'
+import * as Pointer from './pointer'
 
-const style = css`
+const style = /*css*/`
 :host{
-  -webkit-user-select: none;
-  user-select: none;
-  display: inline-flex;
   align-items: center;
-  vertical-align: middle;
   cursor: pointer;
   position: relative;
   color: var(--s-color-on-surface-variant);
@@ -27,6 +24,9 @@ const style = css`
 :host([checked=true]) .thumb{
   background: var(--s-color-on-primary);
   transform: scale(1.5) translateX(16px);
+}
+:host([checked=true]) .icon{
+  filter: opacity(1);
 }
 .track{
   display: flex;
@@ -48,8 +48,17 @@ const style = css`
   transition: transform .2s;
   transform-origin: left;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
+.icon{
+  width: 12px;
+  height: 12px;
+  fill: var(--s-color-primary);
+  filter: opacity(0);
+  transition: filter .2s;
+}
 .pointer-wrapper{
   width: 40px !important;
   height: 40px !important;
@@ -81,11 +90,17 @@ const Component = defineComponent({
     })
     return {
       render: () => <>
+        <style>{rootStyle}</style>
         <style>{style}</style>
         <div class="track">
-          <div class="thumb"></div>
+          <div class="thumb">
+            <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <path d="M375.466667 678.4l-149.333334-149.333333c-8.533333-8.533333-17.066667-12.8-29.866666-12.8-12.8 0-21.333333 4.266667-29.866667 12.8-17.066667 17.066667-17.066667 42.666667 0 59.733333L345.6 768c17.066667 17.066667 42.666667 17.066667 59.733333 0L857.6 315.733333c17.066667-17.066667 17.066667-42.666667 0-59.733333-8.533333-8.533333-17.066667-12.8-29.866667-12.8s-21.333333 4.266667-29.866666 12.8l-422.4 422.4z">
+              </path>
+            </svg>
+          </div>
         </div>
-        <Fragment centered={true} />
+        <Pointer.Fragment centered={true} />
       </>
     }
   }

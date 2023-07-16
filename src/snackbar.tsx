@@ -1,23 +1,41 @@
-import { defineComponent, IntrinsicElement, css } from './base/core'
-import Button from './button'
+import { defineComponent, IntrinsicElement } from './core/runtime'
+import { rootStyle } from './fragment/root-style'
+import type Button from './button'
 
-
-const style = css`
-:host{
-  -webkit-user-select: none;
-  user-select: none;
+const style = /*css*/`
+.wrapper{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+  transform: translateY(100%);
+  filter: opacity(0);
+  transition: transform .2s,filter .2s;
+}
+.wrapper.show{
+  transform: translateY(0%);
+  filter: opacity(1);
+}
+.container{
   background: var(--s-color-inverse-surface);
   color: var(--s-color-inverse-on-surface);
   min-height: 48px;
   border-radius: 4px;
   box-shadow: 0px 5px 5px -3px rgb(0, 0, 0, .2), 0px 8px 10px 1px rgb(0, 0, 0, .14), 0px 3px 14px 2px rgb(0, 0, 0, .12);
-  filter: opacity(.95);
   line-height: 1.6;
   display: inline-flex;
   align-items: center;
-  width: 100%;
-  max-width: 560px;
+  min-width: 360px;
+  max-width: 480px;
   font-size: .875rem;
+  margin: 16px;
+}
+.wrapper.show .container{
+  pointer-events: auto;
 }
 .text{
   margin: 12px 16px;
@@ -37,17 +55,26 @@ const style = css`
 ::slotted([slot=action]:empty){
   display: none;
 }
+@media (max-width: 480px){
+  .container{
+    border-radius: 0;
+    min-width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+}
 `
 
 const name = 's-snackbar'
 const props = {
+  duration: 3000
 }
 
 class Make {
   #view: Node = document.body
   #snackbar: Component
   #action: Button
-  #duration = 2000
+  #duration = props.duration
   #onAction?: () => void
   constructor(text: string, duration?: number)
   constructor(view: Node, text: string, duration?: number)
@@ -65,19 +92,25 @@ class Make {
     this.#action = document.createElement('s-button')
     this.#action.slot = 'action'
     this.#action.addEventListener('click', () => this.#onAction?.())
+    this.#snackbar.addEventListener('blur', () => this.#view.removeChild(this.#snackbar))
     this.#snackbar.appendChild(this.#action)
-    this.#snackbar.textContent = text
+    this.#snackbar.append(text)
+    this.#snackbar.duration = this.#duration
   }
   setAction(text: string, listener?: () => void) {
     this.#action.textContent = text
     this.#onAction = listener
+    return this
   }
   show() {
-    console.log(this)
     this.#view.appendChild(this.#snackbar)
+    window.getComputedStyle(this.#snackbar).top
+    this.#snackbar.show()
+    return this
   }
   dimiss() {
-    //
+    this.#snackbar.dimiss()
+    return this
   }
 }
 
@@ -88,17 +121,45 @@ const Component = defineComponent({
   name, props,
   prototypes: { Make },
   setup() {
+    const state = { showed: false }
     const show = () => {
+      if (!this.host.isConnected || state.showed) return
+      state.showed = true
+      this.host.dispatchEvent(new Event('show'))
+      this.refs.wrapper.addEventListener('transitionend', () => {
+        this.host.dispatchEvent(new FocusEvent('focus'))
+        setTimeout(dimiss, this.props.duration)
+      }, { once: true })
+      this.refs.wrapper.classList.add('show')
+    }
+    const dimiss = () => {
+      if (!this.host.isConnected || !state.showed) return
+      this.host.dispatchEvent(new Event('dimiss'))
+      this.refs.wrapper.addEventListener('transitionend', () => {
+        this.host.dispatchEvent(new FocusEvent('blur'))
+        state.showed = false
+      }, { once: true })
+      this.refs.wrapper.classList.remove('show')
     }
     return {
+      expose: {
+        show, dimiss,
+        get showed() {
+          return state.showed
+        }
+      },
       render: () => <>
+        <style>{rootStyle}</style>
         <style>{style}</style>
-        <slot name="trigger"></slot>
-        <div></div>
-        <div class="text" part="text">
-          <slot></slot>
+        <slot name="trigger" onClick={show}></slot>
+        <div class="wrapper" part="wrapper" ref="wrapper">
+          <div class="container" part="container">
+            <div class="text" part="text">
+              <slot></slot>
+            </div>
+            <slot name="action"></slot>
+          </div>
         </div>
-        <slot name="action"></slot>
       </>
     }
   }

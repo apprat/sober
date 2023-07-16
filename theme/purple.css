@@ -1,33 +1,41 @@
-html {
-  --s-color-primary: #057CC1;
+:root {
+  --s-color-primary: #6750A4;
   --s-color-on-primary: #FFFFFF;
-  --s-color-primary-container: #CDE5FF;
-  --s-color-on-primary-container: #001D34;
 
-  --s-color-secondary: #8492A3;
+  --s-color-primary-container: #EADDFF;
+  --s-color-on-primary-container: #21005E;
+
+  --s-color-secondary: #625B71;
   --s-color-on-secondary: #FFFFFF;
-  --s-color-secondary-container: #D5E4F7;
-  --s-color-on-secondary-container: #0E1D2A;
 
-  --s-color-tertiary: #895100;
+  --s-color-secondary-container: #E8DEF8;
+  --s-color-on-secondary-container: #1E192B;
+
+  --s-color-tertiary: #7D5260;
   --s-color-on-tertiary: #FFFFFF;
-  --s-color-tertiary-container: #FFDCB8;
-  --s-color-on-tertiary-container: #2C1700;
+
+  --s-color-tertiary-container: #FFD8E4;
+  --s-color-on-tertiary-container: #370B1E;
 
   --s-color-error: #B3261E;
   --s-color-on-error: #FFFFFF;
+
   --s-color-error-container: #F9DEDC;
   --s-color-on-error-container: #410E0B;
 
-  --s-color-background: #FFFBFE;
+  --s-color-background: #FEF7FF;
   --s-color-on-background: #1C1B1F;
 
-  --s-color-surface: #FFFBFE;
+  --s-color-surface: #FEF7FF;
   --s-color-on-surface: #1C1B1F;
-  --s-color-surface-variant: #E7E0EC;
-  --s-color-on-surface-variant: #49454F;
 
-  --s-color-inverse-primary: #96B9CE;
+  --s-color-surface-container: #F3EDF7;
+  --s-color-surface-container-high: #ECE6F0;
+
+  --s-color-surface-variant: #E7E0EC;
+  --s-color-on-surface-variant: #49454E;
+
+  --s-color-inverse-primary: #D0BCFF;
   --s-color-inverse-surface: #313033;
   --s-color-inverse-on-surface: #F4EFF4;
 

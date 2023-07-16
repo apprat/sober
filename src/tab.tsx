@@ -1,7 +1,7 @@
-import { defineComponent, IntrinsicElement, css } from './base/core'
+import { defineComponent, IntrinsicElement } from './core/runtime'
 import type TabItem from './tab-item'
 
-const style = css`
+const style = /*css*/`
 :host{
   display: flex;
   color: var(--s-color-on-surface-variant);

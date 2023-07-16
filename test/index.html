@@ -54,6 +54,8 @@
         <tr>
           <td style="background: var(--s-color-surface);color: var(--s-color-on-surface);">surface</td>
           <td style="background: var(--s-color-on-surface);color: #fff;">on-surface</td>
+          <td style="background: var(--s-color-surface-container);">surface-container</td>
+          <td style="background: var(--s-color-surface-container-high);">surface-container-high</td>
         </tr>
         <tr>
           <td style="background: var(--s-color-surface-variant);color: var(--s-color-on-surface-variant);">
@@ -63,18 +65,23 @@
         <tr>
           <td style="background: var(--s-color-background);color: var(--s-color-on-background);">background</td>
           <td style="background: var(--s-color-on-background);color: #fff;">on-background</td>
-        </tr>
-        <tr>
           <td style="background: var(--s-color-outline)">outline</td>
           <td style="background: var(--s-color-outline-variant)">outline-variant</td>
+        </tr>
+        <tr>
+          <td style="background: var(--s-color-inverse-primary);">inverse-primary</td>
+          <td style="background: var(--s-color-inverse-surface);color: #fff;">inverse-surface</td>
+          <td style="background: var(--s-color-inverse-on-surface);">inverse-on-surface</td>
         </tr>
       </tbody>
     </table>
   </div>
   <main>
     <a href="./pointer.html">Pointer</a>
+    <a href="./icon.html">Icon</a>
+    <a href="./icon-button.html">Icon Button</a>
     <a href="./button.html">Button</a>
-    <a href="./FAB.html">FAButton</a>
+    <a href="./floating-action-button.html">Floating Action Button</a>
     <a href="./checkbox.html">Checkbox</a>
     <a href="./radio-button.html">Radio Button</a>
     <a href="./switch.html">Switch</a>
@@ -82,32 +89,23 @@
     <a href="./dialog.html">Dialog</a>
     <a href="./label.html">Label</a>
     <a href="./snackbar.html">Snackbar</a>
+    <a href="./tooltip.html">Tooltip</a>
   </main>
   <main>
-    <s-button
-      onclick="document.body.setAttribute('sober-theme',document.body.getAttribute('sober-theme')==='dark'?'':'dark')">
+    <s-button onclick="toggle()">
       <s-icon slot="start"></s-icon>
-      toggle
+      dark
     </s-button>
-    <s-button theme="elevated">Button</s-button>
-    <s-fab size="small">
-      <s-icon>
-        <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M768 554.666667h-213.333333v213.333333c0 23.466667-19.2 42.666667-42.666667 42.666667s-42.666667-19.2-42.666667-42.666667v-213.333333H256c-23.466667 0-42.666667-19.2-42.666667-42.666667s19.2-42.666667 42.666667-42.666667h213.333333V256c0-23.466667 19.2-42.666667 42.666667-42.666667s42.666667 19.2 42.666667 42.666667v213.333333h213.333333c23.466667 0 42.666667 19.2 42.666667 42.666667s-19.2 42.666667-42.666667 42.666667z">
-          </path>
-        </svg>
-      </s-icon>
-    </s-fab>
-    <s-fab>
-      <s-icon>
-        <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M768 554.666667h-213.333333v213.333333c0 23.466667-19.2 42.666667-42.666667 42.666667s-42.666667-19.2-42.666667-42.666667v-213.333333H256c-23.466667 0-42.666667-19.2-42.666667-42.666667s19.2-42.666667 42.666667-42.666667h213.333333V256c0-23.466667 19.2-42.666667 42.666667-42.666667s42.666667 19.2 42.666667 42.666667v213.333333h213.333333c23.466667 0 42.666667 19.2 42.666667 42.666667s-19.2 42.666667-42.666667 42.666667z">
-          </path>
-        </svg>
-      </s-icon>
-    </s-fab>
+    <s-button theme="elevated" onclick="purple()">
+      <s-icon slot="start" src="search"></s-icon>
+      purple
+    </s-button>
+    <s-floating-action-button size="small">
+      <s-icon></s-icon>
+    </s-floating-action-button>
+    <s-floating-action-button theme="tertiary">
+      <s-icon></s-icon>
+    </s-floating-action-button>
     <s-checkbox></s-checkbox>
     <s-checkbox checked="true"></s-checkbox>
     <s-checkbox indeterminate="true"></s-checkbox>
@@ -115,8 +113,71 @@
     <s-radio-button name="my" checked="true"></s-radio-button>
     <s-switch></s-switch>
     <s-switch checked="true"></s-switch>
+    <s-dialog positive-button="确认">
+      <s-button slot="trigger">
+        Dialog
+      </s-button>
+      <div slot="title">Dialog Choice</div>
+      <div slot="message">
+        The M3 baseline color scheme uses the same roles and token mapping as user-generated color schemes.
+      </div>
+    </s-dialog>
+    <s-snackbar>
+      <s-button slot="trigger">
+        snackbar
+      </s-button>
+      When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
+      <s-button slot="action">Action</s-button>
+    </s-snackbar>
+    <s-icon></s-icon>
+    <s-icon src="search"></s-icon>
+    <s-icon src="menu"></s-icon>
+    <s-icon src="arrow_back"></s-icon>
+    <s-icon src="more_vert"></s-icon>
+  </main>
+  <main>
+    <s-tab style="display: inline-block; width: 360px;">
+      <s-tab-item>
+        <div slot="text">Home</div>
+      </s-tab-item>
+      <s-tab-item>
+        <div slot="text">Discover</div>
+      </s-tab-item>
+      <s-tab-item>
+        <div slot="text">Shopping</div>
+      </s-tab-item>
+      <s-tab-item>
+        <div slot="text">User</div>
+      </s-tab-item>
+    </s-tab>
+  </main>
+  <main>
+    <div style="display: inline-block;width: 560px;">
+      <s-label>
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 1</div>
+        <div slot="subtitle">选择多选框</div>
+      </s-label>
+      <s-label>
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 2</div>
+        <div slot="subtitle">选择多选框</div>
+      </s-label>
+      <s-label>
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 3</div>
+        <div slot="subtitle">选择多选框</div>
+      </s-label>
+    </div>
   </main>
   <script src="../dist/bundle.min.js"></script>
+  <script>
+    const darkStyle = document.createElement('style')
+    darkStyle.textContent = `@import url('../theme/dark.css');`
+    const toggle = () => {
+      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
+    }
+  </script>
 </body>
 
 </html>

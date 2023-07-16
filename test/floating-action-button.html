@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+  <script>
+    const darkStyle = document.createElement('style')
+    darkStyle.textContent = `@import url('../theme/dark.css');`
+    const toggle = () => {
+      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
+    }
+  </script>
+</head>
+
+<body>
+  <s-floating-action-button type="extended" onclick="toggle()">
+    Toggle
+  </s-floating-action-button>
+
+  <main>
+    <s-floating-action-button size="small">
+      <s-icon></s-icon>
+    </s-floating-action-button>
+    <s-floating-action-button>
+      <s-icon></s-icon>
+    </s-floating-action-button>
+    <s-floating-action-button size="large">
+      <s-icon></s-icon>
+    </s-floating-action-button>
+  </main>
+
+  <main>
+    <s-floating-action-button>
+      <s-icon></s-icon>
+    </s-floating-action-button>
+    <s-floating-action-button theme="secondary">
+      <s-icon></s-icon>
+    </s-floating-action-button>
+    <s-floating-action-button theme="surface">
+      <s-icon></s-icon>
+    </s-floating-action-button>
+    <s-floating-action-button theme="tertiary">
+      <s-icon></s-icon>
+    </s-floating-action-button>
+  </main>
+
+  <main>
+    <s-floating-action-button type="extended" size="small">
+      <s-icon slot="start"></s-icon>
+      compose
+    </s-floating-action-button>
+    <s-floating-action-button type="extended">
+      <s-icon slot="start"></s-icon>
+      compose
+    </s-floating-action-button>
+    <s-floating-action-button type="extended" size="large">
+      <s-icon slot="start"></s-icon>
+      compose
+    </s-floating-action-button>
+  </main>
+
+  <hr>
+
+  <script src="../dist/bundle.min.js"></script>
+</body>
+
+</html>

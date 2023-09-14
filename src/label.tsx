@@ -31,11 +31,11 @@ const style = /*css*/`
 }
 ::slotted([slot=title]){
   font-size: 1rem;
-  color: var(--s-on-surface);
+  color: var(--s-color-on-surface,#1C1B1F);
 }
 ::slotted([slot=subtitle]){
   font-size: .75rem;
-  color: var(--s-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#49454E);
 }
 `
 

@@ -11,21 +11,21 @@ const style = /*css*/`
   border-radius: 16px;
   -webkit-box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
   box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
-  background: var(--s-color-primary-container);
-  color: var(--s-color-on-primary-container);
+  background: var(--s-color-primary-container,#EADDFF);
+  color: var(--s-color-on-primary-container,#21005E);
   transition: box-shadow .2s;
 }
 :host([theme=secondary]){
-  background: var(--s-color-secondary-container);
-  color: var(--s-color-on-secondary-container);
+  background: var(--s-color-secondary-container,#E8DEF8);
+  color: var(--s-color-on-secondary-container,#1E192B);
 }
 :host([theme=surface]){
-  background: var(--s-color-surface-container-high);
-  color: var(--s-color-primary);
+  background: var(--s-color-surface-container-high,#ECE6F0);
+  color: var(--s-color-primary,#6750A4);
 }
 :host([theme=tertiary]){
-  background: var(--s-color-tertiary-container);
-  color: var(--s-color-on-tertiary-container);
+  background: var(--s-color-tertiary-container,#FFD8E4);
+  color: var(--s-color-on-tertiary-container,#370B1E);
 }
 :host([type=extended]){
   padding: 0 16px;

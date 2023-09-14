@@ -19,38 +19,29 @@
   <s-floating-action-button type="extended" onclick="toggle()">
     Toggle
   </s-floating-action-button>
-
-
   <main>
-    <s-tab>
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-    </s-tab>
-    <!-- 
-    <s-tab mode="scrollable">
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-    </s-tab> -->
+    <s-button>
+      <s-icon slot="start"></s-icon>
+      filled
+    </s-button>
+
+    <s-button theme="elevated">
+      <s-icon slot="start"></s-icon>
+      elevated
+    </s-button>
+
+    <s-button theme="filled-tonal">
+      <s-icon slot="start"></s-icon>
+      filled-tonal
+    </s-button>
+
+    <s-button theme="outlined">
+      outlined
+    </s-button>
+
+    <s-button theme="text">
+      text button
+    </s-button>
   </main>
 
   <script src="../dist/bundle.min.js"></script>

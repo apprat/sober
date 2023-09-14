@@ -8,19 +8,19 @@ const style = /*css*/`
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#49454E);
 }
 :host([theme=filled]){
-  color: var(--s-color-on-primary);
-  background: var(--s-color-primary);
+  color: var(--s-color-on-primary,#FFFFFF);
+  background: var(--s-color-primary,#6750A4);
 }
 :host([theme=filled-tonal]){
-  color: var(--s-color-on-secondary-container);
-  background: var(--s-color-secondary-container);
+  color: var(--s-color-on-secondary-container,#1E192B);
+  background: var(--s-color-secondary-container,#E8DEF8);
 }
 :host([theme=outlined]){
-  -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline-variant);
-  box-shadow: 0 0 0 1px inset var(--s-color-outline-variant);
+  -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline-variant,#C4C7C5);
+  box-shadow: 0 0 0 1px inset var(--s-color-outline-variant,#C4C7C5);
 }
 :host([size=small]){
   width: 36px;

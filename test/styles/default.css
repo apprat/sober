@@ -12,7 +12,7 @@
 a {
   margin: 8px;
   display: inline-block;
-  color: var(--s-color-primary);
+  color: var(--s-color-primary, rgb(144, 16, 86));
   text-decoration: none;
 }
 

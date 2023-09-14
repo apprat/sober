@@ -7,22 +7,22 @@ const style = /*css*/`
   align-items: center;
   cursor: pointer;
   position: relative;
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#49454E);
 }
 :host([disabled=true]){
   pointer-events: none !important;
   filter: grayscale(.8) opacity(.4) !important;
 }
 :host([checked=true]){
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#6750A4);
 }
 :host([checked=true]) .track{
-  background: var(--s-color-primary);
+  background: var(--s-color-primary,#6750A4);
   -webkit-box-shadow:none;
   box-shadow: none;
 }
 :host([checked=true]) .thumb{
-  background: var(--s-color-on-primary);
+  background: var(--s-color-on-primary,#FFFFFF);
   transform: scale(1.5) translateX(16px);
 }
 :host([checked=true]) .icon{
@@ -34,13 +34,13 @@ const style = /*css*/`
   width: 52px;
   height: 32px;
   border-radius: 20px;
-  --background: var(--s-color-surface-variant);
-  -webkit-box-shadow: 0 0 0 2px inset var(--s-color-outline);
-  box-shadow: 0 0 0 2px inset var(--s-color-outline);
+  --background: var(--s-color-surface-variant,#E7E0EC);
+  -webkit-box-shadow: 0 0 0 2px inset var(--s-color-outline,#79747E);
+  box-shadow: 0 0 0 2px inset var(--s-color-outline,#79747E);
   position: relative;
 }
 .thumb{
-  background: var(--s-color-outline);
+  background: var(--s-color-outline,#79747E);
   border-radius: 50%;
   width: 16px;
   height: 16px;
@@ -55,7 +55,7 @@ const style = /*css*/`
 .icon{
   width: 12px;
   height: 12px;
-  fill: var(--s-color-primary);
+  fill: var(--s-color-primary,#6750A4);
   filter: opacity(0);
   transition: filter .2s;
 }

@@ -90,6 +90,7 @@
     <a href="./label.html">Label</a>
     <a href="./snackbar.html">Snackbar</a>
     <a href="./tooltip.html">Tooltip</a>
+    <a href="./table.html">Table</a>
   </main>
   <main>
     <s-button onclick="toggle()">
@@ -114,61 +115,35 @@
     <s-switch></s-switch>
     <s-switch checked="true"></s-switch>
     <s-dialog positive-button="确认">
-      <s-button slot="trigger">
-        Dialog
-      </s-button>
+      <s-tooltip slot="trigger">
+        <s-button slot="trigger">
+          Dialog
+        </s-button>
+        hello dialog
+      </s-tooltip>
       <div slot="title">Dialog Choice</div>
       <div slot="message">
         The M3 baseline color scheme uses the same roles and token mapping as user-generated color schemes.
       </div>
     </s-dialog>
+
     <s-snackbar>
-      <s-button slot="trigger">
-        snackbar
-      </s-button>
+      <s-tooltip slot="trigger">
+        <s-button slot="trigger">
+          snackbar
+        </s-button>
+        <img style="max-width: 200px;"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQAAAACoxAthAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAd2KE6QAAAAJcEhZcwAAFxEAABcRAcom8z8AAAHMSURBVHja7dtBjoMwDEBRoy667BF6FI4GR+MoHKHLLqpmEtsJoYw0U6lFQfreIEjezlhOAhLeDoFAIBDI98hNlriESeQUH45duMf7zTAEshcZPEkf9uwUZpGK9D78hEAaJ09N7aGQmPzpgc6NxIchkAORSXKmS0l+COR4RKv5NZGzcQjkOMTy3RsSDS3jktrs//QwEMjnyRJak1Mm64qvD0rqYQikWfIauuIbSk3eDEMgzZI0PpfkTxGTX8Mr+90ajgsE0jzRSDU7XmbrUbSk+xbG/FLGIZDWiK/4riGP64rPwqdBIHsTjXueNnkmW3Jbme5CFRBI26SEvgMxnEg6vEsxbpIfAmmLjD75lLuLkDeHNfoQNmUcAmmObA7sUvIP9fvQQSB7k82ZxiNP7b1Ptk7D9yYgkEbJbZ3pVcJP5c73KSCQhsk6fMUn5cAurPaOIZBmya1KeX0m+dueYEfPvW3SjRBI42TwxK++txzFVnye/LI+sINAdiCrFZ9Ns8gZvm1IIJC2Sah+Murz+2A1uYNAjkOm9TGHf295tjO8CwTSNPEK/Vj65NFY8F8zftuFg0BaI0s4kfKVml3k70UiBPJR8mZAIBAI5EvkB0ea8yhUsjqlAAAAAElFTkSuQmCC">
+      </s-tooltip>
       When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
       <s-button slot="action">Action</s-button>
     </s-snackbar>
+
     <s-icon></s-icon>
     <s-icon src="search"></s-icon>
     <s-icon src="menu"></s-icon>
     <s-icon src="arrow_back"></s-icon>
     <s-icon src="more_vert"></s-icon>
-  </main>
-  <main>
-    <s-tab style="display: inline-block; width: 360px;">
-      <s-tab-item>
-        <div slot="text">Home</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">Discover</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">Shopping</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">User</div>
-      </s-tab-item>
-    </s-tab>
-  </main>
-  <main>
-    <div style="display: inline-block;width: 560px;">
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 1</div>
-        <div slot="subtitle">选择多选框</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 2</div>
-        <div slot="subtitle">选择多选框</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 3</div>
-        <div slot="subtitle">选择多选框</div>
-      </s-label>
-    </div>
   </main>
   <script src="../dist/bundle.min.js"></script>
   <script>
@@ -177,6 +152,7 @@
     const toggle = () => {
       document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
     }
+
   </script>
 </body>
 

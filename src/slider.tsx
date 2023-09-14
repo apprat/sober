@@ -5,7 +5,7 @@ const style = /*css*/`
   -webkit-user-select: none;
   user-select: none;
   display: block;
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#6750A4);
   height: 40px;
   cursor: pointer;
   background: rgba(0,0,0,.04);
@@ -27,7 +27,7 @@ const style = /*css*/`
 }
 .track>.block{
   height: 100%;
-  background: var(--s-color-on-surface-variant);
+  background: var(--s-color-on-surface-variant,#49454E);
   border-radius: 2px;
   opacity: .38;
 }

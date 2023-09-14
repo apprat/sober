@@ -25,7 +25,6 @@ $ npm install sober
 Register all components
 ```js
 import { registerAll } from 'sober'
-import 'sober/theme/light.css'
 
 registerAll()
 ```
@@ -49,6 +48,15 @@ button.theme = 'outlined'
 document.body.appendChild(button)
 ```
 > Sober uses the exports declaration in package.json, you must enable the "moduleResolution": "Bundler" option in tsconfig.json, otherwise the declaration file cannot be found  
+
+Use different themes
+```js
+import { registerAll } from 'sober'
+import 'sober/theme/dark.css'
+
+registerAll()
+```
+> Importable auto.css light.css drak.css three themes, you can customize the theme.   
 
 Using the JSX in
 ```jsx

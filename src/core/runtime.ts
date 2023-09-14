@@ -63,7 +63,8 @@ class State {
   mounted?: Function
   unmounted?: Function
   adopted?: Function
-  changed?: Function
+  watched?: Function
+  watches?: { [key: string]: Function | undefined }
   parseTargetType(value: unknown, target: Prop): Prop {
     switch (typeof target) {
       case 'string':
@@ -87,12 +88,14 @@ type ThisComponent<P> = Readonly<{
   refs: { [name: string]: HTMLElement }
 }>
 
+
 export const defineComponent = <
+  N extends string,
   P extends { [name: string]: Prop } = {},
   PT extends {} = {},
   E extends {} = {}
 >(options: {
-  name: string
+  name: N
   props?: P
   prototypes?: PT
   dependencies?: { register: () => void }[]
@@ -102,10 +105,14 @@ export const defineComponent = <
     mounted?: () => void
     unmounted?: () => void
     adopted?: () => void
-    changed?: (name: keyof P) => void
+    watched?: (key: keyof P) => void
+    watches?: {
+      [K in keyof P]?: () => void
+    }
     expose?: E
   }
 }): {
+  readonly name: N
   new(): Partial<P> & Readonly<E> & HTMLElement
   prototype: HTMLElement
   /**
@@ -118,6 +125,8 @@ export const defineComponent = <
   for (const key in options.props) attributes.push(camelToKebab(key))
   class CustomElement extends HTMLElement {
     static observedAttributes = attributes
+    //@ts-ignore
+    static name = options.name
     constructor() {
       super()
       const shadowRoot = this.attachShadow({ mode: 'closed' })
@@ -141,7 +150,8 @@ export const defineComponent = <
               if (old === null || String(value) !== old) return this.setAttribute(camelToKebab(key), String(value))
             }
             oldProps[key] = value
-            state.changed?.(key)
+            state.watched?.(key)
+            state.watches?.[key]?.()
           }
         }
         Object.defineProperty(this, key, descriptor)
@@ -154,7 +164,8 @@ export const defineComponent = <
       state.adopted = setup.adopted?.bind(thisElement)
       state.mounted = setup.mounted?.bind(thisElement)
       state.unmounted = setup.unmounted?.bind(thisElement)
-      state.changed = setup.changed?.bind(thisElement)
+      state.watched = setup.watched?.bind(thisElement)
+      state.watches = setup.watches
       setup.created?.apply(thisElement)
       for (const key in setup.expose) {
         Object.defineProperty(this, key, {

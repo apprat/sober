@@ -21,37 +21,24 @@ const style = /*css*/`
   filter: grayscale(.8) opacity(.6) !important;
 }
 :host([checked=true]){
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#6750A4);
+  font-weight: bold;
 }
 ::slotted(*){
   pointer-events: none;
-  height: 32px;
 }
 ::slotted([slot=icon]){
-  display: flex;
-  align-items: flex-end;
-}
-::slotted([slot=icon]:only-child){
-  align-items: center;
-}
-::slotted([slot=text]){
-  padding-top: 3px;
-  box-sizing: border-box;
-}
-::slotted([slot=text]:only-child){
-  padding: 0;
-  height: auto;
 }
 `
 
 const name = 's-tab-item'
 const props = {
   disabled: false,
-  checked: false,
+  checked: false
 }
 
 /**
- * @slot icon text
+ * @slot icon
  */
 const Component = defineComponent({
   name, props,

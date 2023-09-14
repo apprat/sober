@@ -12,14 +12,14 @@ const style = /*css*/`
 .title{
   display: flex;
   font-size: 1.5rem;
-  color: var(--s-color-on-surface);
+  color: var(--s-color-on-surface,#1C1B1F);
   flex-grow: 1;
 }
 .content{
   -webkit-user-select: text;
   user-select: text;
   font-size: 1rem;
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#49454E);
 }
 .action{
   display: flex;
@@ -57,7 +57,7 @@ const style = /*css*/`
   bottom: 0;
   left: 0;
   width: 100%;
-  background: var(--s-color-outline-variant);
+  background: var(--s-color-outline-variant,#C4C7C5);
   height: 1px;
 }
 :host([size=full-screen]) ::slotted([slot=title]:not(:empty)){
@@ -86,7 +86,7 @@ const style = /*css*/`
 
 const name = 's-dialog'
 const props = {
-  type: 'normal' as 'normal' | 'large' | 'full-screen',
+  size: 'normal' as 'normal' | 'large' | 'full-screen',
   positiveButton: '',
   negativeButton: ''
 }
@@ -141,15 +141,9 @@ const Component = defineComponent({
           return state.showed
         }
       },
-      changed: (name) => {
-        switch (name) {
-          case 'negativeButton':
-            this.refs.negative.textContent = this.props.negativeButton
-            break
-          case 'positiveButton':
-            this.refs.positive.textContent = this.props.positiveButton
-            break
-        }
+      watches: {
+        negativeButton: () => this.refs.negative.textContent = this.props.negativeButton,
+        positiveButton: () => this.refs.positive.textContent = this.props.positiveButton
       },
       render: () => <>
         <style>{rootStyle}</style>

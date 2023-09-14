@@ -8,29 +8,29 @@ const style = /*css*/`
   border-radius: 20px;
   padding: 0 24px;
   min-height: 40px;
-  background: var(--s-color-primary);
-  color: var(--s-color-on-primary);
+  background: var(--s-color-primary,#6750A4);
+  color: var(--s-color-on-primary,#FFFFFF);
 }
 :host([theme=elevated]){
   -webkit-box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
   box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#6750A4);
   background: none;
   transition: box-shadow .2s;
 }
 :host([theme=filled-tonal]){
-  background: var(--s-color-secondary-container);
-  color: var(--s-color-primary);
+  background: var(--s-color-secondary-container,#E8DEF8);
+  color: var(--s-color-primary,#6750A4);
 }
 :host([theme=outlined]){
-  -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline-variant);
-  box-shadow: 0 0 0 1px inset var(--s-color-outline-variant);
+  -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline-variant,#C4C7C5);
+  box-shadow: 0 0 0 1px inset var(--s-color-outline-variant,#C4C7C5);
   background: none;
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#6750A4);
 }
 :host([theme=text]){
   background: none;
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#6750A4);
   padding: 0 16px;
 }
 :host([size=small]){

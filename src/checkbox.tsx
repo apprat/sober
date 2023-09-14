@@ -11,7 +11,7 @@ const style = /*css*/`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#49454E);
 }
 :host([disabled=true]){
   pointer-events: none !important;
@@ -19,7 +19,7 @@ const style = /*css*/`
 }
 :host([checked=true]),
 :host([indeterminate=true]){
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#6750A4);
 }
 .icon{
   width: 24px;
@@ -54,17 +54,9 @@ const Component = defineComponent({
           this.host.dispatchEvent(new Event('change'))
         })
       },
-      changed: (name) => {
-        switch (name) {
-          case 'indeterminate':
-            this.refs.iconPath.setAttribute('d', this.props.indeterminate ? svgData.indeterminate : (
-              this.props.checked ? svgData.checked : svgData.uncheck
-            ))
-            break
-          case 'checked':
-            !this.props.indeterminate && this.refs.iconPath.setAttribute('d', this.props.checked ? svgData.checked : svgData.uncheck)
-            break
-        }
+      watches: {
+        indeterminate: () => this.refs.iconPath.setAttribute('d', this.props.indeterminate ? svgData.indeterminate : (this.props.checked ? svgData.checked : svgData.uncheck)),
+        checked: () => !this.props.indeterminate && this.refs.iconPath.setAttribute('d', this.props.checked ? svgData.checked : svgData.uncheck)
       },
       render: () => <>
         <style>{rootStyle}</style>

@@ -42,7 +42,7 @@ export const defaultStyle = /*css*/`
   transform: scale(1);
 }
 .body{
-  background: var(--s-color-surface-container-high);
+  background: var(--s-color-surface-container-high,#ECE6F0);
   width: calc(100% - 48px);
   max-width: 560px;
   min-width: 280px;

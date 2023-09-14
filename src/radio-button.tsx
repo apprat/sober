@@ -7,7 +7,7 @@ const style = /*css*/`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#49454E);
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -18,7 +18,7 @@ const style = /*css*/`
   filter: grayscale(.8) opacity(.6) !important;
 }
 :host([checked=true]){
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#6750A4);
 }
 .icon{
   width: 24px;
@@ -57,12 +57,8 @@ const Component = defineComponent({
           this.host.dispatchEvent(new Event('change'))
         })
       },
-      changed: (name) => {
-        switch (name) {
-          case 'checked':
-            this.refs.iconPath.setAttribute('d', this.props.checked ? svgData.checked : svgData.uncheck)
-            break
-        }
+      watches: {
+        checked: () => this.refs.iconPath.setAttribute('d', this.props.checked ? svgData.checked : svgData.uncheck)
       },
       render: () => <>
         <style>{rootStyle}</style>

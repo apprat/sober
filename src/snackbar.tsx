@@ -21,8 +21,8 @@ const style = /*css*/`
   filter: opacity(1);
 }
 .container{
-  background: var(--s-color-inverse-surface);
-  color: var(--s-color-inverse-on-surface);
+  background: var(--s-color-inverse-surface,#313033);
+  color: var(--s-color-inverse-on-surface,#F4EFF4);
   min-height: 48px;
   border-radius: 4px;
   box-shadow: 0px 5px 5px -3px rgb(0, 0, 0, .2), 0px 8px 10px 1px rgb(0, 0, 0, .14), 0px 3px 14px 2px rgb(0, 0, 0, .12);
@@ -45,7 +45,7 @@ const style = /*css*/`
   font-size: inherit;
   flex-shrink: 0;
   border-radius: 4px;
-  color: var(--s-color-inverse-primary);
+  color: var(--s-color-inverse-primary,#D0BCFF);
   margin-right: 8px;
   margin-left: -8px;
   min-height: 36px;
@@ -128,7 +128,7 @@ const Component = defineComponent({
       this.host.dispatchEvent(new Event('show'))
       this.refs.wrapper.addEventListener('transitionend', () => {
         this.host.dispatchEvent(new FocusEvent('focus'))
-        setTimeout(dimiss, this.props.duration)
+        if (this.props.duration) setTimeout(dimiss, this.props.duration)
       }, { once: true })
       this.refs.wrapper.classList.add('show')
     }

@@ -25,6 +25,7 @@ $ npm install sober
 Register all components
 ```js
 import { registerAll } from 'sober'
+import 'sober/theme/light.css'
 
 registerAll()
 ```
@@ -69,7 +70,9 @@ Button.register()
 //other.js
 function App() {
   return <div>
-    <s-button theme="text"> Button </s-button>
+    <s-button theme="text"> 
+      Button 
+    </s-button>
   </div>
 }
 ```

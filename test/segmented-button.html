@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+  <script>
+    const darkStyle = document.createElement('style')
+    darkStyle.textContent = `@import url('../theme/dark.css');`
+    const toggle = () => {
+      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
+    }
+  </script>
+</head>
+
+<body>
+  <s-floating-action-button type="extended" onclick="toggle()">
+    Toggle
+  </s-floating-action-button>
+  <main>
+    <s-segmented-button>
+      <s-segmented-button-item>
+        <s-icon slot="start" type="done"></s-icon>
+        hello
+      </s-segmented-button-item>
+      <s-segmented-button-item>
+        index
+      </s-segmented-button-item>
+      <s-segmented-button-item disabled="true">
+        users
+      </s-segmented-button-item>
+
+      <s-segmented-button-item>
+        <s-icon slot="start" type="search"></s-icon>
+        users
+      </s-segmented-button-item>
+    </s-segmented-button>
+  </main>
+
+  <main>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      td {
+        border: solid 1px #333;
+        height: 40px;
+        padding: 0;
+        text-align: center;
+      }
+    </style>
+    <table>
+      <tbody>
+        <tr>
+          <td><s-icon slot="start" type="done"></s-icon>123</td>
+          <td>123</td>
+          <td>123</td>
+          <td>123</td>
+          <td>123</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <script src="../dist/bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,175 +1,266 @@
 import { defineComponent, IntrinsicElement } from './core/runtime'
-import { rootStyle } from './fragment/root-style'
-import { defaultStyle } from './fragment/dialog-style'
-import { Builder } from './fragment/dialog-function'
-import Button from './button'
+import Layer from './layer'
 
 const style = /*css*/`
-.head{
+:host{
+  user-select: none;
+  display: inline-block;
+  vertical-align: middle;
+}
+.wrapper{
+  position: fixed;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+.show{
+  pointer-events: auto;
+}
+.scrim{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--s-color-scrim);
+  cursor: pointer;
+  filter: opacity(0);
+  transition: filter .2s;
+}
+.show .scrim{
+  filter: opacity(.5);
+}
+.wrapper-container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
+  transition: filter .2s,transform .2s;
+  pointer-events: none;
+  filter: opacity(0);
+  transform: scale(.8);
+}
+.show .wrapper-container{
+  filter: opacity(1);
+  transform: scale(1);
+}
+.container{
+  background: var(--s-color-surface-container-high);
+  width: calc(100% - 48px);
+  max-width: 560px;
+  min-width: 280px;
+  max-height: calc(100% - 48px);
+  border-radius: 28px;
+  box-shadow: var(--s-elevation-level3);
+  display: flex;
+  flex-direction: column;
+}
+.show .container{
+  pointer-events: auto;
+}
+.header{
   display: contents;
 }
-.title{
-  display: flex;
-  font-size: 1.5rem;
-  color: var(--s-color-on-surface,#1C1B1F);
-  flex-grow: 1;
+::slotted([slot=icon]){
+  margin: 24px;
+  color: var(--s-color-secondary);
+  flex-shrink: 0;
 }
-.content{
-  -webkit-user-select: text;
-  user-select: text;
-  font-size: 1rem;
-  color: var(--s-color-on-surface-variant,#49454E);
+.icon ::slotted([slot=icon]){
+  align-self: center;
+  margin: 24px 24px -8px 24px;
+}
+.headline{
+  font-size: 1.5rem;
+  color: var(--s-color-on-surface);
+  line-height: 1.3;
+  font-weight: 400;
+  padding: 24px;
+}
+.icon .headline{
+  text-align: center;
 }
 .action{
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+  margin: 0 24px;
+  flex-shrink: 0;
   order: 2;
 }
-.action>.item{
+.text-button{
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: .875rem;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--s-color-primary);
   min-width: 72px;
-  margin: 8px 0 16px 0;
+  margin: 24px 0;
 }
-.action>.item:empty{
+.text-button:empty{
   display: none;
 }
-.action>.item:last-child{
-  margin-right: 16px;
-  margin-left: 8px;
-}
-:host([size=large]) .body{
-  max-width: 1080px;
-}
-:host([size=full-screen]) .body{
-  max-width: none;
-  max-height: none;
-  width: 100%;
-  height: 100%;
-  border-radius: 0;
-}
-:host([size=full-screen]) .head{
-  display: flex;
-}
-:host([size=full-screen]) .head::before{
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: var(--s-color-outline-variant,#C4C7C5);
-  height: 1px;
-}
-:host([size=full-screen]) ::slotted([slot=title]:not(:empty)){
-  margin: 16px 24px;
-}
-:host([size=full-screen]) .action>.item{
-  margin-top: 0;
-  margin-bottom: 0;
-}
-:host([size=full-screen]) .action>.item:last-child{
-  margin-right: 8px;
-}
-
-::slotted([slot=title]:not(:empty)){
-  margin: 24px 24px 16px 24px;
-}
-::slotted([slot=message]:not(:empty)){
-  margin: 0 24px 8px 24px;
-  line-height: 1.6;
+::slotted(p:not([slot])){
+  user-select: text;
+  margin: -8px 24px;
+  line-height: 1.5;
+  font-size: .875rem;
+  font-weight: 400;
+  color: var(--s-color-on-surface-variant);
 }
 ::slotted(s-label){
-  padding-left: 16px;
-  padding-right: 16px;
+  padding: 0 16px;
+}
+:host([size=full-screen]) .container{
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  border-radius: 0;
+}
+:host([size=full-screen]) ::slotted([slot=icon]){
+  margin: 0 0 0 24px;
+}
+:host([size=full-screen]) .headline{
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 24px;
+  text-align: left;
+}
+:host([size=full-screen]) .header{
+  max-height: 56px;
+  display: flex;
+  align-items: center;
+}
+:host([size=full-screen]) ::slotted(p:not([slot])){
+  margin: 0;
+  padding: 24px;
+  border-top: solid 1px var(--s-color-outline-variant);
+}
+:host([size=full-screen]) .action{
+  margin: 0 8px 0 0;
+  order: 0;
+}
+:host([size=full-screen]) .text-button{
+  margin: 8px 0;
 }
 `
 
 const name = 's-dialog'
 const props = {
-  size: 'normal' as 'normal' | 'large' | 'full-screen',
+  size: 'basic' as 'basic' | 'full-screen',
+  headline: '',
   positiveButton: '',
   negativeButton: ''
 }
 
-export const enum EventCode { 'none', 'positiveButton', 'negativeButton', 'mask', 'keyboard' }
-
-class DimissEvent extends Event {
-  constructor(type: string, public readonly code: EventCode, eventInitDict?: EventInit) {
-    super(type, eventInitDict)
-  }
+export const enum EventCode {
+  SCRIM,
+  POSITIVE_BUTTON,
+  NEGATIVE_BUTTON
 }
 
-/**
- * @slot trigger icon title message anonymous
- * @event show dimiss focus blur
- */
+const alert = (options: {
+  view?: Node
+  headline: string
+  text?: string | Node | ((container: HTMLElement) => void)
+  negativeButton?: string
+  positiveButton?: string
+  size?: typeof props.size
+  onNegativeButton?: () => boolean | undefined
+  onPositiveButton?: () => boolean | undefined
+}) => {
+  const view = options.view ?? document.body
+  const dialog = document.createElement('s-dialog') as Self
+  dialog.headline = options.headline
+  dialog.negativeButton = options.negativeButton
+  dialog.positiveButton = options.positiveButton
+  dialog.size = options.size
+  switch (typeof options.text) {
+    case 'undefined':
+      break
+    case 'function':
+      options.text(dialog)
+      break
+    case 'string':
+      const p = document.createElement('p')
+      p.textContent = options.text
+      dialog.appendChild(p)
+      break
+    default:
+      dialog.append(options.text)
+  }
+  dialog.addEventListener('dimiss', (event) => {
+    if (event.detail.code === EventCode.NEGATIVE_BUTTON) {
+      const stoped = options.onNegativeButton?.()
+      if (stoped === false) event.preventDefault()
+    }
+    if (event.detail.code === EventCode.POSITIVE_BUTTON) {
+      const stoped = options.onPositiveButton?.()
+      if (stoped === false) event.preventDefault()
+    }
+  })
+  view.appendChild(dialog)
+  window.getComputedStyle(dialog).top
+  dialog.show()
+}
+
 const Component = defineComponent({
-  name, props,
-  prototypes: { alert, Builder },
-  dependencies: [Button],
+  name, props, propSyncs: ['size'],
+  statics: { alert },
+  dependencies: [Layer],
   setup() {
-    const state = { showed: false }
-    const toggle = (is = true) => this.refs.wrapper.classList[is ? 'add' : 'remove']('show')
-    const dispatch = (type: 'focus' | 'blur') => {
-      this.refs.container.addEventListener('transitionend', () => {
-        this.host.dispatchEvent(new FocusEvent(type))
-      }, { once: true })
+    const show = () => this.refs.wrapper.classList.add('show')
+    const dimiss = () => this.refs.wrapper.classList.remove('show')
+    const onShow = () => {
+      this.host.dispatchEvent(new Event('show'))
+      show()
     }
-    const dispatchShow = () => this.host.dispatchEvent(new Event('show', { cancelable: true }))
-    const dispatchDimiss = (code: EventCode) => this.host.dispatchEvent(new DimissEvent('dimiss', code, { cancelable: true }))
-    const show = () => {
-      if (!this.host.isConnected || !dispatchShow()) return
-      state.showed = true
-      dispatch('focus')
-      toggle()
+    const onDimiss = (code: EventCode) => {
+      if (!this.host.dispatchEvent(new CustomEvent('dimiss', { detail: { code }, cancelable: true }))) return
+      dimiss()
     }
-    const dimiss = (code: EventCode = EventCode.none) => {
-      if (!this.host.isConnected || !dispatchDimiss(code)) return
-      state.showed = false
-      dispatch('blur')
-      toggle(false)
+    const onIconSlotChange = () => {
+      const icon = this.refs.icon as HTMLSlotElement
+      icon.assignedElements().length > 0 ? this.refs.wrapper.classList.add('icon') : this.refs.wrapper.classList.remove('icon')
     }
-    document.addEventListener('keydown', (event) => {
-      if (event.code !== 'Escape' || !this.refs.wrapper.classList.contains('show')) return
-      dimiss(EventCode.keyboard)
-    })
     return {
-      expose: {
-        show,
-        dimiss: () => dimiss(),
-        get showed() {
-          return state.showed
-        }
-      },
+      expose: { show, dimiss },
       watches: {
-        negativeButton: () => this.refs.negative.textContent = this.props.negativeButton,
-        positiveButton: () => this.refs.positive.textContent = this.props.positiveButton
+        headline: () => this.refs.headline.textContent = this.props.headline,
+        negativeButton: () => this.refs.negativeButton.textContent = this.props.negativeButton,
+        positiveButton: () => this.refs.positiveButton.textContent = this.props.positiveButton
       },
       render: () => <>
-        <style>{rootStyle}</style>
-        <style>{defaultStyle}</style>
         <style>{style}</style>
-        <slot name="trigger" onClick={show}></slot>
-        <div class="wrapper" part="wrapper" ref="wrapper">
-          <div class="mask" part="mask" onClick={() => dimiss(EventCode.mask)}></div>
-          <div class="container" part="container" ref="container">
-            <div class="body" part="body">
-              <div class="head">
-                <div class="icon">
-                  <slot name="icon"></slot>
-                </div>
-                <div class="title">
-                  <slot name="title"></slot>
-                </div>
+        <slot name="trigger" onClick={onShow}></slot>
+        <div class="wrapper" ref="wrapper">
+          <div class="scrim" onClick={() => onDimiss(EventCode.SCRIM)}></div>
+          <div class="wrapper-container">
+            <div class="container">
+              <div class="header">
+                <slot name="icon" ref="icon" onSlotChange={onIconSlotChange}></slot>
+                <div class="headline" ref="headline"></div>
                 <div class="action">
-                  <s-button theme="text" class="item" onClick={() => dimiss(EventCode.negativeButton)} ref="negative"></s-button>
-                  <s-button theme="text" class="item" onClick={() => dimiss(EventCode.positiveButton)} ref="positive"></s-button>
+                  <s-layer class="text-button" ref="negativeButton" onClick={() => onDimiss(EventCode.NEGATIVE_BUTTON)}></s-layer>
+                  <s-layer class="text-button" ref="positiveButton" onClick={() => onDimiss(EventCode.POSITIVE_BUTTON)}></s-layer>
                 </div>
               </div>
-              <div class="content">
-                <slot name="message"></slot>
-                <slot></slot>
-              </div>
+              <slot></slot>
             </div>
           </div>
         </div>
@@ -178,24 +269,14 @@ const Component = defineComponent({
   }
 })
 
-export default Component
-
-type Component = InstanceType<typeof Component>
+export default class Self extends Component { }
 
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
   }
-  interface Document {
-    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
-    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
-  }
-  namespace Sober {
-    namespace Dialog {
-      type DimissEvent = InstanceType<typeof DimissEvent>
-    }
-  }
-  interface HTMLElement {
-    addEventListener(type: 'dimiss', listener: (ev: DimissEvent) => void, options?: boolean | AddEventListenerOptions): void
+  interface GlobalEventHandlersEventMap {
+    dimiss: CustomEvent<{ code: EventCode }>
+    show: Event
   }
 }

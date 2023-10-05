@@ -1,9 +1,9 @@
 import { defineComponent, IntrinsicElement } from './core/runtime'
-import { rootStyle } from './fragment/root-style'
-import * as Pointer from './pointer'
+import { LayerFragment } from './fragment/layer'
 
 const style = /*css*/`
 :host{
+  user-select: none;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,59 +12,62 @@ const style = /*css*/`
   position: relative;
   cursor: pointer;
   font-size: .875rem;
+  font-weight: 500;
   text-transform: capitalize;
-  padding: 0 12px;
+  padding: 0 16px;
   overflow: hidden;
 }
-:host([disabled=true]){
-  pointer-events: none !important;
-  filter: grayscale(.8) opacity(.6) !important;
-}
 :host([checked=true]){
-  color: var(--s-color-primary,#6750A4);
-  font-weight: bold;
+  color: var(--s-color-primary);
+  pointer-events: none;
 }
 ::slotted(*){
   pointer-events: none;
 }
 ::slotted([slot=icon]){
+  height: 36px;
+  align-items: end;
+}
+::slotted([slot=icon]:only-child){
+  height: 24px;
+  align-items: center;
+}
+::slotted([slot=text]){
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1;
+  height: 26px;
+  margin-top: 1px;
+}
+::slotted([slot=text]:only-child){
+  height: auto;
+  margin-top: 0;
 }
 `
 
 const name = 's-tab-item'
 const props = {
-  disabled: false,
   checked: false
 }
 
-/**
- * @slot icon
- */
 const Component = defineComponent({
-  name, props,
+  name, props, propSyncs: true,
   setup() {
     return {
       render: () => <>
-        <style>{rootStyle}</style>
         <style>{style}</style>
         <slot name="icon"></slot>
         <slot name="text"></slot>
-        <Pointer.Fragment centered={false} />
+        <LayerFragment trigger={this.host} centered={false} />
       </>
     }
   }
 })
 
-export default Component
-
-type Component = InstanceType<typeof Component>
+export default class extends Component { }
 
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
-  }
-  interface Document {
-    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
-    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
   }
 }

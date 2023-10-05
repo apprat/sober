@@ -1,37 +1,45 @@
 import { defineComponent, IntrinsicElement } from './core/runtime'
-import { rootStyle } from './fragment/root-style'
-import { defaultStyle } from './fragment/button-style'
-import * as Pointer from './pointer'
+import { LayerFragment } from './fragment/layer'
 
 const style = /*css*/`
 :host{
+  user-select: none;
+  display: inline-flex;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  color: var(--s-color-on-surface-variant,#49454E);
+  color: var(--s-color-on-surface-variant);
+  position: relative;
+  box-sizing: border-box;
+}
+:host([disabled=true]){
+  pointer-events: none;
+  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
 }
 :host([theme=filled]){
-  color: var(--s-color-on-primary,#FFFFFF);
-  background: var(--s-color-primary,#6750A4);
+  color: var(--s-color-on-primary);
+  background: var(--s-color-primary);
+}
+:host([theme=filled][disabled=true]){
+  background: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent) !important;
 }
 :host([theme=filled-tonal]){
-  color: var(--s-color-on-secondary-container,#1E192B);
-  background: var(--s-color-secondary-container,#E8DEF8);
+  color: var(--s-color-on-secondary-container);
+  background: var(--s-color-secondary-container);
+}
+:host([theme=filled-tonal][disabled=true]){
+  background: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent) !important;
 }
 :host([theme=outlined]){
-  -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline-variant,#C4C7C5);
-  box-shadow: 0 0 0 1px inset var(--s-color-outline-variant,#C4C7C5);
+  border: solid 1px var(--s-color-outline);
 }
-:host([size=small]){
-  width: 36px;
-  height: 36px;
-}
-:host([size=large]){
-  width: 48px;
-  height: 48px;
-}
-::slotted(*){
-  color: inherit;
+:host([theme=outlined][disabled=true]){
+  background: none !important;
+  border-color: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
 }
 `
 
@@ -39,41 +47,29 @@ const name = 's-icon-button'
 const props = {
   disabled: false,
   theme: 'standard' as 'standard' | 'filled' | 'filled-tonal' | 'outlined',
-  size: 'medium' as 'medium' | 'small' | 'large'
 }
 
-/**
- * @slot start end anonymous
- */
 const Component = defineComponent({
-  name, props,
+  name, props, propSyncs: true,
   setup() {
     return {
       render: () => <>
-        <style>{rootStyle}</style>
-        <style>{defaultStyle}</style>
         <style>{style}</style>
         <slot name="start">
         </slot>
         <slot></slot>
         <slot name="end">
         </slot>
-        <Pointer.Fragment centered={false} />
+        <LayerFragment trigger={this.host} centered={true} />
       </>
     }
   }
 })
 
-export default Component
-
-type Component = InstanceType<typeof Component>
+export default class extends Component { }
 
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
-  }
-  interface Document {
-    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
-    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
   }
 }

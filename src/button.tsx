@@ -1,71 +1,101 @@
 import { defineComponent, IntrinsicElement } from './core/runtime'
-import { rootStyle } from './fragment/root-style'
-import { defaultStyle } from './fragment/button-style'
-import * as Pointer from './pointer'
+import { LayerFragment } from './fragment/layer'
 
 const style = /*css*/`
 :host{
+  user-select: none;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  display: inline-flex;
+  vertical-align: middle;
   border-radius: 20px;
   padding: 0 24px;
-  min-height: 40px;
-  background: var(--s-color-primary,#6750A4);
-  color: var(--s-color-on-primary,#FFFFFF);
-}
-:host([theme=elevated]){
-  -webkit-box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
-  box-shadow: 0px 3px 1px -2px rgb(0, 0, 0, .2), 0px 2px 2px 0px rgb(0, 0, 0, .14), 0px 1px 5px 0px rgb(0, 0, 0, .12);
-  color: var(--s-color-primary,#6750A4);
-  background: none;
+  height: 40px;
+  text-transform: capitalize;
+  position: relative;
+  cursor: pointer;
+  font-size: .875rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--s-color-primary);
+  background: var(--s-color-surface-container-low);
   transition: box-shadow .2s;
+  box-shadow: var(--s-elevation-level1);
+}
+:host([disabled=true]){
+  box-shadow: none !important;
+  pointer-events: none !important;
+  background: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
+}
+:host([theme=filled]){
+  background: var(--s-color-primary);
+  color: var(--s-color-on-primary);
+  box-shadow: none;
 }
 :host([theme=filled-tonal]){
-  background: var(--s-color-secondary-container,#E8DEF8);
-  color: var(--s-color-primary,#6750A4);
+  background: var(--s-color-secondary-container);
+  color: var(--s-color-on-secondary-container);
+  box-shadow: none;
 }
 :host([theme=outlined]){
-  -webkit-box-shadow: 0 0 0 1px inset var(--s-color-outline-variant,#C4C7C5);
-  box-shadow: 0 0 0 1px inset var(--s-color-outline-variant,#C4C7C5);
+  border: solid 1px var(--s-color-outline);
   background: none;
-  color: var(--s-color-primary,#6750A4);
+  box-shadow: none;
+  color: var(--s-color-primary);
+}
+:host([theme=outlined][disabled=true]){
+  background: none !important;
+  border-color: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
 }
 :host([theme=text]){
+  box-shadow: none;
   background: none;
-  color: var(--s-color-primary,#6750A4);
-  padding: 0 16px;
+  color: var(--s-color-primary);
+  padding: 0 12px;
 }
-:host([size=small]){
-  min-height: 36px;
-  font-size: 0.93rem;
-}
-:host([size=small]:not([theme=text])){
-  padding: 0 20px;
-}
-:host([size=large]){
-  min-height: 44px;
-  font-size: 1.06rem;
-}
-:host([size=large][theme=text]){
-  padding: 0 16px;
+:host([theme=text][disabled=true]){
+  background: none !important;
 }
 ::slotted(*){
   color: inherit;
 }
-::slotted([slot=start]){
-  margin: 0 8px 0 -8px;
+::slotted(s-icon){
+  width: 18px;
+  height: 18px;
 }
-::slotted([slot=end]){
-  margin: 0 -8px 0 8px;
+::slotted([slot=start]){
+  margin: 0 4px 0 -8px;
 }
 :host([theme=text]) ::slotted([slot=start]){
   margin: 0 4px 0 -4px;
 }
-:host([theme=text]) ::slotted([slot=end]){
-  margin: 0 -4px 0 4px;
+@media (pointer: coarse){
+  :host(:active){
+    box-shadow: var(--s-elevation-level2);
+  }
+  :host([theme=filled]:active),
+  :host([theme=filled-tonal]:active){
+    box-shadow: var(--s-elevation-level1);
+  }
+  :host([theme=outlined]:active),
+  :host([theme=text]:active){
+    box-shadow: none;
+  }
 }
 @media (pointer: fine){
-  :host([theme=elevated]:hover){
-    -webkit-box-shadow: 0px 2px 4px -1px rgb(0, 0, 0, .2), 0px 4px 5px 0px rgb(0, 0, 0, .14), 0px 1px 10px 0px rgb(0, 0, 0, .12);
-    box-shadow: 0px 2px 4px -1px rgb(0, 0, 0, .2), 0px 4px 5px 0px rgb(0, 0, 0, .14), 0px 1px 10px 0px rgb(0, 0, 0, .12);
+  :host(:hover){
+    box-shadow: var(--s-elevation-level2);
+  }
+  :host([theme=filled]:hover),
+  :host([theme=filled-tonal]:hover){
+    box-shadow: var(--s-elevation-level1);
+  }
+  :host([theme=outlined]:hover),
+  :host([theme=text]:hover){
+    box-shadow: none;
   }
 }
 `
@@ -73,42 +103,27 @@ const style = /*css*/`
 const name = 's-button'
 const props = {
   disabled: false,
-  theme: 'filled' as 'elevated' | 'filled' | 'filled-tonal' | 'outlined' | 'text',
-  size: 'medium' as 'medium' | 'small' | 'large'
+  theme: 'elevated' as 'elevated' | 'filled' | 'filled-tonal' | 'outlined' | 'text'
 }
 
-/**
- * @slot start end anonymous
- */
 const Component = defineComponent({
-  name, props,
+  name, props, propSyncs: true,
   setup() {
     return {
       render: () => <>
-        <style>{rootStyle}</style>
-        <style>{defaultStyle}</style>
         <style>{style}</style>
-        <slot name="start">
-        </slot>
+        <slot name="start"></slot>
         <slot></slot>
-        <slot name="end">
-        </slot>
-        <Pointer.Fragment centered={false} />
+        <LayerFragment trigger={this.host} centered={false} />
       </>
     }
   }
 })
 
-export default Component
-
-type Component = InstanceType<typeof Component>
+export default class extends Component { }
 
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
-  }
-  interface Document {
-    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
-    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
   }
 }

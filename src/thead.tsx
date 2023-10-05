@@ -1,25 +1,33 @@
 import { defineComponent, IntrinsicElement } from './core/runtime'
 
+const style = /*css*/`
+:host{
+  display: table-header-group;
+  font-weight: 600;
+  color: var(--s-color-on-surface-variant);
+}
+`
+
 const name = 's-thead'
+const props = {
+}
+
 const Component = defineComponent({
-  name,
+  name, props,
   setup() {
     return {
-      render: () => <slot></slot>
+      render: () => <>
+        <style>{style}</style>
+        <slot></slot>
+      </>
     }
   }
 })
 
-export default Component
-
-type Component = InstanceType<typeof Component>
+export default class extends Component { }
 
 declare global {
   namespace JSX {
-    interface IntrinsicElements extends IntrinsicElement<typeof name, {}> { }
-  }
-  interface Document {
-    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
-    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
+    interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
   }
 }

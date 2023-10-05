@@ -1,10 +1,12 @@
 import { defineComponent, IntrinsicElement } from './core/runtime'
-import { rootStyle } from './fragment/root-style'
 import { device } from './core/utils'
 
 const style = /*css*/`
 :host{
-  position:relative;
+  user-select: none;
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
 }
 .wrapper{
   position: absolute;
@@ -13,9 +15,10 @@ const style = /*css*/`
 .container{
   position: absolute;
   z-index: 1;
-  background: var(--s-color-inverse-surface,#313033);
-  color: var(--s-color-inverse-on-surface,#F4EFF4);
+  background: var(--s-color-inverse-surface);
+  color: var(--s-color-inverse-on-surface);
   font-size: .875rem;
+  font-weight: 400;
   padding: 6px 8px;
   border-radius: 4px;
   white-space: nowrap;
@@ -84,7 +87,6 @@ const Component = defineComponent({
     return {
       expose: { show, dimiss },
       render: () => <>
-        <style>{rootStyle}</style>
         <style>{style}</style>
         <slot name="trigger" ref="trigger"></slot>
         <div class="wrapper" part="wrapper" ref="wrapper">
@@ -97,16 +99,10 @@ const Component = defineComponent({
   }
 })
 
-export default Component
-
-type Component = InstanceType<typeof Component>
+export default class extends Component { }
 
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
-  }
-  interface Document {
-    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
-    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
   }
 }

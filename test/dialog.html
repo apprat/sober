@@ -20,240 +20,49 @@
     Toggle
   </s-floating-action-button>
   <main>
-    <s-dialog positive-button="确认" onblur="console.log(event)">
+    <s-dialog headline="Dialog Choice" positive-button="确认" onblur="console.log(event)">
       <s-button slot="trigger">
         Base
       </s-button>
-      <div slot="title">Dialog Choice</div>
-      <div slot="message">
+      <p>
         The M3 baseline color scheme uses the same roles and token mapping as user-generated color schemes.
-      </div>
+      </p>
     </s-dialog>
 
-    <s-dialog positive-button="确认">
+    <s-dialog headline="Dialog Choice" positive-button="确认">
       <s-button slot="trigger">
         Nesting
       </s-button>
-      <div slot="title">Dialog Choice</div>
-      <div slot="message">
+      <p>
         The M3 baseline color scheme uses the same roles and token mapping as user-generated color schemes.
-      </div>
-      <s-dialog positive-button="确认">
+      </p>
+      <s-dialog headline="Dialog Choice" positive-button="确认">
         <s-button slot="trigger" style="margin: 8px 16px;">
           Dialog
         </s-button>
-        <div slot="title">Dialog Choice</div>
-        <s-label>
+        <s-label disabled="true">
+          <s-checkbox slot="start"></s-checkbox>
           <div slot="title">选项 1</div>
+          <div slot="subtitle">选择多选框</div>
         </s-label>
         <s-label>
+          <s-checkbox slot="start"></s-checkbox>
           <div slot="title">选项 2</div>
+          <div slot="subtitle">选择多选框</div>
         </s-label>
         <s-label>
+          <s-checkbox slot="start"></s-checkbox>
           <div slot="title">选项 3</div>
-        </s-label>
-        <s-label>
-          <div slot="title">选项 4</div>
-        </s-label>
-        <s-label>
-          <div slot="title">选项 5</div>
-        </s-label>
-        <s-label>
-          <div slot="title">选项 6</div>
+          <div slot="subtitle">选择多选框</div>
         </s-label>
       </s-dialog>
     </s-dialog>
 
 
-    <s-dialog positive-button="确认">
-      <s-button slot="trigger">
-        Item
-      </s-button>
-      <div slot="title">Dialog Choice</div>
-      <s-label>
-        <div slot="title">选项 1</div>
-      </s-label>
-      <s-label>
-        <div slot="title">选项 2</div>
-      </s-label>
-      <s-label>
-        <div slot="title">选项 3</div>
-      </s-label>
-      <s-label>
-        <div slot="title">选项 4</div>
-      </s-label>
-      <s-label>
-        <div slot="title">选项 5</div>
-      </s-label>
-      <s-label>
-        <div slot="title">选项 6</div>
-      </s-label>
-    </s-dialog>
-
-    <s-dialog positive-button="确认">
-      <s-button slot="trigger">
-        Checkbox
-      </s-button>
-      <div slot="title">Dialog Choice</div>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 1</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 2</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 3</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 4</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 5</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 6</div>
-      </s-label>
-    </s-dialog>
-    </s-dialog>
-
-    <s-dialog positive-button="确认">
-      <s-button slot="trigger">
-        Radio Button
-      </s-button>
-      <div slot="title">Dialog Choice</div>
-      <!-- <div slot="message">
-        The M3 baseline color scheme uses the same roles and token mapping as user-generated color schemes.
-      </div> -->
-      <s-label>
-        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
-        <div slot="title">选项 1</div>
-      </s-label>
-      <s-label>
-        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
-        <div slot="title">选项 2</div>
-      </s-label>
-      <s-label>
-        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
-        <div slot="title">选项 3</div>
-      </s-label>
-      <s-label>
-        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
-        <div slot="title">选项 4</div>
-      </s-label>
-      <s-label>
-        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
-        <div slot="title">选项 5</div>
-      </s-label>
-      <s-label>
-        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
-        <div slot="title">选项 6</div>
-      </s-label>
-    </s-dialog>
-
-    <s-dialog positive-button="确认" size="full-screen">
-      <s-button slot="trigger">
-        Checkbox Full-screen
-      </s-button>
-      <div slot="title">Dialog Choice</div>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 1</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 2</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 3</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 4</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 5</div>
-      </s-label>
-      <s-label>
-        <s-checkbox slot="start"></s-checkbox>
-        <div slot="title">选项 6</div>
-      </s-label>
-    </s-dialog>
-
-    <s-dialog positive-button="确认" onclose="console.log(event)" ssize="full-screen">
-      <s-button slot="trigger">
-        Radio-button Subtitle
-      </s-button>
-      <div slot="title">Dialog Choice</div>
-      <s-label>
-        <s-radio-button slot="start" name="dialog-radio-button2"></s-radio-button>
-        <div slot="title">选项 1</div>
-        <div slot="subtitle">选择多选框</div>
-      </s-label>
-      <s-label>
-        <s-radio-button slot="start" name="dialog-radio-button2"></s-radio-button>
-        <div slot="title">选项 2</div>
-        <div slot="subtitle">选择多选框</div>
-      </s-label>
-      <s-label>
-        <s-radio-button slot="start" name="dialog-radio-button2"></s-radio-button>
-        <div slot="title">选项 3</div>
-        <div slot="subtitle">选择多选框</div>
-      </s-label>
-  </main>
-  <main>
-    <s-button onclick="setSingleChoiceItems()">SingleChoiceItems</s-button>
-    <s-button onclick="setMultiChoiceItems()">MultiChoiceItems</s-button>
   </main>
 
   <script src="../dist/bundle.min.js"></script>
   <script>
-    function setSingleChoiceItems() {
-      const builder = new Sober.Dialog.Builder()
-      builder.setTitle('Dialog Builder')
-      builder.setSingleChoiceItems({
-        data: [
-          { title: '选项1' },
-          { title: '选项2' },
-          { title: '选项3' },
-          { title: '选项4' },
-          { title: '选项5' }
-        ],
-        onPositive: (value) => {
-          console.log(value)
-        }
-      })
-      builder.setPositiveButton('确定')
-      builder.setNegativeButton('取消')
-      builder.show()
-    }
-
-    function setMultiChoiceItems() {
-      const builder = new Sober.Dialog.Builder()
-      builder.setTitle('Dialog Builder')
-      builder.setMultiChoiceItems({
-        data: [
-          { title: '选项1', defaultChecked: true },
-          { title: '选项2', disabled: true },
-          { title: '选项3' },
-          { title: '选项4' },
-          { title: '选项5' }
-        ],
-        onPositive: (value) => {
-          console.log(value)
-        }
-      })
-      builder.setPositiveButton('确定')
-      builder.setNegativeButton('取消')
-      builder.show()
-    }
   </script>
 </body>
 

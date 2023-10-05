@@ -4,16 +4,32 @@ import type TabItem from './tab-item'
 const style = /*css*/`
 :host{
   display: flex;
-  color: var(--s-color-on-surface-variant,#49454E);
-  background: var(--s-color-surface,#FEF7FF);
+  color: var(--s-color-on-surface-variant);
+  background: var(--s-color-surface);
   justify-content: center;
-  background: #eee;
+  position: relative;
+}
+:host::before{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background: var(--s-color-surface-variant);
+  bottom: 0;
+  left: 0;
 }
 .container{
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   position: relative;
   width: 100%;
+  scrollbar-width: none;
+}
+:host([mode=scrollable]) .container{
+  overflow-x: scroll;
+  width: auto;
+  scrollbar-width: none;
 }
 .container::-webkit-scrollbar{
   display: none;
@@ -22,7 +38,6 @@ const style = /*css*/`
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 3px;
   display: flex;
   justify-content: center;
   pointer-events: none;
@@ -34,19 +49,21 @@ const style = /*css*/`
   width: calc(100% - 24px);
   height: 100%;
   max-width: 40px;
+  height: 3px;
   background: var(--s-color-primary,#6750A4);
   border-radius: 3px 3px 0 0;
 }
-::slotted(*){
-  flex-basis: 100%;
-}
-:host([mode=scrollable]) .container{
-  overflow-x: scroll;
-  width: auto;
-  scrollbar-width: none;
-}
 :host([mode=scrollable]) .thumb{
   max-width: none;
+}
+:host([type=secondary]) .thumb{
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0;
+  height: 2px;
+}
+::slotted(*){
+  flex-basis: 100%;
 }
 :host([mode=scrollable]) ::slotted(*){
   flex-shrink: 0;
@@ -56,64 +73,49 @@ const style = /*css*/`
 
 const name = 's-tab'
 const props = {
+  type: 'primary' as 'primary' | 'secondary',
   mode: 'fixed' as 'fixed' | 'scrollable',
   select: 0
 }
 
-/**
- * @slot anonymous
- * @event change
- */
 const Component = defineComponent({
-  name, props,
+  name, props, propSyncs: ['type', 'mode'],
   setup() {
-    const state: { items: TabItem[], selectItem?: TabItem, animated: boolean } = { items: [], animated: true }
-    const setIndicatorWidth = (value: string) => this.refs.indicator.style.width = value
-    const setIndicatorLeft = (value: string) => this.refs.indicator.style.transform = value
-    const fixed = 'fixed'
-
-    // const renderFixed = () => {
-    //   const width = !state.selectItem ? 0 : state.items.length
-    //   if (!state.animated) this.refs.indicator.classList.remove('animation')
-    //   setIndicatorWidth(`calc(100% / ${width})`)
-    //   setIndicatorLeft(`translateX(${this.props.select * 100}%)`)
-    //   if (!state.animated) this.refs.indicator.classList.add('animation')
-    // }
-    // const renderScrollable = () => {
-    //   if (!state.selectItem) return
-    //   setIndicatorWidth(`${state.selectItem.clientWidth}px`)
-    //   setIndicatorLeft(`translateX(${state.selectItem.offsetLeft - this.refs.container.offsetLeft}px)`)
-    //   state.selectItem!.scrollIntoView({ behavior: state.animated ? 'auto' : 'smooth', inline: 'center' })
-    // }
-    // const renderSelect = () => {
-    //   state.selectItem = state.items[this.props.select]
-    //   if (!state.selectItem) return
-    //   if (!state.selectItem.checked) state.selectItem.checked = true
-    //   state.items.forEach((value) => {
-    //     if (value === state.selectItem || !value.checked) return
-    //     value.checked = false
-    //   })
-    //   console.log('渲染select', this.host)
-    // } 
-    const render = () => {
+    const state: { select: number, items: TabItem[], selectItem?: TabItem } = { select: this.props.select, items: [] }
+    const setIndicatorWidth = (value = '') => this.refs.indicator.style.width = value
+    const setIndicatorLeft = (value = '') => this.refs.indicator.style.transform = value
+    const render = (animated?: boolean) => {
       const old = state.selectItem
-      state.selectItem = state.items[this.props.select]
+      state.selectItem = state.items[state.select]
       if (!state.selectItem) {
-        setIndicatorWidth('0')
-        if (old) old.checked = false
+        if (old) {
+          setIndicatorWidth()
+          old.checked = false
+        }
         return
       }
-      console.log('渲染', state.selectItem)
       if (!state.selectItem.checked) state.selectItem.checked = true
       state.items.forEach((value) => {
         if (value === state.selectItem || !value.checked) return
         value.checked = false
       })
+      this.refs.indicator.classList[animated ? 'add' : 'remove']('animation')
+      if (this.props.mode === 'fixed') {
+        setIndicatorWidth(`calc(100% / ${state.items.length})`)
+        setIndicatorLeft(`translateX(${state.select * 100}%)`)
+      }
+      if (this.props.mode === 'scrollable') {
+        setIndicatorWidth(`${state.selectItem.clientWidth}px`)
+        setIndicatorLeft(`translateX(${state.selectItem.offsetLeft - this.refs.container.offsetLeft}px)`)
+        state.selectItem!.scrollIntoView({ behavior: animated ? 'smooth' : 'auto', inline: 'center' })
+      }
     }
     const onTabChange = (event: Event) => {
       const target = event.target as unknown as TabItem
       const index = state.items.indexOf(target)
-      if (index !== this.props.select) {
+      if (index !== state.select) {
+        state.select = index
+        render(true)
         this.props.select = index
         this.host.dispatchEvent(new Event('change'))
       }
@@ -121,17 +123,20 @@ const Component = defineComponent({
     const onSlotChange = () => {
       const slot = this.refs.slot as HTMLSlotElement
       state.items = slot.assignedElements() as TabItem[]
-      state.animated = false
-      render()
-      state.animated = true
+      if (this.props.mode === 'fixed') render()
     }
-    const obs = new ResizeObserver(() => console.log('监听', this.host))
+    const obs = new ResizeObserver(() => render())
     return {
       watches: {
-        select: render,
+        select: () => {
+          if (this.props.select === state.select) return
+          state.select = this.props.select
+          render(true)
+        },
         mode: () => {
-          if (this.props.mode === fixed) {
+          if (this.props.mode === 'fixed') {
             obs.unobserve(this.refs.container)
+            render()
           } else {
             obs.observe(this.refs.container)
           }
@@ -141,7 +146,7 @@ const Component = defineComponent({
         <style>{style}</style>
         <div class="container" part="container" ref="container">
           <slot ref="slot" onSlotChange={onSlotChange} onClick={onTabChange}></slot>
-          <div part="indicator" ref="indicator" class="indicator animation">
+          <div part="indicator" ref="indicator" class="indicator">
             <div class="thumb"></div>
           </div>
         </div>
@@ -150,20 +155,10 @@ const Component = defineComponent({
   }
 })
 
-export default Component
-
-type Component = InstanceType<typeof Component>
+export default class extends Component { }
 
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
   }
-  interface Document {
-    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
-    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
-  }
-}
-
-const x = {
-  color: '#009688'
 }

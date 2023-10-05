@@ -2,18 +2,16 @@ import { defineComponent, IntrinsicElement } from './core/runtime'
 
 const style = /*css*/`
 :host{
-  display: block;
-  overflow: hidden;
-  font-size: .875rem;
+  display: table-cell;
+  padding: 18px 12px;
+  text-align: right;
 }
-.container{
-  display: table;
-  width: 100%;
-  border-collapse: collapse;
+::slotted(s-checkbox){
+  margin: -18px 8px -18px 0;
 }
 `
 
-const name = 's-table'
+const name = 's-td'
 const props = {
 }
 
@@ -23,9 +21,7 @@ const Component = defineComponent({
     return {
       render: () => <>
         <style>{style}</style>
-        <div class="container" part="container">
-          <slot></slot>
-        </div>
+        <slot></slot>
       </>
     }
   }

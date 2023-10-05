@@ -2,30 +2,26 @@ import { defineComponent, IntrinsicElement } from './core/runtime'
 
 const style = /*css*/`
 :host{
-  display: block;
-  overflow: hidden;
-  font-size: .875rem;
-}
-.container{
-  display: table;
-  width: 100%;
-  border-collapse: collapse;
+  user-select: none;
+  display: flex;
+  height: 64px;
+  background: var(--s-color-surface);
 }
 `
 
-const name = 's-table'
+const name = 's-top-app-bar'
 const props = {
+  type: 'center-aligned' as 'center-aligned' | 'small' | 'medium' | 'large',
+  headline: ''
 }
 
 const Component = defineComponent({
-  name, props,
+  name, props, propSyncs: ['type'],
   setup() {
     return {
       render: () => <>
         <style>{style}</style>
-        <div class="container" part="container">
-          <slot></slot>
-        </div>
+        <slot></slot>
       </>
     }
   }

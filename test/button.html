@@ -22,25 +22,51 @@
   <main>
     <s-button>
       <s-icon slot="start"></s-icon>
-      filled
+      button
     </s-button>
 
-    <s-button theme="elevated">
+    <s-button theme="filled" tabindex="1">
+      <s-icon slot="start" type="search"></s-icon>
+      button
+    </s-button>
+
+    <s-button theme="filled-tonal" tabindex="2">
       <s-icon slot="start"></s-icon>
-      elevated
+      enabled
     </s-button>
 
-    <s-button theme="filled-tonal">
+    <s-button theme="outlined" tabindex="3">
+      button
+    </s-button>
+
+    <s-button theme="text" tabindex="4">
+      <s-icon slot="start" type="search"></s-icon>
+      button
+    </s-button>
+  </main>
+
+  <main>
+    <s-button disabled="true">
       <s-icon slot="start"></s-icon>
-      filled-tonal
+      button
     </s-button>
 
-    <s-button theme="outlined">
-      outlined
+    <s-button theme="filled" disabled="true">
+      <s-icon slot="start"></s-icon>
+      button
     </s-button>
 
-    <s-button theme="text">
-      text button
+    <s-button theme="filled-tonal" disabled="true">
+      <s-icon slot="start"></s-icon>
+      button
+    </s-button>
+
+    <s-button theme="outlined" disabled="true">
+      button
+    </s-button>
+
+    <s-button theme="text" disabled="true">
+      button
     </s-button>
   </main>
 

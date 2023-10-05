@@ -20,64 +20,8 @@
 </head>
 
 <body>
-  <div>
-    <table>
-      <tbody>
-        <tr>
-          <td style="background: var(--s-color-primary);color: var(--s-color-on-primary);">primary</td>
-          <td style="background: var(--s-color-on-primary)">on-primary</td>
-          <td style="background: var(--s-color-primary-container);color: var(--s-color-on-primary-container)">
-            primary-container</td>
-          <td style="background: var(--s-color-on-primary-container);color: #fff;">on-primary-container</td>
-        </tr>
-        <tr>
-          <td style="background: var(--s-color-secondary);color: var(--s-color-on-secondary);">secondary</td>
-          <td style="background: var(--s-color-on-secondary)">on-secondary</td>
-          <td style="background: var(--s-color-secondary-container);color: var(--s-color-on-secondary-container);">
-            secondary-container</td>
-          <td style="background: var(--s-color-on-secondary-container);color: #fff;">on-secondary-container</td>
-        </tr>
-        <tr>
-          <td style="background: var(--s-color-tertiary);color: var(--s-color-on-tertiary);">tertiary</td>
-          <td style="background: var(--s-color-on-tertiary)">on-tertiary</td>
-          <td style="background: var(--s-color-tertiary-container);color: var(--s-color-on-tertiary-container);">
-            tertiary-container</td>
-          <td style="background: var(--s-color-on-tertiary-container);color: #fff;">on-tertiary-container</td>
-        </tr>
-        <tr>
-          <td style="background: var(--s-color-error);color: var(--s-color-on-error);">error</td>
-          <td style="background: var(--s-color-on-error)">on-error</td>
-          <td style="background: var(--s-color-error-container);color: var(--s-color-on-error-container);">
-            error-container</td>
-          <td style="background: var(--s-color-on-error-container);color: #fff;">on-error-container</td>
-        </tr>
-        <tr>
-          <td style="background: var(--s-color-surface);color: var(--s-color-on-surface);">surface</td>
-          <td style="background: var(--s-color-on-surface);color: #fff;">on-surface</td>
-          <td style="background: var(--s-color-surface-container);">surface-container</td>
-          <td style="background: var(--s-color-surface-container-high);">surface-container-high</td>
-        </tr>
-        <tr>
-          <td style="background: var(--s-color-surface-variant);color: var(--s-color-on-surface-variant);">
-            surface-variant</td>
-          <td style="background: var(--s-color-on-surface-variant);color: #fff;">on-surface-variant</td>
-        </tr>
-        <tr>
-          <td style="background: var(--s-color-background);color: var(--s-color-on-background);">background</td>
-          <td style="background: var(--s-color-on-background);color: #fff;">on-background</td>
-          <td style="background: var(--s-color-outline)">outline</td>
-          <td style="background: var(--s-color-outline-variant)">outline-variant</td>
-        </tr>
-        <tr>
-          <td style="background: var(--s-color-inverse-primary);">inverse-primary</td>
-          <td style="background: var(--s-color-inverse-surface);color: #fff;">inverse-surface</td>
-          <td style="background: var(--s-color-inverse-on-surface);">inverse-on-surface</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
   <main>
-    <a href="./pointer.html">Pointer</a>
+    <a href="./layer.html">Layer</a>
     <a href="./icon.html">Icon</a>
     <a href="./icon-button.html">Icon Button</a>
     <a href="./button.html">Button</a>
@@ -91,22 +35,25 @@
     <a href="./snackbar.html">Snackbar</a>
     <a href="./tooltip.html">Tooltip</a>
     <a href="./table.html">Table</a>
+    <a href="./scrollbar.html">Scrollbar</a>
+    <a href="./slider.html">Slider</a>
+    <a href="./segmented-button.html">Segmented Button</a>
   </main>
   <main>
     <s-button onclick="toggle()">
       <s-icon slot="start"></s-icon>
       dark
     </s-button>
-    <s-button theme="elevated" onclick="purple()">
+    <s-button theme="filled" onclick="dialogAlert()">
       <s-icon slot="start" src="search"></s-icon>
       purple
     </s-button>
     <s-floating-action-button size="small">
       <s-icon></s-icon>
     </s-floating-action-button>
-    <s-floating-action-button theme="tertiary">
-      <s-icon></s-icon>
-    </s-floating-action-button>
+    <s-icon-button>
+      <s-icon type="search"></s-icon>
+    </s-icon-button>
     <s-checkbox></s-checkbox>
     <s-checkbox checked="true"></s-checkbox>
     <s-checkbox indeterminate="true"></s-checkbox>
@@ -114,37 +61,65 @@
     <s-radio-button name="my" checked="true"></s-radio-button>
     <s-switch></s-switch>
     <s-switch checked="true"></s-switch>
-    <s-dialog positive-button="确认">
+
+
+
+
+    <s-dialog headline="伪元素用于选定那些被放在 HTML 模板中的元素 (更多请查看 使用模板和插槽)" positive-button="确认" negative-button="取消"
+      size="full-screen">
       <s-tooltip slot="trigger">
-        <s-button slot="trigger">
+        <s-button theme="filled" slot="trigger">
+          full Dialog
+        </s-button>
+        hello dialog
+      </s-tooltip>
+      <s-icon type="close" slot="icon"></s-icon>
+      <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded theme. The
+        color system automatically handles critical adjustments that provide accessible color contrast. Learn more about
+        color roles.</p>
+    </s-dialog>
+
+
+    <s-dialog headline="并且只会选择实际的元素节点" positive-button="确认" negative-button="取消">
+      <s-tooltip slot="trigger">
+        <s-button theme="filled" slot="trigger">
           Dialog
         </s-button>
         hello dialog
       </s-tooltip>
-      <div slot="title">Dialog Choice</div>
-      <div slot="message">
-        The M3 baseline color scheme uses the same roles and token mapping as user-generated color schemes.
-      </div>
+      <s-icon type="search" slot="icon"></s-icon>
+      <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded theme. The
+        color system automatically handles critical adjustments that provide accessible color contrast. Learn more about
+        color roles.</p>
     </s-dialog>
 
-    <s-snackbar>
+    <s-snackbar action="确认" duration="0">
       <s-tooltip slot="trigger">
-        <s-button slot="trigger">
+        <s-button theme="filled" slot="trigger">
           snackbar
         </s-button>
         <img style="max-width: 200px;"
           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQAAAACoxAthAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAd2KE6QAAAAJcEhZcwAAFxEAABcRAcom8z8AAAHMSURBVHja7dtBjoMwDEBRoy667BF6FI4GR+MoHKHLLqpmEtsJoYw0U6lFQfreIEjezlhOAhLeDoFAIBDI98hNlriESeQUH45duMf7zTAEshcZPEkf9uwUZpGK9D78hEAaJ09N7aGQmPzpgc6NxIchkAORSXKmS0l+COR4RKv5NZGzcQjkOMTy3RsSDS3jktrs//QwEMjnyRJak1Mm64qvD0rqYQikWfIauuIbSk3eDEMgzZI0PpfkTxGTX8Mr+90ajgsE0jzRSDU7XmbrUbSk+xbG/FLGIZDWiK/4riGP64rPwqdBIHsTjXueNnkmW3Jbme5CFRBI26SEvgMxnEg6vEsxbpIfAmmLjD75lLuLkDeHNfoQNmUcAmmObA7sUvIP9fvQQSB7k82ZxiNP7b1Ptk7D9yYgkEbJbZ3pVcJP5c73KSCQhsk6fMUn5cAurPaOIZBmya1KeX0m+dueYEfPvW3SjRBI42TwxK++txzFVnye/LI+sINAdiCrFZ9Ns8gZvm1IIJC2Sah+Murz+2A1uYNAjkOm9TGHf295tjO8CwTSNPEK/Vj65NFY8F8zftuFg0BaI0s4kfKVml3k70UiBPJR8mZAIBAI5EvkB0ea8yhUsjqlAAAAAElFTkSuQmCC">
       </s-tooltip>
       When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
-      <s-button slot="action">Action</s-button>
     </s-snackbar>
-
-    <s-icon></s-icon>
     <s-icon src="search"></s-icon>
-    <s-icon src="menu"></s-icon>
-    <s-icon src="arrow_back"></s-icon>
-    <s-icon src="more_vert"></s-icon>
+    <s-slider labeled="true"></s-slider>
   </main>
+
+  <main>
+    <s-top-app-bar>
+      搜索
+
+      <s-icon-button>
+        <s-icon type="search"></s-icon>
+      </s-icon-button>
+      <s-icon-button>
+        <s-icon type="more_vert"></s-icon>
+      </s-icon-button>
+    </s-top-app-bar>
+  </main>
+
   <script src="../dist/bundle.min.js"></script>
   <script>
     const darkStyle = document.createElement('style')
@@ -152,7 +127,6 @@
     const toggle = () => {
       document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
     }
-
   </script>
 </body>
 

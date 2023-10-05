@@ -21,8 +21,25 @@
   </s-floating-action-button>
 
 
-  <main>
+  <main style="height: 200px;">
     <s-tab>
+      <s-tab-item><s-icon slot="icon" src="search"></s-icon>
+        <div slot="text">首页</div>
+      </s-tab-item>
+      <s-tab-item><s-icon slot="icon"></s-icon>
+        <div slot="text">首页</div>
+      </s-tab-item>
+      <s-tab-item><s-icon slot="icon"></s-icon>
+        <div slot="text">首页</div>
+      </s-tab-item>
+      <s-tab-item><s-icon slot="icon"></s-icon>
+        <div slot="text">首页</div>
+      </s-tab-item>
+    </s-tab>
+  </main>
+
+  <main>
+    <s-tab type="secondary">
       <s-tab-item>
         <div slot="text">首页</div>
       </s-tab-item>
@@ -36,21 +53,41 @@
         <div slot="text">首页</div>
       </s-tab-item>
     </s-tab>
-    <!-- 
+  </main>
+
+
+  <main style="height: 200px;">
     <s-tab mode="scrollable">
-      <s-tab-item>
+      <s-tab-item><s-icon slot="icon" src="search"></s-icon>
         <div slot="text">首页</div>
       </s-tab-item>
-      <s-tab-item>
+      <s-tab-item><s-icon slot="icon"></s-icon>
         <div slot="text">首页</div>
       </s-tab-item>
-      <s-tab-item>
+      <s-tab-item><s-icon slot="icon"></s-icon>
         <div slot="text">首页</div>
       </s-tab-item>
-      <s-tab-item>
+      <s-tab-item><s-icon slot="icon"></s-icon>
         <div slot="text">首页</div>
       </s-tab-item>
-    </s-tab> -->
+    </s-tab>
+  </main>
+
+  <main>
+    <s-tab type="secondary" mode="scrollable">
+      <s-tab-item>
+        <div slot="text">destination</div>
+      </s-tab-item>
+      <s-tab-item>
+        <div slot="text">navigation</div>
+      </s-tab-item>
+      <s-tab-item>
+        <div slot="text">container</div>
+      </s-tab-item>
+      <s-tab-item>
+        <div slot="text">Secondary</div>
+      </s-tab-item>
+    </s-tab>
   </main>
 
   <script src="../dist/bundle.min.js"></script>

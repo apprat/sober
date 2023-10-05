@@ -1,9 +1,9 @@
 import { defineComponent, IntrinsicElement } from './core/runtime'
-import { rootStyle } from './fragment/root-style'
-import * as Pointer from './pointer'
+import { LayerFragment } from './fragment/layer'
 
 const style = /*css*/`
 :host{
+  user-select: none;
   display: flex;
   min-height: 48px;
   align-items: center;
@@ -12,8 +12,7 @@ const style = /*css*/`
   padding: 0 8px;
 }
 :host([disabled=true]){
-  pointer-events: none !important;
-  filter: grayscale(.8) opacity(.6) !important;
+  pointer-events: none;
 }
 .text{
   padding: 8px;
@@ -22,20 +21,34 @@ const style = /*css*/`
   justify-content: center;
   flex-grow: 1;
 }
-::slotted([slot]){
+::slotted(*){
   pointer-events: none;
-  display: flex;
-  align-items: center;
-  height: 24px;
   flex-shrink: 0;
+}
+:host([disabled=true]) ::slotted([slot=start]){
+  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
 }
 ::slotted([slot=title]){
   font-size: 1rem;
-  color: var(--s-color-on-surface,#1C1B1F);
+  height: 24px;
+  color: var(--s-color-on-surface);
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+:host([disabled=true]) ::slotted([slot=title]){
+  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
 }
 ::slotted([slot=subtitle]){
+  color: var(--s-color-on-surface-variant);
+  height: 24px;
   font-size: .75rem;
-  color: var(--s-color-on-surface-variant,#49454E);
+}
+:host([disabled=true]) ::slotted([slot=subtitle]){
+  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
 }
 `
 
@@ -44,11 +57,8 @@ const props = {
   disabled: false
 }
 
-/**
- * @slot title subtitle start
- */
 const Component = defineComponent({
-  name, props,
+  name, props, propSyncs: true,
   setup() {
     this.host.addEventListener('click', () => {
       const start = this.refs.start as HTMLSlotElement
@@ -66,29 +76,22 @@ const Component = defineComponent({
     })
     return {
       render: () => <>
-        <style>{rootStyle}</style>
         <style>{style}</style>
         <slot name="start" ref="start"></slot>
         <div class="text">
           <slot name="title"></slot>
           <slot name="subtitle"></slot>
         </div>
-        <Pointer.Fragment centered={false} />
+        <LayerFragment trigger={this.host} centered={false} />
       </>
     }
   }
 })
 
-export default Component
-
-type Component = InstanceType<typeof Component>
+export default class extends Component { }
 
 declare global {
   namespace JSX {
     interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
-  }
-  interface Document {
-    createElement(tagName: typeof name, options?: ElementCreationOptions): Component
-    getElementsByTagName(qualifiedName: typeof name): HTMLCollectionOf<Component>
   }
 }

@@ -1,37 +1,35 @@
 import { KebabToCamel, kebabToCamel, camelToKebab } from './utils'
 
 export class VNode {
-  constructor(public type: string | null | ((this: { parentNode: Node }, props: {}) => Element), public props: { [name: string]: unknown }) { }
+  constructor(public type: string | null | ((props: unknown) => Element), public props: { [name: string]: unknown }) { }
 }
-
-type CreateElementContainer = { parent: Node, parentNode: Node }
 
 class CreateElement {
   refs: { [name: string]: HTMLElement } = {}
   private marks: { SVG?: boolean } = {}
-  private createChildren(children: unknown, container: CreateElementContainer) {
+  private createChildren(children: unknown, container: Node) {
     const child = Array.isArray(children) ? children : [children]
     for (const item of child) {
       if (item instanceof VNode) {
         this.create(item, container)
         continue
       }
-      container.parent.appendChild(document.createTextNode(String(item)))
+      container.appendChild(document.createTextNode(String(item)))
     }
   }
-  private create(vnode: VNode, container: CreateElementContainer) {
+  private create(vnode: VNode, container: Node) {
     if (vnode.type === null) throw new TypeError()
     if (typeof vnode.type === 'function') {
-      container.parent.appendChild(vnode.type.apply({ parentNode: container.parentNode }, [vnode.props]))
+      container.appendChild(vnode.type.apply({}, [vnode.props]))
       return
     }
     if (vnode.type === 'svg') this.marks.SVG = true
     const node = this.marks.SVG ? document.createElementNS('http://www.w3.org/2000/svg', vnode.type) : document.createElement(vnode.type)
-    container.parent.appendChild(node)
+    container.appendChild(node)
     for (const key in vnode.props) {
       const item = vnode.props[key]
       if (key === 'children') {
-        this.createChildren(item, { parent: node, parentNode: node })
+        this.createChildren(item, node)
         continue
       }
       if (key.match(/on[A-Z]/g) && typeof item === 'function') {
@@ -48,9 +46,8 @@ class CreateElement {
   }
   constructor(vnode: VNode, element: ShadowRoot) {
     const fragment = document.createDocumentFragment()
-    const container: CreateElementContainer = { parent: fragment, parentNode: element.host }
-    if (vnode.type === null) this.createChildren(vnode.props.children as VNode, container)
-    if (typeof vnode.type === 'string') this.create(vnode, container)
+    if (vnode.type === null) this.createChildren(vnode.props.children as VNode, fragment)
+    if (typeof vnode.type === 'string') this.create(vnode, fragment)
     if (typeof vnode.type === 'function') fragment.appendChild(vnode.type.apply({ parentNode: element }, [vnode.props]))
     element.appendChild(fragment)
   }
@@ -66,6 +63,7 @@ class State {
   watched?: Function
   watches?: { [key: string]: Function | undefined }
   parseTargetType(value: unknown, target: Prop): Prop {
+    if (value === undefined) return target
     switch (typeof target) {
       case 'string':
         return String(value)
@@ -73,8 +71,6 @@ class State {
         return Number(value)
       case 'boolean':
         return Boolean(JSON.parse(String(value || 0)))
-      case 'undefined':
-        return target
       default:
         throw new TypeError()
     }
@@ -92,12 +88,13 @@ type ThisComponent<P> = Readonly<{
 export const defineComponent = <
   N extends string,
   P extends { [name: string]: Prop } = {},
-  PT extends {} = {},
+  SS extends {} = {},
   E extends {} = {}
 >(options: {
   name: N
   props?: P
-  prototypes?: PT
+  propSyncs?: (keyof P)[] | true
+  statics?: SS
   dependencies?: { register: () => void }[]
   setup: (this: ThisComponent<P>) => {
     render: () => VNode
@@ -112,21 +109,18 @@ export const defineComponent = <
     expose?: E
   }
 }): {
-  readonly name: N
   new(): Partial<P> & Readonly<E> & HTMLElement
   prototype: HTMLElement
   /**
    * Register this element
    */
   readonly register: () => void
-} & Readonly<PT> => {
+} & Readonly<SS> => {
   const maps = new Map<HTMLElement, State>()
   const attributes: string[] = []
   for (const key in options.props) attributes.push(camelToKebab(key))
   class CustomElement extends HTMLElement {
     static observedAttributes = attributes
-    //@ts-ignore
-    static name = options.name
     constructor() {
       super()
       const shadowRoot = this.attachShadow({ mode: 'closed' })
@@ -142,12 +136,14 @@ export const defineComponent = <
           set: (v: unknown) => {
             let value = state.parseTargetType(v, state.defaultValues[key])
             if (value === oldProps[key]) return
-            const old = this.getAttribute(camelToKebab(key))
-            if (value === undefined) {
-              if (old !== null) return this.removeAttribute(key)
-              value = state.defaultValues[key]
-            } else {
-              if (old === null || String(value) !== old) return this.setAttribute(camelToKebab(key), String(value))
+            if (options.propSyncs === true || options.propSyncs?.includes(key)) {
+              const old = this.getAttribute(camelToKebab(key))
+              if (value === undefined) {
+                if (old !== null) return this.removeAttribute(key)
+                value = state.defaultValues[key]
+              } else {
+                if (old === null || String(value) !== old) return this.setAttribute(camelToKebab(key), String(value))
+              }
             }
             oldProps[key] = value
             state.watched?.(key)
@@ -187,7 +183,7 @@ export const defineComponent = <
       this[kebabToCamel(name)] = newValue ?? undefined
     }
   }
-  for (const key in options.prototypes) CustomElement[key as string] = options.prototypes[key]
+  for (const key in options.statics) CustomElement[key as string] = options.statics[key]
   CustomElement['register'] = () => {
     if (customElements.get(options.name)) return
     options.dependencies?.forEach((value) => value.register())

@@ -2,18 +2,15 @@ import { defineComponent, IntrinsicElement } from './core/runtime'
 
 const style = /*css*/`
 :host{
-  display: block;
-  overflow: hidden;
-  font-size: .875rem;
+  display: table-row-group;
+  color: var(--s-color-on-surface);
 }
-.container{
-  display: table;
-  width: 100%;
-  border-collapse: collapse;
+::slotted(*){
+  border-top: solid 1px color-mix(in srgb ,var(--s-color-on-surface) 16%, transparent);
 }
 `
 
-const name = 's-table'
+const name = 's-tbody'
 const props = {
 }
 
@@ -23,9 +20,7 @@ const Component = defineComponent({
     return {
       render: () => <>
         <style>{style}</style>
-        <div class="container" part="container">
-          <slot></slot>
-        </div>
+        <slot></slot>
       </>
     }
   }

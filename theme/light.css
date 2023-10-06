@@ -1,10 +1,10 @@
 :root {
   --s-color-scrim: #000000;
 
-  --s-color-primary: #266fe8;
+  --s-color-primary: #6750A4;
   --s-color-on-primary: #FFFFFF;
-  --s-color-primary-container: #bbd3fb;
-  --s-color-on-primary-container: #001f97;
+  --s-color-primary-container: #EADDFF;
+  --s-color-on-primary-container: #21005D;
   --s-color-inverse-primary: #D0BCFF;
   --s-color-primary-fixed: #EADDFF;
   --s-color-on-primary-fixed: #21005D;

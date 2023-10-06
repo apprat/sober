@@ -1,4 +1,4 @@
-import { defineComponent, IntrinsicElement } from './core/runtime'
+import { defineComponent } from './core/runtime'
 import { LayerFragment } from './fragment/layer'
 
 const style = /*css*/`
@@ -125,6 +125,15 @@ export default class extends Component { }
 
 declare global {
   namespace JSX {
-    interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
+    interface IntrinsicElements {
+      [name]: Partial<typeof props> & { [name: string]: unknown }
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof props
   }
 }

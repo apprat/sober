@@ -1,4 +1,4 @@
-import { defineComponent, IntrinsicElement } from './core/runtime'
+import { defineComponent } from './core/runtime'
 import { layerStyle, LayerEvent } from './fragment/layer'
 
 const style = /*css*/`
@@ -12,11 +12,10 @@ const style = /*css*/`
 `
 
 const name = 's-layer'
-const props = { centered: false }
+const props = {
+  centered: false
+}
 
-/**
- * @slot anonymous
- */
 const Component = defineComponent({
   name, props,
   setup() {
@@ -38,6 +37,15 @@ export default class extends Component { }
 
 declare global {
   namespace JSX {
-    interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
+    interface IntrinsicElements {
+      [name]: Partial<typeof props> & { [name: string]: unknown }
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof props
   }
 }

@@ -65,8 +65,7 @@
 
 
 
-    <s-dialog headline="伪元素用于选定那些被放在 HTML 模板中的元素 (更多请查看 使用模板和插槽)" positive-button="确认" negative-button="取消"
-      size="full-screen">
+    <s-dialog positive="确认" negative="取消" size="full-screen">
       <s-tooltip slot="trigger">
         <s-button theme="filled" slot="trigger">
           full Dialog
@@ -74,13 +73,14 @@
         hello dialog
       </s-tooltip>
       <s-icon type="close" slot="icon"></s-icon>
+      <div slot="headline">伪元素用于选定那些被放在 HTML 模板中的元素 (更多请查看 使用模板和插槽)</div>
       <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded theme. The
         color system automatically handles critical adjustments that provide accessible color contrast. Learn more about
         color roles.</p>
     </s-dialog>
 
 
-    <s-dialog headline="并且只会选择实际的元素节点" positive-button="确认" negative-button="取消">
+    <s-dialog positive="确认" negative="取消">
       <s-tooltip slot="trigger">
         <s-button theme="filled" slot="trigger">
           Dialog
@@ -88,6 +88,7 @@
         hello dialog
       </s-tooltip>
       <s-icon type="search" slot="icon"></s-icon>
+      <div slot="headline">并且只会选择实际的元素节点</div>
       <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded theme. The
         color system automatically handles critical adjustments that provide accessible color contrast. Learn more about
         color roles.</p>

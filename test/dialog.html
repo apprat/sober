@@ -20,7 +20,7 @@
     Toggle
   </s-floating-action-button>
   <main>
-    <s-dialog headline="Dialog Choice" positive-button="确认" onblur="console.log(event)">
+    <s-dialog headline="Dialog Choice" positive="确认" onblur="console.log(event)">
       <s-button slot="trigger">
         Base
       </s-button>
@@ -29,14 +29,14 @@
       </p>
     </s-dialog>
 
-    <s-dialog headline="Dialog Choice" positive-button="确认">
+    <s-dialog headline="Dialog Choice" positive="确认">
       <s-button slot="trigger">
         Nesting
       </s-button>
       <p>
         The M3 baseline color scheme uses the same roles and token mapping as user-generated color schemes.
       </p>
-      <s-dialog headline="Dialog Choice" positive-button="确认">
+      <s-dialog headline="Dialog Choice" positive="确认">
         <s-button slot="trigger" style="margin: 8px 16px;">
           Dialog
         </s-button>

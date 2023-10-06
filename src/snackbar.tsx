@@ -1,5 +1,5 @@
-import { defineComponent, IntrinsicElement } from './core/runtime'
-import Layer from './layer'
+import { defineComponent } from './core/runtime'
+import './layer'
 
 const style = /*css*/`
 :host{
@@ -101,7 +101,6 @@ const make = (options: {
 const Component = defineComponent({
   name, props,
   statics: { make },
-  dependencies: [Layer],
   setup() {
     const state = { showed: false, timer: 0 }
     const show = () => {
@@ -151,12 +150,20 @@ const Component = defineComponent({
 
 export default class Self extends Component { }
 
-
 declare global {
   namespace JSX {
-    interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
+    interface IntrinsicElements {
+      [name]: Partial<typeof props> & { [name: string]: unknown }
+    }
   }
   interface GlobalEventHandlersEventMap {
     action: Event
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof props
   }
 }

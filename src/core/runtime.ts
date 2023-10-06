@@ -1,4 +1,11 @@
-import { KebabToCamel, kebabToCamel, camelToKebab } from './utils'
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      // @ts-ignore redefined index
+      [name: string]: unknown
+    }
+  }
+}
 
 export class VNode {
   constructor(public type: string | null | ((props: unknown) => Element), public props: { [name: string]: unknown }) { }
@@ -95,7 +102,6 @@ export const defineComponent = <
   props?: P
   propSyncs?: (keyof P)[] | true
   statics?: SS
-  dependencies?: { register: () => void }[]
   setup: (this: ThisComponent<P>) => {
     render: () => VNode
     created?: () => void
@@ -111,14 +117,10 @@ export const defineComponent = <
 }): {
   new(): Partial<P> & Readonly<E> & HTMLElement
   prototype: HTMLElement
-  /**
-   * Register this element
-   */
-  readonly register: () => void
 } & Readonly<SS> => {
   const maps = new Map<HTMLElement, State>()
   const attributes: string[] = []
-  for (const key in options.props) attributes.push(camelToKebab(key))
+  for (const key in options.props) attributes.push(key)
   class CustomElement extends HTMLElement {
     static observedAttributes = attributes
     constructor() {
@@ -137,12 +139,12 @@ export const defineComponent = <
             let value = state.parseTargetType(v, state.defaultValues[key])
             if (value === oldProps[key]) return
             if (options.propSyncs === true || options.propSyncs?.includes(key)) {
-              const old = this.getAttribute(camelToKebab(key))
+              const old = this.getAttribute(key)
               if (value === undefined) {
                 if (old !== null) return this.removeAttribute(key)
                 value = state.defaultValues[key]
               } else {
-                if (old === null || String(value) !== old) return this.setAttribute(camelToKebab(key), String(value))
+                if (old === null || String(value) !== old) return this.setAttribute(key, String(value))
               }
             }
             oldProps[key] = value
@@ -180,19 +182,10 @@ export const defineComponent = <
       maps.get(this)?.adopted?.()
     }
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
-      this[kebabToCamel(name)] = newValue ?? undefined
+      this[name] = newValue ?? undefined
     }
   }
   for (const key in options.statics) CustomElement[key as string] = options.statics[key]
-  CustomElement['register'] = () => {
-    if (customElements.get(options.name)) return
-    options.dependencies?.forEach((value) => value.register())
-    customElements.define(options.name, CustomElement)
-  }
+  !customElements.get(options.name) && customElements.define(options.name, CustomElement)
   return CustomElement as never
 }
-
-export type IntrinsicElement<N extends string, T extends {} = {}> = {
-  [K in KebabToCamel<N>]: Partial<T> & { [name: string]: any }
-} &
-  { [K in N]: Partial<T> & { [name: string]: any } }

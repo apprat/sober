@@ -1,4 +1,4 @@
-import { defineComponent, IntrinsicElement } from './core/runtime'
+import { defineComponent } from './core/runtime'
 
 const style = /*css*/`
 :host{
@@ -12,7 +12,6 @@ const style = /*css*/`
 const name = 's-top-app-bar'
 const props = {
   type: 'center-aligned' as 'center-aligned' | 'small' | 'medium' | 'large',
-  headline: ''
 }
 
 const Component = defineComponent({
@@ -31,6 +30,15 @@ export default class extends Component { }
 
 declare global {
   namespace JSX {
-    interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
+    interface IntrinsicElements {
+      [name]: Partial<typeof props> & { [name: string]: unknown }
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof props
   }
 }

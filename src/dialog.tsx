@@ -1,5 +1,5 @@
-import { defineComponent, IntrinsicElement } from './core/runtime'
-import Layer from './layer'
+import { defineComponent } from './core/runtime'
+import './layer'
 
 const style = /*css*/`
 :host{
@@ -75,14 +75,14 @@ const style = /*css*/`
   align-self: center;
   margin: 24px 24px -8px 24px;
 }
-.headline{
+::slotted([slot=headline]){
   font-size: 1.5rem;
   color: var(--s-color-on-surface);
   line-height: 1.3;
   font-weight: 400;
   padding: 24px;
 }
-.icon .headline{
+.icon ::slotted([slot=headline]){
   text-align: center;
 }
 .action{
@@ -133,7 +133,7 @@ const style = /*css*/`
 :host([size=full-screen]) ::slotted([slot=icon]){
   margin: 0 0 0 24px;
 }
-:host([size=full-screen]) .headline{
+:host([size=full-screen]) ::slotted([slot=headline]){
   flex-grow: 1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -163,9 +163,8 @@ const style = /*css*/`
 const name = 's-dialog'
 const props = {
   size: 'basic' as 'basic' | 'full-screen',
-  headline: '',
-  positiveButton: '',
-  negativeButton: ''
+  positive: '',
+  negative: ''
 }
 
 export const enum EventCode {
@@ -178,17 +177,16 @@ const alert = (options: {
   view?: Node
   headline: string
   text?: string | Node | ((container: HTMLElement) => void)
-  negativeButton?: string
-  positiveButton?: string
+  negative?: string
+  positive?: string
   size?: typeof props.size
-  onNegativeButton?: () => boolean | undefined
-  onPositiveButton?: () => boolean | undefined
+  onNegative?: () => boolean | undefined
+  onPositive?: () => boolean | undefined
 }) => {
   const view = options.view ?? document.body
   const dialog = document.createElement('s-dialog') as Self
-  dialog.headline = options.headline
-  dialog.negativeButton = options.negativeButton
-  dialog.positiveButton = options.positiveButton
+  dialog.negative = options.negative
+  dialog.positive = options.positive
   dialog.size = options.size
   switch (typeof options.text) {
     case 'undefined':
@@ -206,11 +204,11 @@ const alert = (options: {
   }
   dialog.addEventListener('dimiss', (event) => {
     if (event.detail.code === EventCode.NEGATIVE_BUTTON) {
-      const stoped = options.onNegativeButton?.()
+      const stoped = options.onNegative?.()
       if (stoped === false) event.preventDefault()
     }
     if (event.detail.code === EventCode.POSITIVE_BUTTON) {
-      const stoped = options.onPositiveButton?.()
+      const stoped = options.onPositive?.()
       if (stoped === false) event.preventDefault()
     }
   })
@@ -222,7 +220,6 @@ const alert = (options: {
 const Component = defineComponent({
   name, props, propSyncs: ['size'],
   statics: { alert },
-  dependencies: [Layer],
   setup() {
     const show = () => this.refs.wrapper.classList.add('show')
     const dimiss = () => this.refs.wrapper.classList.remove('show')
@@ -241,9 +238,8 @@ const Component = defineComponent({
     return {
       expose: { show, dimiss },
       watches: {
-        headline: () => this.refs.headline.textContent = this.props.headline,
-        negativeButton: () => this.refs.negativeButton.textContent = this.props.negativeButton,
-        positiveButton: () => this.refs.positiveButton.textContent = this.props.positiveButton
+        negative: () => this.refs.negative.textContent = this.props.negative,
+        positive: () => this.refs.positive.textContent = this.props.positive
       },
       render: () => <>
         <style>{style}</style>
@@ -254,10 +250,10 @@ const Component = defineComponent({
             <div class="container">
               <div class="header">
                 <slot name="icon" ref="icon" onSlotChange={onIconSlotChange}></slot>
-                <div class="headline" ref="headline"></div>
+                <slot name="headline"></slot>
                 <div class="action">
-                  <s-layer class="text-button" ref="negativeButton" onClick={() => onDimiss(EventCode.NEGATIVE_BUTTON)}></s-layer>
-                  <s-layer class="text-button" ref="positiveButton" onClick={() => onDimiss(EventCode.POSITIVE_BUTTON)}></s-layer>
+                  <s-layer class="text-button" ref="negative" onClick={() => onDimiss(EventCode.NEGATIVE_BUTTON)}></s-layer>
+                  <s-layer class="text-button" ref="positive" onClick={() => onDimiss(EventCode.POSITIVE_BUTTON)}></s-layer>
                 </div>
               </div>
               <slot></slot>
@@ -273,10 +269,19 @@ export default class Self extends Component { }
 
 declare global {
   namespace JSX {
-    interface IntrinsicElements extends IntrinsicElement<typeof name, typeof props> { }
+    interface IntrinsicElements {
+      [name]: Partial<typeof props> & { [name: string]: unknown }
+    }
   }
   interface GlobalEventHandlersEventMap {
     dimiss: CustomEvent<{ code: EventCode }>
     show: Event
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof props
   }
 }

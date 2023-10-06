@@ -1,5 +1,3 @@
-import Sober, { registerAll } from '../dist/main'
-
-registerAll()
+import * as Sober from '../dist/main'
 
 export default Sober

@@ -24,7 +24,7 @@ import Td from './td'
 import Tooltip from './tooltip'
 import TopAppBar from './top-app-bar'
 
-const components = {
+export {
   Button,
   Checkbox,
   Dialog,
@@ -50,21 +50,4 @@ const components = {
   Th,
   Tooltip,
   TopAppBar
-}
-
-export const registerAll = () => {
-  for (const key in components) {
-    components[key as keyof typeof components].register()
-  }
-}
-
-export default components
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      // @ts-ignore redefined index
-      [name: string]: any
-    }
-  }
 }

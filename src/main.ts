@@ -1,11 +1,18 @@
 import Button from './button'
+import Card from './card'
+import CarouselItem from './carousel-item'
+import Carousel from './carousel'
 import Checkbox from './checkbox'
 import Dialog from './dialog'
+import Divider from './divider'
 import FloatingActionButton from './floating-action-button'
 import IconButton from './icon-button'
 import Icon from './icon'
 import Label from './label'
-import Layer from './layer'
+import Ripple from './ripple'
+import Menu from './menu'
+import NavigationBarItem from './navigation-bar-item'
+import NavigationBar from './navigation-bar'
 import RadioButton from './radio-button'
 import Scrollbar from './scrollbar'
 import SegmentedButtonItem from './segmented-button-item'
@@ -26,13 +33,20 @@ import TopAppBar from './top-app-bar'
 
 export {
   Button,
+  Card,
+  CarouselItem,
+  Carousel,
   Checkbox,
   Dialog,
+  Divider,
   FloatingActionButton,
   IconButton,
   Icon,
   Label,
-  Layer,
+  Ripple,
+  Menu,
+  NavigationBarItem,
+  NavigationBar,
   RadioButton,
   Scrollbar,
   SegmentedButtonItem,

@@ -23,6 +23,7 @@ main {
   padding: 8px;
   border: solid 1px var(--s-color-outline-variant);
   margin: 16px;
+  background: var(--s-color-surface-container-lowest);
 }
 
 main>* {

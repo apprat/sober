@@ -13,35 +13,45 @@
       document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
     }
   </script>
+  <style>
+    s-card {
+      height: 100px;
+    }
+  </style>
 </head>
 
 <body>
   <s-floating-action-button type="extended" onclick="toggle()">
     Toggle
   </s-floating-action-button>
-
   <main>
-    <h1>enabled</h1>
-    <s-floating-action-button size="small">
-      <s-icon type="search"></s-icon>
-    </s-floating-action-button>
-    <s-floating-action-button>
-      <s-icon type="search"></s-icon>
-    </s-floating-action-button>
-    <s-floating-action-button size="large">
-      <s-icon type="search"></s-icon>
-    </s-floating-action-button>
+    <s-card>
+      sss
+    </s-card>
+    <s-card type="filled">
+      <s-button type="outlined" style="margin: 8px;">
+        get started
+      </s-button>
+    </s-card>
+    <s-card type="outlined">
+      sss
+    </s-card>
   </main>
 
-  <main>
-    <h1>extended</h1>
-    <s-floating-action-button extended="true" size="small">
-      <s-icon slot="start"></s-icon>
-      compose
-    </s-floating-action-button>
-  </main>
 
-  <hr>
+  <main>
+    <s-card disabled="true">
+      sss
+    </s-card>
+    <s-card type="filled" disabled="true">
+      <s-button type="outlined" style="margin: 8px;">
+        get started
+      </s-button>
+    </s-card>
+    <s-card type="outlined" disabled="true">
+      sss
+    </s-card>
+  </main>
 
   <script src="../dist/bundle.min.js"></script>
 </body>

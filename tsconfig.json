@@ -12,8 +12,6 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "noImplicitAny": false,
-    "jsx": "react-jsx",
-    "jsxImportSource": "./core",
     "declaration": true,
     "sourceMap": true,
     "moduleResolution": "Bundler",

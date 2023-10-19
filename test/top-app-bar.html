@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+  <script>
+    const darkStyle = document.createElement('style')
+    darkStyle.textContent = `@import url('../theme/dark.css');`
+    const toggle = () => {
+      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
+    }
+  </script>
+</head>
+
+<body>
+  <s-floating-action-button type="extended" onclick="toggle()">
+    Toggle
+  </s-floating-action-button>
+  <main>
+    <s-top-app-bar>
+      <s-icon-button slot="navigation">
+        <s-icon type="arrow_back"></s-icon>
+      </s-icon-button>
+      <div slot="headline">Nesting actions</div>
+      <s-icon-button slot="action">
+        <s-icon type="search"></s-icon>
+      </s-icon-button>
+    </s-top-app-bar>
+
+    <s-top-app-bar size="small">
+      <s-icon-button slot="navigation">
+        <s-icon type="arrow_back"></s-icon>
+      </s-icon-button>
+      <div slot="headline">Nesting actions</div>
+      <s-icon-button slot="action">
+        <s-icon type="search"></s-icon>
+      </s-icon-button>
+      <s-icon-button slot="action">
+        <s-icon type="close"></s-icon>
+      </s-icon-button>
+      <s-icon-button slot="action">
+        <s-icon type="more_vert"></s-icon>
+      </s-icon-button>
+    </s-top-app-bar>
+
+
+    <s-top-app-bar size="medium">
+      <s-icon-button slot="navigation">
+        <s-icon type="arrow_back"></s-icon>
+      </s-icon-button>
+      <div slot="headline">Nesting actions</div>
+      <s-icon-button slot="action">
+        <s-icon type="search"></s-icon>
+      </s-icon-button>
+      <s-icon-button slot="action">
+        <s-icon type="close"></s-icon>
+      </s-icon-button>
+      <s-icon-button slot="action">
+        <s-icon type="more_vert"></s-icon>
+      </s-icon-button>
+    </s-top-app-bar>
+
+    <s-top-app-bar size="large">
+      <s-icon-button slot="navigation">
+        <s-icon type="arrow_back"></s-icon>
+      </s-icon-button>
+      <div slot="headline">Nesting actions</div>
+      <s-icon-button slot="action">
+        <s-icon type="search"></s-icon>
+      </s-icon-button>
+      <s-icon-button slot="action">
+        <s-icon type="close"></s-icon>
+      </s-icon-button>
+      <s-icon-button slot="action">
+        <s-icon type="more_vert"></s-icon>
+      </s-icon-button>
+    </s-top-app-bar>
+  </main>
+
+  <script src="../dist/bundle.min.js"></script>
+</body>
+
+</html>

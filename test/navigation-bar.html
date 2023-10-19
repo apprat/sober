@@ -19,29 +19,26 @@
   <s-floating-action-button type="extended" onclick="toggle()">
     Toggle
   </s-floating-action-button>
-
   <main>
-    <h1>enabled</h1>
-    <s-floating-action-button size="small">
-      <s-icon type="search"></s-icon>
-    </s-floating-action-button>
-    <s-floating-action-button>
-      <s-icon type="search"></s-icon>
-    </s-floating-action-button>
-    <s-floating-action-button size="large">
-      <s-icon type="search"></s-icon>
-    </s-floating-action-button>
+    <s-navigation-bar>
+      <s-navigation-bar-item>
+        <s-icon slot="icon"></s-icon>
+        <div slot="text">Mail</div>
+      </s-navigation-bar-item>
+      <s-navigation-bar-item>
+        <s-icon type="circle_fill" slot="icon"></s-icon>
+        <div slot="text">Chat</div>
+      </s-navigation-bar-item>
+      <s-navigation-bar-item>
+        <s-icon type="circle_fill" slot="icon"></s-icon>
+        <div slot="text">rooms</div>
+      </s-navigation-bar-item>
+      <s-navigation-bar-item>
+        <s-icon type="search" slot="icon"></s-icon>
+        <div slot="text">meet</div>
+      </s-navigation-bar-item>
+    </s-navigation-bar>
   </main>
-
-  <main>
-    <h1>extended</h1>
-    <s-floating-action-button extended="true" size="small">
-      <s-icon slot="start"></s-icon>
-      compose
-    </s-floating-action-button>
-  </main>
-
-  <hr>
 
   <script src="../dist/bundle.min.js"></script>
 </body>

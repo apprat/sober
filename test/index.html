@@ -21,7 +21,7 @@
 
 <body>
   <main>
-    <a href="./layer.html">Layer</a>
+    <a href="./ripple.html">Ripple</a>
     <a href="./icon.html">Icon</a>
     <a href="./icon-button.html">Icon Button</a>
     <a href="./button.html">Button</a>
@@ -38,13 +38,16 @@
     <a href="./scrollbar.html">Scrollbar</a>
     <a href="./slider.html">Slider</a>
     <a href="./segmented-button.html">Segmented Button</a>
+    <a href="./top-app-bar.html">Top App Bar</a>
+    <a href="./navigation-bar.html">Navigation Bar</a>
+    <a href="./card.html">Card</a>
   </main>
   <main>
     <s-button onclick="toggle()">
       <s-icon slot="start"></s-icon>
       dark
     </s-button>
-    <s-button theme="filled" onclick="dialogAlert()">
+    <s-button type="filled" onclick="dialogAlert()">
       <s-icon slot="start" src="search"></s-icon>
       purple
     </s-button>
@@ -67,14 +70,14 @@
 
     <s-dialog positive="确认" negative="取消" size="full-screen">
       <s-tooltip slot="trigger">
-        <s-button theme="filled" slot="trigger">
+        <s-button type="filled" slot="trigger">
           full Dialog
         </s-button>
         hello dialog
       </s-tooltip>
       <s-icon type="close" slot="icon"></s-icon>
       <div slot="headline">伪元素用于选定那些被放在 HTML 模板中的元素 (更多请查看 使用模板和插槽)</div>
-      <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded theme. The
+      <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded type. The
         color system automatically handles critical adjustments that provide accessible color contrast. Learn more about
         color roles.</p>
     </s-dialog>
@@ -82,21 +85,21 @@
 
     <s-dialog positive="确认" negative="取消">
       <s-tooltip slot="trigger">
-        <s-button theme="filled" slot="trigger">
+        <s-button type="filled" slot="trigger">
           Dialog
         </s-button>
         hello dialog
       </s-tooltip>
       <s-icon type="search" slot="icon"></s-icon>
       <div slot="headline">并且只会选择实际的元素节点</div>
-      <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded theme. The
+      <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded type. The
         color system automatically handles critical adjustments that provide accessible color contrast. Learn more about
         color roles.</p>
     </s-dialog>
 
     <s-snackbar action="确认" duration="0">
       <s-tooltip slot="trigger">
-        <s-button theme="filled" slot="trigger">
+        <s-button type="filled" slot="trigger">
           snackbar
         </s-button>
         <img style="max-width: 200px;"
@@ -106,20 +109,32 @@
     </s-snackbar>
     <s-icon src="search"></s-icon>
     <s-slider labeled="true"></s-slider>
+
+
+    <s-navigation-bar>
+      <s-navigation-bar-item>
+        <s-icon slot="icon"></s-icon>
+        <div slot="text">Mail</div>
+      </s-navigation-bar-item>
+      <s-navigation-bar-item>
+        <s-icon type="circle_fill" slot="icon"></s-icon>
+        <div slot="text">Chat</div>
+      </s-navigation-bar-item>
+      <s-navigation-bar-item>
+        <s-icon type="circle_fill" slot="icon"></s-icon>
+        <div slot="text">rooms</div>
+      </s-navigation-bar-item>
+      <s-navigation-bar-item>
+        <s-icon type="search" slot="icon"></s-icon>
+        <div slot="text">meet</div>
+      </s-navigation-bar-item>
+    </s-navigation-bar>
+
+    <s-card>
+      ss
+    </s-card>
   </main>
 
-  <main>
-    <s-top-app-bar>
-      搜索
-
-      <s-icon-button>
-        <s-icon type="search"></s-icon>
-      </s-icon-button>
-      <s-icon-button>
-        <s-icon type="more_vert"></s-icon>
-      </s-icon-button>
-    </s-top-app-bar>
-  </main>
 
   <script src="../dist/bundle.min.js"></script>
   <script>

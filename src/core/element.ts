@@ -13,8 +13,8 @@ const parsePropType = (value: unknown, old: Prop) => {
   if (typeof old === 'string') return String(value)
   if (typeof old === 'number') return Number(value)
   if (typeof old === 'boolean') {
-    if (typeof value === 'string' && value !== 'false') return true
-    return Boolean(value)
+    if (typeof value === 'boolean') return value
+    return value === 'true' ? true : false
   }
   throw new TypeError()
 }
@@ -50,7 +50,7 @@ export const defineElement = <
       super()
       const shadowRoot = this.attachShadow({ mode: 'closed' })
       const realProps = { ...options.props }
-      const elementData: ElementData = { props: { ...realProps } }
+      const elementData: ElementData = { props: { ...options.props } }
       for (const key in realProps) {
         const set = (v: unknown) => {
           let value = parsePropType(v, elementData.props[key])
@@ -58,24 +58,22 @@ export const defineElement = <
           if (options.propSyncs === true || options.propSyncs?.includes(key)) {
             const old = this.getAttribute(key)
             const attrVal = String(value)
-            if (old === null && value !== elementData.props[key]) {
-              this.setAttribute(key, value === true ? '' : attrVal)
+            if (old !== null && value === elementData.props[key]) {
+              this.removeAttribute(key)
               return
             }
-            if (old !== null && (value === false || value === elementData.props[key])) {
-              this.removeAttribute(key)
+            if (attrVal !== old && value !== elementData.props[key]) {
+              this.setAttribute(key, attrVal)
               return
             }
           }
           realProps[key] = value
           elementData.watches?.[key]?.(value)
         }
-        const descriptor = { enumerable: true, get: () => realProps[key], set }
-        Object.defineProperty(this, key, descriptor)
+        Object.defineProperty(this, key, { enumerable: true, get: () => realProps[key], set })
       }
       const setup = options.setup?.apply(this as never, [shadowRoot])
-      const template = setup.render?.()
-      shadowRoot.appendChild(template)
+      shadowRoot.appendChild(setup.render())
       elementData.adopted = setup.adopted
       elementData.mounted = setup.mounted
       elementData.unmounted = setup.unmounted
@@ -126,12 +124,11 @@ const parse = (random: string, template: TemplateStringsArray, values: TemplateV
     }
     str += item + value
   })
-  const div = document.createElement('div')
-  div.innerHTML = str
+  const t = document.createElement('template')
+  t.innerHTML = str
   let index = 0
   return {
-    nodeList: div.childNodes,
-    values: newValues,
+    element: t.content,
     getValue: () => {
       const value = newValues[index]
       index++
@@ -143,7 +140,6 @@ const parse = (random: string, template: TemplateStringsArray, values: TemplateV
 export const html = (template: TemplateStringsArray, ...args: TemplateValue[]) => {
   const marker = `<!--${String(Math.random()).slice(2)}-->`
   const obj = parse(marker, template, args)
-  const fragment = document.createDocumentFragment()
   const find = (list: NodeList) => list.forEach((item) => {
     if (item.nodeType === Node.ELEMENT_NODE) {
       const element = item as Element
@@ -177,11 +173,10 @@ export const html = (template: TemplateStringsArray, ...args: TemplateValue[]) =
       const value = `<!--${element.textContent}-->`
       if (value === marker) {
         const argsVal = obj.getValue()
-        element.parentNode!.replaceChild(argsVal instanceof DocumentFragment ? argsVal : document.createTextNode(String(argsVal)), element)
+        element.parentNode?.replaceChild(argsVal instanceof DocumentFragment ? argsVal : document.createTextNode(String(argsVal)), element)
       }
     }
   })
-  find(obj.nodeList)
-  fragment.append(...Array.from(obj.nodeList))
-  return fragment
+  find(obj.element.childNodes)
+  return obj.element
 }

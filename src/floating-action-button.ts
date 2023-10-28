@@ -14,7 +14,7 @@ const style = /*css*/`
   height: 56px;
   width: 56px;
   margin: 16px;
-  border-radius: 16px;
+  border-radius: 50%;
   color: var(--s-color-on-primary-container);
   background: var(--s-color-primary-container);
   transition: box-shadow .2s;
@@ -23,22 +23,23 @@ const style = /*css*/`
   white-space: nowrap;
   line-height: 1;
   text-transform: capitalize;
-  box-shadow: var(--s-elevation-level1);
+  box-shadow: var(--s-elevation-level2);
 }
 :host([size=small]){
   height: 48px;
   width: 48px;
 }
-:host([extended]){
+:host([extended=true]){
   padding: 0 16px;
   width: auto;
   height: 56px;
+  border-radius: 16px;
 }
-:host(:not([extended])[size=large]){
+:host(:not([extended=true])[size=large]){
   height: 96px;
   width: 96px;
 }
-:host(:not([extended])[size=large]) ::slotted(*){
+:host(:not([extended=true])[size=large]) ::slotted(*){
   width: 36px;
   height: 36px;
   font-size: 36px;
@@ -48,12 +49,12 @@ const style = /*css*/`
 }
 @media (pointer: coarse){
   :host(:active){
-    box-shadow: var(--s-elevation-level2);
+    box-shadow: var(--s-elevation-level4);
   }
 }
 @media (pointer: fine){
   :host(:hover){
-    box-shadow: var(--s-elevation-level2);
+    box-shadow: var(--s-elevation-level4);
   }
 }
 `

@@ -11,7 +11,7 @@ const style = /*css*/`
   cursor: pointer;
   padding: 0 8px;
 }
-:host([disabled]){
+:host([disabled=true]){
   pointer-events: none;
 }
 .text{
@@ -25,7 +25,7 @@ const style = /*css*/`
   pointer-events: none;
   flex-shrink: 0;
 }
-:host([disabled]) ::slotted([slot=start]){
+:host([disabled=true]) ::slotted([slot=start]){
   color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
 }
 ::slotted([slot=title]){
@@ -39,7 +39,7 @@ const style = /*css*/`
   overflow: hidden;
   text-overflow: ellipsis;
 }
-:host([disabled]) ::slotted([slot=title]){
+:host([disabled=true]) ::slotted([slot=title]){
   color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
 }
 ::slotted([slot=subtitle]){
@@ -47,7 +47,7 @@ const style = /*css*/`
   height: 24px;
   font-size: .75rem;
 }
-:host([disabled]) ::slotted([slot=subtitle]){
+:host([disabled=true]) ::slotted([slot=subtitle]){
   color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
 }
 `

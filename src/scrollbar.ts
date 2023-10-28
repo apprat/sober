@@ -5,12 +5,12 @@ const style = /*css*/`
   display: block;
   overflow: auto;
   overflow: overlay;
-  scrollbar-color: var(--s-color-outline-variant) transparent;
 }
 @media (pointer: fine){
   :host::-webkit-scrollbar{
     width: 4px;
     height: 4px;
+    background: none;
   }
   :host::-webkit-scrollbar-thumb{
     background: var(--s-color-outline-variant);

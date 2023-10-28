@@ -15,12 +15,12 @@ const style = /*css*/`
   border-radius: 50%;
   color: var(--s-color-on-surface-variant);
 }
-:host([disabled]){
+:host([disabled=true]){
   pointer-events: none !important;
   color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
 }
-:host([checked]),
-:host([indeterminate]){
+:host([checked=true]),
+:host([indeterminate=true]){
   color: var(--s-color-primary);
 }
 .icon{

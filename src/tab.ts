@@ -1,5 +1,5 @@
 import { defineElement, html, ref } from './core/element'
-import type TabItem from './tab-item'
+import type Item from './tab-item'
 
 const style = /*css*/`
 :host{
@@ -84,7 +84,7 @@ export default class Component extends defineElement({
     const indicator = ref<HTMLElement>()
     const container = ref<HTMLElement>()
     const slot = ref<HTMLSlotElement>()
-    const state: { select: number, items: TabItem[], selectItem?: TabItem } = { select: this.select, items: [] }
+    const state: { select: number, items: Item[], selectItem?: Item } = { select: this.select, items: [] }
     const setIndicatorWidth = (value = '') => indicator.target.style.width = value
     const setIndicatorLeft = (value = '') => indicator.target.style.transform = value
     const render = (animated?: boolean) => {
@@ -114,7 +114,7 @@ export default class Component extends defineElement({
       }
     }
     const onTabChange = (event: Event) => {
-      const target = event.target as unknown as TabItem
+      const target = event.target as unknown as Item
       const index = state.items.indexOf(target)
       if (index !== state.select) {
         state.select = index
@@ -124,7 +124,7 @@ export default class Component extends defineElement({
       }
     }
     const onSlotChange = () => {
-      state.items = slot.target.assignedElements() as TabItem[]
+      state.items = slot.target.assignedElements() as Item[]
       if (this.mode === 'fixed') render()
     }
     const obs = new ResizeObserver(() => render())
@@ -145,7 +145,7 @@ export default class Component extends defineElement({
         }
       },
       render: () => html`
-        <style>{style}</style>
+        <style>${style}</style>
         <div class="container" part="container" ref="${container}">
           <slot ref="${slot}" @slotchange="${onSlotChange}" @click="${onTabChange}"></slot>
           <div part="indicator" ref="${indicator}" class="indicator">

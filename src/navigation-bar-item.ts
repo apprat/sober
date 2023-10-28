@@ -20,7 +20,7 @@ const style = /*css*/`
   text-transform: capitalize;
   color: var(--s-color-on-surface-variant);
 }
-:host([checked]){
+:host([checked=true]){
   color: var(--s-color-on-surface);
   font-weight: 700;
 }
@@ -36,14 +36,14 @@ const style = /*css*/`
   border-radius: 16px !important;
   left: auto !important;
 }
-:host([checked]) .ripple-wrapper{
+:host([checked=true]) .ripple-wrapper{
   background: var(--s-color-secondary-container);
 }
 ::slotted([slot=icon]){
   position: relative;
   pointer-events: none;
 }
-:host([checked]) ::slotted([slot=icon]){
+:host([checked=true]) ::slotted([slot=icon]){
   color: var(--s-color-on-secondary-container);
 }
 ::slotted([slot=text]){

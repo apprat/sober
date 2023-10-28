@@ -1,5 +1,5 @@
 import { defineElement, html, ref } from './core/element'
-import type NavigationBarItem from './navigation-bar-item'
+import type Item from './navigation-bar-item'
 
 const style = /*css*/`
 :host{
@@ -19,7 +19,7 @@ export default class Component extends defineElement({
   name, props, propSyncs: true,
   setup() {
     const slot = ref<HTMLSlotElement>()
-    const state: { items: NavigationBarItem[], selectItem?: NavigationBarItem } = { items: [] }
+    const state: { items: Item[], selectItem?: Item } = { items: [] }
     const render = () => {
       const old = state.selectItem
       state.selectItem = state.items[this.select]
@@ -34,7 +34,7 @@ export default class Component extends defineElement({
       })
     }
     const onChange = (event: Event) => {
-      const target = event.target as unknown as NavigationBarItem
+      const target = event.target as unknown as Item
       const index = state.items.indexOf(target)
       if (index !== this.select) {
         this.select = index
@@ -42,7 +42,7 @@ export default class Component extends defineElement({
       }
     }
     const onSlotChange = () => {
-      state.items = slot.target.assignedElements() as NavigationBarItem[]
+      state.items = slot.target.assignedElements() as Item[]
       render()
     }
     return {

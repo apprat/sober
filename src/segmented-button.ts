@@ -1,5 +1,5 @@
 import { defineElement, html, ref } from './core/element'
-import type SegmentedButtonItem from './segmented-button-item'
+import type Item from './segmented-button-item'
 
 const style = /*css*/`
 :host{
@@ -16,7 +16,7 @@ export default class Component extends defineElement({
   name, props,
   setup() {
     const slot = ref<HTMLSlotElement>()
-    const state: { items: SegmentedButtonItem[], selectItem?: SegmentedButtonItem } = { items: [] }
+    const state: { items: Item[], selectItem?: Item } = { items: [] }
     const render = () => {
       const old = state.selectItem
       state.selectItem = state.items[this.select]
@@ -31,7 +31,7 @@ export default class Component extends defineElement({
       })
     }
     const onChange = (event: Event) => {
-      const target = event.target as unknown as SegmentedButtonItem
+      const target = event.target as unknown as Item
       const index = state.items.indexOf(target)
       if (index !== this.select) {
         this.select = index
@@ -39,7 +39,7 @@ export default class Component extends defineElement({
       }
     }
     const onSlotChange = () => {
-      state.items = slot.target.assignedElements() as SegmentedButtonItem[]
+      state.items = slot.target.assignedElements() as Item[]
       render()
     }
     return {

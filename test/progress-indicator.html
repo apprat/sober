@@ -6,11 +6,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
-  <style>
-    s-ripple {
-      padding: 16px;
-    }
-  </style>
   <script>
     const darkStyle = document.createElement('style')
     darkStyle.textContent = `@import url('../theme/dark.css');`
@@ -18,19 +13,22 @@
       document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
     }
   </script>
+  <style>
+    s-card {
+      height: 100px;
+    }
+  </style>
 </head>
 
 <body>
-  <s-floating-action-button type="extended" onclick="toggle()">
+  <s-floating-action-button extended="true" onclick="toggle()">
     Toggle
   </s-floating-action-button>
   <main>
-    <s-ripple style="width: 200px;height: 400px;">
-      Test
-    </s-ripple>
-    <s-ripple centered="true">
-      Test
-    </s-ripple>
+    <s-progress-indicator value="80"></s-progress-indicator>
+    <s-progress-indicator indeterminate="true" style="color: rgb(21, 177, 70)"></s-progress-indicator>
+    <s-progress-indicator type="circular" value="80"></s-progress-indicator>
+    <s-progress-indicator type="circular" indeterminate="true"></s-progress-indicator>
   </main>
 
   <script src="../dist/bundle.min.js"></script>

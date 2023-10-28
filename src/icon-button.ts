@@ -16,7 +16,7 @@ const style = /*css*/`
   position: relative;
   box-sizing: border-box;
 }
-:host([disabled]){
+:host([disabled=true]){
   pointer-events: none;
   color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
 }
@@ -24,20 +24,20 @@ const style = /*css*/`
   color: var(--s-color-on-primary);
   background: var(--s-color-primary);
 }
-:host([type=filled][disabled]){
+:host([type=filled][disabled=true]){
   background: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent) !important;
 }
 :host([type=filled-tonal]){
   color: var(--s-color-on-secondary-container);
   background: var(--s-color-secondary-container);
 }
-:host([type=filled-tonal][disabled]){
+:host([type=filled-tonal][disabled=true]){
   background: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent) !important;
 }
 :host([type=outlined]){
   border: solid 1px var(--s-color-outline);
 }
-:host([type=outlined][disabled]){
+:host([type=outlined][disabled=true]){
   background: none !important;
   border-color: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
 }

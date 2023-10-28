@@ -1,7 +1,5 @@
 import Button from './button'
 import Card from './card'
-import CarouselItem from './carousel-item'
-import Carousel from './carousel'
 import Checkbox from './checkbox'
 import Dialog from './dialog'
 import Divider from './divider'
@@ -13,6 +11,7 @@ import Ripple from './ripple'
 import Menu from './menu'
 import NavigationBarItem from './navigation-bar-item'
 import NavigationBar from './navigation-bar'
+import ProgressIndicator from './progress-indicator'
 import RadioButton from './radio-button'
 import Scrollbar from './scrollbar'
 import SegmentedButtonItem from './segmented-button-item'
@@ -28,14 +27,13 @@ import Tbody from './tbody'
 import Tr from './tr'
 import Th from './th'
 import Td from './td'
+import TextField from './text-field'
 import Tooltip from './tooltip'
 import TopAppBar from './top-app-bar'
 
 export {
   Button,
   Card,
-  CarouselItem,
-  Carousel,
   Checkbox,
   Dialog,
   Divider,
@@ -47,6 +45,7 @@ export {
   Menu,
   NavigationBarItem,
   NavigationBar,
+  ProgressIndicator,
   RadioButton,
   Scrollbar,
   SegmentedButtonItem,
@@ -62,6 +61,7 @@ export {
   Tr,
   Td,
   Th,
+  TextField,
   Tooltip,
   TopAppBar
 }

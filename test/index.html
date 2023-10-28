@@ -41,6 +41,7 @@
     <a href="./top-app-bar.html">Top App Bar</a>
     <a href="./navigation-bar.html">Navigation Bar</a>
     <a href="./card.html">Card</a>
+    <a href="./progress-indicator.html">Progress Indicator</a>
   </main>
   <main>
     <s-button onclick="toggle()">
@@ -64,10 +65,6 @@
     <s-radio-button name="my" checked="true"></s-radio-button>
     <s-switch></s-switch>
     <s-switch checked="true"></s-switch>
-
-
-
-
     <s-dialog positive="确认" negative="取消" size="full-screen">
       <s-tooltip slot="trigger">
         <s-button type="filled" slot="trigger">
@@ -108,8 +105,9 @@
       When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
     </s-snackbar>
     <s-icon src="search"></s-icon>
+    <s-progress-indicator type="circular" indeterminate="true"></s-progress-indicator>
+    <s-progress-indicator indeterminate="true"></s-progress-indicator>
     <s-slider labeled="true"></s-slider>
-
 
     <s-navigation-bar>
       <s-navigation-bar-item>
@@ -129,10 +127,6 @@
         <div slot="text">meet</div>
       </s-navigation-bar-item>
     </s-navigation-bar>
-
-    <s-card>
-      ss
-    </s-card>
   </main>
 
 

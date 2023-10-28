@@ -2,20 +2,16 @@ import { defineElement, html } from './core/element'
 
 const style = /*css*/`
 :host{
-  user-select: none;
-  display: block;
-  height: 96px;
-  position: relative;
-  border-radius: 28px;
+  display: inline-block;
 }
 `
 
-const name = 's-carousel-item'
+const name = 's-text-field'
 const props = {
 }
 
 export default class Component extends defineElement({
-  name, props, propSyncs: true,
+  name, props,
   setup() {
     return {
       render: () => html`

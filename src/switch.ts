@@ -12,10 +12,10 @@ const style = /*css*/`
   position: relative;
   color: var(--s-color-on-surface-variant);
 }
-:host([disabled]){
+:host([disabled=true]){
   pointer-events: none;
 }
-:host([checked]){
+:host([checked=true]){
   color: var(--s-color-primary);
 }
 .track{
@@ -24,19 +24,18 @@ const style = /*css*/`
   width: 52px;
   height: 32px;
   border-radius: 20px;
-  background: var(--s-color-surface-container-highest);
   box-shadow: 0 0 0 2px inset var(--s-color-outline);
   position: relative;
 }
-:host([checked]) .track{
+:host([checked=true]) .track{
   background: var(--s-color-primary);
   box-shadow: none;
 }
-:host([disabled]) .track{
+:host([disabled=true]) .track{
   background: color-mix(in srgb ,var(--s-color-surface-container-highest) 12%, transparent);
   box-shadow: 0 0 0 2px inset color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
 }
-:host([checked][disabled]) .track{
+:host([checked=true][disabled=true]) .track{
   background: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
   box-shadow: none;
 }
@@ -53,16 +52,16 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
 }
-:host([checked]) .thumb{
+:host([checked=true]) .thumb{
   background: var(--s-color-on-primary);
   transform: scale(1.5) translateX(16px);
   box-shadow: var(--s-elevation-level1);
 }
-:host([disabled]) .thumb{
+:host([disabled=true]) .thumb{
   background: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent);
   box-shadow: none;
 }
-:host([checked][disabled]) .thumb{
+:host([checked=true][disabled=true]) .thumb{
   background: var(--s-color-surface);
 }
 .icon{
@@ -72,11 +71,11 @@ const style = /*css*/`
   filter: opacity(0);
   transition: filter .2s;
 }
-:host([checked]) .icon{
+:host([checked=true]) .icon{
   filter: opacity(1);
 }
-:host([checked][disabled]) .icon{
-  fill: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent);
+:host([checked=true][disabled=true]) .icon{
+  fill: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
 }
 .ripple-wrapper{
   width: 40px !important;
@@ -86,7 +85,7 @@ const style = /*css*/`
   transition: transform .2s;
   transform: translateX(-4px);
 }
-:host([checked]) .ripple-wrapper{
+:host([checked=true]) .ripple-wrapper{
   transform: translateX(16px);
 }
 `

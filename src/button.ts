@@ -24,7 +24,7 @@ const style = /*css*/`
   transition: box-shadow .2s;
   box-shadow: var(--s-elevation-level1);
 }
-:host([disabled]){
+:host([disabled=true]){
   box-shadow: none !important;
   pointer-events: none !important;
   background: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent) !important;
@@ -46,7 +46,7 @@ const style = /*css*/`
   box-shadow: none;
   color: var(--s-color-primary);
 }
-:host([type=outlined][disabled]){
+:host([type=outlined][disabled=true]){
   background: none !important;
   border-color: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
 }
@@ -56,7 +56,7 @@ const style = /*css*/`
   color: var(--s-color-primary);
   padding: 0 12px;
 }
-:host([type=text][disabled]){
+:host([type=text][disabled=true]){
   background: none !important;
 }
 ::slotted(*){

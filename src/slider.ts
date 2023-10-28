@@ -11,7 +11,7 @@ const style = /*css*/`
   position: relative;
   color: var(--s-color-primary);
 }
-:host([disabled]){
+:host([disabled=true]){
   pointer-events: none;
   opacity: .38;
 }
@@ -31,7 +31,7 @@ const style = /*css*/`
   position: relative;
   background: var(--s-color-surface-container-highest);
 }
-:host([disabled]) .track{
+:host([disabled=true]) .track{
   background: color-mix(in srgb ,var(--s-color-on-surface) 31.57894736842105%, transparent);
 }
 .track>.active-track{
@@ -43,7 +43,7 @@ const style = /*css*/`
   background: currentColor;
   transform: translateX(-50%);
 }
-:host([disabled]) .track>.active-track{
+:host([disabled=true]) .track>.active-track{
   background: var(--s-color-on-surface);
 }
 .container{
@@ -75,7 +75,7 @@ const style = /*css*/`
   box-shadow: var(--s-elevation-level1);
   margin: 10px;
 }
-:host([disabled]) .handle{
+:host([disabled=true]) .handle{
   background: var(--s-color-on-surface);
   box-shadow: none;
 }
@@ -90,7 +90,7 @@ const style = /*css*/`
   transform: scale(.5) translateY(100%);
   display: none;
 }
-.labeled>.label{
+:host([labeled=true]) .label{
   display: block;
 }
 .active>.label{
@@ -147,7 +147,7 @@ const style = /*css*/`
 const name = 's-slider'
 const props = {
   disabled: false,
-  labeled: true,
+  labeled: false,
   max: 100,
   min: 0,
   step: 1,
@@ -182,29 +182,28 @@ export default class Component extends defineElement({
         slider.target.addEventListener('touchcancel', () => device.touched && container.target.classList.remove('active'), { passive: true })
       },
       watches: {
-        labeled: () => container.target.classList[this.labeled ? 'add' : 'remove']('labeled'),
-        max: () => {
-          const value = String(this.max)
-          if (slider.target.max === value) return
-          slider.target.max = value
+        max: (value) => {
+          const val = String(value)
+          if (slider.target.max === val) return
+          slider.target.max = val
           render()
         },
-        min: () => {
-          const value = String(this.min)
-          if (slider.target.min === value) return
-          slider.target.min = value
+        min: (value) => {
+          const val = String(value)
+          if (slider.target.min === val) return
+          slider.target.min = val
           render()
         },
-        step: () => {
-          const value = String(this.step)
-          if (slider.target.step === value) return
-          slider.target.step = value
+        step: (value) => {
+          const val = String(value)
+          if (slider.target.step === val) return
+          slider.target.step = val
           render()
         },
-        value: () => {
-          const value = String(this.value)
-          if (slider.target.value === value) return
-          slider.target.value = value
+        value: (value) => {
+          const val = String(value)
+          if (slider.target.value === val) return
+          slider.target.value = val
           render()
         }
       },

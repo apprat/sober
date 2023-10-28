@@ -17,7 +17,7 @@ const style = /*css*/`
   padding: 0 16px;
   overflow: hidden;
 }
-:host([checked]){
+:host([checked=true]){
   color: var(--s-color-primary);
   pointer-events: none;
 }

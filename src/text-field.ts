@@ -3,11 +3,21 @@ import { defineElement, html } from './core/element'
 const style = /*css*/`
 :host{
   display: inline-block;
+  height: 56px;
+  min-width: 240px;
+  border: solid 1px var(--s-color-outline);
+  border-radius: 4px;
 }
 `
 
 const name = 's-text-field'
 const props = {
+  disabled: false,
+  singled: true,
+  placeholder: '',
+  value: '',
+  label: '',
+  max: -1
 }
 
 export default class Component extends defineElement({
@@ -16,6 +26,8 @@ export default class Component extends defineElement({
     return {
       render: () => html`
         <style>${style}</style>
+        <div class="container">
+        </div>
         <slot></slot>
       `
     }

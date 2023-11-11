@@ -3,7 +3,6 @@ import { device } from './core/utils'
 
 const style = /*css*/`
 :host{
-  user-select: none;
   display: block;
   color: var(--s-color-primary);
   height: 40px;

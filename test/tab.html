@@ -6,91 +6,81 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
-  <script>
-    const darkStyle = document.createElement('style')
-    darkStyle.textContent = `@import url('../theme/dark.css');`
-    const toggle = () => {
-      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
-    }
-  </script>
 </head>
 
 <body>
-  <s-floating-action-button type="extended" onclick="toggle()">
-    Toggle
-  </s-floating-action-button>
+  <s-root>
+    <main style="height: 200px;">
+      <s-tab>
+        <s-tab-item><s-icon slot="icon" src="search"></s-icon>
+          <div slot="text">首页</div>
+        </s-tab-item>
+        <s-tab-item><s-icon slot="icon"></s-icon>
+          <div slot="text">首页</div>
+        </s-tab-item>
+        <s-tab-item><s-icon slot="icon"></s-icon>
+          <div slot="text">首页</div>
+        </s-tab-item>
+        <s-tab-item><s-icon slot="icon"></s-icon>
+          <div slot="text">首页</div>
+        </s-tab-item>
+      </s-tab>
+    </main>
+
+    <main>
+      <s-tab type="secondary">
+        <s-tab-item>
+          <div slot="text">首页</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">首页</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">首页</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">首页</div>
+        </s-tab-item>
+      </s-tab>
+    </main>
 
 
-  <main style="height: 200px;">
-    <s-tab>
-      <s-tab-item><s-icon slot="icon" src="search"></s-icon>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item><s-icon slot="icon"></s-icon>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item><s-icon slot="icon"></s-icon>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item><s-icon slot="icon"></s-icon>
-        <div slot="text">首页</div>
-      </s-tab-item>
-    </s-tab>
-  </main>
+    <main style="height: 200px;">
+      <s-tab mode="scrollable">
+        <s-tab-item><s-icon slot="icon" src="search"></s-icon>
+          <div slot="text">首页</div>
+        </s-tab-item>
+        <s-tab-item><s-icon slot="icon"></s-icon>
+          <div slot="text">首页</div>
+        </s-tab-item>
+        <s-tab-item><s-icon slot="icon"></s-icon>
+          <div slot="text">首页</div>
+        </s-tab-item>
+        <s-tab-item><s-icon slot="icon"></s-icon>
+          <div slot="text">首页</div>
+        </s-tab-item>
+      </s-tab>
+    </main>
 
-  <main>
-    <s-tab type="secondary">
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">首页</div>
-      </s-tab-item>
-    </s-tab>
-  </main>
-
-
-  <main style="height: 200px;">
-    <s-tab mode="scrollable">
-      <s-tab-item><s-icon slot="icon" src="search"></s-icon>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item><s-icon slot="icon"></s-icon>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item><s-icon slot="icon"></s-icon>
-        <div slot="text">首页</div>
-      </s-tab-item>
-      <s-tab-item><s-icon slot="icon"></s-icon>
-        <div slot="text">首页</div>
-      </s-tab-item>
-    </s-tab>
-  </main>
-
-  <main>
-    <s-tab type="secondary" mode="scrollable">
-      <s-tab-item>
-        <div slot="text">destination</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">navigation</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">container</div>
-      </s-tab-item>
-      <s-tab-item>
-        <div slot="text">Secondary</div>
-      </s-tab-item>
-    </s-tab>
-  </main>
-
+    <main>
+      <s-tab type="secondary" mode="scrollable">
+        <s-tab-item>
+          <div slot="text">destination</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">navigation</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">container</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">Secondary</div>
+        </s-tab-item>
+      </s-tab>
+    </main>
+  </s-root>
   <script src="../dist/bundle.min.js"></script>
+  <script src="./scripts//default.js"></script>
 </body>
 
 </html>

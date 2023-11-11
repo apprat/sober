@@ -6,41 +6,33 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
-  <script>
-    const darkStyle = document.createElement('style')
-    darkStyle.textContent = `@import url('../theme/dark.css');`
-    const toggle = () => {
-      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
-    }
-  </script>
 </head>
 
 <body>
-  <s-floating-action-button type="extended" onclick="toggle()">
-    Toggle
-  </s-floating-action-button>
-  <main>
-    <s-navigation-bar>
-      <s-navigation-bar-item>
-        <s-icon slot="icon"></s-icon>
-        <div slot="text">Mail</div>
-      </s-navigation-bar-item>
-      <s-navigation-bar-item>
-        <s-icon type="circle_fill" slot="icon"></s-icon>
-        <div slot="text">Chat</div>
-      </s-navigation-bar-item>
-      <s-navigation-bar-item>
-        <s-icon type="circle_fill" slot="icon"></s-icon>
-        <div slot="text">rooms</div>
-      </s-navigation-bar-item>
-      <s-navigation-bar-item>
-        <s-icon type="search" slot="icon"></s-icon>
-        <div slot="text">meet</div>
-      </s-navigation-bar-item>
-    </s-navigation-bar>
-  </main>
-
+  <s-root>
+    <main>
+      <s-navigation-bar>
+        <s-navigation-bar-item>
+          <s-icon slot="icon"></s-icon>
+          <div slot="text">Mail</div>
+        </s-navigation-bar-item>
+        <s-navigation-bar-item>
+          <s-icon type="circle_fill" slot="icon"></s-icon>
+          <div slot="text">Chat</div>
+        </s-navigation-bar-item>
+        <s-navigation-bar-item>
+          <s-icon type="circle_fill" slot="icon"></s-icon>
+          <div slot="text">rooms</div>
+        </s-navigation-bar-item>
+        <s-navigation-bar-item>
+          <s-icon type="search" slot="icon"></s-icon>
+          <div slot="text">meet</div>
+        </s-navigation-bar-item>
+      </s-navigation-bar>
+    </main>
+  </s-root>
   <script src="../dist/bundle.min.js"></script>
+  <script src="./scripts//default.js"></script>
 </body>
 
 </html>

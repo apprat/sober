@@ -6,69 +6,61 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
-  <script>
-    const darkStyle = document.createElement('style')
-    darkStyle.textContent = `@import url('../theme/dark.css');`
-    const toggle = () => {
-      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
-    }
-  </script>
 </head>
 
 <body>
-  <s-floating-action-button type="extended" onclick="toggle()">
-    Toggle
-  </s-floating-action-button>
-  <main>
-    <s-label>
-      <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
-      <div slot="title">选项 1</div>
-    </s-label>
-    <s-label>
-      <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
-      <div slot="title">选项 2</div>
-    </s-label>
-    <s-label>
-      <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
-      <div slot="title">选项 3</div>
-    </s-label>
-  </main>
+  <s-root>
+    <main>
+      <s-label>
+        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
+        <div slot="title">选项 1</div>
+      </s-label>
+      <s-label>
+        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
+        <div slot="title">选项 2</div>
+      </s-label>
+      <s-label>
+        <s-radio-button slot="start" name="dialog-radio-button"></s-radio-button>
+        <div slot="title">选项 3</div>
+      </s-label>
+    </main>
 
-  <main>
-    <s-label disabled="true">
-      <s-checkbox slot="start"></s-checkbox>
-      <div slot="title">选项 1</div>
-    </s-label>
-    <s-label disabled="true">
-      <s-checkbox slot="start" checked="true"></s-checkbox>
-      <div slot="title">选项 2</div>
-    </s-label>
-    <s-label disabled="true">
-      <s-checkbox slot="start"></s-checkbox>
-      <div slot="title">选项 3</div>
-    </s-label>
-  </main>
+    <main>
+      <s-label disabled="true">
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 1</div>
+      </s-label>
+      <s-label disabled="true">
+        <s-checkbox slot="start" checked="true"></s-checkbox>
+        <div slot="title">选项 2</div>
+      </s-label>
+      <s-label disabled="true">
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 3</div>
+      </s-label>
+    </main>
 
-  <main>
-    <s-label disabled="true">
-      <s-checkbox slot="start"></s-checkbox>
-      <div slot="title">选项 1</div>
-      <div slot="subtitle">选择多选框</div>
-    </s-label>
-    <s-label>
-      <s-checkbox slot="start"></s-checkbox>
-      <div slot="title">选项 2</div>
-      <div slot="subtitle">选择多选框</div>
-    </s-label>
-    <s-label>
-      <s-checkbox slot="start"></s-checkbox>
-      <div slot="title">选项 3</div>
-      <div slot="subtitle">选择多选框</div>
-    </s-label>
-  </main>
-
+    <main>
+      <s-label disabled="true">
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 1</div>
+        <div slot="subtitle">选择多选框</div>
+      </s-label>
+      <s-label>
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 2</div>
+        <div slot="subtitle">选择多选框</div>
+      </s-label>
+      <s-label>
+        <s-checkbox slot="start"></s-checkbox>
+        <div slot="title">选项 3</div>
+        <div slot="subtitle">选择多选框</div>
+      </s-label>
+    </main>
+  </s-root>
 
   <script src="../dist/bundle.min.js"></script>
+  <script src="./scripts//default.js"></script>
 </body>
 
 </html>

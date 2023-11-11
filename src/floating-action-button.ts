@@ -3,7 +3,6 @@ import { RippleFragment } from './fragment/ripple'
 
 const style = /*css*/`
 :host{
-  user-select: none;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -14,7 +13,7 @@ const style = /*css*/`
   height: 56px;
   width: 56px;
   margin: 16px;
-  border-radius: 50%;
+  border-radius: 16px;
   color: var(--s-color-on-primary-container);
   background: var(--s-color-primary-container);
   transition: box-shadow .2s;
@@ -33,7 +32,6 @@ const style = /*css*/`
   padding: 0 16px;
   width: auto;
   height: 56px;
-  border-radius: 16px;
 }
 :host(:not([extended=true])[size=large]){
   height: 96px;

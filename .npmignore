@@ -1,6 +1,7 @@
-src
-node_modules
+.vscode/
+src/
+node_modules/
 pnpm-lock.yaml
 tsconfig.json
-rollup/
+dev/
 test/

@@ -2,17 +2,15 @@ import { defineElement, html } from './core/element'
 
 const style = /*css*/`
 :host{
-  display: table-cell;
-  padding: 18px 12px;
-  text-align: right;
-  user-select: text;
-}
-::slotted(s-checkbox){
-  margin: -18px 8px -18px 0;
+  display: block;
+  color: var(--s-color-on-background);
+  background: var(--s-color-background);
+  font-family: Roboto, system-ui;
+  height: 100%;
 }
 `
 
-const name = 's-td'
+const name = 's-root'
 const props = {
 }
 

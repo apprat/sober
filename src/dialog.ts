@@ -3,7 +3,6 @@ import './ripple'
 
 const style = /*css*/`
 :host{
-  user-select: none;
   display: inline-block;
   vertical-align: middle;
 }

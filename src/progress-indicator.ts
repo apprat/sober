@@ -2,7 +2,6 @@ import { defineElement, html, ref } from './core/element'
 
 const style = /*css*/`
 :host{
-  user-select: none;
   display: block;
   height: 4px;
   color: var(--s-color-primary);

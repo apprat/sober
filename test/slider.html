@@ -6,29 +6,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
-  <script>
-    const darkStyle = document.createElement('style')
-    darkStyle.textContent = `@import url('../theme/dark.css');`
-    const toggle = () => {
-      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
-    }
-  </script>
 </head>
 
 <body>
-  <s-floating-action-button type="extended" onclick="toggle()">
-    Toggle
-  </s-floating-action-button>
-  <main>
-    <!-- <s-slider></s-slider> -->
+  <s-root>
+    <main>
+      <!-- <s-slider></s-slider> -->
 
-    <s-slider labeled></s-slider>
+      <s-slider labeled></s-slider>
 
-    <!-- <s-slider disabled=></s-slider> -->
+      <!-- <s-slider disabled=></s-slider> -->
 
-  </main>
-
+    </main>
+  </s-root>
   <script src="../dist/bundle.min.js"></script>
+  <script src="./scripts//default.js"></script>
 </body>
 
 </html>

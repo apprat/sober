@@ -6,164 +6,156 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
-  <script>
-    const darkStyle = document.createElement('style')
-    darkStyle.textContent = `@import url('../theme/dark.css');`
-    const toggle = () => {
-      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
-    }
-  </script>
 </head>
 
 <body>
-  <s-floating-action-button type="extended" onclick="toggle()">
-    Toggle
-  </s-floating-action-button>
-  <main>
-    <s-table>
-      <s-thead>
-        <s-tr>
-          <s-th>
-            <s-checkbox></s-checkbox>
-            Dessert (100g serving)
-          </s-th>
-          <s-th>
-            <s-tooltip>
-              <div slot="trigger">Calories</div>
-              The total amount of food
-            </s-tooltip>
-          </s-th>
-          <s-th>Fat (g)</s-th>
-          <s-th>Carbs (g)</s-th>
-          <s-th>Protein (g)</s-th>
-          <s-th>Sodium (mg)</s-th>
-          <s-th>Calclum (%)</s-th>
-          <s-th>Lron (%)</s-th>
-        </s-tr>
-      </s-thead>
-      <s-tbody>
-        <s-tr>
-          <s-td>
-            <s-checkbox></s-checkbox>
-            Frozen yogurt
-          </s-td>
-          <s-td>237</s-td>
-          <s-td>6.0</s-td>
-          <s-td>24</s-td>
-          <s-td>4.0</s-td>
-          <s-td>26</s-td>
-          <s-td>87</s-td>
-          <s-td>14%</s-td>
-        </s-tr>
-        <s-tr>
-          <s-td>
-            <s-checkbox></s-checkbox>
-            Frozen yogurt
-          </s-td>
-          <s-td>237</s-td>
-          <s-td>6.0</s-td>
-          <s-td>24</s-td>
-          <s-td>4.0</s-td>
-          <s-td>26</s-td>
-          <s-td>87</s-td>
-          <s-td>14%</s-td>
-        </s-tr>
-        <s-tr>
-          <s-td>
-            <s-checkbox></s-checkbox>
-            Frozen yogurt
-          </s-td>
-          <s-td>237</s-td>
-          <s-td>6.0</s-td>
-          <s-td>24</s-td>
-          <s-td>4.0</s-td>
-          <s-td>26</s-td>
-          <s-td>87</s-td>
-          <s-td>14%</s-td>
-        </s-tr>
-        <s-tr>
-          <s-td>
-            <s-checkbox></s-checkbox>
-            Frozen yogurt
-          </s-td>
-          <s-td>237</s-td>
-          <s-td>6.0</s-td>
-          <s-td>24</s-td>
-          <s-td>4.0</s-td>
-          <s-td>26</s-td>
-          <s-td>87</s-td>
-          <s-td>14%</s-td>
-        </s-tr>
-        <s-tr>
-          <s-td>
-            <s-checkbox></s-checkbox>
-            Frozen yogurt
-          </s-td>
-          <s-td>237</s-td>
-          <s-td>6.0</s-td>
-          <s-td>24</s-td>
-          <s-td>4.0</s-td>
-          <s-td>26</s-td>
-          <s-td>87</s-td>
-          <s-td>14%</s-td>
-        </s-tr>
-        <s-tr>
-          <s-td>
-            <s-checkbox></s-checkbox>
-            Frozen yogurt
-          </s-td>
-          <s-td>237</s-td>
-          <s-td>6.0</s-td>
-          <s-td>24</s-td>
-          <s-td>4.0</s-td>
-          <s-td>26</s-td>
-          <s-td>87</s-td>
-          <s-td>14%</s-td>
-        </s-tr>
-        <s-tr>
-          <s-td>
-            <s-checkbox></s-checkbox>
-            Frozen yogurt
-          </s-td>
-          <s-td>237</s-td>
-          <s-td>6.0</s-td>
-          <s-td>24</s-td>
-          <s-td>4.0</s-td>
-          <s-td>26</s-td>
-          <s-td>87</s-td>
-          <s-td>14%</s-td>
-        </s-tr>
-        <s-tr>
-          <s-td>
-            <s-checkbox></s-checkbox>
-            Frozen yogurt
-          </s-td>
-          <s-td>237</s-td>
-          <s-td>6.0</s-td>
-          <s-td>24</s-td>
-          <s-td>4.0</s-td>
-          <s-td>26</s-td>
-          <s-td>87</s-td>
-          <s-td>14%</s-td>
-        </s-tr>
-        <s-tr>
-          <s-td>
-            <s-checkbox></s-checkbox>
-            Frozen yogurt
-          </s-td>
-          <s-td>237</s-td>
-          <s-td>6.0</s-td>
-          <s-td>24</s-td>
-          <s-td>4.0</s-td>
-          <s-td>26</s-td>
-          <s-td>87</s-td>
-          <s-td>14%</s-td>
-        </s-tr>
-      </s-tbody>
-    </s-table>
-  </main>
-
+  <s-root>
+    <main>
+      <s-table>
+        <s-thead>
+          <s-tr>
+            <s-th>
+              <s-checkbox></s-checkbox>
+              Dessert (100g serving)
+            </s-th>
+            <s-th>
+              <s-tooltip>
+                <div slot="trigger">Calories</div>
+                The total amount of food
+              </s-tooltip>
+            </s-th>
+            <s-th>Fat (g)</s-th>
+            <s-th>Carbs (g)</s-th>
+            <s-th>Protein (g)</s-th>
+            <s-th>Sodium (mg)</s-th>
+            <s-th>Calclum (%)</s-th>
+            <s-th>Lron (%)</s-th>
+          </s-tr>
+        </s-thead>
+        <s-tbody>
+          <s-tr>
+            <s-td>
+              <s-checkbox></s-checkbox>
+              Frozen yogurt
+            </s-td>
+            <s-td>237</s-td>
+            <s-td>6.0</s-td>
+            <s-td>24</s-td>
+            <s-td>4.0</s-td>
+            <s-td>26</s-td>
+            <s-td>87</s-td>
+            <s-td>14%</s-td>
+          </s-tr>
+          <s-tr>
+            <s-td>
+              <s-checkbox></s-checkbox>
+              Frozen yogurt
+            </s-td>
+            <s-td>237</s-td>
+            <s-td>6.0</s-td>
+            <s-td>24</s-td>
+            <s-td>4.0</s-td>
+            <s-td>26</s-td>
+            <s-td>87</s-td>
+            <s-td>14%</s-td>
+          </s-tr>
+          <s-tr>
+            <s-td>
+              <s-checkbox></s-checkbox>
+              Frozen yogurt
+            </s-td>
+            <s-td>237</s-td>
+            <s-td>6.0</s-td>
+            <s-td>24</s-td>
+            <s-td>4.0</s-td>
+            <s-td>26</s-td>
+            <s-td>87</s-td>
+            <s-td>14%</s-td>
+          </s-tr>
+          <s-tr>
+            <s-td>
+              <s-checkbox></s-checkbox>
+              Frozen yogurt
+            </s-td>
+            <s-td>237</s-td>
+            <s-td>6.0</s-td>
+            <s-td>24</s-td>
+            <s-td>4.0</s-td>
+            <s-td>26</s-td>
+            <s-td>87</s-td>
+            <s-td>14%</s-td>
+          </s-tr>
+          <s-tr>
+            <s-td>
+              <s-checkbox></s-checkbox>
+              Frozen yogurt
+            </s-td>
+            <s-td>237</s-td>
+            <s-td>6.0</s-td>
+            <s-td>24</s-td>
+            <s-td>4.0</s-td>
+            <s-td>26</s-td>
+            <s-td>87</s-td>
+            <s-td>14%</s-td>
+          </s-tr>
+          <s-tr>
+            <s-td>
+              <s-checkbox></s-checkbox>
+              Frozen yogurt
+            </s-td>
+            <s-td>237</s-td>
+            <s-td>6.0</s-td>
+            <s-td>24</s-td>
+            <s-td>4.0</s-td>
+            <s-td>26</s-td>
+            <s-td>87</s-td>
+            <s-td>14%</s-td>
+          </s-tr>
+          <s-tr>
+            <s-td>
+              <s-checkbox></s-checkbox>
+              Frozen yogurt
+            </s-td>
+            <s-td>237</s-td>
+            <s-td>6.0</s-td>
+            <s-td>24</s-td>
+            <s-td>4.0</s-td>
+            <s-td>26</s-td>
+            <s-td>87</s-td>
+            <s-td>14%</s-td>
+          </s-tr>
+          <s-tr>
+            <s-td>
+              <s-checkbox></s-checkbox>
+              Frozen yogurt
+            </s-td>
+            <s-td>237</s-td>
+            <s-td>6.0</s-td>
+            <s-td>24</s-td>
+            <s-td>4.0</s-td>
+            <s-td>26</s-td>
+            <s-td>87</s-td>
+            <s-td>14%</s-td>
+          </s-tr>
+          <s-tr>
+            <s-td>
+              <s-checkbox></s-checkbox>
+              Frozen yogurt
+            </s-td>
+            <s-td>237</s-td>
+            <s-td>6.0</s-td>
+            <s-td>24</s-td>
+            <s-td>4.0</s-td>
+            <s-td>26</s-td>
+            <s-td>87</s-td>
+            <s-td>14%</s-td>
+          </s-tr>
+        </s-tbody>
+      </s-table>
+    </main>
+  </s-root>
   <script src="../dist/bundle.min.js"></script>
+  <script src="./scripts//default.js"></script>
 </body>
 
 </html>

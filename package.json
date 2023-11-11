@@ -1,11 +1,11 @@
 {
   "name": "sober",
-  "version": "0.0.33",
+  "version": "0.0.4",
   "description": "Material You design style web component UI library",
   "type": "module",
   "scripts": {
-    "dev": "node rollup/dev.js",
-    "build": "npx tsc && npx rollup --config rollup/rollup.config.js"
+    "dev": "node dev/main.js",
+    "build": "npx tsc && npx rollup --config dev/rollup.config.js"
   },
   "keywords": [
     "material you",

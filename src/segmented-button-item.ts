@@ -3,7 +3,6 @@ import { RippleFragment } from './fragment/ripple'
 
 const style = /*css*/`
 :host{
-  user-select: none;
   flex-basis: 100%;
   display: flex;
   justify-content: center;

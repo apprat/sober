@@ -6,71 +6,56 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
-  <script>
-    const darkStyle = document.createElement('style')
-    darkStyle.textContent = `@import url('../theme/dark.css');`
-    const toggle = () => {
-      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
-    }
-  </script>
 </head>
 
 <body>
-  <s-floating-action-button type="extended" onclick="toggle()">
-    Toggle
-  </s-floating-action-button>
-  <main>
-    <s-button>
-      <s-icon slot="start"></s-icon>
-      button
-    </s-button>
+  <s-root>
 
-    <s-button type="filled" tabindex="1">
-      <s-icon slot="start" type="search"></s-icon>
-      button
-    </s-button>
+    <main>
+      <s-button>
+        <s-icon slot="start"></s-icon>
+        button
+      </s-button>
+      <s-button type="filled" tabindex="1">
+        <s-icon slot="start" type="search"></s-icon>
+        button
+      </s-button>
+      <s-button type="filled-tonal" tabindex="2">
+        <s-icon slot="start"></s-icon>
+        enabled
+      </s-button>
+      <s-button type="outlined">
+        button
+      </s-button>
+      <s-button type="text" tabindex="4">
+        <s-icon slot="start" type="search"></s-icon>
+        button
+      </s-button>
+    </main>
 
-    <s-button type="filled-tonal" tabindex="2">
-      <s-icon slot="start"></s-icon>
-      enabled
-    </s-button>
-
-    <s-button type="outlined">
-      button
-    </s-button>
-
-    <s-button type="text" tabindex="4">
-      <s-icon slot="start" type="search"></s-icon>
-      button
-    </s-button>
-  </main>
-
-  <main>
-    <s-button disabled="true">
-      <s-icon slot="start"></s-icon>
-      button
-    </s-button>
-
-    <s-button type="filled" disabled="true">
-      <s-icon slot="start"></s-icon>
-      button
-    </s-button>
-
-    <s-button type="filled-tonal" disabled="true">
-      <s-icon slot="start"></s-icon>
-      button
-    </s-button>
-
-    <s-button type="outlined" disabled="true">
-      button
-    </s-button>
-
-    <s-button type="text" disabled="true">
-      button
-    </s-button>
-  </main>
-
+    <main>
+      <s-button disabled="true">
+        <s-icon slot="start"></s-icon>
+        button
+      </s-button>
+      <s-button type="filled" disabled="true">
+        <s-icon slot="start"></s-icon>
+        button
+      </s-button>
+      <s-button type="filled-tonal" disabled="true">
+        <s-icon slot="start"></s-icon>
+        button
+      </s-button>
+      <s-button type="outlined" disabled="true">
+        button
+      </s-button>
+      <s-button type="text" disabled="true">
+        button
+      </s-button>
+    </main>
+  </s-root>
   <script src="../dist/bundle.min.js"></script>
+  <script src="./scripts//default.js"></script>
 </body>
 
 </html>

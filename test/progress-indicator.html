@@ -6,13 +6,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
-  <script>
-    const darkStyle = document.createElement('style')
-    darkStyle.textContent = `@import url('../theme/dark.css');`
-    const toggle = () => {
-      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
-    }
-  </script>
   <style>
     s-card {
       height: 100px;
@@ -21,17 +14,16 @@
 </head>
 
 <body>
-  <s-floating-action-button extended="true" onclick="toggle()">
-    Toggle
-  </s-floating-action-button>
-  <main>
-    <s-progress-indicator value="80"></s-progress-indicator>
-    <s-progress-indicator indeterminate="true" style="color: rgb(21, 177, 70)"></s-progress-indicator>
-    <s-progress-indicator type="circular" value="80"></s-progress-indicator>
-    <s-progress-indicator type="circular" indeterminate="true"></s-progress-indicator>
-  </main>
-
+  <s-root>
+    <main>
+      <s-progress-indicator value="80"></s-progress-indicator>
+      <s-progress-indicator indeterminate="true" style="color: rgb(21, 177, 70)"></s-progress-indicator>
+      <s-progress-indicator type="circular" value="80"></s-progress-indicator>
+      <s-progress-indicator type="circular" indeterminate="true"></s-progress-indicator>
+    </main>
+  </s-root>
   <script src="../dist/bundle.min.js"></script>
+  <script src="./scripts//default.js"></script>
 </body>
 
 </html>

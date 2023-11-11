@@ -1,3 +1,4 @@
+import Root from './root'
 import Button from './button'
 import Card from './card'
 import Checkbox from './checkbox'
@@ -27,11 +28,13 @@ import Tbody from './tbody'
 import Tr from './tr'
 import Th from './th'
 import Td from './td'
+import TextEdit from './text-edit'
 import TextField from './text-field'
 import Tooltip from './tooltip'
 import TopAppBar from './top-app-bar'
 
 export {
+  Root,
   Button,
   Card,
   Checkbox,
@@ -61,6 +64,7 @@ export {
   Tr,
   Td,
   Th,
+  TextEdit,
   TextField,
   Tooltip,
   TopAppBar

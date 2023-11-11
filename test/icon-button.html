@@ -6,50 +6,42 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
-  <script>
-    const darkStyle = document.createElement('style')
-    darkStyle.textContent = `@import url('../theme/dark.css');`
-    const toggle = () => {
-      document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle)
-    }
-  </script>
 </head>
 
 <body>
-  <s-floating-action-button type="extended" onclick="toggle()">
-    Toggle
-  </s-floating-action-button>
-  <main>
-    <s-icon-button>
-      <s-icon></s-icon>
-    </s-icon-button>
-    <s-icon-button theme="filled">
-      <s-icon></s-icon>
-    </s-icon-button>
-    <s-icon-button theme="filled-tonal">
-      <s-icon></s-icon>
-    </s-icon-button>
-    <s-icon-button theme="outlined">
-      <s-icon></s-icon>
-    </s-icon-button>
-  </main>
+  <s-root>
+    <main>
+      <s-icon-button>
+        <s-icon></s-icon>
+      </s-icon-button>
+      <s-icon-button type="filled">
+        <s-icon></s-icon>
+      </s-icon-button>
+      <s-icon-button type="filled-tonal">
+        <s-icon></s-icon>
+      </s-icon-button>
+      <s-icon-button type="outlined">
+        <s-icon></s-icon>
+      </s-icon-button>
+    </main>
 
-  <main>
-    <s-icon-button disabled="true">
-      <s-icon></s-icon>
-    </s-icon-button>
-    <s-icon-button theme="filled" disabled="true">
-      <s-icon></s-icon>
-    </s-icon-button>
-    <s-icon-button theme="filled-tonal" disabled="true">
-      <s-icon></s-icon>
-    </s-icon-button>
-    <s-icon-button theme="outlined" disabled="true">
-      <s-icon></s-icon>
-    </s-icon-button>
-  </main>
-
+    <main>
+      <s-icon-button disabled="true">
+        <s-icon></s-icon>
+      </s-icon-button>
+      <s-icon-button type="filled" disabled="true">
+        <s-icon></s-icon>
+      </s-icon-button>
+      <s-icon-button type="filled-tonal" disabled="true">
+        <s-icon></s-icon>
+      </s-icon-button>
+      <s-icon-button type="outlined" disabled="true">
+        <s-icon></s-icon>
+      </s-icon-button>
+    </main>
+  </s-root>
   <script src="../dist/bundle.min.js"></script>
+  <script src="./scripts//default.js"></script>
 </body>
 
 </html>

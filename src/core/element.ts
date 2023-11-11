@@ -73,6 +73,9 @@ export const defineElement = <
         Object.defineProperty(this, key, { enumerable: true, get: () => realProps[key], set })
       }
       const setup = options.setup?.apply(this as never, [shadowRoot])
+      const style = document.createElement('style')
+      style.textContent = `:host{ user-select: none; -webkit-user-select: none }`
+      shadowRoot.appendChild(style)
       shadowRoot.appendChild(setup.render())
       elementData.adopted = setup.adopted
       elementData.mounted = setup.mounted

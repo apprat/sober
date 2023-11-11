@@ -6,21 +6,29 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
+  <style>
+    .text[focus] {
+      outline: solid 2px #009688;
+      color: #009688;
+    }
+  </style>
 </head>
 
 <body>
   <s-root>
     <main>
-      <s-scrollbar style="max-height: 400px;">
-        你好
-        <hr>
-        <div style="margin-top: 600px;">hello</div>
-        bottom
-      </s-scrollbar>
+
+      <s-text-edit class="text" placeholder="请输入账号" oninput="console.log(event)"></s-text-edit>
+
+      <s-text-edit mode="multiLine" placeholder="请输入回复" onchange="console.log('blur',event)"
+        oninput="console.log(event)"></s-text-edit>
+
     </main>
   </s-root>
   <script src="../dist/bundle.min.js"></script>
   <script src="./scripts//default.js"></script>
+  <script>
+  </script>
 </body>
 
 </html>

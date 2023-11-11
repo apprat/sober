@@ -3,7 +3,6 @@ import { device } from './core/utils'
 
 const style = /*css*/`
 :host{
-  user-select: none;
   position: relative;
   display: inline-flex;
   vertical-align: middle;
@@ -24,11 +23,13 @@ const style = /*css*/`
   white-space: nowrap;
   opacity: .95;
   filter: opacity(0);
+  -webkit-filter: opacity(0);
   transition: filter .2s;
   pointer-events: none;
 }
 .container.show{
   filter: opacity(1);
+  -webkit-filter: opacity(1);
 }
 ::slotted(img){
   display: block;

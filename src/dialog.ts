@@ -30,7 +30,7 @@ const style = /*css*/`
   transition: filter .2s;
 }
 .show .scrim{
-  filter: opacity(.5);
+  filter: opacity(.62);
 }
 .wrapper-container{
   width: 100%;

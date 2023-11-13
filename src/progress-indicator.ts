@@ -63,8 +63,8 @@ svg{
 }
 @keyframes translate2{
   0% { transform: translateX(-100%) scaleX(1); }
-  60% { transform: translateX(50%) scaleX(0); }
-  100% { transform: translateX(100%) scaleX(0); }
+  60% { transform: translateX(50%) scaleX(.2); }
+  100% { transform: translateX(100%) scaleX(1); }
 }
 @keyframes stroke{
   0% { stroke-dasharray: 1px, 200px; stroke-dashoffset: 0; }

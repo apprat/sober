@@ -1,6 +1,6 @@
 {
   "name": "sober",
-  "version": "0.0.4",
+  "version": "0.0.41",
   "description": "Material You design style web component UI library",
   "type": "module",
   "scripts": {
@@ -20,7 +20,6 @@
   ],
   "exports": {
     ".": "./dist/main.js",
-    "./theme/*": "./theme/*",
     "./*": "./dist/*.js"
   },
   "author": "apprat",

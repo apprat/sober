@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+  <style>
+    body {
+      display: flex;
+    }
+
+    s-page {
+      flex-basis: 100%;
+      padding: 8px;
+    }
+
+    s-page>* {
+      margin: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <s-page>
+    <s-button>
+      submit
+    </s-button>
+    <s-button type="filled">
+      submit
+    </s-button>
+    <s-icon-button>
+      <s-icon></s-icon>
+    </s-icon-button>
+    <s-icon-button type="filled">
+      <s-icon></s-icon>
+    </s-icon-button>
+    <s-icon-button type="filled-tonal">
+      <s-icon></s-icon>
+    </s-icon-button>
+    <s-floating-action-button>
+      <s-icon></s-icon>
+    </s-floating-action-button>
+    <s-checkbox></s-checkbox>
+    <s-checkbox checked="true"></s-checkbox>
+    <s-radio-button name="my"></s-radio-button>
+    <s-radio-button name="my" checked="true"></s-radio-button>
+    <s-switch></s-switch>
+    <s-switch checked="true"></s-switch>
+    <s-progress-indicator type="circular" indeterminate="true"></s-progress-indicator>
+    <s-progress-indicator indeterminate="true"></s-progress-indicator>
+    <s-slider labeled="true"></s-slider>
+  </s-page>
+  <s-page theme="dark">
+    <s-button>
+      submit
+    </s-button>
+    <s-button type="filled">
+      submit
+    </s-button>
+    <s-icon-button>
+      <s-icon></s-icon>
+    </s-icon-button>
+    <s-icon-button type="filled">
+      <s-icon></s-icon>
+    </s-icon-button>
+    <s-icon-button type="filled-tonal">
+      <s-icon></s-icon>
+    </s-icon-button>
+    <s-floating-action-button>
+      <s-icon></s-icon>
+    </s-floating-action-button>
+    <s-checkbox></s-checkbox>
+    <s-checkbox checked="true"></s-checkbox>
+    <s-radio-button name="my"></s-radio-button>
+    <s-radio-button name="my" checked="true"></s-radio-button>
+    <s-switch></s-switch>
+    <s-switch checked="true"></s-switch>
+    <s-progress-indicator type="circular" indeterminate="true"></s-progress-indicator>
+    <s-progress-indicator indeterminate="true"></s-progress-indicator>
+    <s-slider labeled="true"></s-slider>
+  </s-page>
+  <script src="../dist/bundle.min.js"></script>
+  <script src="./scripts//default.js"></script>
+</body>
+
+</html>

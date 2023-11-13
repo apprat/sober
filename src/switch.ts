@@ -66,13 +66,11 @@ const style = /*css*/`
   width: 12px;
   height: 12px;
   fill: var(--s-color-primary);
-  filter: opacity(0);
-  -webkit-filter: opacity(0);
-  transition: filter .2s;
+  opacity: 0;
+  transition: opacity .2s;
 }
 :host([checked=true]) .icon{
-  filter: opacity(1);
-  -webkit-filter: opacity(1);
+  opacity: 1;
 }
 :host([checked=true][disabled=true]) .icon{
   fill: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);

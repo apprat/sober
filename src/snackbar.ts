@@ -32,7 +32,7 @@ const style = /*css*/`
   line-height: 1.6;
   display: inline-flex;
   align-items: center;
-  min-width: 360px;
+  min-width: 280px;
   max-width: 480px;
   font-size: .875rem;
   font-weight: 400;
@@ -62,10 +62,7 @@ const style = /*css*/`
 }
 @media (max-width: 480px){
   .container{
-    border-radius: 0;
-    min-width: 100%;
-    max-width: 100%;
-    margin: 0;
+    margin: 8px;
   }
 }
 `

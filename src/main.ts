@@ -1,4 +1,4 @@
-import Root from './root'
+import Page from './page'
 import Button from './button'
 import Card from './card'
 import Checkbox from './checkbox'
@@ -34,7 +34,7 @@ import Tooltip from './tooltip'
 import TopAppBar from './top-app-bar'
 
 export {
-  Root,
+  Page,
   Button,
   Card,
   Checkbox,

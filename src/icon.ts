@@ -12,8 +12,8 @@ const style = /*css*/`
   box-sizing: border-box;
 }
 svg{
-  width: initial;
-  height: initial;
+  width: 100%;
+  height: 100%;
 }
 `
 const svgData = {

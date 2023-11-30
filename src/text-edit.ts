@@ -1,12 +1,12 @@
-import { defineElement, html, ref } from './core/element'
+import { builder, html, ref } from './core/element'
 
 const style = /*css*/`
 :host{
   position: relative;
-  outline: solid 1px var(--s-color-outline-variant);
+  outline: solid 1px var(--s-color-outline-variant,#c0c8cc);
   border-radius: 4px;
   font-size: 1rem;
-  color: var(--s-color-on-surface);
+  color: var(--s-color-on-surface,#191c1e);
   box-sizing: border-box;
   padding: 12px;
   display: block;
@@ -44,8 +44,8 @@ const style = /*css*/`
   color: var(--placeholder-color,color-mix(in srgb ,currentColor 38%, transparent));
 }
 .box::selection{
-  color: var(--selection-color, var(--s-color-on-primary));
-  background: var(--selection-background-color, var(--s-color-primary));
+  background: var(--selection-background-color, var(--s-color-primary,#006783));
+  color: var(--selection-color, var(--s-color-on-primary,#ffffff));
 }
 :host([mode=multiLine]) .single{
   display: none;
@@ -70,9 +70,11 @@ const props = {
   mode: 'singleLine' as 'singleLine' | 'multiLine' | 'password',
   placeholder: '',
   value: '',
+  maxlength: -1,
+  readonly: false
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: ['mode'],
   setup() {
     const fill = ref<HTMLDivElement>()
@@ -97,7 +99,10 @@ export default class Component extends defineElement({
           single.target.placeholder = value
           multi.target.placeholder = value
         },
-        value: setValue
+        value: setValue,
+        mode: (value) => {
+          value === 'password' ? single.target.type = 'password' : single.target.type = 'text'
+        }
       },
       render: () => html`
         <style>${style}</style>
@@ -108,6 +113,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

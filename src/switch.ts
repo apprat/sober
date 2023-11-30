@@ -1,5 +1,5 @@
-import { defineElement, html } from './core/element'
-import { RippleFragment } from './fragment/ripple'
+import { builder, html } from './core/element'
+import './ripple'
 
 const style = /*css*/`
 :host{
@@ -8,13 +8,13 @@ const style = /*css*/`
   align-items: center;
   cursor: pointer;
   position: relative;
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#40484c);
 }
 :host([disabled=true]){
   pointer-events: none;
 }
 :host([checked=true]){
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#006783);
 }
 .track{
   display: flex;
@@ -22,23 +22,23 @@ const style = /*css*/`
   width: 52px;
   height: 32px;
   border-radius: 20px;
-  box-shadow: 0 0 0 2px inset var(--s-color-outline);
+  box-shadow: 0 0 0 2px inset var(--s-color-outline,#70787d);
   position: relative;
 }
 :host([checked=true]) .track{
-  background: var(--s-color-primary);
+  background: var(--s-color-primary,#006783);
   box-shadow: none;
 }
 :host([disabled=true]) .track{
-  background: color-mix(in srgb ,var(--s-color-surface-container-highest) 12%, transparent);
-  box-shadow: 0 0 0 2px inset color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
+  background: color-mix(in srgb ,var(--s-color-surface-container-highest,#e6e0e9) 12%, transparent);
+  box-shadow: 0 0 0 2px inset color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
 }
 :host([checked=true][disabled=true]) .track{
-  background: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
+  background: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
   box-shadow: none;
 }
 .thumb{
-  background: var(--s-color-outline);
+  background: var(--s-color-outline,#70787d);
   border-radius: 50%;
   width: 16px;
   height: 16px;
@@ -51,21 +51,21 @@ const style = /*css*/`
   align-items: center;
 }
 :host([checked=true]) .thumb{
-  background: var(--s-color-on-primary);
+  background: var(--s-color-on-primary,#ffffff);
   transform: scale(1.5) translateX(16px);
-  box-shadow: var(--s-elevation-level1);
+  box-shadow: var(--s-elevation-level1,0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
 }
 :host([disabled=true]) .thumb{
-  background: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent);
+  background: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent);
   box-shadow: none;
 }
 :host([checked=true][disabled=true]) .thumb{
-  background: var(--s-color-surface);
+  background: var(--s-color-surface,#fbfcfe);
 }
 .icon{
   width: 12px;
   height: 12px;
-  fill: var(--s-color-primary);
+  fill: var(--s-color-primary,#006783);
   opacity: 0;
   transition: opacity .2s;
 }
@@ -73,17 +73,17 @@ const style = /*css*/`
   opacity: 1;
 }
 :host([checked=true][disabled=true]) .icon{
-  fill: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
+  fill: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
 }
-.ripple-wrapper{
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 50% !important;
-  top: auto !important;
+.ripple{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  top: auto;
   transition: transform .2s;
   transform: translateX(-4px);
 }
-:host([checked=true]) .ripple-wrapper{
+:host([checked=true]) .ripple{
   transform: translateX(16px);
 }
 `
@@ -94,7 +94,7 @@ const props = {
   checked: false
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: true,
   setup() {
     this.addEventListener('click', () => {
@@ -112,11 +112,13 @@ export default class Component extends defineElement({
             </svg>
           </div>
         </div>
-        ${RippleFragment(this, true)}
+        <s-ripple attached="true" centered="true" class="ripple"></s-ripple>
       `
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

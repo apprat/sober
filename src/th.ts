@@ -1,10 +1,9 @@
-import { defineElement, html } from './core/element'
+import { builder, html } from './core/element'
 
 const style = /*css*/`
 :host{
   display: table-cell;
   padding: 20px 12px;
-  text-align: right;
   white-space: nowrap;
 }
 ::slotted(s-checkbox){
@@ -16,7 +15,7 @@ const name = 's-th'
 const props = {
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props,
   setup() {
     return {
@@ -27,6 +26,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

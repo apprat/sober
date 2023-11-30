@@ -1,5 +1,5 @@
-import { defineElement, html, ref } from './core/element'
-import { RippleFragment } from './fragment/ripple'
+import { builder, html, ref } from './core/element'
+import './ripple'
 
 const style = /*css*/`
 :host{
@@ -8,7 +8,7 @@ const style = /*css*/`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#40484c);
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -16,10 +16,10 @@ const style = /*css*/`
 }
 :host([disabled=true]){
   pointer-events: none;
-  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent) !important;
 }
 :host([checked=true]){
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#006783);
 }
 .icon{
   width: 24px;
@@ -40,7 +40,7 @@ const svgData = {
   checked: 'M480-280q83 0 141.5-58.5T680-480q0-83-58.5-141.5T480-680q-83 0-141.5 58.5T280-480q0 83 58.5 141.5T480-280Zm0 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z'
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: true,
   setup() {
     const iconPath = ref()
@@ -65,11 +65,13 @@ export default class Component extends defineElement({
         <svg class="icon" viewBox="0 -960 960 960">
           <path ref="${iconPath}" d="${svgData.uncheck}"></path>
         </svg>
-        ${RippleFragment(this, true)}
+        <s-ripple attached="true" centered="true"></s-ripple>
       `
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

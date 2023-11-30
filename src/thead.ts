@@ -1,10 +1,10 @@
-import { defineElement, html } from './core/element'
+import { builder, html } from './core/element'
 
 const style = /*css*/`
 :host{
   display: table-header-group;
   font-weight: 600;
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#40484c);
 }
 `
 
@@ -12,7 +12,7 @@ const name = 's-thead'
 const props = {
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props,
   setup() {
     return {
@@ -23,6 +23,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

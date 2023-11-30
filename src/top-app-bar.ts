@@ -1,12 +1,12 @@
-import { defineElement, html } from './core/element'
+import { builder, html } from './core/element'
 
 const style = /*css*/`
 :host{
   display: flex;
   height: 64px;
-  background: var(--s-color-surface);
+  background: var(--s-color-surface,#fbfcfe);
+  color: var(--s-color-on-surface,#191c1e);
   align-items: center;
-  color: var(--s-color-on-surface);
   padding: 0 8px;
 }
 .container{
@@ -87,7 +87,7 @@ const props = {
   size: 'center-aligned' as 'center-aligned' | 'small' | 'medium' | 'large',
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: ['size'],
   setup() {
     return {
@@ -105,6 +105,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

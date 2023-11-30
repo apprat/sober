@@ -19,15 +19,13 @@ const parsePropType = (value: unknown, old: Prop) => {
   throw new TypeError()
 }
 
-export const defineElement = <
+export const builder = <
   P extends { [x: string]: Prop } = {},
-  S extends {} = {},
   E extends {} = {}
 >(options: {
   name: string
   props?: P
   propSyncs?: (keyof P)[] | true
-  statics?: S
   setup: (this: P & HTMLElement, shadowRoot: ShadowRoot) => {
     render: () => DocumentFragment
     created?: () => void
@@ -39,8 +37,9 @@ export const defineElement = <
   }
 }): {
   new(): P & Readonly<E> & HTMLElement
+  readonly define: () => void
   prototype: HTMLElement
-} & Readonly<S> => {
+} => {
   const maps = new Map<HTMLElement, ElementData>()
   const attributes: string[] = []
   for (const key in options.props) attributes.push(key)
@@ -100,8 +99,9 @@ export const defineElement = <
       this[name] = newValue ?? undefined
     }
   }
-  for (const key in options.statics) CustomElement[key as string] = options.statics[key]
-  !customElements.get(options.name) && customElements.define(options.name, CustomElement)
+  CustomElement['define'] = function () {
+    !customElements.get(options.name) && customElements.define(options.name, this)
+  }
   return CustomElement as never
 }
 

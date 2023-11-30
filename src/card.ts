@@ -1,21 +1,21 @@
-import { defineElement, html } from './core/element'
-import { RippleFragment } from './fragment/ripple'
+import { builder, html } from './core/element'
+import './ripple'
 
 const style = /*css*/`
 :host{
   display: block;
-  background: var(--s-color-surface-container-low);
-  box-shadow: var(--s-elevation-level1);
+  background: var(--s-color-surface-container-low,#f7f2fa);
+  box-shadow: var(--s-elevation-level1,0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
   border-radius: 12px;
   position: relative;
 }
 :host([type=filled]){
-  background: var(--s-color-surface-container-highest);
+  background: var(--s-color-surface-container-highest,#e6e0e9);
   box-shadow: none;
 }
 :host([type=outlined]){
-  background: var(--s-color-surface);
-  border: solid 1px var(--s-color-outline-variant);
+  background: var(--s-color-surface,#fbfcfe);
+  border: solid 1px var(--s-color-outline-variant,#dce4e9);
   box-shadow: none;
 }
 `
@@ -25,7 +25,7 @@ const props = {
   type: 'elevated' as 'elevated' | 'filled' | 'outlined'
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: true,
   setup() {
     return {
@@ -36,6 +36,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

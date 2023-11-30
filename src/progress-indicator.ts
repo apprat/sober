@@ -1,10 +1,10 @@
-import { defineElement, html, ref } from './core/element'
+import { builder, html, ref } from './core/element'
 
 const style = /*css*/`
 :host{
   display: block;
   height: 4px;
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#006783);
 }
 .container{
   height: inherit;
@@ -17,7 +17,7 @@ const style = /*css*/`
   width: inherit;
 }
 .track{
-  background: var(--s-color-surface-container-highest);
+  background: var(--s-color-surface-container-highest,#e6e0e9);
 }
 .indicator{
   position: absolute;
@@ -85,7 +85,7 @@ const props = {
   value: 50
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: ['indeterminate', 'type'],
   setup() {
     const linear = ref<HTMLElement>()
@@ -126,6 +126,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

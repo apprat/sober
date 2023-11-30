@@ -1,4 +1,4 @@
-import { defineElement, html, ref } from './core/element'
+import { builder, html, ref } from './core/element'
 import { device } from './core/utils'
 
 const style = /*css*/`
@@ -14,8 +14,8 @@ const style = /*css*/`
 .container{
   position: absolute;
   z-index: 1;
-  background: var(--s-color-inverse-surface);
-  color: var(--s-color-inverse-on-surface);
+  background: var(--s-color-inverse-surface,#2e3132);
+  color: var(--s-color-inverse-on-surface,#eff1f3);
   font-size: .875rem;
   font-weight: 400;
   padding: 6px 8px;
@@ -41,7 +41,7 @@ const props = {
   delay: 1000
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props,
   setup() {
     const container = ref<HTMLElement>()
@@ -94,6 +94,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

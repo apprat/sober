@@ -1,5 +1,5 @@
-import { defineElement, html, ref } from './core/element'
-import { RippleFragment } from './fragment/ripple'
+import { builder, html, ref } from './core/element'
+import './ripple'
 
 const style = /*css*/`
 :host{
@@ -25,12 +25,12 @@ const style = /*css*/`
   flex-shrink: 0;
 }
 :host([disabled=true]) ::slotted([slot=start]){
-  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent) !important;
 }
 ::slotted([slot=title]){
   font-size: 1rem;
   height: 24px;
-  color: var(--s-color-on-surface);
+  color: var(--s-color-on-surface,#191c1e);
   display: flex;
   align-items: center;
   line-height: 1;
@@ -39,15 +39,15 @@ const style = /*css*/`
   text-overflow: ellipsis;
 }
 :host([disabled=true]) ::slotted([slot=title]){
-  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent) !important;
 }
 ::slotted([slot=subtitle]){
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#40484c);
   height: 24px;
   font-size: .75rem;
 }
 :host([disabled=true]) ::slotted([slot=subtitle]){
-  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent) !important;
 }
 `
 
@@ -56,7 +56,7 @@ const props = {
   disabled: false
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: true,
   setup() {
     const start = ref<HTMLSlotElement>()
@@ -76,16 +76,18 @@ export default class Component extends defineElement({
     return {
       render: () => html`
         <style>${style}</style>
+        <s-ripple attached="true"></s-ripple>
         <slot name="start" ref="${start}"></slot>
         <div class="text">
           <slot name="title"></slot>
           <slot name="subtitle"></slot>
         </div>
-        ${RippleFragment(this)}
       `
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

@@ -1,5 +1,5 @@
-import { defineElement, html } from './core/element'
-import { RippleFragment } from './fragment/ripple'
+import { builder, html } from './core/element'
+import './ripple'
 
 const style = /*css*/`
 :host{
@@ -17,11 +17,12 @@ const style = /*css*/`
   width: 100%;
   max-width: 80px;
   text-transform: capitalize;
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#40484c);
+  transition: font-weight .2s;
 }
 :host([checked=true]){
-  color: var(--s-color-on-surface);
-  font-weight: 700;
+  color: var(--s-color-primary,#006783);
+  font-weight: 600;
 }
 .icon{
   position: relative;
@@ -31,19 +32,9 @@ const style = /*css*/`
   height: 32px;
   width: 64px;
 }
-.ripple-wrapper{
-  border-radius: 16px !important;
-  left: auto !important;
-}
-:host([checked=true]) .ripple-wrapper{
-  background: var(--s-color-secondary-container);
-}
 ::slotted([slot=icon]){
   position: relative;
   pointer-events: none;
-}
-:host([checked=true]) ::slotted([slot=icon]){
-  color: var(--s-color-on-secondary-container);
 }
 ::slotted([slot=text]){
   position: relative;
@@ -57,14 +48,21 @@ const props = {
   checked: false
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: true,
   setup() {
+    this.addEventListener('click', () => this.checked = true)
     return {
+      watches: {
+        checked: () => {
+          if (!this.parentNode) return
+          this.dispatchEvent(new Event('item:change', { bubbles: true }))
+        }
+      },
       render: () => html`
         <style>${style}</style>
+        <s-ripple attached="true"></s-ripple>
         <div class="icon">
-        ${RippleFragment(this, true)}
           <slot name="icon"></slot>
         </div>
         <slot name="text"></slot>
@@ -72,6 +70,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

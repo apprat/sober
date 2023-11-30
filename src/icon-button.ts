@@ -1,5 +1,5 @@
-import { defineElement, html } from './core/element'
-import { RippleFragment } from './fragment/ripple'
+import { builder, html } from './core/element'
+import './ripple'
 
 const style = /*css*/`
 :host{
@@ -11,34 +11,34 @@ const style = /*css*/`
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#40484c);
   position: relative;
   box-sizing: border-box;
 }
 :host([disabled=true]){
   pointer-events: none;
-  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent) !important;
 }
 :host([type=filled]){
-  color: var(--s-color-on-primary);
-  background: var(--s-color-primary);
+  background: var(--s-color-primary,#006783);
+  color: var(--s-color-on-primary,#ffffff);
 }
 :host([type=filled][disabled=true]){
-  background: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent) !important;
+  background: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent) !important;
 }
 :host([type=filled-tonal]){
-  color: var(--s-color-on-secondary-container);
-  background: var(--s-color-secondary-container);
+  background: var(--s-color-secondary-container,#cfe6f2);
+  color: var(--s-color-on-secondary-container,#081e27);
 }
 :host([type=filled-tonal][disabled=true]){
-  background: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent) !important;
+  background: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent) !important;
 }
 :host([type=outlined]){
-  border: solid 1px var(--s-color-outline);
+  border: solid 1px var(--s-color-outline,#70787d);
 }
 :host([type=outlined][disabled=true]){
   background: none !important;
-  border-color: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
+  border-color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
 }
 `
 
@@ -48,7 +48,7 @@ const props = {
   type: 'standard' as 'standard' | 'filled' | 'filled-tonal' | 'outlined',
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: true,
   setup() {
     return {
@@ -57,11 +57,13 @@ export default class Component extends defineElement({
         <slot name="start"></slot>
         <slot></slot>
         <slot name="end"></slot>
-        ${RippleFragment(this, true)}
+        <s-ripple attached="true" centered="true"></s-ripple>
       `
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

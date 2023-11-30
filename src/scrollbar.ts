@@ -1,26 +1,25 @@
-import { defineElement, html } from './core/element'
+import { builder, html } from './core/element'
 
 const style = /*css*/`
 :host{
   display: block;
   overflow: auto;
-  overflow: overlay;
 }
 @media (pointer: fine){
   :host::-webkit-scrollbar{
-    width: 4px;
-    height: 4px;
-    background: none;
+    width: 8px;
+    height: 8px;
   }
-  :host::-webkit-scrollbar-thumb{
-    background: var(--s-color-outline-variant);
+  :host::-webkit-scrollbar-track-piece{
+    background: var(--s-color-surface-container,#eff1f3);
     border-radius: 4px;
   }
-  :host::-webkit-scrollbar{
-    width: 6px;
+  :host::-webkit-scrollbar-corner{
+    background: var(--s-color-surface-container,#eff1f3);
   }
   :host::-webkit-scrollbar-thumb{
-    background: var(--s-color-outline-variant);
+    background: var(--s-color-outline-variant,#c0c8cc);
+    border-radius: 4px;
   }
 }
 `
@@ -29,7 +28,7 @@ const name = 's-scrollbar'
 const props = {
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props,
   setup() {
     return {
@@ -40,6 +39,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

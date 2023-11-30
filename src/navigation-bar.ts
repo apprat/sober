@@ -1,12 +1,12 @@
-import { defineElement, html, ref } from './core/element'
-import type Item from './navigation-bar-item'
+import { builder, html } from './core/element'
+import Item from './navigation-bar-item'
 
 const style = /*css*/`
 :host{
   display: flex;
   justify-content: center;
   overflow: hidden;
-  background: var(--s-color-surface-container);
+  background: var(--s-color-surface-container,#eff1f3);
 }
 `
 
@@ -15,47 +15,48 @@ const props = {
   select: 0
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: true,
   setup() {
-    const slot = ref<HTMLSlotElement>()
-    const state: { items: Item[], selectItem?: Item } = { items: [] }
-    const render = () => {
-      const old = state.selectItem
-      state.selectItem = state.items[this.select]
-      if (!state.selectItem) {
-        if (old) old.checked = false
-        return
-      }
-      if (!state.selectItem.checked) state.selectItem.checked = true
-      state.items.forEach((value) => {
-        if (value === state.selectItem || !value.checked) return
-        value.checked = false
+    let options: Item[] = []
+    let selectIndex = -1
+    let changing = false
+    const slotChange = () => {
+      options = Array.from(this.children) as Item[]
+      selectIndex = options.findIndex((item) => item.checked)
+    }
+    this.addEventListener('item:change', (event: Event) => {
+      event.stopPropagation()
+      if (changing) return
+      changing = true
+      if (!event.target || !(event.target instanceof Item)) return
+      const target = event.target
+      selectIndex = -1
+      options.forEach((item, index) => {
+        if (item === target && target.checked) return selectIndex = index
+        item.checked && (item.checked = false)
       })
-    }
-    const onChange = (event: Event) => {
-      const target = event.target as unknown as Item
-      const index = state.items.indexOf(target)
-      if (index !== this.select) {
-        this.select = index
-        this.dispatchEvent(new Event('change'))
-      }
-    }
-    const onSlotChange = () => {
-      state.items = slot.target.assignedElements() as Item[]
-      render()
-    }
+      changing = false
+      this.dispatchEvent(new Event('change'))
+    })
     return {
-      watches: {
-        select: render
+      expose: {
+        get options() {
+          return options
+        },
+        get selectIndex() {
+          return selectIndex
+        }
       },
       render: () => html`
         <style>${style}</style>
-        <slot ref="${slot}" @click="${onChange}" @slotchange="${onSlotChange}"></slot>
+        <slot @slotchange="${slotChange}"></slot>
       `
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

@@ -1,4 +1,4 @@
-import { defineElement, html, ref } from './core/element'
+import { builder, html, ref } from './core/element'
 import './ripple'
 
 const style = /*css*/`
@@ -16,29 +16,24 @@ const style = /*css*/`
   pointer-events: none;
   z-index: 1;
   transform: translateY(100%);
-  filter: opacity(0);
-  transition: transform .2s,filter .2s;
-}
-.wrapper.show{
-  transform: translateY(0%);
   filter: opacity(1);
 }
 .container{
-  background: var(--s-color-inverse-surface);
-  color: var(--s-color-inverse-on-surface);
+  background: var(--s-color-inverse-surface,#2e3132);
+  color: var(--s-color-inverse-on-surface,#eff1f3);
   min-height: 48px;
   border-radius: 4px;
-  box-shadow: var(--s-elevation-level3);
+  box-shadow: var(--s-elevation-level3,0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
   line-height: 1.6;
   display: inline-flex;
   align-items: center;
-  min-width: 280px;
+  min-width: 320px;
   max-width: 480px;
   font-size: .875rem;
   font-weight: 400;
   margin: 16px;
 }
-.wrapper.show .container{
+.show .container{
   pointer-events: auto;
 }
 .supporting-text{
@@ -49,7 +44,7 @@ const style = /*css*/`
   font-size: inherit;
   flex-shrink: 0;
   border-radius: 4px;
-  color: var(--s-color-inverse-primary);
+  color: var(--s-color-inverse-primary,#61d4ff);
   margin-right: 8px;
   margin-left: -8px;
   min-height: 36px;
@@ -63,6 +58,7 @@ const style = /*css*/`
 @media (max-width: 480px){
   .container{
     margin: 8px;
+    min-width: auto;
   }
 }
 `
@@ -73,52 +69,53 @@ const props = {
   action: ''
 }
 
-const make = (options: {
-  view?: Node
+const make = (options: string | {
+  view?: Element
   text: string
   duration?: number
   action?: string
-  onAction?: () => boolean | undefined
+  onAction?: (event: Event) => boolean | undefined
 }) => {
-  const view = options.view ?? document.body
+  let view: Element = document.body
   const snackbar = document.createElement('s-snackbar')
-  snackbar.textContent = options.text
-  snackbar.duration = options.duration ?? props.duration
-  snackbar.action = options.text
-  snackbar.addEventListener('action', (event) => {
-    const stoped = options.onAction?.()
-    if (stoped === false) event.preventDefault()
-  })
+  const page = document.body.firstElementChild
+  if (page && page.tagName === 'S-PAGE') {
+    view = page
+  }
+  if (typeof options === 'string') {
+    snackbar.textContent = options
+  } else {
+    if (options.view) view = options.view
+    if (options.action) snackbar.action = options.action
+    if (options.duration) snackbar.duration = options.duration
+    if (options.action) snackbar.addEventListener('action', (event) => options.onAction?.(event))
+    snackbar.textContent = options.text
+  }
   view.appendChild(snackbar)
   window.getComputedStyle(snackbar).top
+  snackbar.addEventListener('dimiss', () => view.removeChild(snackbar))
   snackbar.show()
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props,
-  statics: { make },
   setup() {
     const wrapper = ref<HTMLElement>()
     const action = ref<HTMLElement>()
-    const state = { showed: false, timer: 0 }
+    const state = { timer: 0 }
+    const animateOptions = { duration: 200, fill: 'forwards', easing: 'linear' } as const
     const show = () => {
-      if (!this.isConnected || state.showed) return
-      state.showed = true
-      this.dispatchEvent(new Event('show'))
-      wrapper.target.addEventListener('transitionend', () => {
-        this.dispatchEvent(new FocusEvent('focus'))
-        if (this.duration > 0) state.timer = setTimeout(dimiss, this.duration)
-      }, { once: true })
+      clearTimeout(state.timer)
+      const animation = wrapper.target.animate({ transform: ['translateY(100%)', 'translateY(0%)'], filter: ['opacity(0)', 'opacity(1)'] }, animateOptions)
+      animation.addEventListener('finish', () => this.dispatchEvent(new Event('show')))
+      animation.addEventListener('cancel', dimiss)
       wrapper.target.classList.add('show')
+      if (this.duration > 0) state.timer = setTimeout(dimiss, this.duration)
     }
     const dimiss = () => {
-      if (!this.isConnected || !state.showed) return
       clearTimeout(state.timer)
-      this.dispatchEvent(new Event('dimiss'))
-      wrapper.target.addEventListener('transitionend', () => {
-        this.dispatchEvent(new FocusEvent('blur'))
-        state.showed = false
-      }, { once: true })
+      const animation = wrapper.target.animate({ transform: ['translateY(0%)', 'translateY(100%)'], filter: ['opacity(1)', 'opacity(0)'] }, animateOptions)
+      animation.addEventListener('finish', () => this.dispatchEvent(new Event('dimiss')))
       wrapper.target.classList.remove('show')
     }
     const onAction = () => {
@@ -144,7 +141,11 @@ export default class Component extends defineElement({
       `
     }
   }
-}) { }
+}) {
+  static readonly show = make
+}
+
+Component.define()
 
 declare global {
   namespace JSX {

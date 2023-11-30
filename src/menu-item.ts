@@ -1,1 +1,2 @@
-import { defineElement, html } from './core/element'
+import { builder, html } from './core/element'
+import './ripple'

@@ -1,5 +1,5 @@
-import { defineElement, html, ref } from './core/element'
-import { RippleFragment } from './fragment/ripple'
+import { builder, html, ref } from './core/element'
+import './ripple'
 
 const style = /*css*/`
 :host{
@@ -12,15 +12,15 @@ const style = /*css*/`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  color: var(--s-color-on-surface-variant);
+  color: var(--s-color-on-surface-variant,#40484c);
 }
 :host([disabled=true]){
   pointer-events: none !important;
-  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent) !important;
 }
 :host([checked=true]),
 :host([indeterminate=true]){
-  color: var(--s-color-primary);
+  color: var(--s-color-primary,#006783);
 }
 .icon{
   width: 24px;
@@ -42,7 +42,7 @@ const svgData = {
   checked: 'm424-312 282-282-56-56-226 226-114-114-56 56 170 170ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Z'
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: true,
   setup() {
     const iconPath = ref<SVGAElement>()
@@ -53,19 +53,21 @@ export default class Component extends defineElement({
     })
     return {
       watches: {
-        indeterminate: () => iconPath.target.setAttribute('d', this.indeterminate ? svgData.indeterminate : (this.checked ? svgData.checked : svgData.uncheck)),
-        checked: () => !this.indeterminate && iconPath.target.setAttribute('d', this.checked ? svgData.checked : svgData.uncheck)
+        indeterminate: (value) => iconPath.target.setAttribute('d', value ? svgData.indeterminate : (this.checked ? svgData.checked : svgData.uncheck)),
+        checked: (value) => !this.indeterminate && iconPath.target.setAttribute('d', value ? svgData.checked : svgData.uncheck)
       },
       render: () => html`
         <style>${style}</style>
         <svg class="icon" viewBox="0 -960 960 960">
           <path ref="${iconPath}" d="${svgData.uncheck}"></path>
         </svg>
-        ${RippleFragment(this, true)}
+        <s-ripple attached="true" centered="true"></s-ripple>
       `
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

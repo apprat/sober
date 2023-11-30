@@ -1,5 +1,5 @@
-import { defineElement, html } from './core/element'
-import { RippleFragment } from './fragment/ripple'
+import { builder, html } from './core/element'
+import './ripple'
 
 const style = /*css*/`
 :host{
@@ -7,12 +7,12 @@ const style = /*css*/`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--s-color-on-surface);
+  color: var(--s-color-on-surface,#191c1e);
   height: 40px;
   text-transform: capitalize;
   font-weight: 500;
   font-size: .875rem;
-  border: solid 1px var(--s-color-outline);
+  border: solid 1px var(--s-color-outline,#70787d);
   position: relative;
   cursor: pointer;
 }
@@ -26,15 +26,14 @@ const style = /*css*/`
   border-right: none;
 }
 :host([checked=true]){
-  background: var(--s-color-secondary-container);
-  color: var(--s-color-on-secondary-container);
-  pointer-events: none;
+  background: var(--s-color-secondary-container,#cfe6f2);
+  color: var(--s-color-on-secondary-container,#081e27);
 }
 :host([disabled=true]){
   pointer-events: none;
-  border-top-color: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
-  border-bottom-color: color-mix(in srgb ,var(--s-color-on-surface) 12%, transparent);
-  color: color-mix(in srgb ,var(--s-color-on-surface) 38%, transparent);
+  border-top-color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
+  border-bottom-color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
+  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent);
 }
 :host([disabled=true]:not(:last-child)){
   margin-left: -1px;
@@ -54,19 +53,28 @@ const props = {
   disabled: false
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: true,
   setup() {
+    this.addEventListener('click', () => this.checked = true)
     return {
+      watches: {
+        checked: () => {
+          if (!this.parentNode) return
+          this.dispatchEvent(new Event('item:change', { bubbles: true }))
+        }
+      },
       render: () => html`
         <style>${style}</style>
+        <s-ripple attached="true"></s-ripple>
         <slot name="start"></slot>
         <slot></slot>
-        ${RippleFragment(this)}
       `
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

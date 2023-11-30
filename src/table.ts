@@ -1,4 +1,4 @@
-import { defineElement, html } from './core/element'
+import { builder, html } from './core/element'
 
 const style = /*css*/`
 :host{
@@ -17,7 +17,7 @@ const name = 's-table'
 const props = {
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props,
   setup() {
     return {
@@ -30,6 +30,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

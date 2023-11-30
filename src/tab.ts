@@ -1,11 +1,11 @@
-import { defineElement, html, ref } from './core/element'
-import type Item from './tab-item'
+import { builder, html, ref } from './core/element'
+import Item from './tab-item'
 
 const style = /*css*/`
 :host{
   display: flex;
-  color: var(--s-color-on-surface-variant);
-  background: var(--s-color-surface);
+  color: var(--s-color-on-surface-variant,#40484c);
+  background: var(--s-color-surface,#fbfcfe);
   justify-content: center;
   position: relative;
 }
@@ -14,7 +14,7 @@ const style = /*css*/`
   position: absolute;
   width: 100%;
   height: 1px;
-  background: var(--s-color-surface-variant);
+  background: var(--s-color-surface-variant,#dce4e9);
   bottom: 0;
   left: 0;
 }
@@ -50,7 +50,7 @@ const style = /*css*/`
   height: 100%;
   max-width: 40px;
   height: 3px;
-  background: var(--s-color-primary);
+  background: var(--s-color-primary,#006783);
   border-radius: 3px 3px 0 0;
 }
 :host([mode=scrollable]) .thumb{
@@ -74,80 +74,66 @@ const style = /*css*/`
 const name = 's-tab'
 const props = {
   type: 'primary' as 'primary' | 'secondary',
-  mode: 'fixed' as 'fixed' | 'scrollable',
-  select: 0
+  mode: 'fixed' as 'fixed' | 'scrollable'
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props, propSyncs: ['type', 'mode'],
   setup() {
     const indicator = ref<HTMLElement>()
     const container = ref<HTMLElement>()
-    const slot = ref<HTMLSlotElement>()
-    const state: { select: number, items: Item[], selectItem?: Item } = { select: this.select, items: [] }
+    let options: Item[] = []
+    let selectIndex = -1
+    let changing = false
     const setIndicatorWidth = (value = '') => indicator.target.style.width = value
     const setIndicatorLeft = (value = '') => indicator.target.style.transform = value
-    const render = (animated?: boolean) => {
-      const old = state.selectItem
-      state.selectItem = state.items[state.select]
-      if (!state.selectItem) {
-        if (old) {
-          setIndicatorWidth()
-          old.checked = false
-        }
-        return
-      }
-      if (!state.selectItem.checked) state.selectItem.checked = true
-      state.items.forEach((value) => {
-        if (value === state.selectItem || !value.checked) return
-        value.checked = false
-      })
+    const update = (animated?: boolean) => {
+      if (selectIndex === -1) return setIndicatorWidth()
       indicator.target.classList[animated ? 'add' : 'remove']('animation')
       if (this.mode === 'fixed') {
-        setIndicatorWidth(`calc(100% / ${state.items.length})`)
-        setIndicatorLeft(`translateX(${state.select * 100}%)`)
+        setIndicatorWidth(`calc(100% / ${options.length})`)
+        setIndicatorLeft(`translateX(${selectIndex * 100}%)`)
       }
       if (this.mode === 'scrollable') {
-        setIndicatorWidth(`${state.selectItem.clientWidth}px`)
-        setIndicatorLeft(`translateX(${state.selectItem.offsetLeft - container.target.offsetLeft}px)`)
-        state.selectItem!.scrollIntoView({ behavior: animated ? 'smooth' : 'auto', inline: 'center' })
+        const select = options[selectIndex]
+        setIndicatorWidth(`${select.clientWidth}px`)
+        setIndicatorLeft(`translateX(${select.offsetLeft - container.target.offsetLeft}px)`)
+        select.scrollIntoView({ behavior: animated ? 'smooth' : 'auto', inline: 'center' })
       }
     }
-    const onTabChange = (event: Event) => {
-      const target = event.target as unknown as Item
-      const index = state.items.indexOf(target)
-      if (index !== state.select) {
-        state.select = index
-        render(true)
-        this.select = index
-        this.dispatchEvent(new Event('change'))
-      }
+    const slotChange = () => {
+      options = Array.from(this.children) as Item[]
+      selectIndex = options.findIndex((item) => item.checked)
+      if (selectIndex !== -1) update()
     }
-    const onSlotChange = () => {
-      state.items = slot.target.assignedElements() as Item[]
-      if (this.mode === 'fixed') render()
-    }
-    const obs = new ResizeObserver(() => render())
+    this.addEventListener('item:change', (event: Event) => {
+      event.stopPropagation()
+      if (changing) return
+      changing = true
+      if (!event.target || !(event.target instanceof Item)) return
+      const target = event.target
+      selectIndex = -1
+      options.forEach((item, index) => {
+        if (item === target && target.checked) return selectIndex = index
+        item.checked && (item.checked = false)
+      })
+      changing = false
+      update(true)
+      this.dispatchEvent(new Event('change'))
+    })
     return {
-      watches: {
-        select: () => {
-          if (this.select === state.select) return
-          state.select = this.select
-          render(true)
+      expose: {
+        get options() {
+          return options
         },
-        mode: () => {
-          if (this.mode === 'fixed') {
-            obs.unobserve(container.target)
-            render()
-          } else {
-            obs.observe(container.target)
-          }
+        get selectIndex() {
+          return selectIndex
         }
       },
       render: () => html`
         <style>${style}</style>
         <div class="container" part="container" ref="${container}">
-          <slot ref="${slot}" @slotchange="${onSlotChange}" @click="${onTabChange}"></slot>
+          <slot @slotchange="${slotChange}"></slot>
           <div part="indicator" ref="${indicator}" class="indicator">
             <div class="thumb"></div>
           </div>
@@ -156,6 +142,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

@@ -99,14 +99,14 @@ button.textContent = 'hello'
 document.body.appendChild(button)
 ```
 
-你也可以在浏览器中按需引入，这需要用到 module 方法引入
+你也可以在浏览器中按需引入，这需要用到 ES Module 方式
 ```html
 <s-root>
   <s-button> hello </s-button>
 </s-root>
 
 <script type="module">
-  import Root from 'https://unpkg.com/sober/dist/root.js'
+  import Page from 'https://unpkg.com/sober/dist/page.js'
   import Button from 'https://unpkg.com/sober/dist/button.js'
-  console.log(Root, Button)
+  console.log(Page, Button)
 </script>

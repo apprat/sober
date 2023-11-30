@@ -1,11 +1,11 @@
-import { defineElement, html } from './core/element'
+import { builder, html } from './core/element'
 
 const style = /*css*/`
 :host{
   display: inline-block;
   height: 56px;
   min-width: 240px;
-  border: solid 1px var(--s-color-outline);
+  border: solid 1px var(--s-color-outline,#70787d);
   border-radius: 4px;
 }
 `
@@ -20,7 +20,7 @@ const props = {
   max: -1
 }
 
-export default class Component extends defineElement({
+export default class Component extends builder({
   name, props,
   setup() {
     return {
@@ -33,6 +33,8 @@ export default class Component extends defineElement({
     }
   }
 }) { }
+
+Component.define()
 
 declare global {
   namespace JSX {

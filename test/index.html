@@ -20,131 +20,133 @@
 </head>
 
 <body>
-  <s-page>
-    <main>
-      <a href="./test.html">Test</a>
-      <a href="./ripple.html">Ripple</a>
-      <a href="./icon.html">Icon</a>
-      <a href="./icon-button.html">Icon Button</a>
-      <a href="./button.html">Button</a>
-      <a href="./floating-action-button.html">Floating Action Button</a>
-      <a href="./checkbox.html">Checkbox</a>
-      <a href="./radio-button.html">Radio Button</a>
-      <a href="./switch.html">Switch</a>
-      <a href="./tab.html">Tab</a>
-      <a href="./dialog.html">Dialog</a>
-      <a href="./label.html">Label</a>
-      <a href="./snackbar.html">Snackbar</a>
-      <a href="./tooltip.html">Tooltip</a>
-      <a href="./table.html">Table</a>
-      <a href="./scrollbar.html">Scrollbar</a>
-      <a href="./slider.html">Slider</a>
-      <a href="./segmented-button.html">Segmented Button</a>
-      <a href="./top-app-bar.html">Top App Bar</a>
-      <a href="./navigation-bar.html">Navigation Bar</a>
-      <a href="./card.html">Card</a>
-      <a href="./progress-indicator.html">Progress Indicator</a>
-      <a href="./text-field.html">Text Field</a>
-    </main>
-    <main>
-      <s-button>
-        <s-icon slot="start"></s-icon>
-        dark
-      </s-button>
-      <s-button type="filled">
-        <s-icon slot="start" src="search"></s-icon>
-        purple
-      </s-button>
-      <s-floating-action-button size="small">
-        <s-icon></s-icon>
-      </s-floating-action-button>
-      <s-icon-button>
-        <s-icon type="search"></s-icon>
-      </s-icon-button>
-      <s-checkbox></s-checkbox>
-      <s-checkbox checked="true"></s-checkbox>
-      <s-checkbox indeterminate="true"></s-checkbox>
-      <s-radio-button name="my"></s-radio-button>
-      <s-radio-button name="my" checked="true"></s-radio-button>
-      <s-switch></s-switch>
-      <s-switch checked="true"></s-switch>
-      <s-dialog positive="确认" negative="取消" size="full-screen">
-        <s-tooltip slot="trigger">
-          <s-button type="filled" slot="trigger">
-            full Dialog
-          </s-button>
-          hello dialog
-        </s-tooltip>
-        <s-icon type="close" slot="icon"></s-icon>
-        <div slot="headline">伪元素用于选定那些被放在 HTML 模板中的元素 (更多请查看 使用模板和插槽)</div>
-        <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded type. The
-          color system automatically handles critical adjustments that provide accessible color contrast. Learn more
-          about
-          color roles.</p>
-      </s-dialog>
+  <s-page theme="dark">
+    <s-scrollbar>
+      <main>
+        <a href="./test.html">Test</a>
+        <a href="./ripple.html">Ripple</a>
+        <a href="./icon.html">Icon</a>
+        <a href="./icon-button.html">Icon Button</a>
+        <a href="./button.html">Button</a>
+        <a href="./floating-action-button.html">Floating Action Button</a>
+        <a href="./checkbox.html">Checkbox</a>
+        <a href="./radio-button.html">Radio Button</a>
+        <a href="./switch.html">Switch</a>
+        <a href="./tab.html">Tab</a>
+        <a href="./dialog.html">Dialog</a>
+        <a href="./label.html">Label</a>
+        <a href="./snackbar.html">Snackbar</a>
+        <a href="./tooltip.html">Tooltip</a>
+        <a href="./table.html">Table</a>
+        <a href="./scrollbar.html">Scrollbar</a>
+        <a href="./slider.html">Slider</a>
+        <a href="./segmented-button.html">Segmented Button</a>
+        <a href="./top-app-bar.html">Top App Bar</a>
+        <a href="./navigation-bar.html">Navigation Bar</a>
+        <a href="./card.html">Card</a>
+        <a href="./progress-indicator.html">Progress Indicator</a>
+        <a href="./text-field.html">Text Field</a>
+      </main>
+      <main>
+        <s-button>
+          <s-icon slot="start"></s-icon>
+          dark
+        </s-button>
+        <s-button type="filled">
+          <s-icon slot="start" src="search"></s-icon>
+          purple
+        </s-button>
+        <s-floating-action-button>
+          <s-icon></s-icon>
+        </s-floating-action-button>
+        <s-icon-button>
+          <s-icon type="search"></s-icon>
+        </s-icon-button>
+        <s-checkbox></s-checkbox>
+        <s-checkbox checked="true"></s-checkbox>
+        <s-checkbox indeterminate="true"></s-checkbox>
+        <s-radio-button name="my"></s-radio-button>
+        <s-radio-button name="my" checked="true"></s-radio-button>
+        <s-switch></s-switch>
+        <s-switch checked="true"></s-switch>
+        <s-dialog positive="确认" negative="取消" size="full-screen">
+          <s-tooltip slot="trigger">
+            <s-button type="filled" slot="trigger">
+              full Dialog
+            </s-button>
+            hello dialog
+          </s-tooltip>
+          <s-icon type="close" slot="icon"></s-icon>
+          <div slot="headline">伪元素用于选定那些被放在 HTML 模板中的元素 (更多请查看 使用模板和插槽)</div>
+          <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded type. The
+            color system automatically handles critical adjustments that provide accessible color contrast. Learn more
+            about
+            color roles.</p>
+        </s-dialog>
 
 
-      <s-dialog positive="确认" negative="取消">
-        <s-tooltip slot="trigger">
-          <s-button type="filled" slot="trigger">
-            Dialog
-          </s-button>
-          hello dialog
-        </s-tooltip>
-        <s-icon type="search" slot="icon"></s-icon>
-        <div slot="headline">并且只会选择实际的元素节点</div>
-        <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded type. The
-          color system automatically handles critical adjustments that provide accessible color contrast. Learn more
-          about
-          color roles.</p>
-      </s-dialog>
+        <s-dialog positive="确认" negative="取消">
+          <s-tooltip slot="trigger">
+            <s-button type="filled" slot="trigger">
+              Dialog
+            </s-button>
+            hello dialog
+          </s-tooltip>
+          <s-icon type="search" slot="icon"></s-icon>
+          <div slot="headline">并且只会选择实际的元素节点</div>
+          <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded type. The
+            color system automatically handles critical adjustments that provide accessible color contrast. Learn more
+            about
+            color roles.</p>
+        </s-dialog>
 
-      <s-snackbar action="确认" duration="0">
-        <s-tooltip slot="trigger">
-          <s-button type="filled" slot="trigger">
-            snackbar
-          </s-button>
-          <img style="max-width: 200px;"
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQAAAACoxAthAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAd2KE6QAAAAJcEhZcwAAFxEAABcRAcom8z8AAAHMSURBVHja7dtBjoMwDEBRoy667BF6FI4GR+MoHKHLLqpmEtsJoYw0U6lFQfreIEjezlhOAhLeDoFAIBDI98hNlriESeQUH45duMf7zTAEshcZPEkf9uwUZpGK9D78hEAaJ09N7aGQmPzpgc6NxIchkAORSXKmS0l+COR4RKv5NZGzcQjkOMTy3RsSDS3jktrs//QwEMjnyRJak1Mm64qvD0rqYQikWfIauuIbSk3eDEMgzZI0PpfkTxGTX8Mr+90ajgsE0jzRSDU7XmbrUbSk+xbG/FLGIZDWiK/4riGP64rPwqdBIHsTjXueNnkmW3Jbme5CFRBI26SEvgMxnEg6vEsxbpIfAmmLjD75lLuLkDeHNfoQNmUcAmmObA7sUvIP9fvQQSB7k82ZxiNP7b1Ptk7D9yYgkEbJbZ3pVcJP5c73KSCQhsk6fMUn5cAurPaOIZBmya1KeX0m+dueYEfPvW3SjRBI42TwxK++txzFVnye/LI+sINAdiCrFZ9Ns8gZvm1IIJC2Sah+Murz+2A1uYNAjkOm9TGHf295tjO8CwTSNPEK/Vj65NFY8F8zftuFg0BaI0s4kfKVml3k70UiBPJR8mZAIBAI5EvkB0ea8yhUsjqlAAAAAElFTkSuQmCC">
-        </s-tooltip>
-        When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
-      </s-snackbar>
-      <s-icon src="search"></s-icon>
-      <s-progress-indicator type="circular" indeterminate="true"></s-progress-indicator>
-      <s-progress-indicator indeterminate="true"></s-progress-indicator>
-      <s-slider labeled="true"></s-slider>
-      <s-segmented-button>
-        <s-segmented-button-item>
-          <s-icon slot="start" type="done"></s-icon>
-          hello
-        </s-segmented-button-item>
-        <s-segmented-button-item>
-          index
-        </s-segmented-button-item>
-        <s-segmented-button-item>
-          users
-        </s-segmented-button-item>
+        <s-snackbar action="确认" duration="0">
+          <s-tooltip slot="trigger">
+            <s-button type="filled" slot="trigger">
+              snackbar
+            </s-button>
+            <img style="max-width: 200px;"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQAAAACoxAthAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAd2KE6QAAAAJcEhZcwAAFxEAABcRAcom8z8AAAHMSURBVHja7dtBjoMwDEBRoy667BF6FI4GR+MoHKHLLqpmEtsJoYw0U6lFQfreIEjezlhOAhLeDoFAIBDI98hNlriESeQUH45duMf7zTAEshcZPEkf9uwUZpGK9D78hEAaJ09N7aGQmPzpgc6NxIchkAORSXKmS0l+COR4RKv5NZGzcQjkOMTy3RsSDS3jktrs//QwEMjnyRJak1Mm64qvD0rqYQikWfIauuIbSk3eDEMgzZI0PpfkTxGTX8Mr+90ajgsE0jzRSDU7XmbrUbSk+xbG/FLGIZDWiK/4riGP64rPwqdBIHsTjXueNnkmW3Jbme5CFRBI26SEvgMxnEg6vEsxbpIfAmmLjD75lLuLkDeHNfoQNmUcAmmObA7sUvIP9fvQQSB7k82ZxiNP7b1Ptk7D9yYgkEbJbZ3pVcJP5c73KSCQhsk6fMUn5cAurPaOIZBmya1KeX0m+dueYEfPvW3SjRBI42TwxK++txzFVnye/LI+sINAdiCrFZ9Ns8gZvm1IIJC2Sah+Murz+2A1uYNAjkOm9TGHf295tjO8CwTSNPEK/Vj65NFY8F8zftuFg0BaI0s4kfKVml3k70UiBPJR8mZAIBAI5EvkB0ea8yhUsjqlAAAAAElFTkSuQmCC">
+          </s-tooltip>
+          When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
+        </s-snackbar>
+        <s-icon src="search"></s-icon>
+        <s-progress-indicator type="circular" indeterminate="true"></s-progress-indicator>
+        <s-progress-indicator indeterminate="true"></s-progress-indicator>
+        <s-slider labeled="true"></s-slider>
+        <s-segmented-button onchange="console.log('change',this.selectIndex)">
+          <s-segmented-button-item>
+            <s-icon slot="start" type="done"></s-icon>
+            hello
+          </s-segmented-button-item>
+          <s-segmented-button-item checked="true">
+            index
+          </s-segmented-button-item>
+          <s-segmented-button-item>
+            users
+          </s-segmented-button-item>
 
-        <s-segmented-button-item>
-          <s-icon slot="start" type="search"></s-icon>
-          users
-        </s-segmented-button-item>
-      </s-segmented-button>
-      <s-tab type="secondary" mode="scrollable">
-        <s-tab-item>
-          <div slot="text">destination</div>
-        </s-tab-item>
-        <s-tab-item>
-          <div slot="text">navigation</div>
-        </s-tab-item>
-        <s-tab-item>
-          <div slot="text">container</div>
-        </s-tab-item>
-        <s-tab-item>
-          <div slot="text">Secondary</div>
-        </s-tab-item>
-      </s-tab>
-    </main>
+          <s-segmented-button-item>
+            <s-icon slot="start" type="search"></s-icon>
+            users
+          </s-segmented-button-item>
+        </s-segmented-button>
+        <s-tab type="secondary" mode="scrollable" onchange="console.log('change',this.selectIndex)">
+          <s-tab-item>
+            <div slot="text">destination</div>
+          </s-tab-item>
+          <s-tab-item checked="true">
+            <div slot="text">navigation</div>
+          </s-tab-item>
+          <s-tab-item>
+            <div slot="text">container</div>
+          </s-tab-item>
+          <s-tab-item>
+            <div slot="text">Secondary</div>
+          </s-tab-item>
+        </s-tab>
+      </main>
+    </s-scrollbar>
   </s-page>
 
   <script src="../dist/bundle.min.js"></script>

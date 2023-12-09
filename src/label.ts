@@ -65,10 +65,10 @@ export default class Component extends builder({
       starNodes.forEach((value) => {
         switch (value.nodeName) {
           case 'S-CHECKBOX':
-            value?.click()
+            value.click()
             break
           case 'S-RADIO-BUTTON':
-            value?.click()
+            value.click()
             break
         }
       })

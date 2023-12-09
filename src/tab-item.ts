@@ -18,10 +18,6 @@ const style = /*css*/`
 }
 :host([checked=true]){
   color: var(--s-color-primary,#006783);
-  pointer-events: none;
-}
-::slotted(*){
-  pointer-events: none;
 }
 ::slotted([slot=icon]){
   height: 36px;

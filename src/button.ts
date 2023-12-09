@@ -35,7 +35,7 @@ const style = /*css*/`
   box-shadow: none;
 }
 :host([type=filled-tonal]){
-  background: var(--s-color-secondary-container,#cfe6f2;);
+  background: var(--s-color-secondary-container,#cfe6f2);
   color: var(--s-color-on-secondary-container,#081e27);
   box-shadow: none;
 }

@@ -28,7 +28,7 @@ const style = /*css*/`
   border-radius: inherit;
 }
 .animation {
-  background: currentColor;
+  background: var(--ripple-color,currentColor);
   border-radius: 50%;
   transition: opacity .8s;
   opacity: var(--ripple-opacity,.38);
@@ -38,6 +38,8 @@ const style = /*css*/`
   transform: translate(-50%,-50%) scale(0);
   left: var(--x);
   top: var(--y);
+  animation: ripple 800ms cubic-bezier(.2, .9, .1, .9);
+  animation-fill-mode: forwards;
 }
 .container::before{
   content: '';
@@ -45,12 +47,21 @@ const style = /*css*/`
   height: 100%;
   position: absolute;
   border-radius: inherit;
-  background: currentColor;
+  background: var(--ripple-color,currentColor);
   filter: opacity(0);
   transition: filter .2s;
+  will-change: filter;
 }
 .container.hover::before{
   filter: opacity(.12);
+}
+@keyframes ripple{
+  0%{
+    transform: translate(-50%,-50%) scale(0);
+  }
+  100%{
+    transform: translate(-50%,-50%) scale(1);
+  }
 }
 `
 
@@ -77,7 +88,7 @@ export default class Component extends builder({
         trigger.target = this.parentNode as HTMLElement
       }
     }
-    const onPress = (event: { clientX: number, clientY: number }) => {
+    const press = (event: { clientX: number, clientY: number }) => {
       const animation = document.createElement('div')
       animation.className = 'animation'
       const root = trigger.target
@@ -96,12 +107,7 @@ export default class Component extends builder({
         coordinate.x = `${x}px`
         coordinate.y = `${y}px`
       }
-      animation.style.setProperty('--size', `${size}px`)
-      animation.style.setProperty('--x', coordinate.x)
-      animation.style.setProperty('--y', coordinate.y)
-      animation.animate({
-        transform: ['translate(-50%,-50%) scale(0)', 'translate(-50%,-50%) scale(1)']
-      }, { duration: 800, fill: 'forwards', easing: 'cubic-bezier(.2, .9, .1, .9)' })
+      animation.setAttribute('style', `--size: ${size}px;--x: ${coordinate.x};--y: ${coordinate.y};`)
       container.target.appendChild(animation)
       const remove = () => animation.isConnected && container.target.removeChild(animation)
       const up = () => {
@@ -117,7 +123,7 @@ export default class Component extends builder({
     }
     const down = (event: PointerEvent) => {
       if (event.button !== 0) return
-      onPress(event)
+      press(event)
     }
     const addEvents = (root: HTMLElement) => {
       root.addEventListener('mouseover', hover)

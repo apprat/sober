@@ -4,7 +4,7 @@ const style = /*css*/`
 :host{
   display: flex;
   height: 64px;
-  background: var(--s-color-surface,#fbfcfe);
+  background: var(--s-color-surface-container,#eff1f3);
   color: var(--s-color-on-surface,#191c1e);
   align-items: center;
   padding: 0 8px;

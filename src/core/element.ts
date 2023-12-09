@@ -19,9 +19,20 @@ const parsePropType = (value: unknown, old: Prop) => {
   throw new TypeError()
 }
 
+const style = /*css*/ `
+:host{
+  user-select: none;
+  -webkit-user-select: none;
+}
+::selection{
+  background: var(--s-color-primary, #006783);
+  color: var(--s-color-on-primary, #ffffff);
+}
+`
+
 export const builder = <
   P extends { [x: string]: Prop } = {},
-  E extends {} = {}
+  E extends {} = {},
 >(options: {
   name: string
   props?: P
@@ -36,11 +47,11 @@ export const builder = <
     expose?: E
   }
 }): {
-  new(): P & Readonly<E> & HTMLElement
+  new(): P & E & HTMLElement
   readonly define: () => void
   prototype: HTMLElement
 } => {
-  const maps = new Map<HTMLElement, ElementData>()
+  const map = new Map<HTMLElement, ElementData>()
   const attributes: string[] = []
   for (const key in options.props) attributes.push(key)
   class CustomElement extends HTMLElement {
@@ -72,9 +83,9 @@ export const builder = <
         Object.defineProperty(this, key, { enumerable: true, get: () => realProps[key], set })
       }
       const setup = options.setup?.apply(this as never, [shadowRoot])
-      const style = document.createElement('style')
-      style.textContent = `:host{ user-select: none; -webkit-user-select: none }`
-      shadowRoot.appendChild(style)
+      const styled = document.createElement('style')
+      styled.textContent = style
+      shadowRoot.appendChild(styled)
       shadowRoot.appendChild(setup.render())
       elementData.adopted = setup.adopted
       elementData.mounted = setup.mounted
@@ -84,16 +95,16 @@ export const builder = <
       for (const key in setup.expose) {
         Object.defineProperty(this, key, { get: () => setup.expose?.[key] })
       }
-      maps.set(this, elementData)
+      map.set(this, elementData)
     }
     connectedCallback() {
-      maps.get(this)?.mounted?.()
+      map.get(this)?.mounted?.()
     }
     disconnectedCallback() {
-      maps.get(this)?.unmounted?.()
+      map.get(this)?.unmounted?.()
     }
     adoptedCallback() {
-      maps.get(this)?.adopted?.()
+      map.get(this)?.adopted?.()
     }
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
       this[name] = newValue ?? undefined
@@ -113,14 +124,14 @@ export const ref = <T extends Element = Element>() => {
   return new Ref(undefined as unknown as T)
 }
 
-type TemplateValue = Prop | Ref<Element> | DocumentFragment | Function
+type TemplateValue = Prop | Ref<Element> | Function
 
 const parse = (random: string, template: TemplateStringsArray, values: TemplateValue[]) => {
   const newValues: TemplateValue[] = []
   let str = ''
   template.raw.forEach((item, index) => {
     const value = values[index] ?? ''
-    if (value instanceof Ref || value instanceof DocumentFragment || value instanceof Function) {
+    if (value instanceof Ref || value instanceof Function) {
       str += item + random
       newValues.push(value)
       return
@@ -176,7 +187,7 @@ export const html = (template: TemplateStringsArray, ...args: TemplateValue[]) =
       const value = `<!--${element.textContent}-->`
       if (value === marker) {
         const argsVal = obj.getValue()
-        element.parentNode?.replaceChild(argsVal instanceof DocumentFragment ? argsVal : document.createTextNode(String(argsVal)), element)
+        element.parentNode?.replaceChild(document.createTextNode(String(argsVal)), element)
       }
     }
   })

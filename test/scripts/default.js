@@ -1,11 +1,13 @@
-// const fab = document.createElement('s-floating-action-button')
-// fab.size = 'small'
-// const icon = document.createElement('s-icon')
-// icon.type = 'done'
-// fab.appendChild(icon)
-// const root = document.body.firstElementChild
-// root && root.firstElementChild ? root.insertBefore(fab, root.firstElementChild) : document.body.appendChild(fab)
-
-// const darkStyle = document.createElement('style')
-// darkStyle.textContent = `@import url('../theme/dark.css')`
-// fab.addEventListener('click', () => document.head[!darkStyle.isConnected ? 'appendChild' : 'removeChild'](darkStyle))
+const fab = document.createElement('s-floating-action-button')
+const icon = document.createElement('s-icon')
+icon.type = 'dark_mode'
+fab.appendChild(icon)
+fab.setAttribute('style', `position: fixed;right: 0;bottom: 0;`)
+const page = document.body.firstElementChild
+if (page && page.tagName === 'S-PAGE') {
+  page.appendChild(fab)
+  fab.addEventListener('click', () => {
+    page.theme = page.theme === 'dark' ? 'light' : 'dark'
+    icon.type = page.theme === 'dark' ? 'light_mode' : 'dark_mode'
+  })
+}

@@ -11,7 +11,7 @@ const style = /*css*/`
   position: relative;
   font-size: .75rem;
   font-weight: 500;
-  height: 80px;
+  height: 72px;
   box-sizing: border-box;
   padding: 12px 0 16px 0;
   width: 100%;

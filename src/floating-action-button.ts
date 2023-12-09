@@ -12,7 +12,7 @@ const style = /*css*/`
   box-sizing: border-box;
   height: 56px;
   width: 56px;
-  margin: 16px;
+  margin: 24px;
   border-radius: 50%;
   background: var(--s-color-primary-container,#bce9ff);
   color: var(--s-color-on-primary-container,#001f29);

@@ -15,8 +15,7 @@ const style = /*css*/`
   justify-content: center;
   pointer-events: none;
   z-index: 1;
-  transform: translateY(100%);
-  filter: opacity(1);
+  overflow: hidden;
 }
 .container{
   background: var(--s-color-inverse-surface,#2e3132);
@@ -32,13 +31,20 @@ const style = /*css*/`
   font-size: .875rem;
   font-weight: 400;
   margin: 16px;
-}
-.show .container{
   pointer-events: auto;
+  transform: translateY(100%);
+  filter: opacity(0);
+  transition: transform .2s,filter .2s;
+}
+.wrapper.show .container{
+  transform: translateY(0%);
+  filter: opacity(1);
 }
 .supporting-text{
   margin: 12px 16px;
   flex-grow: 1;
+  user-select: text;
+  -webkit-user-select: text;
 }
 .action{
   font-size: inherit;
@@ -92,45 +98,46 @@ const make = (options: string | {
     snackbar.textContent = options.text
   }
   view.appendChild(snackbar)
-  window.getComputedStyle(snackbar).top
-  snackbar.addEventListener('dimiss', () => view.removeChild(snackbar))
+  snackbar.addEventListener('dismissed', () => view.removeChild(snackbar))
   snackbar.show()
 }
 
-export default class Component extends builder({
+class Component extends builder({
   name, props,
   setup() {
     const wrapper = ref<HTMLElement>()
     const action = ref<HTMLElement>()
     const state = { timer: 0 }
-    const animateOptions = { duration: 200, fill: 'forwards', easing: 'linear' } as const
     const show = () => {
       clearTimeout(state.timer)
-      const animation = wrapper.target.animate({ transform: ['translateY(100%)', 'translateY(0%)'], filter: ['opacity(0)', 'opacity(1)'] }, animateOptions)
-      animation.addEventListener('finish', () => this.dispatchEvent(new Event('show')))
-      animation.addEventListener('cancel', dimiss)
+      getComputedStyle(wrapper.target).top
       wrapper.target.classList.add('show')
-      if (this.duration > 0) state.timer = setTimeout(dimiss, this.duration)
+      this.dispatchEvent(new Event('show'))
+      if (this.duration > 0) state.timer = setTimeout(dismiss, this.duration)
     }
-    const dimiss = () => {
+    const dismiss = () => {
       clearTimeout(state.timer)
-      const animation = wrapper.target.animate({ transform: ['translateY(0%)', 'translateY(100%)'], filter: ['opacity(1)', 'opacity(0)'] }, animateOptions)
-      animation.addEventListener('finish', () => this.dispatchEvent(new Event('dimiss')))
       wrapper.target.classList.remove('show')
+      this.dispatchEvent(new Event('dismiss'))
     }
     const onAction = () => {
       if (!this.dispatchEvent(new Event('action', { cancelable: true }))) return
-      dimiss()
+      dismiss()
+    }
+    const transitionEnd = (event: TransitionEvent) => {
+      if (event.propertyName !== 'transform') return
+      const showed = wrapper.target.classList.contains('show')
+      this.dispatchEvent(new Event(showed ? 'showed' : 'dismissed'))
     }
     return {
-      expose: { show, dimiss },
+      expose: { show, dismiss },
       watches: {
         action: (value) => action.target.textContent = value
       },
       render: () => html`
         <style>${style}</style>
         <slot name="trigger" @click="${show}"></slot>
-        <div class="wrapper" ref="${wrapper}">
+        <div class="wrapper" ref="${wrapper}" @transitionend="${transitionEnd}">
           <div class="container" part="container">
             <div class="supporting-text">
               <slot></slot>
@@ -147,14 +154,26 @@ export default class Component extends builder({
 
 Component.define()
 
+interface EventMap extends HTMLElementEventMap {
+  show: Event
+  showed: Event
+  dismiss: Event
+  dismissed: Event
+  action: Event
+}
+
+interface Component {
+  addEventListener<K extends keyof EventMap>(type: K, listener: (this: Component, ev: EventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof EventMap>(type: K, listener: (this: Component, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
+}
+
+export default Component
+
 declare global {
   namespace JSX {
     interface IntrinsicElements {
       [name]: Partial<typeof props> & { [name: string]: unknown }
     }
-  }
-  interface GlobalEventHandlersEventMap {
-    action: Event
   }
   interface HTMLElementTagNameMap {
     [name]: Component

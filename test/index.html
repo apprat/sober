@@ -20,7 +20,7 @@
 </head>
 
 <body>
-  <s-page theme="dark">
+  <s-page>
     <s-scrollbar>
       <main>
         <a href="./test.html">Test</a>
@@ -74,7 +74,7 @@
             <s-button type="filled" slot="trigger">
               full Dialog
             </s-button>
-            hello dialog
+            hello dialogss
           </s-tooltip>
           <s-icon type="close" slot="icon"></s-icon>
           <div slot="headline">伪元素用于选定那些被放在 HTML 模板中的元素 (更多请查看 使用模板和插槽)</div>
@@ -85,12 +85,24 @@
         </s-dialog>
 
 
+        <s-snackbar action="确认" duration="0">
+          <s-tooltip slot="trigger">
+            <s-button type="filled" slot="trigger">
+              snackbar
+            </s-button>
+            <img style="max-width: 200px;"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQAAAACoxAthAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAd2KE6QAAAAJcEhZcwAAFxEAABcRAcom8z8AAAHMSURBVHja7dtBjoMwDEBRoy667BF6FI4GR+MoHKHLLqpmEtsJoYw0U6lFQfreIEjezlhOAhLeDoFAIBDI98hNlriESeQUH45duMf7zTAEshcZPEkf9uwUZpGK9D78hEAaJ09N7aGQmPzpgc6NxIchkAORSXKmS0l+COR4RKv5NZGzcQjkOMTy3RsSDS3jktrs//QwEMjnyRJak1Mm64qvD0rqYQikWfIauuIbSk3eDEMgzZI0PpfkTxGTX8Mr+90ajgsE0jzRSDU7XmbrUbSk+xbG/FLGIZDWiK/4riGP64rPwqdBIHsTjXueNnkmW3Jbme5CFRBI26SEvgMxnEg6vEsxbpIfAmmLjD75lLuLkDeHNfoQNmUcAmmObA7sUvIP9fvQQSB7k82ZxiNP7b1Ptk7D9yYgkEbJbZ3pVcJP5c73KSCQhsk6fMUn5cAurPaOIZBmya1KeX0m+dueYEfPvW3SjRBI42TwxK++txzFVnye/LI+sINAdiCrFZ9Ns8gZvm1IIJC2Sah+Murz+2A1uYNAjkOm9TGHf295tjO8CwTSNPEK/Vj65NFY8F8zftuFg0BaI0s4kfKVml3k70UiBPJR8mZAIBAI5EvkB0ea8yhUsjqlAAAAAElFTkSuQmCC">
+          </s-tooltip>
+          When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
+        </s-snackbar>
+
+
         <s-dialog positive="确认" negative="取消">
           <s-tooltip slot="trigger">
             <s-button type="filled" slot="trigger">
               Dialog
             </s-button>
-            hello dialog
+            hello dialogxxxx
           </s-tooltip>
           <s-icon type="search" slot="icon"></s-icon>
           <div slot="headline">并且只会选择实际的元素节点</div>
@@ -101,13 +113,9 @@
         </s-dialog>
 
         <s-snackbar action="确认" duration="0">
-          <s-tooltip slot="trigger">
-            <s-button type="filled" slot="trigger">
-              snackbar
-            </s-button>
-            <img style="max-width: 200px;"
-              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQAAAACoxAthAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAd2KE6QAAAAJcEhZcwAAFxEAABcRAcom8z8AAAHMSURBVHja7dtBjoMwDEBRoy667BF6FI4GR+MoHKHLLqpmEtsJoYw0U6lFQfreIEjezlhOAhLeDoFAIBDI98hNlriESeQUH45duMf7zTAEshcZPEkf9uwUZpGK9D78hEAaJ09N7aGQmPzpgc6NxIchkAORSXKmS0l+COR4RKv5NZGzcQjkOMTy3RsSDS3jktrs//QwEMjnyRJak1Mm64qvD0rqYQikWfIauuIbSk3eDEMgzZI0PpfkTxGTX8Mr+90ajgsE0jzRSDU7XmbrUbSk+xbG/FLGIZDWiK/4riGP64rPwqdBIHsTjXueNnkmW3Jbme5CFRBI26SEvgMxnEg6vEsxbpIfAmmLjD75lLuLkDeHNfoQNmUcAmmObA7sUvIP9fvQQSB7k82ZxiNP7b1Ptk7D9yYgkEbJbZ3pVcJP5c73KSCQhsk6fMUn5cAurPaOIZBmya1KeX0m+dueYEfPvW3SjRBI42TwxK++txzFVnye/LI+sINAdiCrFZ9Ns8gZvm1IIJC2Sah+Murz+2A1uYNAjkOm9TGHf295tjO8CwTSNPEK/Vj65NFY8F8zftuFg0BaI0s4kfKVml3k70UiBPJR8mZAIBAI5EvkB0ea8yhUsjqlAAAAAElFTkSuQmCC">
-          </s-tooltip>
+          <s-button type="filled" slot="trigger">
+            snackbar2
+          </s-button>
           When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
         </s-snackbar>
         <s-icon src="search"></s-icon>
@@ -131,7 +139,7 @@
             users
           </s-segmented-button-item>
         </s-segmented-button>
-        <s-tab type="secondary" mode="scrollable" onchange="console.log('change',this.selectIndex)">
+        <s-tab mode="scrollable" onchange="console.log('change',this.selectIndex)">
           <s-tab-item>
             <div slot="text">destination</div>
           </s-tab-item>
@@ -146,10 +154,11 @@
           </s-tab-item>
         </s-tab>
       </main>
+
     </s-scrollbar>
   </s-page>
 
-  <script src="../dist/bundle.min.js"></script>
+  <script src="../dist/sober.min.js"></script>
   <script src="./scripts//default.js"></script>
   <script>
 

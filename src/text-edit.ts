@@ -43,10 +43,6 @@ const style = /*css*/`
 .box::placeholder{
   color: var(--placeholder-color,color-mix(in srgb ,currentColor 38%, transparent));
 }
-.box::selection{
-  background: var(--selection-background-color, var(--s-color-primary,#006783));
-  color: var(--selection-color, var(--s-color-on-primary,#ffffff));
-}
 :host([mode=multiLine]) .single{
   display: none;
 }

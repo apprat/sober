@@ -4,7 +4,7 @@ import { uglify } from 'rollup-plugin-uglify'
 export default defineConfig({
   input: './dev/rollup.js',
   output: {
-    file: 'dist/bundle.min.js',
+    file: 'dist/sober.min.js',
     format: 'umd',
     sourcemap: true,
     name: 'sober'

@@ -1,5 +1,5 @@
-import { builder, html } from './core/element'
-import './ripple'
+import { builder, html } from './core/element.js'
+import './ripple.js'
 
 const style = /*css*/`
 :host{

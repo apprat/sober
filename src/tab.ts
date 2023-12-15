@@ -1,5 +1,5 @@
-import { builder, html, ref } from './core/element'
-import Item from './tab-item'
+import { builder, html, ref } from './core/element.js'
+import type Item from './tab-item.js'
 
 const style = /*css*/`
 :host{
@@ -110,8 +110,8 @@ export default class Component extends builder({
       event.stopPropagation()
       if (changing) return
       changing = true
-      if (!event.target || !(event.target instanceof Item)) return
-      const target = event.target
+      if (!event.target) return
+      const target = event.target as Item
       selectIndex = -1
       options.forEach((item, index) => {
         if (item === target && target.checked) return selectIndex = index

@@ -46,6 +46,8 @@
         <a href="./card.html">Card</a>
         <a href="./progress-indicator.html">Progress Indicator</a>
         <a href="./text-field.html">Text Field</a>
+        <a href="./drawer.html">Drawer</a>
+        <a href="./navigation-rail.html">Bavigation Rail</a>
       </main>
       <main>
         <s-button>
@@ -154,12 +156,29 @@
           </s-tab-item>
         </s-tab>
       </main>
-
+      <s-navigation-bar onchange="console.log('change',this.selectIndex)">
+        <s-navigation-bar-item checked="true">
+          <s-icon slot="icon"></s-icon>
+          <div slot="text">Home</div>
+        </s-navigation-bar-item>
+        <s-navigation-bar-item badge="99">
+          <s-icon type="visibility" slot="icon"></s-icon>
+          <div slot="text">Chat</div>
+        </s-navigation-bar-item>
+        <s-navigation-bar-item>
+          <s-icon type="dark_mode" slot="icon"></s-icon>
+          <div slot="text">Dark</div>
+        </s-navigation-bar-item>
+        <s-navigation-bar-item badge="5">
+          <s-icon type="light_mode" slot="icon"></s-icon>
+          <div slot="text">Light</div>
+        </s-navigation-bar-item>
+      </s-navigation-bar>
     </s-scrollbar>
   </s-page>
 
-  <script src="../dist/sober.min.js"></script>
-  <script src="./scripts//default.js"></script>
+  <script type="module" src="../dist/main.js"></script>
+  <script src="./scripts/default.js"></script>
   <script>
 
   </script>

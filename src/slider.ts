@@ -1,5 +1,5 @@
-import { builder, html, ref } from './core/element'
-import { device } from './core/utils'
+import { builder, html, ref } from './core/element.js'
+import { device } from './core/utils.js'
 
 const style = /*css*/`
 :host{

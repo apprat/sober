@@ -1,4 +1,4 @@
-import { builder, html } from './core/element'
+import { builder, html } from './core/element.js'
 
 const style = /*css*/`
 :host{

@@ -3,6 +3,7 @@ import './ripple.js'
 
 const style = /*css*/`
 :host{
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,7 +12,7 @@ const style = /*css*/`
   position: relative;
   font-size: .75rem;
   font-weight: 500;
-  height: 64px;
+  height: 80px;
   box-sizing: border-box;
   width: 100%;
   max-width: 80px;
@@ -51,7 +52,7 @@ const style = /*css*/`
   color: var(--s-color-on-error, #ffffff);
   position: absolute;
   right: 16px;
-  top: 4px;
+  top: 12px;
   padding: 3px 6px;
   border-radius: 12px;
   font-size: .625rem;
@@ -70,7 +71,7 @@ const style = /*css*/`
 }
 `
 
-const name = 's-navigation-bar-item'
+const name = 's-navigation-rail-item'
 const props = {
   checked: false,
   badge: ''

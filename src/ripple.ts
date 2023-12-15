@@ -1,5 +1,5 @@
-import { builder, html, ref } from './core/element'
-import { device } from './core/utils'
+import { builder, html, ref } from './core/element.js'
+import { device } from './core/utils.js'
 
 const style = /*css*/`
 :host{
@@ -91,12 +91,11 @@ export default class Component extends builder({
     const press = (event: { clientX: number, clientY: number }) => {
       const animation = document.createElement('div')
       animation.className = 'animation'
-      const root = trigger.target
-      const { offsetWidth, offsetHeight } = root
+      const { offsetWidth, offsetHeight } = container.target
       let size = Math.sqrt(offsetWidth * offsetWidth + offsetHeight * offsetHeight)
       const coordinate = { x: '50%', y: '50%' }
       if (!this.centered) {
-        const { left, top } = root.getBoundingClientRect()
+        const { left, top } = container.target.getBoundingClientRect()
         const x = event.clientX - left
         const y = event.clientY - top
         const h = offsetHeight / 2

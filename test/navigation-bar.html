@@ -12,27 +12,27 @@
   <s-page>
     <main>
       <s-navigation-bar>
-        <s-navigation-bar-item>
+        <s-navigation-bar-item checked="true">
           <s-icon slot="icon"></s-icon>
-          <div slot="text">Mail</div>
+          <div slot="text">Home</div>
         </s-navigation-bar-item>
-        <s-navigation-bar-item>
+        <s-navigation-bar-item badge="99">
           <s-icon type="visibility" slot="icon"></s-icon>
           <div slot="text">Chat</div>
         </s-navigation-bar-item>
         <s-navigation-bar-item>
-          <s-icon type="menu" slot="icon"></s-icon>
-          <div slot="text">rooms</div>
+          <s-icon type="dark_mode" slot="icon"></s-icon>
+          <div slot="text">Dark</div>
         </s-navigation-bar-item>
-        <s-navigation-bar-item>
-          <s-icon type="search" slot="icon"></s-icon>
-          <div slot="text">meet</div>
+        <s-navigation-bar-item badge="5">
+          <s-icon type="light_mode" slot="icon"></s-icon>
+          <div slot="text">Light</div>
         </s-navigation-bar-item>
       </s-navigation-bar>
     </main>
   </s-page>
-  <script src="../dist/sober.min.js"></script>
-  <script src="./scripts//default.js"></script>
+  <script type="module" src="../dist/main.js"></script>
+  <script src="./scripts/default.js"></script>
 </body>
 
 </html>

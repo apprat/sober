@@ -1,4 +1,4 @@
-import { builder, html } from './core/element'
+import { builder, html } from './core/element.js'
 
 const style = /*css*/`
 :host{
@@ -8,6 +8,10 @@ const style = /*css*/`
   color: var(--s-color-on-surface,#191c1e);
   align-items: center;
   padding: 0 8px;
+  transition: box-shadow .2,background .2s;
+}
+:host([elevated=true]){
+  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
 }
 .container{
   display: contents;
@@ -85,10 +89,11 @@ slot[name=action]{
 const name = 's-top-app-bar'
 const props = {
   size: 'center-aligned' as 'center-aligned' | 'small' | 'medium' | 'large',
+  elevated: false
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: ['size'],
+  name, props, propSyncs: ['size', 'elevated'],
   setup() {
     return {
       render: () => html`

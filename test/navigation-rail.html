@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+</head>
+
+<body>
+  <s-page>
+    <s-navigation-rail>
+      <s-icon-button slot="menu" type="filled-tonal">
+        <s-icon type="menu"></s-icon>
+      </s-icon-button>
+
+      <s-navigation-rail-item checked="true">
+        <s-icon slot="icon"></s-icon>
+        <div slot="text">Home</div>
+      </s-navigation-rail-item>
+      <s-navigation-rail-item badge="99">
+        <s-icon type="visibility" slot="icon"></s-icon>
+        <div slot="text">Chat</div>
+      </s-navigation-rail-item>
+      <s-navigation-rail-item>
+        <s-icon type="dark_mode" slot="icon"></s-icon>
+        <div slot="text">Dark</div>
+      </s-navigation-rail-item>
+      <s-navigation-rail-item badge="5">
+        <s-icon type="light_mode" slot="icon"></s-icon>
+        <div slot="text">Light</div>
+      </s-navigation-rail-item>
+      <div slot="end" style="display: flex;align-items: flex-end;justify-content: center;">
+        <s-icon-button slot="menu" type="outlined" style="margin: 16px 0;">
+          <s-icon type="dark_mode"></s-icon>
+        </s-icon-button>
+      </div>
+    </s-navigation-rail>
+  </s-page>
+  <script type="module" src="../dist/main.js"></script>
+  <script src="./scripts/default.js"></script>
+</body>
+
+</html>

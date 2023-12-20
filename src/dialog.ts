@@ -83,7 +83,7 @@ const style = /*css*/`
   font-size: 1.5rem;
   line-height: 1.6;
   font-weight: 600;
-  color: var(--s-color-on-surface, #191c1e);
+  color: var(--s-color-on-surface, #1d1b20);
   flex-shrink: 0;
 }
 .supporting-text{
@@ -118,7 +118,7 @@ const style = /*css*/`
   text-transform: capitalize;
   box-sizing: border-box;
   font-size: .875rem;
-  color: var(--s-color-primary,#006783);
+  color: var(--s-color-primary,#6750a4);
   margin: 20px 0;
 }
 .action>s-ripple:empty{
@@ -130,13 +130,13 @@ const style = /*css*/`
     height: 8px;
   }
   .supporting-text::-webkit-scrollbar-track-piece{
-    background: var(--s-color-outline-variant,#c0c8cc);
+    background: var(--s-color-outline-variant,#cac4d0);
   }
   .supporting-text::-webkit-scrollbar-corner{
-    background: var(--s-color-outline-variant,#c0c8cc);
+    background: var(--s-color-outline-variant,#cac4d0);
   }
   .supporting-text::-webkit-scrollbar-thumb{
-    background: var(--s-color-outline,#70787d);
+    background: var(--s-color-outline,#79747e);
   }
 }
 `

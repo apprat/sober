@@ -18,8 +18,8 @@ const style = /*css*/`
   overflow: hidden;
 }
 .container{
-  background: var(--s-color-inverse-surface,#2e3132);
-  color: var(--s-color-inverse-on-surface,#eff1f3);
+  background: var(--s-color-inverse-surface,#322f35);
+  color: var(--s-color-inverse-on-surface,#f5eff7);
   min-height: 48px;
   border-radius: 4px;
   box-shadow: var(--s-elevation-level3,0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
@@ -50,7 +50,7 @@ const style = /*css*/`
   font-size: inherit;
   flex-shrink: 0;
   border-radius: 4px;
-  color: var(--s-color-inverse-primary,#61d4ff);
+  color: var(--s-color-inverse-primary,#d0bcff);
   margin-right: 8px;
   margin-left: -8px;
   min-height: 36px;

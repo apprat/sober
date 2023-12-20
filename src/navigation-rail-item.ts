@@ -12,16 +12,16 @@ const style = /*css*/`
   position: relative;
   font-size: .75rem;
   font-weight: 500;
-  height: 80px;
+  height: 72px;
   box-sizing: border-box;
   width: 100%;
   max-width: 80px;
   text-transform: capitalize;
-  color: var(--s-color-on-surface-variant,#40484c);
+  color: var(--s-color-on-surface-variant,#49454f);
   transition: color .2s;
 }
 :host([checked=true]){
-  color: var(--s-color-primary,#006783);
+  color: var(--s-color-primary,#6750a4);
 }
 .icon{
   position: relative;
@@ -42,23 +42,16 @@ const style = /*css*/`
   top: 0;
   transform: scale(0);
   transition: transform .2s;
-  background: var(--s-color-secondary-container);
+  background: var(--s-color-secondary-container,#e8def8);
 }
 :host([checked=true]) .icon::before{
   transform: scale(1);
 }
 .badge{
-  background: var(--s-color-error, #ba1a1a);
-  color: var(--s-color-on-error, #ffffff);
   position: absolute;
-  right: 16px;
-  top: 12px;
-  padding: 3px 6px;
-  border-radius: 12px;
-  font-size: .625rem;
-}
-.badge:empty{
-  display: none;
+  top: 8px;
+  left: 50%;
+  margin-left: 4px;
 }
 ::slotted([slot=icon]){
   position: relative;
@@ -74,7 +67,7 @@ const style = /*css*/`
 const name = 's-navigation-rail-item'
 const props = {
   checked: false,
-  badge: ''
+  badge: 0
 }
 
 export default class Component extends builder({
@@ -87,8 +80,7 @@ export default class Component extends builder({
         checked: () => {
           if (!this.parentNode) return
           this.dispatchEvent(new Event('item:change', { bubbles: true }))
-        },
-        badge: (value) => badge.target.textContent = value
+        }
       },
       render: () => html`
         <style>${style}</style>
@@ -96,7 +88,9 @@ export default class Component extends builder({
           <slot name="icon"></slot>
         </div>
         <slot name="text"></slot>
-        <div class="badge" ref="${badge}"></div>
+        <div class="badge">
+          <slot name="badge"></slot>
+        </div>
         <s-ripple attached="true" class="ripple"></s-ripple>
       `
     }

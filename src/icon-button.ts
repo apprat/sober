@@ -11,34 +11,34 @@ const style = /*css*/`
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  color: var(--s-color-on-surface-variant,#40484c);
+  color: var(--s-color-on-surface-variant,#49454f);
   position: relative;
   box-sizing: border-box;
 }
 :host([disabled=true]){
   pointer-events: none;
-  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 38%, transparent) !important;
 }
 :host([type=filled]){
-  background: var(--s-color-primary,#006783);
+  background: var(--s-color-primary,#6750a4);
   color: var(--s-color-on-primary,#ffffff);
 }
 :host([type=filled][disabled=true]){
-  background: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent) !important;
+  background: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent) !important;
 }
 :host([type=filled-tonal]){
-  background: var(--s-color-secondary-container,#cfe6f2);
-  color: var(--s-color-on-secondary-container,#081e27);
+  background: var(--s-color-secondary-container,#e8def8);
+  color: var(--s-color-on-secondary-container,#1d192b);
 }
 :host([type=filled-tonal][disabled=true]){
-  background: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent) !important;
+  background: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent) !important;
 }
 :host([type=outlined]){
-  border: solid 1px var(--s-color-outline,#70787d);
+  border: solid 1px var(--s-color-outline,#79747e);
 }
 :host([type=outlined][disabled=true]){
   background: none !important;
-  border-color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
+  border-color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent);
 }
 `
 

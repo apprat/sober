@@ -10,77 +10,120 @@
 
 <body>
   <s-page>
-    <main style="height: 200px;">
-      <s-tab>
-        <s-tab-item><s-icon slot="icon" src="search"></s-icon>
-          <div slot="text">首页</div>
-        </s-tab-item>
-        <s-tab-item><s-icon slot="icon"></s-icon>
-          <div slot="text">首页</div>
-        </s-tab-item>
-        <s-tab-item><s-icon slot="icon"></s-icon>
-          <div slot="text">首页</div>
-        </s-tab-item>
-        <s-tab-item><s-icon slot="icon"></s-icon>
-          <div slot="text">首页</div>
-        </s-tab-item>
-      </s-tab>
-    </main>
-
     <main>
-      <s-tab type="secondary">
+      <s-tab mode="scrollable" onchange="console.log('change',this.selectIndex)">
         <s-tab-item>
-          <div slot="text">首页</div>
+          <s-icon type="visibility" slot="icon"></s-icon>
+          <div slot="text">destination</div>
+        </s-tab-item>
+        <s-tab-item checked="true">
+          <s-icon type="visibility" slot="icon"></s-icon>
+          <div slot="text">navigation</div>
         </s-tab-item>
         <s-tab-item>
-          <div slot="text">首页</div>
+          <s-icon type="light_mode" slot="icon"></s-icon>
+          <div slot="text">container</div>
+          <s-badge slot="badge">16</s-badge>
         </s-tab-item>
         <s-tab-item>
-          <div slot="text">首页</div>
-        </s-tab-item>
-        <s-tab-item>
-          <div slot="text">首页</div>
+          <s-icon type="dark_mode" slot="icon"></s-icon>
+          <div slot="text">Secondary</div>
+          <s-badge slot="badge"></s-badge>
         </s-tab-item>
       </s-tab>
-    </main>
-
-
-    <main style="height: 200px;">
-      <s-tab mode="scrollable">
-        <s-tab-item><s-icon slot="icon" src="search"></s-icon>
-          <div slot="text">首页</div>
-        </s-tab-item>
-        <s-tab-item><s-icon slot="icon"></s-icon>
-          <div slot="text">首页</div>
-        </s-tab-item>
-        <s-tab-item><s-icon slot="icon"></s-icon>
-          <div slot="text">首页</div>
-        </s-tab-item>
-        <s-tab-item><s-icon slot="icon"></s-icon>
-          <div slot="text">首页</div>
-        </s-tab-item>
-      </s-tab>
-    </main>
-
-    <main>
-      <s-tab type="secondary" mode="scrollable">
+      <s-tab mode="scrollable" style="justify-content: right;" onchange="console.log('change',this.selectIndex)">
         <s-tab-item>
           <div slot="text">destination</div>
         </s-tab-item>
-        <s-tab-item>
+        <s-tab-item checked="true">
           <div slot="text">navigation</div>
+          <s-badge slot="badge">16</s-badge>
         </s-tab-item>
         <s-tab-item>
           <div slot="text">container</div>
         </s-tab-item>
         <s-tab-item>
           <div slot="text">Secondary</div>
+          <s-badge slot="badge"></s-badge>
+        </s-tab-item>
+      </s-tab>
+      <s-tab mode="scrollable" onchange="console.log('change',this.selectIndex)">
+        <s-tab-item>
+          <div slot="text">destination</div>
+        </s-tab-item>
+        <s-tab-item checked="true">
+          <div slot="text">navigation</div>
+          <s-badge slot="badge">16</s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">container</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">Secondary</div>
+          <s-badge slot="badge"></s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">navigation</div>
+          <s-badge slot="badge">16</s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">container</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">Secondary</div>
+          <s-badge slot="badge"></s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">Secondary</div>
+          <s-badge slot="badge"></s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">navigation</div>
+          <s-badge slot="badge">16</s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">container</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">Secondary</div>
+          <s-badge slot="badge"></s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">Secondary</div>
+          <s-badge slot="badge"></s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">navigation</div>
+          <s-badge slot="badge">16</s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">container</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">Secondary</div>
+          <s-badge slot="badge"></s-badge>
+        </s-tab-item>
+      </s-tab>
+      <s-tab onchange="console.log('change',this.selectIndex)">
+        <s-tab-item>
+          <div slot="text">destination</div>
+        </s-tab-item>
+        <s-tab-item checked="true">
+          <div slot="text">navigation</div>
+          <s-badge slot="badge">16</s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">container</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">Secondary</div>
+          <s-badge slot="badge"></s-badge>
         </s-tab-item>
       </s-tab>
     </main>
   </s-page>
   <script type="module" src="../dist/main.js"></script>
-  <script src="./scripts/default.js"></script>
+  <script type="module" src="./scripts/default.js"></script>
 </body>
 
 </html>

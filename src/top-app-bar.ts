@@ -4,8 +4,8 @@ const style = /*css*/`
 :host{
   display: flex;
   height: 64px;
-  background: var(--s-color-surface-container,#eff1f3);
-  color: var(--s-color-on-surface,#191c1e);
+  background: var(--s-color-surface-container,#f3edf7);
+  color: var(--s-color-on-surface,#1d1b20);
   align-items: center;
   padding: 0 8px;
   transition: box-shadow .2,background .2s;

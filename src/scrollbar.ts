@@ -11,13 +11,13 @@ const style = /*css*/`
     height: 8px;
   }
   :host::-webkit-scrollbar-track-piece{
-    background: var(--s-color-outline-variant,#c0c8cc);
+    background: var(--s-color-outline-variant,#cac4d0);
   }
   :host::-webkit-scrollbar-corner{
-    background: var(--s-color-outline-variant,#c0c8cc);
+    background: var(--s-color-outline-variant,#cac4d0);
   }
   :host::-webkit-scrollbar-thumb{
-    background: var(--s-color-outline,#70787d);
+    background: var(--s-color-outline,#79747e);
   }
 }
 `

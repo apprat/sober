@@ -28,7 +28,7 @@
         <a href="./icon.html">Icon</a>
         <a href="./icon-button.html">Icon Button</a>
         <a href="./button.html">Button</a>
-        <a href="./floating-action-button.html">Floating Action Button</a>
+        <a href="./fab.html">Floating Action Button</a>
         <a href="./checkbox.html">Checkbox</a>
         <a href="./radio-button.html">Radio Button</a>
         <a href="./switch.html">Switch</a>
@@ -58,9 +58,9 @@
           <s-icon slot="start" src="search"></s-icon>
           purple
         </s-button>
-        <s-floating-action-button>
+        <s-fab>
           <s-icon></s-icon>
-        </s-floating-action-button>
+        </s-fab>
         <s-icon-button>
           <s-icon type="search"></s-icon>
         </s-icon-button>
@@ -141,44 +141,32 @@
             users
           </s-segmented-button-item>
         </s-segmented-button>
-        <s-tab mode="scrollable" onchange="console.log('change',this.selectIndex)">
-          <s-tab-item>
-            <div slot="text">destination</div>
-          </s-tab-item>
-          <s-tab-item checked="true">
-            <div slot="text">navigation</div>
-          </s-tab-item>
-          <s-tab-item>
-            <div slot="text">container</div>
-          </s-tab-item>
-          <s-tab-item>
-            <div slot="text">Secondary</div>
-          </s-tab-item>
-        </s-tab>
       </main>
       <s-navigation-bar onchange="console.log('change',this.selectIndex)">
         <s-navigation-bar-item checked="true">
           <s-icon slot="icon"></s-icon>
           <div slot="text">Home</div>
         </s-navigation-bar-item>
-        <s-navigation-bar-item badge="99">
+        <s-navigation-bar-item>
           <s-icon type="visibility" slot="icon"></s-icon>
           <div slot="text">Chat</div>
+          <s-badge slot="badge">16</s-badge>
         </s-navigation-bar-item>
         <s-navigation-bar-item>
           <s-icon type="dark_mode" slot="icon"></s-icon>
           <div slot="text">Dark</div>
         </s-navigation-bar-item>
-        <s-navigation-bar-item badge="5">
+        <s-navigation-bar-item>
           <s-icon type="light_mode" slot="icon"></s-icon>
           <div slot="text">Light</div>
+          <s-badge slot="badge"></s-badge>
         </s-navigation-bar-item>
       </s-navigation-bar>
     </s-scrollbar>
   </s-page>
 
   <script type="module" src="../dist/main.js"></script>
-  <script src="./scripts/default.js"></script>
+  <script type="module" src="./scripts/default.js"></script>
   <script>
 
   </script>

@@ -3,10 +3,10 @@ import { builder, html, ref } from './core/element.js'
 const style = /*css*/`
 :host{
   position: relative;
-  outline: solid 1px var(--s-color-outline-variant,#c0c8cc);
+  outline: solid 1px var(--s-color-outline-variant,#cac4d0);
   border-radius: 4px;
   font-size: 1rem;
-  color: var(--s-color-on-surface,#191c1e);
+  color: var(--s-color-on-surface,#1d1b20);
   box-sizing: border-box;
   padding: 12px;
   display: block;

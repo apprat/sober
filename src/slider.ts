@@ -4,11 +4,10 @@ import { device } from './core/utils.js'
 const style = /*css*/`
 :host{
   display: block;
-  color: var(--s-color-primary,#006783);
+  color: var(--s-color-primary,#6750a4);
   height: 40px;
   cursor: pointer;
   position: relative;
-  color: var(--s-color-primary,#006783);
 }
 :host([disabled=true]){
   pointer-events: none;
@@ -28,10 +27,10 @@ const style = /*css*/`
   overflow: hidden;
   border-radius: 2px;
   position: relative;
-  background: var(--s-color-surface-container-highest,#e6e0e9);
+  background: var(--s-color-surface-container-highest, #e6e0e9);
 }
 :host([disabled=true]) .track{
-  background: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 31.57894736842105%, transparent);
+  background: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 31.57894736842105%, transparent);
 }
 .track>.active-track{
   position: absolute;
@@ -43,7 +42,7 @@ const style = /*css*/`
   transform: translateX(-50%);
 }
 :host([disabled=true]) .track>.active-track{
-  background: var(--s-color-on-surface,#191c1e);
+  background: var(--s-color-on-surface,#1d1b20);
 }
 .container{
   position: absolute;
@@ -75,7 +74,7 @@ const style = /*css*/`
   margin: 10px;
 }
 :host([disabled=true]) .handle{
-  background: var(--s-color-on-surface,#191c1e);
+  background: var(--s-color-on-surface,#1d1b20);
   box-shadow: none;
 }
 .label{

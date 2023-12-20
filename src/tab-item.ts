@@ -1,12 +1,11 @@
-import { builder, html } from './core/element.js'
+import { builder, html, ref } from './core/element.js'
 import './ripple.js'
 
 const style = /*css*/`
 :host{
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
+  justify-content: center;
   min-height: 48px;
   position: relative;
   cursor: pointer;
@@ -14,29 +13,55 @@ const style = /*css*/`
   font-weight: 500;
   text-transform: capitalize;
   padding: 0 16px;
-  overflow: hidden;
 }
 :host([checked=true]){
-  color: var(--s-color-primary,#006783);
+  color: var(--s-color-primary,#6750a4);
+}
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  min-height: inherit;
+}
+.indicator{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--s-color-primary,#6750a4);
+  border-radius: 3px 3px 0 0;
+  transition: filter .2s,transform .2s,width .2s;
+  filter: opacity(0);
+}
+:host([checked=true]) .indicator{
+  filter: opacity(1);
+}
+.text{
+  display: flex;
+  align-items: center;
+}
+.badge{
+  margin-left: 4px;
+}
+.icon .badge{
+  position: absolute;
+  top: 8px;
+  left: 50%;
 }
 ::slotted([slot=icon]){
-  height: 36px;
-  align-items: end;
-}
-::slotted([slot=icon]:only-child){
-  height: 24px;
-  align-items: center;
+  height: 42px;
 }
 ::slotted([slot=text]){
   white-space: nowrap;
   text-overflow: ellipsis;
   line-height: 1;
-  height: 26px;
-  margin-top: 1px;
 }
-::slotted([slot=text]:only-child){
-  height: auto;
-  margin-top: 0;
+.icon ::slotted([slot=text]){
+  height: 26px;
+  margin-top: -4px;
 }
 `
 
@@ -48,19 +73,39 @@ const props = {
 export default class Component extends builder({
   name, props, propSyncs: true,
   setup() {
+    const icon = ref<HTMLSlotElement>()
+    const container = ref<HTMLSlotElement>()
+    const indicator = ref<HTMLDivElement>()
+    const iconSlotChange = () => {
+      const length = icon.target.assignedElements().length
+      container.target.classList[length > 0 ? 'add' : 'remove']('icon')
+    }
     this.addEventListener('click', () => this.checked = true)
     return {
+      expose: {
+        get indicator() {
+          return indicator.target
+        }
+      },
       watches: {
         checked: () => {
           if (!this.parentNode) return
           this.dispatchEvent(new Event('item:change', { bubbles: true }))
-        }
+        },
       },
       render: () => html`
         <style>${style}</style>
+        <div class="container" ref="${container}">
+          <slot name="icon" ref="${icon}" @slotchange="${iconSlotChange}"></slot>
+          <div class="text">
+            <slot name="text"></slot>
+            <div class="badge">
+              <slot name="badge"></slot>
+            </div>
+          </div>
+          <div class="indicator" ref="${indicator}"></div>
+        </div>
         <s-ripple attached="true"></s-ripple>
-        <slot name="icon"></slot>
-        <slot name="text"></slot>
       `
     }
   }

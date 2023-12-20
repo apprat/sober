@@ -14,8 +14,8 @@ const style = /*css*/`
   box-shadow: none;
 }
 :host([type=outlined]){
-  background: var(--s-color-surface,#fbfcfe);
-  border: solid 1px var(--s-color-outline-variant,#dce4e9);
+  background: var(--s-color-surface,#fef7ff);
+  border: solid 1px var(--s-color-outline-variant,#cac4d0);
   box-shadow: none;
 }
 `

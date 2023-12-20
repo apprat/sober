@@ -1,4 +1,4 @@
-const fab = document.createElement('s-floating-action-button')
+const fab = document.createElement('s-fab')
 const icon = document.createElement('s-icon')
 icon.type = 'dark_mode'
 fab.appendChild(icon)

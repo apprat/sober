@@ -9,7 +9,6 @@ const style = /*css*/`
   width: 80px;
   height: 100%;
   overflow: hidden;
-  background: var(--s-color-surface-container,#eff1f3);
 }
 ::slotted([slot=start]){
   flex-shrink: 0;

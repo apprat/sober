@@ -1,11 +1,12 @@
 import Page from './page.js'
+import Badge from './badge.js'
 import Button from './button.js'
 import Card from './card.js'
 import Checkbox from './checkbox.js'
 import Dialog from './dialog.js'
 import Divider from './divider.js'
 import Drawer from './drawer.js'
-import FloatingActionButton from './floating-action-button.js'
+import FAB from './floating-action-button.js'
 import IconButton from './icon-button.js'
 import Icon from './icon.js'
 import Label from './label.js'
@@ -38,13 +39,14 @@ import TopAppBar from './top-app-bar.js'
 
 export {
   Page,
+  Badge,
   Button,
   Card,
   Checkbox,
   Dialog,
   Divider,
   Drawer,
-  FloatingActionButton,
+  FAB,
   IconButton,
   Icon,
   Label,

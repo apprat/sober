@@ -3,10 +3,7 @@ import { builder, html } from './core/element.js'
 const style = /*css*/`
 :host{
   display: table-row-group;
-  color: var(--s-color-on-surface,#191c1e);
-}
-::slotted(*){
-  border-top: solid 1px color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 16%, transparent);
+  color: var(--s-color-on-surface,#1d1b20);
 }
 `
 

@@ -64,8 +64,8 @@ const style = /*css*/`
     pointer-events: none;
     filter: opacity(0);
   }
-  .start-show-small .start-scrim,
-  .end-show-small .end-scrim{
+  .start-show-fixed .start-scrim,
+  .end-show-fixed .end-scrim{
     filter: opacity(.62);
     pointer-events: auto;
   }
@@ -83,26 +83,26 @@ const style = /*css*/`
   ::slotted([slot=end]){
     right: 0;
   }
-  .start-show-small ::slotted([slot=start]) {
+  .start-show-fixed ::slotted([slot=start]) {
     margin-left: 0px;
   }
-  .end-show-small ::slotted([slot=end]) {
+  .end-show-fixed ::slotted([slot=end]) {
     margin-right: 0px;
   }
-  .start-show-small ::slotted([slot=start]),
-  .end-show-small ::slotted([slot=end]){
+  .start-show-fixed ::slotted([slot=start]),
+  .end-show-fixed ::slotted([slot=end]){
     box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
   }
 }
 `
 
-type Slot = 'start' | 'end'
-const screen = { small: false }
-{
-  const mediaQueryList = matchMedia('(max-width: 840px)')
-  screen.small = mediaQueryList.matches
-  mediaQueryList.addEventListener('change', ({ matches }) => screen.small = matches)
-}
+type Type = 'start' | 'end' | 'fixed-start' | 'fixed-end'
+// const screen = { fixed: false }
+// {
+//   const mediaQueryList = matchMedia('(max-width: 840px)')
+//   screen.fixed = mediaQueryList.matches
+//   mediaQueryList.addEventListener('change', ({ matches }) => screen.fixed = matches)
+// }
 
 const name = 's-drawer'
 const props = {
@@ -112,11 +112,11 @@ export default class Component extends builder({
   name, props,
   setup() {
     const container = ref()
-    const show = (slot: Slot = 'start') => {
-      container.target.classList.add(`${slot}-${screen.small ? 'show-small' : 'show'}`)
+    const show = (type: Type = 'start') => {
+      //container.target.classList.add(`${slot}-${screen.fixed ? 'show-fixed' : 'show'}`)
     }
-    const dismiss = (slot: Slot = 'start') => {
-      container.target.classList.remove(`${slot}-${screen.small ? 'show-small' : 'show'}`)
+    const dismiss = (type: Type = 'start') => {
+      //container.target.classList.remove(`${slot}-${screen.fixed ? 'show-fixed' : 'show'}`)
     }
     return {
       expose: { show, dismiss },

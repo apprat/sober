@@ -4,7 +4,7 @@ const style = /*css*/`
 :host{
   display: block;
   height: 1px;
-  background: var(--s-color-outline-variant,#c0c8cc);
+  background: var(--s-color-outline-variant,#cac4d0);
   margin: 0 16px;
 }
 `

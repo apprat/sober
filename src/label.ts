@@ -25,12 +25,12 @@ const style = /*css*/`
   flex-shrink: 0;
 }
 :host([disabled=true]) ::slotted([slot=start]){
-  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 38%, transparent) !important;
 }
 ::slotted([slot=title]){
   font-size: 1rem;
   height: 24px;
-  color: var(--s-color-on-surface,#191c1e);
+  color: var(--s-color-on-surface,#1d1b20);
   display: flex;
   align-items: center;
   line-height: 1;
@@ -39,15 +39,15 @@ const style = /*css*/`
   text-overflow: ellipsis;
 }
 :host([disabled=true]) ::slotted([slot=title]){
-  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 38%, transparent) !important;
 }
 ::slotted([slot=subtitle]){
-  color: var(--s-color-on-surface-variant,#40484c);
+  color: var(--s-color-on-surface-variant,#49454f);
   height: 24px;
   font-size: .75rem;
 }
 :host([disabled=true]) ::slotted([slot=subtitle]){
-  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 38%, transparent) !important;
 }
 `
 

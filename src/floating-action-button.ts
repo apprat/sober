@@ -14,8 +14,8 @@ const style = /*css*/`
   width: 56px;
   margin: 24px;
   border-radius: 50%;
-  background: var(--s-color-primary-container,#bce9ff);
-  color: var(--s-color-on-primary-container,#001f29);
+  background: var(--s-color-primary-container,#eaddff);
+  color: var(--s-color-on-primary-container,#21005d);
   transition: box-shadow .2s;
   font-size: .875rem;
   font-weight: 500;
@@ -57,7 +57,7 @@ const style = /*css*/`
 }
 `
 
-const name = 's-floating-action-button'
+const name = 's-fab'
 const props = {
   size: 'medium' as 'medium' | 'small' | 'large',
   extended: false,

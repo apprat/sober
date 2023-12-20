@@ -7,12 +7,12 @@ const style = /*css*/`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--s-color-on-surface,#191c1e);
+  color: var(--s-color-on-surface,#1d1b20);
   height: 40px;
   text-transform: capitalize;
   font-weight: 500;
   font-size: .875rem;
-  border: solid 1px var(--s-color-outline,#70787d);
+  border: solid 1px var(--s-color-outline,#79747e);
   position: relative;
   cursor: pointer;
 }
@@ -26,14 +26,14 @@ const style = /*css*/`
   border-right: none;
 }
 :host([checked=true]){
-  background: var(--s-color-secondary-container,#cfe6f2);
-  color: var(--s-color-on-secondary-container,#081e27);
+  background: var(--s-color-secondary-container,#e8def8);
+  color: var(--s-color-on-secondary-container,#1d192b);
 }
 :host([disabled=true]){
   pointer-events: none;
-  border-top-color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
-  border-bottom-color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
-  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent);
+  border-top-color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent);
+  border-bottom-color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent);
+  color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 38%, transparent);
 }
 :host([disabled=true]:not(:last-child)){
   margin-left: -1px;

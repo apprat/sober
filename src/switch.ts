@@ -8,13 +8,13 @@ const style = /*css*/`
   align-items: center;
   cursor: pointer;
   position: relative;
-  color: var(--s-color-on-surface-variant,#40484c);
+  color: var(--s-color-on-surface-variant,#49454f);
 }
 :host([disabled=true]){
   pointer-events: none;
 }
 :host([checked=true]){
-  color: var(--s-color-primary,#006783);
+  color: var(--s-color-primary,#6750a4);
 }
 .track{
   display: flex;
@@ -22,23 +22,23 @@ const style = /*css*/`
   width: 52px;
   height: 32px;
   border-radius: 20px;
-  box-shadow: 0 0 0 2px inset var(--s-color-outline,#70787d);
+  box-shadow: 0 0 0 2px inset var(--s-color-outline,#79747e);
   position: relative;
 }
 :host([checked=true]) .track{
-  background: var(--s-color-primary,#006783);
+  background: var(--s-color-primary,#6750a4);
   box-shadow: none;
 }
 :host([disabled=true]) .track{
   background: color-mix(in srgb ,var(--s-color-surface-container-highest,#e6e0e9) 12%, transparent);
-  box-shadow: 0 0 0 2px inset color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
+  box-shadow: 0 0 0 2px inset color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent);
 }
 :host([checked=true][disabled=true]) .track{
-  background: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
+  background: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent);
   box-shadow: none;
 }
 .thumb{
-  background: var(--s-color-outline,#70787d);
+  background: var(--s-color-outline,#79747e);
   border-radius: 50%;
   width: 16px;
   height: 16px;
@@ -56,16 +56,16 @@ const style = /*css*/`
   box-shadow: var(--s-elevation-level1,0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
 }
 :host([disabled=true]) .thumb{
-  background: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent);
+  background: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 38%, transparent);
   box-shadow: none;
 }
 :host([checked=true][disabled=true]) .thumb{
-  background: var(--s-color-surface,#fbfcfe);
+  background: var(--s-color-surface,#fef7ff);
 }
 .icon{
   width: 12px;
   height: 12px;
-  fill: var(--s-color-primary,#006783);
+  fill: var(--s-color-primary,#6750a4);
   opacity: 0;
   transition: opacity .2s;
 }
@@ -73,7 +73,7 @@ const style = /*css*/`
   opacity: 1;
 }
 :host([checked=true][disabled=true]) .icon{
-  fill: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 12%, transparent);
+  fill: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent);
 }
 .ripple{
   width: 40px;

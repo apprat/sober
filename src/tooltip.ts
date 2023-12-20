@@ -12,8 +12,8 @@ const style = /*css*/`
   left: 0;
   top: 0;
   z-index: 1;
-  background: var(--s-color-inverse-surface,#2e3132);
-  color: var(--s-color-inverse-on-surface,#eff1f3);
+  background: var(--s-color-inverse-surface,#322f35);
+  color: var(--s-color-inverse-on-surface,#f5eff7);
   font-size: .875rem;
   font-weight: 400;
   padding: 6px 8px;
@@ -65,7 +65,7 @@ export default class Component extends builder({
       if (showed) return
       container.target.removeAttribute('style')
     }
-    this.addEventListener('wheel', dismiss)
+    this.addEventListener('wheel', dismiss, { passive: true })
     this.addEventListener('mouseover', () => !device.touched && show())
     this.addEventListener('mouseleave', () => !device.touched && dismiss())
     this.addEventListener('touchstart', show, { passive: true })

@@ -8,7 +8,7 @@ const style = /*css*/`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--s-color-on-surface-variant,#40484c);
+  color: var(--s-color-on-surface-variant,#49454f);
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -16,10 +16,10 @@ const style = /*css*/`
 }
 :host([disabled=true]){
   pointer-events: none;
-  color: color-mix(in srgb ,var(--s-color-on-surface,#191c1e) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 38%, transparent) !important;
 }
 :host([checked=true]){
-  color: var(--s-color-primary,#006783);
+  color: var(--s-color-primary,#6750a4);
 }
 .icon{
   width: 24px;

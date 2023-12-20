@@ -5,7 +5,7 @@ const style = /*css*/`
   display: inline-block;
   height: 56px;
   min-width: 240px;
-  border: solid 1px var(--s-color-outline,#70787d);
+  border: solid 1px var(--s-color-outline,#79747e);
   border-radius: 4px;
 }
 `

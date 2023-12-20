@@ -4,7 +4,7 @@ const style = /*css*/`
 :host{
   display: block;
   height: 4px;
-  color: var(--s-color-primary,#006783);
+  color: var(--s-color-primary,#6750a4);
 }
 .container{
   height: inherit;

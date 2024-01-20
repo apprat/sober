@@ -71,7 +71,7 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: ['mode'],
+  name, style, props, propSyncs: ['mode'],
   setup() {
     const fill = ref<HTMLDivElement>()
     const single = ref<HTMLInputElement>()
@@ -101,7 +101,6 @@ export default class Component extends builder({
         }
       },
       render: () => html`
-        <style>${style}</style>
         <div class="text fill" ref="${fill}"></div>
         <input type="text" class="single box" ref="${single}" value="${this.value}" placeholder="${this.placeholder}" @input="${onInputSingle}" @focus="${onFocus}" @blur="${onBlur}">
         <textarea class="text multi box" rows="1" ref="${multi}" placeholder="${this.placeholder}" @input="${onInputMulti}" @focus="${onFocus}" @blur="${onBlur}">${this.value}</textarea>

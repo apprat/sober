@@ -49,11 +49,10 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: true,
+  name, style, props, propSyncs: true,
   setup() {
     return {
       render: () => html`
-        <style>${style}</style>
         <slot name="start"></slot>
         <slot></slot>
         <slot name="end"></slot>

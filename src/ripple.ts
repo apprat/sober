@@ -31,7 +31,7 @@ const style = /*css*/`
   background: var(--ripple-color,currentColor);
   border-radius: 50%;
   transition: opacity .8s;
-  opacity: var(--ripple-opacity,.38);
+  opacity: var(--ripple-opacity,.24);
   width: var(--size);
   height: var(--size);
   position: absolute;
@@ -40,6 +40,7 @@ const style = /*css*/`
   top: var(--y);
   animation: ripple 800ms cubic-bezier(.2, .9, .1, .9);
   animation-fill-mode: forwards;
+  filter: blur(8px);
 }
 .container::before{
   content: '';
@@ -72,7 +73,7 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: ['attached'],
+  name, style, props, propSyncs: ['attached'],
   setup() {
     const container = ref<HTMLDivElement>()
     const hover = () => !device.touched && container.target.classList.add('hover')
@@ -127,11 +128,13 @@ export default class Component extends builder({
     const addEvents = (root: HTMLElement) => {
       root.addEventListener('mouseover', hover)
       root.addEventListener('mouseleave', unHover)
+      root.addEventListener('wheel', unHover, { passive: true })
       root.addEventListener('pointerdown', down)
     }
     const removeEvents = (root: HTMLElement) => {
       root.removeEventListener('mouseover', hover)
       root.removeEventListener('mouseleave', unHover)
+      root.removeEventListener('wheel', unHover)
       root.removeEventListener('pointerdown', down)
     }
     return {
@@ -144,7 +147,6 @@ export default class Component extends builder({
         attached: trigger.set
       },
       render: () => html`
-        <style>${style}</style>
         <div class="container" ref="${container}"></div>
         <slot></slot>
       `

@@ -43,7 +43,7 @@ const svgData = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: true,
+  name, style, props, propSyncs: true,
   setup() {
     const iconPath = ref<SVGAElement>()
     this.addEventListener('click', () => {
@@ -57,7 +57,6 @@ export default class Component extends builder({
         checked: (value) => !this.indeterminate && iconPath.target.setAttribute('d', value ? svgData.checked : svgData.uncheck)
       },
       render: () => html`
-        <style>${style}</style>
         <svg class="icon" viewBox="0 -960 960 960">
           <path ref="${iconPath}" d="${svgData.uncheck}"></path>
         </svg>

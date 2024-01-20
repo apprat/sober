@@ -103,7 +103,7 @@ const make = (options: string | {
 }
 
 class Component extends builder({
-  name, props,
+  name, style, props,
   setup() {
     const wrapper = ref<HTMLElement>()
     const action = ref<HTMLElement>()
@@ -135,7 +135,6 @@ class Component extends builder({
         action: (value) => action.target.textContent = value
       },
       render: () => html`
-        <style>${style}</style>
         <slot name="trigger" @click="${show}"></slot>
         <div class="wrapper" ref="${wrapper}" @transitionend="${transitionEnd}">
           <div class="container" part="container">

@@ -10,7 +10,24 @@ div.setAttribute('style', 'position: fixed;right: 0;width: 100%;height: 100%;bot
 
 export const getStackingContext = (el: Node) => {
   el.appendChild(div)
-  const rect = div.getBoundingClientRect()
+  const DOMRect = div.getBoundingClientRect()
   el.removeChild(div)
-  return { left: rect.left, top: rect.top, width: rect.width, height: rect.height }
+  return {
+    left: DOMRect.left,
+    top: DOMRect.top,
+    width: DOMRect.width,
+    height: DOMRect.height
+  }
+}
+
+export const animate = (callback: (progress: number) => void, duration: number) => {
+  let startTime: number
+  const run = (timestamp: number) => {
+    if (!startTime) startTime = timestamp
+    const elapsedTime = timestamp - startTime
+    const progress = Math.min(elapsedTime / duration, 1)
+    callback(progress)
+    if (progress < 1) requestAnimationFrame(run)
+  }
+  requestAnimationFrame(run)
 }

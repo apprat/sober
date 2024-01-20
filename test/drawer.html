@@ -25,11 +25,12 @@
         </p>
       </div>
       <div>
-        <s-button onclick="show()" style="margin: 24px;">Show</s-button>
-        <s-button onclick="dismiss()" style="margin: 24px;">Dismiss</s-button>
+        <s-button onclick="document.querySelector('s-drawer').show()" style="margin: 24px;">Show</s-button>
+        <s-button onclick="document.querySelector('s-drawer').dismiss()" style="margin: 24px;">Dismiss</s-button>
 
-        <s-button onclick="show('end')" style="margin: 24px;">Show End</s-button>
-        <s-button onclick="dismiss('end')" style="margin: 24px;">Dismiss End</s-button>
+        <s-button onclick="document.querySelector('s-drawer').show('end')" style="margin: 24px;">Show 2</s-button>
+        <s-button onclick="document.querySelector('s-drawer').dismiss('end')" style="margin: 24px;">Dismiss 2</s-button>
+
 
         <div style="background: red;width: 200px;height: 200px;margin: 100px;">
           <div style="display: inline-block;">
@@ -56,14 +57,6 @@
 
   <script type="module" src="../dist/main.js"></script>
   <script type="module" src="./scripts//default.js"></script>
-  <script type="module">
-    function show(type) {
-      document.querySelector('#drawer').show(type)
-    }
-    function dismiss(type) {
-      document.querySelector('#drawer').dismiss(type)
-    }
-  </script>
 </body>
 
 </html>

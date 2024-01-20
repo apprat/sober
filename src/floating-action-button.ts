@@ -64,7 +64,7 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: true,
+  name, style, props, propSyncs: true,
   setup() {
     const ripple = ref<Ripple>()
     return {
@@ -72,7 +72,6 @@ export default class Component extends builder({
         extended: (value) => ripple.target.centered = !value
       },
       render: () => html`
-        <style>${style}</style>
         <s-ripple attached="true" centered="true" ref="${ripple}"></s-ripple>
         <slot name="start"></slot>
         <slot></slot>

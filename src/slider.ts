@@ -133,11 +133,13 @@ const style = /*css*/`
   height: 100%;
   top: 0;
   left: 0;
+  display: flex;
+  justify-content: center;
 }
 .native>input{
   margin: 0;
   height: 100%;
-  width: 100%;
+  width: calc(100% - 20px);
   cursor: inherit;
 }
 `
@@ -153,7 +155,7 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: ['disabled', 'labeled'],
+  name, style, props, propSyncs: ['disabled', 'labeled'],
   setup() {
     const activeTrack = ref<HTMLElement>()
     const container = ref<HTMLInputElement>()
@@ -206,7 +208,6 @@ export default class Component extends builder({
         }
       },
       render: () => html`
-        <style>${style}</style>
         <div class="wrapper">
           <div class="track">
             <div class="active-track" ref="${activeTrack}"></div>

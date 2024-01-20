@@ -71,7 +71,7 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: true,
+  name, style, props, propSyncs: true,
   setup() {
     const icon = ref<HTMLSlotElement>()
     const container = ref<HTMLSlotElement>()
@@ -94,7 +94,6 @@ export default class Component extends builder({
         },
       },
       render: () => html`
-        <style>${style}</style>
         <div class="container" ref="${container}">
           <slot name="icon" ref="${icon}" @slotchange="${iconSlotChange}"></slot>
           <div class="text">

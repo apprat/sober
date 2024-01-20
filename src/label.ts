@@ -57,7 +57,7 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: true,
+  name, style, props, propSyncs: true,
   setup() {
     const start = ref<HTMLSlotElement>()
     this.addEventListener('click', () => {
@@ -75,13 +75,12 @@ export default class Component extends builder({
     })
     return {
       render: () => html`
-        <style>${style}</style>
-        <s-ripple attached="true"></s-ripple>
         <slot name="start" ref="${start}"></slot>
         <div class="text">
           <slot name="title"></slot>
           <slot name="subtitle"></slot>
         </div>
+        <s-ripple attached="true"></s-ripple>
       `
     }
   }

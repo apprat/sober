@@ -95,7 +95,7 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: true,
+  name, style, props, propSyncs: true,
   setup() {
     this.addEventListener('click', () => {
       this.checked = !this.checked
@@ -103,7 +103,6 @@ export default class Component extends builder({
     })
     return {
       render: () => html`
-        <style>${style}</style>
         <div class="track">
           <div class="thumb">
             <svg class="icon" viewBox="0 -960 960 960">

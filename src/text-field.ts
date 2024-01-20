@@ -21,11 +21,10 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props,
+  name, style, props,
   setup() {
     return {
       render: () => html`
-        <style>${style}</style>
         <div class="container">
         </div>
         <slot></slot>

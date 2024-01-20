@@ -71,7 +71,7 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: true,
+  name, style, props, propSyncs: true,
   setup() {
     const badge = ref()
     this.addEventListener('click', () => this.checked = true)
@@ -83,7 +83,6 @@ export default class Component extends builder({
         }
       },
       render: () => html`
-        <style>${style}</style>
         <div class="icon">
           <slot name="icon"></slot>
         </div>

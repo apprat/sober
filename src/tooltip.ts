@@ -39,14 +39,17 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props,
+  name, style, props,
   setup(shadowRoot) {
+    const trigger = ref<HTMLDivElement>()
     const container = ref<HTMLElement>()
+    const state = { showed: false }
     const show = () => {
-      const rect = this.getBoundingClientRect()
+      if (!this.isConnected || state.showed) return
+      const rect = trigger.target.getBoundingClientRect()
       const stackingContext = getStackingContext(shadowRoot)
       const gap = 4
-      const margin = { top: this.offsetHeight + gap, left: -((container.target.offsetWidth - this.offsetWidth) / 2) }
+      const margin = { top: trigger.target.offsetHeight + gap, left: -((container.target.offsetWidth - trigger.target.offsetWidth) / 2) }
       if (rect.top + margin.top + container.target.offsetHeight > stackingContext.top + stackingContext.height) {
         margin.top = -(container.target.offsetHeight + gap)
       }
@@ -54,26 +57,33 @@ export default class Component extends builder({
         margin.left = 0
       }
       if ((rect.left + container.target.offsetWidth) + margin.left > stackingContext.width - stackingContext.left) {
-        margin.left = -(container.target.offsetWidth - this.offsetWidth)
+        margin.left = -(container.target.offsetWidth - trigger.target.offsetWidth)
       }
       container.target.setAttribute('style', `left: auto;top: auto;margin-left: ${margin.left}px;margin-top: ${margin.top}px`)
       container.target.classList.add('show')
+      state.showed = true
     }
-    const dismiss = () => container.target.classList.remove('show')
+    const dismiss = () => {
+      if (!this.isConnected || !state.showed) return
+      container.target.classList.remove('show')
+      state.showed = false
+    }
     const transitionEnd = () => {
       const showed = container.target.classList.contains('show')
       if (showed) return
       container.target.removeAttribute('style')
     }
-    this.addEventListener('wheel', dismiss, { passive: true })
-    this.addEventListener('mouseover', () => !device.touched && show())
-    this.addEventListener('mouseleave', () => !device.touched && dismiss())
-    this.addEventListener('touchstart', show, { passive: true })
-    this.addEventListener('touchend', dismiss)
     return {
       render: () => html`
-        <style>${style}</style>
-        <slot name="trigger"></slot>
+        <div ref="${trigger}" 
+          @wheel.passive="${dismiss}"
+          @mouseover="${() => !device.touched && show()}"
+          @mouseleave="${() => !device.touched && dismiss()}"
+          @touchstart.passive="${show}"
+          @touchend="${dismiss}"
+        >
+          <slot name="trigger"></slot>
+        </div>
         <div class="container" part="container" ref="${container}" @transitionend="${transitionEnd}">
           <slot></slot>
         </div>

@@ -48,18 +48,19 @@
         <a href="./text-field.html">Text Field</a>
         <a href="./drawer.html">Drawer</a>
         <a href="./navigation-rail.html">Bavigation Rail</a>
+        <a href="./menu.html">Menu</a>
       </main>
       <main>
         <s-button>
-          <s-icon slot="start"></s-icon>
+          <s-icon slot="start" type="add"></s-icon>
           dark
         </s-button>
         <s-button type="filled">
-          <s-icon slot="start" src="search"></s-icon>
+          <s-icon slot="start" type="search"></s-icon>
           purple
         </s-button>
         <s-fab>
-          <s-icon></s-icon>
+          <s-icon type="add"></s-icon>
         </s-fab>
         <s-icon-button>
           <s-icon type="search"></s-icon>
@@ -144,7 +145,7 @@
       </main>
       <s-navigation-bar onchange="console.log('change',this.selectIndex)">
         <s-navigation-bar-item checked="true">
-          <s-icon slot="icon"></s-icon>
+          <s-icon slot="icon" type="add"></s-icon>
           <div slot="text">Home</div>
         </s-navigation-bar-item>
         <s-navigation-bar-item>

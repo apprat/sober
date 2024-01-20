@@ -1,33 +1,42 @@
 <!DOCTYPE html>
-<html lang="ZH-cn">
+<html>
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>Test</title>
-  <link rel="stylesheet" href="./styles/default.css">
   <style>
-    .text[focus] {
-      outline: solid 2px #009688;
-      color: #009688;
+    .anime {
+      position: absolute;
+      left: 0px;
+      width: 50px;
+      height: 50px;
+      background-color: red;
     }
   </style>
 </head>
 
-<body>
-  <s-page>
-    <main>
+<body style="position: relative;">
+  <div style="position: relative;width: 800px;background: #eee;">
+    <div id="animatedElement" class="anime"></div>
+    <div id="a" class="anime" style="margin-top: 100px;transition: transform .5s linear;transform: translateX(0%);">
+    </div>
+  </div>
+  <button onclick="starts()" style="margin: 200px;">start</button>
 
-      <s-text-edit class="text" placeholder="请输入账号" oninput="console.log(event)"></s-text-edit>
-
-      <s-text-edit mode="multiLine" placeholder="请输入回复" onchange="console.log('blur',event)"
-        oninput="console.log(event)"></s-text-edit>
-
-    </main>
-  </s-page>
-  <script type="module" src="../dist/main.js"></script>
-  <script type="module" src="./scripts/default.js"></script>
   <script>
+    const element = document.getElementById('animatedElement');
+    const duration = 200;
+    let startTime;
+    function updataAnimate(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const elapsedTime = timestamp - startTime;
+      const progress = Math.min(elapsedTime / duration, 1);
+      element.style.left = `${progress * 100}%`
+      if (progress < 1) requestAnimationFrame(updataAnimate)
+    }
+    const a = document.getElementById('a');
+    const starts = () => {
+      requestAnimationFrame(updataAnimate)
+      a.style.transform = 'translateX(800px)'
+    }
   </script>
 </body>
 

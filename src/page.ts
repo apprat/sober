@@ -79,7 +79,7 @@ const style = /*css*/`
   --s-color-on-background: #e6e1e5;
 
   --s-color-outline: #938f99;
-  --s-color-outline-variant: ;
+  --s-color-outline-variant: #49454f;
 
   --s-color-surface: #1c1b1f;
   --s-color-on-surface: #e6e1e5;
@@ -103,11 +103,10 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: ['theme'],
+  name, style, props, propSyncs: ['theme'],
   setup() {
     return {
       render: () => html`
-        <style>${style}</style>
         <slot></slot>
       `
     }

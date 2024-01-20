@@ -7,19 +7,82 @@
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
   <style>
+    .nav {
+      flex-shrink: 0;
+      flex-grow: 1;
+      border-left: solid var(--s-color-surface-variant) 1px;
+    }
+
+    .nav>.tag {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      margin: 8px 0;
+      color: var(--s-color-secondary);
+      font-size: .75rem;
+      padding: 0 16px;
+    }
+
+    .nav>.item {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      color: var(--s-color-on-surface);
+      padding: 0 24px;
+      font-size: .875rem;
+      border-radius: 28px;
+      margin: 8px;
+    }
+
+    .nav>.checked {
+      color: var(--s-color-primary);
+      background: var(--s-color-secondary-container);
+      color: var(--s-color-on-secondary-container);
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      background: var(--s-color-surface);
+      height: 36px;
+      border-radius: 20px;
+      margin: 0 8px;
+      max-width: 196px;
+      width: 100%;
+    }
+
+    .search>s-icon {
+      margin: 0 8px;
+      color: var(--s-color-outline);
+    }
+
+    .search>input {
+      background: none;
+      outline: none;
+      border: none;
+      padding: 0;
+      height: 100%;
+      font-size: .875rem;
+      width: 100%;
+    }
+
+    @media(max-width: 840px) {
+      .search {
+        max-width: none;
+      }
+    }
   </style>
 </head>
 
 <body>
   <s-page>
     <s-drawer>
-      <s-scrollbar slot="start">
-        <s-navigation-rail>
+      <s-scrollbar slot="start" style="display: flex;">
+        <s-navigation-rail style="flex-shrink: 0;">
           <s-icon-button slot="menu" type="filled-tonal">
-            <s-icon type="menu"></s-icon>
+            <s-icon type="add"></s-icon>
           </s-icon-button>
-
-          <s-navigation-rail-item checked="true">
+          <s-navigation-rail-item>
             <s-icon slot="icon">
               <svg viewBox="0 -960 960 960">
                 <path
@@ -28,7 +91,7 @@
             </s-icon>
             <div slot="text">首页</div>
           </s-navigation-rail-item>
-          <s-navigation-rail-item badge="37">
+          <s-navigation-rail-item checked="true">
             <s-icon slot="icon">
               <svg viewBox="0 -960 960 960">
                 <path
@@ -36,8 +99,9 @@
               </svg>
             </s-icon>
             <div slot="text">组件</div>
+            <s-badge slot="badge">16</s-badge>
           </s-navigation-rail-item>
-          <s-navigation-rail-item badge="-1">
+          <s-navigation-rail-item>
             <s-icon slot="icon">
               <svg viewBox="0 -960 960 960">
                 <path
@@ -54,6 +118,7 @@
               </svg>
             </s-icon>
             <div slot="text">设计</div>
+            <s-badge slot="badge"></s-badge>
           </s-navigation-rail-item>
           <s-navigation-rail-item>
             <s-icon slot="icon">
@@ -65,16 +130,128 @@
             <div slot="text">资源</div>
           </s-navigation-rail-item>
           <div slot="end" style="display: flex;align-items: flex-end;justify-content: center;">
-            <s-icon-button slot="menu" type="outlined" style="margin: 16px 0;">
-              <s-icon type="dark_mode"></s-icon>
-            </s-icon-button>
+            <s-dialog>
+              <s-icon-button slot="trigger" type="outlined" style="margin: 16px 0;">
+                <s-icon type="dark_mode"></s-icon>
+              </s-icon-button>
+              <div slot="headline">
+                Dialog
+              </div>
+              <p>
+                ???
+              </p>
+            </s-dialog>
           </div>
         </s-navigation-rail>
+        <s-scrollbar class="nav">
+          <div class="tag">介绍</div>
+          <s-ripple class="item checked">
+            概述
+          </s-ripple>
+          <div class="tag">快速上手</div>
+          <s-ripple class="item">
+            安装
+          </s-ripple>
+          <s-ripple class="item">
+            在 SFC 中使用
+          </s-ripple>
+          <s-ripple class="item">
+            使用 UMD
+          </s-ripple>
+          <s-ripple class="item">
+            配置字体
+          </s-ripple>
+          <s-ripple class="item">
+            按需引入
+          </s-ripple>
+          <s-ripple class="item">
+            支持的平台
+          </s-ripple>
+          <div class="tag">指南</div>
+          <s-ripple class="item">
+            JSX & TSX
+          </s-ripple>
+          <s-ripple class="item">
+            服务端渲染 SSR
+          </s-ripple>
+          <s-ripple class="item">
+            潜在的问题
+          </s-ripple>
+          <s-ripple class="item">
+            社区精选资源
+          </s-ripple>
+          <s-ripple class="item">
+            更新日志
+          </s-ripple>
+        </s-scrollbar>
       </s-scrollbar>
+      <div>
+        <s-top-app-bar>
+          <s-icon-button slot="navigation" onclick="document.querySelector('s-drawer').toggle()">
+            <s-icon type="menu"></s-icon>
+          </s-icon-button>
+
+          <div style="display: flex;justify-content: flex-end;align-items: center;height: 100%;">
+            <div class="search">
+              <s-icon type="search"></s-icon>
+              <input type="text" placeholder="搜索文档...">
+            </div>
+          </div>
+
+          <s-tooltip slot="action">
+            <s-menu slot="trigger">
+              <s-icon-button slot="trigger">
+                <s-icon>
+                  <svg viewBox="0 -960 960 960">
+                    <path
+                      d="m476-80 182-480h84L924-80h-84l-43-122H603L560-80h-84ZM160-200l-56-56 202-202q-35-35-63.5-80T190-640h84q20 39 40 68t48 58q33-33 68.5-92.5T484-720H40v-80h280v-80h80v80h280v80H564q-21 72-63 148t-83 116l96 98-30 82-122-125-202 201Zm468-72h144l-72-204-72 204Z" />
+                  </svg>
+                </s-icon>
+              </s-icon-button>
+              <s-menu-item>
+                中文
+              </s-menu-item>
+              <s-menu-item>
+                English
+              </s-menu-item>
+              <s-menu-item>
+                한국어
+              </s-menu-item>
+              <s-menu-item>
+                ไทย ไทย
+              </s-menu-item>
+              <s-menu-item>
+                日本語で
+              </s-menu-item>
+            </s-menu>
+            多语言
+          </s-tooltip>
+          <s-tooltip slot="action">
+            <s-icon-button slot="trigger">
+              <s-icon type="dark_mode"></s-icon>
+            </s-icon-button>
+            暗色模式
+          </s-tooltip>
+          <s-tooltip slot="action">
+            <s-icon-button slot="trigger">
+              <s-icon>
+                <svg viewBox="0 0 1024 1024">
+                  <path
+                    d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9 23.5 23.2 38.1 55.4 38.1 91v112.5c0.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z">
+                  </path>
+                </svg>
+              </s-icon>
+            </s-icon-button>
+            Github
+          </s-tooltip>
+        </s-top-app-bar>
+        <s-scrollbar>
+
+        </s-scrollbar>
+      </div>
     </s-drawer>
   </s-page>
-  <script type="module" src="../dist/main.js"></script>
-  <script type="module" src="./scripts/default.js"></script>
+  <script type="module" src="../dist/sober.min.js"></script>
 </body>
 
 </html>

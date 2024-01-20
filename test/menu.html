@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+  <style>
+    s-card {
+      height: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <s-page>
+    <main>
+      <s-menu>
+        <s-button slot="trigger">菜单</s-button>
+        <s-menu-item>选项1</s-menu-item>
+        <s-menu-item>选项2</s-menu-item>
+        <s-menu-item>选项3</s-menu-item>
+        <s-menu-item>选项4</s-menu-item>
+        <s-menu-item>选项5</s-menu-item>
+      </s-menu>
+
+      <s-menu style="margin-left: 600px;">
+        <s-button slot="trigger">菜单2</s-button>
+        <s-menu-item>选项1</s-menu-item>
+        <s-menu-item>选项2</s-menu-item>
+        <s-menu-item>选项3</s-menu-item>
+        <s-menu-item>选项4</s-menu-item>
+        <s-menu-item>选项3</s-menu-item>
+        <s-menu-item>选项4</s-menu-item>
+        <s-menu-item>选项5</s-menu-item>
+        <s-menu>
+          <s-menu-item slot="trigger">
+            更多
+            <s-icon slot="end" type="arrow_drop_right"></s-icon>
+          </s-menu-item>
+          <s-menu-item>保存</s-menu-item>
+          <s-menu-item>修改</s-menu-item>
+          <s-menu-item>
+            删除
+          </s-menu-item>
+        </s-menu>
+        <s-menu>
+          <s-menu-item slot="trigger">
+            更多2
+            <s-icon slot="end" type="arrow_drop_right"></s-icon>
+          </s-menu-item>
+          <s-menu-item>保存</s-menu-item>
+          <s-menu-item>修改</s-menu-item>
+          <s-menu>
+            <s-menu-item slot="trigger">
+              更多2-1
+              <s-icon slot="end" type="arrow_drop_right"></s-icon>
+            </s-menu-item>
+            <s-menu-item>保存</s-menu-item>
+            <s-menu-item>修改</s-menu-item>
+            <s-menu-item>
+              删除
+            </s-menu-item>
+          </s-menu>
+        </s-menu>
+        <s-menu-item>选项1</s-menu-item>
+        <s-menu-item>选项5</s-menu-item>
+        <s-menu-item>选项1</s-menu-item>
+        <s-menu-item>选项2</s-menu-item>
+      </s-menu>
+
+      <s-menu style="margin-left: 600px;margin-top: 1000px;">
+        <s-button slot="trigger">菜单3</s-button>
+        <s-menu-item>选项1</s-menu-item>
+        <s-menu-item>选项2</s-menu-item>
+        <s-menu-item>选项3</s-menu-item>
+        <s-menu-item>选项4</s-menu-item>
+        <s-menu-item>选项5</s-menu-item>
+        <s-menu-item>选项1</s-menu-item>
+        <s-menu-item>选项2</s-menu-item>
+        <s-menu-item>选项3</s-menu-item>
+        <s-menu-item>选项4</s-menu-item>
+        <s-menu-item>选项5</s-menu-item>
+        <s-menu-item>选项1</s-menu-item>
+        <s-menu-item>选项2</s-menu-item>
+        <s-menu-item>选项3</s-menu-item>
+        <s-menu-item>选项4</s-menu-item>
+        <s-menu-item>选项5</s-menu-item>
+        <s-menu-item>选项1</s-menu-item>
+        <s-menu-item>选项2</s-menu-item>
+        <s-menu-item>选项3</s-menu-item>
+        <s-menu-item>选项4</s-menu-item>
+        <s-menu-item>选项5</s-menu-item>
+        <s-menu-item>选项1</s-menu-item>
+        <s-menu-item>选项2</s-menu-item>
+    </main>
+  </s-page>
+
+  <script type="module" src="../dist/main.js"></script>
+  <script type="module" src="./scripts/default.js"></script>
+</body>
+
+</html>

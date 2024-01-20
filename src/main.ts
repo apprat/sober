@@ -11,6 +11,7 @@ import IconButton from './icon-button.js'
 import Icon from './icon.js'
 import Label from './label.js'
 import Ripple from './ripple.js'
+import MenuItem from './menu-item.js'
 import Menu from './menu.js'
 import NavigationBarItem from './navigation-bar-item.js'
 import NavigationBar from './navigation-bar.js'
@@ -51,6 +52,7 @@ export {
   Icon,
   Label,
   Ripple,
+  MenuItem,
   Menu,
   NavigationBarItem,
   NavigationBar,

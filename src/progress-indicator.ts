@@ -86,7 +86,7 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: ['indeterminate', 'type'],
+  name, style, props, propSyncs: ['indeterminate', 'type'],
   setup() {
     const linear = ref<HTMLElement>()
     const circular = ref<SVGCircleElement>()
@@ -102,7 +102,6 @@ export default class Component extends builder({
         value: render
       },
       render: () => html`
-        <style>${style}</style>
         <div class="linear">
           <div class="determinable container">
             <div class="track container"></div>

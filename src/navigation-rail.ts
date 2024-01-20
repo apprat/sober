@@ -30,7 +30,7 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props, propSyncs: true,
+  name, style, props, propSyncs: true,
   setup() {
     let options: Item[] = []
     let selectIndex = -1
@@ -63,7 +63,6 @@ export default class Component extends builder({
         }
       },
       render: () => html`
-        <style>${style}</style>
         <slot name="start"></slot>
         <slot name="menu"></slot>
         <slot @slotchange="${slotChange}"></slot>

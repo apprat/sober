@@ -19,7 +19,8 @@ const parsePropType = (value: unknown, old: Prop) => {
   throw new TypeError()
 }
 
-const style = /*css*/ `
+const baseStyle = new CSSStyleSheet()
+baseStyle.replaceSync(/*css*/`
 :host{
   user-select: none;
   -webkit-user-select: none;
@@ -28,13 +29,14 @@ const style = /*css*/ `
   background: var(--s-color-primary, #006783);
   color: var(--s-color-on-primary, #ffffff);
 }
-`
+`)
 
 export const builder = <
   P extends { [x: string]: Prop } = {},
   E extends {} = {},
 >(options: {
   name: string
+  style?: string
   props?: P
   propSyncs?: (keyof P)[] | true
   setup: (this: P & HTMLElement, shadowRoot: ShadowRoot) => {
@@ -54,6 +56,8 @@ export const builder = <
   const map = new Map<HTMLElement, ElementData>()
   const attributes: string[] = []
   for (const key in options.props) attributes.push(key)
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync(options.style ?? '')
   class CustomElement extends HTMLElement {
     static observedAttributes = attributes
     constructor() {
@@ -83,9 +87,7 @@ export const builder = <
         Object.defineProperty(this, key, { enumerable: true, get: () => realProps[key], set })
       }
       const setup = options.setup?.apply(this as never, [shadowRoot])
-      const styled = document.createElement('style')
-      styled.textContent = style
-      shadowRoot.appendChild(styled)
+      shadowRoot.adoptedStyleSheets = [baseStyle, sheet]
       shadowRoot.appendChild(setup.render())
       elementData.adopted = setup.adopted
       elementData.mounted = setup.mounted
@@ -168,7 +170,14 @@ export const html = (template: TemplateStringsArray, ...args: TemplateValue[]) =
           return
         }
         if (name.startsWith('@')) {
-          element.addEventListener(name.slice(1), value as EventListener)
+          const [eventName, behavior] = name.slice(1).split('.')
+          element.addEventListener(eventName, (event: Event) => {
+            if (typeof value === 'function') value(event)
+            if (behavior) {
+              if (behavior === 'stop') event.stopPropagation()
+              if (behavior === 'prevent') event.preventDefault()
+            }
+          }, { passive: behavior === 'passive' })
           element.removeAttribute(name)
           return
         }

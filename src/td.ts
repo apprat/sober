@@ -22,7 +22,7 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props,
+  name, style, props,
   setup() {
     const td = ref<HTMLTableCellElement>()
     return {
@@ -31,7 +31,6 @@ export default class Component extends builder({
         rowspan: (value) => td.target.rowSpan = value
       },
       render: () => html`
-        <style>${style}</style>
         <td ref="${td}" rowspan="${this.rowspan}" colspan="${this.colspan}">
           <slot></slot>
         </td>

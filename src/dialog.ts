@@ -126,17 +126,12 @@ const style = /*css*/`
 }
 @media (pointer: fine){
   .supporting-text::-webkit-scrollbar{
-    width: 8px;
-    height: 8px;
-  }
-  .supporting-text::-webkit-scrollbar-track-piece{
-    background: var(--s-color-outline-variant,#cac4d0);
-  }
-  .supporting-text::-webkit-scrollbar-corner{
-    background: var(--s-color-outline-variant,#cac4d0);
+    width: 6px;
+    height: 6px;
   }
   .supporting-text::-webkit-scrollbar-thumb{
-    background: var(--s-color-outline,#79747e);
+    background: var(--s-color-outline-variant,#cac4d0);
+    border-radius: 2px;
   }
 }
 `
@@ -149,7 +144,7 @@ const props = {
 }
 
 class Component extends builder({
-  name, props, propSyncs: ['size'],
+  name, style, props, propSyncs: ['size'],
   setup() {
     const wrapper = ref()
     const negative = ref()
@@ -178,10 +173,9 @@ class Component extends builder({
         positive: (value) => positive.target.textContent = value
       },
       render: () => html`
-        <style>${style}</style>
         <slot name="trigger" @click="${show}"></slot>
         <div class="wrapper" ref="${wrapper}" @transitionend="${transitionEnd}">
-        <div class="scrim" @click="${dismiss}"></div>
+          <div class="scrim" @click="${dismiss}"></div>
           <div class="wrapper-container">
             <div class="container" part="container">
               <slot name="headline"></slot>

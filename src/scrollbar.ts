@@ -7,17 +7,12 @@ const style = /*css*/`
 }
 @media (pointer: fine){
   :host::-webkit-scrollbar{
-    width: 8px;
-    height: 8px;
-  }
-  :host::-webkit-scrollbar-track-piece{
-    background: var(--s-color-outline-variant,#cac4d0);
-  }
-  :host::-webkit-scrollbar-corner{
-    background: var(--s-color-outline-variant,#cac4d0);
+    width: 6px;
+    height: 6px;
   }
   :host::-webkit-scrollbar-thumb{
-    background: var(--s-color-outline,#79747e);
+    background: var(--s-color-outline-variant,#cac4d0);
+    border-radius: 2px;
   }
 }
 `
@@ -27,11 +22,10 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props,
+  name, style, props,
   setup() {
     return {
       render: () => html`
-        <style>${style}</style>
         <slot></slot>
       `
     }

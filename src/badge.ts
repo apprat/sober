@@ -26,11 +26,10 @@ const props = {
 }
 
 export default class Component extends builder({
-  name, props,
+  name, props, style,
   setup() {
     return {
       render: () => html`
-        <style>${style}</style>
         <slot></slot>
       `
     }

@@ -12,7 +12,7 @@ const style = /*css*/`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
   transition: filter .2s;
   filter: opacity(0);

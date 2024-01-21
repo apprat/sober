@@ -14,7 +14,7 @@ const style = /*css*/`
   display: flex;
   justify-content: center;
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
   overflow: hidden;
 }
 .container{

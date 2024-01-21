@@ -15,6 +15,10 @@ svg{
   width: 100%;
   height: 100%;
 }
+::slotted(svg){
+  width: 100%;
+  height: 100%;
+}
 `
 const svgData = {
   none: '',

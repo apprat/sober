@@ -43,7 +43,7 @@ export default class Component extends builder({
   setup(shadowRoot) {
     const trigger = ref<HTMLDivElement>()
     const container = ref<HTMLElement>()
-    const state = { showed: false }
+    const state = { showed: false, timer: 0 }
     const show = () => {
       if (!this.isConnected || state.showed) return
       const rect = trigger.target.getBoundingClientRect()
@@ -73,14 +73,22 @@ export default class Component extends builder({
       if (showed) return
       container.target.removeAttribute('style')
     }
+    const touchShow = () => {
+      clearTimeout(state.timer)
+      state.timer = setTimeout(show, 1000)
+    }
+    const touchDismiss = () => {
+      clearTimeout(state.timer)
+      dismiss()
+    }
     return {
       render: () => html`
         <div ref="${trigger}" 
           @wheel.passive="${dismiss}"
           @mouseover="${() => !device.touched && show()}"
           @mouseleave="${() => !device.touched && dismiss()}"
-          @touchstart.passive="${show}"
-          @touchend="${dismiss}"
+          @touchstart.passive="${touchShow}"
+          @touchend="${touchDismiss}"
         >
           <slot name="trigger"></slot>
         </div>

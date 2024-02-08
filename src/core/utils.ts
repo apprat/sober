@@ -6,7 +6,7 @@ export const device = { touched: false }
 }
 
 const div = document.createElement('div')
-div.setAttribute('style', 'position: fixed;right: 0;width: 100%;height: 100%;bottom: 0;pointer-events: none;')
+div.setAttribute('style', 'position: fixed;right: 0;bottom: 0;width: 100%;height: 100%;pointer-events: none')
 
 export const getStackingContext = (el: Node) => {
   el.appendChild(div)
@@ -20,14 +20,14 @@ export const getStackingContext = (el: Node) => {
   }
 }
 
-export const animate = (callback: (progress: number) => void, duration: number) => {
-  let startTime: number
-  const run = (timestamp: number) => {
-    if (!startTime) startTime = timestamp
-    const elapsedTime = timestamp - startTime
-    const progress = Math.min(elapsedTime / duration, 1)
-    callback(progress)
-    if (progress < 1) requestAnimationFrame(run)
-  }
-  requestAnimationFrame(run)
-}
+// export const animate = (callback: (progress: number) => void, duration: number) => {
+//   let startTime: number
+//   const run = (timestamp: number) => {
+//     if (!startTime) startTime = timestamp
+//     const elapsedTime = timestamp - startTime
+//     const progress = Math.min(elapsedTime / duration, 1)
+//     callback(progress)
+//     if (progress < 1) requestAnimationFrame(run)
+//   }
+//   requestAnimationFrame(run)
+// }

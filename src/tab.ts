@@ -83,7 +83,7 @@ export default class Component extends builder({
         old.indicator.setAttribute('style', `filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
         select.scrollIntoView({ behavior: 'smooth', inline: 'center' })
       }
-      this.dispatchEvent(new Event('change'))
+      this.isConnected && this.dispatchEvent(new Event('change'))
     })
     return {
       expose: {

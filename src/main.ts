@@ -9,7 +9,6 @@ import Drawer from './drawer.js'
 import FAB from './floating-action-button.js'
 import IconButton from './icon-button.js'
 import Icon from './icon.js'
-import Label from './label.js'
 import Ripple from './ripple.js'
 import MenuItem from './menu-item.js'
 import Menu from './menu.js'
@@ -33,8 +32,6 @@ import Tbody from './tbody.js'
 import Tr from './tr.js'
 import Th from './th.js'
 import Td from './td.js'
-import TextEdit from './text-edit.js'
-import TextField from './text-field.js'
 import Tooltip from './tooltip.js'
 import TopAppBar from './top-app-bar.js'
 
@@ -50,7 +47,6 @@ export {
   FAB,
   IconButton,
   Icon,
-  Label,
   Ripple,
   MenuItem,
   Menu,
@@ -74,8 +70,6 @@ export {
   Tr,
   Td,
   Th,
-  TextEdit,
-  TextField,
   Tooltip,
   TopAppBar
 }

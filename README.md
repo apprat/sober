@@ -21,6 +21,8 @@
 ```shell
 $ npm install sober
 ```
+开发文档：[https://soberjs.com](https://soberjs.com)
+
 引入组件
 ```js
 import 'sober' //引入所有组件

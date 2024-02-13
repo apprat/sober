@@ -110,7 +110,7 @@ const style = /*css*/`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 80px;
+  min-width: 72px;
   border-radius: 20px;
   padding: 0 12px;
   font-weight: 500;

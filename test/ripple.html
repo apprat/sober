@@ -7,9 +7,6 @@
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
   <style>
-    s-ripple {
-      background: #eee;
-    }
   </style>
 </head>
 
@@ -19,15 +16,14 @@
       <s-ripple style="width: 247px;height: 400px;margin: 200px;color: #009688;box-sizing: border-box;">
         Test
       </s-ripple>
-      <s-ripple centered="true" style="width: 100px;height: 100px;">
-        Test
-      </s-ripple>
 
-      <a href="/" style="width: 200px;height: 40px;display: block;">
-        <s-ripple style="width: 100%;height: 100%;">
-          Hello
-        </s-ripple>
-      </a>
+      <div style="position: relative;">
+        <button onclick="console.log('button')">
+          卧槽
+        </button>
+        <s-ripple attached="true"></s-ripple>
+      </div>
+
 
     </main>
   </s-page>

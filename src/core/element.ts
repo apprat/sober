@@ -25,10 +25,6 @@ baseStyle.replaceSync(/*css*/`
   user-select: none;
   -webkit-user-select: none;
 }
-::selection{
-  background: var(--s-color-primary, #006783);
-  color: var(--s-color-on-primary, #ffffff);
-}
 `)
 
 export const builder = <

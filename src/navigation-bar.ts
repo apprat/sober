@@ -37,7 +37,7 @@ export default class Component extends builder({
         item.checked && (item.checked = false)
       })
       changing = false
-      this.isConnected && this.dispatchEvent(new Event('change'))
+      this.dispatchEvent(new Event('change'))
     })
     return {
       expose: {

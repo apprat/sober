@@ -78,18 +78,15 @@ export default class Component extends builder({
     const container = ref<HTMLDivElement>()
     const hover = () => !device.touched && container.target.classList.add('hover')
     const unHover = () => !device.touched && container.target.classList.remove('hover')
-    const trigger = {
-      target: this as HTMLElement,
-      set: () => {
-        if (!this.attached || !this.parentNode) return
-        if (this.parentNode instanceof ShadowRoot) {
-          trigger.target = this.parentNode.host as HTMLElement
-          return
-        }
-        trigger.target = this.parentNode as HTMLElement
+    const that = this
+    const action = {
+      get root(): HTMLElement {
+        if (!that.attached || !that.parentNode) return that
+        if (that.parentNode instanceof ShadowRoot) return that.parentNode.host as HTMLElement
+        return that.parentNode as HTMLElement
       }
     }
-    const press = (event: { clientX: number, clientY: number }) => {
+    const start = (event: { clientX: number, clientY: number }) => {
       const animation = document.createElement('div')
       animation.className = 'animation'
       const { offsetWidth, offsetHeight } = container.target
@@ -121,30 +118,38 @@ export default class Component extends builder({
       animation.addEventListener('animationcancel', remove)
       animation.addEventListener('transitioncancel', remove)
     }
-    const down = (event: PointerEvent) => {
-      if (event.button !== 0) return
-      press(event)
+    let timer: number[] = []
+    const stop = () => {
+      if (timer.length === 0) return
+      timer.map((item) => clearTimeout(item))
+      timer = []
     }
-    const addEvents = (root: HTMLElement) => {
-      root.addEventListener('mouseover', hover)
-      root.addEventListener('mouseleave', unHover)
-      root.addEventListener('wheel', unHover, { passive: true })
-      root.addEventListener('pointerdown', down)
+    const down = (event: MouseEvent) => !device.touched && event.button === 0 && start(event)
+    const touch = (event: TouchEvent) => timer.push(setTimeout(() => start(event.targetTouches[0]), 80))
+    const addEvents = () => {
+      action.root.addEventListener('mouseover', hover)
+      action.root.addEventListener('mouseleave', unHover)
+      action.root.addEventListener('wheel', unHover, { passive: true })
+      action.root.addEventListener('mousedown', down)
+      action.root.addEventListener('touchstart', touch)
+      action.root.addEventListener('touchmove', stop)
     }
-    const removeEvents = (root: HTMLElement) => {
-      root.removeEventListener('mouseover', hover)
-      root.removeEventListener('mouseleave', unHover)
-      root.removeEventListener('wheel', unHover)
-      root.removeEventListener('pointerdown', down)
+    const removeEvents = () => {
+      action.root.removeEventListener('mouseover', hover)
+      action.root.removeEventListener('mouseleave', unHover)
+      action.root.removeEventListener('wheel', unHover)
+      action.root.removeEventListener('mousedown', down)
+      action.root.removeEventListener('touchstart', touch)
+      action.root.removeEventListener('touchmove', stop)
     }
     return {
-      mounted: () => {
-        trigger.set()
-        addEvents(trigger.target)
-      },
-      unmounted: () => removeEvents(trigger.target),
+      mounted: addEvents,
+      unmounted: removeEvents,
       watches: {
-        attached: trigger.set
+        attached: () => {
+          removeEvents()
+          addEvents()
+        }
       },
       render: () => html`
         <div class="container" ref="${container}"></div>

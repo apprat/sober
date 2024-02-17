@@ -131,8 +131,8 @@ export default class Component extends builder({
       action.root.addEventListener('mouseleave', unHover)
       action.root.addEventListener('wheel', unHover, { passive: true })
       action.root.addEventListener('mousedown', down)
-      action.root.addEventListener('touchstart', touch)
-      action.root.addEventListener('touchmove', stop)
+      action.root.addEventListener('touchstart', touch, { passive: true })
+      action.root.addEventListener('touchmove', stop, { passive: true })
     }
     const removeEvents = () => {
       action.root.removeEventListener('mouseover', hover)

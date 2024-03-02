@@ -69,7 +69,7 @@ export default class Component extends builder({
     const ripple = ref<Ripple>()
     return {
       watches: {
-        extended: (value) => ripple.target.centered = !value
+        extended: (value) => ripple.target.setAttribute('centered', String(!value))
       },
       render: () => html`
         <s-ripple attached="true" centered="true" ref="${ripple}"></s-ripple>

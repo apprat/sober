@@ -1,6 +1,6 @@
 {
   "name": "sober",
-  "version": "0.0.51",
+  "version": "0.0.52",
   "description": "Material You design style web component UI library",
   "type": "module",
   "scripts": {
@@ -10,13 +10,8 @@
   "keywords": [
     "material you",
     "material design",
-    "material design3",
-    "web ui-library",
     "web components",
-    "framework",
-    "web",
-    "ui-library",
-    "tools"
+    "sober"
   ],
   "exports": {
     ".": "./dist/main.js",

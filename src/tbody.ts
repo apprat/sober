@@ -4,9 +4,10 @@ const style = /*css*/`
 :host{
   display: table-row-group;
   color: var(--s-color-on-surface,#1d1b20);
+  position: relative;
 }
-::slotted(*){
-  border-top: solid 1px color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 16%, transparent);
+::slotted(s-tr){
+  border-top: solid 1px var(--s-color-surface-variant, #49454f);
 }
 `
 

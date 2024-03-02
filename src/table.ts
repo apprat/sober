@@ -5,6 +5,9 @@ const style = /*css*/`
   display: block;
   overflow: hidden;
   font-size: .875rem;
+  border: solid 1px var(--s-color-surface-variant, #49454f);
+  border-radius: 8px;
+  overflow: auto;
 }
 .container{
   display: table;

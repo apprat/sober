@@ -6,7 +6,7 @@ import Checkbox from './checkbox.js'
 import Dialog from './dialog.js'
 import Divider from './divider.js'
 import Drawer from './drawer.js'
-import FAB from './floating-action-button.js'
+import FAB from './FAB.js'
 import IconButton from './icon-button.js'
 import Icon from './icon.js'
 import Ripple from './ripple.js'
@@ -16,7 +16,8 @@ import NavigationBarItem from './navigation-bar-item.js'
 import NavigationBar from './navigation-bar.js'
 import NavigationRailItem from './navigation-rail-item.js'
 import NavigationRail from './navigation-rail.js'
-import ProgressIndicator from './progress-indicator.js'
+import CircularProgress from './circular-progress.js'
+import LinerProgress from './linear-progress.js'
 import RadioButton from './radio-button.js'
 import Scrollbar from './scrollbar.js'
 import SegmentedButtonItem from './segmented-button-item.js'
@@ -54,7 +55,8 @@ export {
   NavigationBar,
   NavigationRailItem,
   NavigationRail,
-  ProgressIndicator,
+  CircularProgress,
+  LinerProgress,
   RadioButton,
   Scrollbar,
   SegmentedButtonItem,

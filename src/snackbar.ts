@@ -71,7 +71,7 @@ const style = /*css*/`
 
 const name = 's-snackbar'
 const props = {
-  duration: 3000,
+  duration: 5000,
   action: ''
 }
 

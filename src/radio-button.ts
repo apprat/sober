@@ -8,23 +8,32 @@ const style = /*css*/`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--s-color-on-surface-variant,#49454f);
   width: 40px;
   height: 40px;
   border-radius: 50%;
   position: relative;
+  color: var(--s-color-primary,#6750a4);
 }
 :host([disabled=true]){
   pointer-events: none;
-  color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 38%, transparent) !important;
 }
 :host([checked=true]){
   color: var(--s-color-primary,#6750a4);
 }
 .icon{
-  width: 24px;
-  height: 24px;
+  width: 60%;
+  height: 60%;
   fill: currentColor;
+}
+.color{
+  color: var(--s-color-on-surface-variant,#49454f);
+}
+:host([checked=true]) .color,
+:host([indeterminate=true]) .color{
+  color: currentColor;
+}
+:host([disabled=true]) .color{
+  color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 38%, transparent) !important;
 }
 `
 
@@ -61,10 +70,10 @@ export default class Component extends builder({
         checked: (value) => iconPath.target.setAttribute('d', value ? svgData.checked : svgData.uncheck)
       },
       render: () => html`
-        <svg class="icon" viewBox="0 -960 960 960">
+        <svg class="icon color" viewBox="0 -960 960 960">
           <path ref="${iconPath}" d="${svgData.uncheck}"></path>
         </svg>
-        <s-ripple attached="true" centered="true"></s-ripple>
+        <s-ripple class="color" attached="true" centered="true"></s-ripple>
       `
     }
   }

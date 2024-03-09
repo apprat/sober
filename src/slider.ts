@@ -50,6 +50,7 @@ const style = /*css*/`
   height: 100%;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   transform: translateX(calc(-50% + 20px));
 }
 .container::before{
@@ -80,12 +81,13 @@ const style = /*css*/`
 .label{
   position: absolute;
   right: 6px;
-  bottom: 20px;
+  margin-bottom: 28px;
   width: 28px;
   height: 28px;
   filter: opacity(0);
   transition: filter .2s,transform .2s;
   transform: scale(.5) translateY(100%);
+  transform-origin: center;
   display: none;
 }
 :host([labeled=true]) .label{
@@ -99,7 +101,7 @@ const style = /*css*/`
   content: '';
   position: absolute;
   background: currentColor;
-  bottom: 22px;
+  bottom: 23px;
   left: 0;
   width: 28px;
   height: 28px;

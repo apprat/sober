@@ -31,8 +31,8 @@ const style = /*css*/`
 :host([extended=true]){
   padding: 0 16px;
   width: auto;
-  height: 56px;
-  border-radius: 30px;
+  height: 48px;
+  border-radius: var(--s-shape-corner-extra-large, 28px);
 }
 :host(:not([extended=true])[size=large]){
   height: 72px;
@@ -44,6 +44,9 @@ const style = /*css*/`
 }
 ::slotted([slot=start]){
   margin: 0 4px 0 0;
+}
+::slotted([slot=end]){
+  margin: 0 0 0 4px;
 }
 @media (pointer: coarse){
   :host(:active){
@@ -75,6 +78,7 @@ export default class Component extends builder({
         <s-ripple attached="true" centered="true" ref="${ripple}"></s-ripple>
         <slot name="start"></slot>
         <slot></slot>
+        <slot name="end"></slot>
       `
     }
   }

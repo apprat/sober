@@ -8,7 +8,7 @@ const style = /*css*/`
   box-sizing: border-box;
   display: inline-flex;
   vertical-align: middle;
-  border-radius: 20px;
+  border-radius: var(--s-shape-corner-full, 20px);
   padding: 0 24px;
   height: 40px;
   text-transform: capitalize;
@@ -67,6 +67,12 @@ const style = /*css*/`
 :host([type=text]) ::slotted([slot=start]){
   margin: 0 4px 0 -4px;
 }
+::slotted([slot=end]){
+  margin: 0 -8px 0 4px;
+}
+:host([type=text]) ::slotted([slot=end]){
+  margin: 0 -4px 0 4px;
+}
 @media (pointer: coarse){
   :host([type=elevated]:active){
     box-shadow: var(--s-elevation-level2,0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
@@ -108,6 +114,7 @@ export default class Component extends builder({
       render: () => html`
         <slot name="start"></slot>
         <slot></slot>
+        <slot name="end"></slot>
         <s-ripple attached="true"></s-ripple>
       `
     }

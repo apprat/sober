@@ -34,7 +34,6 @@
         <a href="./switch.html">Switch</a>
         <a href="./tab.html">Tab</a>
         <a href="./dialog.html">Dialog</a>
-        <a href="./label.html">Label</a>
         <a href="./snackbar.html">Snackbar</a>
         <a href="./tooltip.html">Tooltip</a>
         <a href="./table.html">Table</a>
@@ -44,7 +43,7 @@
         <a href="./top-app-bar.html">Top App Bar</a>
         <a href="./navigation-bar.html">Navigation Bar</a>
         <a href="./card.html">Card</a>
-        <a href="./progress-indicator.html">Progress Indicator</a>
+        <a href="./progress.html">Progressr</a>
         <a href="./text-field.html">Text Field</a>
         <a href="./drawer.html">Drawer</a>
         <a href="./navigation-rail.html">Bavigation Rail</a>
@@ -121,9 +120,11 @@
           </s-button>
           When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
         </s-snackbar>
-        <s-icon src="search"></s-icon>
-        <s-progress-indicator type="circular" indeterminate="true"></s-progress-indicator>
-        <s-progress-indicator indeterminate="true"></s-progress-indicator>
+        <s-icon type="search"></s-icon>
+        <s-circular-progress></s-circular-progress>
+        <s-circular-progress indeterminate="true"></s-circular-progress>
+        <s-linear-progress value="50"></s-linear-progress>
+        <s-linear-progress indeterminate="true"></s-linear-progress>
         <s-slider labeled="true"></s-slider>
         <s-segmented-button onchange="console.log('change',this.selectIndex)">
           <s-segmented-button-item>

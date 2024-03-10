@@ -1,4 +1,4 @@
-import { builder, html } from './core/element.js'
+import { builder, html, ref } from './core/element.js'
 import type Item from './tab-item.js'
 
 const style = /*css*/`
@@ -23,34 +23,35 @@ const style = /*css*/`
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  width: 100%;
   scrollbar-width: none;
-}
-:host([mode=scrollable]) .container{
-  overflow-x: scroll;
-  width: auto;
-  scrollbar-width: none;
+  overflow-x: auto;
 }
 .container::-webkit-scrollbar{
   display: none;
 }
-::slotted(*){
-  flex-basis: 100%;
+:host([mode=fixed]) .container{
+  overflow: hidden;
+  width: 100%;
 }
-:host([mode=scrollable]) ::slotted(*){
+::slotted(s-tab-item){
   flex-shrink: 0;
   flex-basis: auto;
+}
+:host([mode=fixed]) ::slotted(s-tab-item){
+  flex-basis: 100%;
+  flex-shrink: 1;
 }
 `
 
 const name = 's-tab'
 const props = {
-  mode: 'fixed' as 'fixed' | 'scrollable',
+  mode: 'scrollable' as 'scrollable' | 'fixed',
 }
 
 export default class Component extends builder({
   name, style, props, propSyncs: ['mode'],
   setup() {
+    const container = ref<HTMLDivElement>()
     let options: Item[] = []
     let selectIndex = -1
     let changing = false
@@ -81,7 +82,10 @@ export default class Component extends builder({
         const oldLeft = old.indicator.getBoundingClientRect().left
         const rect = select.indicator.getBoundingClientRect()
         old.indicator.setAttribute('style', `filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
-        select.scrollIntoView({ behavior: 'smooth', inline: 'center' })
+        if (container.target.scrollWidth !== container.target.offsetWidth) {
+          const left = select.offsetLeft - container.target.offsetWidth + container.target.offsetWidth / 2 + select.offsetWidth / 2
+          container.target.scrollTo({ left, behavior: 'smooth' })
+        }
       }
       this.dispatchEvent(new Event('change'))
     })
@@ -95,7 +99,7 @@ export default class Component extends builder({
         },
       },
       render: () => html`
-        <div class="container">
+        <div class="container" ref="${container}">
           <slot @slotchange="${slotChange}"></slot>
         </div>
       `

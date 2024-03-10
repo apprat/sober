@@ -14,6 +14,16 @@ const style = /*css*/`
   width: 100%;
   border-collapse: collapse;
 }
+@media (pointer: fine){
+  :host::-webkit-scrollbar{
+    width: 6px;
+    height: 6px;
+  }
+  :host::-webkit-scrollbar-thumb{
+    background: var(--s-color-outline-variant,#cac4d0);
+    border-radius: 2px;
+  }
+}
 `
 
 const name = 's-table'

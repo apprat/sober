@@ -47,6 +47,8 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   position: absolute;
+  left: 0;
+  top: 0;
   border-radius: inherit;
   background: var(--ripple-color,currentColor);
   filter: opacity(0);

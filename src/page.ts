@@ -62,6 +62,7 @@ const style = /*css*/`
   --s-shape-corner-full: 20px;
 }
 :host([theme=dark]){
+  color-scheme: dark;
   --s-color-primary: #D0BCFF;
   --s-color-on-primary: #381E72;
 

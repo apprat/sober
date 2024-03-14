@@ -75,7 +75,7 @@ export default class Component extends builder({
     }
     const touchShow = () => {
       clearTimeout(state.timer)
-      state.timer = setTimeout(show, 1000)
+      state.timer = setTimeout(show, 800)
     }
     const touchDismiss = () => {
       clearTimeout(state.timer)

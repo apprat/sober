@@ -92,12 +92,9 @@ const style = /*css*/`
   flex-grow: 1;
   overflow-y: auto;
 }
-::slotted(p){
+::slotted([slot=text]){
   margin: 24px;
   line-height: 1.6;
-}
-::slotted(s-label){
-  padding: 0 16px;
 }
 .action{
   display: flex;
@@ -181,6 +178,7 @@ class Component extends builder({
               <slot name="headline"></slot>
               <div class="supporting-text">
                 <slot></slot>
+                <slot name="text"></slot>
               </div>
               <div class="action">
                 <s-ripple ref="${negative}" @click="${() => action('negative')}"></s-ripple>

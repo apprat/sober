@@ -176,7 +176,10 @@ export default class Component extends builder({
     return {
       created: () => {
         slider.target.addEventListener('change', () => this.dispatchEvent(new Event('change')))
-        slider.target.addEventListener('input', render)
+        slider.target.addEventListener('input', () => {
+          render()
+          this.dispatchEvent(new Event('input'))
+        })
         slider.target.addEventListener('mousedown', (event) => event.button === 0 && !device.touched && container.target.classList.add('active'))
         slider.target.addEventListener('mouseup', () => !device.touched && container.target.classList.remove('active'))
         slider.target.addEventListener('touchstart', () => device.touched && container.target.classList.add('active'), { passive: true })

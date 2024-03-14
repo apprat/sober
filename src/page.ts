@@ -1,5 +1,46 @@
 import { builder, html } from './core/element.js'
 
+const dark = `
+  color-scheme: dark;
+  --s-color-primary: #D0BCFF;
+  --s-color-on-primary: #381E72;
+
+  --s-color-secondary: #CCC2DC;
+  --s-color-on-secondary: #332D41;
+  --s-color-secondary-container: #4A4458;
+  --s-color-on-secondary-container: #E8DEF8;
+
+  --s-color-tertiary: #EFB8C8;
+  --s-color-on-tertiary: #492532;
+  --s-color-tertiary-container: #633B48;
+  --s-color-on-tertiary-container: #FFD8E4;
+
+  --s-color-error: #F2B8B5;
+  --s-color-on-error: #601410;
+  --s-color-error-container: #8C1D18;
+  --s-color-on-error-container: #F9DEDC;
+
+  --s-color-background: #1C1B1F;
+  --s-color-on-background: #E6E1E5;
+
+  --s-color-outline: #938F99;
+  --s-color-outline-variant: #49454F;
+
+  --s-color-surface: #1C1B1F;
+  --s-color-on-surface: #E6E1E5;
+  --s-color-surface-variant: #49454F;
+  --s-color-on-surface-variant: #CAC4D0;
+
+  --s-color-inverse-surface: #E6E0E9;
+  --s-color-inverse-on-surface: #322F35;
+  --s-color-inverse-primary: #6750A4;
+
+  --s-color-surface-container: #211F26;
+  --s-color-surface-container-high: #36343B;
+  --s-color-surface-container-highest: #36343B;
+  --s-color-surface-container-low: #1D1B20;
+`
+
 const style = /*css*/`
 :host{
   display: flow-root;
@@ -62,50 +103,18 @@ const style = /*css*/`
   --s-shape-corner-full: 20px;
 }
 :host([theme=dark]){
-  color-scheme: dark;
-  --s-color-primary: #D0BCFF;
-  --s-color-on-primary: #381E72;
-
-  --s-color-secondary: #CCC2DC;
-  --s-color-on-secondary: #332D41;
-  --s-color-secondary-container: #4A4458;
-  --s-color-on-secondary-container: #E8DEF8;
-
-  --s-color-tertiary: #EFB8C8;
-  --s-color-on-tertiary: #492532;
-  --s-color-tertiary-container: #633B48;
-  --s-color-on-tertiary-container: #FFD8E4;
-
-  --s-color-error: #F2B8B5;
-  --s-color-on-error: #601410;
-  --s-color-error-container: #8C1D18;
-  --s-color-on-error-container: #F9DEDC;
-
-  --s-color-background: #1C1B1F;
-  --s-color-on-background: #E6E1E5;
-
-  --s-color-outline: #938F99;
-  --s-color-outline-variant: #49454F;
-
-  --s-color-surface: #1C1B1F;
-  --s-color-on-surface: #E6E1E5;
-  --s-color-surface-variant: #49454F;
-  --s-color-on-surface-variant: #CAC4D0;
-
-  --s-color-inverse-surface: #E6E0E9;
-  --s-color-inverse-on-surface: #322F35;
-  --s-color-inverse-primary: #6750A4;
-
-  --s-color-surface-container: #211F26;
-  --s-color-surface-container-high: #36343B;
-  --s-color-surface-container-highest: #36343B;
-  --s-color-surface-container-low: #1D1B20;
+  ${dark}
+}
+@media (prefers-color-scheme: dark){
+  :host([theme=auto]){
+    ${dark}
+  }
 }
 `
 
 const name = 's-page'
 const props = {
-  theme: 'light' as 'light' | 'dark'
+  theme: 'light' as 'light' | 'dark' | 'auto'
 }
 
 export default class Component extends builder({

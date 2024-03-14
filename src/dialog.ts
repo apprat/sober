@@ -165,6 +165,7 @@ class Component extends builder({
       this.dispatchEvent(new Event(showed ? 'showed' : 'dismissed'))
     }
     return {
+      expose: { show, dismiss },
       watches: {
         negative: (value) => negative.target.textContent = value,
         positive: (value) => positive.target.textContent = value

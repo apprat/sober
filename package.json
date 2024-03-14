@@ -1,6 +1,6 @@
 {
   "name": "sober",
-  "version": "0.0.63",
+  "version": "0.0.64",
   "description": "Material You design style web component UI library",
   "type": "module",
   "scripts": {

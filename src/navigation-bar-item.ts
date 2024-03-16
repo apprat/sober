@@ -16,11 +16,11 @@ const style = /*css*/`
   width: 100%;
   max-width: 80px;
   text-transform: capitalize;
-  color: var(--s-color-on-surface-variant,#49454f);
+  color: var(--s-color-on-surface-variant, #41474d);
   transition: color .2s;
 }
 :host([checked=true]){
-  color: var(--s-color-primary,#6750a4);
+  color: var(--s-color-primary, #006495);
 }
 .icon{
   position: relative;
@@ -41,7 +41,7 @@ const style = /*css*/`
   top: 0;
   transform: scale(0);
   transition: transform .2s;
-  background: var(--s-color-secondary-container,#e8def8);
+  background: var(--s-color-secondary-container, #d4e4f6);
 }
 :host([checked=true]) .icon::before{
   transform: scale(1);
@@ -103,12 +103,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

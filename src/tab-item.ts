@@ -15,7 +15,7 @@ const style = /*css*/`
   padding: 0 16px;
 }
 :host([checked=true]){
-  color: var(--s-color-primary,#6750a4);
+  color: var(--s-color-primary, #006495);
 }
 .container{
   display: flex;
@@ -31,7 +31,7 @@ const style = /*css*/`
   bottom: 0;
   height: 3px;
   width: 100%;
-  background: var(--s-color-primary,#6750a4);
+  background: var(--s-color-primary, #006495);
   border-radius: 3px 3px 0 0;
   transition: filter .2s,transform .2s,width .2s;
   filter: opacity(0);
@@ -120,12 +120,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

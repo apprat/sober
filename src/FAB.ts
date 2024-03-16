@@ -14,15 +14,15 @@ const style = /*css*/`
   width: 56px;
   margin: 24px;
   border-radius: 50%;
-  background: var(--s-color-primary-container,#eaddff);
-  color: var(--s-color-on-primary-container,#21005d);
+  background: var(--s-color-primary-container, #cbe6ff);
+  color: var(--s-color-on-primary-container, #001e30);
   transition: box-shadow .2s;
   font-size: .875rem;
   font-weight: 500;
   white-space: nowrap;
   line-height: 1;
   text-transform: capitalize;
-  box-shadow: var(--s-elevation-level2,0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
 }
 :host([size=small]){
   height: 48px;
@@ -50,12 +50,12 @@ const style = /*css*/`
 }
 @media (pointer: coarse){
   :host(:active){
-    box-shadow: var(--s-elevation-level4,0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
+    box-shadow: var(--s-elevation-level4, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
   }
 }
 @media (pointer: fine){
   :host(:hover){
-    box-shadow: var(--s-elevation-level4,0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
+    box-shadow: var(--s-elevation-level4, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
   }
 }
 `
@@ -94,12 +94,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

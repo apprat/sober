@@ -15,7 +15,7 @@ svg{
   width: 100%;
   height: 100%;
 }
-::slotted(svg){
+::slotted(*){
   width: 100%;
   height: 100%;
 }
@@ -88,12 +88,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

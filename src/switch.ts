@@ -8,7 +8,7 @@ const style = /*css*/`
   align-items: center;
   cursor: pointer;
   position: relative;
-  color: var(--s-color-primary,#6750a4);
+  color: var(--s-color-primary, #006495);
   width: 52px;
 }
 :host([disabled=true]){
@@ -23,7 +23,7 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   border-radius: var(--s-shape-corner-full, 20px);
-  background: var(--s-color-outline,#79747E);
+  background: var(--s-color-outline, #72787e);
   position: absolute;
   padding: 4%;
   overflow: hidden;
@@ -34,24 +34,24 @@ const style = /*css*/`
   background: currentColor;
 }
 :host([disabled=true]) .track{
-  background: var(--s-color-on-surface,#1d1b20);
+  background: var(--s-color-on-surface, #1a1c1e);
   opacity: .12;
 }
 :host([checked=true][disabled=true]) .track{
-  background: var(--s-color-on-surface,#1d1b20);
+  background: var(--s-color-on-surface, #1a1c1e);
 }
 .track::before{
   content: '';
   display: block;
   height: 100%;
-  background: var(--s-color-surface-container-highest, #E6E0E9);
+  background: var(--s-color-surface-container-highest, #e2e2e5);
   border-radius: var(--s-shape-corner-full, 20px);
 }
 :host([checked=true]) .track::before{
   opacity: 0;
 }
 :host([disabled=true]) .track::before{
-  background: var(--s-color-surface, #fef7ff);
+  background: var(--s-color-surface, #fcfcff);
 }
 .ripple{
   height: 125%;
@@ -64,14 +64,14 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  color: var(--s-color-outline,#79747E);
+  color: var(--s-color-outline, #72787e);
 }
 :host([checked=true]) .ripple{
   transform: translateX(50%);
   color: currentColor;
 }
 .thumb{
-  background: var(--s-color-outline,#79747e);
+  background: var(--s-color-outline, #72787e);
   border-radius: 50%;
   width: 60%;
   height: 60%;
@@ -84,16 +84,16 @@ const style = /*css*/`
   align-items: center;
 }
 :host([checked=true]) .thumb{
-  background: var(--s-color-on-primary,#ffffff);
+  background: var(--s-color-on-primary, #ffffff);
   transform: scale(1);
-  box-shadow: var(--s-elevation-level1,0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
 }
 :host([disabled=true]) .thumb{
-  background: color-mix(in srgb, var(--s-color-on-surface, #1d1b20) 38%, transparent);
+  background: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 38%, transparent);
   box-shadow: none;
 }
 :host([checked=true][disabled=true]) .thumb{
-  background: var(--s-color-surface,#fef7ff);
+  background: var(--s-color-surface, #fcfcff);
 }
 .icon{
   width: 66.66666666666667%;
@@ -106,7 +106,7 @@ const style = /*css*/`
   opacity: 1;
 }
 :host([checked=true][disabled=true]) .icon{
-  fill: color-mix(in srgb, var(--s-color-on-surface, #1d1b20) 12%, transparent);
+  fill: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent);
 }
 `
 
@@ -149,12 +149,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

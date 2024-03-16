@@ -51,7 +51,7 @@ const style = /*css*/`
   min-width: 280px;
   max-width: calc(100% - 48px);
   max-height: calc(100% - 48px);
-  background: var(--s-color-surface-container-high, #ece6f0);
+  background: var(--s-color-surface-container-high, #e8e8eb);
   position: relative;
   border-radius: 28px;
   box-shadow: var(--s-elevation-level5, 0 8px 10px -6px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12));
@@ -83,7 +83,7 @@ const style = /*css*/`
   font-size: 1.5rem;
   line-height: 1.6;
   font-weight: 600;
-  color: var(--s-color-on-surface, #1d1b20);
+  color: var(--s-color-on-surface, #1a1c1e);
   flex-shrink: 0;
 }
 .supporting-text{
@@ -93,7 +93,7 @@ const style = /*css*/`
   overflow-y: auto;
 }
 ::slotted([slot=text]){
-  margin: 24px;
+  margin: 16px 24px;
   line-height: 1.6;
 }
 .action{
@@ -115,7 +115,7 @@ const style = /*css*/`
   text-transform: capitalize;
   box-sizing: border-box;
   font-size: .875rem;
-  color: var(--s-color-primary,#6750a4);
+  color: var(--s-color-primary, #006495);
   margin: 20px 0;
 }
 .action>s-ripple:empty{
@@ -127,7 +127,7 @@ const style = /*css*/`
     height: 6px;
   }
   .supporting-text::-webkit-scrollbar-thumb{
-    background: var(--s-color-outline-variant,#cac4d0);
+    background: var(--s-color-outline-variant, #c1c7ce);
     border-radius: 2px;
   }
 }
@@ -219,12 +219,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

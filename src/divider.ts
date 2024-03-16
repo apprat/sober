@@ -4,7 +4,7 @@ const style = /*css*/`
 :host{
   display: block;
   height: 1px;
-  background: var(--s-color-outline-variant,#cac4d0);
+  background: var(--s-color-outline-variant, #c1c7ce);
   margin: 0 16px;
 }
 `
@@ -34,12 +34,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

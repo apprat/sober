@@ -3,11 +3,11 @@ import { builder, html } from './core/element.js'
 const style = /*css*/`
 :host{
   display: table-row-group;
-  color: var(--s-color-on-surface,#1d1b20);
+  color: var(--s-color-on-surface, #1a1c1e);
   position: relative;
 }
 ::slotted(s-tr){
-  border-top: solid 1px var(--s-color-surface-variant, #49454f);
+  border-top: solid 1px var(--s-color-outline-variant, #c1c7ce);
 }
 `
 
@@ -36,12 +36,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

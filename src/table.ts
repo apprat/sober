@@ -5,7 +5,7 @@ const style = /*css*/`
   display: block;
   overflow: hidden;
   font-size: .875rem;
-  border: solid 1px var(--s-color-surface-variant, #49454f);
+  border: solid 1px var(--s-color-outline-variant, #c1c7ce);
   border-radius: 8px;
   overflow: auto;
 }
@@ -20,7 +20,7 @@ const style = /*css*/`
     height: 6px;
   }
   :host::-webkit-scrollbar-thumb{
-    background: var(--s-color-outline-variant,#cac4d0);
+    background: var(--s-color-outline-variant, #c1c7ce);
     border-radius: 2px;
   }
 }
@@ -53,12 +53,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

@@ -18,37 +18,37 @@ const style = /*css*/`
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
-  background: var(--s-color-primary,#6750a4);
-  color: var(--s-color-on-primary,#ffffff);
+  background: var(--s-color-primary, #006495);
+  color: var(--s-color-on-primary, #ffffff);
   transition: box-shadow .2s;
 }
 :host([disabled=true]){
   box-shadow: none !important;
   pointer-events: none !important;
-  background: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent) !important;
-  color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 38%, transparent) !important;
+  background: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent) !important;
+  color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 38%, transparent) !important;
 }
 :host([type=elevated]){
-  background: var(--s-color-surface-container-low,#f7f2fa);
-  color: var(--s-color-primary,#6750a4);
-  box-shadow: var(--s-elevation-level1,0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+  background: var(--s-color-surface-container-low, #f3f3f6);
+  color: var(--s-color-primary, #006495);
+  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
 }
 :host([type=filled-tonal]){
-  background: var(--s-color-secondary-container,#e8def8);
-  color: var(--s-color-on-secondary-container,#1d192b);
+  background: var(--s-color-secondary-container, #d4e4f6);
+  color: var(--s-color-on-secondary-container, #0d1d29);
 }
 :host([type=outlined]){
-  border: solid 1px var(--s-color-outline,#79747e);
+  border: solid 1px var(--s-color-outline, #72787e);
   background: none;
-  color: var(--s-color-primary,#6750a4);
+  color: var(--s-color-primary, #006495);
 }
 :host([type=outlined][disabled=true]){
   background: none !important;
-  border-color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent);
+  border-color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent);
 }
 :host([type=text]){
   background: none;
-  color: var(--s-color-primary,#6750a4);
+  color: var(--s-color-primary, #006495);
   padding: 0 12px;
 }
 :host([type=text][disabled=true]){
@@ -56,8 +56,6 @@ const style = /*css*/`
 }
 ::slotted(*){
   color: inherit;
-}
-::slotted(s-icon){
   width: 18px;
   height: 18px;
 }
@@ -75,11 +73,11 @@ const style = /*css*/`
 }
 @media (pointer: coarse){
   :host([type=elevated]:active){
-    box-shadow: var(--s-elevation-level2,0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+    box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
   }
   :host(:active),
   :host([type=filled-tonal]:active){
-    box-shadow: var(--s-elevation-level1,0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+    box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
   }
   :host([type=outlined]:active),
   :host([type=text]:active){
@@ -88,11 +86,11 @@ const style = /*css*/`
 }
 @media (pointer: fine){
   :host([type=elevated]:hover){
-    box-shadow: var(--s-elevation-level2,0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+    box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
   }
   :host(:hover),
   :host([type=filled-tonal]:hover){
-    box-shadow: var(--s-elevation-level1,0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+    box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
   }
   :host([type=outlined]:hover),
   :host([type=text]:hover){
@@ -131,12 +129,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

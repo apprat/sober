@@ -4,7 +4,7 @@ import { device } from './core/utils.js'
 const style = /*css*/`
 :host{
   display: block;
-  color: var(--s-color-primary,#6750a4);
+  color: var(--s-color-primary, #006495);
   height: 40px;
   cursor: pointer;
   position: relative;
@@ -27,10 +27,10 @@ const style = /*css*/`
   overflow: hidden;
   border-radius: 2px;
   position: relative;
-  background: var(--s-color-surface-container-highest, #e6e0e9);
+  background: var(--s-color-surface-container-highest, #e2e2e5);
 }
 :host([disabled=true]) .track{
-  background: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 31.57894736842105%, transparent);
+  background: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 31.57894736842105%, transparent);
 }
 .track>.active-track{
   position: absolute;
@@ -42,7 +42,7 @@ const style = /*css*/`
   transform: translateX(-50%);
 }
 :host([disabled=true]) .track>.active-track{
-  background: var(--s-color-on-surface,#1d1b20);
+  background: var(--s-color-on-surface, #1a1c1e);
 }
 .container{
   position: absolute;
@@ -71,11 +71,11 @@ const style = /*css*/`
   height: 20px;
   background: currentColor;
   border-radius: 50%;
-  box-shadow: var(--s-elevation-level1,0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
   margin: 10px;
 }
 :host([disabled=true]) .handle{
-  background: var(--s-color-on-surface,#1d1b20);
+  background: var(--s-color-on-surface, #1a1c1e);
   box-shadow: none;
 }
 .label{
@@ -119,7 +119,7 @@ const style = /*css*/`
 }
 .label>span{
   position: absolute;
-  color: var(--s-color-on-primary,#ffffff);
+  color: var(--s-color-on-primary, #ffffff);
   font-size: .625rem;
   width: 28px;
   height: 28px;
@@ -244,12 +244,3 @@ declare global {
     [name]: Component
   }
 }
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
-  }
-}
-
-type Events = Event

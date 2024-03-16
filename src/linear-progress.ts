@@ -4,12 +4,12 @@ const style = /*css*/`
 :host{
   display: block;
   height: 4px;
-  color: var(--s-color-primary,#6750a4);
+  color: var(--s-color-primary, #006495);
   position: relative;
   overflow: hidden;
 }
 .track{
-  background: var(--s-color-surface-container-highest,#e6e0e9);
+  background: var(--s-color-surface-container-highest, #e2e2e5);
   height: 100%;
 }
 .float{
@@ -45,15 +45,15 @@ const style = /*css*/`
   display: block;
 }
 @keyframes translate{
-  0% { left: 0; width: 0; }
-  50% { left: 30%; width: 70%; }
-  75% { left: 100%; width: 0; }
+  0% { left: 0; width: 0 }
+  50% { left: 30%; width: 70% }
+  75% { left: 100%; width: 0 }
 }
 @keyframes translate2{
-  0% { left: 0; width: 0; }
-  50% { left: 0; width: 0; }
-  75% { left: 0; width: 25%; }
-  100% { left: 100%; width: 0; }
+  0% { left: 0; width: 0 }
+  50% { left: 0; width: 0 }
+  75% { left: 0; width: 25% }
+  100% { left: 100%; width: 0 }
 }
 `
 
@@ -96,12 +96,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

@@ -4,7 +4,7 @@ const style = /*css*/`
 :host{
   display: table-header-group;
   font-weight: 600;
-  color: var(--s-color-on-surface-variant,#49454f);
+  color: var(--s-color-on-surface-variant, #41474d);
 }
 `
 
@@ -33,12 +33,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

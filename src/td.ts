@@ -51,10 +51,3 @@ declare global {
     [name]: Component
   }
 }
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
-  }
-}

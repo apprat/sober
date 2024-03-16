@@ -6,7 +6,7 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
   font-size: .875rem;
-  color: var(--s-color-on-surface,#1d1b20);
+  color: var(--s-color-on-surface, #1a1c1e);
 }
 .wrapper{
   pointer-events: none;
@@ -32,7 +32,7 @@ const style = /*css*/`
   position: fixed;
   top: var(--top);
   left: var(--left);
-  background: var(--s-color-surface-container-high, #36343b);
+  background: var(--s-color-surface-container-high, #e8e8eb);
   border-radius: 4px;
   padding: 8px 0;
   max-width: 192px;
@@ -53,12 +53,12 @@ const style = /*css*/`
   display: block;
 }
 ::slotted(s-menu:first-of-type:not(:first-child)){
-  border-top: solid 1px var(--s-color-outline-variant,#cac4d0);
+  border-top: solid 1px var(--s-color-outline-variant, #c1c7ce);
   margin-top: 8px;
   padding-top: 8px;
 }
 ::slotted(s-menu:last-of-type:not(:last-child)){
-  border-bottom: solid 1px var(--s-color-outline-variant,#cac4d0);
+  border-bottom: solid 1px var(--s-color-outline-variant, #c1c7ce);
   margin-bottom: 8px;
   padding-bottom: 8px;
 }

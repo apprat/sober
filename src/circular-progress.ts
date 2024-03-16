@@ -6,7 +6,7 @@ const style = /*css*/`
   vertical-align: middle;
   width: 48px;
   height: 48px;
-  color: var(--s-color-primary,#6750a4);
+  color: var(--s-color-primary, #006495);
 }
 svg{
   height: inherit;
@@ -21,13 +21,13 @@ svg{
   display: block;
 }
 @keyframes stroke{
-  0% { stroke-dasharray: 1px, 200px; stroke-dashoffset: 0; }
-  50% { stroke-dasharray: 100px, 200px; stroke-dashoffset: -15px; }
-  100% { stroke-dasharray: 100px, 200px; stroke-dashoffset: -125px; }
+  0% { stroke-dasharray: 1px, 200px; stroke-dashoffset: 0 }
+  50% { stroke-dasharray: 100px, 200px; stroke-dashoffset: -15px }
+  100% { stroke-dasharray: 100px, 200px; stroke-dashoffset: -125px }
 }
 @keyframes rotate{
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% { transform: rotate(0deg) }
+  100% { transform: rotate(360deg) }
 }
 `
 
@@ -74,12 +74,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

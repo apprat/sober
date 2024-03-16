@@ -12,8 +12,8 @@ const style = /*css*/`
   left: 0;
   top: 0;
   z-index: 1;
-  background: var(--s-color-inverse-surface,#322f35);
-  color: var(--s-color-inverse-on-surface,#f5eff7);
+  background: var(--s-color-inverse-surface, #2f3133);
+  color: var(--s-color-inverse-on-surface, #f0f0f3);
   font-size: .875rem;
   font-weight: 400;
   padding: 6px 8px;
@@ -110,12 +110,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

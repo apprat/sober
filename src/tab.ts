@@ -6,15 +6,15 @@ const style = /*css*/`
   display: flex;
   justify-content: center;
   position: relative;
-  background: var(--s-color-surface,#fef7ff);
-  color: var(--s-color-on-surface-variant,#49454f);
+  background: var(--s-color-surface, #fcfcff);
+  color: var(--s-color-on-surface-variant, #41474d);
 }
 :host::before{
   content: '';
   position: absolute;
   width: 100%;
   height: 1px;
-  background: var(--s-color-surface-variant,#49454f);
+  background: var(--s-color-surface-variant, #dee3ea);
   bottom: 0;
   left: 0;
 }
@@ -117,12 +117,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

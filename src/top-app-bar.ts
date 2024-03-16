@@ -4,8 +4,8 @@ const style = /*css*/`
 :host{
   display: flex;
   height: 64px;
-  background: var(--s-color-surface-container,#f3edf7);
-  color: var(--s-color-on-surface,#1d1b20);
+  background: var(--s-color-surface-container, #edeef1);
+  color: var(--s-color-on-surface, #1a1c1e);
   align-items: center;
   padding: 0 8px;
   transition: box-shadow .2s;
@@ -85,12 +85,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

@@ -2,43 +2,37 @@ import { builder, html } from './core/element.js'
 
 const dark = `
   color-scheme: dark;
-  --s-color-primary: #D0BCFF;
-  --s-color-on-primary: #381E72;
-
-  --s-color-secondary: #CCC2DC;
-  --s-color-on-secondary: #332D41;
-  --s-color-secondary-container: #4A4458;
-  --s-color-on-secondary-container: #E8DEF8;
-
-  --s-color-tertiary: #EFB8C8;
-  --s-color-on-tertiary: #492532;
-  --s-color-tertiary-container: #633B48;
-  --s-color-on-tertiary-container: #FFD8E4;
-
-  --s-color-error: #F2B8B5;
-  --s-color-on-error: #601410;
-  --s-color-error-container: #8C1D18;
-  --s-color-on-error-container: #F9DEDC;
-
-  --s-color-background: #1C1B1F;
-  --s-color-on-background: #E6E1E5;
-
-  --s-color-outline: #938F99;
-  --s-color-outline-variant: #49454F;
-
-  --s-color-surface: #1C1B1F;
-  --s-color-on-surface: #E6E1E5;
-  --s-color-surface-variant: #49454F;
-  --s-color-on-surface-variant: #CAC4D0;
-
-  --s-color-inverse-surface: #E6E0E9;
-  --s-color-inverse-on-surface: #322F35;
-  --s-color-inverse-primary: #6750A4;
-
-  --s-color-surface-container: #211F26;
-  --s-color-surface-container-high: #36343B;
-  --s-color-surface-container-highest: #36343B;
-  --s-color-surface-container-low: #1D1B20;
+  --s-color-primary: var(--s-color-dark-primary, #8fcdff);
+  --s-color-on-primary: var(--s-color-dark-on-primary, #003450);
+  --s-color-primary-container: var(--s-color-dark-primary-container, #004b71);
+  --s-color-on-primary-container: var(--s-color-dark-on-primary-container, #cbe6ff);
+  --s-color-secondary: var(--s-color-dark-secondary, #b8c8d9);
+  --s-color-on-secondary: var(--s-color-dark-on-secondary, #22323f);
+  --s-color-secondary-container: var(--s-color-dark-secondary-container, #394856);
+  --s-color-on-secondary-container: var(--s-color-dark-on-secondary-container, #d4e4f6);
+  --s-color-tertiary: var(--s-color-dark-tertiary, #d0bfe7);
+  --s-color-on-tertiary: var(--s-color-dark-on-tertiary, #362b4a);
+  --s-color-tertiary-container: var(--s-color-dark-tertiary-container, #4d4162);
+  --s-color-on-tertiary-container: var(--s-color-dark-on-tertiary-container, #ecdcff);
+  --s-color-error: var(--s-color-dark-error, #ffb4ab);
+  --s-color-on-error: var(--s-color-dark-on-error, #690005);
+  --s-color-error-container: var(--s-color-dark-error-container, #93000a);
+  --s-color-on-error-container: var(--s-color-dark-on-error-container, #ffb4ab);
+  --s-color-background: var(--s-color-dark-background, #1a1c1e);
+  --s-color-on-background: var(--s-color-dark-on-background, #e2e2e5);
+  --s-color-outline: var(--s-color-dark-outline, #8b9198);
+  --s-color-outline-variant: var(--s-color-dark-outline-variant, #41474d);
+  --s-color-surface: var(--s-color-dark-surface, #1a1c1e);
+  --s-color-on-surface: var(--s-color-dark-on-surface, #e2e2e5);
+  --s-color-surface-variant: var(--s-color-dark-surface-variant, #41474d);
+  --s-color-on-surface-variant: var(--s-color-dark-on-surface-variant, #c1c7ce);
+  --s-color-inverse-surface: var(--s-color-dark-inverse-surface, #e2e2e5);
+  --s-color-inverse-on-surface: var(--s-color-dark-inverse-on-surface, #2f3133);
+  --s-color-inverse-primary: var(--s-color-dark-inverse-primary, #006495);
+  --s-color-surface-container: var(--s-color-dark-surface-container, #1e2022);
+  --s-color-surface-container-high: var(--s-color-dark-surface-container-high, #282a2d);
+  --s-color-surface-container-highest: var(--s-color-dark-surface-container-highest, #333537);
+  --s-color-surface-container-low: var(--s-color-dark-surface-container-low, #1a1c1e);
 `
 
 const style = /*css*/`
@@ -49,52 +43,43 @@ const style = /*css*/`
   font-family: Roboto, system-ui;
   height: 100%;
   --s-color-scrim: #000000;
-  --s-color-primary: #6750A4;
-  --s-color-on-primary: #FFFFFF;
-  --s-color-primary-container: #EADDFF;
-  --s-color-on-primary-container: #21005D;
-
-  --s-color-secondary: #625B71;
-  --s-color-on-secondary: #FFFFFF;
-  --s-color-secondary-container: #E8DEF8;
-  --s-color-on-secondary-container: #1D192B;
-
-  --s-color-tertiary: #7D5260;
-  --s-color-on-tertiary: #FFFFFF;
-  --s-color-tertiary-container: #FFD8E4;
-  --s-color-on-tertiary-container: #31111D;
-
-  --s-color-error: #B3261E;
-  --s-color-on-error: #FFFFFF;
-  --s-color-error-container: #F9DEDC;
-  --s-color-on-error-container: #410E0B;
-
-  --s-color-background: #FFFBFE;
-  --s-color-on-background: #1C1B1F;
-
-  --s-color-outline: #79747E;
-  --s-color-outline-variant: #CAC4D0;
-
-  --s-color-surface: #FEF7FF;
-  --s-color-on-surface: #1D1B20;
-  --s-color-surface-variant: #E7E0EC;
-  --s-color-on-surface-variant: #49454F;
-
-  --s-color-inverse-surface: #322F35;
-  --s-color-inverse-on-surface: #F5EFF7;
-  --s-color-inverse-primary: #D0BCFF;
-
-  --s-color-surface-container: #F3EDF7;
-  --s-color-surface-container-high: #ECE6F0;
-  --s-color-surface-container-highest: #E6E0E9;
-  --s-color-surface-container-low: #F7F2FA;
+  --s-color-primary: #006495;
+  --s-color-on-primary: #ffffff;
+  --s-color-primary-container: #cbe6ff;
+  --s-color-on-primary-container: #001e30;
+  --s-color-secondary: #50606f;
+  --s-color-on-secondary: #ffffff;
+  --s-color-secondary-container: #d4e4f6;
+  --s-color-on-secondary-container: #0d1d29;
+  --s-color-tertiary: #66587b;
+  --s-color-on-tertiary: #ffffff;
+  --s-color-tertiary-container: #ecdcff;
+  --s-color-on-tertiary-container: #211634;
+  --s-color-error: #ba1a1a;
+  --s-color-on-error: #ffffff;
+  --s-color-error-container: #ffdad6;
+  --s-color-on-error-container: #410002;
+  --s-color-background: #fcfcff;
+  --s-color-on-background: #1a1c1e;
+  --s-color-outline: #72787e;
+  --s-color-outline-variant: #c1c7ce;
+  --s-color-surface: #fcfcff;
+  --s-color-on-surface: #1a1c1e;
+  --s-color-surface-variant: #dee3ea;
+  --s-color-on-surface-variant: #41474d;
+  --s-color-inverse-surface: #2f3133;
+  --s-color-inverse-on-surface: #f0f0f3;
+  --s-color-inverse-primary: #8fcdff;
+  --s-color-surface-container: #edeef1;
+  --s-color-surface-container-high: #e8e8eb;
+  --s-color-surface-container-highest: #e2e2e5;
+  --s-color-surface-container-low: #f3f3f6;
 
   --s-elevation-level1: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
   --s-elevation-level2: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
   --s-elevation-level3: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
   --s-elevation-level4: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
   --s-elevation-level5: 0 8px 10px -6px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12);
-
   --s-shape-corner-extra-small: 4px;
   --s-shape-corner-small: 8px;
   --s-shape-corner-medium: 12px;

@@ -11,34 +11,34 @@ const style = /*css*/`
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  color: var(--s-color-on-surface-variant,#49454f);
+  color: var(--s-color-on-surface-variant, #41474d);
   position: relative;
   box-sizing: border-box;
 }
 :host([disabled=true]){
   pointer-events: none;
-  color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 38%, transparent) !important;
+  color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 38%, transparent) !important;
 }
 :host([type=filled]){
-  background: var(--s-color-primary,#6750a4);
-  color: var(--s-color-on-primary,#ffffff);
+  background: var(--s-color-primary, #006495);
+  color: var(--s-color-on-primary, #ffffff);
 }
 :host([type=filled][disabled=true]){
-  background: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent) !important;
+  background: color-mix(in srgb ,var(--s-color-on-surface, #1a1c1e) 12%, transparent) !important;
 }
 :host([type=filled-tonal]){
-  background: var(--s-color-secondary-container,#e8def8);
-  color: var(--s-color-on-secondary-container,#1d192b);
+  background: var(--s-color-secondary-container, #d4e4f6);
+  color: var(--s-color-on-secondary-container, #0d1d29);
 }
 :host([type=filled-tonal][disabled=true]){
-  background: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent) !important;
+  background: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent) !important;
 }
 :host([type=outlined]){
-  border: solid 1px var(--s-color-outline,#79747e);
+  border: solid 1px var(--s-color-outline, #72787e);
 }
 :host([type=outlined][disabled=true]){
   background: none !important;
-  border-color: color-mix(in srgb ,var(--s-color-on-surface,#1d1b20) 12%, transparent);
+  border-color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent);
 }
 `
 
@@ -72,12 +72,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

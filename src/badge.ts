@@ -7,7 +7,7 @@ const style = /*css*/`
   align-items: center;
   min-width: 18px;
   height: 18px;
-  background: var(--s-color-error,#b3261e);
+  background: var(--s-color-error, #ba1a1a);
   color: var(--s-color-on-error, #ffffff);
   border-radius: 12px;
   padding: 0 3px;
@@ -46,12 +46,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

@@ -30,7 +30,7 @@ const style = /*css*/`
 ::slotted([slot=end]){
   width: 320px;
   height: 100%;
-  background: var(--s-color-surface-container-low, #f7f2fa);
+  background: var(--s-color-surface-container-low, #f3f3f6);
   position: relative;
   display: flow-root;
 }
@@ -194,12 +194,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

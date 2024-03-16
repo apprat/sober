@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import type Item from './segmented-button-item.js'
 
 const style = /*css*/`
@@ -61,12 +61,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

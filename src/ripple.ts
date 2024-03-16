@@ -28,19 +28,18 @@ const style = /*css*/`
   border-radius: inherit;
 }
 .animation {
-  background: var(--ripple-color,currentColor);
+  background: var(--ripple-color, currentColor);
   border-radius: 50%;
   transition: opacity .8s;
-  opacity: var(--ripple-opacity,.24);
+  opacity: var(--ripple-opacity, .24);
   width: var(--size);
   height: var(--size);
   position: absolute;
-  transform: translate(-50%,-50%) scale(0);
+  transform: translate(-50%, -50%) scale(0);
   left: var(--x);
   top: var(--y);
   animation: ripple 800ms cubic-bezier(.2, .9, .1, .9);
   animation-fill-mode: forwards;
-  filter: blur(8px);
 }
 .container::before{
   content: '';
@@ -50,7 +49,7 @@ const style = /*css*/`
   left: 0;
   top: 0;
   border-radius: inherit;
-  background: var(--ripple-color,currentColor);
+  background: var(--ripple-color, currentColor);
   filter: opacity(0);
   transition: filter .2s;
   will-change: filter;
@@ -59,12 +58,8 @@ const style = /*css*/`
   filter: opacity(.12);
 }
 @keyframes ripple{
-  0%{
-    transform: translate(-50%,-50%) scale(0);
-  }
-  100%{
-    transform: translate(-50%,-50%) scale(1);
-  }
+  0% {transform: translate(-50%,-50%) scale(0)}
+  100% {transform: translate(-50%,-50%) scale(1)}
 }
 `
 
@@ -171,12 +166,5 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
-  }
-}
-
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
   }
 }

@@ -1,5 +1,6 @@
 import { builder, html, ref } from './core/element.js'
 import { device, getStackingContext } from './core/utils.js'
+import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
 :host{
@@ -49,17 +50,26 @@ export default class Component extends builder({
       const rect = trigger.target.getBoundingClientRect()
       const stackingContext = getStackingContext(shadowRoot)
       const gap = 4
-      const margin = { top: trigger.target.offsetHeight + gap, left: -((container.target.offsetWidth - trigger.target.offsetWidth) / 2) }
-      if (rect.top + margin.top + container.target.offsetHeight > stackingContext.top + stackingContext.height) {
-        margin.top = -(container.target.offsetHeight + gap)
+      const left = rect.left - stackingContext.left
+      const top = rect.top - stackingContext.top
+      const position = {
+        top: top + trigger.target.offsetHeight + gap,
+        left: left - ((container.target.offsetWidth - trigger.target.offsetWidth) / 2),
       }
-      if (rect.left + margin.left < stackingContext.left) {
-        margin.left = 0
+      //right
+      if (position.left + container.target.offsetWidth > innerWidth) {
+        position.left = left - container.target.offsetWidth + trigger.target.offsetWidth
       }
-      if ((rect.left + container.target.offsetWidth) + margin.left > stackingContext.width - stackingContext.left) {
-        margin.left = -(container.target.offsetWidth - trigger.target.offsetWidth)
+      //left
+      if (position.left < 0) {
+        position.left = left
       }
-      container.target.setAttribute('style', `left: auto;top: auto;margin-left: ${margin.left}px;margin-top: ${margin.top}px`)
+      //top
+      if (position.top + container.target.offsetHeight > innerHeight) {
+        console.log('底部不够')
+        position.top = top - container.target.offsetHeight - gap
+      }
+      container.target.setAttribute('style', `left: ${position.left}px;top: ${position.top}px`)
       container.target.classList.add('show')
       state.showed = true
     }
@@ -88,6 +98,7 @@ export default class Component extends builder({
           @mouseover="${() => !device.touched && show()}"
           @mouseleave="${() => !device.touched && dismiss()}"
           @touchstart.passive="${touchShow}"
+          @touchmove.passive="${touchDismiss}"
           @touchend="${touchDismiss}"
         >
           <slot name="trigger"></slot>
@@ -105,7 +116,7 @@ Component.define()
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      [name]: Partial<typeof props> & { [name: string]: unknown }
+      [name]: Partial<typeof props> & JSXAttributes
     }
   }
   interface HTMLElementTagNameMap {

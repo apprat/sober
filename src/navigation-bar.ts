@@ -1,5 +1,6 @@
 import { builder, html } from './core/element.js'
 import type Item from './navigation-bar-item.js'
+import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
 :host{
@@ -60,7 +61,7 @@ Component.define()
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      [name]: Partial<typeof props> & { [name: string]: unknown }
+      [name]: Partial<typeof props> & JSXAttributes
     }
   }
   interface HTMLElementTagNameMap {

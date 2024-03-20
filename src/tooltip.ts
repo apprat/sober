@@ -52,22 +52,25 @@ export default class Component extends builder({
       const gap = 4
       const left = rect.left - stackingContext.left
       const top = rect.top - stackingContext.top
+      const cWidth = container.target.offsetWidth
+      const tWidth = trigger.target.offsetWidth
+      const cHeight = container.target.offsetHeight
+      const tHeight = trigger.target.offsetHeight
       const position = {
         top: top + trigger.target.offsetHeight + gap,
-        left: left - ((container.target.offsetWidth - trigger.target.offsetWidth) / 2),
+        left: left - ((cWidth - tWidth) / 2),
       }
       //right
-      if (position.left + container.target.offsetWidth > innerWidth) {
-        position.left = left - container.target.offsetWidth + trigger.target.offsetWidth
+      if (rect.left + ((cWidth + tWidth) / 2) > innerWidth) {
+        position.left = left - cWidth + tWidth
       }
       //left
-      if (position.left < 0) {
+      if (rect.left - ((cWidth + tWidth) / 2) < 0) {
         position.left = left
       }
       //top
-      if (position.top + container.target.offsetHeight > innerHeight) {
-        console.log('底部不够')
-        position.top = top - container.target.offsetHeight - gap
+      if (rect.top + cHeight + tHeight + gap > innerHeight) {
+        position.top = top - cHeight - gap
       }
       container.target.setAttribute('style', `left: ${position.left}px;top: ${position.top}px`)
       container.target.classList.add('show')
@@ -85,7 +88,7 @@ export default class Component extends builder({
     }
     const touchShow = () => {
       clearTimeout(state.timer)
-      state.timer = setTimeout(show, 800)
+      state.timer = setTimeout(show, 600)
     }
     const touchDismiss = () => {
       clearTimeout(state.timer)
@@ -98,7 +101,6 @@ export default class Component extends builder({
           @mouseover="${() => !device.touched && show()}"
           @mouseleave="${() => !device.touched && dismiss()}"
           @touchstart.passive="${touchShow}"
-          @touchmove.passive="${touchDismiss}"
           @touchend="${touchDismiss}"
         >
           <slot name="trigger"></slot>

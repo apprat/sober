@@ -76,7 +76,7 @@ const props = {
   action: ''
 }
 
-const make = (options: string | {
+const show = (options: string | {
   view?: Element
   text: string
   duration?: number
@@ -149,7 +149,7 @@ class Component extends builder({
     }
   }
 }) {
-  static readonly show = make
+  static readonly show = show
 }
 
 Component.define()

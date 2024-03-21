@@ -31,8 +31,9 @@ const style = /*css*/`
 .container{
   opacity: 0;
   position: fixed;
-  top: var(--top);
-  left: var(--left);
+  top: var(--top, auto);
+  left: var(--left, auto);
+  transform-origin: var(--origin,left top);
   background: var(--s-color-surface-container-high, #e8e8eb);
   border-radius: 4px;
   padding: 8px 0;
@@ -42,7 +43,6 @@ const style = /*css*/`
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
-  transform-origin: var(--origin);
   max-height: 504px;
   box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
 }
@@ -85,35 +85,46 @@ export default class Component extends builder({
       if (!this.isConnected || state.showed) return
       const rect = (element ?? trigger.target).getBoundingClientRect()
       const stackingContext = getStackingContext(shadowRoot)
-      const value = { top: -1, left: -2, origin: ['left', 'top'] }
-      if (this.parentNode instanceof Component) {
-        value.left = rect.left - stackingContext.left + rect.width
-        value.top = rect.top - stackingContext.top
-        if (value.left + container.target.offsetWidth > stackingContext.width) {
-          value.left = value.left - container.target.offsetWidth * 2
-          value.origin[0] = 'right'
+      const left = rect.left - stackingContext.left
+      const top = rect.top - stackingContext.top
+      const cWidth = container.target.offsetWidth
+      const tWidth = trigger.target.offsetWidth
+      const cHeight = container.target.offsetHeight
+      const tHeight = trigger.target.offsetHeight
+      const position = {
+        top: top + trigger.target.offsetHeight,
+        left: left,
+        origin: ['left', 'top']
+      }
+      if (!(this.parentNode instanceof Component)) {
+        //right
+        if (rect.left + cWidth > innerWidth) {
+          position.left = left - cWidth + tWidth
+          position.origin[0] = 'right'
         }
-        if (value.top + container.target.offsetHeight > stackingContext.height) {
-          value.top = value.top + rect.height - container.target.offsetHeight
-          value.origin[1] = 'bottom'
+        //top
+        if (rect.top + cHeight + tHeight > innerHeight) {
+          position.top = top - cHeight
+          position.origin[1] = 'bottom'
         }
       } else {
-        value.left = rect.left - stackingContext.left
-        const top = rect.top - stackingContext.top
-        if (value.left + container.target.offsetWidth > stackingContext.width) {
-          value.origin[0] = 'right'
-          value.left = value.left - container.target.offsetWidth + rect.width
+        position.left = left + cWidth
+        position.top = top
+        console.log(innerWidth, rect.left)
+        //right
+        if (rect.left + cWidth + cWidth > innerWidth) {
+          position.left = left - cWidth
+          position.origin[0] = 'right'
         }
-        if (top + container.target.offsetHeight > stackingContext.height) {
-          value.origin[1] = 'bottom'
-          value.top = top - container.target.offsetHeight
-        } else {
-          value.top = top + rect.height
+        //top
+        if (rect.top + cHeight + tHeight > innerHeight) {
+          position.top = (top - cHeight) + tHeight
+          position.origin[1] = 'bottom'
         }
       }
-      wrapper.target.style.setProperty('--origin', `${value.origin.join(' ')}`)
-      wrapper.target.style.setProperty('--top', value.top >= 0 ? `${value.top}px` : `auto`)
-      wrapper.target.style.setProperty('--left', value.left >= 0 ? `${value.left}px` : `auto`)
+      wrapper.target.style.setProperty('--origin', position.origin.join(' '))
+      position.top && wrapper.target.style.setProperty('--top', `${position.top}px`)
+      position.left && wrapper.target.style.setProperty('--left', `${position.left}px`)
       wrapper.target.classList.add('show')
       container.target.animate([
         { transform: 'scale(.9)', opacity: 0 },

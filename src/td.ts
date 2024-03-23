@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
@@ -25,14 +25,14 @@ const props = {
 export default class Component extends builder({
   name, style, props,
   setup() {
-    const td = ref<HTMLTableCellElement>()
+    let td: HTMLTableCellElement
     return {
       watches: {
-        colspan: (value) => td.target.colSpan = value,
-        rowspan: (value) => td.target.rowSpan = value
+        colspan: (value) => td.colSpan = value,
+        rowspan: (value) => td.rowSpan = value
       },
       render: () => html`
-        <td ref="${td}" rowspan="${this.rowspan}" colspan="${this.colspan}">
+        <td ref="${(el: HTMLTableCellElement) => td = el}" rowspan="${this.rowspan}" colspan="${this.colspan}">
           <slot></slot>
         </td>
       `
@@ -50,5 +50,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

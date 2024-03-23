@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import './ripple.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -106,19 +106,19 @@ const show = (options: string | {
 class Component extends builder({
   name, style, props,
   setup() {
-    const wrapper = ref<HTMLElement>()
-    const action = ref<HTMLElement>()
+    let wrapper: HTMLDivElement
+    let action: HTMLDivElement
     const state = { timer: 0 }
     const show = () => {
       clearTimeout(state.timer)
-      getComputedStyle(wrapper.target).top
-      wrapper.target.classList.add('show')
+      getComputedStyle(wrapper).top
+      wrapper.classList.add('show')
       this.dispatchEvent(new Event('show'))
       if (this.duration > 0) state.timer = setTimeout(dismiss, this.duration)
     }
     const dismiss = () => {
       clearTimeout(state.timer)
-      wrapper.target.classList.remove('show')
+      wrapper.classList.remove('show')
       this.dispatchEvent(new Event('dismiss'))
     }
     const onAction = () => {
@@ -127,22 +127,22 @@ class Component extends builder({
     }
     const transitionEnd = (event: TransitionEvent) => {
       if (event.propertyName !== 'transform') return
-      const showed = wrapper.target.classList.contains('show')
+      const showed = wrapper.classList.contains('show')
       this.dispatchEvent(new Event(showed ? 'showed' : 'dismissed'))
     }
     return {
       expose: { show, dismiss },
       watches: {
-        action: (value) => action.target.textContent = value
+        action: (value) => action.textContent = value
       },
       render: () => html`
         <slot name="trigger" @click="${show}"></slot>
-        <div class="wrapper" ref="${wrapper}" @transitionend="${transitionEnd}">
+        <div class="wrapper" ref="${(el: HTMLDivElement) => wrapper = el}" @transitionend="${transitionEnd}">
           <div class="container" part="container">
             <div class="supporting-text">
               <slot></slot>
             </div>
-            <s-ripple class="action" ref="${action}" @click="${onAction}"></s-ripple>
+            <s-ripple class="action" ref="${(el: HTMLDivElement) => action = el}" @click="${onAction}"></s-ripple>
           </div>
         </div>
       `
@@ -177,5 +177,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

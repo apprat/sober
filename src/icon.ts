@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
@@ -54,24 +54,24 @@ const props = {
 export default class Component extends builder({
   name, style, props, propSyncs: ['type'],
   setup() {
-    const path = ref()
+    let path: SVGAElement
     return {
       watches: {
         type: (value) => {
           let d = svgData[value]
           if (typeof d === 'object') {
-            path.target.setAttribute('transform', `rotate(${d.angle} 480 -480)`)
+            path.setAttribute('transform', `rotate(${d.angle} 480 -480)`)
             d = svgData[d.name] as string
           } else {
-            path.target.removeAttribute('transform')
+            path.removeAttribute('transform')
           }
-          path.target.setAttribute('d', d)
+          path.setAttribute('d', d)
         }
       },
       render: () => html`
         <slot>
           <svg viewBox="0 -960 960 960">
-            <path ref="${path}" d="${svgData.none}"></path>
+            <path ref="${(el: SVGAElement) => path = el}" d="${svgData.none}"></path>
           </svg>
         </slot>
       `
@@ -89,5 +89,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import Ripple from './ripple.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -69,13 +69,13 @@ const props = {
 export default class Component extends builder({
   name, style, props, propSyncs: true,
   setup() {
-    const ripple = ref<Ripple>()
+    let ripple: Ripple
     return {
       watches: {
-        extended: (value) => ripple.target.setAttribute('centered', String(!value))
+        extended: (value) => ripple.setAttribute('centered', String(!value))
       },
       render: () => html`
-        <s-ripple attached="true" centered="true" ref="${ripple}"></s-ripple>
+        <s-ripple attached="true" centered="true" ref="${(el: Ripple) => ripple = el}"></s-ripple>
         <slot name="start"></slot>
         <slot></slot>
         <slot name="end"></slot>
@@ -94,5 +94,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

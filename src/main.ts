@@ -1,6 +1,7 @@
 import Page from './page.js'
 import Badge from './badge.js'
 import Button from './button.js'
+import Chip from './chip.js'
 import Card from './card.js'
 import Checkbox from './checkbox.js'
 import Dialog from './dialog.js'
@@ -40,6 +41,7 @@ export {
   Page,
   Badge,
   Button,
+  Chip,
   Card,
   Checkbox,
   Dialog,

@@ -1,11 +1,78 @@
 type Prop = string | number | boolean
 
-interface ElementData {
-  props: { [x: string]: Prop }
-  mounted?: Function
-  unmounted?: Function
-  adopted?: Function
-  watches?: { [x: string]: (value: Prop) => void | undefined }
+interface TemplateHTML {
+  template: HTMLTemplateElement
+  mark: string
+}
+
+const getMark = (value: string) => `<!--${value}-->`
+
+export const html = (template: TemplateStringsArray, ...values: (Function | Prop)[]) => {
+  return {
+    values,
+    getTemplateHTML: (): TemplateHTML => {
+      const mark = getMark(String(Math.random()).slice(2))
+      const t = document.createElement('template')
+      t.innerHTML = template.join(mark)
+      return { mark, template: t }
+    }
+  }
+}
+
+const walkNode = (list: NodeList, mark: string, templateValue: { value: Function | Prop }) => {
+  list.forEach((item) => {
+    if (item.nodeType === Node.TEXT_NODE && item.textContent === mark) (item as Text).data = String(templateValue.value)
+    if (item.nodeType === Node.COMMENT_NODE && item.textContent && mark === getMark(item.textContent)) {
+      item.parentNode!.replaceChild(document.createTextNode(String(templateValue.value)), item)
+    }
+    if (item.nodeType === Node.ELEMENT_NODE) {
+      const el = item as Element
+      const attrs = el.getAttributeNames()
+      attrs.forEach((name) => {
+        const old = el.getAttribute(name)
+        if (name === 'ref' && old === mark) {
+          el.removeAttribute(name)
+          return (templateValue.value as Function)(el)
+        }
+        if (name.startsWith('@')) {
+          const [eventName, behavior] = name.slice(1).split('.') //click.stop
+          const fn = old === mark && templateValue.value as Function
+          el.addEventListener(eventName, (event: Event) => {
+            fn && fn(event)
+            if (behavior === 'stop') event.stopPropagation()
+            if (behavior === 'prevent') event.preventDefault()
+          }, { passive: behavior === 'passive' })
+          return el.removeAttribute(name)
+        }
+        old === mark && el.setAttribute(name, String(templateValue.value))
+      })
+      walkNode(item.childNodes, mark, templateValue)
+    }
+  })
+}
+
+const templateHTMLCaches: { [key: string]: TemplateHTML } = {}
+
+const documentFromHTML = (name: string, htmls: ReturnType<typeof html>) => {
+  if (!templateHTMLCaches[name]) templateHTMLCaches[name] = htmls.getTemplateHTML()
+  const { mark, template: OldTemplate } = templateHTMLCaches[name]
+  const template = OldTemplate.cloneNode(true) as HTMLTemplateElement
+  const templateValue = {
+    index: 0,
+    get value() {
+      const value = htmls.values[this.index]
+      this.index++
+      return value
+    }
+  }
+  walkNode(template.content.childNodes, mark, templateValue)
+  return template.content
+}
+
+interface ElementState {
+  props: { [name: string]: Prop }
+  events?: { [name: string]: (() => unknown) | undefined }
+  watches?: { [x: string]: (value: Prop) => unknown }
 }
 
 const parsePropType = (value: unknown, old: Prop) => {
@@ -20,12 +87,7 @@ const parsePropType = (value: unknown, old: Prop) => {
 }
 
 const baseStyle = new CSSStyleSheet()
-baseStyle.replaceSync(/*css*/`
-:host{
-  user-select: none;
-  -webkit-user-select: none;
-}
-`)
+baseStyle.replaceSync(/*css*/`:host{ user-select: none;-webkit-user-select: none }`)
 
 export const builder = <
   P extends { [x: string]: Prop } = {},
@@ -36,11 +98,11 @@ export const builder = <
   props?: P
   propSyncs?: (keyof P)[] | true
   setup: (this: P & HTMLElement, shadowRoot: ShadowRoot) => {
-    render: () => DocumentFragment
+    render: () => ReturnType<typeof html>
     created?: () => void
     mounted?: () => void
     unmounted?: () => void
-    adopted?: () => void
+    adopted?: () => unknown
     watches?: { [K in keyof P]?: (value: P[K]) => void }
     expose?: E
   }
@@ -49,7 +111,7 @@ export const builder = <
   readonly define: () => void
   prototype: HTMLElement
 } => {
-  const map = new Map<HTMLElement, ElementData>()
+  const map = new Map<HTMLElement, ElementState>()
   const attributes: string[] = []
   for (const key in options.props) attributes.push(key)
   const sheet = new CSSStyleSheet()
@@ -60,51 +122,53 @@ export const builder = <
       super()
       const shadowRoot = this.attachShadow({ mode: 'closed' })
       const realProps = { ...options.props }
-      const elementData: ElementData = { props: { ...options.props } }
+      const elementState: ElementState = { props: { ...options.props } }
       for (const key in realProps) {
         const set = (v: unknown) => {
-          let value = parsePropType(v, elementData.props[key])
+          let value = parsePropType(v, elementState.props[key])
           if (value === realProps[key]) return
           if (options.propSyncs === true || options.propSyncs?.includes(key)) {
             const old = this.getAttribute(key)
             const attrVal = String(value)
-            if (old !== null && value === elementData.props[key]) {
+            if (old !== null && value === elementState.props[key]) {
               this.removeAttribute(key)
               return
             }
-            if (attrVal !== old && value !== elementData.props[key]) {
+            if (attrVal !== old && value !== elementState.props[key]) {
               this.setAttribute(key, attrVal)
               return
             }
           }
           realProps[key] = value
-          elementData.watches?.[key]?.(value)
+          elementState.watches?.[key]?.(value)
         }
         Object.defineProperty(this, key, { enumerable: true, get: () => realProps[key], set })
       }
       const setup = options.setup?.apply(this as never, [shadowRoot])
       shadowRoot.adoptedStyleSheets = [baseStyle, sheet]
-      shadowRoot.appendChild(setup.render())
-      elementData.adopted = setup.adopted
-      elementData.mounted = setup.mounted
-      elementData.unmounted = setup.unmounted
-      elementData.watches = setup.watches as any
+      shadowRoot.appendChild(documentFromHTML(options.name, setup.render()))
+      elementState.events = {
+        adopted: setup.adopted,
+        mounted: setup.mounted,
+        unmounted: setup.unmounted
+      }
+      elementState.watches = setup.watches as any
       setup.created?.()
       for (const key in setup.expose) {
         Object.defineProperty(this, key, { get: () => setup.expose?.[key] })
       }
-      map.set(this, elementData)
+      map.set(this, elementState)
     }
     connectedCallback() {
-      map.get(this)?.mounted?.()
+      map.get(this)?.events?.mounted?.()
     }
     disconnectedCallback() {
-      map.get(this)?.unmounted?.()
+      map.get(this)?.events?.unmounted?.()
     }
     adoptedCallback() {
-      map.get(this)?.adopted?.()
+      map.get(this)?.events?.adopted?.()
     }
-    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    attributeChangedCallback(name: string, _: string | null, newValue: string | null) {
       this[name] = newValue ?? undefined
     }
   }
@@ -112,90 +176,4 @@ export const builder = <
     !customElements.get(options.name) && customElements.define(options.name, this)
   }
   return CustomElement as never
-}
-
-class Ref<T extends Element>{
-  constructor(public target: T) { }
-}
-
-export const ref = <T extends Element = Element>() => {
-  return new Ref(undefined as unknown as T)
-}
-
-type TemplateValue = Prop | Ref<Element> | Function
-
-const parse = (random: string, template: TemplateStringsArray, values: TemplateValue[]) => {
-  const newValues: TemplateValue[] = []
-  let str = ''
-  template.raw.forEach((item, index) => {
-    const value = values[index] ?? ''
-    if (value instanceof Ref || value instanceof Function) {
-      str += item + random
-      newValues.push(value)
-      return
-    }
-    str += item + value
-  })
-  const t = document.createElement('template')
-  t.innerHTML = str
-  let index = 0
-  return {
-    element: t.content,
-    getValue: () => {
-      const value = newValues[index]
-      index++
-      return value
-    }
-  }
-}
-
-export const html = (template: TemplateStringsArray, ...args: TemplateValue[]) => {
-  const marker = `<!--${String(Math.random()).slice(2)}-->`
-  const obj = parse(marker, template, args)
-  const find = (list: NodeList) => list.forEach((item) => {
-    if (item.nodeType === Node.ELEMENT_NODE) {
-      const element = item as Element
-      const attrs = element.getAttributeNames()
-      attrs.forEach((name) => {
-        const old = element.getAttribute(name)
-        if (old !== marker) return
-        const value = obj.getValue()
-        if (name === 'ref') {
-          (value as Ref<Element>).target = element
-          element.removeAttribute(name)
-          return
-        }
-        if (name.startsWith('@')) {
-          const [eventName, behavior] = name.slice(1).split('.')
-          element.addEventListener(eventName, (event: Event) => {
-            if (typeof value === 'function') value(event)
-            if (behavior) {
-              if (behavior === 'stop') event.stopPropagation()
-              if (behavior === 'prevent') event.preventDefault()
-            }
-          }, { passive: behavior === 'passive' })
-          element.removeAttribute(name)
-          return
-        }
-        element.setAttribute(name, String(value))
-      })
-      find(item.childNodes)
-      return
-    }
-    if (item.nodeType === Node.TEXT_NODE) {
-      const element = item as Text
-      if (item.textContent === marker) element.data = String(obj.getValue())
-      return
-    }
-    if (item.nodeType === Node.COMMENT_NODE) {
-      const element = item as Comment
-      const value = `<!--${element.textContent}-->`
-      if (value === marker) {
-        const argsVal = obj.getValue()
-        element.parentNode?.replaceChild(document.createTextNode(String(argsVal)), element)
-      }
-    }
-  })
-  find(obj.element.childNodes)
-  return obj.element
 }

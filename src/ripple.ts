@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import { device } from './core/utils.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -73,9 +73,9 @@ const props = {
 export default class Component extends builder({
   name, style, props, propSyncs: ['attached'],
   setup() {
-    const container = ref<HTMLDivElement>()
-    const hover = () => !device.touched && container.target.classList.add('hover')
-    const unHover = () => !device.touched && container.target.classList.remove('hover')
+    let container: HTMLDivElement
+    const hover = () => !device.touched && container.classList.add('hover')
+    const unHover = () => !device.touched && container.classList.remove('hover')
     const that = this
     const action = {
       get root(): HTMLElement {
@@ -87,11 +87,11 @@ export default class Component extends builder({
     const start = (event: { clientX: number, clientY: number }) => {
       const animation = document.createElement('div')
       animation.className = 'animation'
-      const { offsetWidth, offsetHeight } = container.target
+      const { offsetWidth, offsetHeight } = container
       let size = Math.sqrt(offsetWidth * offsetWidth + offsetHeight * offsetHeight)
       const coordinate = { x: '50%', y: '50%' }
       if (!this.centered) {
-        const { left, top } = container.target.getBoundingClientRect()
+        const { left, top } = container.getBoundingClientRect()
         const x = event.clientX - left
         const y = event.clientY - top
         const h = offsetHeight / 2
@@ -103,8 +103,8 @@ export default class Component extends builder({
         coordinate.y = `${y}px`
       }
       animation.setAttribute('style', `--size: ${size}px;--x: ${coordinate.x};--y: ${coordinate.y};`)
-      container.target.appendChild(animation)
-      const remove = () => animation.isConnected && container.target.removeChild(animation)
+      container.appendChild(animation)
+      const remove = () => animation.isConnected && container.removeChild(animation)
       const up = () => {
         document.removeEventListener('mouseup', up)
         document.removeEventListener('touchend', up)
@@ -150,7 +150,7 @@ export default class Component extends builder({
         }
       },
       render: () => html`
-        <div class="container" ref="${container}"></div>
+        <div class="container" ref="${(el: HTMLDivElement) => container = el}"></div>
         <slot></slot>
       `
     }
@@ -167,5 +167,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import './ripple.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -144,15 +144,16 @@ const props = {
 class Component extends builder({
   name, style, props, propSyncs: ['size'],
   setup() {
-    const wrapper = ref()
-    const negative = ref()
-    const positive = ref()
+    let wrapper: HTMLDivElement
+    let negative: HTMLDivElement
+    let positive: HTMLDivElement
     const show = () => {
-      wrapper.target.classList.add('show')
+      console.log('show')
+      wrapper.classList.add('show')
       this.dispatchEvent(new Event('show'))
     }
     const dismiss = () => {
-      wrapper.target.classList.remove('show')
+      wrapper.classList.remove('show')
       this.dispatchEvent(new Event('dismiss'))
     }
     const action = (type: string) => {
@@ -162,18 +163,18 @@ class Component extends builder({
     }
     const transitionEnd = (event: TransitionEvent) => {
       if (event.propertyName !== 'transform') return
-      const showed = wrapper.target.classList.contains('show')
+      const showed = wrapper.classList.contains('show')
       this.dispatchEvent(new Event(showed ? 'showed' : 'dismissed'))
     }
     return {
       expose: { show, dismiss },
       watches: {
-        negative: (value) => negative.target.textContent = value,
-        positive: (value) => positive.target.textContent = value
+        negative: (value) => negative.textContent = value,
+        positive: (value) => positive.textContent = value
       },
       render: () => html`
         <slot name="trigger" @click="${show}"></slot>
-        <div class="wrapper" ref="${wrapper}" @transitionend="${transitionEnd}">
+        <div class="wrapper" ref="${(el: HTMLDivElement) => wrapper = el}" @transitionend="${transitionEnd}">
           <div class="scrim" @click="${dismiss}"></div>
           <div class="wrapper-container">
             <div class="container" part="container">
@@ -183,8 +184,8 @@ class Component extends builder({
                 <slot name="text"></slot>
               </div>
               <div class="action">
-                <s-ripple ref="${negative}" @click="${() => action('negative')}"></s-ripple>
-                <s-ripple ref="${positive}" @click="${() => action('positive')}"></s-ripple>
+                <s-ripple ref="${(el: HTMLDivElement) => negative = el}" @click="${() => action('negative')}"></s-ripple>
+                <s-ripple ref="${(el: HTMLDivElement) => positive = el}" @click="${() => action('positive')}"></s-ripple>
               </div>
             </div>
           </div>
@@ -220,5 +221,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

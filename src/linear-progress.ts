@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
@@ -68,10 +68,10 @@ const props = {
 export default class Component extends builder({
   name, style, props, propSyncs: ['indeterminate'],
   setup() {
-    const linear = ref<HTMLElement>()
+    let linear: HTMLDivElement
     const render = () => {
       const percentage = Math.min(this.value, this.max) / this.max * 100
-      linear.target.style.transform = `translateX(-${100 - percentage}%)`
+      linear.style.transform = `translateX(-${100 - percentage}%)`
     }
     return {
       watches: {
@@ -80,7 +80,7 @@ export default class Component extends builder({
       },
       render: () => html`
         <div class="track"></div>
-        <div class="determinable float" ref="${linear}"></div>
+        <div class="determinable float" ref="${(el: HTMLDivElement) => linear = el}"></div>
         <div class="indeterminate float"></div>
       `
     }
@@ -97,5 +97,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

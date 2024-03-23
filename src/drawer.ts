@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
@@ -119,41 +119,41 @@ const props = {
 export default class Component extends builder({
   name, props, style,
   setup() {
-    const container = ref<HTMLDivElement>()
-    const start = ref<HTMLDivElement>()
-    const end = ref<HTMLDivElement>()
+    let container: HTMLDivElement
+    let start: HTMLDivElement
+    let end: HTMLDivElement
     const getMode = () => innerWidth < 840 ? 'fixed' : 'static'
     const show = (type: Type = 'start', mode?: Mode) => {
       if (!this.isConnected) return
       const moded = getMode()
       const className = `${type}-${!mode ? moded : mode}-show`
-      if (container.target.classList.contains(className)) return
-      container.target.classList.add(className)
+      if (container.classList.contains(className)) return
+      container.classList.add(className)
       const el = type === 'start' ? start : end
-      const width = el.target.offsetWidth
+      const width = el.offsetWidth
       let keyframes: { width?: string, transform?: string }[] = [{ width: '0px' }, { width: `${width}px` }]
       if (type === 'start' && moded === 'fixed') keyframes = [{ transform: `translateX(-${width}px)` }, { transform: 'translateX(0px)' }]
       if (type === 'end' && moded === 'fixed') keyframes = [{ transform: `translateX(${width}px)` }, { transform: `translateX(0px)` }]
-      el.target.animate(keyframes, { duration: 200 })
+      el.animate(keyframes, { duration: 200 })
     }
     const dismiss = (type: Type = 'start', mode?: Mode) => {
       if (!this.isConnected) return
       const moded = getMode()
       const el = type === 'start' ? start : end
-      const width = el.target.offsetWidth
+      const width = el.offsetWidth
       const className = `${type}-${!mode ? moded : mode}-show`
-      if (!container.target.classList.contains(className)) return
-      const remove = () => container.target.classList.remove(className)
+      if (!container.classList.contains(className)) return
+      const remove = () => container.classList.remove(className)
       let keyframes: { width?: string, transform?: string }[] = [{ width: `${width}px` }, { width: '0px' }]
       if (type === 'start' && moded === 'fixed') keyframes = [{ transform: 'translateX(0px)' }, { transform: `translateX(-${width}px)` },]
       if (type === 'end' && moded === 'fixed') keyframes = [{ transform: `translateX(0px)` }, { transform: `translateX(${width}px)` }]
-      const animation = el.target.animate(keyframes, { duration: 200 })
+      const animation = el.animate(keyframes, { duration: 200 })
       animation.addEventListener('cancel', remove)
       animation.addEventListener('remove', remove)
       animation.addEventListener('finish', remove)
     }
     const toggle = (type: Type = 'start', mode?: Mode) => {
-      container.target.classList.contains(`${type}-${!mode ? getMode() : mode}-show`) ? dismiss(type, mode) : show(type, mode)
+      container.classList.contains(`${type}-${!mode ? getMode() : mode}-show`) ? dismiss(type, mode) : show(type, mode)
     }
     return {
       expose: {
@@ -163,19 +163,19 @@ export default class Component extends builder({
         }
       },
       render: () => html`
-        <div class="container start-static-show end-static-show" ref="${container}">
+        <div class="container start-static-show end-static-show" ref="${(el: HTMLDivElement) => container = el}">
           <div class="supporting-text">
             <slot></slot>
           </div>
           <div class="left">
             <div class="scrim" @click="${() => dismiss()}"></div>
-            <div class="start" ref="${start}">
+            <div class="start" ref="${(el: HTMLDivElement) => start = el}">
               <slot name="start"></slot>
             </div>
           </div>
           <div class="right">
             <div class="scrim" @click="${() => dismiss('end')}"></div>
-            <div class="end" ref="${end}">
+            <div class="end" ref="${(el: HTMLDivElement) => end = el}">
               <slot name="end"></slot>
             </div>
           </div>
@@ -195,5 +195,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

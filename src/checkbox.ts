@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import './ripple.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -51,7 +51,7 @@ const svgData = {
 export default class Component extends builder({
   name, style, props, propSyncs: true,
   setup() {
-    const iconPath = ref<SVGAElement>()
+    let iconPath: SVGAElement
     this.addEventListener('click', () => {
       if (this.indeterminate) return this.indeterminate = false
       this.checked = !this.checked
@@ -59,12 +59,12 @@ export default class Component extends builder({
     })
     return {
       watches: {
-        indeterminate: (value) => iconPath.target.setAttribute('d', value ? svgData.indeterminate : (this.checked ? svgData.checked : svgData.uncheck)),
-        checked: (value) => !this.indeterminate && iconPath.target.setAttribute('d', value ? svgData.checked : svgData.uncheck)
+        indeterminate: (value) => iconPath.setAttribute('d', value ? svgData.indeterminate : (this.checked ? svgData.checked : svgData.uncheck)),
+        checked: (value) => !this.indeterminate && iconPath.setAttribute('d', value ? svgData.checked : svgData.uncheck)
       },
       render: () => html`
         <svg class="icon color" viewBox="0 -960 960 960">
-          <path ref="${iconPath}" d="${svgData.uncheck}"></path>
+          <path ref="${(el: SVGAElement) => iconPath = el}" d="${svgData.uncheck}"></path>
         </svg>
         <s-ripple class="color" attached="true" centered="true"></s-ripple>
       `
@@ -82,5 +82,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import './ripple.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -74,18 +74,18 @@ const props = {
 export default class Component extends builder({
   name, style, props, propSyncs: true,
   setup() {
-    const icon = ref<HTMLSlotElement>()
-    const container = ref<HTMLSlotElement>()
-    const indicator = ref<HTMLDivElement>()
+    let icon: HTMLSlotElement
+    let container: HTMLDivElement
+    let indicator: HTMLDivElement
     const iconSlotChange = () => {
-      const length = icon.target.assignedElements().length
-      container.target.classList[length > 0 ? 'add' : 'remove']('icon')
+      const length = icon.assignedElements().length
+      container.classList[length > 0 ? 'add' : 'remove']('icon')
     }
     this.addEventListener('click', () => this.checked = true)
     return {
       expose: {
         get indicator() {
-          return indicator.target
+          return indicator
         }
       },
       watches: {
@@ -95,15 +95,15 @@ export default class Component extends builder({
         },
       },
       render: () => html`
-        <div class="container" ref="${container}">
-          <slot name="icon" ref="${icon}" @slotchange="${iconSlotChange}"></slot>
+        <div class="container" ref="${(el: HTMLDivElement) => container = el}">
+          <slot name="icon" ref="${(el: HTMLSlotElement) => icon = el}" @slotchange="${iconSlotChange}"></slot>
           <div class="text">
             <slot name="text"></slot>
             <div class="badge">
               <slot name="badge"></slot>
             </div>
           </div>
-          <div class="indicator" ref="${indicator}"></div>
+          <div class="indicator" ref="${(el: HTMLDivElement) => indicator = el}"></div>
         </div>
         <s-ripple attached="true"></s-ripple>
       `
@@ -121,5 +121,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

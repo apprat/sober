@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import { device } from './core/utils.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -160,73 +160,73 @@ const props = {
 export default class Component extends builder({
   name, style, props, propSyncs: ['disabled', 'labeled'],
   setup() {
-    const activeTrack = ref<HTMLElement>()
-    const container = ref<HTMLInputElement>()
-    const slider = ref<HTMLInputElement>()
-    const label = ref<HTMLInputElement>()
+    let activeTrack: HTMLDivElement
+    let container: HTMLDivElement
+    let slider: HTMLInputElement
+    let label: HTMLSpanElement
     const render = () => {
       if (!this.isConnected) return
-      const value = Number(slider.target.value)
+      const value = Number(slider.value)
       const percentage = ((value - this.min) * 100) / this.max - this.min
       const remain = 100 - percentage
-      activeTrack.target.style.transform = `translateX(-${remain}%)`
-      container.target.style.transform = `translateX(calc(-${remain}% + ${remain * 0.4}px))`
-      this.value = Number(slider.target.value)
-      label.target.textContent = slider.target.value
+      activeTrack.style.transform = `translateX(-${remain}%)`
+      container.style.transform = `translateX(calc(-${remain}% + ${remain * 0.4}px))`
+      this.value = Number(slider.value)
+      label.textContent = slider.value
     }
     return {
       created: () => {
-        slider.target.addEventListener('change', () => this.dispatchEvent(new Event('change')))
-        slider.target.addEventListener('input', () => {
+        slider.addEventListener('change', () => this.dispatchEvent(new Event('change')))
+        slider.addEventListener('input', () => {
           render()
           this.dispatchEvent(new Event('input'))
         })
-        slider.target.addEventListener('mousedown', (event) => event.button === 0 && !device.touched && container.target.classList.add('active'))
-        slider.target.addEventListener('mouseup', () => !device.touched && container.target.classList.remove('active'))
-        slider.target.addEventListener('touchstart', () => device.touched && container.target.classList.add('active'), { passive: true })
-        slider.target.addEventListener('touchend', () => device.touched && container.target.classList.remove('active'), { passive: true })
-        slider.target.addEventListener('touchcancel', () => device.touched && container.target.classList.remove('active'), { passive: true })
+        slider.addEventListener('mousedown', (event) => event.button === 0 && !device.touched && container.classList.add('active'))
+        slider.addEventListener('mouseup', () => !device.touched && container.classList.remove('active'))
+        slider.addEventListener('touchstart', () => device.touched && container.classList.add('active'), { passive: true })
+        slider.addEventListener('touchend', () => device.touched && container.classList.remove('active'), { passive: true })
+        slider.addEventListener('touchcancel', () => device.touched && container.classList.remove('active'), { passive: true })
       },
       watches: {
         max: (value) => {
           const val = String(value)
-          if (slider.target.max === val) return
-          slider.target.max = val
+          if (slider.max === val) return
+          slider.max = val
           render()
         },
         min: (value) => {
           const val = String(value)
-          if (slider.target.min === val) return
-          slider.target.min = val
+          if (slider.min === val) return
+          slider.min = val
           render()
         },
         step: (value) => {
           const val = String(value)
-          if (slider.target.step === val) return
-          slider.target.step = val
+          if (slider.step === val) return
+          slider.step = val
           render()
         },
         value: (value) => {
           const val = String(value)
-          if (slider.target.value === val) return
-          slider.target.value = val
+          if (slider.value === val) return
+          slider.value = val
           render()
         }
       },
       render: () => html`
         <div class="wrapper">
           <div class="track">
-            <div class="active-track" ref="${activeTrack}"></div>
+            <div class="active-track" ref="${(el: HTMLDivElement) => activeTrack = el}"></div>
           </div>
-          <div class="container labeled" ref="${container}">
+          <div class="container labeled" ref="${(el: HTMLDivElement) => container = el}">
             <div class="handle"></div>
             <div class="label">
-              <span ref="${label}">${this.value}</span>
+              <span ref="${(el: HTMLSpanElement) => label = el}">${this.value}</span>
             </div>
           </div>
         </div>
         <div class="native">
-          <input ref="${slider}" type="range" max="${this.max}" min="${this.min}" step="${this.step}" value="${this.value}" />
+          <input ref="${(el: HTMLInputElement) => slider = el}" type="range" max="${this.max}" min="${this.min}" step="${this.step}" value="${this.value}" />
         </div>
       `
     }
@@ -243,5 +243,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

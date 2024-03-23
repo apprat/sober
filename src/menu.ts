@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import { getStackingContext } from './core/utils.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -77,22 +77,23 @@ const props = {
 export default class Component extends builder({
   name, style, props,
   setup(shadowRoot) {
-    const trigger = ref<HTMLDivElement>()
-    const wrapper = ref<HTMLDivElement>()
-    const container = ref<HTMLElement>()
+    let trigger: HTMLDivElement
+    let wrapper: HTMLDivElement
+    let container: HTMLDivElement
     const state = { showed: false }
     const show = (element?: HTMLElement) => {
       if (!this.isConnected || state.showed) return
-      const rect = (element ?? trigger.target).getBoundingClientRect()
+      const el = (element ?? trigger)
+      const rect = el.getBoundingClientRect()
       const stackingContext = getStackingContext(shadowRoot)
       const left = rect.left - stackingContext.left
       const top = rect.top - stackingContext.top
-      const cWidth = container.target.offsetWidth
-      const tWidth = trigger.target.offsetWidth
-      const cHeight = container.target.offsetHeight
-      const tHeight = trigger.target.offsetHeight
+      const cWidth = container.offsetWidth
+      const tWidth = el.offsetWidth
+      const cHeight = container.offsetHeight
+      const tHeight = el.offsetHeight
       const position = {
-        top: top + trigger.target.offsetHeight,
+        top: top + el.offsetHeight,
         left: left,
         origin: ['left', 'top']
       }
@@ -110,7 +111,6 @@ export default class Component extends builder({
       } else {
         position.left = left + cWidth
         position.top = top
-        console.log(innerWidth, rect.left)
         //right
         if (rect.left + cWidth + cWidth > innerWidth) {
           position.left = left - cWidth
@@ -122,11 +122,11 @@ export default class Component extends builder({
           position.origin[1] = 'bottom'
         }
       }
-      wrapper.target.style.setProperty('--origin', position.origin.join(' '))
-      position.top && wrapper.target.style.setProperty('--top', `${position.top}px`)
-      position.left && wrapper.target.style.setProperty('--left', `${position.left}px`)
-      wrapper.target.classList.add('show')
-      container.target.animate([
+      wrapper.style.setProperty('--origin', position.origin.join(' '))
+      position.top && wrapper.style.setProperty('--top', `${position.top}px`)
+      position.left && wrapper.style.setProperty('--left', `${position.left}px`)
+      wrapper.classList.add('show')
+      container.animate([
         { transform: 'scale(.9)', opacity: 0 },
         { transform: 'scale(1)', opacity: 1 }
       ], { duration: 200 })
@@ -134,8 +134,8 @@ export default class Component extends builder({
     }
     const dismiss = () => {
       if (!this.isConnected || !state.showed) return
-      wrapper.target.classList.remove('show')
-      container.target.animate([
+      wrapper.classList.remove('show')
+      container.animate([
         { transform: 'scale(1)', opacity: 1 },
         { transform: 'scale(.9)', opacity: 0 }
       ], { duration: 200 })
@@ -150,14 +150,14 @@ export default class Component extends builder({
     })
     addEventListener('resize', dismiss)
     return {
-      expose: { show, dismiss, toggle, },
+      expose: { show, dismiss, toggle },
       render: () => html`
-        <div ref="${trigger}">
+        <div ref="${(el: HTMLDivElement) => trigger = el}">
           <slot name="trigger" @click="${() => show()}"></slot>
         </div>
-        <div class="wrapper" ref="${wrapper}">
+        <div class="wrapper" ref="${(el: HTMLDivElement) => wrapper = el}">
           <div class="scrim" @pointerdown="${dismiss}"></div>
-          <div class="container" ref="${container}">
+          <div class="container" ref="${(el: HTMLDivElement) => container = el}">
             <slot></slot>
           </div>
         </div>
@@ -176,5 +176,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

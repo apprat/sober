@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
@@ -42,11 +42,11 @@ const props = {
 export default class Component extends builder({
   name, style, props, propSyncs: ['indeterminate'],
   setup() {
-    const circular = ref<SVGCircleElement>()
+    let circular: SVGCircleElement
     const dashoffset = 126.92
     const update = () => {
       const percentage = Math.min(this.value, this.max) / this.max * 100
-      circular.target.style.strokeDashoffset = `${dashoffset - (dashoffset * (percentage / 100))}px`
+      circular.style.strokeDashoffset = `${dashoffset - (dashoffset * (percentage / 100))}px`
     }
     return {
       watches: {
@@ -55,7 +55,7 @@ export default class Component extends builder({
       },
       render: () => html`
         <svg class="determinable" viewBox="22 22 44 44"style="transform: rotate(-90deg)">
-          <circle ref="${circular}" cx="44" cy="44" r="20.2" fill="none" stroke-width="3.6" style="transition: stroke-dashoffset .2s;stroke-dasharray: ${dashoffset}px"></circle>
+          <circle ref="${(el: SVGCircleElement) => circular = el}" cx="44" cy="44" r="20.2" fill="none" stroke-width="3.6" style="transition: stroke-dashoffset .2s;stroke-dasharray: ${dashoffset}px"></circle>
         </svg>
         <svg class="indeterminate" viewBox="22 22 44 44" style="animation: rotate 1.4s linear infinite">
           <circle style="stroke-dasharray: 80px,200px;stroke-dashoffset: 0;animation: stroke 1.4s ease-in-out infinite" cx="44" cy="44" r="20.2" fill="none" stroke-width="3.6"></circle>
@@ -75,5 +75,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

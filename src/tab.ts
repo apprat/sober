@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import type Item from './tab-item.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -52,7 +52,7 @@ const props = {
 export default class Component extends builder({
   name, style, props, propSyncs: ['mode'],
   setup() {
-    const container = ref<HTMLDivElement>()
+    let container: HTMLDivElement
     let options: Item[] = []
     let selectIndex = -1
     let changing = false
@@ -83,9 +83,9 @@ export default class Component extends builder({
         const oldLeft = old.indicator.getBoundingClientRect().left
         const rect = select.indicator.getBoundingClientRect()
         old.indicator.setAttribute('style', `filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
-        if (container.target.scrollWidth !== container.target.offsetWidth) {
-          const left = select.offsetLeft - container.target.offsetWidth + container.target.offsetWidth / 2 + select.offsetWidth / 2
-          container.target.scrollTo({ left, behavior: 'smooth' })
+        if (container.scrollWidth !== container.offsetWidth) {
+          const left = select.offsetLeft - container.offsetWidth + container.offsetWidth / 2 + select.offsetWidth / 2
+          container.scrollTo({ left, behavior: 'smooth' })
         }
       }
       this.dispatchEvent(new Event('change'))
@@ -100,7 +100,7 @@ export default class Component extends builder({
         },
       },
       render: () => html`
-        <div class="container" ref="${container}">
+        <div class="container" ref="${(el: HTMLDivElement) => container = el}">
           <slot @slotchange="${slotChange}"></slot>
         </div>
       `
@@ -118,5 +118,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

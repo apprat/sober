@@ -1,4 +1,4 @@
-import { builder, html, ref } from './core/element.js'
+import { builder, html } from './core/element.js'
 import { device, getStackingContext } from './core/utils.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -42,22 +42,22 @@ const props = {
 export default class Component extends builder({
   name, style, props,
   setup(shadowRoot) {
-    const trigger = ref<HTMLDivElement>()
-    const container = ref<HTMLElement>()
+    let trigger: HTMLDivElement
+    let container: HTMLDivElement
     const state = { showed: false, timer: 0 }
     const show = () => {
       if (!this.isConnected || state.showed) return
-      const rect = trigger.target.getBoundingClientRect()
+      const rect = trigger.getBoundingClientRect()
       const stackingContext = getStackingContext(shadowRoot)
       const gap = 4
       const left = rect.left - stackingContext.left
       const top = rect.top - stackingContext.top
-      const cWidth = container.target.offsetWidth
-      const tWidth = trigger.target.offsetWidth
-      const cHeight = container.target.offsetHeight
-      const tHeight = trigger.target.offsetHeight
+      const cWidth = container.offsetWidth
+      const tWidth = trigger.offsetWidth
+      const cHeight = container.offsetHeight
+      const tHeight = trigger.offsetHeight
       const position = {
-        top: top + trigger.target.offsetHeight + gap,
+        top: top + trigger.offsetHeight + gap,
         left: left - ((cWidth - tWidth) / 2),
       }
       //right
@@ -72,19 +72,19 @@ export default class Component extends builder({
       if (rect.top + cHeight + tHeight + gap > innerHeight) {
         position.top = top - cHeight - gap
       }
-      container.target.setAttribute('style', `left: ${position.left}px;top: ${position.top}px`)
-      container.target.classList.add('show')
+      container.setAttribute('style', `left: ${position.left}px;top: ${position.top}px`)
+      container.classList.add('show')
       state.showed = true
     }
     const dismiss = () => {
       if (!this.isConnected || !state.showed) return
-      container.target.classList.remove('show')
+      container.classList.remove('show')
       state.showed = false
     }
     const transitionEnd = () => {
-      const showed = container.target.classList.contains('show')
+      const showed = container.classList.contains('show')
       if (showed) return
-      container.target.removeAttribute('style')
+      container.removeAttribute('style')
     }
     const touchShow = () => {
       clearTimeout(state.timer)
@@ -96,7 +96,7 @@ export default class Component extends builder({
     }
     return {
       render: () => html`
-        <div ref="${trigger}" 
+        <div ref="${(el: HTMLDivElement) => trigger = el}" 
           @wheel.passive="${dismiss}"
           @mouseover="${() => !device.touched && show()}"
           @mouseleave="${() => !device.touched && dismiss()}"
@@ -105,7 +105,7 @@ export default class Component extends builder({
         >
           <slot name="trigger"></slot>
         </div>
-        <div class="container" part="container" ref="${container}" @transitionend="${transitionEnd}">
+        <div class="container" part="container" ref="${(el: HTMLDivElement) => container = el}" @transitionend="${transitionEnd}">
           <slot></slot>
         </div>
       `
@@ -123,5 +123,12 @@ declare global {
   }
   interface HTMLElementTagNameMap {
     [name]: Component
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
   }
 }

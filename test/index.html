@@ -53,6 +53,7 @@
         <a href="./drawer.html">Drawer</a>
         <a href="./navigation-rail.html">Bavigation Rail</a>
         <a href="./menu.html">Menu</a>
+        <a href="./chip.html">Chip</a>
       </main>
       <main>
         <s-button>
@@ -126,6 +127,24 @@
           When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
         </s-snackbar>
         <s-icon type="search"></s-icon>
+
+        <s-chip>
+          <s-icon type="search" slot="start"></s-icon>
+          Assist
+          <s-icon type="close" slot="end"></s-icon>
+        </s-chip>
+
+        <s-chip type="elevated">Assist 2</s-chip>
+
+        <s-chip type="filled-tonal">Assist 2</s-chip>
+
+        <s-chip type="filled-tonal">
+          Assist 2
+          <s-icon-button slot="action">
+            <s-icon type="close"></s-icon>
+          </s-icon-button>
+        </s-chip>
+
         <s-circular-progress></s-circular-progress>
         <s-circular-progress indeterminate="true"></s-circular-progress>
         <s-linear-progress value="50"></s-linear-progress>

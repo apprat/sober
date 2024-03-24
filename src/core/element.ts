@@ -21,7 +21,7 @@ export const html = (template: TemplateStringsArray, ...values: (Function | Prop
 
 const walkNode = (list: NodeList, mark: string, templateValue: { value: Function | Prop }) => {
   list.forEach((item) => {
-    if (item.nodeType === Node.TEXT_NODE && item.textContent === mark) (item as Text).data = String(templateValue.value)
+    if (item.nodeType === Node.TEXT_NODE && item.textContent?.includes(mark)) item.textContent = item.textContent.replaceAll(mark, () => String(templateValue.value))
     if (item.nodeType === Node.COMMENT_NODE && item.textContent && mark === getMark(item.textContent)) {
       item.parentNode!.replaceChild(document.createTextNode(String(templateValue.value)), item)
     }
@@ -44,7 +44,7 @@ const walkNode = (list: NodeList, mark: string, templateValue: { value: Function
           }, { passive: behavior === 'passive' })
           return el.removeAttribute(name)
         }
-        old === mark && el.setAttribute(name, String(templateValue.value))
+        old?.includes(mark) && el.setAttribute(name, old.replaceAll(mark, () => String(templateValue.value)))
       })
       walkNode(item.childNodes, mark, templateValue)
     }

@@ -12,8 +12,8 @@ export const html = (template, ...values) => {
 };
 const walkNode = (list, mark, templateValue) => {
     list.forEach((item) => {
-        if (item.nodeType === Node.TEXT_NODE && item.textContent === mark)
-            item.data = String(templateValue.value);
+        if (item.nodeType === Node.TEXT_NODE && item.textContent?.includes(mark))
+            item.textContent = item.textContent.replaceAll(mark, () => String(templateValue.value));
         if (item.nodeType === Node.COMMENT_NODE && item.textContent && mark === getMark(item.textContent)) {
             item.parentNode.replaceChild(document.createTextNode(String(templateValue.value)), item);
         }
@@ -38,7 +38,7 @@ const walkNode = (list, mark, templateValue) => {
                     }, { passive: behavior === 'passive' });
                     return el.removeAttribute(name);
                 }
-                old === mark && el.setAttribute(name, String(templateValue.value));
+                old?.includes(mark) && el.setAttribute(name, old.replaceAll(mark, () => String(templateValue.value)));
             });
             walkNode(item.childNodes, mark, templateValue);
         }

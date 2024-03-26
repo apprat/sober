@@ -34,10 +34,10 @@ const style = /*css*/`
   top: var(--top, auto);
   left: var(--left, auto);
   transform-origin: var(--origin,left top);
-  background: var(--s-color-surface-container-high, #e8e8eb);
-  border-radius: 4px;
+  background: var(--s-color-surface-container-highest, #e2e2e5);
+  border-radius: var(--s-shape-corner-small, 8px);
   padding: 8px 0;
-  max-width: 192px;
+  max-width: 224px;
   min-width: 128px;
   height: min-content;
   overflow-y: auto;
@@ -53,12 +53,12 @@ const style = /*css*/`
 ::slotted(s-menu){
   display: block;
 }
-::slotted(s-menu:first-of-type:not(:first-child)){
+::slotted(s-menu[group=start]){
   border-top: solid 1px var(--s-color-outline-variant, #c1c7ce);
   margin-top: 8px;
   padding-top: 8px;
 }
-::slotted(s-menu:last-of-type:not(:last-child)){
+::slotted(s-menu[group=end]){
   border-bottom: solid 1px var(--s-color-outline-variant, #c1c7ce);
   margin-bottom: 8px;
   padding-bottom: 8px;
@@ -72,10 +72,11 @@ const style = /*css*/`
 
 const name = 's-menu'
 const props = {
+  group: '' as 'start' | 'end' | ''
 }
 
 export default class Component extends builder({
-  name, style, props,
+  name, style, props, propSyncs: ['group'],
   setup(shadowRoot) {
     let trigger: HTMLDivElement
     let wrapper: HTMLDivElement

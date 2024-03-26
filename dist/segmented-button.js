@@ -1,7 +1,13 @@
 import { builder, html } from './core/element.js';
 const style = /*css*/ `
 :host{
-  display: flex;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  border: solid 1px var(--s-color-outline, #72787e);
+  border-radius: 20px;
+  height: 40px;
+  overflow: hidden;
 }
 `;
 const name = 's-segmented-button';

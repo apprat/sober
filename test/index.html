@@ -20,6 +20,11 @@
     s-page {
       --s-color-primary: #006e1b;
       --s-color-dark-primary: #4fe25b;
+      --s-shape-corner-extra-small: 0;
+      --s-shape-corner-small: 0;
+      --s-shape-corner-medium: 0;
+      --s-shape-corner-large: 0;
+      --s-shape-corner-extra-large: 0;
     }
   </style>
 </head>
@@ -46,12 +51,11 @@
         <a href="./slider.html">Slider</a>
         <a href="./segmented-button.html">Segmented Button</a>
         <a href="./top-app-bar.html">Top App Bar</a>
-        <a href="./navigation-bar.html">Navigation Bar</a>
         <a href="./card.html">Card</a>
         <a href="./progress.html">Progress</a>
         <a href="./text-field.html">Text Field</a>
         <a href="./drawer.html">Drawer</a>
-        <a href="./navigation-rail.html">Bavigation Rail</a>
+        <a href="./navigation.html">Bavigation</a>
         <a href="./menu.html">Menu</a>
         <a href="./chip.html">Chip</a>
       </main>
@@ -158,36 +162,87 @@
           <s-segmented-button-item checked="true">
             index
           </s-segmented-button-item>
+          <s-segmented-button-item disabled="true">
+            users
+          </s-segmented-button-item>
           <s-segmented-button-item>
             users
           </s-segmented-button-item>
-
           <s-segmented-button-item>
             <s-icon slot="start" type="search"></s-icon>
             users
           </s-segmented-button-item>
         </s-segmented-button>
       </main>
-      <s-navigation-bar onchange="console.log('change',this.selectIndex)">
-        <s-navigation-bar-item checked="true">
+      <s-navigation onchange="console.log('change',this.selectIndex)">
+        <s-navigation-item checked="true">
           <s-icon slot="icon" type="add"></s-icon>
           <div slot="text">Home</div>
-        </s-navigation-bar-item>
-        <s-navigation-bar-item>
+        </s-navigation-item>
+        <s-navigation-item>
           <s-icon type="visibility" slot="icon"></s-icon>
           <div slot="text">Chat</div>
           <s-badge slot="badge">16</s-badge>
-        </s-navigation-bar-item>
-        <s-navigation-bar-item>
+        </s-navigation-item>
+        <s-navigation-item>
           <s-icon type="dark_mode" slot="icon"></s-icon>
           <div slot="text">Dark</div>
-        </s-navigation-bar-item>
-        <s-navigation-bar-item>
+        </s-navigation-item>
+        <s-navigation-item>
           <s-icon type="light_mode" slot="icon"></s-icon>
           <div slot="text">Light</div>
           <s-badge slot="badge"></s-badge>
-        </s-navigation-bar-item>
-      </s-navigation-bar>
+        </s-navigation-item>
+      </s-navigation>
+
+      <s-search style="margin: 24px;" size="small">
+        <s-icon-button slot="start">
+          <s-icon type="menu"></s-icon>
+        </s-icon-button>
+        <input type="text" placeholder="搜索关键字">
+        <s-icon-button slot="end">
+          <s-icon type="search"></s-icon>
+        </s-icon-button>
+      </s-search>
+
+      <s-search style="margin: 24px;">
+        <s-icon-button slot="start">
+          <s-icon type="menu"></s-icon>
+        </s-icon-button>
+        <input type="text" placeholder="搜索关键字">
+        <s-icon-button slot="end">
+          <s-icon type="search"></s-icon>
+        </s-icon-button>
+      </s-search>
+
+      <s-search style="margin: 24px;" size="large">
+        <s-icon-button slot="start">
+          <s-icon type="menu"></s-icon>
+        </s-icon-button>
+        <input type="text" placeholder="搜索关键字">
+        <s-icon-button slot="end">
+          <s-icon type="search"></s-icon>
+        </s-icon-button>
+      </s-search>
+      <hr>
+      <s-search style="margin: 24px;" size="small">
+        <s-icon type="menu" slot="start"></s-icon>
+        <input type="text" placeholder="搜索关键字">
+        <s-icon type="search" slot="end"></s-icon>
+      </s-search>
+
+      <s-search style="margin: 24px;">
+        <s-icon type="menu" slot="start"></s-icon>
+        <input type="text" placeholder="搜索关键字">
+        <s-icon type="search" slot="end"></s-icon>
+      </s-search>
+
+      <s-search style="margin: 24px;" size="large">
+        <s-icon type="menu" slot="start"></s-icon>
+        <input type="text" placeholder="搜索关键字">
+        <s-icon type="search" slot="end"></s-icon>
+      </s-search>
+
     </s-scrollbar>
   </s-page>
 

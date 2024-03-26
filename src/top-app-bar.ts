@@ -24,6 +24,9 @@ slot[name=action]{
 ::slotted([slot=action]){
   margin: 0 4px;
 }
+::slotted(s-search[slot=action]){
+  background: var(--s-color-surface, #fcfcff);
+}
 .headline{
   overflow: hidden;
 }

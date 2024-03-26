@@ -47,7 +47,6 @@ export default class Component extends builder({
     const update = () => {
       const percentage = Math.min(this.value, this.max) / this.max * 100
       circular.style.strokeDashoffset = `${dashoffset - (dashoffset * (percentage / 100))}px`
-      console.log(circular)
     }
     return {
       watches: {

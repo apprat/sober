@@ -1,43 +1,54 @@
 import { builder, html } from './core/element.js'
-import type Item from './navigation-rail-item.js'
+import type Item from './navigation-item.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
 :host{
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  width: 80px;
-  height: 100%;
   overflow: hidden;
+  background: var(--s-color-surface, #fcfcff);
+  box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+  position: relative;
 }
-::slotted([slot=start]){
-  flex-shrink: 0;
+:host([mode=rail]){
+  flex-direction: column;
+  width: 80px;
+  box-shadow: none;
+  height: 100%;
 }
-::slotted(s-icon-button[slot=menu]){
+::slotted(s-navigation-item){
+  height: 64px;
+}
+:host([mode=rail]) ::slotted(s-navigation-item){
+  height: 72px;
+}
+::slotted(s-icon-button[slot=start]){
   width: 56px;
   height: 56px;
   margin: 16px 0 8px 0;
-  border-radius: 12px;
+  border-radius: var(--s-shape-corner-medium, 12px);
 }
 ::slotted([slot=end]){
   flex-grow: 1;
-  width: 100%;
 }
 `
 
-const name = 's-navigation-rail'
+const name = 's-navigation'
 const props = {
+  mode: 'bottom' as 'bottom' | 'rail'
 }
 
 export default class Component extends builder({
   name, style, props, propSyncs: true,
   setup() {
+    let slot: HTMLSlotElement
     let options: Item[] = []
     let selectIndex = -1
     let changing = false
     const slotChange = () => {
-      options = Array.from(this.children) as Item[]
+      options = slot.assignedElements().filter((item) => item.tagName === 'S-NAVIGATION-ITEM') as Item[]
       selectIndex = options.findIndex((item) => item.checked)
     }
     this.addEventListener('item:change', (event: Event) => {
@@ -65,8 +76,7 @@ export default class Component extends builder({
       },
       render: () => html`
         <slot name="start"></slot>
-        <slot name="menu"></slot>
-        <slot @slotchange="${slotChange}"></slot>
+        <slot ref="${(el: HTMLSlotElement) => slot = el}" @slotchange="${slotChange}"></slot>
         <slot name="end"></slot>
       `
     }

@@ -24,7 +24,6 @@ const style = /*css*/ `
   width: calc(100% - 20px);
   height: 4px;
   overflow: hidden;
-  border-radius: 2px;
   position: relative;
   background: var(--s-color-surface-container-highest, #e2e2e5);
 }

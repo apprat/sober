@@ -9,22 +9,20 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   color: var(--s-color-on-surface, #1a1c1e);
-  height: 40px;
+  height: 100%;
+  min-width: 80px;
+  padding: 0 24px;
   text-transform: capitalize;
   font-weight: 500;
   font-size: .875rem;
-  border: solid 1px var(--s-color-outline, #72787e);
   position: relative;
   cursor: pointer;
+  box-sizing: border-box;
+  border-left: solid 1px var(--s-color-outline, #72787e);
 }
 :host(:first-child){
-  border-radius: 20px 0 0 20px;
-}
-:host(:last-child){
-  border-radius: 0 20px 20px 0;
-}
-:host(:not(:last-child)){
-  border-right: none;
+  border-left-color: transparent;
+  margin-left: -1px;
 }
 :host([checked=true]){
   background: var(--s-color-secondary-container, #d4e4f6);
@@ -32,12 +30,7 @@ const style = /*css*/`
 }
 :host([disabled=true]){
   pointer-events: none;
-  border-top-color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent);
   color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 38%, transparent);
-}
-:host([disabled=true]:not(:last-child)){
-  margin-left: -1px;
 }
 ::slotted(s-icon){
   width: 18px;
@@ -66,9 +59,9 @@ export default class Component extends builder({
         }
       },
       render: () => html`
-        <s-ripple attached="true"></s-ripple>
         <slot name="start"></slot>
         <slot></slot>
+        <s-ripple class="ripple" attached="true"></s-ripple>
       `
     }
   }

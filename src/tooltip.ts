@@ -18,7 +18,7 @@ const style = /*css*/`
   font-size: .875rem;
   font-weight: 400;
   padding: 6px 8px;
-  border-radius: 4px;
+  border-radius: var(--s-shape-corner-extra-small, 4px);
   white-space: nowrap;
   opacity: .95;
   filter: opacity(0);
@@ -30,7 +30,7 @@ const style = /*css*/`
 }
 ::slotted(img){
   display: block;
-  border-radius: 4px;
+  border-radius: var(--s-shape-corner-extra-small, 4px);
   margin: 2px 0;
 }
 `

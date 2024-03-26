@@ -1,8 +1,9 @@
-import { builder, html } from './core/element.js';
-import './ripple.js';
-const style = /*css*/ `
+import { builder, html } from './core/element.js'
+import './ripple.js'
+import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+
+const style = /*css*/`
 :host{
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,7 +12,6 @@ const style = /*css*/ `
   position: relative;
   font-size: .75rem;
   font-weight: 500;
-  height: 72px;
   box-sizing: border-box;
   width: 100%;
   max-width: 80px;
@@ -29,7 +29,7 @@ const style = /*css*/ `
   align-items: center;
   height: 28px;
   width: 48px;
-  border-radius: 16px;
+  border-radius: 14px;
 }
 .icon::before{
   content: '';
@@ -61,25 +61,25 @@ const style = /*css*/ `
   pointer-events: none;
   margin-top: 4px;
 }
-`;
-const name = 's-navigation-rail-item';
+`
+
+const name = 's-navigation-item'
 const props = {
-    checked: false,
-    badge: 0
-};
+  checked: false,
+}
+
 export default class Component extends builder({
-    name, style, props, propSyncs: true,
-    setup() {
-        this.addEventListener('click', () => this.checked = true);
-        return {
-            watches: {
-                checked: () => {
-                    if (!this.parentNode)
-                        return;
-                    this.dispatchEvent(new Event('item:change', { bubbles: true }));
-                }
-            },
-            render: () => html `
+  name, style, props, propSyncs: true,
+  setup() {
+    this.addEventListener('click', () => this.checked = true)
+    return {
+      watches: {
+        checked: () => {
+          if (!this.parentNode) return
+          this.dispatchEvent(new Event('item:change', { bubbles: true }))
+        },
+      },
+      render: () => html`
         <div class="icon">
           <slot name="icon"></slot>
         </div>
@@ -89,8 +89,26 @@ export default class Component extends builder({
         </div>
         <s-ripple attached="true" class="ripple"></s-ripple>
       `
-        };
     }
-}) {
+  }
+}) { }
+
+Component.define()
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      [name]: Partial<typeof props> & JSXAttributes
+    }
+  }
+  interface HTMLElementTagNameMap {
+    [name]: Component
+  }
 }
-Component.define();
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof Component
+  }
+}

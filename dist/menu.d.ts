@@ -1,8 +1,12 @@
 import type { JSXAttributes } from './core/types/HTMLAttributes.js';
 declare const name = "s-menu";
-declare const props: {};
+declare const props: {
+    group: "" | "start" | "end";
+};
 declare const Component_base: {
     new (): {
+        group: "" | "start" | "end";
+    } & {
         show: (element?: HTMLElement) => void;
         dismiss: () => void;
         toggle: (element?: HTMLElement) => void;

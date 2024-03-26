@@ -9,6 +9,7 @@ const style = /*css*/ `
   position: relative;
   color: var(--s-color-primary, #006495);
   width: 52px;
+  border-radius: 16px;
 }
 :host([disabled=true]){
   pointer-events: none;
@@ -21,7 +22,7 @@ const style = /*css*/ `
 .track{
   width: 100%;
   height: 100%;
-  border-radius: var(--s-shape-corner-full, 20px);
+  border-radius: inherit;
   background: var(--s-color-outline, #72787e);
   position: absolute;
   padding: 4%;
@@ -44,7 +45,7 @@ const style = /*css*/ `
   display: block;
   height: 100%;
   background: var(--s-color-surface-container-highest, #e2e2e5);
-  border-radius: var(--s-shape-corner-full, 20px);
+  border-radius: inherit;
 }
 :host([checked=true]) .track::before{
   opacity: 0;

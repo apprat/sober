@@ -50,9 +50,9 @@ const style = /*css*/ `
   min-width: 280px;
   max-width: calc(100% - 48px);
   max-height: calc(100% - 48px);
-  background: var(--s-color-surface-container-high, #e8e8eb);
+  background: var(--s-color-surface-container-highest, #e2e2e5);
   position: relative;
-  border-radius: 28px;
+  border-radius: var(--s-shape-corner-extra-large, 28px);
   box-shadow: var(--s-elevation-level5, 0 8px 10px -6px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12));
   display: flex;
   flex-direction: column;
@@ -144,7 +144,6 @@ class Component extends builder({
         let negative;
         let positive;
         const show = () => {
-            console.log('show');
             wrapper.classList.add('show');
             this.dispatchEvent(new Event('show'));
         };

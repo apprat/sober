@@ -20,7 +20,7 @@ const style = /*css*/ `
   background: var(--s-color-inverse-surface, #2f3133);
   color: var(--s-color-inverse-on-surface, #f0f0f3);
   min-height: 48px;
-  border-radius: 4px;
+  border-radius: var(--s-shape-corner-extra-small, 4px);
   box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
   line-height: 1.6;
   display: inline-flex;
@@ -48,7 +48,7 @@ const style = /*css*/ `
 .action{
   font-size: inherit;
   flex-shrink: 0;
-  border-radius: 4px;
+  border-radius: var(--s-shape-corner-extra-small, 4px);
   color: var(--s-color-inverse-primary, #8fcdff);
   margin-right: 8px;
   margin-left: -8px;

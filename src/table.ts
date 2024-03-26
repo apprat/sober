@@ -7,7 +7,7 @@ const style = /*css*/`
   overflow: hidden;
   font-size: .875rem;
   border: solid 1px var(--s-color-outline-variant, #c1c7ce);
-  border-radius: 8px;
+  border-radius: var(--s-shape-corner-small, 8px);
   overflow: auto;
 }
 .container{

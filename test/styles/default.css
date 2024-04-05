@@ -1,0 +1,55 @@
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:not(:defined) {
+  display: none;
+}
+
+a {
+  margin: 8px;
+  display: inline-block;
+  color: var(--s-color-primary, rgb(144, 16, 86));
+  text-decoration: none;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  padding: 8px;
+  border: solid 1px var(--s-color-outline-variant);
+  margin: 16px;
+  display: flow-root;
+}
+
+main>* {
+  margin: 8px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2rem;
+  padding: 12px 16px;
+}
+
+#test {
+  --s-color-surface: #fbfcfe;
+  --s-color-on-surface: #191c1e;
+  --s-color-surface-variant: #dce4e9;
+  --s-color-on-surface-variant: #40484c;
+  --s-color-inverse-surface: #2e3132;
+  --s-color-inverse-on-surface: #eff1f3;
+
+  --s-color-surface-container: #eff1f3;
+  --s-color-surface-container-high: #e6edf0;
+  --s-color-surface-container-highest: #e0e7e9;
+  --s-color-surface-container-low: #f2f6fa;
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+  <style>
+  </style>
+</head>
+
+<body>
+  <s-page>
+    <main>
+      <s-ripple style="width: 247px;height: 400px;margin: 200px;color: #009688;box-sizing: border-box;">
+        Test
+      </s-ripple>
+
+      <div style="position: relative;">
+        <button onclick="console.log('button')">
+          卧槽
+        </button>
+        <s-ripple attached="true"></s-ripple>
+      </div>
+
+
+    </main>
+  </s-page>
+  <script type="module" src="../dist/main.js"></script>
+  <script type="module" src="./scripts/default.js"></script>
+</body>
+
+</html>

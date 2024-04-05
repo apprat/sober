@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+</head>
+
+<body>
+  <s-page>
+    <main>
+      <s-tab onchange="console.log('change',this.selectIndex)">
+        <s-tab-item>
+          <s-icon type="visibility" slot="icon"></s-icon>
+          <div slot="text">destination</div>
+        </s-tab-item>
+        <s-tab-item checked="true">
+          <s-icon type="visibility" slot="icon"></s-icon>
+          <div slot="text">navigation</div>
+        </s-tab-item>
+        <s-tab-item>
+          <s-icon type="light_mode" slot="icon"></s-icon>
+          <div slot="text">container</div>
+          <s-badge slot="badge">16</s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <s-icon type="dark_mode" slot="icon"></s-icon>
+          <div slot="text">Secondary</div>
+          <s-badge slot="badge"></s-badge>
+        </s-tab-item>
+      </s-tab>
+      <s-tab mode="fixed">
+        <s-tab-item>
+          <div slot="text">destination</div>
+        </s-tab-item>
+        <s-tab-item checked="true">
+          <div slot="text">navigation</div>
+          <s-badge slot="badge">16</s-badge>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">container</div>
+        </s-tab-item>
+        <s-tab-item>
+          <div slot="text">Secondary</div>
+          <s-badge slot="badge"></s-badge>
+        </s-tab-item>
+      </s-tab>
+    </main>
+  </s-page>
+  <script type="module" src="../dist/main.js"></script>
+  <script type="module" src="./scripts/default.js"></script>
+</body>
+
+</html>

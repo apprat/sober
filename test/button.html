@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+</head>
+
+<body>
+  <s-page>
+
+    <main>
+      <s-button> button </s-button>
+      <s-button type="elevated"> button </s-button>
+      <s-button type="filled-tonal"> button </s-button>
+      <s-button type="outlined"> button </s-button>
+      <s-button type="text"> button </s-button>
+
+      <s-button disabled="true"> button </s-button>
+      <s-button type="elevated" disabled="true"> button </s-button>
+      <s-button type="filled-tonal" disabled="true"> button </s-button>
+      <s-button type="outlined" disabled="true"> button </s-button>
+      <s-button type="text" disabled="true"> button </s-button>
+      <hr>
+      <s-button>
+        <s-icon type="search" slot="start"></s-icon>
+        button
+        <s-icon type="close" slot="end"></s-icon>
+      </s-button>
+      <s-button type="elevated">
+        <s-icon type="search" slot="start"></s-icon>
+        button
+        <s-icon type="close" slot="end"></s-icon>
+      </s-button>
+      <s-button type="filled-tonal">
+        <s-icon type="search" slot="start"></s-icon>
+        button
+        <s-icon type="close" slot="end"></s-icon>
+      </s-button>
+      <s-button type="outlined">
+        <s-icon type="search" slot="start"></s-icon>
+        button
+        <s-icon type="close" slot="end"></s-icon>
+      </s-button>
+      <s-button type="text">
+        <s-icon type="search" slot="start"></s-icon>
+        button
+        <s-icon type="close" slot="end"></s-icon>
+      </s-button>
+      <hr>
+      <s-button>
+        <s-circular-progress indeterminate="true" slot="start"></s-circular-progress>
+        button
+        <s-icon type="close" slot="end"></s-icon>
+      </s-button>
+  </s-page>
+  <script type="module" src="../dist/main.js"></script>
+  <script type="module" src="./scripts/default.js"></script>
+</body>
+
+</html>

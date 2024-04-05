@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+</head>
+
+<body>
+  <s-page>
+    <main>
+      <h1>enabled</h1>
+      <s-fab size="small">
+        <s-icon type="search"></s-icon>
+      </s-fab>
+      <s-fab>
+        <s-icon type="search"></s-icon>
+      </s-fab>
+      <s-fab size="large">
+        <s-icon type="search"></s-icon>
+      </s-fab>
+    </main>
+
+    <main>
+      <h1>extended</h1>
+      <s-fab extended="true" size="small">
+        <s-icon slot="start" type="add"></s-icon>
+        compose
+      </s-fab>
+    </main>
+
+    <hr>
+  </s-page>
+  <script type="module" src="../dist/main.js"></script>
+  <script type="module" src="./scripts/default.js"></script>
+</body>
+
+</html>

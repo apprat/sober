@@ -1,0 +1,33 @@
+{
+  "name": "sober",
+  "version": "0.0.82",
+  "description": "Sober is a library of UI components designed with reference to Material You.",
+  "type": "module",
+  "scripts": {
+    "dev": "node dev/main.js",
+    "build": "npx tsc && npx rollup --config dev/rollup.config.js"
+  },
+  "keywords": [
+    "sober",
+    "material you",
+    "material design",
+    "web components"
+  ],
+  "exports": {
+    ".": "./dist/main.js",
+    "./*": "./dist/*.js"
+  },
+  "author": "apprat",
+  "repository": "apprat/sober",
+  "homepage": "https://soberjs.com",
+  "license": "MIT",
+  "main": "./dist/main.js",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "rollup": "^3.20.2",
+    "rollup-plugin-uglify": "^6.0.4",
+    "typescript": "latest",
+    "csstype": "^3.1.3"
+  },
+  "dependencies": {}
+}

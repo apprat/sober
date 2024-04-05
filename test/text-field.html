@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Test</title>
+  <link rel="stylesheet" href="./styles/default.css">
+  <style>
+    s-card {
+      height: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <s-page>
+    <main>
+      <s-text-field label="请输入内容">
+        <input type="text">
+      </s-text-field>
+
+      <s-text-field>
+        <input type="text" placeholder="请输入内容">
+      </s-text-field>
+
+      <s-text-field label="请输入内容">
+        <textarea style="min-height: 112px;max-height: 560px;"></textarea>
+      </s-text-field>
+
+
+
+      <s-button onclick="document.querySelector('input[type=text]').value=String(Math.random())">
+        Set
+      </s-button>
+
+      <s-layout full-style="background: red" full-class="full">
+
+      </s-layout>
+
+    </main>
+  </s-page>
+
+  <script type="module" src="../dist/main.js"></script>
+  <script type="module" src="./scripts/default.js"></script>
+</body>
+
+</html>

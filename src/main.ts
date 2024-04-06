@@ -8,6 +8,7 @@ import Carousel from './carousel.js'
 import Dialog from './dialog.js'
 import Divider from './divider.js'
 import Drawer from './drawer.js'
+import Dropdown from './dropdown.js'
 import FAB from './FAB.js'
 import IconButton from './icon-button.js'
 import Icon from './icon.js'
@@ -50,6 +51,7 @@ export {
   Dialog,
   Divider,
   Drawer,
+  Dropdown,
   FAB,
   IconButton,
   Icon,

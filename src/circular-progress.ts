@@ -55,7 +55,7 @@ export default class Component extends builder({
       },
       render: () => html`
         <svg class="determinable" viewBox="22 22 44 44"style="transform: rotate(-90deg)">
-          <circle ref="${(el: SVGCircleElement) => circular = el}" cx="44" cy="44" r="20.2" fill="none" stroke-width="3.6" style="transition: stroke-dashoffset .2s;stroke-dasharray: ${dashoffset}px"></circle>
+          <circle ref="${(el: SVGCircleElement) => circular = el}" cx="44" cy="44" r="20.2" fill="none" stroke-linecap="round" stroke-width="3.6" style="transition: stroke-dashoffset .2s;stroke-dasharray: ${dashoffset}px"></circle>
         </svg>
         <svg class="indeterminate" viewBox="22 22 44 44" style="animation: rotate 1.4s linear infinite">
           <circle style="stroke-dasharray: 80px,200px;stroke-dashoffset: 0;animation: stroke 1.4s ease-in-out infinite" cx="44" cy="44" r="20.2" fill="none" stroke-width="3.6"></circle>

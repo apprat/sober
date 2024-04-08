@@ -29,7 +29,7 @@ const style = /*css*/`
   align-items: center;
   height: 28px;
   width: 48px;
-  border-radius: 14px;
+  border-radius: var(--s-shape-corner-full, 7680px);
 }
 .icon::before{
   content: '';

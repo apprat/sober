@@ -33,7 +33,7 @@ const style = /*css*/`
   height: 3px;
   width: 100%;
   background: var(--s-color-primary, #006495);
-  border-radius: 3px 3px 0 0;
+  border-radius: var(--s-shape-corner-full, 7680px) var(--s-shape-corner-full, 7680px) 0 0;
   transition: filter .2s,transform .2s,width .2s;
   filter: opacity(0);
 }

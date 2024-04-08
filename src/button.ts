@@ -9,7 +9,7 @@ const style = /*css*/`
   box-sizing: border-box;
   display: inline-flex;
   vertical-align: middle;
-  border-radius: 20px;
+  border-radius: var(--s-shape-corner-full, 7680px);
   padding: 0 24px;
   height: 40px;
   text-transform: capitalize;

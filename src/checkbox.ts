@@ -12,7 +12,7 @@ const style = /*css*/`
   position: relative;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: var(--s-shape-corner-full, 7680px);
   color: var(--s-color-primary, #006495);
 }
 :host([disabled=true]){

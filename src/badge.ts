@@ -10,7 +10,7 @@ const style = /*css*/`
   height: 18px;
   background: var(--s-color-error, #ba1a1a);
   color: var(--s-color-on-error, #ffffff);
-  border-radius: 12px;
+  border-radius: var(--s-shape-corner-full, 7680px);
   padding: 0 3px;
   font-size: .625rem;
   box-sizing: border-box;

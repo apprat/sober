@@ -34,7 +34,7 @@ const style = /*css*/`
   top: var(--top, auto);
   left: var(--left, auto);
   transform-origin: var(--origin,left top);
-  background: var(--s-color-surface-container-highest, #e2e2e5);
+  background: var(--s-color-surface-container-low, #f3f3f6);
   border-radius: var(--s-shape-corner-small, 8px);
   padding: 8px 0;
   max-width: 224px;

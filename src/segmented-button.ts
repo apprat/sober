@@ -8,7 +8,7 @@ const style = /*css*/`
   align-items: center;
   vertical-align: middle;
   border: solid 1px var(--s-color-outline, #72787e);
-  border-radius: 20px;
+  border-radius: var(--s-shape-corner-full, 7680px);
   height: 40px;
   overflow: hidden;
 }

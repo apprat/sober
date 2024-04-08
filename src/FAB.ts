@@ -13,7 +13,7 @@ const style = /*css*/`
   box-sizing: border-box;
   height: 56px;
   width: 56px;
-  border-radius: 50%;
+  border-radius: var(--s-shape-corner-full, 7680px);
   background: var(--s-color-primary-container, #cbe6ff);
   color: var(--s-color-on-primary-container, #001e30);
   transition: box-shadow .2s;

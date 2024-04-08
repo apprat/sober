@@ -9,7 +9,7 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: var(--s-shape-corner-full, 7680px);
   width: 40px;
   height: 40px;
   color: var(--s-color-on-surface-variant, #41474d);

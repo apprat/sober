@@ -58,7 +58,7 @@ const style = /*css*/`
   position: absolute;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: var(--s-shape-corner-full, 7680px);
   background: currentColor;
   filter: opacity(0);
   transition: filter .2s;
@@ -70,7 +70,7 @@ const style = /*css*/`
   width: 20px;
   height: 20px;
   background: currentColor;
-  border-radius: 50%;
+  border-radius: var(--s-shape-corner-full, 7680px);
   box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
   margin: 10px;
 }
@@ -105,7 +105,7 @@ const style = /*css*/`
   left: 0;
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+  border-radius: var(--s-shape-corner-full, 7680px);
 }
 .label::after{
   content: '';

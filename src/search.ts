@@ -11,7 +11,7 @@ const style = /*css*/`
   background: var(--s-color-surface-container-high, #e8e8eb);
   color: var(--s-color-on-surface, #1a1c1e);
   height: 48px;
-  border-radius: 24px;
+  border-radius: var(--s-shape-corner-full, 7680px);
   font-size: .875rem;
 }
 :host([size=small]){
@@ -20,7 +20,6 @@ const style = /*css*/`
 }
 :host([size=large]){
   height: 56px;
-  border-radius: 28px;
   min-width: 280px;
   font-size: 1rem;
 }

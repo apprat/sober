@@ -86,6 +86,7 @@ const style = /*css*/`
   --s-shape-corner-medium: 12px;
   --s-shape-corner-large: 16px;
   --s-shape-corner-extra-large: 28px;
+  --s-shape-corner-full: 7680px;
 
   --s-color-dark-primary: #8fcdff;
   --s-color-dark-on-primary: #003450;

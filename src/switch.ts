@@ -13,7 +13,7 @@ const style = /*css*/`
   font-size: 32px;
   width: 1.625em;
   height: 1em;
-  border-radius: .5em;
+  border-radius: var(--s-shape-corner-full, 7680px);
 }
 :host([disabled=true]){
   pointer-events: none;
@@ -55,7 +55,7 @@ const style = /*css*/`
 .ripple{
   height: 125%;
   width: 76.92307692307692%;
-  border-radius: 50%;
+  border-radius: var(--s-shape-corner-full, 7680px);
   top: auto;
   margin-left: -7.6923076923076925%;
   transition: transform .2s;
@@ -71,7 +71,7 @@ const style = /*css*/`
 }
 .thumb{
   background: var(--s-color-outline, #72787e);
-  border-radius: 50%;
+  border-radius: var(--s-shape-corner-full, 7680px);
   width: 60%;
   height: 60%;
   transform: scale(.6666666666666667) translateX(0px);

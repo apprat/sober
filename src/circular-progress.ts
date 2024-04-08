@@ -5,14 +5,10 @@ const style = /*css*/`
 :host{
   display: inline-block;
   vertical-align: middle;
+  position: relative;
   width: 48px;
   height: 48px;
   color: var(--s-color-primary, #006495);
-}
-svg{
-  height: inherit;
-  width: inherit;
-  stroke: currentColor;
 }
 :host([indeterminate=true]) .determinable,
 .indeterminate{
@@ -20,15 +16,43 @@ svg{
 }
 :host([indeterminate=true]) .indeterminate{
   display: block;
+  animation: rotate 1568ms linear infinite;
+  width: inherit;
+  height: inherit;
 }
 @keyframes stroke{
-  0% { stroke-dasharray: 1px, 200px; stroke-dashoffset: 0 }
-  50% { stroke-dasharray: 100px, 200px; stroke-dashoffset: -15px }
-  100% { stroke-dasharray: 100px, 200px; stroke-dashoffset: -125px }
+  0% { stroke-dashoffset: var(--dasharray) }
+  50% { stroke-dashoffset: calc(var(--dasharray) / 4) }
+  100% { stroke-dashoffset: var(--dasharray) }
+}
+@keyframes stroke-rotate{
+  0% { transform: rotate(0deg) }
+  12.5% { transform: rotate(0deg) }
+  25% {transform: rotate(270deg)}
+  37.5% {transform: rotate(270deg)}
+  50% {transform: rotate(540deg)}
+  62.5% {transform: rotate(540deg)}
+  75% {transform: rotate(810deg)}
+  87.5% {transform: rotate(810deg)}
+  100% { transform: rotate(1080deg) }
+  100% { transform: rotate(1080deg) }
 }
 @keyframes rotate{
   0% { transform: rotate(0deg) }
   100% { transform: rotate(360deg) }
+}
+svg{
+  height: inherit;
+  width: inherit;
+  stroke: currentColor;
+}
+circle{
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: var(--dasharray)
+}
+.unckecked{
+  stroke: var(--s-color-primary-container, #cbe6ff);
 }
 `
 
@@ -36,17 +60,19 @@ const name = 's-circular-progress'
 const props = {
   indeterminate: false,
   max: 100,
-  value: 100
+  value: 0
 }
 
 export default class Component extends builder({
   name, style, props, propSyncs: ['indeterminate'],
   setup() {
     let circular: SVGCircleElement
-    const dashoffset = 126.92
+    const size = 48
+    const borderWidth = 4
+    const dasharray = (size - borderWidth) * Math.PI
     const update = () => {
       const percentage = Math.min(this.value, this.max) / this.max * 100
-      circular.style.strokeDashoffset = `${dashoffset - (dashoffset * (percentage / 100))}px`
+      circular.style.strokeDashoffset = `${dasharray - (dasharray * (percentage / 100))}px`
     }
     return {
       watches: {
@@ -54,12 +80,15 @@ export default class Component extends builder({
         value: update
       },
       render: () => html`
-        <svg class="determinable" viewBox="22 22 44 44"style="transform: rotate(-90deg)">
-          <circle ref="${(el: SVGCircleElement) => circular = el}" cx="44" cy="44" r="20.2" fill="none" stroke-linecap="round" stroke-width="3.6" style="transition: stroke-dashoffset .2s;stroke-dasharray: ${dashoffset}px"></circle>
+        <svg class="determinable" viewBox="0 0 48 48" style="transform: rotate(-90deg);--dasharray: ${dasharray}px;">
+          <circle class="unckecked" style="cx: ${size / 2};cy: ${size / 2};r: ${(size - borderWidth) / 2};stroke-width: ${borderWidth}px" />
+          <circle ref="${(el: SVGCircleElement) => circular = el}" style="stroke-dashoffset: ${dasharray}px;cx: ${size / 2};cy: ${size / 2};r: ${(size - borderWidth) / 2};stroke-width: ${borderWidth}px" />
         </svg>
-        <svg class="indeterminate" viewBox="22 22 44 44" style="animation: rotate 1.4s linear infinite">
-          <circle style="stroke-dasharray: 80px,200px;stroke-dashoffset: 0;animation: stroke 1.4s ease-in-out infinite" cx="44" cy="44" r="20.2" fill="none" stroke-width="3.6"></circle>
-        </svg>
+        <div class="indeterminate">
+          <svg viewBox="0 0 48 48" style="animation: stroke-rotate 5.2s ease-in-out infinite;--dasharray: ${dasharray}px;">
+            <circle transform="rotate(-90, ${size / 2}, ${size / 2})" style="animation: stroke 1.3s ease-in-out infinite; cx: ${size / 2};cy: ${size / 2};r: ${(size - borderWidth) / 2};stroke-width: ${borderWidth}px"></circle>
+          </svg>
+        </div>
       `
     }
   }

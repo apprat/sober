@@ -1,5 +1,6 @@
 import { builder, html } from './core/element.js'
 import './ripple.js'
+import { getStackingContext } from './core/utils.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
@@ -11,11 +12,11 @@ const style = /*css*/`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: 2;
   pointer-events: none;
-  transition: filter .2s;
+  transition: filter .1s;
   filter: opacity(0);
 }
 .wrapper.show{
@@ -42,7 +43,7 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   transform: scale(.9);
-  transition: transform .2s;
+  transition: transform .1s;
 }
 .wrapper.show .wrapper-container{
   transform: scale(1);
@@ -143,11 +144,14 @@ const props = {
 
 class Component extends builder({
   name, style, props, propSyncs: ['size'],
-  setup() {
+  setup(shadowRoot) {
     let wrapper: HTMLDivElement
     let negative: HTMLDivElement
     let positive: HTMLDivElement
     const show = () => {
+      const stackingContext = getStackingContext(shadowRoot)
+      wrapper.style.top = `${0 - stackingContext.top}px`
+      wrapper.style.left = `${0 - stackingContext.left}px`
       wrapper.classList.add('show')
       this.dispatchEvent(new Event('show'))
     }

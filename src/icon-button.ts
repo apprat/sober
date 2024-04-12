@@ -41,6 +41,9 @@ const style = /*css*/`
   background: none !important;
   border-color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent);
 }
+::slotted(s-icon){
+  color: inherit;
+}
 `
 
 const name = 's-icon-button'

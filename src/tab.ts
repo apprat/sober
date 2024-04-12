@@ -61,7 +61,7 @@ export default class Component extends builder({
       options = slot.assignedElements().filter((item) => item instanceof Item) as Item[]
       selectIndex = options.findIndex((item) => item.checked)
     }
-    this.addEventListener('item:change', (event: Event) => {
+    this.addEventListener('tab-item:change', (event: Event) => {
       event.stopPropagation()
       if (changing) return
       changing = true

@@ -29,7 +29,7 @@ export default class Component extends builder({
       options = slot.assignedElements().filter((item) => item instanceof Item) as Item[]
       selectIndex = options.findIndex((item) => item.checked)
     }
-    this.addEventListener('item:change', (event: Event) => {
+    this.addEventListener('segmented-button-item:change', (event: Event) => {
       event.stopPropagation()
       if (changing) return
       changing = true
@@ -53,9 +53,7 @@ export default class Component extends builder({
         }
       },
       render: () => html`
-        <slot name="start"></slot>
         <slot ref="${(el: HTMLSlotElement) => slot = el}" @slotchange="${slotChange}"></slot>
-        <slot name="end"></slot>
       `
     }
   }

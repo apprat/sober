@@ -18,17 +18,20 @@
     <main>
       <s-text-field label="请输入内容">
         <input type="text">
+        <s-icon-button slot="end">
+          <s-icon type="search"></s-icon>
+        </s-icon-button>
       </s-text-field>
 
       <s-text-field>
         <input type="text" placeholder="请输入内容">
+        <s-icon slot="end" type="search"></s-icon>
       </s-text-field>
 
       <s-text-field label="请输入内容">
         <textarea style="min-height: 112px;max-height: 560px;"></textarea>
+        <s-icon slot="end" type="search"></s-icon>
       </s-text-field>
-
-
 
       <s-button onclick="document.querySelector('input[type=text]').value=String(Math.random())">
         Set

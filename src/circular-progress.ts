@@ -52,7 +52,7 @@ circle{
   stroke-dasharray: var(--dasharray)
 }
 .unckecked{
-  stroke: var(--s-color-primary-container, #cbe6ff);
+  stroke: var(--s-color-secondary-container, #d4e4f6);
 }
 `
 

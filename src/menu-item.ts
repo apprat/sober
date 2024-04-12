@@ -37,7 +37,7 @@ export default class Component extends builder({
   name, style, props,
   setup() {
     const click = () => {
-      this.dispatchEvent(new Event('item:click', { bubbles: true }))
+      this.dispatchEvent(new Event('menu-item:click', { bubbles: true }))
     }
     return {
       render: () => html`

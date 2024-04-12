@@ -46,7 +46,6 @@ const style = /*css*/`
 ::slotted([slot]),
 ::slotted([slot]){
   flex-shrink: 0;
-  color: var(--s-color-on-surface-variant, #dee3ea);
 }
 ::slotted(s-icon[slot=start]){
   margin: 0 -6px 0 12px;

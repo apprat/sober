@@ -1,4 +1,5 @@
 import { builder, html } from './core/element.js'
+import { getStackingContext } from './core/utils.js'
 import './ripple.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -9,10 +10,12 @@ const style = /*css*/`
 }
 .wrapper{
   position: fixed;
-  bottom: 0;
+  top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
+  align-items: flex-end;
   justify-content: center;
   pointer-events: none;
   z-index: 2;
@@ -35,7 +38,7 @@ const style = /*css*/`
   pointer-events: auto;
   transform: translateY(100%);
   filter: opacity(0);
-  transition: transform .2s,filter .2s;
+  transition: transform .1s, filter .1s;
 }
 .wrapper.show .container{
   transform: translateY(0%);
@@ -105,11 +108,14 @@ const show = (options: string | {
 
 class Component extends builder({
   name, style, props,
-  setup() {
+  setup(shadowRoot) {
     let wrapper: HTMLDivElement
     let action: HTMLDivElement
     const state = { timer: 0 }
     const show = () => {
+      const stackingContext = getStackingContext(shadowRoot)
+      wrapper.style.top = `${0 - stackingContext.top}px`
+      wrapper.style.left = `${0 - stackingContext.left}px`
       clearTimeout(state.timer)
       getComputedStyle(wrapper).top
       wrapper.classList.add('show')

@@ -34,6 +34,7 @@ const dark = `
   --s-color-surface-container-high: var(--s-color-dark-surface-container-high) !important;
   --s-color-surface-container-highest: var(--s-color-dark-surface-container-highest) !important;
   --s-color-surface-container-low: var(--s-color-dark-surface-container-low) !important;
+  --s-color-surface-container-lowest: var(--s-color-dark-surface-container-lowest) !important;
 `
 
 const style = /*css*/`
@@ -75,6 +76,7 @@ const style = /*css*/`
   --s-color-surface-container-high: #e8e8eb;
   --s-color-surface-container-highest: #e2e2e5;
   --s-color-surface-container-low: #f3f3f6;
+  --s-color-surface-container-lowest: #ffffff;
 
   --s-elevation-level1: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
   --s-elevation-level2: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
@@ -119,6 +121,7 @@ const style = /*css*/`
   --s-color-dark-surface-container-high: #282a2d;
   --s-color-dark-surface-container-highest: #333537;
   --s-color-dark-surface-container-low: #1a1c1e;
+  --s-color-dark-surface-container-lowest: #0c0e11;
 }
 :host([theme=dark]){
   ${dark}

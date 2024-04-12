@@ -27,6 +27,12 @@ slot[name=action]{
 ::slotted(s-search){
   background: var(--s-color-surface, #fcfcff);
 }
+::slotted(s-top-app-bar){
+  height: 100%;
+  width: 100%;
+  max-width: 1280px;
+  padding: 0;
+}
 .headline{
   overflow: hidden;
 }
@@ -34,6 +40,8 @@ slot[name=action]{
   flex-grow: 1;
   min-width: 0;
   height: 100%;
+  display: flex;
+  justify-content: center;
 }
 ::slotted([slot=headline]){
   font-size: 1.375rem;

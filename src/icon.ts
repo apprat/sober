@@ -9,6 +9,7 @@ const style = /*css*/`
   align-items: center;
   width: 24px;
   height: 24px;
+  color: var(--s-color-on-surface-variant, #41474d);
   fill: currentColor;
   box-sizing: border-box;
 }

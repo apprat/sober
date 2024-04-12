@@ -31,8 +31,7 @@ const style = /*css*/`
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--s-color-surface, #fcfcff);
-  opacity: .38;
+  background: var(--s-color-secondary-container, #d4e4f6);
   flex-shrink: 0;
   margin: 16px 4px;
   cursor: pointer;

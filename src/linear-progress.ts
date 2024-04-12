@@ -7,10 +7,11 @@ const style = /*css*/`
   height: 4px;
   color: var(--s-color-primary, #006495);
   position: relative;
+  border-radius: var(--s-shape-corner-full, 7680px);
   overflow: hidden;
 }
 .track{
-  background: var(--s-color-surface-container-highest, #e2e2e5);
+  background: var(--s-color-secondary-container, #d4e4f6);
   height: 100%;
 }
 .float{
@@ -22,7 +23,7 @@ const style = /*css*/`
 }
 .determinable{
   background: currentColor;
-  transition: transform .2s;
+  transform: translateX(-100%);
 }
 .indeterminate::before,
 .indeterminate::after{
@@ -62,7 +63,7 @@ const name = 's-linear-progress'
 const props = {
   indeterminate: false,
   max: 100,
-  value: 100
+  value: 0
 }
 
 export default class Component extends builder({

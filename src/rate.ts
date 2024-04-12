@@ -8,11 +8,12 @@ const style = /*css*/`
   font-size: 24px;
   position: relative;
   overflow: hidden;
-  --rate-unchecked-color: var(--s-color-surface-container-highest, #e2e2e5);
+  width: calc(1em * 5);
+  --rate-unchecked-color: var(--s-color-secondary-container, #d4e4f6);
   --rate-checked-color: var(--s-color-primary, #006495);
 }
 .unchecked{
-  width: calc(1em * 5);
+  width: 100%;
   display: flex;
 }
 .unchecked svg,

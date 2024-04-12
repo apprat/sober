@@ -123,6 +123,12 @@ export const builder = <
       const shadowRoot = this.attachShadow({ mode: 'closed' })
       const realProps = { ...options.props }
       const elementState: ElementState = { props: { ...options.props } }
+      //Allocated before initialization
+      const assigned: { [key: string]: unknown } = {}
+      for (const key in this) {
+        if (key in HTMLElement.prototype) continue
+        assigned[key] = this[key]
+      }
       for (const key in realProps) {
         const set = (v: unknown) => {
           let value = parsePropType(v, elementState.props[key])
@@ -143,6 +149,9 @@ export const builder = <
           elementState.watches?.[key]?.(value)
         }
         Object.defineProperty(this, key, { enumerable: true, get: () => realProps[key], set })
+      }
+      for (const key in assigned) {
+        this[key] = assigned[key]
       }
       const setup = options.setup?.apply(this as never, [shadowRoot])
       shadowRoot.adoptedStyleSheets = [baseStyle, sheet]

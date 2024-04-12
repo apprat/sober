@@ -48,18 +48,19 @@ const style = /*css*/`
 const name = 's-segmented-button-item'
 const props = {
   checked: false,
-  disabled: false
+  disabled: false,
+  selectabled: true
 }
 
 export default class Component extends builder({
-  name, style, props, propSyncs: true,
+  name, style, props, propSyncs: ['checked', 'disabled'],
   setup() {
-    this.addEventListener('click', () => this.slot === '' && (this.checked = true))
+    this.addEventListener('click', () => this.selectabled && (this.checked = true))
     return {
       watches: {
         checked: () => {
           if (!this.parentNode) return
-          this.dispatchEvent(new Event('item:change', { bubbles: true }))
+          this.dispatchEvent(new Event('segmented-button-item:change', { bubbles: true }))
         }
       },
       render: () => html`

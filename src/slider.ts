@@ -27,7 +27,8 @@ const style = /*css*/`
   height: 4px;
   overflow: hidden;
   position: relative;
-  background: var(--s-color-surface-container-highest, #e2e2e5);
+  background: var(--s-color-secondary-container, #d4e4f6);
+  border-radius: var(--s-shape-corner-full, 7680px);
 }
 :host([disabled=true]) .track{
   background: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 31.57894736842105%, transparent);

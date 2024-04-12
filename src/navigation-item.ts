@@ -76,7 +76,7 @@ export default class Component extends builder({
       watches: {
         checked: () => {
           if (!this.parentNode) return
-          this.dispatchEvent(new Event('item:change', { bubbles: true }))
+          this.dispatchEvent(new Event('navigation-item:change', { bubbles: true }))
         },
       },
       render: () => html`

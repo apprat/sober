@@ -40,16 +40,6 @@ h1 {
   padding: 12px 16px;
 }
 
-#test {
-  --s-color-surface: #fbfcfe;
-  --s-color-on-surface: #191c1e;
-  --s-color-surface-variant: #dce4e9;
-  --s-color-on-surface-variant: #40484c;
-  --s-color-inverse-surface: #2e3132;
-  --s-color-inverse-on-surface: #eff1f3;
-
-  --s-color-surface-container: #eff1f3;
-  --s-color-surface-container-high: #e6edf0;
-  --s-color-surface-container-highest: #e0e7e9;
-  --s-color-surface-container-low: #f2f6fa;
+s-page{
+  ---s-shape-corner-full: 0;
 }

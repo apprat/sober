@@ -13,6 +13,8 @@ const style = /*css*/`
 .container{
   border-radius: inherit;
   color: var(--s-color-outline, #72787e);
+  display: flex;
+  align-items: center;
 }
 .focus{
   color: currentColor;
@@ -94,6 +96,10 @@ const style = /*css*/`
 .label>span:empty{
   padding: 0;
 }
+.content{
+  position: relative;
+  flex-grow: 1;
+}
 ::slotted(input[type=text]),
 ::slotted(textarea),
 .textarea{
@@ -138,6 +144,18 @@ const style = /*css*/`
 ::slotted(input[type=text])::placeholder,
 ::slotted(textarea)::placeholder{
   color: var(--s-color-outline, #72787e);
+}
+::slotted([slot=end]){
+  flex-shrink: 0;
+}
+::slotted(s-icon[slot=end]){
+  margin: 0 12px 0 -8px;
+}
+::slotted(s-icon-button[slot=end]){
+  margin: 0 4px 0 -12px;
+}
+.focus ::slotted([slot=end]){
+  color: currentColor;
 }
 `
 
@@ -200,8 +218,11 @@ export default class Component extends builder({
           <div class="label">
             <span ref="${(el: HTMLSpanElement) => label = el}"></span>
           </div>
-          <slot style="min-height: inherit;" @slotchange="${inputSlotChange}" ref="${(el: HTMLSlotElement) => inputSlot = el}"></slot>
-          <div ref="${(el: HTMLDivElement) => inputShaodw = el}" class="textarea"></div>
+          <div class="content">
+            <slot style="min-height: inherit;" @slotchange="${inputSlotChange}" ref="${(el: HTMLSlotElement) => inputSlot = el}"></slot>
+            <div ref="${(el: HTMLDivElement) => inputShaodw = el}" class="textarea"></div>
+          </div>
+          <slot name="end"></slot>
         </div>
       `
     }

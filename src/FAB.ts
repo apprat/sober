@@ -32,7 +32,6 @@ const style = /*css*/`
   padding: 0 16px;
   width: auto;
   height: 48px;
-  border-radius: var(--s-shape-corner-extra-large, 28px);
 }
 :host(:not([extended=true])[size=large]){
   height: 72px;
@@ -41,6 +40,9 @@ const style = /*css*/`
 :host(:not([extended=true])[size=large]) ::slotted(*){
   width: 36px;
   height: 36px;
+}
+::slotted(s-icon){
+  color: inherit;
 }
 ::slotted(s-icon[slot=start]){
   margin: 0 8px 0 0;

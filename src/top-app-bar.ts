@@ -32,6 +32,7 @@ slot[name=action]{
   width: 100%;
   max-width: 1280px;
   padding: 0;
+  background: none;
 }
 .headline{
   overflow: hidden;

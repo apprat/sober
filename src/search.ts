@@ -5,14 +5,14 @@ const style = /*css*/`
 :host{
   display: inline-flex;
   vertical-align: middle;
-  align-items: center;
   max-width: 520px;
   min-width: 240px;
+  height: 48px;
   background: var(--s-color-surface-container-high, #e8e8eb);
   color: var(--s-color-on-surface, #1a1c1e);
-  height: 48px;
   border-radius: var(--s-shape-corner-full, 7680px);
   font-size: .875rem;
+  position: relative;
 }
 :host([size=small]){
   height: 40px;
@@ -23,11 +23,51 @@ const style = /*css*/`
   min-width: 280px;
   font-size: 1rem;
 }
+.container{
+  display: flex;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+::slotted([slot=drop]){
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .1s;
+  overflow-y: auto;
+  border-radius: var(--s-shape-corner-extra-small, 4px);
+  box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+  padding-top: 48px;
+  background: var(--s-color-surface-container-high, #e8e8eb);
+}
+:host(:focus-within) ::slotted([slot=drop]){
+  opacity: 1;
+  pointer-events: auto;
+}
+:host(:focus-within) ::slotted([slot=drop])::before{
+  content: '';
+  height: 48px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  border-bottom: solid 1px var(--s-color-outline-variant, #c1c7ce);
+}
+:host([size=small]:focus-within) ::slotted([slot=drop])::before{
+  height: 40px;
+}
+:host([size=large]:focus-within) ::slotted([slot=drop])::before{
+  height: 56px;
+}
 ::slotted(input[type=text]){
   border: none;
   padding: 0 16px;
   height: 100%;
-  width: 0;
+  width: 100%;
+  max-width: 240px;
   flex-grow: 1;
   background: none;
   outline: none;
@@ -88,6 +128,11 @@ const style = /*css*/`
 :host([size=large]) ::slotted(s-icon[slot=end]){
   margin: 0 16px 0 -8px;
 }
+@media (pointer: fine){
+  ::slotted([slot=drop])::-webkit-scrollbar{
+    display: none;
+  }
+}
 `
 
 const name = 's-search'
@@ -100,9 +145,12 @@ export default class Component extends builder({
   setup() {
     return {
       render: () => html`
-        <slot name="start"></slot>
-        <slot></slot>
-        <slot name="end"></slot>
+        <slot name="drop" @pointerdown.prevent></slot>
+        <div class="container">
+          <slot name="start"></slot>
+          <slot></slot>
+          <slot name="end"></slot>
+        </div>
       `
     }
   }

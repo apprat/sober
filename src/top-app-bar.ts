@@ -33,6 +33,7 @@ slot[name=action]{
   max-width: 1280px;
   padding: 0;
   background: none;
+  margin: 0 auto;
 }
 .headline{
   overflow: hidden;
@@ -41,8 +42,6 @@ slot[name=action]{
   flex-grow: 1;
   min-width: 0;
   height: 100%;
-  display: flex;
-  justify-content: center;
 }
 ::slotted([slot=headline]){
   font-size: 1.375rem;

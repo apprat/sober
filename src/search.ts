@@ -28,6 +28,7 @@ const style = /*css*/`
   align-items: center;
   height: 100%;
   position: relative;
+  z-index: 1;
 }
 ::slotted([slot=drop]){
   position: absolute;
@@ -42,6 +43,7 @@ const style = /*css*/`
   box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
   padding-top: 48px;
   background: var(--s-color-surface-container-high, #e8e8eb);
+  z-index: 1;
 }
 :host(:focus-within) ::slotted([slot=drop]){
   opacity: 1;

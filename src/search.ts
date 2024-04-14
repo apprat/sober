@@ -31,32 +31,33 @@ const style = /*css*/`
 }
 :host(:focus-within) .container{
   z-index: 1;
-  background: inherit;
-  border-bottom: solid 1px var(--s-color-outline-variant, #c1c7ce);
 }
-::slotted([slot=drop]){
+.drop{
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   pointer-events: none;
+  background: inherit;
+  box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+  border-radius: var(--s-shape-corner-extra-small, 4px);
   opacity: 0;
   transition: opacity .1s;
-  border-radius: var(--s-shape-corner-extra-small, 4px);
-  box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
-  padding-top: 48px;
-  background: var(--s-color-surface-container-high, #e8e8eb);
 }
-:host(:focus-within) ::slotted([slot=drop]){
+:host(:focus-within) .drop{
   opacity: 1;
   pointer-events: auto;
   z-index: 1;
 }
+::slotted([slot=drop]){
+  border-top: solid 1px var(--s-color-outline-variant, #c1c7ce);
+  margin-top: 48px;
+}
 :host([size=small]:focus-within) ::slotted([slot=drop]){
-  padding-top: 40px;
+  margin-top: 40px;
 }
 :host([size=large]:focus-within) ::slotted([slot=drop]){
-  padding-top: 56px;
+  margin-top: 56px;
 }
 ::slotted(input[type=text]){
   border: none;
@@ -79,7 +80,6 @@ const style = /*css*/`
 :host([size=large]) ::slotted(input[type=text]){
   padding: 0 24px;
 }
-::slotted([slot]),
 ::slotted([slot]){
   flex-shrink: 0;
 }
@@ -136,7 +136,9 @@ export default class Component extends builder({
   setup() {
     return {
       render: () => html`
-        <slot name="drop" @pointerdown.prevent></slot>
+        <div class="drop">
+          <slot name="drop" @pointerdown.prevent></slot>
+        </div>
         <div class="container">
           <slot name="start"></slot>
           <slot></slot>

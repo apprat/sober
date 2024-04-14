@@ -40,16 +40,9 @@ const style = /*css*/`
 ::slotted(*:not([slot])){
   background: var(--s-color-surface-container-low, #f3f3f6);
   border-radius: var(--s-shape-corner-extra-small, 4px);
-  overflow-y: auto;
-  overflow-x: hidden;
   box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
   min-width: var(--dropdown-min-width, auto);
   max-height: 100vh;
-}
-@media (pointer: fine){
-  ::slotted(*:not([slot]))::-webkit-scrollbar{
-    display: none;
-  }
 }
 `
 

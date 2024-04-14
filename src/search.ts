@@ -31,6 +31,8 @@ const style = /*css*/`
 }
 :host(:focus-within) .container{
   z-index: 1;
+  background: inherit;
+  border-bottom: solid 1px var(--s-color-outline-variant, #c1c7ce);
 }
 ::slotted([slot=drop]){
   position: absolute;
@@ -40,7 +42,6 @@ const style = /*css*/`
   pointer-events: none;
   opacity: 0;
   transition: opacity .1s;
-  overflow-y: auto;
   border-radius: var(--s-shape-corner-extra-small, 4px);
   box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
   padding-top: 48px;
@@ -51,20 +52,11 @@ const style = /*css*/`
   pointer-events: auto;
   z-index: 1;
 }
-:host(:focus-within) ::slotted([slot=drop])::before{
-  content: '';
-  height: 48px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  border-bottom: solid 1px var(--s-color-outline-variant, #c1c7ce);
+:host([size=small]:focus-within) ::slotted([slot=drop]){
+  padding-top: 40px;
 }
-:host([size=small]:focus-within) ::slotted([slot=drop])::before{
-  height: 40px;
-}
-:host([size=large]:focus-within) ::slotted([slot=drop])::before{
-  height: 56px;
+:host([size=large]:focus-within) ::slotted([slot=drop]){
+  padding-top: 56px;
 }
 ::slotted(input[type=text]){
   border: none;
@@ -131,11 +123,6 @@ const style = /*css*/`
 }
 :host([size=large]) ::slotted(s-icon[slot=end]){
   margin: 0 16px 0 -8px;
-}
-@media (pointer: fine){
-  ::slotted([slot=drop])::-webkit-scrollbar{
-    display: none;
-  }
 }
 `
 

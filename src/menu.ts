@@ -1,6 +1,7 @@
 import { builder, html } from './core/element.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 import Dropdown from './dropdown.js'
+import './scrollbar.js'
 
 const style = /*css*/`
 :host{
@@ -57,10 +58,10 @@ export default class Component extends builder({
       render: () => html`
         <s-dropdown class="dropdown" ref="${(el: Dropdown) => dropdown = el}">
           <slot slot="trigger" name="trigger" @click.stop="${() => show()}"></slot>
-          <div class="container">
+          <s-scrollbar class="container">
             <slot></slot>
           </div>
-        </s-dropdown>
+        </s-scrollbar>
       `
     }
   }

@@ -15,7 +15,6 @@ const style = /*css*/`
 .container{
   padding: 8px 0;
   max-width: 224px;
-  min-width: 128px;
   min-height: auto;
   box-sizing: border-box;
 }

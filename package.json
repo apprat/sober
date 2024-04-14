@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "node dev/main.js",
-    "build": "npx tsc && npx rollup --config dev/rollup.config.js"
+    "build": "npx tsc && npx rollup --config dev/rollup.config.js",
+    "publish": "npm publish"
   },
   "keywords": [
     "sober",

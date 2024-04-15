@@ -39,7 +39,7 @@ const style = /*css*/`
 }
 ::slotted(*:not([slot])){
   background: var(--s-color-surface-container-low, #f3f3f6);
-  border-radius: var(--s-shape-corner-extra-small, 4px);
+  border-radius: 4px;
   box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
   min-width: var(--dropdown-min-width, auto);
   max-height: 100vh;
@@ -53,7 +53,7 @@ const props = {
 
 type ShowOption = HTMLElement | { x: number, y: number, origin?: string }
 
-export default class Component extends builder({
+export default class Dropdown extends builder({
   name, style, props,
   setup(shadowRoot) {
     let trigger: HTMLDivElement
@@ -158,7 +158,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Dropdown.define()
 
 declare global {
   namespace JSX {
@@ -167,13 +167,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Dropdown
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

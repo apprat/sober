@@ -65,7 +65,7 @@ const props = {
   step: 1
 }
 
-export default class Component extends builder({
+export default class Rate extends builder({
   name, style, props, propSyncs: ['readonly'],
   setup() {
     let checked: HTMLDivElement
@@ -132,7 +132,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Rate.define()
 
 declare global {
   namespace JSX {
@@ -141,13 +141,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Rate
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

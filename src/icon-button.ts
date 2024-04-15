@@ -9,15 +9,16 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  border-radius: var(--s-shape-corner-full, 7680px);
+  border-radius: 50%;
   width: 40px;
   height: 40px;
   color: var(--s-color-on-surface-variant, #41474d);
   position: relative;
   box-sizing: border-box;
+  overflow: hidden;
 }
 :host([disabled=true]){
-  pointer-events: none;
+  pointer-events: none !important;
   color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 38%, transparent) !important;
 }
 :host([type=filled]){
@@ -35,13 +36,15 @@ const style = /*css*/`
   background: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent) !important;
 }
 :host([type=outlined]){
-  border: solid 1px var(--s-color-outline, #72787e);
+  border: solid 1px var(--s-color-outline, #72787e)
 }
 :host([type=outlined][disabled=true]){
-  background: none !important;
-  border-color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent);
+  border-color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e)) !important;
 }
-::slotted(s-icon){
+.ripple{
+  border-radius: 0;
+}
+::slotted(*){
   color: inherit;
 }
 `
@@ -52,7 +55,7 @@ const props = {
   type: 'standard' as 'standard' | 'filled' | 'filled-tonal' | 'outlined',
 }
 
-export default class Component extends builder({
+export default class IconButton extends builder({
   name, style, props, propSyncs: true,
   setup() {
     return {
@@ -60,13 +63,13 @@ export default class Component extends builder({
         <slot name="start"></slot>
         <slot></slot>
         <slot name="end"></slot>
-        <s-ripple attached="true" centered="true"></s-ripple>
+        <s-ripple class="ripple" attached="true" centered="true"></s-ripple>
       `
     }
   }
 }) { }
 
-Component.define()
+IconButton.define()
 
 declare global {
   namespace JSX {
@@ -75,13 +78,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: IconButton
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

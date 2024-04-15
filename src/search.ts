@@ -10,7 +10,7 @@ const style = /*css*/`
   height: 48px;
   background: var(--s-color-surface-container-high, #e8e8eb);
   color: var(--s-color-on-surface, #1a1c1e);
-  border-radius: var(--s-shape-corner-full, 7680px);
+  border-radius: 24px;
   font-size: .875rem;
   position: relative;
 }
@@ -40,7 +40,7 @@ const style = /*css*/`
   pointer-events: none;
   background: inherit;
   box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
-  border-radius: var(--s-shape-corner-extra-small, 4px);
+  border-radius: 4px;
   opacity: 0;
   transition: opacity .1s;
 }
@@ -131,7 +131,7 @@ const props = {
   size: 'medium' as 'medium' | 'small' | 'large'
 }
 
-export default class Component extends builder({
+export default class Search extends builder({
   name, style, props, propSyncs: true,
   setup() {
     return {
@@ -149,7 +149,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Search.define()
 
 declare global {
   namespace JSX {
@@ -158,13 +158,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Search
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

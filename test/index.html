@@ -7,14 +7,20 @@
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
   <style>
-    table {
-      width: 100%;
-      table-layout: fixed;
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 800px;
     }
 
-    td {
-      height: 48px;
-      padding: 0 24px;
+    .nav a {
+      border: solid 1px var(--s-color-outline-variant);
+      display: inline-flex;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 4px;
+      height: 36px;
+      color: var(--s-color-primary);
     }
   </style>
 </head>
@@ -22,7 +28,7 @@
 <body>
   <s-page theme="auto">
     <s-scrollbar>
-      <main>
+      <main class="nav">
         <a href="./test.html">Test</a>
         <a href="./ripple.html">Ripple</a>
         <a href="./icon.html">Icon</a>
@@ -47,149 +53,13 @@
         <a href="./drawer.html">Drawer</a>
         <a href="./navigation.html">Bavigation</a>
         <a href="./menu.html">Menu</a>
-        <a href="./chip.html">Chip</a>
         <a href="./text-field.html">Text Field</a>
         <a href="./carousel.html">Carousel</a>
         <a href="./search.html">Search</a>
         <a href="./rate.html">Rate</a>
         <a href="./dropdown.html">Dropdown</a>
+        <a href="./chip.html">Chip</a>
       </main>
-      <main>
-        <s-button onclick="customElements.get('s-snackbar').show({text:'提示信息',duration:0})">
-          <s-icon slot="start" type="add"></s-icon>
-          dark
-        </s-button>
-        <s-button type="filled">
-          <s-icon slot="start" type="search"></s-icon>
-          purple
-        </s-button>
-        <s-fab>
-          <s-icon type="add"></s-icon>
-        </s-fab>
-        <s-icon-button>
-          <s-icon type="search"></s-icon>
-        </s-icon-button>
-        <s-checkbox></s-checkbox>
-        <s-checkbox checked="true"></s-checkbox>
-        <s-checkbox indeterminate="true"></s-checkbox>
-        <s-radio-button name="my"></s-radio-button>
-        <s-radio-button name="my" checked="true"></s-radio-button>
-        <s-switch></s-switch>
-        <s-switch checked="true"></s-switch>
-        <s-dialog positive="确认" negative="取消" size="full-screen">
-          <s-tooltip slot="trigger">
-            <s-button type="filled" slot="trigger">
-              full Dialog
-            </s-button>
-            hello dialogss
-          </s-tooltip>
-          <s-icon type="close" slot="icon"></s-icon>
-          <div slot="headline">伪元素用于选定那些被放在 HTML 模板中的元素 (更多请查看 使用模板和插槽)</div>
-          <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded type. The
-            color system automatically handles critical adjustments that provide accessible color contrast. Learn more
-            about
-            color roles.</p>
-        </s-dialog>
-
-
-        <s-snackbar action="确认" duration="0">
-          <s-tooltip slot="trigger">
-            <s-button type="filled" slot="trigger">
-              snackbar
-            </s-button>
-            <img style="max-width: 200px;"
-              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQAAAACoxAthAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAd2KE6QAAAAJcEhZcwAAFxEAABcRAcom8z8AAAHMSURBVHja7dtBjoMwDEBRoy667BF6FI4GR+MoHKHLLqpmEtsJoYw0U6lFQfreIEjezlhOAhLeDoFAIBDI98hNlriESeQUH45duMf7zTAEshcZPEkf9uwUZpGK9D78hEAaJ09N7aGQmPzpgc6NxIchkAORSXKmS0l+COR4RKv5NZGzcQjkOMTy3RsSDS3jktrs//QwEMjnyRJak1Mm64qvD0rqYQikWfIauuIbSk3eDEMgzZI0PpfkTxGTX8Mr+90ajgsE0jzRSDU7XmbrUbSk+xbG/FLGIZDWiK/4riGP64rPwqdBIHsTjXueNnkmW3Jbme5CFRBI26SEvgMxnEg6vEsxbpIfAmmLjD75lLuLkDeHNfoQNmUcAmmObA7sUvIP9fvQQSB7k82ZxiNP7b1Ptk7D9yYgkEbJbZ3pVcJP5c73KSCQhsk6fMUn5cAurPaOIZBmya1KeX0m+dueYEfPvW3SjRBI42TwxK++txzFVnye/LI+sINAdiCrFZ9Ns8gZvm1IIJC2Sah+Murz+2A1uYNAjkOm9TGHf295tjO8CwTSNPEK/Vj65NFY8F8zftuFg0BaI0s4kfKVml3k70UiBPJR8mZAIBAI5EvkB0ea8yhUsjqlAAAAAElFTkSuQmCC">
-          </s-tooltip>
-          When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
-        </s-snackbar>
-
-
-        <s-dialog positive="确认" negative="取消">
-          <s-tooltip slot="trigger">
-            <s-button type="filled" slot="trigger">
-              Dialog
-            </s-button>
-            hello dialogxxxx
-          </s-tooltip>
-          <s-icon type="search" slot="icon"></s-icon>
-          <div slot="headline">并且只会选择实际的元素节点</div>
-          <p>Build a custom color scheme to map dynamic color, use as fallback colors, or implement a branded type. The
-            color system automatically handles critical adjustments that provide accessible color contrast. Learn more
-            about
-            color roles.</p>
-        </s-dialog>
-
-        <s-snackbar action="确认" duration="0">
-          <s-button type="filled" slot="trigger">
-            snackbar2
-          </s-button>
-          When closed, MatDialog restores focus to the element that previously held focus when the dialog opened.
-        </s-snackbar>
-
-        <s-icon type="search"></s-icon>
-
-        <s-chip>
-          <s-icon type="search" slot="start"></s-icon>
-          Assist
-          <s-icon type="close" slot="end"></s-icon>
-        </s-chip>
-
-        <s-chip type="elevated">Assist 2</s-chip>
-
-        <s-chip type="filled-tonal">Assist 2</s-chip>
-
-        <s-chip type="filled-tonal">
-          Assist 2
-          <s-icon-button slot="action">
-            <s-icon type="close"></s-icon>
-          </s-icon-button>
-        </s-chip>
-
-        <s-circular-progress></s-circular-progress>
-        <s-circular-progress indeterminate="true"></s-circular-progress>
-        <s-linear-progress value="50"></s-linear-progress>
-        <s-linear-progress indeterminate="true"></s-linear-progress>
-        <s-slider labeled="true"></s-slider>
-        <s-segmented-button onchange="console.log('change',this.selectIndex)">
-          <s-segmented-button-item>
-            <s-icon slot="start" type="done"></s-icon>
-            hello
-          </s-segmented-button-item>
-          <s-segmented-button-item checked="true">
-            index
-          </s-segmented-button-item>
-          <s-segmented-button-item disabled="true">
-            users
-          </s-segmented-button-item>
-          <s-segmented-button-item>
-            users
-          </s-segmented-button-item>
-          <s-segmented-button-item>
-            <s-icon slot="start" type="search"></s-icon>
-            users
-          </s-segmented-button-item>
-        </s-segmented-button>
-      </main>
-      <s-navigation onchange="console.log('change',this.selectIndex)">
-        <s-navigation-item checked="true">
-          <s-icon slot="icon" type="add"></s-icon>
-          <div slot="text">Home</div>
-        </s-navigation-item>
-        <s-navigation-item>
-          <s-icon type="home" slot="icon"></s-icon>
-          <div slot="text">Chat</div>
-          <s-badge slot="badge">16</s-badge>
-        </s-navigation-item>
-        <s-navigation-item>
-          <s-icon type="dark_mode" slot="icon"></s-icon>
-          <div slot="text">Dark</div>
-        </s-navigation-item>
-        <s-navigation-item>
-          <s-icon type="light_mode" slot="icon"></s-icon>
-          <div slot="text">Light</div>
-          <s-badge slot="badge"></s-badge>
-        </s-navigation-item>
-      </s-navigation>
     </s-scrollbar>
   </s-page>
 

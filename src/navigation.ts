@@ -1,5 +1,5 @@
 import { builder, html } from './core/element.js'
-import Item from './navigation-item.js'
+import './ripple.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
@@ -30,7 +30,7 @@ const style = /*css*/`
   width: 56px;
   height: 56px;
   margin: 16px 0 8px 0;
-  border-radius: var(--s-shape-corner-medium, 12px);
+  border-radius: 12px;
 }
 :host([mode=rail]) ::slotted([slot=end]){
   flex-grow: 1;
@@ -42,15 +42,15 @@ const props = {
   mode: 'bottom' as 'bottom' | 'rail'
 }
 
-export default class Component extends builder({
+export default class Navigation extends builder({
   name, style, props, propSyncs: true,
   setup() {
     let slot: HTMLSlotElement
-    let options: Item[] = []
+    let options: NavigationItem[] = []
     let selectIndex = -1
     let changing = false
     const slotChange = () => {
-      options = slot.assignedElements().filter((item) => item instanceof Item) as Item[]
+      options = slot.assignedElements().filter((item) => item instanceof NavigationItem) as NavigationItem[]
       selectIndex = options.findIndex((item) => item.checked)
     }
     this.addEventListener('navigation-item:change', (event: Event) => {
@@ -58,7 +58,7 @@ export default class Component extends builder({
       if (changing) return
       changing = true
       if (!event.target) return
-      const target = event.target as Item
+      const target = event.target as NavigationItem
       selectIndex = -1
       options.forEach((item, index) => {
         if (item === target && target.checked) return selectIndex = index
@@ -85,22 +85,120 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+const itemStyle = /*css*/`
+:host{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+  font-size: .75rem;
+  font-weight: 500;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 80px;
+  text-transform: capitalize;
+  color: var(--s-color-on-surface-variant, #41474d);
+  transition: color .2s;
+}
+:host([checked=true]){
+  color: var(--s-color-primary, #006495);
+}
+.icon{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 28px;
+  width: 48px;
+  border-radius: 14px;
+}
+.icon::before{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  left: 0;
+  top: 0;
+  transform: scale(0);
+  transition: transform .2s;
+  background: var(--s-color-secondary-container, #d4e4f6);
+}
+:host([checked=true]) .icon::before{
+  transform: scale(1);
+}
+.badge{
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  margin-left: 4px;
+}
+::slotted([slot=icon]){
+  position: relative;
+  pointer-events: none;
+}
+::slotted([slot=text]){
+  position: relative;
+  pointer-events: none;
+  margin-top: 4px;
+}
+`
+
+const itemName = 's-navigation-item'
+const itemProps = {
+  checked: false,
+}
+
+export class NavigationItem extends builder({
+  name: itemName,
+  style: itemStyle,
+  props: itemProps,
+  propSyncs: true,
+  setup() {
+    this.addEventListener('click', () => this.checked = true)
+    return {
+      watches: {
+        checked: () => {
+          if (!this.parentNode) return
+          this.dispatchEvent(new Event('navigation-item:change', { bubbles: true }))
+        },
+      },
+      render: () => html`
+        <div class="icon">
+          <slot name="icon"></slot>
+        </div>
+        <slot name="text"></slot>
+        <div class="badge">
+          <slot name="badge"></slot>
+        </div>
+        <s-ripple attached="true" class="ripple"></s-ripple>
+      `
+    }
+  }
+}) { }
+
+Navigation.define()
+NavigationItem.define()
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
       [name]: Partial<typeof props> & JSXAttributes
+      [itemName]: Partial<typeof itemProps> & JSXAttributes
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Navigation
+    [itemName]: NavigationItem
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
+    [itemName]: typeof itemProps
   }
 }

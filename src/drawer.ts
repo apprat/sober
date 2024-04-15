@@ -116,7 +116,7 @@ const name = 's-drawer'
 const props = {
 }
 
-export default class Component extends builder({
+export default class Drawer extends builder({
   name, props, style,
   setup() {
     let container: HTMLDivElement
@@ -185,7 +185,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Drawer.define()
 
 declare global {
   namespace JSX {
@@ -194,13 +194,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Drawer
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

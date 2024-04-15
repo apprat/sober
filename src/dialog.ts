@@ -1,5 +1,4 @@
 import { builder, html } from './core/element.js'
-import './ripple.js'
 import { getStackingContext } from './core/utils.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
@@ -55,7 +54,7 @@ const style = /*css*/`
   max-height: calc(100% - 48px);
   background: var(--s-color-surface-container-highest, #e2e2e5);
   position: relative;
-  border-radius: var(--s-shape-corner-extra-large, 28px);
+  border-radius: 28px;
   box-shadow: var(--s-elevation-level5, 0 8px 10px -6px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12));
   display: flex;
   flex-direction: column;
@@ -101,27 +100,12 @@ const style = /*css*/`
 .action{
   display: flex;
   justify-content: flex-end;
-  padding: 0 16px;
+  padding: 0 14px;
   flex-shrink: 0;
 }
-.action>s-ripple{
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+::slotted(s-button[slot=action]){
   min-width: 72px;
-  border-radius: 20px;
-  padding: 0 12px;
-  font-weight: 500;
-  line-height: 1;
-  text-transform: capitalize;
-  box-sizing: border-box;
-  font-size: .875rem;
-  color: var(--s-color-primary, #006495);
-  margin: 20px 0;
-}
-.action>s-ripple:empty{
-  display: none;
+  margin: 20px 2px;
 }
 @media (pointer: fine){
   .supporting-text::-webkit-scrollbar{
@@ -138,16 +122,53 @@ const style = /*css*/`
 const name = 's-dialog'
 const props = {
   size: 'basic' as 'basic' | 'vertical' | 'horizontal' | 'large' | 'full',
-  negative: '',
-  positive: '',
 }
 
-class Component extends builder({
+const show = (options: string | {
+  root?: Element
+  headline?: string
+  text: string
+  actions?: { text: string, onclick?: (event: MouseEvent) => unknown }[],
+}) => {
+  let root: Element = document.body
+  const dialog = new Dialog()
+  const page = document.body.firstElementChild
+  if (page && page.tagName === 'S-PAGE') {
+    root = page
+  }
+  const text = document.createElement('div')
+  text.slot = 'text'
+  if (typeof options === 'string') {
+    text.textContent = options
+    dialog.appendChild(text)
+  } else {
+    if (options.root) root = options.root
+    if (options.headline) {
+      const headline = document.createElement('div')
+      headline.slot = 'headline'
+      headline.textContent = options.headline
+      dialog.appendChild(headline)
+    }
+    text.textContent = options.text
+    dialog.appendChild(text)
+    for (const item of options.actions ?? []) {
+      const action = document.createElement('s-button')
+      action.slot = 'action'
+      action.type = 'text'
+      action.textContent = item.text
+      if (item.onclick) action.addEventListener('click', item.onclick)
+      dialog.appendChild(action)
+    }
+  }
+  root.appendChild(dialog)
+  dialog.addEventListener('dismissed', () => root.removeChild(dialog))
+  dialog.show()
+}
+
+class Dialog extends builder({
   name, style, props, propSyncs: ['size'],
   setup(shadowRoot) {
     let wrapper: HTMLDivElement
-    let negative: HTMLDivElement
-    let positive: HTMLDivElement
     const show = () => {
       const stackingContext = getStackingContext(shadowRoot)
       wrapper.style.top = `${0 - stackingContext.top}px`
@@ -159,11 +180,6 @@ class Component extends builder({
       wrapper.classList.remove('show')
       this.dispatchEvent(new Event('dismiss'))
     }
-    const action = (type: string) => {
-      const canceled = this.dispatchEvent(new Event(type, { cancelable: true }))
-      if (!canceled) return
-      dismiss()
-    }
     const transitionEnd = (event: TransitionEvent) => {
       if (event.propertyName !== 'transform') return
       const showed = wrapper.classList.contains('show')
@@ -171,10 +187,6 @@ class Component extends builder({
     }
     return {
       expose: { show, dismiss },
-      watches: {
-        negative: (value) => negative.textContent = value,
-        positive: (value) => positive.textContent = value
-      },
       render: () => html`
         <slot name="trigger" @click="${show}"></slot>
         <div class="wrapper" ref="${(el: HTMLDivElement) => wrapper = el}" @transitionend="${transitionEnd}">
@@ -187,8 +199,7 @@ class Component extends builder({
                 <slot name="text"></slot>
               </div>
               <div class="action">
-                <s-ripple ref="${(el: HTMLDivElement) => negative = el}" @click="${() => action('negative')}"></s-ripple>
-                <s-ripple ref="${(el: HTMLDivElement) => positive = el}" @click="${() => action('positive')}"></s-ripple>
+                <slot name="action" @click="${dismiss}"></slot>
               </div>
             </div>
           </div>
@@ -196,25 +207,25 @@ class Component extends builder({
       `
     }
   }
-}) { }
+}) {
+  static readonly show = show
+}
 
-Component.define()
+Dialog.define()
 
 interface EventMap extends HTMLElementEventMap {
   show: Event
   showed: Event
   dismiss: Event
   dismissed: Event
-  positive: Event
-  negative: Event
 }
 
-interface Component {
-  addEventListener<K extends keyof EventMap>(type: K, listener: (this: Component, ev: EventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof EventMap>(type: K, listener: (this: Component, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
+interface Dialog {
+  addEventListener<K extends keyof EventMap>(type: K, listener: (this: Dialog, ev: EventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof EventMap>(type: K, listener: (this: Dialog, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
-export default Component
+export default Dialog
 
 declare global {
   namespace JSX {
@@ -223,13 +234,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Dialog
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

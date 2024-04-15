@@ -7,9 +7,7 @@
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
   <style>
-    s-card {
-      height: 100px;
-    }
+
   </style>
 </head>
 
@@ -17,15 +15,56 @@
   <s-page>
     <main>
       <s-card>
-        sss
+        <div slot="image"></div>
+        <div slot="headline">Healine</div>
+        <div slot="subhead">Subhead</div>
+        <div slot="text">Card containers hold all card elements. Their size is determined by the space those</div>
+        <s-button slot="action" type="filled-tonal">Action</s-button>
+        <s-button slot="action">Action</s-button>
       </s-card>
       <s-card type="filled">
-        <s-button type="outlined">
-          get started
-        </s-button>
+        <div slot="image"></div>
+        <div slot="headline">Healine</div>
+        <div slot="subhead">Subhead</div>
+        <div slot="text">Card containers hold all card elements. Their size is determined by the space those</div>
+        <s-button slot="action" type="outlined">Action</s-button>
+        <s-button slot="action">Action</s-button>
       </s-card>
       <s-card type="outlined">
-        sss
+        <div slot="image"></div>
+        <div slot="headline">Healine</div>
+        <div slot="subhead">Subhead</div>
+        <div slot="text">Card containers hold all card elements. Their size is determined by the space those</div>
+        <s-button slot="action" type="filled-tonal">Action</s-button>
+        <s-button slot="action">Action</s-button>
+      </s-card>
+      <hr>
+      <s-card clickable="true">
+        <div slot="image"></div>
+        <div slot="headline">Healine</div>
+        <div slot="subhead">Subhead</div>
+        <div slot="text">Card containers hold all card elements. Their size is determined by the space those</div>
+        <s-button slot="action" type="filled-tonal">Action</s-button>
+        <s-button slot="action">Action</s-button>
+      </s-card>
+      <s-card type="filled" clickable="true">
+        <div slot="image"></div>
+        <div slot="headline">Healine</div>
+        <div slot="subhead">Subhead</div>
+        <div slot="text">Card containers hold all card elements. Their size is determined by the space those</div>
+        <s-button slot="action" type="outlined">Action</s-button>
+        <s-button slot="action">Action</s-button>
+      </s-card>
+      <s-card type="outlined" clickable="true">
+        <div slot="image"></div>
+        <div slot="headline">Healine</div>
+        <div slot="subhead">Subhead</div>
+        <div slot="text">Card containers hold all card elements. Their size is determined by the space those</div>
+        <s-button slot="action" type="filled-tonal">Action</s-button>
+        <s-button slot="action">Action</s-button>
+      </s-card>
+      <s-card>
+        text
       </s-card>
     </main>
   </s-page>

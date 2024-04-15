@@ -1,6 +1,5 @@
 import { builder, html } from './core/element.js'
 import { getStackingContext } from './core/utils.js'
-import './ripple.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
@@ -25,7 +24,7 @@ const style = /*css*/`
   background: var(--s-color-inverse-surface, #2f3133);
   color: var(--s-color-inverse-on-surface, #f0f0f3);
   min-height: 48px;
-  border-radius: var(--s-shape-corner-extra-small, 4px);
+  border-radius: 4px;
   box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
   line-height: 1.6;
   display: inline-flex;
@@ -50,20 +49,14 @@ const style = /*css*/`
   user-select: text;
   -webkit-user-select: text;
 }
-.action{
+::slotted(s-button[slot=action]){
   font-size: inherit;
   flex-shrink: 0;
-  border-radius: var(--s-shape-corner-extra-small, 4px);
+  border-radius: 4px;
   color: var(--s-color-inverse-primary, #8fcdff);
   margin-right: 8px;
   margin-left: -8px;
-  min-height: 36px;
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-}
-.action:empty{
-  display: none;
+  height: 36px;
 }
 @media (max-width: 480px){
   .container{
@@ -75,42 +68,48 @@ const style = /*css*/`
 
 const name = 's-snackbar'
 const props = {
-  duration: 5000,
-  action: ''
+  duration: 5000
 }
 
 const show = (options: string | {
-  view?: Element
+  root?: Element
   text: string
   duration?: number
-  action?: string
-  onAction?: (event: Event) => boolean | undefined
+  action?: {
+    text: string
+    onclick: (event: MouseEvent) => unknown
+  }
 }) => {
-  let view: Element = document.body
-  const snackbar = document.createElement('s-snackbar')
+  let root: Element = document.body
+  const snackbar = new Snackbar()
   const page = document.body.firstElementChild
   if (page && page.tagName === 'S-PAGE') {
-    view = page
+    root = page
   }
   if (typeof options === 'string') {
     snackbar.textContent = options
   } else {
-    if (options.view) view = options.view
-    if (options.action) snackbar.action = options.action
-    if (options.duration) snackbar.duration = options.duration
-    if (options.action) snackbar.addEventListener('action', (event) => options.onAction?.(event))
+    if (options.root) root = options.root
     snackbar.textContent = options.text
+    if (options.action) {
+      const action = document.createElement('s-button')
+      action.type = 'text'
+      action.slot = 'action'
+      action.textContent = options.action.text
+      if (options.action.onclick) action.addEventListener('click', options.action.onclick)
+      snackbar.appendChild(action)
+    }
+    if (options.duration) snackbar.duration = options.duration
   }
-  view.appendChild(snackbar)
-  snackbar.addEventListener('dismissed', () => view.removeChild(snackbar))
+  root.appendChild(snackbar)
+  snackbar.addEventListener('dismissed', () => root.removeChild(snackbar))
   snackbar.show()
 }
 
-class Component extends builder({
+class Snackbar extends builder({
   name, style, props,
   setup(shadowRoot) {
     let wrapper: HTMLDivElement
-    let action: HTMLDivElement
     const state = { timer: 0 }
     const show = () => {
       const stackingContext = getStackingContext(shadowRoot)
@@ -127,10 +126,6 @@ class Component extends builder({
       wrapper.classList.remove('show')
       this.dispatchEvent(new Event('dismiss'))
     }
-    const onAction = () => {
-      if (!this.dispatchEvent(new Event('action', { cancelable: true }))) return
-      dismiss()
-    }
     const transitionEnd = (event: TransitionEvent) => {
       if (event.propertyName !== 'transform') return
       const showed = wrapper.classList.contains('show')
@@ -138,9 +133,6 @@ class Component extends builder({
     }
     return {
       expose: { show, dismiss },
-      watches: {
-        action: (value) => action.textContent = value
-      },
       render: () => html`
         <slot name="trigger" @click="${show}"></slot>
         <div class="wrapper" ref="${(el: HTMLDivElement) => wrapper = el}" @transitionend="${transitionEnd}">
@@ -148,7 +140,7 @@ class Component extends builder({
             <div class="supporting-text">
               <slot></slot>
             </div>
-            <s-ripple class="action" ref="${(el: HTMLDivElement) => action = el}" @click="${onAction}"></s-ripple>
+            <slot name="action" @click="${dismiss}"></slot>
           </div>
         </div>
       `
@@ -158,22 +150,21 @@ class Component extends builder({
   static readonly show = show
 }
 
-Component.define()
+Snackbar.define()
 
 interface EventMap extends HTMLElementEventMap {
   show: Event
   showed: Event
   dismiss: Event
   dismissed: Event
-  action: Event
 }
 
-interface Component {
-  addEventListener<K extends keyof EventMap>(type: K, listener: (this: Component, ev: EventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof EventMap>(type: K, listener: (this: Component, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
+interface Snackbar {
+  addEventListener<K extends keyof EventMap>(type: K, listener: (this: Snackbar, ev: EventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof EventMap>(type: K, listener: (this: Snackbar, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
-export default Component
+export default Snackbar
 
 declare global {
   namespace JSX {
@@ -182,13 +173,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Snackbar
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

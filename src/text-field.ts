@@ -16,7 +16,7 @@ const style = /*css*/`
   display: flex;
   align-items: center;
 }
-.focus{
+:host(:focus-within) .container{
   color: currentColor;
 }
 .outline{
@@ -32,7 +32,7 @@ const style = /*css*/`
   border-top: none;
   transition: box-shadow .2s;
 }
-.focus .outline{
+:host(:focus-within) .outline{
   box-shadow: 1px 0 currentColor inset, -1px 0 currentColor inset, 0 -1px currentColor inset;
 }
 .label{
@@ -58,7 +58,7 @@ const style = /*css*/`
   transition: box-shadow .2s;
   flex-shrink: 0;
 }
-.focus .label::before{
+:host(:focus-within) .label::before{
   border-color: currentColor;
   box-shadow: 0 1px currentColor inset, 1px 0 currentColor inset;
 }
@@ -74,7 +74,7 @@ const style = /*css*/`
   border-top-right-radius: var(--s-shape-corner-extra-small, 4px);
   transition: box-shadow .2s;
 }
-.focus .label::after{
+:host(:focus-within) .label::after{
   border-color: currentColor;
   box-shadow: -1px 0 currentColor inset, 0 1px currentColor inset;
 }
@@ -88,7 +88,7 @@ const style = /*css*/`
   position: absolute;
 }
 .not-empty .label>span,
-.focus .label>span{
+:host(:focus-within) .label>span{
   transform: translateY(0);
   font-size: .75rem;
   position: static;
@@ -172,36 +172,28 @@ export default class Component extends builder({
     let inputSlot: HTMLSlotElement
     let input: HTMLInputElement | HTMLTextAreaElement
     let inputShaodw: HTMLDivElement
-    const events = {
-      focus: () => container.classList.add('focus'),
-      blur: () => container.classList.remove('focus'),
-      input: () => {
-        input.value === '' ? container.classList.remove('not-empty') : container.classList.add('not-empty')
-        if (input instanceof HTMLTextAreaElement) {
-          inputShaodw.textContent = input.value
-          if (input.offsetHeight !== inputShaodw.offsetHeight) input.style.height = `${inputShaodw.offsetHeight}px`
-        }
+    const onInput = () => {
+      if (!input || input.parentNode !== this) return
+      input.value === '' ? container.classList.remove('not-empty') : container.classList.add('not-empty')
+      if (input instanceof HTMLTextAreaElement) {
+        inputShaodw.textContent = input.value
+        if (input.offsetHeight !== inputShaodw.offsetHeight) input.style.height = `${inputShaodw.offsetHeight}px`
       }
     }
-    const on = (event: Event) => {
-      if (!input || input.parentNode !== this) return
-      events[event.type]()
-    }
     const bindEvent = (el: HTMLInputElement | HTMLTextAreaElement) => {
-      el.addEventListener('focus', on)
-      el.addEventListener('blur', on)
-      el.addEventListener('input', on)
+      el.addEventListener('input', onInput)
       const descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el), 'value')
       if (descriptor) {
         const oldSet = descriptor.set
         descriptor.set = (val: string) => {
           oldSet?.apply(el, [val])
-          events.input()
+          if (!input || input.parentNode !== this) return
+          onInput()
         }
         Object.defineProperty(el, 'value', descriptor)
       }
       input = el
-      events.input()
+      onInput()
     }
     const inputSlotChange = () => {
       const el = inputSlot.assignedElements()[0]

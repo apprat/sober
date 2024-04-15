@@ -13,7 +13,7 @@ const style = /*css*/`
   font-size: 32px;
   width: 1.625em;
   height: 1em;
-  border-radius: var(--s-shape-corner-full, 7680px);
+  border-radius: .5em;
 }
 :host([disabled=true]){
   pointer-events: none;
@@ -24,7 +24,7 @@ const style = /*css*/`
   border-radius: inherit;
   background: var(--s-color-outline, #72787e);
   position: absolute;
-  padding: 4%;
+  padding: .0625em;
   overflow: hidden;
   box-sizing: border-box;
   transition: background .2s;
@@ -53,11 +53,11 @@ const style = /*css*/`
   background: var(--s-color-surface, #fcfcff);
 }
 .ripple{
-  height: 125%;
-  width: 76.92307692307692%;
-  border-radius: var(--s-shape-corner-full, 7680px);
+  height: 1.25em;
+  width: 1.25em;
+  border-radius: 50%;
   top: auto;
-  margin-left: -7.6923076923076925%;
+  margin-left: -0.125em;
   transition: transform .2s;
   display: flex;
   justify-content: center;
@@ -71,9 +71,9 @@ const style = /*css*/`
 }
 .thumb{
   background: var(--s-color-outline, #72787e);
-  border-radius: var(--s-shape-corner-full, 7680px);
-  width: 60%;
-  height: 60%;
+  border-radius: 50%;
+  width: .75em;
+  height: .75em;
   transform: scale(.6666666666666667) translateX(0px);
   transform-origin: center;
   transition: transform .2s,box-shadow .2s;
@@ -81,6 +81,7 @@ const style = /*css*/`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
 }
 :host([checked=true]) .thumb{
   background: var(--s-color-on-primary, #ffffff);
@@ -95,8 +96,8 @@ const style = /*css*/`
   background: var(--s-color-surface, #fcfcff);
 }
 .icon{
-  width: 66.66666666666667%;
-  height: 66.66666666666667%;
+  width: .5em;
+  height: .5em;
   fill: currentColor;
   opacity: 0;
   transition: opacity .2s;
@@ -115,7 +116,7 @@ const props = {
   checked: false
 }
 
-export default class Component extends builder({
+export default class Switch extends builder({
   name, style, props, propSyncs: true,
   setup() {
     this.addEventListener('click', () => {
@@ -138,7 +139,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Switch.define()
 
 declare global {
   namespace JSX {
@@ -147,13 +148,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Switch
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

@@ -1,10 +1,10 @@
-import Page from './page.js'
 import Badge from './badge.js'
 import Button from './button.js'
-import Chip from './chip.js'
 import Card from './card.js'
-import Checkbox from './checkbox.js'
 import Carousel from './carousel.js'
+import Checkbox from './checkbox.js'
+import Chip from './chip.js'
+import CircularProgress from './circular-progress.js'
 import Dialog from './dialog.js'
 import Divider from './divider.js'
 import Drawer from './drawer.js'
@@ -12,42 +12,33 @@ import Dropdown from './dropdown.js'
 import FAB from './FAB.js'
 import IconButton from './icon-button.js'
 import Icon from './icon.js'
-import Ripple from './ripple.js'
-import MenuItem from './menu-item.js'
-import Menu from './menu.js'
-import NavigationItem from './navigation-item.js'
-import Navigation from './navigation.js'
-import CircularProgress from './circular-progress.js'
 import LinerProgress from './linear-progress.js'
+import Menu, { MenuItem } from './menu.js'
+import Navigation, { NavigationItem } from './navigation.js'
+import Page from './page.js'
 import RadioButton from './radio-button.js'
 import Rate from './rate.js'
-import Search from './search.js'
+import Ripple from './ripple.js'
 import Scrollbar from './scrollbar.js'
-import SegmentedButtonItem from './segmented-button-item.js'
-import SegmentedButton from './segmented-button.js'
+import Search from './search.js'
+import SegmentedButton, { SegmentedButtonItem } from './segmented-button.js'
 import Slider from './slider.js'
 import Snackbar from './snackbar.js'
 import Switch from './switch.js'
+import Tab, { TabItem } from './tab.js'
+import Table, { Thead, Tbody, Tr, Th, Td } from './table.js'
 import TextField from './text-field.js'
-import TabItem from './tab-item.js'
-import Tab from './tab.js'
-import Table from './table.js'
-import Thead from './thead.js'
-import Tbody from './tbody.js'
-import Tr from './tr.js'
-import Th from './th.js'
-import Td from './td.js'
 import Tooltip from './tooltip.js'
 import TopAppBar from './top-app-bar.js'
 
 export {
-  Page,
   Badge,
   Button,
-  Chip,
   Card,
-  Checkbox,
   Carousel,
+  Checkbox,
+  Chip,
+  CircularProgress,
   Dialog,
   Divider,
   Drawer,
@@ -55,15 +46,15 @@ export {
   FAB,
   IconButton,
   Icon,
-  Ripple,
+  LinerProgress,
   MenuItem,
   Menu,
   NavigationItem,
   Navigation,
-  CircularProgress,
-  LinerProgress,
+  Page,
   RadioButton,
   Rate,
+  Ripple,
   Scrollbar,
   Search,
   SegmentedButtonItem,
@@ -71,15 +62,15 @@ export {
   Slider,
   Snackbar,
   Switch,
-  TextField,
-  TabItem,
   Tab,
+  TabItem,
   Table,
-  Thead,
   Tbody,
-  Tr,
+  Thead,
   Td,
+  TextField,
   Th,
   Tooltip,
-  TopAppBar
+  TopAppBar,
+  Tr
 }

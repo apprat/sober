@@ -10,7 +10,7 @@ const style = /*css*/`
   height: 18px;
   background: var(--s-color-error, #ba1a1a);
   color: var(--s-color-on-error, #ffffff);
-  border-radius: var(--s-shape-corner-full, 7680px);
+  border-radius: 18px;
   padding: 0 3px;
   font-size: .625rem;
   box-sizing: border-box;
@@ -27,7 +27,7 @@ const name = 's-badge'
 const props = {
 }
 
-export default class Component extends builder({
+export default class Badge extends builder({
   name, props, style,
   setup() {
     return {
@@ -38,7 +38,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Badge.define()
 
 declare global {
   namespace JSX {
@@ -47,13 +47,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Badge
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

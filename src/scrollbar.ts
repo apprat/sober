@@ -22,7 +22,7 @@ const name = 's-scrollbar'
 const props = {
 }
 
-export default class Component extends builder({
+export default class Scrollbar extends builder({
   name, style, props,
   setup() {
     return {
@@ -33,7 +33,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Scrollbar.define()
 
 declare global {
   namespace JSX {
@@ -42,13 +42,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Scrollbar
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

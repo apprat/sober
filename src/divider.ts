@@ -14,7 +14,7 @@ const name = 's-divider'
 const props = {
 }
 
-export default class Component extends builder({
+export default class Divider extends builder({
   name, style, props,
   setup() {
     return {
@@ -25,7 +25,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Divider.define()
 
 declare global {
   namespace JSX {
@@ -34,13 +34,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Divider
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

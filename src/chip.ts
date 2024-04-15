@@ -10,11 +10,12 @@ const style = /*css*/`
   padding: 0 16px;
   height: 32px;
   border: solid 1px var(--s-color-color-outline, #79747E);
-  border-radius: var(--s-shape-corner-small, 8px);
+  border-radius: 8px;
   box-sizing: border-box;
   font-size: .875rem;
   position: relative;
   cursor: pointer;
+  overflow: hidden;
 }
 :host([type=elevated]){
   border: none;
@@ -24,6 +25,13 @@ const style = /*css*/`
   background: var(--s-color-secondary-container, #d4e4f6);
   color: var(--s-color-on-surface-variant, #41474d);
   border: none;
+}
+.ripple{
+  display: none;
+  border-radius: 0;
+}
+:host([clickable=true]) .ripple{
+  display: block;
 }
 ::slotted(*){
   width: 18px;
@@ -40,32 +48,32 @@ const style = /*css*/`
   width: 24px;
   height: 24px;
   padding: 3px;
+  flex-shrink: 0;
 }
 `
 
 const name = 's-chip'
 const props = {
-  type: 'outlined' as 'outlined' | 'elevated' | 'filled-tonal'
+  type: 'outlined' as 'outlined' | 'elevated' | 'filled-tonal',
+  clickable: false
 }
 
-export default class Component extends builder({
-  name, style, props, propSyncs: ['type'],
+export default class Chip extends builder({
+  name, style, props, propSyncs: true,
   setup() {
     return {
       render: () => html`
         <slot name="start"></slot>
         <slot></slot>
         <slot name="end"></slot>
-        <div @mousedown.stop @touchstart.stop>
-          <slot name="action"></slot>
-        </div>
-        <s-ripple attached="true"></s-ripple>
+        <slot name="action" @mousedown.stop></slot>
+        <s-ripple class="ripple" attached="true"></s-ripple>
       `
     }
   }
 }) { }
 
-Component.define()
+Chip.define()
 
 declare global {
   namespace JSX {
@@ -74,13 +82,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Chip
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

@@ -7,7 +7,7 @@ const style = /*css*/`
   height: 4px;
   color: var(--s-color-primary, #006495);
   position: relative;
-  border-radius: var(--s-shape-corner-full, 7680px);
+  border-radius: 2px;
   overflow: hidden;
 }
 .track{
@@ -66,7 +66,7 @@ const props = {
   value: 0
 }
 
-export default class Component extends builder({
+export default class LinearProgress extends builder({
   name, style, props, propSyncs: ['indeterminate'],
   setup() {
     let linear: HTMLDivElement
@@ -88,7 +88,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+LinearProgress.define()
 
 declare global {
   namespace JSX {
@@ -97,13 +97,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: LinearProgress
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

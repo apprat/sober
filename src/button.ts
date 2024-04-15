@@ -9,7 +9,7 @@ const style = /*css*/`
   box-sizing: border-box;
   display: inline-flex;
   vertical-align: middle;
-  border-radius: var(--s-shape-corner-full, 7680px);
+  border-radius: 20px;
   padding: 0 24px;
   height: 40px;
   text-transform: capitalize;
@@ -22,9 +22,9 @@ const style = /*css*/`
   background: var(--s-color-primary, #006495);
   color: var(--s-color-on-primary, #ffffff);
   transition: box-shadow .2s;
+  overflow: hidden;
 }
 :host([disabled=true]){
-  box-shadow: none !important;
   pointer-events: none !important;
   background: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent) !important;
   color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 38%, transparent) !important;
@@ -33,6 +33,9 @@ const style = /*css*/`
   background: var(--s-color-surface-container-low, #f3f3f6);
   color: var(--s-color-primary, #006495);
   box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+}
+:host([type=elevated][disabled=true]){
+  box-shadow: none !important;
 }
 :host([type=filled-tonal]){
   background: var(--s-color-secondary-container, #d4e4f6);
@@ -45,7 +48,7 @@ const style = /*css*/`
 }
 :host([type=outlined][disabled=true]){
   background: none !important;
-  border-color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent);
+  border-color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent) !important;
 }
 :host([type=text]){
   background: none;
@@ -54,6 +57,9 @@ const style = /*css*/`
 }
 :host([type=text][disabled=true]){
   background: none !important;
+}
+.ripple{
+  border-radius: 0;
 }
 ::slotted(*){
   color: inherit;
@@ -112,7 +118,7 @@ const props = {
   type: 'filled' as 'filled' | 'elevated' | 'filled-tonal' | 'outlined' | 'text'
 }
 
-export default class Component extends builder({
+export default class Button extends builder({
   name, style, props, propSyncs: true,
   setup() {
     return {
@@ -120,13 +126,13 @@ export default class Component extends builder({
         <slot name="start"></slot>
         <slot></slot>
         <slot name="end"></slot>
-        <s-ripple attached="true"></s-ripple>
+        <s-ripple class="ripple" attached="true"></s-ripple>
       `
     }
   }
 }) { }
 
-Component.define()
+Button.define()
 
 declare global {
   namespace JSX {
@@ -135,13 +141,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Button
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

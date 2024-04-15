@@ -63,7 +63,7 @@ const props = {
   value: 0
 }
 
-export default class Component extends builder({
+export default class CircularProgress extends builder({
   name, style, props, propSyncs: ['indeterminate'],
   setup() {
     let circular: SVGCircleElement
@@ -94,7 +94,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+CircularProgress.define()
 
 declare global {
   namespace JSX {
@@ -103,13 +103,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: CircularProgress
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

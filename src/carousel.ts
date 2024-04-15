@@ -6,7 +6,7 @@ const style = /*css*/`
   display: block;
   height: 280px;
   background: var(--s-color-surface-container-low, #f3f3f6);
-  border-radius: var(--s-shape-corner-small, 8px);
+  border-radius: 8px;
   position: relative;
   color: var(--s-color-primary, #006495);
   overflow: hidden;
@@ -36,7 +36,6 @@ const style = /*css*/`
   margin: 16px 4px;
   cursor: pointer;
   pointer-events: auto;
-  transition: box-shadow .2s;
 }
 .dot>.checked{
   background: currentColor;
@@ -48,12 +47,6 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  cursor: pointer;
-}
-@media (pointer: fine){
-  .dot>.item:hover{
-    box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
-  }
 }
 `
 
@@ -62,7 +55,7 @@ const props = {
   duration: 4000
 }
 
-export default class Component extends builder({
+export default class Carousel extends builder({
   name, style, props,
   setup() {
     let container: HTMLDivElement
@@ -121,7 +114,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Carousel.define()
 
 declare global {
   namespace JSX {
@@ -130,13 +123,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Carousel
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

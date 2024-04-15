@@ -28,7 +28,7 @@ const style = /*css*/`
   overflow: hidden;
   position: relative;
   background: var(--s-color-secondary-container, #d4e4f6);
-  border-radius: var(--s-shape-corner-full, 7680px);
+  border-radius: 2px;
 }
 :host([disabled=true]) .track{
   background: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 31.57894736842105%, transparent);
@@ -59,7 +59,7 @@ const style = /*css*/`
   position: absolute;
   width: 40px;
   height: 40px;
-  border-radius: var(--s-shape-corner-full, 7680px);
+  border-radius: 20px;
   background: currentColor;
   filter: opacity(0);
   transition: filter .2s;
@@ -71,7 +71,7 @@ const style = /*css*/`
   width: 20px;
   height: 20px;
   background: currentColor;
-  border-radius: var(--s-shape-corner-full, 7680px);
+  border-radius: 10px;
   box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
   margin: 10px;
 }
@@ -106,7 +106,7 @@ const style = /*css*/`
   left: 0;
   width: 28px;
   height: 28px;
-  border-radius: var(--s-shape-corner-full, 7680px);
+  border-radius: 14px;
 }
 .label::after{
   content: '';
@@ -151,7 +151,7 @@ const props = {
   value: 50,
 }
 
-export default class Component extends builder({
+export default class Slider extends builder({
   name, style, props, propSyncs: ['disabled', 'labeled'],
   setup() {
     let activeTrack: HTMLDivElement
@@ -226,7 +226,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Slider.define()
 
 declare global {
   namespace JSX {
@@ -235,13 +235,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Slider
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

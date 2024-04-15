@@ -32,7 +32,7 @@ const style = /*css*/`
   background: var(--ripple-color, currentColor);
   border-radius: 50%;
   transition: opacity .8s;
-  opacity: var(--ripple-opacity, .24);
+  opacity: var(--ripple-opacity, .2);
   width: var(--size);
   height: var(--size);
   position: absolute;
@@ -56,7 +56,7 @@ const style = /*css*/`
   will-change: filter;
 }
 .container.hover::before{
-  filter: opacity(.12);
+  filter: opacity(.1);
 }
 @keyframes ripple{
   0% {transform: translate(-50%,-50%) scale(0)}

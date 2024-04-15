@@ -1,6 +1,7 @@
 import { builder, html } from './core/element.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 import Dropdown from './dropdown.js'
+import './ripple.js'
 import './scrollbar.js'
 
 const style = /*css*/`
@@ -39,7 +40,7 @@ const props = {
   group: '' as 'start' | 'end' | ''
 }
 
-export default class Component extends builder({
+export default class Menu extends builder({
   name, style, props, propSyncs: ['group'],
   setup() {
     let dropdown: Dropdown
@@ -52,7 +53,7 @@ export default class Component extends builder({
     })
     return {
       mounted: () => {
-        if (this.parentNode instanceof Component) dropdown.setAttribute('align', 'right')
+        if (this.parentNode instanceof Menu) dropdown.setAttribute('align', 'right')
       },
       expose: { show, dismiss, toggle },
       render: () => html`
@@ -67,22 +68,79 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+const itemStyle = /*css*/`
+:host{
+  display: block;
+  height: 44px;
+}
+.container{
+  display: flex;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+  position: relative;
+}
+.text{
+  flex-grow: 1;
+  padding: 0 16px;
+}
+::slotted([slot=start]){
+  flex-shrink: 0;
+  margin-left: 16px;
+  margin-right: -4px;
+}
+::slotted([slot=end]){
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+`
+
+const itemName = 's-menu-item'
+const itemProps = {
+}
+
+export class MenuItem extends builder({
+  name: itemName,
+  style: itemStyle,
+  props: itemProps,
+  setup() {
+    const click = () => {
+      this.dispatchEvent(new Event('menu-item:click', { bubbles: true }))
+    }
+    return {
+      render: () => html`
+        <s-ripple class="container" @click="${click}">
+          <slot name="start"></slot>
+          <div class="text">
+            <slot></slot>
+          </div>
+          <slot name="end"></slot>
+        </s-ripple>
+      `
+    }
+  }
+}) { }
+
+Menu.define()
+MenuItem.define()
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
       [name]: Partial<typeof props> & JSXAttributes
+      [itemName]: Partial<typeof itemProps> & JSXAttributes
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Menu
+    [itemName]: MenuItem
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
+    [itemName]: typeof itemProps
   }
 }

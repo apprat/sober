@@ -55,7 +55,7 @@ const props = {
   type: 'none' as keyof typeof svgData
 }
 
-export default class Component extends builder({
+export default class Icon extends builder({
   name, style, props, propSyncs: ['type'],
   setup() {
     let path: SVGAElement
@@ -83,7 +83,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Icon.define()
 
 declare global {
   namespace JSX {
@@ -92,13 +92,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Icon
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

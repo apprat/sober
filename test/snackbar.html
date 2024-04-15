@@ -17,6 +17,7 @@
           无论哪种形式，都会返回一个 MatSnackBarRef。它可以用来关闭快餐栏或在快餐栏关闭时接收通知。 对于只有一个操作的简单消息，当该动作被触发时，MatSnackBarRef 会暴露出一个 Observable。
           如果你要关闭一个用 openFromComponent 打开的自定义快餐栏，可以在该组件中注入一个 MatSnackBarRef。
         </div>
+        <s-button slot="action" type="text">关闭</s-button>
       </s-snackbar>
       <s-button onclick="call()">JavaScript Call</s-button>
       <s-button onclick="call2()">JavaScript Call2</s-button>
@@ -24,12 +25,12 @@
   </s-page>
   <script type="module" src="../dist/main.js"></script>
   <script type="module" src="./scripts/default.js"></script>
-  <script type="module">
+  <script>
     function call() {
-      sober.Snackbar.show('你好')
+      customElements.get('s-snackbar').show('你好')
     }
     function call2() {
-      sober.Snackbar.show({ text: '你好', action: '傻逼' })
+      customElements.get('s-snackbar').show({ text: '你好', action: { text: '傻逼' } })
     }
   </script>
 </body>

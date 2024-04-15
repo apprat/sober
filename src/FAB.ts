@@ -13,7 +13,7 @@ const style = /*css*/`
   box-sizing: border-box;
   height: 56px;
   width: 56px;
-  border-radius: var(--s-shape-corner-full, 7680px);
+  border-radius: 28px;
   background: var(--s-color-primary-container, #cbe6ff);
   color: var(--s-color-on-primary-container, #001e30);
   transition: box-shadow .2s;
@@ -27,15 +27,18 @@ const style = /*css*/`
 :host([size=small]){
   height: 48px;
   width: 48px;
+  border-radius: 24px;
 }
 :host([extended=true]){
   padding: 0 16px;
   width: auto;
   height: 48px;
+  border-radius: 24px;
 }
 :host(:not([extended=true])[size=large]){
   height: 72px;
   width: 72px;
+  border-radius: 36px;
 }
 :host(:not([extended=true])[size=large]) ::slotted(*){
   width: 36px;
@@ -68,7 +71,7 @@ const props = {
   extended: false,
 }
 
-export default class Component extends builder({
+export default class FAB extends builder({
   name, style, props, propSyncs: true,
   setup() {
     let ripple: Ripple
@@ -86,7 +89,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+FAB.define()
 
 declare global {
   namespace JSX {
@@ -95,13 +98,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: FAB
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

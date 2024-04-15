@@ -137,7 +137,7 @@ export default class Search extends builder({
     return {
       render: () => html`
         <div class="drop">
-          <slot name="drop" @pointerdown.prevent></slot>
+          <slot name="drop" @mousedown.prevent></slot>
         </div>
         <div class="container">
           <slot name="start"></slot>

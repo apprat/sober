@@ -128,7 +128,7 @@ const show = (options: string | {
   root?: Element
   headline?: string
   text: string
-  actions?: { text: string, onclick?: (event: MouseEvent) => unknown }[],
+  actions?: { text: string, click?: (event: MouseEvent) => unknown }[],
 }) => {
   let root: Element = document.body
   const dialog = new Dialog()
@@ -156,7 +156,7 @@ const show = (options: string | {
       action.slot = 'action'
       action.type = 'text'
       action.textContent = item.text
-      if (item.onclick) action.addEventListener('click', item.onclick)
+      if (item.click) action.addEventListener('click', item.click)
       dialog.appendChild(action)
     }
   }

@@ -77,7 +77,7 @@ const show = (options: string | {
   duration?: number
   action?: {
     text: string
-    onclick: (event: MouseEvent) => unknown
+    click: (event: MouseEvent) => unknown
   }
 }) => {
   let root: Element = document.body
@@ -96,7 +96,7 @@ const show = (options: string | {
       action.type = 'text'
       action.slot = 'action'
       action.textContent = options.action.text
-      if (options.action.onclick) action.addEventListener('click', options.action.onclick)
+      if (options.action.click) action.addEventListener('click', options.action.click)
       snackbar.appendChild(action)
     }
     if (options.duration) snackbar.duration = options.duration

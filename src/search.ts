@@ -54,6 +54,7 @@ const style = /*css*/`
 ::slotted([slot=drop]){
   border-top: solid 1px var(--s-color-outline-variant, #c1c7ce);
   margin-top: 48px;
+  border-radius: 4px;
 }
 :host([size=small]:focus-within) ::slotted([slot=drop]){
   margin-top: 40px;

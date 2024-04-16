@@ -17,11 +17,13 @@ const style = /*css*/`
 :host([size=small]){
   height: 40px;
   min-width: 196px;
+  border-radius: 20px;
 }
 :host([size=large]){
   height: 56px;
   min-width: 280px;
   font-size: 1rem;
+  border-radius: 28px;
 }
 .container{
   display: flex;

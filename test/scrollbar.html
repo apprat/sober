@@ -11,12 +11,21 @@
 <body>
   <s-page>
     <main>
-      <s-scrollbar style="max-height: 1000px;background: #f2f2f2;">
-        你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
-        <div style="height: 800px;">hello</div>
-        <div style="height: 20px;background: #ddd;">hello</div>
-        <div style="height: 800px;">hello</div>
+      <s-scrollbar style="height: 520px;min-height: 520px;background: #f2f2f2;">
+        <div style="background: #ddd;height: 100%;"></div>
+        <div style="background: #725151;min-height: 100%;"></div>
+        <div style="background: #324d7b;height: 100%;"></div>
       </s-scrollbar>
+
+      <s-scrollbar style="background: #f2f2f2;">
+        <div style="display: flex;height: 520px;">
+          <div style="background: #926565;width: 100%;flex-shrink: 0;"></div>
+          <div style="background: #505859;width: 100%;flex-shrink: 0;"></div>
+          <div id="test" style="background: #64555c;width: 100%;flex-shrink: 0;"></div>
+        </div>
+      </s-scrollbar>
+      <s-button onclick="document.querySelector('#test').style.display='none'">删除</s-button>
+      你好你好
     </main>
   </s-page>
   <script type="module" src="../dist/main.js"></script>

@@ -38,7 +38,7 @@ const walkNode = (list: NodeList, mark: string, templateValue: { value: Function
           const [eventName, behavior] = name.slice(1).split('.') //click.stop
           const fn = old === mark && templateValue.value as Function
           el.addEventListener(eventName, (event: Event) => {
-            fn && fn(event)
+            fn && fn(event, el)
             if (behavior === 'stop') event.stopPropagation()
             if (behavior === 'prevent') event.preventDefault()
           }, { passive: behavior === 'passive' })

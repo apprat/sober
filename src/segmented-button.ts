@@ -21,12 +21,11 @@ const props = {
 export default class SegmentedButton extends builder({
   name, style, props,
   setup() {
-    let slot: HTMLSlotElement
     let options: SegmentedButtonItem[] = []
     let selectIndex = -1
     let changing = false
-    const slotChange = () => {
-      options = slot.assignedElements().filter((item) => item instanceof SegmentedButtonItem) as SegmentedButtonItem[]
+    const slotChange = (_: Event, el: HTMLSlotElement) => {
+      options = el.assignedElements().filter((item) => item instanceof SegmentedButtonItem) as SegmentedButtonItem[]
       selectIndex = options.findIndex((item) => item.checked)
     }
     this.addEventListener('segmented-button-item:change', (event: Event) => {
@@ -53,7 +52,7 @@ export default class SegmentedButton extends builder({
         }
       },
       render: () => html`
-        <slot ref="${(el: HTMLSlotElement) => slot = el}" @slotchange="${slotChange}"></slot>
+        <slot @slotchange="${slotChange}"></slot>
       `
     }
   }

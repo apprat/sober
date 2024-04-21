@@ -10,10 +10,16 @@ const style = /*css*/`
   :host::-webkit-scrollbar{
     width: 6px;
     height: 6px;
+    background: transparent;
   }
   :host::-webkit-scrollbar-thumb{
     background: var(--s-color-outline-variant, #c1c7ce);
-    border-radius: 2px;
+    border-radius: 3px;
+  }
+  @supports not selector(::-webkit-scrollbar){
+    :host{
+      scrollbar-color: var(--s-color-outline-variant, #c1c7ce) transparent;
+    }
   }
 }
 `

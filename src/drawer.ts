@@ -4,7 +4,6 @@ import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 const style = /*css*/`
 :host{
   display: block;
-  height: 100%;
 }
 .container{
   display: flex;
@@ -12,172 +11,137 @@ const style = /*css*/`
   position: relative;
   overflow: hidden;
 }
-.left,
-.right{
+.scrim{
+  background: var(--s-color-scrim, #000000);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
-  flex-shrink: 0;
-  overflow: hidden;
-  will-change: width;
-  min-width: 0;
+  filter: opacity(0);
+  pointer-events: none;
+  transition: filter .2s;
 }
-.left{
+.start,
+.end{
+  min-width: 0;
+  height: 100%;
+  width: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.show-start>.start,
+.show-end>.end{
+  width: auto;
+}
+.start{
   order: -1;
 }
-.supporting-text{
+::slotted(:not([slot])){
   flex-grow: 1;
   min-width: 0;
 }
 ::slotted([slot=start]),
 ::slotted([slot=end]){
-  width: 320px;
-  height: 100%;
-  background: var(--s-color-surface-container-low, #f3f3f6);
-  position: relative;
+  width: 280px;
   display: flow-root;
+  flex-shrink: 0;
+  background: var(--s-color-surface-container-low, #f3f3f6);
+  border-color: var(--s-color-surface-variant, #dee3ea);
+  border-width: 1px;
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
 }
-@media (min-width: 840px){
-  .start,
-  .end {
-    width: 0;
-    height: 100%;
-  }
-  .start-static-show .start,
-  .end-static-show .end{
-    width: auto;
-  }
+::slotted([slot=start]){
+  border-right-style: solid;
 }
-@media (max-width: 840px){
-  .left,
-  .right{
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    pointer-events: none;
-  }
-  .scrim{
-    background: var(--s-color-scrim, #000000);
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    transition: filter .2s linear;
-  }
-  .left>.scrim,
-  .right>.scrim{
-    display: block;
-    filter: opacity(0);
-  }
-  .start-fixed-show>.left>.scrim,
-  .end-fixed-show>.right>.scrim{
-    filter: opacity(.62);
-    pointer-events: auto;
-  }
-  .start,
-  .end{
-    height: 100%;
-    position: absolute;
-  }
-  .start{
-    margin-left: -100%;
-  }
-  .end{
-    margin-right: 100%;
-    right: 0;
-  }
-  ::slotted([slot=start]),
-  ::slotted([slot=end]){
-    transition: box-shadow .2s;
-  }
-  .start-fixed-show .start,
-  .end-fixed-show .end{
-    pointer-events: auto;
-  }
-  .start-fixed-show .start{
-    margin-left: 0;
-  }
-  .end-fixed-show .end{
-    margin-right: 0;
-  }
-  .start-fixed-show ::slotted([slot=start]),
-  .end-fixed-show ::slotted([slot=end]){
-    box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
-  }
+::slotted([slot=end]){
+  border-left-style: solid;
+}
+.folded>.start,
+.folded>.end{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  visibility: hidden;
+}
+.folded>.end{
+  display: flex;
+  justify-content: flex-end;
+}
+.folded ::slotted([slot=start]),
+.folded ::slotted([slot=end]){
+  pointer-events: auto;
+  max-width: 75%;
+}
+.folded.show-fold-start>.scrim,
+.folded.show-fold-end>.scrim{
+  filter: opacity(.8);
+  pointer-events: auto;
+}
+.folded.show-fold-start>.start,
+.folded.show-fold-end>.end{
+  visibility: visible;
 }
 `
 
-type Type = 'start' | 'end'
-type Mode = 'static' | 'fixed'
-
+type Slot = 'start' | 'end'
 
 const name = 's-drawer'
 const props = {
+  fold: 840
 }
 
 export default class Drawer extends builder({
   name, props, style,
   setup() {
     let container: HTMLDivElement
-    let start: HTMLDivElement
-    let end: HTMLDivElement
-    const getMode = () => innerWidth < 840 ? 'fixed' : 'static'
-    const show = (type: Type = 'start', mode?: Mode) => {
-      if (!this.isConnected) return
-      const moded = getMode()
-      const className = `${type}-${!mode ? moded : mode}-show`
+    const elements = { start: undefined as unknown as HTMLDivElement, end: undefined as unknown as HTMLDivElement }
+    const slots = { start: undefined as undefined | HTMLSlotElement, end: undefined as undefined | HTMLSlotElement }
+    const duration = 200
+    const show = (slot: Slot = 'start', folded?: boolean) => {
+      const isFold = folded === undefined ? container.classList.contains('folded') : folded
+      const className = isFold ? `show-fold-${slot}` : `show-${slot}`
       if (container.classList.contains(className)) return
       container.classList.add(className)
-      const el = type === 'start' ? start : end
-      const width = el.offsetWidth
-      let keyframes: { width?: string, transform?: string }[] = [{ width: '0px' }, { width: `${width}px` }]
-      if (type === 'start' && moded === 'fixed') keyframes = [{ transform: `translateX(-${width}px)` }, { transform: 'translateX(0px)' }]
-      if (type === 'end' && moded === 'fixed') keyframes = [{ transform: `translateX(${width}px)` }, { transform: `translateX(0px)` }]
-      el.animate(keyframes, { duration: 200 })
+      const width = slots[slot]?.offsetWidth ?? 0
+      const translate = slot === 'start' ? width * -1 : width
+      const animate = isFold ? [{ transform: `translateX(${translate}px)` }, { transform: `translateX(0px)` }] : [{ width: 0 }, { width: `${width}px` }]
+      elements[slot].animate(animate, { duration })
     }
-    const dismiss = (type: Type = 'start', mode?: Mode) => {
-      if (!this.isConnected) return
-      const moded = getMode()
-      const el = type === 'start' ? start : end
-      const width = el.offsetWidth
-      const className = `${type}-${!mode ? moded : mode}-show`
+    const dismiss = (slot: Slot = 'start', folded?: boolean) => {
+      const isFold = folded === undefined ? container.classList.contains('folded') : folded
+      const className = isFold ? `show-fold-${slot}` : `show-${slot}`
       if (!container.classList.contains(className)) return
-      const remove = () => container.classList.remove(className)
-      let keyframes: { width?: string, transform?: string }[] = [{ width: `${width}px` }, { width: '0px' }]
-      if (type === 'start' && moded === 'fixed') keyframes = [{ transform: 'translateX(0px)' }, { transform: `translateX(-${width}px)` },]
-      if (type === 'end' && moded === 'fixed') keyframes = [{ transform: `translateX(0px)` }, { transform: `translateX(${width}px)` }]
-      const animation = el.animate(keyframes, { duration: 200 })
-      animation.addEventListener('cancel', remove)
-      animation.addEventListener('remove', remove)
-      animation.addEventListener('finish', remove)
+      container.classList.remove(className)
+      const width = slots[slot]?.offsetWidth ?? 0
+      const translate = slot === 'start' ? width * -1 : width
+      const animate = isFold ? [{ transform: `translateX(0px)`, visibility: 'visible' }, { transform: `translateX(${translate}px)`, visibility: 'visible' }] : [{ width: `${width}px` }, { width: 0 }]
+      elements[slot].animate(animate, { duration })
     }
-    const toggle = (type: Type = 'start', mode?: Mode) => {
-      container.classList.contains(`${type}-${!mode ? getMode() : mode}-show`) ? dismiss(type, mode) : show(type, mode)
+    const toggle = (slot: Slot = 'start', folded?: boolean) => {
+      const isFold = folded === undefined ? container.classList.contains('folded') : folded
+      const className = isFold ? `show-fold-${slot}` : `show-${slot}`
+      container.classList.contains(className) ? dismiss(slot, folded) : show(slot, folded)
     }
+    const obs = new ResizeObserver(() => this.offsetWidth < this.fold ? container.classList.add('folded') : container.classList.remove('folded'))
+    obs.observe(this)
     return {
-      expose: {
-        show, dismiss, toggle,
-        get mode() {
-          return getMode()
-        }
-      },
+      expose: { show, dismiss, toggle },
       render: () => html`
-        <div class="container start-static-show end-static-show" ref="${(el: HTMLDivElement) => container = el}">
-          <div class="supporting-text">
-            <slot></slot>
+        <div class="container show-start show-end" ref="${(el: HTMLDivElement) => container = el}">
+          <slot></slot>
+          <div class="scrim" @click="${() => { dismiss('start'); dismiss('end') }}"></div>
+          <div class="start" ref="${(el: HTMLDivElement) => elements.start = el}">
+            <slot name="start" @slotchange="${(_: Event, el: HTMLSlotElement) => slots.start = el.assignedElements()[0] as any}"></slot>
           </div>
-          <div class="left">
-            <div class="scrim" @click="${() => dismiss()}"></div>
-            <div class="start" ref="${(el: HTMLDivElement) => start = el}">
-              <slot name="start"></slot>
-            </div>
-          </div>
-          <div class="right">
-            <div class="scrim" @click="${() => dismiss('end')}"></div>
-            <div class="end" ref="${(el: HTMLDivElement) => end = el}">
-              <slot name="end"></slot>
-            </div>
+          <div class="end" ref="${(el: HTMLDivElement) => elements.end = el}">
+            <slot name="end" @slotchange="${(_: Event, el: HTMLSlotElement) => slots.end = el.assignedElements()[0] as any}"></slot>
           </div>
         </div>
       `

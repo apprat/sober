@@ -1,6 +1,7 @@
 import { builder, html } from './core/element.js'
 import { getStackingContext } from './core/utils.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import './scrollbar.js'
 
 const style = /*css*/`
 :host{
@@ -29,7 +30,7 @@ const style = /*css*/`
   left: 0;
   width: 100%;
   height: 100%;
-  filter: opacity(.62);
+  filter: opacity(.8);
 }
 .wrapper-container{
   display: flex;
@@ -87,11 +88,10 @@ const style = /*css*/`
   color: var(--s-color-on-surface, #1a1c1e);
   flex-shrink: 0;
 }
-.supporting-text{
+.text{
   user-select: text;
   -webkit-user-select: text;
   flex-grow: 1;
-  overflow-y: auto;
 }
 ::slotted([slot=text]){
   margin: 16px 24px;
@@ -106,16 +106,6 @@ const style = /*css*/`
 ::slotted(s-button[slot=action]){
   min-width: 72px;
   margin: 20px 2px;
-}
-@media (pointer: fine){
-  .supporting-text::-webkit-scrollbar{
-    width: 6px;
-    height: 6px;
-  }
-  .supporting-text::-webkit-scrollbar-thumb{
-    background: var(--s-color-outline-variant, #c1c7ce);
-    border-radius: 2px;
-  }
 }
 `
 
@@ -194,10 +184,10 @@ class Dialog extends builder({
           <div class="wrapper-container">
             <div class="container" part="container">
               <slot name="headline"></slot>
-              <div class="supporting-text">
+              <s-scrollbar class="text">
                 <slot></slot>
                 <slot name="text"></slot>
-              </div>
+              </s-scrollbar>
               <div class="action">
                 <slot name="action" @click="${dismiss}"></slot>
               </div>

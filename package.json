@@ -1,6 +1,6 @@
 {
   "name": "sober",
-  "version": "0.0.96",
+  "version": "0.0.97",
   "description": "Sober is a library of UI components designed with reference to Material You.",
   "type": "module",
   "scripts": {
@@ -16,7 +16,8 @@
   ],
   "exports": {
     ".": "./dist/main.js",
-    "./*": "./dist/*.js"
+    "./style/*": "./style/*",
+    "./*": "./dist/*"
   },
   "author": "apprat",
   "repository": "apprat/sober",

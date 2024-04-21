@@ -4,6 +4,7 @@ import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 const style = /*css*/`
 :host{
   display: block;
+  height: 100%;
 }
 .container{
   display: flex;
@@ -69,15 +70,17 @@ const style = /*css*/`
   z-index: 1;
   pointer-events: none;
   visibility: hidden;
+  display: flex;
 }
 .folded>.end{
-  display: flex;
   justify-content: flex-end;
 }
 .folded ::slotted([slot=start]),
 .folded ::slotted([slot=end]){
   pointer-events: auto;
   max-width: 75%;
+  border-style: none;
+  box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
 }
 .folded.show-fold-start>.scrim,
 .folded.show-fold-end>.scrim{
@@ -118,8 +121,8 @@ export default class Drawer extends builder({
       const isFold = folded === undefined ? container.classList.contains('folded') : folded
       const className = isFold ? `show-fold-${slot}` : `show-${slot}`
       if (!container.classList.contains(className)) return
-      container.classList.remove(className)
       const width = slots[slot]?.offsetWidth ?? 0
+      container.classList.remove(className)
       const translate = slot === 'start' ? width * -1 : width
       const animate = isFold ? [{ transform: `translateX(0px)`, visibility: 'visible' }, { transform: `translateX(${translate}px)`, visibility: 'visible' }] : [{ width: `${width}px` }, { width: 0 }]
       elements[slot].animate(animate, { duration })

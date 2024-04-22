@@ -11,7 +11,7 @@
 <body>
   <s-page>
     <main>
-      <s-snackbar action="确认">
+      <s-snackbar duration="0">
         <s-button slot="trigger">Show</s-button>
         <div>
           无论哪种形式，都会返回一个 MatSnackBarRef。它可以用来关闭快餐栏或在快餐栏关闭时接收通知。 对于只有一个操作的简单消息，当该动作被触发时，MatSnackBarRef 会暴露出一个 Observable。
@@ -28,9 +28,11 @@
   <script>
     function call() {
       customElements.get('s-snackbar').show('你好')
+      document.body.firstElementChild.append('test')
     }
     function call2() {
       customElements.get('s-snackbar').show({ text: '你好', action: { text: '傻逼' } })
+      document.body.firstElementChild.append('test')
     }
   </script>
 </body>

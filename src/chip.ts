@@ -66,7 +66,7 @@ export default class Chip extends builder({
         <slot name="start"></slot>
         <slot></slot>
         <slot name="end"></slot>
-        <slot name="action" @mousedown.stop></slot>
+        <slot name="action" @pointerdown.stop></slot>
         <s-ripple class="ripple" attached="true"></s-ripple>
       `
     }

@@ -93,7 +93,7 @@ export default class Card extends builder({
         <slot name="text"></slot>
         <slot></slot>
         <div class="action">
-          <slot name="action" @mousedown="${(event: MouseEvent) => event.stopPropagation()}"></slot>
+          <slot name="action" @pointerdown.stop></slot>
         </div>
         <slot name="end"></slot>
         <s-ripple class="ripple" attached="true"></s-ripple>

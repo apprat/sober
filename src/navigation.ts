@@ -45,12 +45,11 @@ const props = {
 export default class Navigation extends builder({
   name, style, props, propSyncs: true,
   setup() {
-    let slot: HTMLSlotElement
     let options: NavigationItem[] = []
     let selectIndex = -1
     let changing = false
-    const slotChange = () => {
-      options = slot.assignedElements().filter((item) => item instanceof NavigationItem) as NavigationItem[]
+    const slotChange = (_: Event, el: HTMLSlotElement) => {
+      options = el.assignedElements().filter((item) => item instanceof NavigationItem) as NavigationItem[]
       selectIndex = options.findIndex((item) => item.checked)
     }
     this.addEventListener('navigation-item:change', (event: Event) => {
@@ -78,7 +77,7 @@ export default class Navigation extends builder({
       },
       render: () => html`
         <slot name="start"></slot>
-        <slot ref="${(el: HTMLSlotElement) => slot = el}" @slotchange="${slotChange}"></slot>
+        <slot @slotchange="${slotChange}"></slot>
         <slot name="end"></slot>
       `
     }

@@ -17,7 +17,7 @@
   "exports": {
     ".": "./dist/main.js",
     "./style/*": "./style/*",
-    "./*": "./dist/*"
+    "./*": "./dist/*.js"
   },
   "author": "apprat",
   "repository": "apprat/sober",

@@ -3,29 +3,31 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
+  <meta name="theme-color" content="#1972F8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1C4D98" media="(prefers-color-scheme: dark)">
 </head>
 
-<body>
-  <s-page>
+<body style="padding-bottom: env(safe-area-inset-bottom)">
+  <s-page style="background: #009688;">
     <main>
-      <s-scrollbar style="height: 520px;min-height: 520px;background: #f2f2f2;">
+      <s-scrollbar style="height: 320px;min-height: 320px;background: #f2f2f2;">
         <div style="background: #ddd;height: 100%;"></div>
         <div style="background: #725151;min-height: 100%;"></div>
         <div style="background: #324d7b;height: 100%;"></div>
       </s-scrollbar>
 
       <s-scrollbar style="background: #f2f2f2;">
-        <div style="display: flex;height: 520px;">
+        <div style="display: flex;height: 320px;">
           <div style="background: #926565;width: 100%;flex-shrink: 0;"></div>
           <div style="background: #505859;width: 100%;flex-shrink: 0;"></div>
           <div id="test" style="background: #64555c;width: 100%;flex-shrink: 0;"></div>
         </div>
       </s-scrollbar>
-      <s-button onclick="document.querySelector('#test').style.display='none'">删除</s-button>
-      你好你好
+      xxx
     </main>
   </s-page>
   <script type="module" src="../dist/main.js"></script>

@@ -52,13 +52,12 @@ const props = {
 export default class Tab extends builder({
   name, style, props, propSyncs: ['mode'],
   setup() {
-    let slot: HTMLSlotElement
     let container: HTMLDivElement
     let options: TabItem[] = []
     let selectIndex = -1
     let changing = false
-    const slotChange = () => {
-      options = slot.assignedElements().filter((item) => item instanceof TabItem) as TabItem[]
+    const slotChange = (_: Event, el: HTMLSlotElement) => {
+      options = el.assignedElements().filter((item) => item instanceof TabItem) as TabItem[]
       selectIndex = options.findIndex((item) => item.checked)
     }
     this.addEventListener('tab-item:change', (event: Event) => {
@@ -102,7 +101,7 @@ export default class Tab extends builder({
       },
       render: () => html`
         <div class="container" ref="${(el: HTMLDivElement) => container = el}">
-          <slot ref="${(el: HTMLSlotElement) => slot = el}" @slotchange="${slotChange}"></slot>
+          <slot @slotchange="${slotChange}"></slot>
         </div>
       `
     }

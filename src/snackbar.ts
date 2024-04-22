@@ -11,8 +11,8 @@ const style = /*css*/`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -37,7 +37,7 @@ const style = /*css*/`
   pointer-events: auto;
   transform: translateY(100%);
   filter: opacity(0);
-  transition: transform .1s, filter .1s;
+  transition: transform .2s, filter .2s;
 }
 .wrapper.show .container{
   transform: translateY(0%);
@@ -58,9 +58,10 @@ const style = /*css*/`
   margin-left: -8px;
   height: 36px;
 }
-@media (max-width: 480px){
+@media (max-width: 320px){
   .container{
     margin: 8px;
+    flex-grow: 1;
     min-width: auto;
   }
 }
@@ -113,8 +114,9 @@ class Snackbar extends builder({
     const state = { timer: 0 }
     const show = () => {
       const stackingContext = getStackingContext(shadowRoot)
-      wrapper.style.top = `${0 - stackingContext.top}px`
-      wrapper.style.left = `${0 - stackingContext.left}px`
+      if (stackingContext.top !== 0 || stackingContext.left !== 0) {
+        wrapper.setAttribute('style', `width: ${innerWidth}px;height: ${innerHeight}px;top: ${0 - stackingContext.top}px;left: ${0 - stackingContext.left}px`)
+      }
       clearTimeout(state.timer)
       getComputedStyle(wrapper).top
       wrapper.classList.add('show')

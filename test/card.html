@@ -60,7 +60,8 @@
         <div slot="headline">Healine</div>
         <div slot="subhead">Subhead</div>
         <div slot="text">Card containers hold all card elements. Their size is determined by the space those</div>
-        <s-button slot="action" type="filled-tonal">Action</s-button>
+        <s-button slot="action" type="filled-tonal" onpointerdown="event.stopPropagation()"
+          onclick="console.log('sss')">Action</s-button>
         <s-button slot="action">Action</s-button>
       </s-card>
       <s-card>

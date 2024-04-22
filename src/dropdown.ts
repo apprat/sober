@@ -13,8 +13,8 @@ const style = /*css*/`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 2;
   overflow: hidden;
 }
@@ -62,8 +62,9 @@ export default class Dropdown extends builder({
     const show = (elementOrOptions?: ShowOption) => {
       if (!this.isConnected || wrapper.classList.contains('show')) return
       const stackingContext = getStackingContext(shadowRoot)
-      wrapper.style.top = `${0 - stackingContext.top}px`
-      wrapper.style.left = `${0 - stackingContext.left}px`
+      if (stackingContext.top !== 0 || stackingContext.left !== 0) {
+        wrapper.setAttribute('style', `width: ${innerWidth}px;height: ${innerHeight}px;top: ${0 - stackingContext.top}px;left: ${0 - stackingContext.left}px`)
+      }
       const position = { top: 0, left: 0, origin: [] as string[] }
       if (!elementOrOptions || elementOrOptions instanceof HTMLElement) {
         const el = !elementOrOptions ? trigger : elementOrOptions

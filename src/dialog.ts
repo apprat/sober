@@ -12,11 +12,11 @@ const style = /*css*/`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 2;
   pointer-events: none;
-  transition: filter .1s;
+  transition: filter .2s;
   filter: opacity(0);
 }
 .wrapper.show{
@@ -43,7 +43,7 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   transform: scale(.9);
-  transition: transform .1s;
+  transition: transform .2s;
 }
 .wrapper.show .wrapper-container{
   transform: scale(1);
@@ -161,8 +161,9 @@ class Dialog extends builder({
     let wrapper: HTMLDivElement
     const show = () => {
       const stackingContext = getStackingContext(shadowRoot)
-      wrapper.style.top = `${0 - stackingContext.top}px`
-      wrapper.style.left = `${0 - stackingContext.left}px`
+      if (stackingContext.top !== 0 || stackingContext.left !== 0) {
+        wrapper.setAttribute('style', `width: ${innerWidth}px;height: ${innerHeight}px;top: ${0 - stackingContext.top}px;left: ${0 - stackingContext.left}px`)
+      }
       wrapper.classList.add('show')
       this.dispatchEvent(new Event('show'))
     }

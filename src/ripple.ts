@@ -89,9 +89,15 @@ export default class Component extends builder({
         coordinate.y = `${y}px`
       }
       animation.setAttribute('style', `--size: ${size}px;--x: ${coordinate.x};--y: ${coordinate.y};`)
-      const remove = () => animation.isConnected && container.removeChild(animation)
+      const up = () => animation.style.opacity = '0'
+      const remove = () => {
+        document.removeEventListener('pointerup', up)
+        document.removeEventListener('touchend', up)
+        animation.isConnected && container.removeChild(animation)
+      }
       animation.addEventListener('transitionend', remove, { once: true })
-      document.addEventListener('pointerup', () => animation.style.opacity = '0', { once: true })
+      document.addEventListener('pointerup', up, { once: true })
+      document.addEventListener('touchend', up, { once: true })
       container.appendChild(animation)
       animation.animate([
         { transform: 'translate(-50%, -50%) scale(0)' },
@@ -105,16 +111,16 @@ export default class Component extends builder({
     let target: HTMLElement = this
     const addEvents = () => {
       target = this.attached ? ((this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode) as HTMLElement) : this
-      target.addEventListener('mouseover', hover)
-      target.addEventListener('mouseleave', unHover)
-      target.addEventListener('wheel', unHover, { passive: true })
-      target.addEventListener('pointerdown', down)
+      target?.addEventListener('mouseover', hover)
+      target?.addEventListener('mouseleave', unHover)
+      target?.addEventListener('wheel', unHover, { passive: true })
+      target?.addEventListener('pointerdown', down)
     }
     const removeEvents = () => {
-      target.removeEventListener('mouseover', hover)
-      target.removeEventListener('mouseleave', unHover)
-      target.removeEventListener('wheel', unHover)
-      target.removeEventListener('pointerdown', down)
+      target?.removeEventListener('mouseover', hover)
+      target?.removeEventListener('mouseleave', unHover)
+      target?.removeEventListener('wheel', unHover)
+      target?.removeEventListener('pointerdown', down)
     }
     return {
       mounted: addEvents,

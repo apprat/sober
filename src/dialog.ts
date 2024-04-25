@@ -49,7 +49,6 @@ const style = /*css*/`
   transform: scale(1);
 }
 .container{
-  width: 560px;
   min-width: 280px;
   max-width: calc(100% - 48px);
   max-height: calc(100% - 48px);
@@ -63,15 +62,6 @@ const style = /*css*/`
 }
 .wrapper.show .container{
   pointer-events: auto;
-}
-:host([size=vertical]) .container{
-  height: 100%;
-}
-:host([size=horizontal]) .container{
-  width: 100%;
-}
-:host([size=large]) .container{
-  width: 1080px;
 }
 :host([size=full]) .container{
   width: 100%;
@@ -107,11 +97,19 @@ const style = /*css*/`
   min-width: 72px;
   margin: 20px 2px;
 }
+::slotted([slot=text]),
+::slotted(:not([slot])){
+  max-width: 520px;
+}
+:host([size=full]) ::slotted([slot=text]),
+:host([size=full]) ::slotted(:not([slot])){
+  max-width: none;
+}
 `
 
 const name = 's-dialog'
 const props = {
-  size: 'basic' as 'basic' | 'vertical' | 'horizontal' | 'large' | 'full',
+  size: 'basic' as 'basic' | 'full',
 }
 
 const show = (options: string | {

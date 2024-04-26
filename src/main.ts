@@ -5,7 +5,6 @@ import Carousel from './carousel.js'
 import Checkbox from './checkbox.js'
 import Chip from './chip.js'
 import CircularProgress from './circular-progress.js'
-import DatePicker from './date-picker.js'
 import Dialog from './dialog.js'
 import Divider from './divider.js'
 import Drawer from './drawer.js'
@@ -40,7 +39,6 @@ export {
   Checkbox,
   Chip,
   CircularProgress,
-  DatePicker,
   Dialog,
   Divider,
   Drawer,

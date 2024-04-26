@@ -106,6 +106,15 @@ export default class Component extends builder({
     }
     const down = (event: PointerEvent) => {
       if (event.button !== 0) return
+      if (device.touched) {
+        const clear = () => {
+          clearTimeout(timer)
+          document.removeEventListener('touchmove', clear)
+        }
+        document.addEventListener('touchmove', clear, { once: true })
+        const timer = setTimeout(() => start(event), 80)
+        return
+      }
       start(event)
     }
     let target: HTMLElement = this

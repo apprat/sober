@@ -64,15 +64,25 @@ const props = {
   attached: false
 }
 
+const pointerUp = (fn: Function) => {
+  const up = () => {
+    fn()
+    document.removeEventListener('pointerup', up)
+    document.removeEventListener('pointercancel', up)
+  }
+  document.addEventListener('pointerup', up)
+  document.addEventListener('pointercancel', up)
+}
+
 export default class Component extends builder({
   name, style, props, propSyncs: ['attached'],
   setup() {
     let container: HTMLDivElement
     const hover = () => !device.touched && container.classList.add('hover')
     const unHover = () => !device.touched && container.classList.remove('hover')
-    const start = (event: { clientX: number, clientY: number }) => {
-      const animation = document.createElement('div')
-      animation.className = 'animation'
+    const run = (event: PointerEvent, upped?: boolean) => {
+      const el = document.createElement('div')
+      el.className = 'animation'
       const { offsetWidth, offsetHeight } = container
       let size = Math.sqrt(offsetWidth * offsetWidth + offsetHeight * offsetHeight)
       const coordinate = { x: '50%', y: '50%' }
@@ -88,33 +98,34 @@ export default class Component extends builder({
         coordinate.x = `${x}px`
         coordinate.y = `${y}px`
       }
-      animation.setAttribute('style', `--size: ${size}px;--x: ${coordinate.x};--y: ${coordinate.y};`)
-      const up = () => animation.style.opacity = '0'
-      const remove = () => {
-        document.removeEventListener('pointerup', up)
-        document.removeEventListener('touchend', up)
-        animation.isConnected && container.removeChild(animation)
-      }
-      animation.addEventListener('transitionend', remove, { once: true })
-      document.addEventListener('pointerup', up, { once: true })
-      document.addEventListener('touchend', up, { once: true })
-      container.appendChild(animation)
-      animation.animate([
+      el.setAttribute('style', `--size: ${size}px;--x: ${coordinate.x};--y: ${coordinate.y};`)
+      const remove = () => el.isConnected && container.removeChild(el)
+      el.addEventListener('transitionend', remove, { once: true })
+      el.addEventListener('transitioncancel', remove, { once: true })
+      const end = () => el.style.opacity = '0'
+      container.appendChild(el)
+      el.animate([
         { transform: 'translate(-50%, -50%) scale(0)' },
         { transform: 'translate(-50%, -50%) scale(1)' }
       ], { duration: 800, fill: 'forwards', easing: 'cubic-bezier(.2, .9, .1, .9)' })
+      if (!upped) return pointerUp(end)
+      window.getComputedStyle(el).top
+      end()
+    }
+    const start = (event: PointerEvent) => {
+      if (event.pointerType === 'mouse') return run(event)
+      //触屏设备延迟80ms触发优先响应滚动
+      let upped = false
+      const clear = () => clearTimeout(timer)
+      const timer = setTimeout(() => {
+        run(event, upped)
+        document.removeEventListener('pointermove', clear)
+      }, 80)
+      pointerUp(() => upped = true)
+      document.addEventListener('pointermove', clear, { once: true })
     }
     const down = (event: PointerEvent) => {
       if (event.button !== 0) return
-      if (device.touched) {
-        const clear = () => {
-          clearTimeout(timer)
-          document.removeEventListener('touchmove', clear)
-        }
-        document.addEventListener('touchmove', clear, { once: true })
-        const timer = setTimeout(() => start(event), 80)
-        return
-      }
       start(event)
     }
     let target: HTMLElement = this

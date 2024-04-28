@@ -30,6 +30,7 @@ const style = /*css*/`
   align-items: center;
   height: 100%;
   position: relative;
+  flex-grow: 1;
 }
 :host(:focus-within) .container{
   z-index: 1;
@@ -67,7 +68,6 @@ const style = /*css*/`
   padding: 0 16px;
   height: 100%;
   width: 100%;
-  max-width: 240px;
   flex-grow: 1;
   background: none;
   outline: none;

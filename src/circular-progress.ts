@@ -81,12 +81,12 @@ export default class CircularProgress extends builder({
       },
       render: () => html`
         <svg class="determinable" viewBox="0 0 48 48" style="transform: rotate(-90deg);--dasharray: ${dasharray}px;">
-          <circle class="unckecked" style="cx: ${size / 2};cy: ${size / 2};r: ${(size - borderWidth) / 2};stroke-width: ${borderWidth}px" />
-          <circle ref="${(el: SVGCircleElement) => circular = el}" style="stroke-dashoffset: ${dasharray}px;cx: ${size / 2};cy: ${size / 2};r: ${(size - borderWidth) / 2};stroke-width: ${borderWidth}px" />
+          <circle class="unckecked" cx="${size / 2}" cy="${size / 2}" r="${(size - borderWidth) / 2}" style="stroke-width: ${borderWidth}px" />
+          <circle ref="${(el: SVGCircleElement) => circular = el}" cx="${size / 2}" cy="${size / 2}" r="${(size - borderWidth) / 2}" style="stroke-dashoffset: ${dasharray}px;stroke-width: ${borderWidth}px" />
         </svg>
         <div class="indeterminate">
           <svg viewBox="0 0 48 48" style="animation: stroke-rotate 5.2s ease-in-out infinite;--dasharray: ${dasharray}px;">
-            <circle transform="rotate(-90, ${size / 2}, ${size / 2})" style="animation: stroke 1.3s ease-in-out infinite; cx: ${size / 2};cy: ${size / 2};r: ${(size - borderWidth) / 2};stroke-width: ${borderWidth}px"></circle>
+            <circle transform="rotate(-90, ${size / 2}, ${size / 2})" cx="${size / 2}" cy="${size / 2}" r=" ${(size - borderWidth) / 2}" style="animation: stroke 1.3s ease-in-out infinite;stroke-width: ${borderWidth}px"></circle>
           </svg>
         </div>
       `

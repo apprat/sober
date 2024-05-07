@@ -24,7 +24,7 @@ const style = /*css*/`
 }
 `
 
-const name = 's-scrollbar'
+const name = 's-scroll-view'
 const props = {
 }
 

@@ -1,7 +1,7 @@
 import { builder, html } from './core/element.js'
 import { getStackingContext } from './core/utils.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
-import './scrollbar.js'
+import './scroll-view.js'
 
 const style = /*css*/`
 :host{
@@ -183,10 +183,10 @@ class Dialog extends builder({
           <div class="wrapper-container">
             <div class="container" part="container">
               <slot name="headline"></slot>
-              <s-scrollbar class="text">
+              <s-scroll-view class="text">
                 <slot></slot>
                 <slot name="text"></slot>
-              </s-scrollbar>
+              </s-scroll-view>
               <div class="action">
                 <slot name="action" @click="${dismiss}"></slot>
               </div>

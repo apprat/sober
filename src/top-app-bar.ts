@@ -50,7 +50,6 @@ slot[name=action]{
   text-transform: capitalize;
   text-overflow: ellipsis;
   white-space: nowrap;
-  text-align: center;
   margin: 0 16px;
 }
 @media(max-width: 840px){

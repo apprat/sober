@@ -2,7 +2,6 @@ import { builder, html } from './core/element.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const dark = `
-  color-scheme: dark;
   --s-color-primary: var(--s-color-dark-primary) !important;
   --s-color-on-primary: var(--s-color-dark-on-primary) !important;
   --s-color-primary-container: var(--s-color-dark-primary-container) !important;
@@ -129,7 +128,7 @@ const style = /*css*/`
 
 const name = 's-page'
 const props = {
-  theme: 'light' as 'light' | 'dark' | 'auto'
+  theme: 'light' as 'auto' | 'light' | 'dark'
 }
 
 export default class Component extends builder({

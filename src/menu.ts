@@ -2,7 +2,7 @@ import { builder, html } from './core/element.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 import Dropdown from './dropdown.js'
 import './ripple.js'
-import './scrollbar.js'
+import './scroll-view.js'
 
 const style = /*css*/`
 :host{
@@ -59,10 +59,10 @@ export default class Menu extends builder({
       render: () => html`
         <s-dropdown class="dropdown" ref="${(el: Dropdown) => dropdown = el}">
           <slot slot="trigger" name="trigger" @click.stop="${() => show()}"></slot>
-          <s-scrollbar class="container">
+          <s-scroll-view class="container">
             <slot></slot>
           </div>
-        </s-scrollbar>
+        </s-scroll-view>
       `
     }
   }

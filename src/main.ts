@@ -19,7 +19,7 @@ import Page from './page.js'
 import RadioButton from './radio-button.js'
 import Rate from './rate.js'
 import Ripple from './ripple.js'
-import Scrollbar from './scrollbar.js'
+import ScrollView from './scroll-view.js'
 import Search from './search.js'
 import SegmentedButton, { SegmentedButtonItem } from './segmented-button.js'
 import Slider from './slider.js'
@@ -55,7 +55,7 @@ export {
   RadioButton,
   Rate,
   Ripple,
-  Scrollbar,
+  ScrollView,
   Search,
   SegmentedButtonItem,
   SegmentedButton,

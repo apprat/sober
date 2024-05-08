@@ -50,29 +50,29 @@ export default class Component extends builder({
       const rect = trigger.getBoundingClientRect()
       const stackingContext = getStackingContext(shadowRoot)
       const gap = 4
-      const left = rect.left - stackingContext.left
-      const top = rect.top - stackingContext.top
       const cWidth = container.offsetWidth
-      const tWidth = trigger.offsetWidth
       const cHeight = container.offsetHeight
-      const tHeight = trigger.offsetHeight
       const position = {
-        top: top + trigger.offsetHeight + gap,
-        left: left - ((cWidth - tWidth) / 2),
-      }
-      //right
-      if (rect.left + ((cWidth + tWidth) / 2) > innerWidth) {
-        position.left = left - cWidth + tWidth
+        top: device.touched ? rect.top - gap - cHeight : rect.top + trigger.offsetHeight + gap,
+        left: rect.left - ((cWidth - rect.width) / 2),
       }
       //left
-      if (rect.left - ((cWidth + tWidth) / 2) < 0) {
-        position.left = left
+      if (position.left < 0) {
+        position.left = rect.left
+      }
+      //right
+      if (position.left + cWidth > innerWidth) {
+        position.left = rect.left + rect.width - cWidth
       }
       //top
-      if (rect.top + cHeight + tHeight + gap > innerHeight) {
-        position.top = top - cHeight - gap
+      if (position.top + cHeight > innerHeight) {
+        position.top = rect.top - gap - cHeight
       }
-      container.setAttribute('style', `left: ${position.left}px;top: ${position.top}px`)
+      //bottom
+      if (position.top < 0) {
+        position.top = rect.top + trigger.offsetHeight + gap
+      }
+      container.setAttribute('style', `left: ${position.left - stackingContext.left}px;top: ${position.top - stackingContext.top}px`)
       container.classList.add('show')
       state.showed = true
     }
@@ -100,7 +100,7 @@ export default class Component extends builder({
           @wheel.passive="${dismiss}"
           @mouseover="${() => !device.touched && show()}"
           @mouseleave="${() => !device.touched && dismiss()}"
-          @touchstart.passive="${touchShow}"
+          @touchstart="${touchShow}"
           @touchend="${touchDismiss}"
         >
           <slot name="trigger"></slot>

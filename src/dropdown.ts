@@ -31,6 +31,7 @@ const style = /*css*/`
 .container{
   position: absolute;
   pointer-events: none;
+  white-space: nowrap;
   opacity: 0;
 }
 .show .container{

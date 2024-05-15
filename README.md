@@ -29,7 +29,7 @@ import 'sober/button' //或只引入单个组件 Loading individual components
 Dynamic creation of components
 
 ```js
-import Button from 'sober/button'
+import { Button } from 'sober'
 
 const button = new Button()
 //或者 or

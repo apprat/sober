@@ -134,7 +134,7 @@ const props = {
   size: 'medium' as 'medium' | 'small' | 'large'
 }
 
-export default class Search extends builder({
+export class Search extends builder({
   name, style, props, propSyncs: true,
   setup() {
     return {

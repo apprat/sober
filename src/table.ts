@@ -21,7 +21,7 @@ const name = 's-table'
 const props = {
 }
 
-export default class Table extends builder({
+export class Table extends builder({
   name, style, props,
   setup() {
     return {

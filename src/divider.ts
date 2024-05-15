@@ -14,7 +14,7 @@ const name = 's-divider'
 const props = {
 }
 
-export default class Divider extends builder({
+export class Divider extends builder({
   name, style, props,
   setup() {
     return {

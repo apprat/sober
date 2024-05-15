@@ -55,7 +55,7 @@ const props = {
   type: 'standard' as 'standard' | 'filled' | 'filled-tonal' | 'outlined',
 }
 
-export default class IconButton extends builder({
+export class IconButton extends builder({
   name, style, props, propSyncs: true,
   setup() {
     return {

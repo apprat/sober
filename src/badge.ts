@@ -27,7 +27,7 @@ const name = 's-badge'
 const props = {
 }
 
-export default class Badge extends builder({
+export class Badge extends builder({
   name, props, style,
   setup() {
     return {

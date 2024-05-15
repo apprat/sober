@@ -65,7 +65,7 @@ const props = {
   step: 1
 }
 
-export default class Rate extends builder({
+export class Rate extends builder({
   name, style, props, propSyncs: ['readonly'],
   setup() {
     let checked: HTMLDivElement

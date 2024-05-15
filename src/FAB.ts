@@ -1,5 +1,5 @@
 import { builder, html } from './core/element.js'
-import Ripple from './ripple.js'
+import { Ripple } from './ripple.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 
 const style = /*css*/`
@@ -71,7 +71,7 @@ const props = {
   extended: false,
 }
 
-export default class FAB extends builder({
+export class FAB extends builder({
   name, style, props, propSyncs: true,
   setup() {
     let ripple: Ripple

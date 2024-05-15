@@ -66,7 +66,7 @@ const props = {
   value: 0
 }
 
-export default class LinearProgress extends builder({
+export class LinearProgress extends builder({
   name, style, props, propSyncs: ['indeterminate'],
   setup() {
     let linear: HTMLDivElement

@@ -100,7 +100,7 @@ const props = {
   fold: 840
 }
 
-export default class Drawer extends builder({
+export class Drawer extends builder({
   name, props, style,
   setup() {
     let container: HTMLDivElement

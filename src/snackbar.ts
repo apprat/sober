@@ -166,7 +166,7 @@ interface Snackbar {
   removeEventListener<K extends keyof EventMap>(type: K, listener: (this: Snackbar, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
-export default Snackbar
+export { Snackbar }
 
 declare global {
   namespace JSX {

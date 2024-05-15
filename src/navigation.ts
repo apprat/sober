@@ -42,7 +42,7 @@ const props = {
   mode: 'bottom' as 'bottom' | 'rail'
 }
 
-export default class Navigation extends builder({
+export class Navigation extends builder({
   name, style, props, propSyncs: true,
   setup() {
     let options: NavigationItem[] = []

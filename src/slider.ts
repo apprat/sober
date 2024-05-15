@@ -151,7 +151,7 @@ const props = {
   value: 50,
 }
 
-export default class Slider extends builder({
+export class Slider extends builder({
   name, style, props, propSyncs: ['disabled', 'labeled'],
   setup() {
     let activeTrack: HTMLDivElement

@@ -116,7 +116,7 @@ const props = {
   checked: false
 }
 
-export default class Switch extends builder({
+export class Switch extends builder({
   name, style, props, propSyncs: true,
   setup() {
     this.addEventListener('click', () => {

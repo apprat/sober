@@ -39,7 +39,7 @@ const name = 's-tooltip'
 const props = {
 }
 
-export default class Component extends builder({
+export class Tooltip extends builder({
   name, style, props,
   setup(shadowRoot) {
     let trigger: HTMLDivElement
@@ -109,7 +109,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Tooltip.define()
 
 declare global {
   namespace JSX {
@@ -118,13 +118,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Tooltip
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

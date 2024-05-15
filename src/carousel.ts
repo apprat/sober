@@ -55,7 +55,7 @@ const props = {
   duration: 4000
 }
 
-export default class Carousel extends builder({
+export class Carousel extends builder({
   name, style, props,
   setup() {
     let container: HTMLDivElement

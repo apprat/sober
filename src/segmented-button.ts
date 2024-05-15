@@ -18,7 +18,7 @@ const name = 's-segmented-button'
 const props = {
 }
 
-export default class SegmentedButton extends builder({
+export class SegmentedButton extends builder({
   name, style, props,
   setup() {
     let options: SegmentedButtonItem[] = []

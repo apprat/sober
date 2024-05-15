@@ -164,7 +164,7 @@ const props = {
   label: ''
 }
 
-export default class Component extends builder({
+export class TextField extends builder({
   name, style, props, propSyncs: true,
   setup() {
     let container: HTMLDivElement
@@ -221,7 +221,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+TextField.define()
 
 declare global {
   namespace JSX {
@@ -230,13 +230,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: TextField
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

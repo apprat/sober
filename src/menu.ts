@@ -1,6 +1,6 @@
 import { builder, html } from './core/element.js'
 import type { JSXAttributes } from './core/types/HTMLAttributes.js'
-import Dropdown from './dropdown.js'
+import { Dropdown } from './dropdown.js'
 import './ripple.js'
 import './scroll-view.js'
 
@@ -40,7 +40,7 @@ const props = {
   group: '' as 'start' | 'end' | ''
 }
 
-export default class Menu extends builder({
+export class Menu extends builder({
   name, style, props, propSyncs: ['group'],
   setup() {
     let dropdown: Dropdown

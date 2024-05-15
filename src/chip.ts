@@ -58,7 +58,7 @@ const props = {
   clickable: false
 }
 
-export default class Chip extends builder({
+export class Chip extends builder({
   name, style, props, propSyncs: true,
   setup() {
     return {

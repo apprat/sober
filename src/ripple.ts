@@ -74,7 +74,7 @@ const pointerUp = (fn: Function) => {
   document.addEventListener('pointercancel', up)
 }
 
-export default class Component extends builder({
+export class Ripple extends builder({
   name, style, props, propSyncs: ['attached'],
   setup() {
     let container: HTMLDivElement
@@ -159,7 +159,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Ripple.define()
 
 declare global {
   namespace JSX {
@@ -168,13 +168,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Ripple
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

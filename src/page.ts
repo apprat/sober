@@ -131,7 +131,7 @@ const props = {
   theme: 'light' as 'auto' | 'light' | 'dark'
 }
 
-export default class Component extends builder({
+export class Page extends builder({
   name, style, props, propSyncs: ['theme'],
   setup() {
     return {
@@ -142,7 +142,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+Page.define()
 
 declare global {
   namespace JSX {
@@ -151,13 +151,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: Page
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

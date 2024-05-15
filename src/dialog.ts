@@ -202,6 +202,8 @@ class Dialog extends builder({
 
 Dialog.define()
 
+export { Dialog }
+
 interface EventMap extends HTMLElementEventMap {
   show: Event
   showed: Event
@@ -213,8 +215,6 @@ interface Dialog {
   addEventListener<K extends keyof EventMap>(type: K, listener: (this: Dialog, ev: EventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
   removeEventListener<K extends keyof EventMap>(type: K, listener: (this: Dialog, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
-
-export default Dialog
 
 declare global {
   namespace JSX {

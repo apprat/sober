@@ -118,7 +118,7 @@ const props = {
   type: 'filled' as 'filled' | 'elevated' | 'filled-tonal' | 'outlined' | 'text'
 }
 
-export default class Button extends builder({
+export class Button extends builder({
   name, style, props, propSyncs: true,
   setup() {
     return {

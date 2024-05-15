@@ -63,7 +63,7 @@ const name = 's-top-app-bar'
 const props = {
 }
 
-export default class Component extends builder({
+export class TopAppBar extends builder({
   name, style, props,
   setup() {
     return {
@@ -81,7 +81,7 @@ export default class Component extends builder({
   }
 }) { }
 
-Component.define()
+TopAppBar.define()
 
 declare global {
   namespace JSX {
@@ -90,13 +90,13 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Component
+    [name]: TopAppBar
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof Component
+    [name]: typeof props
   }
 }

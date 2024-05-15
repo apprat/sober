@@ -81,7 +81,7 @@ const props = {
   clickable: false
 }
 
-export default class Card extends builder({
+export class Card extends builder({
   name, style, props, propSyncs: true,
   setup() {
     return {

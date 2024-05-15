@@ -55,7 +55,7 @@ const props = {
   type: 'none' as keyof typeof svgData
 }
 
-export default class Icon extends builder({
+export class Icon extends builder({
   name, style, props, propSyncs: ['type'],
   setup() {
     let path: SVGAElement

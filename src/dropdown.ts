@@ -54,7 +54,7 @@ const props = {
 
 type ShowOption = HTMLElement | { x: number, y: number, origin?: string }
 
-export default class Dropdown extends builder({
+export class Dropdown extends builder({
   name, style, props,
   setup(shadowRoot) {
     let trigger: HTMLDivElement

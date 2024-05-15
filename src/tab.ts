@@ -49,7 +49,7 @@ const props = {
   mode: 'scrollable' as 'scrollable' | 'fixed',
 }
 
-export default class Tab extends builder({
+export class Tab extends builder({
   name, style, props, propSyncs: ['mode'],
   setup() {
     let container: HTMLDivElement

@@ -63,7 +63,7 @@ const props = {
   value: 0
 }
 
-export default class CircularProgress extends builder({
+export class CircularProgress extends builder({
   name, style, props, propSyncs: ['indeterminate'],
   setup() {
     let circular: SVGCircleElement

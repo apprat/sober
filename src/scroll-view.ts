@@ -28,7 +28,7 @@ const name = 's-scroll-view'
 const props = {
 }
 
-export default class Scrollbar extends builder({
+export class ScrollView extends builder({
   name, style, props,
   setup() {
     return {
@@ -39,7 +39,7 @@ export default class Scrollbar extends builder({
   }
 }) { }
 
-Scrollbar.define()
+ScrollView.define()
 
 declare global {
   namespace JSX {
@@ -48,7 +48,7 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: Scrollbar
+    [name]: ScrollView
   }
 }
 

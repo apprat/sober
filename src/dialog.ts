@@ -49,7 +49,6 @@ const style = /*css*/`
   transform: scale(1);
 }
 .container{
-  min-width: 280px;
   max-width: calc(100% - 48px);
   max-height: calc(100% - 48px);
   background: var(--s-color-surface-container-highest, #e2e2e5);
@@ -100,6 +99,7 @@ const style = /*css*/`
 ::slotted([slot=text]),
 ::slotted(:not([slot])){
   max-width: 520px;
+  min-width: 280px;
 }
 :host([size=full]) ::slotted([slot=text]),
 :host([size=full]) ::slotted(:not([slot])){

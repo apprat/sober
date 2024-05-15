@@ -53,7 +53,7 @@ export default class Component extends builder({
       const cWidth = container.offsetWidth
       const cHeight = container.offsetHeight
       const position = {
-        top: device.touched ? rect.top - gap - cHeight : rect.top + trigger.offsetHeight + gap,
+        top: rect.top - gap - cHeight,
         left: rect.left - ((cWidth - rect.width) / 2),
       }
       //left
@@ -63,10 +63,6 @@ export default class Component extends builder({
       //right
       if (position.left + cWidth > innerWidth) {
         position.left = rect.left + rect.width - cWidth
-      }
-      //top
-      if (position.top + cHeight > innerHeight) {
-        position.top = rect.top - gap - cHeight
       }
       //bottom
       if (position.top < 0) {

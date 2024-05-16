@@ -5,7 +5,7 @@ const style = /*css*/`
 :host{
   display: block;
   height: 1px;
-  background: var(--s-color-outline-variant, #c1c7ce);
+  background: var(--s-color-outline-variant, #c7c5d0);
   margin: 0 16px;
 }
 `

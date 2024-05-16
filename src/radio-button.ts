@@ -13,7 +13,7 @@ const style = /*css*/`
   height: 40px;
   border-radius: 50%;
   position: relative;
-  color: var(--s-color-primary, #006495);
+  color: var(--s-color-primary, #5256a9);
 }
 :host([disabled=true]){
   pointer-events: none;
@@ -24,14 +24,14 @@ const style = /*css*/`
   fill: currentColor;
 }
 .color{
-  color: var(--s-color-on-surface-variant, #41474d);
+  color: var(--s-color-on-surface-variant, #46464f);
 }
 :host([checked=true]) .color,
 :host([indeterminate=true]) .color{
   color: currentColor;
 }
 :host([disabled=true]) .color{
-  color: color-mix(in srgb ,var(--s-color-on-surface, #1a1c1e) 38%, transparent) !important;
+  color: color-mix(in srgb ,var(--s-color-on-surface, #1c1b1f) 38%, transparent) !important;
 }
 `
 

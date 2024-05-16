@@ -5,8 +5,8 @@ const style = /*css*/`
 :host{
   display: flex;
   height: 64px;
-  background: var(--s-color-surface-container, #edeef1);
-  color: var(--s-color-on-surface, #1a1c1e);
+  background: var(--s-color-surface-container, #f0edf1);
+  color: var(--s-color-on-surface, #1c1b1f);
   align-items: center;
   padding: 0 8px;
 }
@@ -25,7 +25,7 @@ slot[name=action]{
   margin: 0 4px;
 }
 ::slotted(s-search){
-  background: var(--s-color-surface, #fcfcff);
+  background: var(--s-color-surface, #fffbff);
 }
 ::slotted(s-top-app-bar){
   height: 100%;

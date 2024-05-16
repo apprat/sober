@@ -13,12 +13,12 @@ const style = /*css*/`
     background: transparent;
   }
   :host::-webkit-scrollbar-thumb{
-    background: var(--s-color-outline-variant, #c1c7ce);
+    background: var(--s-color-outline-variant, #c7c5d0);
     border-radius: 3px;
   }
   @supports not selector(::-webkit-scrollbar){
     :host{
-      scrollbar-color: var(--s-color-outline-variant, #c1c7ce) transparent;
+      scrollbar-color: var(--s-color-outline-variant, #c7c5d0) transparent;
     }
   }
 }

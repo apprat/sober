@@ -39,7 +39,7 @@ const style = /*css*/`
   opacity: 1;
 }
 ::slotted(*:not([slot])){
-  background: var(--s-color-surface-container-low, #f3f3f6);
+  background: var(--s-color-surface-container-low, #f6f2f7);
   border-radius: 4px;
   box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
   min-width: var(--dropdown-min-width, auto);

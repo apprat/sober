@@ -8,8 +8,8 @@ const style = /*css*/`
   max-width: 520px;
   min-width: 240px;
   height: 48px;
-  background: var(--s-color-surface-container-high, #e8e8eb);
-  color: var(--s-color-on-surface, #1a1c1e);
+  background: var(--s-color-surface-container-high, #eae7ec);
+  color: var(--s-color-on-surface, #1c1b1f);
   border-radius: 24px;
   font-size: .875rem;
   position: relative;
@@ -53,7 +53,7 @@ const style = /*css*/`
   z-index: 1;
 }
 ::slotted([slot=drop]){
-  border-top: solid 1px var(--s-color-outline-variant, #c1c7ce);
+  border-top: solid 1px var(--s-color-outline-variant, #c7c5d0);
   margin-top: 48px;
   border-radius: 4px;
 }
@@ -78,7 +78,7 @@ const style = /*css*/`
   font-family: inherit;
 }
 ::slotted(input[type=text])::placeholder{
-  color: var(--s-color-outline, #72787e);
+  color: var(--s-color-outline, #777680);
 }
 :host([size=large]) ::slotted(input[type=text]){
   padding: 0 24px;

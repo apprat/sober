@@ -9,7 +9,7 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
   font-size: .875rem;
-  color: var(--s-color-on-surface, #1a1c1e);
+  color: var(--s-color-on-surface, #1c1b1f);
 }
 .dropdown{
   display: block;
@@ -24,12 +24,12 @@ const style = /*css*/`
   display: block;
 }
 ::slotted(s-menu[group=start]){
-  border-top: solid 1px var(--s-color-outline-variant, #c1c7ce);
+  border-top: solid 1px var(--s-color-outline-variant, #c7c5d0);
   margin-top: 8px;
   padding-top: 8px;
 }
 ::slotted(s-menu[group=end]){
-  border-bottom: solid 1px var(--s-color-outline-variant, #c1c7ce);
+  border-bottom: solid 1px var(--s-color-outline-variant, #c7c5d0);
   margin-bottom: 8px;
   padding-bottom: 8px;
 }

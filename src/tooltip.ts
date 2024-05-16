@@ -13,12 +13,12 @@ const style = /*css*/`
   left: 0;
   top: 0;
   z-index: 1;
-  background: var(--s-color-inverse-surface, #2f3133);
-  color: var(--s-color-inverse-on-surface, #f0f0f3);
+  background: var(--s-color-inverse-surface, #313034);
+  color: var(--s-color-inverse-on-surface, #f3eff4);
   font-size: .875rem;
   font-weight: 400;
   padding: 6px 8px;
-  border-radius: var(--s-shape-corner-extra-small, 4px);
+  border-radius: 4px;
   white-space: nowrap;
   opacity: .95;
   filter: opacity(0);
@@ -30,7 +30,7 @@ const style = /*css*/`
 }
 ::slotted(img){
   display: block;
-  border-radius: var(--s-shape-corner-extra-small, 4px);
+  border-radius: 4px;
   margin: 2px 0;
 }
 `

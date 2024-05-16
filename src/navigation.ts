@@ -8,7 +8,7 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background: var(--s-color-surface, #fcfcff);
+  background: var(--s-color-surface, #fffbff);
   box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
   position: relative;
 }
@@ -98,11 +98,11 @@ const itemStyle = /*css*/`
   width: 100%;
   max-width: 80px;
   text-transform: capitalize;
-  color: var(--s-color-on-surface-variant, #41474d);
+  color: var(--s-color-on-surface-variant, #46464f);
   transition: color .2s;
 }
 :host([checked=true]){
-  color: var(--s-color-primary, #006495);
+  color: var(--s-color-primary, #5256a9);
 }
 .icon{
   position: relative;
@@ -123,7 +123,7 @@ const itemStyle = /*css*/`
   top: 0;
   transform: scale(0);
   transition: transform .2s;
-  background: var(--s-color-secondary-container, #d4e4f6);
+  background: var(--s-color-secondary-container, #e2e0f9);
 }
 :host([checked=true]) .icon::before{
   transform: scale(1);

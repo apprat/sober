@@ -12,34 +12,34 @@ const style = /*css*/`
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  color: var(--s-color-on-surface-variant, #41474d);
+  color: var(--s-color-on-surface-variant, #46464f);
   position: relative;
   box-sizing: border-box;
   overflow: hidden;
 }
 :host([disabled=true]){
   pointer-events: none !important;
-  color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 38%, transparent) !important;
+  color: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 38%, transparent) !important;
 }
 :host([type=filled]){
-  background: var(--s-color-primary, #006495);
+  background: var(--s-color-primary, #5256a9);
   color: var(--s-color-on-primary, #ffffff);
 }
 :host([type=filled][disabled=true]){
-  background: color-mix(in srgb ,var(--s-color-on-surface, #1a1c1e) 12%, transparent) !important;
+  background: color-mix(in srgb ,var(--s-color-on-surface, #1c1b1f) 12%, transparent) !important;
 }
 :host([type=filled-tonal]){
-  background: var(--s-color-secondary-container, #d4e4f6);
-  color: var(--s-color-on-secondary-container, #0d1d29);
+  background: var(--s-color-secondary-container, #e2e0f9);
+  color: var(--s-color-on-secondary-container, #191a2c);
 }
 :host([type=filled-tonal][disabled=true]){
-  background: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent) !important;
+  background: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 12%, transparent) !important;
 }
 :host([type=outlined]){
-  border: solid 1px var(--s-color-outline, #72787e)
+  border: solid 1px var(--s-color-outline, #777680)
 }
 :host([type=outlined][disabled=true]){
-  border-color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e)) !important;
+  border-color: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f)) !important;
 }
 .ripple{
   border-radius: 0;

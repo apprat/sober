@@ -5,13 +5,13 @@ const style = /*css*/`
 :host{
   display: block;
   height: 4px;
-  color: var(--s-color-primary, #006495);
+  color: var(--s-color-primary, #5256a9);
   position: relative;
   border-radius: 2px;
   overflow: hidden;
 }
 .track{
-  background: var(--s-color-secondary-container, #d4e4f6);
+  background: var(--s-color-secondary-container, #e2e0f9);
   height: 100%;
 }
 .float{

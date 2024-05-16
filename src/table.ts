@@ -5,7 +5,7 @@ const style = /*css*/`
 :host{
   display: block;
   font-size: .875rem;
-  border: solid 1px var(--s-color-outline-variant, #c1c7ce);
+  border: solid 1px var(--s-color-outline-variant, #c7c5d0);
   border-radius: 8px;
   white-space: nowrap;
   overflow: hidden;
@@ -39,7 +39,7 @@ const theadStyle = /*css*/`
 :host{
   display: table-header-group;
   font-weight: 600;
-  color: var(--s-color-on-surface-variant, #41474d);
+  color: var(--s-color-on-surface-variant, #46464f);
 }
 `
 
@@ -63,11 +63,11 @@ export class Thead extends builder({
 const tbodyStyle = /*css*/`
 :host{
   display: table-row-group;
-  color: var(--s-color-on-surface, #1a1c1e);
+  color: var(--s-color-on-surface, #1c1b1f);
   position: relative;
 }
 ::slotted(s-tr){
-  border-top: solid 1px var(--s-color-outline-variant, #c1c7ce);
+  border-top: solid 1px var(--s-color-outline-variant, #c7c5d0);
 }
 `
 

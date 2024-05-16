@@ -8,7 +8,7 @@ const style = /*css*/`
   position: relative;
   width: 48px;
   height: 48px;
-  color: var(--s-color-primary, #006495);
+  color: var(--s-color-primary, #5256a9);
 }
 :host([indeterminate=true]) .determinable,
 .indeterminate{
@@ -52,7 +52,7 @@ circle{
   stroke-dasharray: var(--dasharray)
 }
 .unckecked{
-  stroke: var(--s-color-secondary-container, #d4e4f6);
+  stroke: var(--s-color-secondary-container, #e2e0f9);
 }
 `
 

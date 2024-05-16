@@ -51,7 +51,7 @@ const style = /*css*/`
 .container{
   max-width: calc(100% - 48px);
   max-height: calc(100% - 48px);
-  background: var(--s-color-surface-container-highest, #e2e2e5);
+  background: var(--s-color-surface-container-highest, #e5e1e6);
   position: relative;
   border-radius: 28px;
   box-shadow: var(--s-elevation-level5, 0 8px 10px -6px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12));
@@ -74,7 +74,7 @@ const style = /*css*/`
   font-size: 1.5rem;
   line-height: 1.6;
   font-weight: 600;
-  color: var(--s-color-on-surface, #1a1c1e);
+  color: var(--s-color-on-surface, #1c1b1f);
   flex-shrink: 0;
 }
 .text{

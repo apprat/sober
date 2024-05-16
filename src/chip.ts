@@ -9,7 +9,7 @@ const style = /*css*/`
   vertical-align: middle;
   padding: 0 16px;
   height: 32px;
-  border: solid 1px var(--s-color-color-outline, #79747E);
+  border: solid 1px var(--s-color-color-outline, #777680);
   border-radius: 8px;
   box-sizing: border-box;
   font-size: .875rem;
@@ -22,8 +22,8 @@ const style = /*css*/`
   box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
 }
 :host([type=filled-tonal]){
-  background: var(--s-color-secondary-container, #d4e4f6);
-  color: var(--s-color-on-surface-variant, #41474d);
+  background: var(--s-color-secondary-container, #e2e0f9);
+  color: var(--s-color-on-surface-variant, #46464f);
   border: none;
 }
 .ripple{

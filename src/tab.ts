@@ -7,15 +7,15 @@ const style = /*css*/`
   display: flex;
   justify-content: center;
   position: relative;
-  background: var(--s-color-surface, #fcfcff);
-  color: var(--s-color-on-surface-variant, #41474d);
+  background: var(--s-color-surface, #fffbff);
+  color: var(--s-color-on-surface-variant, #46464f);
 }
 :host::before{
   content: '';
   position: absolute;
   width: 100%;
   height: 1px;
-  background: var(--s-color-surface-variant, #dee3ea);
+  background: var(--s-color-surface-variant, #e4e1ec);
   bottom: 0;
   left: 0;
 }
@@ -123,7 +123,7 @@ const itemStyle = /*css*/`
   padding: 0 16px;
 }
 :host([checked=true]){
-  color: var(--s-color-primary, #006495);
+  color: var(--s-color-primary, #5256a9);
 }
 .container{
   display: flex;
@@ -139,7 +139,7 @@ const itemStyle = /*css*/`
   bottom: 0;
   height: 3px;
   width: 100%;
-  background: var(--s-color-primary, #006495);
+  background: var(--s-color-primary, #5256a9);
   border-radius: 1.5px 1.5px 0 0;
   transition: filter .2s, transform .2s, width .2s;
   filter: opacity(0);

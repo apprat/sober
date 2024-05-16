@@ -6,13 +6,13 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
   min-width: 280px;
-  border-radius: var(--s-shape-corner-extra-small, 4px);
+  border-radius: 4px;
   position: relative;
-  color: var(--s-color-primary, #006495);
+  color: var(--s-color-primary, #5256a9);
 }
 .container{
   border-radius: inherit;
-  color: var(--s-color-outline, #72787e);
+  color: var(--s-color-outline, #777680);
   display: flex;
   align-items: center;
 }
@@ -54,7 +54,7 @@ const style = /*css*/`
   height: 8px;
   width: 12px;
   box-sizing: border-box;
-  border-top-left-radius: var(--s-shape-corner-extra-small, 4px);
+  border-top-left-radius: 4px;
   transition: box-shadow .2s;
   flex-shrink: 0;
 }
@@ -64,14 +64,14 @@ const style = /*css*/`
 }
 .label::after{
   content: '';
-  border-color: var(--s-color-outline, #72787e);
+  border-color: var(--s-color-outline, #777680);
   border-width: 1px;
   border-top-style: solid;
   border-right-style: solid;
   height: 8px;
   flex-grow: 1;
   box-sizing: border-box;
-  border-top-right-radius: var(--s-shape-corner-extra-small, 4px);
+  border-top-right-radius: 4px;
   transition: box-shadow .2s;
 }
 :host(:focus-within) .label::after{
@@ -111,7 +111,7 @@ const style = /*css*/`
   background: none;
   outline: none;
   font-size: inherit;
-  color: var(--s-color-on-surface, #1a1c1e);
+  color: var(--s-color-on-surface, #1c1b1f);
   box-sizing: border-box;
   line-height: 1;
   font-family: inherit;
@@ -143,7 +143,7 @@ const style = /*css*/`
 }
 ::slotted(input[type=text])::placeholder,
 ::slotted(textarea)::placeholder{
-  color: var(--s-color-outline, #72787e);
+  color: var(--s-color-outline, #777680);
 }
 ::slotted([slot=end]){
   flex-shrink: 0;

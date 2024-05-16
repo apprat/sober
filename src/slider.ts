@@ -5,7 +5,7 @@ import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 const style = /*css*/`
 :host{
   display: block;
-  color: var(--s-color-primary, #006495);
+  color: var(--s-color-primary, #5256a9);
   height: 40px;
   cursor: pointer;
   position: relative;
@@ -27,11 +27,11 @@ const style = /*css*/`
   height: 4px;
   overflow: hidden;
   position: relative;
-  background: var(--s-color-secondary-container, #d4e4f6);
+  background: var(--s-color-secondary-container, #e2e0f9);
   border-radius: 2px;
 }
 :host([disabled=true]) .track{
-  background: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 31.57894736842105%, transparent);
+  background: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 31.57894736842105%, transparent);
 }
 .track>.active-track{
   position: absolute;
@@ -43,7 +43,7 @@ const style = /*css*/`
   transform: translateX(-50%);
 }
 :host([disabled=true]) .track>.active-track{
-  background: var(--s-color-on-surface, #1a1c1e);
+  background: var(--s-color-on-surface, #1c1b1f);
 }
 .container{
   position: absolute;
@@ -76,7 +76,7 @@ const style = /*css*/`
   margin: 10px;
 }
 :host([disabled=true]) .handle{
-  background: var(--s-color-on-surface, #1a1c1e);
+  background: var(--s-color-on-surface, #1c1b1f);
   box-shadow: none;
 }
 .label{

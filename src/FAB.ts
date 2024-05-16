@@ -14,8 +14,8 @@ const style = /*css*/`
   height: 56px;
   width: 56px;
   border-radius: 28px;
-  background: var(--s-color-primary-container, #cbe6ff);
-  color: var(--s-color-on-primary-container, #001e30);
+  background: var(--s-color-primary-container, #e1e0ff);
+  color: var(--s-color-on-primary-container, #090764);
   transition: box-shadow .2s;
   font-size: .875rem;
   font-weight: 500;

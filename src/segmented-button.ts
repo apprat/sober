@@ -7,7 +7,7 @@ const style = /*css*/`
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
-  border: solid 1px var(--s-color-outline, #72787e);
+  border: solid 1px var(--s-color-outline, #777680);
   border-radius: 20px;
   height: 40px;
   overflow: hidden;
@@ -64,7 +64,7 @@ const itemStyle = /*css*/`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--s-color-on-surface, #1a1c1e);
+  color: var(--s-color-on-surface, #1c1b1f);
   height: 100%;
   min-width: 48px;
   padding: 0 16px;
@@ -74,19 +74,19 @@ const itemStyle = /*css*/`
   position: relative;
   cursor: pointer;
   box-sizing: border-box;
-  border-left: solid 1px var(--s-color-outline, #72787e);
+  border-left: solid 1px var(--s-color-outline, #777680);
 }
 :host(:first-child){
   border-left-color: transparent;
   margin-left: -1px;
 }
 :host([checked=true]){
-  background: var(--s-color-secondary-container, #d4e4f6);
-  color: var(--s-color-on-secondary-container, #0d1d29);
+  background: var(--s-color-secondary-container, #e2e0f9);
+  color: var(--s-color-on-secondary-container, #191a2c);
 }
 :host([disabled=true]){
   pointer-events: none;
-  color: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 38%, transparent);
+  color: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 38%, transparent);
 }
 ::slotted(s-icon){
   width: 18px;

@@ -9,7 +9,7 @@ const style = /*css*/`
   align-items: center;
   width: 24px;
   height: 24px;
-  color: var(--s-color-on-surface-variant, #41474d);
+  color: var(--s-color-on-surface-variant, #46464f);
   fill: currentColor;
   box-sizing: border-box;
 }

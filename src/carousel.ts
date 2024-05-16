@@ -5,10 +5,10 @@ const style = /*css*/`
 :host{
   display: block;
   height: 280px;
-  background: var(--s-color-surface-container-low, #f3f3f6);
+  background: var(--s-color-surface-container-low, #f6f2f7);
   border-radius: 8px;
   position: relative;
-  color: var(--s-color-primary, #006495);
+  color: var(--s-color-primary, #5256a9);
   overflow: hidden;
 }
 .container{
@@ -31,7 +31,7 @@ const style = /*css*/`
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--s-color-secondary-container, #d4e4f6);
+  background: var(--s-color-secondary-container, #e2e0f9);
   flex-shrink: 0;
   margin: 16px 4px;
   cursor: pointer;

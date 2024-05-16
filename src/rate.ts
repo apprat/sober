@@ -9,8 +9,8 @@ const style = /*css*/`
   position: relative;
   overflow: hidden;
   width: calc(1em * 5);
-  --rate-unchecked-color: var(--s-color-secondary-container, #d4e4f6);
-  --rate-checked-color: var(--s-color-primary, #006495);
+  --rate-unchecked-color: var(--s-color-secondary-container, #e2e0f9);
+  --rate-checked-color: var(--s-color-primary, #5256a9);
 }
 .unchecked{
   width: 100%;

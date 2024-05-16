@@ -9,7 +9,7 @@ const style = /*css*/`
   align-items: center;
   cursor: pointer;
   position: relative;
-  color: var(--s-color-primary, #006495);
+  color: var(--s-color-primary, #5256a9);
   font-size: 32px;
   width: 1.625em;
   height: 1em;
@@ -22,7 +22,7 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   border-radius: inherit;
-  background: var(--s-color-outline, #72787e);
+  background: var(--s-color-outline, #777680);
   position: absolute;
   padding: .0625em;
   overflow: hidden;
@@ -33,24 +33,24 @@ const style = /*css*/`
   background: currentColor;
 }
 :host([disabled=true]) .track{
-  background: var(--s-color-on-surface, #1a1c1e);
+  background: var(--s-color-on-surface, #1c1b1f);
   opacity: .12;
 }
 :host([checked=true][disabled=true]) .track{
-  background: var(--s-color-on-surface, #1a1c1e);
+  background: var(--s-color-on-surface, #1c1b1f);
 }
 .track::before{
   content: '';
   display: block;
   height: 100%;
-  background: var(--s-color-surface-container-highest, #e2e2e5);
+  background: var(--s-color-surface-container-highest, #e5e1e6);
   border-radius: inherit;
 }
 :host([checked=true]) .track::before{
   opacity: 0;
 }
 :host([disabled=true]) .track::before{
-  background: var(--s-color-surface, #fcfcff);
+  background: var(--s-color-surface, #fffbff);
 }
 .ripple{
   height: 1.25em;
@@ -63,14 +63,14 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  color: var(--s-color-outline, #72787e);
+  color: var(--s-color-outline, #777680);
 }
 :host([checked=true]) .ripple{
   transform: translateX(50%);
   color: currentColor;
 }
 .thumb{
-  background: var(--s-color-outline, #72787e);
+  background: var(--s-color-outline, #777680);
   border-radius: 50%;
   width: .75em;
   height: .75em;
@@ -89,11 +89,11 @@ const style = /*css*/`
   box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
 }
 :host([disabled=true]) .thumb{
-  background: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 38%, transparent);
+  background: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 38%, transparent);
   box-shadow: none;
 }
 :host([checked=true][disabled=true]) .thumb{
-  background: var(--s-color-surface, #fcfcff);
+  background: var(--s-color-surface, #fffbff);
 }
 .icon{
   width: .5em;
@@ -106,7 +106,7 @@ const style = /*css*/`
   opacity: 1;
 }
 :host([checked=true][disabled=true]) .icon{
-  fill: color-mix(in srgb, var(--s-color-on-surface, #1a1c1e) 12%, transparent);
+  fill: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 12%, transparent);
 }
 `
 

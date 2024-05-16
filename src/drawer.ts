@@ -47,8 +47,8 @@ const style = /*css*/`
   width: 280px;
   display: flow-root;
   flex-shrink: 0;
-  background: var(--s-color-surface-container-low, #f3f3f6);
-  border-color: var(--s-color-surface-variant, #dee3ea);
+  background: var(--s-color-surface-container-low, #f6f2f7);
+  border-color: var(--s-color-surface-variant, #e4e1ec);
   border-width: 1px;
   height: 100%;
   box-sizing: border-box;

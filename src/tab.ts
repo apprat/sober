@@ -158,6 +158,7 @@ const itemStyle = /*css*/`
 }
 ::slotted([slot=icon]){
   height: 42px;
+  color: inherit;
 }
 ::slotted([slot=text]){
   white-space: nowrap;

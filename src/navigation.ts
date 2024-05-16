@@ -137,6 +137,7 @@ const itemStyle = /*css*/`
 ::slotted([slot=icon]){
   position: relative;
   pointer-events: none;
+  color: inherit;
 }
 ::slotted([slot=text]){
   position: relative;

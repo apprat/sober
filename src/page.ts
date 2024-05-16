@@ -43,6 +43,8 @@ const style = /*css*/`
   background: var(--s-color-background);
   font-family: Roboto, system-ui;
   height: 100%;
+  --s-color-scrim: #000000;
+
   --s-color-primary: #5256a9;
   --s-color-on-primary: #ffffff;
   --s-color-primary-container: #e1e0ff;

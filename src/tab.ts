@@ -59,13 +59,11 @@ export class Tab extends builder({
     let changed = false
     const slotChange = (_: Event, el: HTMLSlotElement) => {
       options = el.assignedElements().filter((item) => item instanceof TabItem) as TabItem[]
+      selectedIndex = -1
       let target: null | TabItem = null
-      options.forEach((item, index) => {
-        if (item.selected) {
-          target = item
-          selectedIndex = index
-        }
-      })
+      for (const item of options) {
+        if (item.selected) target = item
+      }
       if (target) update(target)
     }
     const update = (target: TabItem) => {
@@ -92,7 +90,7 @@ export class Tab extends builder({
           }
           if (old) {
             old.indicator.addEventListener('transitionend', () => {
-              old.indicator.removeAttribute('style')
+              old?.indicator.removeAttribute('style')
               target.indicator.removeAttribute('style')
             }, { once: true })
             const oldLeft = old.indicator.getBoundingClientRect().left

@@ -27,10 +27,10 @@ export class SegmentedButton extends builder({
     let changed = false
     const slotChange = (_: Event, el: HTMLSlotElement) => {
       options = el.assignedElements().filter((item) => item instanceof SegmentedButtonItem) as SegmentedButtonItem[]
+      selectedIndex = -1
       let target: null | SegmentedButtonItem = null
       for (const item of options) {
-        if (item === target) continue
-        if (item.selected) item.removeAttribute('selected')
+        if (item.selected) target = item
       }
       if (target) update(target)
     }

@@ -22,33 +22,48 @@ export class SegmentedButton extends builder({
   name, style, props,
   setup() {
     let options: SegmentedButtonItem[] = []
-    let selectIndex = -1
-    let changing = false
+    let selectedIndex = -1
+    let timer = -1
+    let changed = false
     const slotChange = (_: Event, el: HTMLSlotElement) => {
       options = el.assignedElements().filter((item) => item instanceof SegmentedButtonItem) as SegmentedButtonItem[]
-      selectIndex = options.findIndex((item) => item.checked)
+      let target: null | SegmentedButtonItem = null
+      for (const item of options) {
+        if (item === target) continue
+        if (item.selected) item.removeAttribute('selected')
+      }
+      if (target) update(target)
     }
+    const update = (target: SegmentedButtonItem) => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        if (!target.selected) return (selectedIndex = -1)
+        options.forEach((item) => {
+          if (item === target) return
+          if (item.selected) item.removeAttribute('selected')
+        })
+        selectedIndex = options.indexOf(target)
+        if (changed) {
+          this.dispatchEvent(new Event('change'))
+          changed = false
+        }
+      }, 0)
+    }
+    this.addEventListener('segmented-button-item:update', (event: Event) => {
+      event.stopPropagation()
+      update(event.target as SegmentedButtonItem)
+    })
     this.addEventListener('segmented-button-item:change', (event: Event) => {
       event.stopPropagation()
-      if (changing) return
-      changing = true
-      if (!event.target) return
-      const target = event.target as SegmentedButtonItem
-      selectIndex = -1
-      options.forEach((item, index) => {
-        if (item === target && target.checked) return selectIndex = index
-        item.checked && (item.checked = false)
-      })
-      changing = false
-      this.dispatchEvent(new Event('change'))
+      changed = true
     })
     return {
       expose: {
         get options() {
           return options
         },
-        get selectIndex() {
-          return selectIndex
+        get selectedIndex() {
+          return selectedIndex
         }
       },
       render: () => html`
@@ -80,7 +95,7 @@ const itemStyle = /*css*/`
   border-left-color: transparent;
   margin-left: -1px;
 }
-:host([checked=true]){
+:host([selected=true]){
   background: var(--s-color-secondary-container, #e2e0f9);
   color: var(--s-color-on-secondary-container, #191a2c);
 }
@@ -103,7 +118,7 @@ const itemStyle = /*css*/`
 
 const itemName = 's-segmented-button-item'
 const itemProps = {
-  checked: false,
+  selected: false,
   disabled: false,
   selectable: true
 }
@@ -112,14 +127,18 @@ export class SegmentedButtonItem extends builder({
   name: itemName,
   style: itemStyle,
   props: itemProps,
-  propSyncs: ['checked', 'disabled'],
+  propSyncs: ['selected', 'disabled'],
   setup() {
-    this.addEventListener('click', () => this.selectable && (this.checked = true))
+    this.addEventListener('click', () => {
+      if (this.selectable) {
+        this.selected = true
+        this.dispatchEvent(new Event('segmented-button-item:change', { bubbles: true }))
+      }
+    })
     return {
       watches: {
-        checked: () => {
-          if (!this.parentNode) return
-          this.dispatchEvent(new Event('segmented-button-item:change', { bubbles: true }))
+        selected: () => {
+          this.dispatchEvent(new Event('segmented-button-item:update', { bubbles: true }))
         }
       },
       render: () => html`

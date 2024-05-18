@@ -11,13 +11,13 @@
 <body>
   <s-page>
     <main>
-      <s-tab onchange="console.log('change',this.selectIndex)">
-        <s-tab-item>
-          <s-icon type="visibility" slot="icon"></s-icon>
+      <s-tab>
+        <s-tab-item selected="true">
+          <s-icon type="add" slot="icon"></s-icon>
           <div slot="text">destination</div>
         </s-tab-item>
-        <s-tab-item checked="true">
-          <s-icon type="visibility" slot="icon"></s-icon>
+        <s-tab-item>
+          <s-icon type="search" slot="icon"></s-icon>
           <div slot="text">navigation</div>
         </s-tab-item>
         <s-tab-item>
@@ -31,11 +31,14 @@
           <s-badge slot="badge"></s-badge>
         </s-tab-item>
       </s-tab>
-      <s-tab mode="fixed">
-        <s-tab-item>
+
+      <s-button onclick="test()">删除</s-button>
+
+      <!-- <s-tab mode="fixed">
+        <s-tab-item selected="true">
           <div slot="text">destination</div>
         </s-tab-item>
-        <s-tab-item checked="true">
+        <s-tab-item>
           <div slot="text">navigation</div>
           <s-badge slot="badge">16</s-badge>
         </s-tab-item>
@@ -46,11 +49,26 @@
           <div slot="text">Secondary</div>
           <s-badge slot="badge"></s-badge>
         </s-tab-item>
-      </s-tab>
+      </s-tab> -->
+
+      <select onchange="console.log(this.selectedIndex)">
+        <option value="auto">自适应</option>
+        <option value="light" selected>白天</option>
+        <option value="dark" selected>夜间</option>
+      </select>
     </main>
   </s-page>
   <script type="module" src="../dist/main.js"></script>
   <script type="module" src="./scripts/default.js"></script>
+  <script>
+    function test() {
+      const tab = document.querySelector('s-tab')
+      tab.removeChild(tab.options[tab.options.length - 1])
+      setTimeout(() => {
+        tab.options[tab.options.length - 1].selected = true
+      }, 0)
+    }
+  </script>
 </body>
 
 </html>

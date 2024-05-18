@@ -46,33 +46,48 @@ export class Navigation extends builder({
   name, style, props, propSyncs: true,
   setup() {
     let options: NavigationItem[] = []
-    let selectIndex = -1
-    let changing = false
+    let selectedIndex = -1
+    let timer = -1
+    let changed = false
     const slotChange = (_: Event, el: HTMLSlotElement) => {
       options = el.assignedElements().filter((item) => item instanceof NavigationItem) as NavigationItem[]
-      selectIndex = options.findIndex((item) => item.checked)
+      let target: null | NavigationItem = null
+      for (const item of options) {
+        if (item === target) continue
+        if (item.selected) item.removeAttribute('selected')
+      }
+      if (target) update(target)
     }
+    const update = (target: NavigationItem) => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        if (!target.selected) return (selectedIndex = -1)
+        options.forEach((item) => {
+          if (item === target) return
+          if (item.selected) item.removeAttribute('selected')
+        })
+        selectedIndex = options.indexOf(target)
+        if (changed) {
+          this.dispatchEvent(new Event('change'))
+          changed = false
+        }
+      }, 0)
+    }
+    this.addEventListener('navigation-item:update', (event: Event) => {
+      event.stopPropagation()
+      update(event.target as NavigationItem)
+    })
     this.addEventListener('navigation-item:change', (event: Event) => {
       event.stopPropagation()
-      if (changing) return
-      changing = true
-      if (!event.target) return
-      const target = event.target as NavigationItem
-      selectIndex = -1
-      options.forEach((item, index) => {
-        if (item === target && target.checked) return selectIndex = index
-        item.checked && (item.checked = false)
-      })
-      changing = false
-      this.dispatchEvent(new Event('change'))
+      changed = true
     })
     return {
       expose: {
         get options() {
           return options
         },
-        get selectIndex() {
-          return selectIndex
+        get selectedIndex() {
+          return selectedIndex
         }
       },
       render: () => html`
@@ -101,7 +116,7 @@ const itemStyle = /*css*/`
   color: var(--s-color-on-surface-variant, #46464f);
   transition: color .2s;
 }
-:host([checked=true]){
+:host([selected=true]){
   color: var(--s-color-primary, #5256a9);
 }
 .icon{
@@ -125,7 +140,7 @@ const itemStyle = /*css*/`
   transition: transform .2s;
   background: var(--s-color-secondary-container, #e2e0f9);
 }
-:host([checked=true]) .icon::before{
+:host([selected=true]) .icon::before{
   transform: scale(1);
 }
 .badge{
@@ -148,7 +163,7 @@ const itemStyle = /*css*/`
 
 const itemName = 's-navigation-item'
 const itemProps = {
-  checked: false,
+  selected: false,
 }
 
 export class NavigationItem extends builder({
@@ -157,12 +172,14 @@ export class NavigationItem extends builder({
   props: itemProps,
   propSyncs: true,
   setup() {
-    this.addEventListener('click', () => this.checked = true)
+    this.addEventListener('click', () => {
+      this.selected = true
+      this.dispatchEvent(new Event('navigation-item:change', { bubbles: true }))
+    })
     return {
       watches: {
-        checked: () => {
-          if (!this.parentNode) return
-          this.dispatchEvent(new Event('navigation-item:change', { bubbles: true }))
+        selected: () => {
+          this.dispatchEvent(new Event('navigation-item:update', { bubbles: true }))
         },
       },
       render: () => html`

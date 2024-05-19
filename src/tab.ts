@@ -67,9 +67,10 @@ export class Tab extends builder({
       if (target) update(target)
     }
     const update = (target: TabItem) => {
+      if (!target.selected) return (selectedIndex = -1)
+      selectedIndex = options.indexOf(target)
       clearTimeout(timer)
       timer = setTimeout(() => {
-        if (!target.selected) return (selectedIndex = -1)
         let old: TabItem | null = null
         for (const item of options) {
           if (item === target) continue
@@ -78,7 +79,6 @@ export class Tab extends builder({
             item.removeAttribute('selected')
           }
         }
-        selectedIndex = options.indexOf(target)
         if (changed) {
           this.dispatchEvent(new Event('change'))
           changed = false

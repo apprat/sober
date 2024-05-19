@@ -12,7 +12,7 @@
   <s-page>
     <main>
       <s-tab>
-        <s-tab-item selected="true">
+        <!-- <s-tab-item selected="true">
           <s-icon type="add" slot="icon"></s-icon>
           <div slot="text">destination</div>
         </s-tab-item>
@@ -29,10 +29,11 @@
           <s-icon type="dark_mode" slot="icon"></s-icon>
           <div slot="text">Secondary</div>
           <s-badge slot="badge"></s-badge>
-        </s-tab-item>
+        </s-tab-item> -->
       </s-tab>
 
       <s-button onclick="test()">删除</s-button>
+      <s-button onclick="add()">添加</s-button>
 
       <!-- <s-tab mode="fixed">
         <s-tab-item selected="true">
@@ -61,11 +62,26 @@
   <script type="module" src="../dist/main.js"></script>
   <script type="module" src="./scripts/default.js"></script>
   <script>
+    const tab = document.querySelector('s-tab')
     function test() {
-      const tab = document.querySelector('s-tab')
       tab.removeChild(tab.options[tab.options.length - 1])
       setTimeout(() => {
         tab.options[tab.options.length - 1].selected = true
+        console.log(tab.selectedIndex)
+      }, 0)
+    }
+
+    function add() {
+      //tab.options[]
+      const item = document.createElement('s-tab-item')
+      item.innerHTML = '<div slot="text">destination</div>'
+      tab.appendChild(item)
+      const item2 = document.createElement('s-tab-item')
+      item2.innerHTML = '<div slot="text">destination2</div>'
+      tab.appendChild(item2)
+      item2.selected = true
+      setTimeout(() => {
+        console.log(tab.selectedIndex)
       }, 0)
     }
   </script>

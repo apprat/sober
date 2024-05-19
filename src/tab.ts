@@ -55,7 +55,6 @@ export class Tab extends builder({
     let container: HTMLDivElement
     let options: TabItem[] = []
     let selectedIndex = -1
-    let timer = -1
     let changed = false
     const slotChange = (_: Event, el: HTMLSlotElement) => {
       options = el.assignedElements().filter((item) => item instanceof TabItem) as TabItem[]
@@ -67,39 +66,36 @@ export class Tab extends builder({
       if (target) update(target)
     }
     const update = (target: TabItem) => {
-      if (!target.selected) return (selectedIndex = -1)
+      if (options.length === 0 || !target.selected) return (selectedIndex = -1)
+      let old: TabItem | null = null
+      for (const item of options) {
+        if (item === target) continue
+        if (item.selected) {
+          old = item
+          item.removeAttribute('selected')
+        }
+      }
       selectedIndex = options.indexOf(target)
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        let old: TabItem | null = null
-        for (const item of options) {
-          if (item === target) continue
-          if (item.selected) {
-            old = item
-            item.removeAttribute('selected')
-          }
+      if (changed) {
+        this.dispatchEvent(new Event('change'))
+        changed = false
+      }
+      if (this.isConnected) {
+        if (container.scrollWidth !== container.offsetWidth) {
+          const left = target.offsetLeft - container.offsetWidth + container.offsetWidth / 2 + target.offsetWidth / 2
+          container.scrollTo({ left, behavior: 'smooth' })
         }
-        if (changed) {
-          this.dispatchEvent(new Event('change'))
-          changed = false
+        if (old) {
+          old.indicator.addEventListener('transitionend', () => {
+            old?.indicator.removeAttribute('style')
+            target.indicator.removeAttribute('style')
+          }, { once: true })
+          const oldLeft = old.indicator.getBoundingClientRect().left
+          const rect = target.indicator.getBoundingClientRect()
+          target.indicator.setAttribute('style', 'transition:none;filter:opacity(0)')
+          old.indicator.setAttribute('style', `transition: transform .2s, width .2s;filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
         }
-        if (this.isConnected) {
-          if (container.scrollWidth !== container.offsetWidth) {
-            const left = target.offsetLeft - container.offsetWidth + container.offsetWidth / 2 + target.offsetWidth / 2
-            container.scrollTo({ left, behavior: 'smooth' })
-          }
-          if (old) {
-            old.indicator.addEventListener('transitionend', () => {
-              old?.indicator.removeAttribute('style')
-              target.indicator.removeAttribute('style')
-            }, { once: true })
-            const oldLeft = old.indicator.getBoundingClientRect().left
-            const rect = target.indicator.getBoundingClientRect()
-            target.indicator.setAttribute('style', 'transition:none;filter:opacity(0)')
-            old.indicator.setAttribute('style', `transition: transform .2s, width .2s;filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
-          }
-        }
-      }, 0)
+      }
     }
     this.addEventListener('tab-item:update', (event: Event) => {
       event.stopPropagation()
@@ -210,8 +206,11 @@ export class TabItem extends builder({
       container.classList[length > 0 ? 'add' : 'remove']('icon')
     }
     this.addEventListener('click', () => {
+      if (this.selected) return
+      if (this.parentNode instanceof Tab) {
+        this.dispatchEvent(new Event('tab-item:change', { bubbles: true }))
+      }
       this.selected = true
-      this.dispatchEvent(new Event('tab-item:change', { bubbles: true }))
     })
     return {
       expose: {
@@ -221,6 +220,7 @@ export class TabItem extends builder({
       },
       watches: {
         selected: () => {
+          if (!(this.parentNode instanceof Tab)) return
           this.dispatchEvent(new Event('tab-item:update', { bubbles: true }))
         },
       },

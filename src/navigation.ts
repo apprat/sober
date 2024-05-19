@@ -47,7 +47,6 @@ export class Navigation extends builder({
   setup() {
     let options: NavigationItem[] = []
     let selectedIndex = -1
-    let timer = -1
     let changed = false
     const slotChange = (_: Event, el: HTMLSlotElement) => {
       options = el.assignedElements().filter((item) => item instanceof NavigationItem) as NavigationItem[]
@@ -59,19 +58,20 @@ export class Navigation extends builder({
       if (target) update(target)
     }
     const update = (target: NavigationItem) => {
-      if (!target.selected) return (selectedIndex = -1)
-      selectedIndex = options.indexOf(target)
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        options.forEach((item) => {
-          if (item === target) return
-          if (item.selected) item.removeAttribute('selected')
-        })
-        if (changed) {
-          this.dispatchEvent(new Event('change'))
-          changed = false
+      if (options.length === 0 || !target.selected) return (selectedIndex = -1)
+      let old: NavigationItem | null = null
+      for (const item of options) {
+        if (item === target) continue
+        if (item.selected) {
+          old = item
+          item.removeAttribute('selected')
         }
-      }, 0)
+      }
+      selectedIndex = options.indexOf(target)
+      if (changed) {
+        this.dispatchEvent(new Event('change'))
+        changed = false
+      }
     }
     this.addEventListener('navigation-item:update', (event: Event) => {
       event.stopPropagation()
@@ -173,12 +173,16 @@ export class NavigationItem extends builder({
   propSyncs: true,
   setup() {
     this.addEventListener('click', () => {
+      if (this.selected) return
+      if (this.parentNode instanceof Navigation) {
+        this.dispatchEvent(new Event('navigation-item:change', { bubbles: true }))
+      }
       this.selected = true
-      this.dispatchEvent(new Event('navigation-item:change', { bubbles: true }))
     })
     return {
       watches: {
         selected: () => {
+          if (!(this.parentNode instanceof Navigation)) return
           this.dispatchEvent(new Event('navigation-item:update', { bubbles: true }))
         },
       },

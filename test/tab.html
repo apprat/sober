@@ -11,7 +11,7 @@
 <body>
   <s-page>
     <main>
-      <s-tab>
+      <s-tab onchange="console.log(this.selectedIndex)">
         <!-- <s-tab-item selected="true">
           <s-icon type="add" slot="icon"></s-icon>
           <div slot="text">destination</div>
@@ -35,7 +35,7 @@
       <s-button onclick="test()">删除</s-button>
       <s-button onclick="add()">添加</s-button>
 
-      <!-- <s-tab mode="fixed">
+      <s-tab mode="fixed" onchange="console.log(this.selectedIndex)">
         <s-tab-item selected="true">
           <div slot="text">destination</div>
         </s-tab-item>
@@ -50,13 +50,7 @@
           <div slot="text">Secondary</div>
           <s-badge slot="badge"></s-badge>
         </s-tab-item>
-      </s-tab> -->
-
-      <select onchange="console.log(this.selectedIndex)">
-        <option value="auto">自适应</option>
-        <option value="light" selected>白天</option>
-        <option value="dark" selected>夜间</option>
-      </select>
+      </s-tab>
     </main>
   </s-page>
   <script type="module" src="../dist/main.js"></script>
@@ -67,22 +61,19 @@
       tab.removeChild(tab.options[tab.options.length - 1])
       setTimeout(() => {
         tab.options[tab.options.length - 1].selected = true
-        console.log(tab.selectedIndex)
       }, 0)
     }
 
     function add() {
-      //tab.options[]
       const item = document.createElement('s-tab-item')
+      console.log('创建item完毕')
       item.innerHTML = '<div slot="text">destination</div>'
+      item.selected = true
+      console.log('设置item selected')
       tab.appendChild(item)
       const item2 = document.createElement('s-tab-item')
       item2.innerHTML = '<div slot="text">destination2</div>'
       tab.appendChild(item2)
-      item2.selected = true
-      setTimeout(() => {
-        console.log(tab.selectedIndex)
-      }, 0)
     }
   </script>
 </body>

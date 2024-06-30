@@ -1,113 +1,169 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
+
+const name = 's-text-field'
+const props = {
+  label: '',
+  disabled: false
+}
+
 
 const style = /*css*/`
 :host{
-  display: inline-block;
-  vertical-align: middle;
-  min-width: 280px;
-  border-radius: 4px;
-  position: relative;
+  display: grid;
   color: var(--s-color-primary, #5256a9);
+  font-size: .875rem;
+  min-height: 48px;
+  max-width: 280px;
+  --border-radius: 4px;
+  --border-color: var(--s-color-outline, #777680);
+  --border-width: 1px;
+  --padding: 16px;
+}
+:host([disabled=true]){
+  pointer-events: none;
+  opacity: .38;
 }
 .container{
-  border-radius: inherit;
-  color: var(--s-color-outline, #777680);
   display: flex;
   align-items: center;
+  height: 100%;
+  position: relative;
 }
-:host(:focus-within) .container{
-  color: currentColor;
+.start,
+.end{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  min-width: var(--border-radius);
+  flex-shrink: 0;
+}
+.start::before,
+.end::before,
+.start::after,
+.end::after{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: var(--border-radius);
+  border: solid var(--border-width) var(--border-color);
+  pointer-events: none;
+  box-sizing: border-box;
+}
+.start::before,
+.start::after{
+  border-right: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.end::before,
+.end::after{
+  border-left: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.start::after,
+.end::after{
+  border-width: calc(var(--border-width) * 2);
+  border-color: currentColor;
+  opacity: 0;
+  transition: opacity .12s;
+}
+:host(:focus-within) .start::after,
+:host(:focus-within) .end::after{
+  opacity: 1;
+}
+.text{
+  display: flex;
+  height: 100%;
+  flex-grow: 1;
+  position: relative;
+  margin: 0 calc(var(--border-radius) * -1);
+}
+.text::before,
+.text::after{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: var(--border-radius);
+  width: calc(100%  - (var(--border-radius)*2));
+  border-bottom: solid var(--border-width) var(--border-color);
+}
+.text::after{
+  border-bottom-width: calc(var(--border-width) * 2);
+  border-bottom-color: currentColor;
+  opacity: 0;
+  transition: opacity .12s;
+}
+:host(:focus-within) .text::after{
+  opacity: 1;
+}
+.top{
+  position: absolute;
+  pointer-events: none;
+  left: var(--border-radius);
+  top: 0;
+  height: 100%;
+  width: calc(100%  - (var(--border-radius)*2));
+  display: flex;
+  align-items: center;
+  transform: translateY(-50%);
 }
 .outline{
+  position: relative;
+}
+.outline.left{
+  width: calc(var(--padding) - var(--border-radius) - 4px);
+}
+.outline.right{
+  flex-grow: 1;
+}
+.outline::before,
+.outline::after{
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  border: solid 1px currentColor;
-  box-sizing: border-box;
-  border-radius: inherit;
-  pointer-events: none;
-  border-top: none;
-  transition: box-shadow .2s;
+  border-top: solid var(--border-width) var(--border-color);
 }
-:host(:focus-within) .outline{
-  box-shadow: 1px 0 currentColor inset, -1px 0 currentColor inset, 0 -1px currentColor inset;
+.outline::after{
+  border-top-width: calc(var(--border-width) * 2);
+  border-top-color: currentColor;
+  opacity: 0;
+  transition: opacity .12s;
+}
+:host(:focus-within) .outline::after{
+  opacity: 1;
 }
 .label{
+  color: var(--border-color);
+  position: absolute;
+  height: 100%;
   display: flex;
-  align-items: flex-end;
-  height: 16px;
-  width: 100%;
-  position: absolute;
-  top: -8px;
-  left: 0;
-  pointer-events: none;
+  align-items: center;
+  transform: translate(calc((var(--border-radius) * -1) + var(--padding)), 50%);
+  transition: transform .12s;
 }
-.label::before{
-  content: '';
-  border-color: currentColor;
-  border-width: 1px;
-  border-top-style: solid;
-  border-left-style: solid;
-  height: 8px;
-  width: 12px;
-  box-sizing: border-box;
-  border-top-left-radius: 4px;
-  transition: box-shadow .2s;
-  flex-shrink: 0;
-}
-:host(:focus-within) .label::before{
-  border-color: currentColor;
-  box-shadow: 0 1px currentColor inset, 1px 0 currentColor inset;
-}
-.label::after{
-  content: '';
-  border-color: var(--s-color-outline, #777680);
-  border-width: 1px;
-  border-top-style: solid;
-  border-right-style: solid;
-  height: 8px;
-  flex-grow: 1;
-  box-sizing: border-box;
-  border-top-right-radius: 4px;
-  transition: box-shadow .2s;
-}
-:host(:focus-within) .label::after{
-  border-color: currentColor;
-  box-shadow: -1px 0 currentColor inset, 0 1px currentColor inset;
-}
-.label>span{
-  padding: 0 4px;
-  transform-origin: left;
-  transition: font-size .2s, color .2s, transform .2s;
-  left: 12px;
-  font-size: 1rem;
-  transform: translateY(31px);
-  position: absolute;
-}
-.not-empty .label>span,
-:host(:focus-within) .label>span{
-  transform: translateY(0);
-  font-size: .75rem;
+.empty .label,
+:host(:focus-within) .label{
   position: static;
+  transform: translate(0, 0) scale(.8571428571428571);
 }
-.label>span:empty{
-  padding: 0;
+:host(:focus-within) .label{
+  color: currentColor;
 }
-.content{
-  position: relative;
-  flex-grow: 1;
-}
-::slotted(input[type=text]),
+::slotted(input),
 ::slotted(textarea),
-.textarea{
+.shadow{
   border: none;
-  padding: 0 16px;
-  min-height: 56px;
+  height: 100%;
   width: 100%;
-  flex-grow: 1;
+  padding: 0 var(--padding);
   background: none;
   outline: none;
   font-size: inherit;
@@ -117,111 +173,114 @@ const style = /*css*/`
   font-family: inherit;
   display: block;
 }
-::slotted(textarea){
-  height: 0;
-}
-::slotted(textarea),
-.textarea{
-  padding: 16px;
-  scrollbar-width: none;
-  resize: none;
-  line-height: 1.5;
-  word-wrap: break-word;
-  word-break: break-all;
-  white-space: pre-wrap;
-}
-.textarea{
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: auto;
-  pointer-events: none;
-  visibility: hidden;
-}
-.textarea::after{
-  content: ' ';
-}
-::slotted(input[type=text])::placeholder,
+::slotted(input)::placeholder,
 ::slotted(textarea)::placeholder{
   color: var(--s-color-outline, #777680);
 }
-::slotted([slot=end]){
-  flex-shrink: 0;
+::slotted(textarea),
+.shadow{
+  resize: none;
+  padding: var(--padding);
+  scrollbar-width: none;
+  line-height: 16px;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+  min-height: 100%;
+  height: 0;
 }
-::slotted(s-icon[slot=end]){
-  margin: 0 12px 0 -8px;
+.shadow{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+  min-height: auto;
+  visibility: hidden;
+  pointer-events: none;
+}
+.shadow::after{
+  content: ' ';
+}
+::slotted(s-icon-button[slot=start]){
+  margin-left: 4px;
+  margin-right: calc(var(--border-radius) - var(--padding) + 4px);
 }
 ::slotted(s-icon-button[slot=end]){
-  margin: 0 4px 0 -12px;
+  margin-right: 4px;
+  margin-left: calc(var(--border-radius) - var(--padding) + 4px);
 }
-.focus ::slotted([slot=end]){
-  color: currentColor;
+::slotted(s-icon[slot=start]){
+  margin-left: 12px;
+  margin-right: calc(var(--border-radius) - var(--padding) + 12px);
+}
+::slotted(s-icon[slot=end]){
+  margin-right: 12px;
+  margin-left: calc(var(--border-radius) - var(--padding) + 12px);
 }
 `
 
-const name = 's-text-field'
-const props = {
-  label: ''
-}
+const template = /*html*/`
+<div class="container" part="container">
+  <div class="start">
+    <slot name="start"></slot>
+  </div>
+  <div class="text">
+    <div class="top">
+      <div class="outline left"></div>
+      <div class="label" part="label"></div>
+      <div class="outline right"></div>
+    </div>
+    <slot class="input"></slot>
+    <div class="shadow"></div>
+  </div>
+  <div class="end">
+    <slot name="end"></slot>
+  </div>
+</div>
+`
 
-export class TextField extends builder({
-  name, style, props, propSyncs: true,
-  setup() {
-    let container: HTMLDivElement
-    let label: HTMLSpanElement
-    let inputSlot: HTMLSlotElement
+export class TextField extends useElement({
+  style, template, props, syncProps: ['disabled'],
+  setup(shadowRoot) {
+    const container = shadowRoot.querySelector('.container') as HTMLDivElement
+    const label = shadowRoot.querySelector('.label') as HTMLSpanElement
+    const inputSlot = shadowRoot.querySelector('.input') as HTMLSlotElement
+    const inputShaodw = shadowRoot.querySelector('.shadow') as HTMLDivElement
     let input: HTMLInputElement | HTMLTextAreaElement
-    let inputShaodw: HTMLDivElement
     const onInput = () => {
-      if (!input || input.parentNode !== this) return
-      input.value === '' ? container.classList.remove('not-empty') : container.classList.add('not-empty')
+      input.value === '' ? container.classList.remove('empty') : container.classList.add('empty')
       if (input instanceof HTMLTextAreaElement) {
         inputShaodw.textContent = input.value
         if (input.offsetHeight !== inputShaodw.offsetHeight) input.style.height = `${inputShaodw.offsetHeight}px`
       }
     }
-    const bindEvent = (el: HTMLInputElement | HTMLTextAreaElement) => {
-      el.addEventListener('input', onInput)
-      const descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el), 'value')
+    inputSlot.addEventListener('slotchange', () => {
+      const field = inputSlot.assignedElements()[0]
+      if (!(field instanceof HTMLInputElement) && !(field instanceof HTMLTextAreaElement)) return
+      input = field
+      const descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(input), 'value')
       if (descriptor) {
         const oldSet = descriptor.set
         descriptor.set = (val: string) => {
-          oldSet?.apply(el, [val])
+          oldSet?.apply(input, [val])
           if (!input || input.parentNode !== this) return
           onInput()
         }
-        Object.defineProperty(el, 'value', descriptor)
+        Object.defineProperty(input, 'value', descriptor)
       }
-      input = el
       onInput()
-    }
-    const inputSlotChange = () => {
-      const el = inputSlot.assignedElements()[0]
-      if (!el || (!(el instanceof HTMLInputElement) && !(el instanceof HTMLTextAreaElement))) return
-      bindEvent(el)
-    }
+      input.addEventListener('input', onInput)
+    })
     return {
       watches: {
         label: (value) => label.textContent = value
-      },
-      render: () => html`
-        <div class="container" ref="${(el: HTMLDivElement) => container = el}">
-          <div class="outline"></div>
-          <div class="label">
-            <span ref="${(el: HTMLSpanElement) => label = el}"></span>
-          </div>
-          <div class="content">
-            <slot style="min-height: inherit;" @slotchange="${inputSlotChange}" ref="${(el: HTMLSlotElement) => inputSlot = el}"></slot>
-            <div ref="${(el: HTMLDivElement) => inputShaodw = el}" class="textarea"></div>
-          </div>
-          <slot name="end"></slot>
-        </div>
-      `
+      }
     }
   }
 }) { }
 
-TextField.define()
+TextField.define(name)
 
 declare global {
   namespace JSX {

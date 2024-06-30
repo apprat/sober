@@ -1,6 +1,10 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
 import './ripple.js'
+
+const name = 's-tab'
+const props = {
+  mode: 'scrollable' as 'scrollable' | 'fixed',
+}
 
 const style = /*css*/`
 :host{
@@ -44,27 +48,21 @@ const style = /*css*/`
 }
 `
 
-const name = 's-tab'
-const props = {
-  mode: 'scrollable' as 'scrollable' | 'fixed',
-}
+const template = /*html*/`
+<div class="container" part="container">
+  <slot></slot>
+</div>
+`
 
-export class Tab extends builder({
-  name, style, props, propSyncs: ['mode'],
-  setup() {
-    let container: HTMLDivElement
+export class Tab extends useElement({
+  style, template, props, syncProps: ['mode'],
+  setup(shadowRoot) {
+    const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
+    const container = shadowRoot.querySelector('.container') as HTMLDivElement
     let options: TabItem[] = []
     let selectedIndex = -1
     let changed = false
-    const slotChange = (_: Event, el: HTMLSlotElement) => {
-      options = el.assignedElements().filter((item) => item instanceof TabItem) as TabItem[]
-      selectedIndex = -1
-      let target: null | TabItem = null
-      for (const item of options) {
-        if (item.selected) target = item
-      }
-      if (target) update(target)
-    }
+
     const update = (target: TabItem) => {
       if (options.length === 0 || !target.selected) return (selectedIndex = -1)
       let old: TabItem | null = null
@@ -86,6 +84,7 @@ export class Tab extends builder({
           container.scrollTo({ left, behavior: 'smooth' })
         }
         if (old) {
+
           old.indicator.addEventListener('transitionend', () => {
             old?.indicator.removeAttribute('style')
             target.indicator.removeAttribute('style')
@@ -93,10 +92,21 @@ export class Tab extends builder({
           const oldLeft = old.indicator.getBoundingClientRect().left
           const rect = target.indicator.getBoundingClientRect()
           target.indicator.setAttribute('style', 'transition:none;filter:opacity(0)')
-          old.indicator.setAttribute('style', `transition: transform .2s, width .2s;filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
+          old.indicator.setAttribute('style', `transition: transform .12s, width .12s;filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
         }
       }
     }
+    slot.addEventListener('slotchange', () => {
+      let target: null | TabItem = null
+      selectedIndex = -1
+      options = slot.assignedElements().filter((item) => {
+        if (item instanceof TabItem) {
+          if (item.selected) target = item
+          return true
+        }
+      }) as TabItem[]
+      if (target) update(target)
+    })
     this.addEventListener('tab-item:update', (event: Event) => {
       event.stopPropagation()
       update(event.target as TabItem)
@@ -113,16 +123,15 @@ export class Tab extends builder({
         get selectedIndex() {
           return selectedIndex
         },
-      },
-      render: () => html`
-        <div class="container" ref="${(el: HTMLDivElement) => container = el}">
-          <slot @slotchange="${slotChange}"></slot>
-        </div>
-      `
+      }
     }
   }
 }) { }
 
+const itemName = 's-tab-item'
+const itemProps = {
+  selected: false
+}
 
 const itemStyle = /*css*/`
 :host{
@@ -188,23 +197,34 @@ const itemStyle = /*css*/`
 }
 `
 
-const itemName = 's-tab-item'
-const itemProps = {
-  selected: false
-}
+const itemTemplate = /*html*/`
+<div class="container" part="container">
+  <slot name="icon"></slot>
+  <div class="text" part="text">
+    <slot name="text"></slot>
+    <div class="badge" part="badge">
+      <slot name="badge"></slot>
+    </div>
+  </div>
+  <div class="indicator" part="indicator"></div>
+</div>
+<s-ripple attached="true" part="ripple"></s-ripple>
+`
 
-export class TabItem extends builder({
-  name: itemName,
+export class TabItem extends useElement({
   style: itemStyle,
+  template: itemTemplate,
   props: itemProps,
-  propSyncs: true,
-  setup() {
-    let container: HTMLDivElement
-    let indicator: HTMLDivElement
-    const iconSlotChange = (_: Event, icon: HTMLSlotElement) => {
-      const length = icon.assignedElements().length
+  syncProps: true,
+  setup(shadowRoot) {
+    const container = shadowRoot.querySelector('.container') as HTMLDivElement
+    const indicator = shadowRoot.querySelector('.indicator') as HTMLDivElement
+    const iconSlot = shadowRoot.querySelector('[name=icon]') as HTMLSlotElement
+    const iconSlotChange = () => {
+      const length = iconSlot.assignedElements().length
       container.classList[length > 0 ? 'add' : 'remove']('icon')
     }
+    iconSlot.addEventListener('slotchange', iconSlotChange)
     this.addEventListener('click', () => {
       if (this.selected) return
       if (this.parentNode instanceof Tab) {
@@ -223,26 +243,13 @@ export class TabItem extends builder({
           if (!(this.parentNode instanceof Tab)) return
           this.dispatchEvent(new Event('tab-item:update', { bubbles: true }))
         },
-      },
-      render: () => html`
-        <div class="container" ref="${(el: HTMLDivElement) => container = el}">
-          <slot name="icon" @slotchange="${iconSlotChange}"></slot>
-          <div class="text">
-            <slot name="text"></slot>
-            <div class="badge">
-              <slot name="badge"></slot>
-            </div>
-          </div>
-          <div class="indicator" ref="${(el: HTMLDivElement) => indicator = el}"></div>
-        </div>
-        <s-ripple attached="true"></s-ripple>
-      `
+      }
     }
   }
 }) { }
 
-Tab.define()
-TabItem.define()
+Tab.define(name)
+TabItem.define(itemName)
 
 declare global {
   namespace JSX {

@@ -1,6 +1,11 @@
-import { builder, html } from './core/element.js'
+import { useElement, JSXAttributes } from './core/element.js'
 import './ripple.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+
+const name = 's-card'
+const props = {
+  type: 'elevated' as 'elevated' | 'filled' | 'outlined',
+  clickable: false
+}
 
 const style = /*css*/`
 :host{
@@ -27,7 +32,7 @@ const style = /*css*/`
 }
 :host([clickable=true]){
   cursor: pointer;
-  transition: box-shadow .2s;
+  transition: box-shadow .12s;
 }
 :host([clickable=true]) .ripple{
   display: block;
@@ -35,7 +40,6 @@ const style = /*css*/`
 .action{
   display: flex;
   justify-content: flex-end;
-  padding: 0 12px;
 }
 .ripple{
   display: none;
@@ -64,6 +68,9 @@ const style = /*css*/`
 ::slotted(s-button[slot=action]){
   margin: 16px 4px;
 }
+::slotted(s-button[slot=action]:last-of-type){
+  margin-right: 16px;
+}
 @media (pointer: fine){
   :host([clickable=true][type=filled]:hover),
   :host([clickable=true][type=outlined]:hover){
@@ -75,34 +82,29 @@ const style = /*css*/`
 }
 `
 
-const name = 's-card'
-const props = {
-  type: 'elevated' as 'elevated' | 'filled' | 'outlined',
-  clickable: false
-}
+const template = /*html*/`
+<slot name="start"></slot>
+<slot name="image"></slot>
+<slot name="headline"></slot>
+<slot name="subhead"></slot>
+<slot name="text"></slot>
+<slot></slot>
+<div class="action" part="action">
+  <slot name="action"></slot>
+</div>
+<slot name="end"></slot>
+<s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
+`
 
-export class Card extends builder({
-  name, style, props, propSyncs: true,
-  setup() {
-    return {
-      render: () => html`
-        <slot name="start"></slot>
-        <slot name="image"></slot>
-        <slot name="headline"></slot>
-        <slot name="subhead"></slot>
-        <slot name="text"></slot>
-        <slot></slot>
-        <div class="action">
-          <slot name="action" @pointerdown.stop></slot>
-        </div>
-        <slot name="end"></slot>
-        <s-ripple class="ripple" attached="true"></s-ripple>
-      `
-    }
+export class Card extends useElement({
+  style, template, props, syncProps: true,
+  setup(shadowRoot) {
+    const action = shadowRoot.querySelector('.action') as HTMLElement
+    action.addEventListener('pointerdown', (e) => e.stopPropagation())
   }
 }) { }
 
-Card.define()
+Card.define(name)
 
 declare global {
   namespace JSX {

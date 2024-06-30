@@ -1,6 +1,10 @@
-import { builder, html } from './core/element.js'
+import { useElement, JSXAttributes } from './core/element.js'
 import './ripple.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+
+const name = 's-navigation'
+const props = {
+  mode: 'bottom' as 'bottom' | 'rail'
+}
 
 const style = /*css*/`
 :host{
@@ -37,33 +41,24 @@ const style = /*css*/`
 }
 `
 
-const name = 's-navigation'
-const props = {
-  mode: 'bottom' as 'bottom' | 'rail'
-}
+const template = /*html*/`
+<slot name="start"></slot>
+<slot id="slot"></slot>
+<slot name="end"></slot>
+`
 
-export class Navigation extends builder({
-  name, style, props, propSyncs: true,
-  setup() {
+export class Navigation extends useElement({
+  style, template, props, syncProps: true,
+  setup(shadowRoot) {
+    const slot = shadowRoot.querySelector('#slot') as HTMLSlotElement
     let options: NavigationItem[] = []
     let selectedIndex = -1
     let changed = false
-    const slotChange = (_: Event, el: HTMLSlotElement) => {
-      options = el.assignedElements().filter((item) => item instanceof NavigationItem) as NavigationItem[]
-      selectedIndex = -1
-      let target: null | NavigationItem = null
-      for (const item of options) {
-        if (item.selected) target = item
-      }
-      if (target) update(target)
-    }
     const update = (target: NavigationItem) => {
       if (options.length === 0 || !target.selected) return (selectedIndex = -1)
-      let old: NavigationItem | null = null
       for (const item of options) {
         if (item === target) continue
         if (item.selected) {
-          old = item
           item.removeAttribute('selected')
         }
       }
@@ -73,6 +68,17 @@ export class Navigation extends builder({
         changed = false
       }
     }
+    slot.addEventListener('slotchange', () => {
+      let target: null | NavigationItem = null
+      selectedIndex = -1
+      options = slot.assignedElements().filter((item) => {
+        if (item instanceof NavigationItem) {
+          if (item.selected) target = item
+          return true
+        }
+      }) as NavigationItem[]
+      if (target) update(target)
+    })
     this.addEventListener('navigation-item:update', (event: Event) => {
       event.stopPropagation()
       update(event.target as NavigationItem)
@@ -89,15 +95,15 @@ export class Navigation extends builder({
         get selectedIndex() {
           return selectedIndex
         }
-      },
-      render: () => html`
-        <slot name="start"></slot>
-        <slot @slotchange="${slotChange}"></slot>
-        <slot name="end"></slot>
-      `
+      }
     }
   }
 }) { }
+
+const itemName = 's-navigation-item'
+const itemProps = {
+  selected: false,
+}
 
 const itemStyle = /*css*/`
 :host{
@@ -114,7 +120,7 @@ const itemStyle = /*css*/`
   max-width: 80px;
   text-transform: capitalize;
   color: var(--s-color-on-surface-variant, #46464f);
-  transition: color .2s;
+  transition: color .12s;
 }
 :host([selected=true]){
   color: var(--s-color-primary, #5256a9);
@@ -137,7 +143,7 @@ const itemStyle = /*css*/`
   left: 0;
   top: 0;
   transform: scale(0);
-  transition: transform .2s;
+  transition: transform .12s;
   background: var(--s-color-secondary-container, #e2e0f9);
 }
 :host([selected=true]) .icon::before{
@@ -161,16 +167,22 @@ const itemStyle = /*css*/`
 }
 `
 
-const itemName = 's-navigation-item'
-const itemProps = {
-  selected: false,
-}
+const itemTemplate = /*html*/`
+<div class="icon" part="icon">
+  <slot name="icon"></slot>
+</div>
+<slot name="text"></slot>
+<div class="badge" part="badge">
+  <slot name="badge"></slot>
+</div>
+<s-ripple attached="true" class="ripple" part="ripple"></s-ripple>
+`
 
-export class NavigationItem extends builder({
-  name: itemName,
+export class NavigationItem extends useElement({
   style: itemStyle,
+  template: itemTemplate,
   props: itemProps,
-  propSyncs: true,
+  syncProps: true,
   setup() {
     this.addEventListener('click', () => {
       if (this.selected) return
@@ -184,24 +196,14 @@ export class NavigationItem extends builder({
         selected: () => {
           if (!(this.parentNode instanceof Navigation)) return
           this.dispatchEvent(new Event('navigation-item:update', { bubbles: true }))
-        },
-      },
-      render: () => html`
-        <div class="icon">
-          <slot name="icon"></slot>
-        </div>
-        <slot name="text"></slot>
-        <div class="badge">
-          <slot name="badge"></slot>
-        </div>
-        <s-ripple attached="true" class="ripple"></s-ripple>
-      `
+        }
+      }
     }
   }
 }) { }
 
-Navigation.define()
-NavigationItem.define()
+Navigation.define(name)
+NavigationItem.define(itemName)
 
 declare global {
   namespace JSX {

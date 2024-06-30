@@ -1,5 +1,8 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
+
+const name = 's-badge'
+const props = {
+}
 
 const style = /*css*/`
 :host{
@@ -23,22 +26,11 @@ const style = /*css*/`
 }
 `
 
-const name = 's-badge'
-const props = {
-}
+const template = /*html*/ `<slot></slot>`
 
-export class Badge extends builder({
-  name, props, style,
-  setup() {
-    return {
-      render: () => html`
-        <slot></slot>
-      `
-    }
-  }
-}) { }
+export class Badge extends useElement({ style, template, props }) { }
 
-Badge.define()
+Badge.define(name)
 
 declare global {
   namespace JSX {

@@ -3,65 +3,520 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Test</title>
   <link rel="stylesheet" href="./styles/default.css">
   <style>
-    .nav {
-      display: flex;
-      flex-wrap: wrap;
-      max-width: 800px;
+    s-page {
+      padding: 24px;
+      overflow: auto;
+      box-sizing: border-box;
     }
 
-    .nav a {
-      border: solid 1px var(--s-color-outline-variant);
-      display: inline-flex;
-      align-items: center;
-      padding: 0 12px;
-      border-radius: 4px;
-      height: 36px;
-      color: var(--s-color-primary);
+    s-page>* {
+      margin: 8px;
+    }
+
+    hr {
+      margin: 0;
+      border: none;
+      height: 1px;
+      background: var(--s-color-outline-variant);
+      margin: 16px 0;
     }
   </style>
 </head>
 
 <body>
   <s-page theme="auto">
-    <s-scroll-view>
-      <main class="nav">
-        <a href="./test.html">Test</a>
-        <a href="./ripple.html">Ripple</a>
-        <a href="./icon.html">Icon</a>
-        <a href="./icon-button.html">Icon Button</a>
-        <a href="./button.html">Button</a>
-        <a href="./fab.html">Floating Action Button</a>
-        <a href="./checkbox.html">Checkbox</a>
-        <a href="./radio-button.html">Radio Button</a>
-        <a href="./switch.html">Switch</a>
-        <a href="./tab.html">Tab</a>
-        <a href="./dialog.html">Dialog</a>
-        <a href="./snackbar.html">Snackbar</a>
-        <a href="./tooltip.html">Tooltip</a>
-        <a href="./table.html">Table</a>
-        <a href="./scroll-view.html">Scroll View</a>
-        <a href="./slider.html">Slider</a>
-        <a href="./segmented-button.html">Segmented Button</a>
-        <a href="./top-app-bar.html">Top App Bar</a>
-        <a href="./card.html">Card</a>
-        <a href="./progress.html">Progress</a>
-        <a href="./text-field.html">Text Field</a>
-        <a href="./drawer.html">Drawer</a>
-        <a href="./navigation.html">Bavigation</a>
-        <a href="./menu.html">Menu</a>
-        <a href="./text-field.html">Text Field</a>
-        <a href="./carousel.html">Carousel</a>
-        <a href="./search.html">Search</a>
-        <a href="./rate.html">Rate</a>
-        <a href="./dropdown.html">Dropdown</a>
-        <a href="./chip.html">Chip</a>
-        <a href="./date-picker.html">Date Picker</a>
-      </main>
-    </s-scroll-view>
+    <s-button>
+      <s-icon type="search" slot="start"></s-icon>
+      button
+      <s-icon type="close" slot="end"></s-icon>
+    </s-button>
+    <s-button type="elevated">
+      <s-icon type="search" slot="start"></s-icon>
+      button
+      <s-icon type="close" slot="end"></s-icon>
+    </s-button>
+    <s-button type="filled-tonal">
+      <s-icon type="search" slot="start"></s-icon>
+      button
+      <s-icon type="close" slot="end"></s-icon>
+    </s-button>
+    <s-button type="outlined">
+      <s-icon type="search" slot="start"></s-icon>
+      button
+      <s-icon type="close" slot="end"></s-icon>
+    </s-button>
+    <s-button type="text">
+      <s-icon type="search" slot="start"></s-icon>
+      button
+      <s-icon type="close" slot="end"></s-icon>
+    </s-button>
+    <s-button disabled="true"> button </s-button>
+    <s-button type="elevated" disabled="true"> button </s-button>
+    <s-button type="filled-tonal" disabled="true"> button </s-button>
+    <s-button type="outlined" disabled="true"> button </s-button>
+    <s-button type="text" disabled="true"> button </s-button>
+    <hr>
+    <s-icon></s-icon>
+    <s-icon type="search"></s-icon>
+    <s-icon type="menu"></s-icon>
+    <s-icon type="arrow_back"></s-icon>
+    <s-icon type="arrow_forward"></s-icon>
+    <s-icon type="arrow_upward"></s-icon>
+    <s-icon type="arrow_downward"></s-icon>
+    <hr>
+    <s-icon-button>
+      <s-icon type="add"></s-icon>
+    </s-icon-button>
+    <s-icon-button type="filled">
+      <s-icon type="add"></s-icon>
+    </s-icon-button>
+    <s-icon-button type="filled-tonal">
+      <s-icon type="add"></s-icon>
+    </s-icon-button>
+    <s-icon-button type="outlined">
+      <s-icon type="add"></s-icon>
+    </s-icon-button>
+    <s-icon-button disabled="true">
+      <s-icon type="add"></s-icon>
+    </s-icon-button>
+    <s-icon-button type="filled" disabled="true">
+      <s-icon type="add"></s-icon>
+    </s-icon-button>
+    <s-icon-button type="filled-tonal" disabled="true">
+      <s-icon type="add"></s-icon>
+    </s-icon-button>
+    <s-icon-button type="outlined" disabled="true">
+      <s-icon type="add"></s-icon>
+    </s-icon-button>
+    <hr>
+    <s-fab size="small">
+      <s-icon type="search"></s-icon>
+    </s-fab>
+    <s-fab>
+      <s-icon type="search"></s-icon>
+    </s-fab>
+    <s-fab size="large">
+      <s-icon type="search"></s-icon>
+    </s-fab>
+    <s-fab extended="true" size="small">
+      <s-icon slot="start" type="add"></s-icon>
+      compose
+    </s-fab>
+    <hr>
+    <s-segmented-button onchange="console.log(this.selectedIndex)">
+      <s-segmented-button-item selectable="false">
+        <s-icon type="chevron_left"></s-icon>
+      </s-segmented-button-item>
+      <s-segmented-button-item selected="true">1</s-segmented-button-item>
+      <s-segmented-button-item>2</s-segmented-button-item>
+      <s-segmented-button-item>3</s-segmented-button-item>
+      <s-segmented-button-item>...</s-segmented-button-item>
+      <s-segmented-button-item>16</s-segmented-button-item>
+      <s-segmented-button-item selectable="false">
+        <s-icon type="chevron_right"></s-icon>
+      </s-segmented-button-item>
+    </s-segmented-button>
+    <hr>
+    <s-ripple style="color: #009688;padding: 24px;">
+      Test
+    </s-ripple>
+    <div style="position: relative;">
+      <button onclick="console.log('button')">
+        ripple
+      </button>
+      <s-ripple attached="true"></s-ripple>
+    </div>
+    <hr>
+    <s-checkbox></s-checkbox>
+    <s-checkbox indeterminate="true"></s-checkbox>
+    <s-checkbox disabled="true"></s-checkbox>
+    <s-checkbox disabled="true" checked="true"></s-checkbox>
+    <s-checkbox disabled="true" indeterminate="true"></s-checkbox>
+    <s-checkbox style="color: #009688;"></s-checkbox>
+    <s-checkbox style="color: #009688;" indeterminate="true"></s-checkbox>
+    <s-checkbox style="color: #009688;" disabled="true"></s-checkbox>
+    <s-checkbox style="color: #009688;" disabled="true" checked="true"></s-checkbox>
+    <s-checkbox style="color: #009688;" disabled="true" indeterminate="true"></s-checkbox>
+    <hr>
+    <s-radio-button name="test"></s-radio-button>
+    <s-radio-button name="test">Selected</s-radio-button>
+    <s-radio-button disabled="true"></s-radio-button>
+    <s-radio-button checked="true" disabled="true">Select Group</s-radio-button>
+    <s-radio-button name="test" style="color: #009688;"></s-radio-button>
+    <s-radio-button name="test" style="color: #009688;"></s-radio-button>
+    <s-radio-button disabled="true" style="color: #009688;"></s-radio-button>
+    <s-radio-button checked="true" disabled="true">Select Group</s-radio-button>
+    <s-radio-button name="test" style="color: #009688;width: 64px;height: 64px;"></s-radio-button>
+    <hr>
+    <s-slider value="0" oninput="document.querySelector('#progress').value=this.value"></s-slider>
+    <s-slider labeled="true"></s-slider>
+    <s-slider disabled="true" value="50"></s-slider>
+    <s-slider ranged="true"></s-slider>
+    <hr>
+    <s-linear-progress value="20"></s-linear-progress>
+    <s-linear-progress style="color: #009688" value="50"></s-linear-progress>
+    <s-linear-progress style="width: 800px;" indeterminate="true"></s-linear-progress>
+
+    <hr>
+
+    <s-circular-progress id="progress" style="color: #009688" animated="true"></s-circular-progress>
+    <s-circular-progress style="color: #8d711b" indeterminate="true"></s-circular-progress>
+    <hr>
+    <s-switch></s-switch>
+    <s-switch checked="true"></s-switch>
+    <s-switch disabled="true"></s-switch>
+    <s-switch disabled="true" checked="true"></s-switch>
+    <hr>
+    <s-text-field label="请输入名称" style="margin: 16px;">
+      <s-icon-button slot="start">
+        <s-icon slot="end" type="star"></s-icon>
+      </s-icon-button>
+      <input type="text">
+      <s-icon slot="end" type="favorite"></s-icon>
+    </s-text-field>
+
+    <s-text-field label="请输入名称" style="margin: 16px;--border-radius: 24px; --padding: 24px;">
+      <input type="password">
+    </s-text-field>
+
+    <s-text-field label="请输入名称" style="margin: 16px;">
+      <textarea>ss</textarea>
+    </s-text-field>
+
+    <hr>
+    <s-rate></s-rate>
+    <s-rate readonly="true"></s-rate>
+    <s-divider></s-divider>
+    <hr>
+    <s-card clickable="true">
+      <div slot="image"></div>
+      <div slot="headline">Healine</div>
+      <div slot="subhead">Subhead</div>
+      <div slot="text">Card containers hold all card elements. Their size is determined by the space those</div>
+      <s-button slot="action" type="filled-tonal">Action</s-button>
+      <s-button slot="action">Action</s-button>
+    </s-card>
+    <s-card type="filled" clickable="true">
+      <div slot="image"></div>
+      <div slot="headline">Healine</div>
+      <div slot="subhead">Subhead</div>
+      <div slot="text">Card containers hold all card elements. Their size is determined by the space those</div>
+      <s-button slot="action" type="outlined">Action</s-button>
+      <s-button slot="action">Action</s-button>
+    </s-card>
+    <s-card type="outlined" clickable="true">
+      <div slot="image"></div>
+      <div slot="headline">Healine</div>
+      <div slot="subhead">Subhead</div>
+      <div slot="text">Card containers hold all card elements. Their size is determined by the space those</div>
+      <s-button slot="action" type="filled-tonal" onpointerdown="event.stopPropagation()"
+        onclick="console.log('sss')">Action</s-button>
+      <s-button slot="action">Action</s-button>
+    </s-card>
+    <hr>
+    <s-carousel>
+      <img
+        src="https://imgcps.jd.com/img-cubic/creative_server_cia_jdcloud/v2/2000366/100087971198/FocusFullshop/CkNqZnMvdDEvMTcxNzAyLzI3LzQzNzk2LzU1OTIzLzY2MDVjN2JkRjU1OWJkNDljLzFiYTgyZDFhZmNmNmJiNDQuanBnEgo5OTktdHlfMF8xMAE47ot6WP761O30Ag/cr/s/q.jpg">
+      <img
+        src="https://imgcps.jd.com/ling-cubic/ling4/lab/amZzL3QxLzYyMTk2LzE0LzI0Mzc3LzIzMTU4OC82NGMwYjc1N0Y0YWE2ZjZjOC8wMGI4Mjc5ZjU5ZjRiNzJjLnBuZw/5Lqs6YCJ5aW96LSn/5L2g5YC85b6X5oul5pyJ/1635187410014105601/cr/s/q.jpg">
+      <img
+        src="https://img20.360buyimg.com/babel/s1180x940_jfs/t20270328/123726/8/45309/31863/6604db83F9dae4720/4ec7722ceb7165aa.jpg.avif">
+    </s-carousel>
+    <hr>
+    <s-chip clickable="true">
+      a
+      <s-icon-button slot="action">
+        <s-icon type="close"></s-icon>
+      </s-icon-button>
+    </s-chip>
+    <s-chip type="elevated">
+      Assist 2
+      <s-icon-button slot="action">
+        <s-icon type="close"></s-icon>
+      </s-icon-button>
+    </s-chip>
+    <s-chip type="filled-tonal" clickable="true">
+      Assist 2
+      <s-icon-button slot="action">
+        <s-icon type="close"></s-icon>
+      </s-icon-button>
+    </s-chip>
+    <hr>
+    <s-dialog negative="取消" positive="确认" onscroll="console.log('??')">
+      <button slot="trigger">
+        Base
+      </button>
+      <div slot="headline">出师表</div>
+      <div slot="text">
+        先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。<br /><br />
+        宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。<br /><br />
+        侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必能裨补阙漏，有所广益。<br /><br />
+        将军向宠，性行淑均，晓畅军事，试用于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。<br /><br />
+        亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。<br /><br />
+        臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
+        先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
+        愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
+        今当远离临表涕零不知所言。
+        臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
+        先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
+        愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
+        今当远离临表涕零不知所言。
+      </div>
+      <s-button type="text" slot="action">取消</s-button>
+      <s-button type="text" slot="action">确定</s-button>
+    </s-dialog>
+
+    <s-dialog positive="确认">
+      <s-button slot="trigger">
+        Nesting
+      </s-button>
+      <div slot="headline">Dialog Choice</div>
+      <div slot="text" style="width: 800px;">
+        The M3 baseline color scheme uses the same roles and token mapping as user-generated color schemes.
+      </div>
+      <s-button type="text" slot="action">取消</s-button>
+      <s-button type="text" slot="action">确定</s-button>
+    </s-dialog>
+    <hr>
+
+    <hr>
+    <s-drawer id="drawer" style="height: 500px;">
+      <div slot="start" style="display: flex;width: auto;">
+        <p style="max-width: 280px;">
+          先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。<br /><br />
+          宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。<br /><br />
+          侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必能裨补阙漏，有所广益。<br /><br />
+          将军向宠，性行淑均，晓畅军事，试用于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。<br /><br />
+          亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。<br /><br />
+          臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
+          先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
+          愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
+          今当远离临表涕零不知所言。
+        </p>
+      </div>
+      <div>
+        main
+      </div>
+      <s-scroll-view slot="end" style="padding: 24px;">
+        先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。<br /><br />
+        宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。<br /><br />
+        侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必能裨补阙漏，有所广益。<br /><br />
+        将军向宠，性行淑均，晓畅军事，试用于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。<br /><br />
+        亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。<br /><br />
+        臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
+        先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
+        愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
+        今当远离临表涕零不知所言。
+      </s-scroll-view>
+    </s-drawer>
+    <hr>
+    <s-popup>
+      <s-button slot="trigger">popup</s-button>
+      <div style="min-height: 280px;">test popup</div>
+    </s-popup>
+    <hr>
+    <s-search>
+      <s-icon type="search" slot="start"></s-icon>
+      <input type="text" placeholder="搜索关键字">
+      <s-icon type="close" slot="end"></s-icon>
+    </s-search>
+
+    <s-search>
+      <s-icon-button slot="start">
+        <s-icon type="search"></s-icon>
+      </s-icon-button>
+      <input type="text" placeholder="搜索关键字">
+      <s-icon-button slot="end">
+        <s-icon type="close"></s-icon>
+      </s-icon-button>
+    </s-search>
+
+    <s-search>
+      <s-icon type="search" slot="start"></s-icon>
+      <input type="text" placeholder="搜索关键字">
+      <s-icon type="close" slot="end"></s-icon>
+      <div slot="dropdown" style="height: 128px">
+        hello
+      </div>
+    </s-search>
+    <hr>
+    <s-tab>
+      <s-tab-item>
+        <div slot="text">Item 1</div>
+      </s-tab-item>
+      <s-tab-item selected="true">
+        <div slot="text">Item 2</div>
+      </s-tab-item>
+      <s-tab-item>
+        <div slot="text">Item 3</div>
+      </s-tab-item>
+    </s-tab>
+    <s-tab>
+      <s-tab-item>
+        <div slot="text">Item 1</div>
+        <s-badge slot="badge"></s-badge>
+      </s-tab-item>
+      <s-tab-item selected="true">
+        <div slot="text">Item 2</div>
+      </s-tab-item>
+      <s-tab-item>
+        <div slot="text">Item 3</div>
+        <s-badge slot="badge">99</s-badge>
+      </s-tab-item>
+    </s-tab>
+    <hr>
+    <s-navigation>
+      <s-navigation-item selected="true">
+        <s-icon type="add" slot="icon"></s-icon>
+        <div slot="text">Item 1</div>
+        <s-badge slot="badge"></s-badge>
+      </s-navigation-item>
+      <s-navigation-item>
+        <s-icon type="search" slot="icon"></s-icon>
+        <div slot="text">Item 2</div>
+      </s-navigation-item>
+      <s-navigation-item>
+        <s-icon type="dark_mode" slot="icon"></s-icon>
+        <div slot="text">Item 3</div>
+        <s-badge slot="badge">99</s-badge>
+      </s-navigation-item>
+    </s-navigation>
+    <hr>
+    <s-appbar>
+      <!--左侧菜单按钮-->
+      <s-icon-button slot="navigation">
+        <s-icon type="menu"></s-icon>
+      </s-icon-button>
+      <!--标题-->
+      <div slot="headline"> Title </div>
+      <!--右侧操作按钮-->
+      <s-icon-button slot="action">
+        <s-icon type="search"></s-icon>
+      </s-icon-button>
+    </s-appbar>
+    <s-appbar>
+      <s-appbar>
+        <!--左侧菜单按钮-->
+        <s-icon-button slot="navigation">
+          <s-icon type="menu"></s-icon>
+        </s-icon-button>
+        <!--标题-->
+        <div slot="headline"> Title </div>
+        <!--右侧操作按钮-->
+        <s-icon-button slot="action">
+          <s-icon type="search"></s-icon>
+        </s-icon-button>
+      </s-appbar>
+    </s-appbar>
+    <hr>
+    <s-picker onchange="console.log(this.selectedIndex)">
+      <s-picker-item selected="true">北京</s-picker-item>
+      <s-picker-item>上海</s-picker-item>
+      <s-picker-item>成都</s-picker-item>
+      <s-picker-item>贵阳</s-picker-item>
+      <s-picker-item>西安</s-picker-item>
+    </s-picker>
+    <s-picker label="请选择" onchange="console.log(this.selectedIndex)">
+      <s-picker-item>北京</s-picker-item>
+      <s-picker-item>上海</s-picker-item>
+      <s-picker-item>成都</s-picker-item>
+      <s-picker-item>贵阳</s-picker-item>
+      <s-picker-item>西安</s-picker-item>
+    </s-picker>
+    <s-picker onchange="console.log(this.selectedIndex)">
+      <s-button slot="trigger">选择</s-button>
+      <s-picker-item>北京</s-picker-item>
+      <s-picker-item>上海</s-picker-item>
+      <s-picker-item>成都</s-picker-item>
+      <s-picker-item>贵阳</s-picker-item>
+      <s-picker-item>西安</s-picker-item>
+    </s-picker>
+    <hr>
+    <s-popup>
+      <s-button slot="trigger"> popup </s-button>
+      <div style="min-height: 280px">
+        下拉框
+      </div>
+    </s-popup>
+    <hr>
+    <s-popup-menu>
+      <s-button slot="trigger">菜单</s-button>
+      <s-popup-menu-item>选项1</s-popup-menu-item>
+      <s-popup-menu-item>选项2</s-popup-menu-item>
+      <s-popup-menu-item>选项3</s-popup-menu-item>
+      <s-popup-menu-item>选项4</s-popup-menu-item>
+      <s-popup-menu-item>选项5</s-popup-menu-item>
+    </s-popup-menu>
+    <hr>
+    <s-snackbar>
+      <s-button slot="trigger"> Snackbar </s-button>
+      Snackbar Message
+      <s-button type="text" slot="action"> 关闭 </s-button>
+    </s-snackbar>
+    <hr>
+    <s-tooltip>
+      <s-button slot="trigger">Tooltip</s-button>
+      提示信息
+    </s-tooltip>
+    <hr>
+    <s-table>
+      <s-thead>
+        <s-tr>
+          <s-th>title1</s-th>
+          <s-th>title2</s-th>
+          <s-th>title3</s-th>
+          <s-th>title4</s-th>
+          <s-th>title5</s-th>
+        </s-tr>
+      </s-thead>
+      <s-tbody>
+        <s-tr>
+          <s-td>item1</s-td>
+          <s-td>item2</s-td>
+          <s-td>item3</s-td>
+          <s-td>item4</s-td>
+          <s-td>item5</s-td>
+        </s-tr>
+        <s-tr>
+          <s-td>item1</s-td>
+          <s-td>item2</s-td>
+          <s-td>item3</s-td>
+          <s-td>item4</s-td>
+          <s-td>item5</s-td>
+        </s-tr>
+        <s-tr>
+          <s-td>item1</s-td>
+          <s-td>item2</s-td>
+          <s-td>item3</s-td>
+          <s-td>item4</s-td>
+          <s-td>item5</s-td>
+        </s-tr>
+        <s-tr>
+          <s-td>item1</s-td>
+          <s-td>item2</s-td>
+          <s-td>item3</s-td>
+          <s-td>item4</s-td>
+          <s-td>item5</s-td>
+        </s-tr>
+        <s-tr>
+          <s-td>item1</s-td>
+          <s-td>item2</s-td>
+          <s-td>item3</s-td>
+          <s-td>item4</s-td>
+          <s-td>item5</s-td>
+        </s-tr>
+        <s-tr>
+          <s-td>item1</s-td>
+          <s-td>item2</s-td>
+          <s-td>item3</s-td>
+          <s-td>item4</s-td>
+          <s-td>item5</s-td>
+        </s-tr>
+      </s-tbody>
+    </s-table>
   </s-page>
 
   <script type="module" src="../dist/main.js"></script>

@@ -1,7 +1,11 @@
-import { builder, html } from './core/element.js'
+import { useElement, JSXAttributes } from './core/element.js'
 import { getStackingContext } from './core/utils.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
 import './scroll-view.js'
+
+const name = 's-dialog'
+const props = {
+  size: 'basic' as 'basic' | 'full'
+}
 
 const style = /*css*/`
 :host{
@@ -16,7 +20,7 @@ const style = /*css*/`
   height: 100%;
   z-index: 2;
   pointer-events: none;
-  transition: filter .2s;
+  transition: filter .12s;
   filter: opacity(0);
 }
 .wrapper.show{
@@ -43,7 +47,7 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   transform: scale(.9);
-  transition: transform .2s;
+  transition: transform .12s;
 }
 .wrapper.show .wrapper-container{
   transform: scale(1);
@@ -54,7 +58,7 @@ const style = /*css*/`
   background: var(--s-color-surface-container-highest, #e5e1e6);
   position: relative;
   border-radius: 28px;
-  box-shadow: var(--s-elevation-level5, 0 8px 10px -6px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level5, 0 10px 14px -6px rgba(0, 0, 0, .2), 0 22px 35px 3px rgba(0, 0, 0, .14), 0 8px 42px 7px rgba(0, 0, 0, .12));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -107,15 +111,30 @@ const style = /*css*/`
 }
 `
 
-const name = 's-dialog'
-const props = {
-  size: 'basic' as 'basic' | 'full',
-}
+const template = /*html*/`
+<slot name="trigger"></slot>
+<div class="wrapper" part="wrapper">
+  <div class="scrim" part="scrim"></div>
+  <div class="wrapper-container" part="wrapper-container">
+    <div class="container" part="container">
+      <slot name="headline"></slot>
+      <s-scroll-view class="text" part="view">
+        <slot></slot>
+        <slot name="text"></slot>
+      </s-scroll-view>
+      <div class="action" part="action">
+        <slot name="action"></slot>
+      </div>
+    </div>
+  </div>
+</div>
+`
 
 const show = (options: string | {
   root?: Element
   headline?: string
-  text: string
+  text?: string
+  view?: HTMLElement | ((dialog: Dialog) => void)
   actions?: { text: string, click?: (event: MouseEvent) => unknown }[],
 }) => {
   let root: Element = document.body
@@ -124,9 +143,9 @@ const show = (options: string | {
   if (page && page.tagName === 'S-PAGE') {
     root = page
   }
-  const text = document.createElement('div')
-  text.slot = 'text'
   if (typeof options === 'string') {
+    const text = document.createElement('div')
+    text.slot = 'text'
     text.textContent = options
     dialog.appendChild(text)
   } else {
@@ -137,8 +156,15 @@ const show = (options: string | {
       headline.textContent = options.headline
       dialog.appendChild(headline)
     }
-    text.textContent = options.text
-    dialog.appendChild(text)
+    if (options.text) {
+      const text = document.createElement('div')
+      text.slot = 'text'
+      text.textContent = options.text
+      dialog.appendChild(text)
+    }
+    if (options.view) {
+      typeof options.view === 'function' ? options.view(dialog) : dialog.appendChild(options.view)
+    }
     for (const item of options.actions ?? []) {
       const action = document.createElement('s-button')
       action.slot = 'action'
@@ -153,10 +179,13 @@ const show = (options: string | {
   dialog.show()
 }
 
-class Dialog extends builder({
-  name, style, props, propSyncs: ['size'],
+class Dialog extends useElement({
+  style, template, props, syncProps: ['size'],
   setup(shadowRoot) {
-    let wrapper: HTMLDivElement
+    const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
+    const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
+    const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
+    const action = shadowRoot.querySelector('.action') as HTMLElement
     const show = () => {
       const stackingContext = getStackingContext(shadowRoot)
       if (stackingContext.top !== 0 || stackingContext.left !== 0) {
@@ -174,33 +203,19 @@ class Dialog extends builder({
       const showed = wrapper.classList.contains('show')
       this.dispatchEvent(new Event(showed ? 'showed' : 'dismissed'))
     }
+    trigger.addEventListener('click', show)
+    wrapper.addEventListener('transitionend', transitionEnd)
+    scrim.addEventListener('click', dismiss)
+    action.addEventListener('click', dismiss)
     return {
-      expose: { show, dismiss },
-      render: () => html`
-        <slot name="trigger" @click="${show}"></slot>
-        <div class="wrapper" ref="${(el: HTMLDivElement) => wrapper = el}" @transitionend="${transitionEnd}">
-          <div class="scrim" @click="${dismiss}"></div>
-          <div class="wrapper-container">
-            <div class="container" part="container">
-              <slot name="headline"></slot>
-              <s-scroll-view class="text">
-                <slot></slot>
-                <slot name="text"></slot>
-              </s-scroll-view>
-              <div class="action">
-                <slot name="action" @click="${dismiss}"></slot>
-              </div>
-            </div>
-          </div>
-        </div>
-      `
+      expose: { show, dismiss }
     }
   }
 }) {
   static readonly show = show
 }
 
-Dialog.define()
+Dialog.define(name)
 
 export { Dialog }
 

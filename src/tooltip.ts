@@ -1,6 +1,9 @@
-import { builder, html } from './core/element.js'
+import { useElement, JSXAttributes } from './core/element.js'
 import { device, getStackingContext } from './core/utils.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+
+const name = 's-tooltip'
+const props = {
+}
 
 const style = /*css*/`
 :host{
@@ -20,9 +23,9 @@ const style = /*css*/`
   padding: 6px 8px;
   border-radius: 4px;
   white-space: nowrap;
-  opacity: .95;
+  opacity: .85;
   filter: opacity(0);
-  transition: filter .2s;
+  transition: filter .12s;
   pointer-events: none;
 }
 .container.show{
@@ -35,15 +38,20 @@ const style = /*css*/`
 }
 `
 
-const name = 's-tooltip'
-const props = {
-}
+const template = /*html*/`
+<div id="trigger" part="trigger">
+  <slot name="trigger"></slot>
+</div>
+<div class="container" part="container">
+  <slot></slot>
+</div>
+`
 
-export class Tooltip extends builder({
-  name, style, props,
+export class Tooltip extends useElement({
+  style, template, props,
   setup(shadowRoot) {
-    let trigger: HTMLDivElement
-    let container: HTMLDivElement
+    const trigger = shadowRoot.querySelector('#trigger') as HTMLDivElement
+    const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const state = { showed: false, timer: 0 }
     const show = () => {
       if (!this.isConnected || state.showed) return
@@ -90,26 +98,16 @@ export class Tooltip extends builder({
       clearTimeout(state.timer)
       dismiss()
     }
-    return {
-      render: () => html`
-        <div ref="${(el: HTMLDivElement) => trigger = el}" 
-          @wheel.passive="${dismiss}"
-          @mouseover="${() => !device.touched && show()}"
-          @mouseleave="${() => !device.touched && dismiss()}"
-          @touchstart="${touchShow}"
-          @touchend="${touchDismiss}"
-        >
-          <slot name="trigger"></slot>
-        </div>
-        <div class="container" part="container" ref="${(el: HTMLDivElement) => container = el}" @transitionend="${transitionEnd}">
-          <slot></slot>
-        </div>
-      `
-    }
+    trigger.addEventListener('wheel', dismiss, { passive: true })
+    trigger.addEventListener('mouseover', () => !device.touched && show())
+    trigger.addEventListener('mouseleave', () => !device.touched && dismiss())
+    trigger.addEventListener('touchstart', touchShow)
+    trigger.addEventListener('touchend', touchDismiss)
+    container.addEventListener('transitionend', transitionEnd)
   }
 }) { }
 
-Tooltip.define()
+Tooltip.define(name)
 
 declare global {
   namespace JSX {

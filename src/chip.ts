@@ -1,6 +1,11 @@
-import { builder, html } from './core/element.js'
+import { useElement, JSXAttributes } from './core/element.js'
 import './ripple.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+
+const name = 's-chip'
+const props = {
+  type: 'outlined' as 'outlined' | 'elevated' | 'filled-tonal',
+  clickable: false
+}
 
 const style = /*css*/`
 :host{
@@ -52,28 +57,23 @@ const style = /*css*/`
 }
 `
 
-const name = 's-chip'
-const props = {
-  type: 'outlined' as 'outlined' | 'elevated' | 'filled-tonal',
-  clickable: false
-}
+const template = /*html*/`
+<slot name="start"></slot>
+<slot></slot>
+<slot name="end"></slot>
+<slot name="action"></slot>
+<s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
+`
 
-export class Chip extends builder({
-  name, style, props, propSyncs: true,
-  setup() {
-    return {
-      render: () => html`
-        <slot name="start"></slot>
-        <slot></slot>
-        <slot name="end"></slot>
-        <slot name="action" @pointerdown.stop></slot>
-        <s-ripple class="ripple" attached="true"></s-ripple>
-      `
-    }
+export class Chip extends useElement({
+  style, template, props, syncProps: true,
+  setup(shadowRoot) {
+    const action = shadowRoot.querySelector('slot[name=action]') as HTMLSlotElement
+    action.addEventListener('pointerdown', (e) => e.stopPropagation())
   }
 }) { }
 
-Chip.define()
+Chip.define(name)
 
 declare global {
   namespace JSX {

@@ -1,5 +1,8 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
+
+const name = 's-scroll-view'
+const props = {
+}
 
 const style = /*css*/`
 :host{
@@ -24,22 +27,11 @@ const style = /*css*/`
 }
 `
 
-const name = 's-scroll-view'
-const props = {
-}
+const template = /*html*/`<slot></slot>`
 
-export class ScrollView extends builder({
-  name, style, props,
-  setup() {
-    return {
-      render: () => html`
-        <slot></slot>
-      `
-    }
-  }
-}) { }
+export class ScrollView extends useElement({ style, template, props, }) { }
 
-ScrollView.define()
+ScrollView.define(name)
 
 declare global {
   namespace JSX {

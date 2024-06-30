@@ -1,5 +1,9 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
+
+const name = 's-carousel'
+const props = {
+  duration: 4000
+}
 
 const style = /*css*/`
 :host{
@@ -10,12 +14,13 @@ const style = /*css*/`
   position: relative;
   color: var(--s-color-primary, #5256a9);
   overflow: hidden;
+  max-width: 480px;
 }
 .container{
   display: flex;
   justify-content: flex-start;
   height: 100%;
-  transition: transform .2s;
+  transition: transform .12s;
 }
 .dot{
   position: absolute;
@@ -50,17 +55,19 @@ const style = /*css*/`
 }
 `
 
-const name = 's-carousel'
-const props = {
-  duration: 4000
-}
+const template = /*html*/`
+<div class="container" part="container">
+  <slot></slot>
+</div>
+<div class="dot" part="dot-container"></div>
+`
 
-export class Carousel extends builder({
-  name, style, props,
-  setup() {
-    let container: HTMLDivElement
-    let dot: HTMLDivElement
-    let slot: HTMLSlotElement
+export class Carousel extends useElement({
+  style, template, props,
+  setup(shadowRoot) {
+    const container = shadowRoot.querySelector('.container') as HTMLDivElement
+    const dot = shadowRoot.querySelector('.dot') as HTMLDivElement
+    const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
     let selectIndex = 0
     let selectLength = 0
     let timer = 0
@@ -79,7 +86,7 @@ export class Carousel extends builder({
         setDot()
       }, this.duration)
     }
-    const slotchange = () => {
+    slot.addEventListener('slotchange', () => {
       dot.innerHTML = ''
       const elements = slot.assignedElements()
       const fragment = document.createDocumentFragment()
@@ -87,6 +94,7 @@ export class Carousel extends builder({
         const div = document.createElement('div')
         const index = Number(key)
         div.className = index === 0 ? 'item checked' : 'item'
+        div.setAttribute('part', 'dot')
         div.addEventListener('click', () => {
           selectIndex = index
           runTask()
@@ -97,24 +105,18 @@ export class Carousel extends builder({
       dot.appendChild(fragment)
       selectIndex = 0
       runTask()
-    }
+    })
     return {
       mounted: runTask,
       unmounted: () => clearInterval(timer),
       watches: {
         duration: runTask
-      },
-      render: () => html`
-        <div class="container" ref="${(el: HTMLDivElement) => container = el}">
-          <slot ref="${(el: HTMLSlotElement) => slot = el}" @slotchange="${slotchange}"></slot>
-        </div>
-        <div class="dot" ref="${(el: HTMLDivElement) => dot = el}"></div>
-      `
+      }
     }
   }
 }) { }
 
-Carousel.define()
+Carousel.define(name)
 
 declare global {
   namespace JSX {

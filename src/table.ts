@@ -1,11 +1,15 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
+
+const name = 's-table'
+const props = {
+}
 
 const style = /*css*/`
 :host{
   display: block;
   font-size: .875rem;
   border: solid 1px var(--s-color-outline-variant, #c7c5d0);
+  background: var(--s-color-surface-container-low, #f6f2f7);
   border-radius: 8px;
   white-space: nowrap;
   overflow: hidden;
@@ -17,23 +21,17 @@ const style = /*css*/`
 }
 `
 
-const name = 's-table'
-const props = {
+const template = /*html*/`
+<div class="container" part="container">
+  <slot></slot>
+</div>
+`
+
+export class Table extends useElement({ style, template, props, }) { }
+
+const theadName = 's-thead'
+const theadProps = {
 }
-
-export class Table extends builder({
-  name, style, props,
-  setup() {
-    return {
-      render: () => html`
-        <div class="container" part="container">
-          <slot></slot>
-        </div>
-      `
-    }
-  }
-}) { }
-
 
 const theadStyle = /*css*/`
 :host{
@@ -43,22 +41,17 @@ const theadStyle = /*css*/`
 }
 `
 
-const theadName = 's-thead'
-const theadProps = {
-}
+const theadTemplate =/*html*/`<slot></slot>`
 
-export class Thead extends builder({
-  name: theadName,
+export class Thead extends useElement({
   style: theadStyle,
-  props: theadProps,
-  setup() {
-    return {
-      render: () => html`
-        <slot></slot>
-      `
-    }
-  }
+  template: theadTemplate,
+  props: theadProps
 }) { }
+
+const tbodyName = 's-tbody'
+const tbodyProps = {
+}
 
 const tbodyStyle = /*css*/`
 :host{
@@ -66,126 +59,86 @@ const tbodyStyle = /*css*/`
   color: var(--s-color-on-surface, #1c1b1f);
   position: relative;
 }
-::slotted(s-tr){
-  border-top: solid 1px var(--s-color-outline-variant, #c7c5d0);
+::slotted(s-tr:nth-child(odd)){
+  background: var(--s-color-surface-container-lowest, #ffffff);
 }
 `
 
-const tbodyName = 's-tbody'
-const tbodyProps = {
-}
+const tbodyTemplate =/*html*/`<slot></slot>`
 
-export class Tbody extends builder({
-  name: tbodyName,
+export class Tbody extends useElement({
   style: tbodyStyle,
-  props: tbodyProps,
-  setup() {
-    return {
-      render: () => html`
-        <slot></slot>
-      `
-    }
-  }
+  template: tbodyTemplate,
+  props: tbodyProps
 }) { }
 
-const trStyle = /*css*/`
-:host{
-  display: table-row;
-}
-`
 
 const trName = 's-tr'
 const trProps = {
 }
 
-export class Tr extends builder({
-  name: trName,
+const trStyle = /*css*/`
+:host{
+  display: table-row;
+}
+::slotted(*:first-child){
+  width: 0;
+}
+`
+
+const trTemplate =/*html*/`<slot></slot>`
+
+export class Tr extends useElement({
   style: trStyle,
-  props: trProps,
-  setup() {
-    return {
-      render: () => html`
-        <slot></slot>
-      `
-    }
-  }
+  template: trTemplate,
+  props: trProps
 }) { }
+
+const thName = 's-th'
+const thProps = {
+}
 
 const thStyle = /*css*/`
 :host{
   display: table-cell;
   padding: 16px;
 }
-:host(:not(:first-child)){
-  width: 0;
-  text-align: right;
-}
 `
 
-const thName = 's-th'
-const thProps = {
-}
+const thTemplate =/*html*/`<slot></slot>`
 
-export class Th extends builder({
-  name: thName,
+export class Th extends useElement({
   style: thStyle,
-  props: thProps,
-  setup() {
-    return {
-      render: () => html`
-        <slot></slot>
-      `
-    }
-  }
+  template: thTemplate,
+  props: thProps
 }) { }
-
-const tdStyle = /*css*/`
-:host{
-  display: contents;
-  user-select: text;
-  padding: 12px 16px;
-}
-:host(:not(:first-child)){
-  text-align: right;
-}
-td{
-  padding: inherit;
-  vertical-align: middle;
-}
-`
 
 const tdName = 's-td'
 const tdProps = {
-  colspan: 1,
-  rowspan: 1
 }
 
-export class Td extends builder({
-  name: tdName,
+const tdStyle = /*css*/`
+:host{
+  display: table-cell;
+  user-select: text;
+  padding: 12px 16px;
+}
+`
+
+const tdTemplate = /*html*/`<slot></slot>`
+
+export class Td extends useElement({
   style: tdStyle,
-  props: tdProps,
-  setup() {
-    let td: HTMLTableCellElement
-    return {
-      watches: {
-        colspan: (value) => td.colSpan = value,
-        rowspan: (value) => td.rowSpan = value
-      },
-      render: () => html`
-        <td ref="${(el: HTMLTableCellElement) => td = el}" rowspan="${this.rowspan}" colspan="${this.colspan}">
-          <slot></slot>
-        </td>
-      `
-    }
-  }
+  template: tdTemplate,
+  props: tdProps
 }) { }
 
-Table.define()
-Thead.define()
-Tbody.define()
-Tr.define()
-Th.define()
-Td.define()
+Table.define(name)
+Thead.define(theadName)
+Tbody.define(tbodyName)
+Tr.define(trName)
+Th.define(thName)
+Td.define(tdName)
 
 declare global {
   namespace JSX {

@@ -1,6 +1,10 @@
-import { builder, html } from './core/element.js'
+import { useElement, JSXAttributes } from './core/element.js'
 import { getStackingContext } from './core/utils.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+
+const name = 's-snackbar'
+const props = {
+  duration: 5000
+}
 
 const style = /*css*/`
 :host{
@@ -37,13 +41,13 @@ const style = /*css*/`
   pointer-events: auto;
   transform: translateY(100%);
   filter: opacity(0);
-  transition: transform .2s, filter .2s;
+  transition: transform .12s, filter .12s;
 }
 .wrapper.show .container{
   transform: translateY(0%);
   filter: opacity(1);
 }
-.supporting-text{
+.text{
   margin: 12px 16px;
   flex-grow: 1;
   user-select: text;
@@ -67,10 +71,17 @@ const style = /*css*/`
 }
 `
 
-const name = 's-snackbar'
-const props = {
-  duration: 5000
-}
+const template = /*html*/`
+<slot name="trigger"></slot>
+<div class="wrapper" part="wrapper">
+  <div class="container" part="container">
+    <div class="text" part="text">
+      <slot></slot>
+    </div>
+    <slot name="action"></slot>
+  </div>
+</div>
+`
 
 const show = (options: string | {
   root?: Element
@@ -107,10 +118,12 @@ const show = (options: string | {
   snackbar.show()
 }
 
-class Snackbar extends builder({
-  name, style, props,
+class Snackbar extends useElement({
+  style, template, props,
   setup(shadowRoot) {
-    let wrapper: HTMLDivElement
+    const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
+    const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
+    const action = shadowRoot.querySelector('slot[name=action]') as HTMLElement
     const state = { timer: 0 }
     const show = () => {
       const stackingContext = getStackingContext(shadowRoot)
@@ -133,26 +146,18 @@ class Snackbar extends builder({
       const showed = wrapper.classList.contains('show')
       this.dispatchEvent(new Event(showed ? 'showed' : 'dismissed'))
     }
+    trigger.addEventListener('click', show)
+    wrapper.addEventListener('transitionend', transitionEnd)
+    action.addEventListener('click', dismiss)
     return {
-      expose: { show, dismiss },
-      render: () => html`
-        <slot name="trigger" @click="${show}"></slot>
-        <div class="wrapper" ref="${(el: HTMLDivElement) => wrapper = el}" @transitionend="${transitionEnd}">
-          <div class="container" part="container">
-            <div class="supporting-text">
-              <slot></slot>
-            </div>
-            <slot name="action" @click="${dismiss}"></slot>
-          </div>
-        </div>
-      `
+      expose: { show, dismiss }
     }
   }
 }) {
   static readonly show = show
 }
 
-Snackbar.define()
+Snackbar.define(name)
 
 interface EventMap extends HTMLElementEventMap {
   show: Event

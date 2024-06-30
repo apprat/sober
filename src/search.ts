@@ -1,5 +1,9 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
+
+const name = 's-search'
+const props = {
+  size: 'medium' as 'medium' | 'small' | 'large'
+}
 
 const style = /*css*/`
 :host{
@@ -35,7 +39,7 @@ const style = /*css*/`
 :host(:focus-within) .container{
   z-index: 1;
 }
-.drop{
+.dropdown{
   position: absolute;
   left: 0;
   top: 0;
@@ -45,22 +49,22 @@ const style = /*css*/`
   box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
   border-radius: 4px;
   opacity: 0;
-  transition: opacity .1s;
+  transition: opacity .12s;
 }
-:host(:focus-within) .drop{
+:host(:focus-within) .dropdown{
   opacity: 1;
   pointer-events: auto;
   z-index: 1;
 }
-::slotted([slot=drop]){
+::slotted([slot=dropdown]){
   border-top: solid 1px var(--s-color-outline-variant, #c7c5d0);
   margin-top: 48px;
   border-radius: 4px;
 }
-:host([size=small]:focus-within) ::slotted([slot=drop]){
+:host([size=small]:focus-within) ::slotted([slot=dropdown]){
   margin-top: 40px;
 }
-:host([size=large]:focus-within) ::slotted([slot=drop]){
+:host([size=large]:focus-within) ::slotted([slot=dropdown]){
   margin-top: 56px;
 }
 ::slotted(input[type=text]){
@@ -129,30 +133,26 @@ const style = /*css*/`
 }
 `
 
-const name = 's-search'
-const props = {
-  size: 'medium' as 'medium' | 'small' | 'large'
-}
+const template = /*html*/`
+<div class="dropdown" part="dropdown">
+  <slot name="dropdown"></slot>
+</div>
+<div class="container" part="container">
+  <slot name="start"></slot>
+  <slot></slot>
+  <slot name="end"></slot>
+</div>
+`
 
-export class Search extends builder({
-  name, style, props, propSyncs: true,
-  setup() {
-    return {
-      render: () => html`
-        <div class="drop">
-          <slot name="drop" @mousedown.prevent></slot>
-        </div>
-        <div class="container">
-          <slot name="start"></slot>
-          <slot></slot>
-          <slot name="end"></slot>
-        </div>
-      `
-    }
+export class Search extends useElement({
+  style, template, props, syncProps: true,
+  setup(shadowRoot) {
+    const dropdown = shadowRoot.querySelector('[name=dropdown]') as HTMLSlotElement
+    dropdown.addEventListener('mousedown', (e) => e.preventDefault())
   }
 }) { }
 
-Search.define()
+Search.define(name)
 
 declare global {
   namespace JSX {

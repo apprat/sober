@@ -1,5 +1,8 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
+
+const name = 's-divider'
+const props = {
+}
 
 const style = /*css*/`
 :host{
@@ -10,22 +13,11 @@ const style = /*css*/`
 }
 `
 
-const name = 's-divider'
-const props = {
-}
+const template = /*html*/`<slot></slot>`
 
-export class Divider extends builder({
-  name, style, props,
-  setup() {
-    return {
-      render: () => html`
-        <slot></slot>
-      `
-    }
-  }
-}) { }
+export class Divider extends useElement({ style, template, props }) { }
 
-Divider.define()
+Divider.define(name)
 
 declare global {
   namespace JSX {

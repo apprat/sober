@@ -1,6 +1,9 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
 import './ripple.js'
+
+const name = 's-segmented-button'
+const props = {
+}
 
 const style = /*css*/`
 :host{
@@ -13,26 +16,15 @@ const style = /*css*/`
   overflow: hidden;
 }
 `
+const template = /*html*/`<slot></slot>`
 
-const name = 's-segmented-button'
-const props = {
-}
-
-export class SegmentedButton extends builder({
-  name, style, props,
-  setup() {
+export class SegmentedButton extends useElement({
+  style, template, props,
+  setup(shadowRoot) {
+    const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
     let options: SegmentedButtonItem[] = []
     let selectedIndex = -1
     let changed = false
-    const slotChange = (_: Event, el: HTMLSlotElement) => {
-      options = el.assignedElements().filter((item) => item instanceof SegmentedButtonItem) as SegmentedButtonItem[]
-      selectedIndex = -1
-      let target: null | SegmentedButtonItem = null
-      for (const item of options) {
-        if (item.selected) target = item
-      }
-      if (target) update(target)
-    }
     const update = (target: SegmentedButtonItem) => {
       if (options.length === 0 || !target.selected) return (selectedIndex = -1)
       let old: SegmentedButtonItem | null = null
@@ -49,6 +41,17 @@ export class SegmentedButton extends builder({
         changed = false
       }
     }
+    slot.addEventListener('slotchange', () => {
+      let target: null | SegmentedButtonItem = null
+      selectedIndex = -1
+      options = slot.assignedElements().filter((item) => {
+        if (item instanceof SegmentedButtonItem) {
+          if (item.selected) target = item
+          return true
+        }
+      }) as SegmentedButtonItem[]
+      if (target) update(target)
+    })
     this.addEventListener('segmented-button-item:update', (event: Event) => {
       event.stopPropagation()
       update(event.target as SegmentedButtonItem)
@@ -65,13 +68,17 @@ export class SegmentedButton extends builder({
         get selectedIndex() {
           return selectedIndex
         }
-      },
-      render: () => html`
-        <slot @slotchange="${slotChange}"></slot>
-      `
+      }
     }
   }
 }) { }
+
+const itemName = 's-segmented-button-item'
+const itemProps = {
+  selected: false,
+  disabled: false,
+  selectable: true
+}
 
 const itemStyle = /*css*/`
 :host{
@@ -116,18 +123,18 @@ const itemStyle = /*css*/`
 }
 `
 
-const itemName = 's-segmented-button-item'
-const itemProps = {
-  selected: false,
-  disabled: false,
-  selectable: true
-}
+const itemTemplate =/*html*/`
+<slot name="start"></slot>
+<slot></slot>
+<slot name="end"></slot>
+<s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
+`
 
-export class SegmentedButtonItem extends builder({
-  name: itemName,
+export class SegmentedButtonItem extends useElement({
   style: itemStyle,
+  template: itemTemplate,
   props: itemProps,
-  propSyncs: ['selected', 'disabled'],
+  syncProps: ['selected', 'disabled'],
   setup() {
     this.addEventListener('click', () => {
       if (this.selectable) {
@@ -144,19 +151,13 @@ export class SegmentedButtonItem extends builder({
           if (!(this.parentNode instanceof SegmentedButton)) return
           this.dispatchEvent(new Event('segmented-button-item:update', { bubbles: true }))
         }
-      },
-      render: () => html`
-        <slot name="start"></slot>
-        <slot></slot>
-        <slot name="end"></slot>
-        <s-ripple class="ripple" attached="true"></s-ripple>
-      `
+      }
     }
   }
 }) { }
 
-SegmentedButton.define()
-SegmentedButtonItem.define()
+SegmentedButton.define(name)
+SegmentedButtonItem.define(itemName)
 
 
 declare global {

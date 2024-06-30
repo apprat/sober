@@ -1,6 +1,11 @@
-import { builder, html } from './core/element.js'
+import { useElement, JSXAttributes } from './core/element.js'
 import './ripple.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+
+const name = 's-button'
+const props = {
+  disabled: false,
+  type: 'filled' as 'filled' | 'elevated' | 'filled-tonal' | 'outlined' | 'text'
+}
 
 const style = /*css*/`
 :host{
@@ -21,7 +26,7 @@ const style = /*css*/`
   white-space: nowrap;
   background: var(--s-color-primary, #5256a9);
   color: var(--s-color-on-primary, #ffffff);
-  transition: box-shadow .2s;
+  transition: box-shadow .12s;
   overflow: hidden;
 }
 :host([disabled=true]){
@@ -112,27 +117,16 @@ const style = /*css*/`
 }
 `
 
-const name = 's-button'
-const props = {
-  disabled: false,
-  type: 'filled' as 'filled' | 'elevated' | 'filled-tonal' | 'outlined' | 'text'
-}
+const template = /*html*/ `
+<slot name="start"></slot>
+<slot></slot>
+<slot name="end"></slot>
+<s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
+`
 
-export class Button extends builder({
-  name, style, props, propSyncs: true,
-  setup() {
-    return {
-      render: () => html`
-        <slot name="start"></slot>
-        <slot></slot>
-        <slot name="end"></slot>
-        <s-ripple class="ripple" attached="true"></s-ripple>
-      `
-    }
-  }
-}) { }
+export class Button extends useElement({ style, template, props, syncProps: true, }) { }
 
-Button.define()
+Button.define(name)
 
 declare global {
   namespace JSX {

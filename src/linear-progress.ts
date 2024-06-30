@@ -1,94 +1,117 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
+
+const name = 's-linear-progress'
+const props = {
+  indeterminate: false,
+  animated: false,
+  max: 100,
+  value: 0
+}
 
 const style = /*css*/`
 :host{
   display: block;
   height: 4px;
   color: var(--s-color-primary, #5256a9);
-  position: relative;
   border-radius: 2px;
   overflow: hidden;
 }
-.track{
-  background: var(--s-color-secondary-container, #e2e0f9);
-  height: 100%;
+:host([animated=true]) .known>.block{
+  transition: transform .12s;
 }
-.float{
+:host([indeterminate=true]) .known,
+.unknown{
+  display: none;
+}
+:host([indeterminate=true]) .unknown,
+.known{
+  display: flex;
+}
+.container{
+  height: 100%;
+  border-radius: inherit;
+  position: relative;
+}
+.block{
   position: absolute;
   height: 100%;
+  border-radius: inherit;
   width: 100%;
   left: 0;
   top: 0;
 }
-.determinable{
-  background: currentColor;
-  transform: translateX(-100%);
+.track{
+  background: var(--s-color-secondary-container, #e2e0f9);
 }
-.indeterminate::before,
-.indeterminate::after{
-  content: '';
+.indicator{
+  background: currentColor;
+}
+.indicator-dot{
   position: absolute;
-  height: 100%;
+  right: 0;
   top: 0;
-  bottom: 0;
-  left: 0;
+  height: 100%;
+  aspect-ratio: 1;
   background: currentColor;
-  animation: translate 2s linear infinite;
+  border-radius: inherit;
 }
-.indeterminate::after{
-  animation: translate2 2s linear infinite;
+@keyframes unknown{
+  0%{
+    transform: translateX(0);
+  }
+  100%{
+    transform: translateX(150%);
+  }
 }
-:host([indeterminate=true]) .determinable,
-.indeterminate{
-  display: none;
+.unknown{
+  justify-content: flex-end;
+  gap: 4px;
+  animation: unknown 2s linear infinite;
 }
-:host([indeterminate=true]) .indeterminate{
-  display: block;
+.unknown .block{
+  position: static;
+  flex-grow: 1;
+  width: 100%;
+  flex-shrink: 0;
 }
-@keyframes translate{
-  0% { left: 0; width: 0 }
-  50% { left: 30%; width: 70% }
-  75% { left: 100%; width: 0 }
-}
-@keyframes translate2{
-  0% { left: 0; width: 0 }
-  50% { left: 0; width: 0 }
-  75% { left: 0; width: 25% }
-  100% { left: 100%; width: 0 }
+.unknown .indicator{
+  width: 50%;
 }
 `
 
-const name = 's-linear-progress'
-const props = {
-  indeterminate: false,
-  max: 100,
-  value: 0
-}
+const template = /*html*/`
+<div class="container known" part="container">
+  <div class="track block" style="transform: translateX(0%)" part="track"></div>
+  <div class="indicator-dot" part="indicator-dot"></div>
+  <div class="indicator block" style="transform: translateX(-100%)" part="indicator"></div>
+</div>
+<div class="container unknown" part="container">
+  <div class="track block" part="track"></div>
+  <div class="indicator block" part="indicator"></div>
+  <div class="track block" part="indicator"></div>
+</div>
+`
 
-export class LinearProgress extends builder({
-  name, style, props, propSyncs: ['indeterminate'],
-  setup() {
-    let linear: HTMLDivElement
+export class LinearProgress extends useElement({
+  style, template, props, syncProps: ['indeterminate', 'animated'],
+  setup(shadowRoot) {
+    const track = shadowRoot.querySelector('.known>.track') as HTMLDivElement
+    const indicator = shadowRoot.querySelector('.known>.indicator') as HTMLDivElement
     const render = () => {
       const percentage = Math.min(this.value, this.max) / this.max * 100
-      linear.style.transform = `translateX(-${100 - percentage}%)`
+      track.style.transform = `translateX(calc(${percentage}% + ${percentage === 0 ? 0 : 4}px))`
+      indicator.style.transform = `translateX(${percentage - 100}%)`
     }
     return {
       watches: {
         max: render,
         value: render
-      },
-      render: () => html`
-        <div class="track"></div>
-        <div class="determinable float" ref="${(el: HTMLDivElement) => linear = el}"></div>
-        <div class="indeterminate float"></div>
-      `
+      }
     }
   }
 }) { }
 
-LinearProgress.define()
+LinearProgress.define(name)
 
 declare global {
   namespace JSX {

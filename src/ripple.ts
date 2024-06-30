@@ -1,6 +1,11 @@
-import { builder, html } from './core/element.js'
+import { useElement, JSXAttributes } from './core/element.js'
 import { device } from './core/utils.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+
+const name = 's-ripple'
+const props = {
+  centered: false,
+  attached: false
+}
 
 const style = /*css*/`
 :host{
@@ -50,7 +55,7 @@ const style = /*css*/`
   border-radius: inherit;
   background: var(--ripple-color, currentColor);
   filter: opacity(0);
-  transition: filter .2s;
+  transition: filter .12s;
   will-change: filter;
 }
 .container.hover::before{
@@ -58,11 +63,10 @@ const style = /*css*/`
 }
 `
 
-const name = 's-ripple'
-const props = {
-  centered: false,
-  attached: false
-}
+const template = /*html*/`
+<slot></slot>
+<div class="container" part="container"></div>
+`
 
 const pointerUp = (fn: Function) => {
   const up = () => {
@@ -74,10 +78,10 @@ const pointerUp = (fn: Function) => {
   document.addEventListener('pointercancel', up)
 }
 
-export class Ripple extends builder({
-  name, style, props, propSyncs: ['attached'],
-  setup() {
-    let container: HTMLDivElement
+export class Ripple extends useElement({
+  style, template, props, syncProps: ['attached'],
+  setup(shadowRoot) {
+    const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const hover = () => !device.touched && container.classList.add('hover')
     const unHover = () => !device.touched && container.classList.remove('hover')
     const run = (event: PointerEvent, upped?: boolean) => {
@@ -150,16 +154,12 @@ export class Ripple extends builder({
           removeEvents()
           addEvents()
         }
-      },
-      render: () => html`
-        <slot></slot>
-        <div class="container" ref="${(el: HTMLDivElement) => container = el}"></div>
-      `
+      }
     }
   }
 }) { }
 
-Ripple.define()
+Ripple.define(name)
 
 declare global {
   namespace JSX {

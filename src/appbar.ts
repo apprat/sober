@@ -1,5 +1,8 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
+
+const name = 's-appbar'
+const props = {
+}
 
 const style = /*css*/`
 :host{
@@ -27,7 +30,7 @@ slot[name=action]{
 ::slotted(s-search){
   background: var(--s-color-surface, #fffbff);
 }
-::slotted(s-top-app-bar){
+::slotted(s-appbar){
   height: 100%;
   width: 100%;
   max-width: 1280px;
@@ -59,29 +62,20 @@ slot[name=action]{
 }
 `
 
-const name = 's-top-app-bar'
-const props = {
-}
+const template = /*html*/`
+<slot name="navigation"></slot>
+<div class="headline">
+  <slot name="headline"></slot>
+</div>
+<div class="grow" part="view">
+  <slot></slot>
+</div>
+<slot name="action"></slot>
+`
 
-export class TopAppBar extends builder({
-  name, style, props,
-  setup() {
-    return {
-      render: () => html`
-        <slot name="navigation"></slot>
-        <div class="headline">
-          <slot name="headline"></slot>
-        </div>
-        <div class="grow">
-          <slot></slot>
-        </div>
-        <slot name="action"></slot>
-      `
-    }
-  }
-}) { }
+export class Appbar extends useElement({ style, template, props }) { }
 
-TopAppBar.define()
+Appbar.define(name)
 
 declare global {
   namespace JSX {
@@ -90,7 +84,7 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: TopAppBar
+    [name]: Appbar
   }
 }
 

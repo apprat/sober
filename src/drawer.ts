@@ -1,5 +1,9 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
+
+const name = 's-drawer'
+const props = {
+  fold: 840
+}
 
 const style = /*css*/`
 :host{
@@ -21,7 +25,7 @@ const style = /*css*/`
   height: 100%;
   filter: opacity(0);
   pointer-events: none;
-  transition: filter .2s;
+  transition: filter .12s;
 }
 .start,
 .end{
@@ -93,19 +97,37 @@ const style = /*css*/`
 }
 `
 
+const template = /*html*/`
+<div class="container show-start show-end" part="container">
+  <slot></slot>
+  <div class="scrim" part="scrim"></div>
+  <div class="start" part="start">
+    <slot name="start"></slot>
+  </div>
+  <div class="end" part="end">
+    <slot name="end"></slot>
+  </div>
+</div>
+`
+
 type Slot = 'start' | 'end'
 
-const name = 's-drawer'
-const props = {
-  fold: 840
-}
 
-export class Drawer extends builder({
-  name, props, style,
-  setup() {
-    let container: HTMLDivElement
-    const elements = { start: undefined as unknown as HTMLDivElement, end: undefined as unknown as HTMLDivElement }
-    const slots = { start: undefined as undefined | HTMLSlotElement, end: undefined as undefined | HTMLSlotElement }
+export class Drawer extends useElement({
+  style, template, props,
+  setup(shadowRoot) {
+    const container = shadowRoot.querySelector('.container') as HTMLDivElement
+    const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
+    const elements = {
+      start: shadowRoot.querySelector('.start') as HTMLDivElement,
+      end: shadowRoot.querySelector('.end') as HTMLDivElement,
+      startSlot: shadowRoot.querySelector('slot[name=start]') as HTMLSlotElement,
+      endSlot: shadowRoot.querySelector('slot[name=end]') as HTMLSlotElement
+    }
+    const slots = {
+      start: null as null | HTMLElement,
+      end: null as null | HTMLElement
+    }
     const duration = 200
     const show = (slot: Slot = 'start', folded?: boolean) => {
       const isFold = folded === undefined ? container.classList.contains('folded') : folded
@@ -134,25 +156,19 @@ export class Drawer extends builder({
     }
     const obs = new ResizeObserver(() => this.offsetWidth < this.fold ? container.classList.add('folded') : container.classList.remove('folded'))
     obs.observe(this)
+    scrim.addEventListener('click', () => {
+      dismiss('start')
+      dismiss('end')
+    })
+    elements.startSlot.addEventListener('slotchange', () => slots.start = elements.startSlot.assignedElements()[0] as never)
+    elements.endSlot.addEventListener('slotchange', () => slots.end = elements.endSlot.assignedElements()[0] as never)
     return {
-      expose: { show, dismiss, toggle },
-      render: () => html`
-        <div class="container show-start show-end" ref="${(el: HTMLDivElement) => container = el}">
-          <slot></slot>
-          <div class="scrim" @click="${() => { dismiss('start'); dismiss('end') }}"></div>
-          <div class="start" ref="${(el: HTMLDivElement) => elements.start = el}">
-            <slot name="start" @slotchange="${(_: Event, el: HTMLSlotElement) => slots.start = el.assignedElements()[0] as any}"></slot>
-          </div>
-          <div class="end" ref="${(el: HTMLDivElement) => elements.end = el}">
-            <slot name="end" @slotchange="${(_: Event, el: HTMLSlotElement) => slots.end = el.assignedElements()[0] as any}"></slot>
-          </div>
-        </div>
-      `
+      expose: { show, dismiss, toggle }
     }
   }
 }) { }
 
-Drawer.define()
+Drawer.define(name)
 
 declare global {
   namespace JSX {

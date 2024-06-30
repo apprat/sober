@@ -1,6 +1,11 @@
-import { builder, html } from './core/element.js'
+import { useElement, JSXAttributes } from './core/element.js'
 import './ripple.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+
+const name = 's-icon-button'
+const props = {
+  disabled: false,
+  type: 'standard' as 'standard' | 'filled' | 'filled-tonal' | 'outlined',
+}
 
 const style = /*css*/`
 :host{
@@ -11,7 +16,7 @@ const style = /*css*/`
   cursor: pointer;
   border-radius: 50%;
   width: 40px;
-  height: 40px;
+  aspect-ratio: 1;
   color: var(--s-color-on-surface-variant, #46464f);
   position: relative;
   box-sizing: border-box;
@@ -49,27 +54,16 @@ const style = /*css*/`
 }
 `
 
-const name = 's-icon-button'
-const props = {
-  disabled: false,
-  type: 'standard' as 'standard' | 'filled' | 'filled-tonal' | 'outlined',
-}
+const template = /*html*/`
+<slot name="start"></slot>
+<slot></slot>
+<slot name="end"></slot>
+<s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
+`
 
-export class IconButton extends builder({
-  name, style, props, propSyncs: true,
-  setup() {
-    return {
-      render: () => html`
-        <slot name="start"></slot>
-        <slot></slot>
-        <slot name="end"></slot>
-        <s-ripple class="ripple" attached="true" centered="true"></s-ripple>
-      `
-    }
-  }
-}) { }
+export class IconButton extends useElement({ style, template, props, syncProps: true, }) { }
 
-IconButton.define()
+IconButton.define(name)
 
 declare global {
   namespace JSX {

@@ -1,81 +1,8 @@
+export * from './types/HTMLAttributes.js'
+
 type Prop = string | number | boolean
 
-interface TemplateHTML {
-  template: HTMLTemplateElement
-  mark: string
-}
-
-const getMark = (value: string) => `<!--${value}-->`
-
-export const html = (template: TemplateStringsArray, ...values: (Function | Prop)[]) => {
-  return {
-    values,
-    getTemplateHTML: (): TemplateHTML => {
-      const mark = getMark(String(Math.random()).slice(2))
-      const t = document.createElement('template')
-      t.innerHTML = template.join(mark)
-      return { mark, template: t }
-    }
-  }
-}
-
-const walkNode = (list: NodeList, mark: string, templateValue: { value: Function | Prop }) => {
-  list.forEach((item) => {
-    if (item.nodeType === Node.TEXT_NODE && item.textContent?.includes(mark)) item.textContent = item.textContent.replaceAll(mark, () => String(templateValue.value))
-    if (item.nodeType === Node.COMMENT_NODE && item.textContent && mark === getMark(item.textContent)) {
-      item.parentNode!.replaceChild(document.createTextNode(String(templateValue.value)), item)
-    }
-    if (item.nodeType === Node.ELEMENT_NODE) {
-      const el = item as Element
-      const attrs = el.getAttributeNames()
-      attrs.forEach((name) => {
-        const old = el.getAttribute(name)
-        if (name === 'ref' && old === mark) {
-          el.removeAttribute(name)
-          return (templateValue.value as Function)(el)
-        }
-        if (name.startsWith('@')) {
-          const [eventName, behavior] = name.slice(1).split('.') //click.stop
-          const fn = old === mark && templateValue.value as Function
-          el.addEventListener(eventName, (event: Event) => {
-            fn && fn(event, el)
-            if (behavior === 'stop') event.stopPropagation()
-            if (behavior === 'prevent') event.preventDefault()
-          }, { passive: behavior === 'passive' })
-          return el.removeAttribute(name)
-        }
-        old?.includes(mark) && el.setAttribute(name, old.replaceAll(mark, () => String(templateValue.value)))
-      })
-      walkNode(item.childNodes, mark, templateValue)
-    }
-  })
-}
-
-const templateHTMLCaches: { [key: string]: TemplateHTML } = {}
-
-const documentFromHTML = (name: string, htmls: ReturnType<typeof html>) => {
-  if (!templateHTMLCaches[name]) templateHTMLCaches[name] = htmls.getTemplateHTML()
-  const { mark, template: OldTemplate } = templateHTMLCaches[name]
-  const template = OldTemplate.cloneNode(true) as HTMLTemplateElement
-  const templateValue = {
-    index: 0,
-    get value() {
-      const value = htmls.values[this.index]
-      this.index++
-      return value
-    }
-  }
-  walkNode(template.content.childNodes, mark, templateValue)
-  return template.content
-}
-
-interface ElementState {
-  props: { [name: string]: Prop }
-  events?: { [name: string]: (() => unknown) | undefined }
-  watches?: { [x: string]: (value: Prop) => unknown }
-}
-
-const parsePropType = (value: unknown, old: Prop) => {
+const parseType = (value: unknown, old: Prop) => {
   if (value === undefined) return old
   if (typeof old === 'string') return String(value)
   if (typeof old === 'number') return Number(value)
@@ -89,100 +16,104 @@ const parsePropType = (value: unknown, old: Prop) => {
 const baseStyle = new CSSStyleSheet()
 baseStyle.replaceSync(/*css*/`:host{ user-select: none;-webkit-user-select: none }`)
 
-export const builder = <
-  P extends { [x: string]: Prop } = {},
-  E extends {} = {},
+type Setup<P, E> = (this: P & HTMLElement, shadowRoot: ShadowRoot) => {
+  mounted?: () => void
+  unmounted?: () => void
+  adopted?: () => unknown
+  watches?: {
+    [K in keyof P]?: (value: P[K]) => void
+  }
+  expose?: E
+} | void
+
+export const useElement = <
+  P extends { [key: string]: Prop } = {},
+  E extends {} = {}
 >(options: {
-  name: string
   style?: string
   props?: P
-  propSyncs?: (keyof P)[] | true
-  setup: (this: P & HTMLElement, shadowRoot: ShadowRoot) => {
-    render: () => ReturnType<typeof html>
-    created?: () => void
-    mounted?: () => void
-    unmounted?: () => void
-    adopted?: () => unknown
-    watches?: { [K in keyof P]?: (value: P[K]) => void }
-    expose?: E
-  }
+  syncProps?: (keyof P)[] | true
+  template?: string
+  setup?: Setup<P, E>
 }): {
   new(): P & E & HTMLElement
-  readonly define: () => void
+  readonly define: (name: string) => void
   prototype: HTMLElement
 } => {
-  const map = new Map<HTMLElement, ElementState>()
-  const attributes: string[] = []
-  for (const key in options.props) attributes.push(key)
   const sheet = new CSSStyleSheet()
   sheet.replaceSync(options.style ?? '')
-  class CustomElement extends HTMLElement {
-    static observedAttributes = attributes
+  const attrs: string[] = []
+  const upperAttrs: { [key: string]: string } = {}
+  for (const key in options.props) {
+    const value = key.toLowerCase()
+    attrs.push(value)
+    upperAttrs[value] = key
+  }
+  const map = new Map<HTMLElement, ReturnType<Setup<P, E>>>()
+  class Protoptype extends HTMLElement {
+    static observedAttributes = attrs
+    static define(name: string) {
+      customElements.define(name, this)
+    }
     constructor() {
       super()
-      const shadowRoot = this.attachShadow({ mode: 'closed' })
-      const realProps = { ...options.props }
-      const elementState: ElementState = { props: { ...options.props } }
-      //Allocated before initialization
-      const assigned: { [key: string]: unknown } = {}
-      for (const key in this) {
-        if (key in HTMLElement.prototype) continue
-        assigned[key] = this[key]
-      }
-      for (const key in realProps) {
-        const set = (v: unknown) => {
-          let value = parsePropType(v, elementState.props[key])
-          if (value === realProps[key]) return
-          if (options.propSyncs === true || options.propSyncs?.includes(key)) {
-            const old = this.getAttribute(key)
-            const attrVal = String(value)
-            if (old !== null && value === elementState.props[key]) {
-              this.removeAttribute(key)
-              return
-            }
-            if (attrVal !== old && value !== elementState.props[key]) {
-              this.setAttribute(key, attrVal)
-              return
-            }
-          }
-          realProps[key] = value
-          elementState.watches?.[key]?.(value)
-        }
-        Object.defineProperty(this, key, { enumerable: true, get: () => realProps[key], set })
-      }
-      for (const key in assigned) {
-        this[key] = assigned[key]
-      }
-      const setup = options.setup?.apply(this as never, [shadowRoot])
+      const shadowRoot = this.attachShadow({ mode: 'open' })
       shadowRoot.adoptedStyleSheets = [baseStyle, sheet]
-      shadowRoot.appendChild(documentFromHTML(options.name, setup.render()))
-      elementState.events = {
-        adopted: setup.adopted,
-        mounted: setup.mounted,
-        unmounted: setup.unmounted
+      shadowRoot.innerHTML = options.template ?? ''
+      const props = { ...options.props }
+      const setups = options.setup?.apply(this as any, [shadowRoot])
+      //在组件创建前的赋值
+      const assigned: { [key: string]: unknown } = {}
+      for (const key in options.props) {
+        if (this[key as never] === undefined) continue
+        assigned[key] = this[key as never]
       }
-      elementState.watches = setup.watches as any
-      setup.created?.()
-      for (const key in setup.expose) {
-        Object.defineProperty(this, key, { get: () => setup.expose?.[key] })
+      for (const key in options.props) {
+        Object.defineProperty(this, key, {
+          get: () => props[key],
+          set: (v) => {
+            const value = parseType(v, options.props![key])
+            if (value === props[key]) return
+            if (options.syncProps === true || options.syncProps?.includes(key)) {
+              const lowerKey = key.toLowerCase()
+              const attrValue = this.getAttribute(lowerKey)
+              const valueStr = String(value)
+              if (value === options.props?.[key] && attrValue !== null) {
+                this.removeAttribute(lowerKey)
+                return
+              }
+              if (value !== options.props?.[key] && attrValue !== valueStr) {
+                this.setAttribute(lowerKey, valueStr)
+                return
+              }
+            }
+            props[key] = value
+            setups?.watches?.[key]?.(value as never)
+          }
+        })
       }
-      map.set(this, elementState)
+      for (const key in setups?.expose) {
+        Object.defineProperty(this, key, { get: () => setups?.expose![key as never] })
+      }
+      for (const key in assigned) this[key] = assigned[key]
+      map.set(this, setups)
     }
     connectedCallback() {
-      map.get(this)?.events?.mounted?.()
+      map.get(this)?.mounted?.()
     }
     disconnectedCallback() {
-      map.get(this)?.events?.unmounted?.()
+      map.get(this)?.unmounted?.()
     }
     adoptedCallback() {
-      map.get(this)?.events?.adopted?.()
+      map.get(this)?.adopted?.()
     }
-    attributeChangedCallback(name: string, _: string | null, newValue: string | null) {
-      this[name] = newValue ?? undefined
+    attributeChangedCallback(key: string, _: unknown, newValue: string | null) {
+      this[upperAttrs[key]] = newValue ?? undefined
     }
   }
-  CustomElement['define'] = function () {
-    !customElements.get(options.name) && customElements.define(options.name, this)
-  }
-  return CustomElement as never
+  return Protoptype as never
+}
+
+export type LowercaseKeys<T> = {
+  [K in keyof T as K extends string ? Lowercase<K> : never]: T[K]
 }

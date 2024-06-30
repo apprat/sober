@@ -1,5 +1,9 @@
-import { builder, html } from './core/element.js'
-import type { JSXAttributes } from './core/types/HTMLAttributes.js'
+import { useElement, JSXAttributes } from './core/element.js'
+
+const name = 's-page'
+const props = {
+  theme: 'light' as 'auto' | 'light' | 'dark'
+}
 
 const dark = `
   --s-color-primary: var(--s-color-dark-primary) !important;
@@ -114,8 +118,8 @@ const style = /*css*/`
   --s-elevation-level1: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
   --s-elevation-level2: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
   --s-elevation-level3: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
-  --s-elevation-level4: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
-  --s-elevation-level5: 0 8px 10px -6px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12);
+  --s-elevation-level4: 0 8px 10px -5px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12);
+  --s-elevation-level5: 0 10px 14px -6px rgba(0, 0, 0, .2), 0 22px 35px 3px rgba(0, 0, 0, .14), 0 8px 42px 7px rgba(0, 0, 0, .12);
 }
 :host([theme=dark]){
   ${dark}
@@ -127,23 +131,11 @@ const style = /*css*/`
 }
 `
 
-const name = 's-page'
-const props = {
-  theme: 'light' as 'auto' | 'light' | 'dark'
-}
+const template = /*html*/`<slot></slot>`
 
-export class Page extends builder({
-  name, style, props, propSyncs: ['theme'],
-  setup() {
-    return {
-      render: () => html`
-        <slot></slot>
-      `
-    }
-  }
-}) { }
+export class Page extends useElement({ style, template, props, syncProps: ['theme'] }) { }
 
-Page.define()
+Page.define(name)
 
 declare global {
   namespace JSX {

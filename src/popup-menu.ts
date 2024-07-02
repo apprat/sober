@@ -15,7 +15,7 @@ const style = /*css*/`
   font-size: .875rem;
   color: var(--s-color-on-surface, #1c1b1f);
 }
-.POPUP{
+.popup{
   display: block;
 }
 .container{
@@ -24,15 +24,15 @@ const style = /*css*/`
   min-height: auto;
   box-sizing: border-box;
 }
-::slotted(s-menu){
+::slotted(s-popup-menu){
   display: block;
 }
-::slotted(s-menu[group=start]){
+::slotted(s-popup-menu[group=start]){
   border-top: solid 1px var(--s-color-outline-variant, #c7c5d0);
   margin-top: 8px;
   padding-top: 8px;
 }
-::slotted(s-menu[group=end]){
+::slotted(s-popup-menu[group=end]){
   border-bottom: solid 1px var(--s-color-outline-variant, #c7c5d0);
   margin-bottom: 8px;
   padding-bottom: 8px;

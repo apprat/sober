@@ -99,10 +99,10 @@ export class Tooltip extends useElement({
       dismiss()
     }
     trigger.addEventListener('wheel', dismiss, { passive: true })
-    trigger.addEventListener('mouseover', () => !device.touched && show())
-    trigger.addEventListener('mouseleave', () => !device.touched && dismiss())
-    trigger.addEventListener('touchstart', touchShow)
-    trigger.addEventListener('touchend', touchDismiss)
+    trigger.addEventListener('mouseover', () => !device.touched && show(), { passive: true })
+    trigger.addEventListener('mouseleave', () => !device.touched && dismiss(), { passive: true })
+    trigger.addEventListener('touchstart', touchShow, { passive: true })
+    trigger.addEventListener('touchend', touchDismiss, { passive: true })
     container.addEventListener('transitionend', transitionEnd)
   }
 }) { }

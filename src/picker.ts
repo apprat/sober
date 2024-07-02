@@ -208,8 +208,9 @@ export class Picker extends useElement({
         get selectedIndex() {
           return selectedIndex
         },
-        show: () => popup.show(),
-        dismiss: () => popup.dismiss()
+        show: popup.show.bind(popup),
+        dismiss: popup.dismiss.bind(popup),
+        toggle: popup.toggle.bind(popup)
       }
     }
   }

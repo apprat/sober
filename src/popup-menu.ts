@@ -53,9 +53,9 @@ export class PopupMenu extends useElement({
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector('.popup') as Popup
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
-    const show = (elemtnt?: HTMLElement) => popup.show(elemtnt)
-    const dismiss = () => popup.dismiss()
-    const toggle = (elemtnt?: HTMLElement) => popup.toggle(elemtnt)
+    const show = popup.show.bind(popup)
+    const dismiss = popup.dismiss.bind(popup)
+    const toggle = popup.toggle.bind(popup)
     trigger.addEventListener('click', (e) => {
       e.stopPropagation()
       show()

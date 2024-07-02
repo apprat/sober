@@ -62,12 +62,6 @@ export const useElement = <
       shadowRoot.innerHTML = options.template ?? ''
       const props = { ...options.props }
       const setups = options.setup?.apply(this as any, [shadowRoot])
-      //在组件创建前的赋值
-      const assigned: { [key: string]: unknown } = {}
-      for (const key in options.props) {
-        if (this[key as never] === undefined) continue
-        assigned[key] = this[key as never]
-      }
       for (const key in options.props) {
         Object.defineProperty(this, key, {
           get: () => props[key],
@@ -95,7 +89,6 @@ export const useElement = <
       for (const key in setups?.expose) {
         Object.defineProperty(this, key, { get: () => setups?.expose![key as never] })
       }
-      for (const key in assigned) this[key] = assigned[key]
       map.set(this, setups)
     }
     connectedCallback() {

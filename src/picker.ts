@@ -1,6 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
 import { Popup } from './popup.js'
-import './ripple.js'
 import './scroll-view.js'
 
 const name = 's-picker'
@@ -11,10 +10,10 @@ const props = {
 
 const style = /*css*/`
 :host{
-  display: inline-block;
+  display: inline-grid;
   vertical-align: middle;
   font-size: .875rem;
-  --height: 48px;
+  min-height: 48px;
   --border-radius: 4px;
   --border-color: var(--s-color-outline, #777680);
   --border-width: 1px;
@@ -24,107 +23,95 @@ const style = /*css*/`
   pointer-events: none;
   opacity: .38;
 }
+.popup{
+  display: grid;
+  height: 100%;
+}
 .trigger{
-  color: var(--s-color-on-surface, #1c1b1f);
   display: flex;
-  align-items: center;
-  height: var(--height);
-  position: relative;
+  height: 100%;
   cursor: pointer;
   border-radius: var(--border-radius);
+  position: relative;
 }
 .trigger::before,
 .trigger::after{
   content: '';
-  width: var(--border-radius);
   height: 100%;
-  box-sizing: border-box;
-  border-radius: var(--border-radius);
+  width: var(--border-radius);
   border: solid var(--border-width) var(--border-color);
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 .trigger::before{
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
   border-right: none;
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
 }
 .trigger::after{
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
   border-left: none;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 .text{
   display: flex;
-  height: var(--height);
+  justify-content: space-between;
   align-items: center;
+  padding: 0 var(--padding);
   position: relative;
-  padding: 0 var(--padding, 16px);
-  color: var(--s-color-on-surface, #1c1b1f);
-  white-space: nowrap;
   margin: 0 calc(var(--border-radius) * -1);
+  width: 100%;
 }
-.text::before{
-  position: absolute;
-  left: var(--border-radius);
-  bottom: 0;
+.text::after{
   content: '';
-  width: calc(100% - (var(--border-radius) * 2));
-  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: var(--border-radius);
+  width: calc(100%  - (var(--border-radius)*2));
   border-bottom: solid var(--border-width) var(--border-color);
 }
 .top{
-  pointer-events: none;
-  height: 100%;
-  display: flex;
-}
-.top::after,
-.top::before{
   position: absolute;
+  pointer-events: none;
   left: var(--border-radius);
   top: 0;
-  width: calc(100%  - (var(--border-radius)*2));
+  height: 100%;
+  width: calc(100%  - (var(--border-radius) * 2));
+  display: flex;
+}
+.top::before,
+.top::after{
   content: '';
   border-top: solid var(--border-width) var(--border-color);
+  box-sizing: border-box;
+}
+.top::before{
+  width: calc(var(--padding) - var(--border-radius));
 }
 .top::after{
-  content: none;
+  flex-grow: 1;
 }
 .label{
   color: var(--border-color);
+  height: 100%;
   display: flex;
+  white-space: nowrap;
+  width: 0;
   align-items: center;
+  transform: translateX(min(calc(var(--padding) - var(--border-radius)), 0px));
   transition: transform .12s;
 }
-.label:empty{
-  display: none;
-}
-.value:not(:empty)+.top{
-  position: absolute;
-  left: var(--border-radius);
-  top: 0;
-  width: calc(100%  - (var(--border-radius)*2));
-}
-.value:not(:empty)+.top::before,
-.value:not(:empty)+.top::after{
-  content: '';
-  position: static;
-}
-.value:not(:empty)+.top::before{
-  width: calc(var(--padding) - var(--border-radius) - 4px);
-  flex-shrink: 0;
-}
-.value:not(:empty)+.top::after{
-  flex-grow: 1;
-}
 .value:not(:empty)+.top>.label{
+  width: auto;
   transform: translateY(-50%) scale(.8571428571428571);
 }
 svg{
   width: 24px;
   height: 24px;
-  fill: currentColor;
+  fill: var(--s-color-on-surface, #1c1b1f);
   padding: 2px;
   box-sizing: border-box;
-  margin-right: -8px;
+  margin-right: -10px;
   flex-shrink: 0;
 }
 .container{
@@ -139,13 +126,15 @@ const template = /*html*/ `
       <div class="text">
         <div class="value"></div>
         <div class="top">
-          <div class="label">${props.label}</div>
+          <div class="label" part="label">
+            <span>${props.label}</span>
+          </div>
         </div>
         <svg viewBox="0 -960 960 960" slot="end">
           <path d="M480-360 280-560h400L480-360Z"></path>
         </svg>
       </div>
-      <s-ripple attached="true" ></s-ripple>
+      <s-ripple attached="true" part="ripple"></s-ripple>
     </div>
   </slot>
   <s-scroll-view class="container" part="container">
@@ -159,11 +148,12 @@ export class Picker extends useElement({
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector('.popup') as Popup
     const slot = shadowRoot.querySelector('#slot') as HTMLSlotElement
-    const label = shadowRoot.querySelector('.label') as HTMLDivElement
+    const label = shadowRoot.querySelector('.label>span') as HTMLDivElement
     const value = shadowRoot.querySelector('.value') as HTMLDivElement
     let options: PickerItem[] = []
     let selectedIndex = -1
     let changed = false
+    const setMinWidth = () => value.style.minWidth = `${label.offsetWidth}px`
     const update = (target: PickerItem) => {
       if (options.length === 0 || !target.selected) {
         value.textContent = ''
@@ -177,7 +167,7 @@ export class Picker extends useElement({
         }
       }
       selectedIndex = options.indexOf(target)
-      value.textContent = options[selectedIndex].textContent!
+      value.textContent = options[selectedIndex].textContent
       if (changed) {
         this.dispatchEvent(new Event('change'))
         changed = false
@@ -204,9 +194,11 @@ export class Picker extends useElement({
       changed = true
     })
     return {
+      mounted: setMinWidth,
       watches: {
         label: (value) => {
           label.textContent = value
+          setMinWidth()
         }
       },
       expose: {
@@ -240,6 +232,7 @@ const itemStyle = /*css*/`
 }
 :host([selected=true]){
   background: var(--s-color-surface-container-highest, #e5e1e6);
+  pointer-events: none;
 }
 `
 

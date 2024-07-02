@@ -28,6 +28,9 @@
 
 <body>
   <s-page theme="auto">
+    <s-text-field label="请输入名称">
+      <textarea style="min-height: 112px"></textarea>
+    </s-text-field>
     <s-button>
       <s-icon type="search" slot="start"></s-icon>
       button
@@ -171,6 +174,10 @@
     <s-switch disabled="true" checked="true"></s-switch>
     <hr>
     <s-text-field label="请输入名称" style="margin: 16px;">
+      <input type="text">
+    </s-text-field>
+
+    <s-text-field label="请输入名称" style="margin: 16px;">
       <s-icon-button slot="start">
         <s-icon slot="end" type="star"></s-icon>
       </s-icon-button>
@@ -178,14 +185,41 @@
       <s-icon slot="end" type="favorite"></s-icon>
     </s-text-field>
 
-    <s-text-field label="请输入名称" style="margin: 16px;--border-radius: 24px; --padding: 24px;">
+    <s-text-field label="请输入名称" style="margin: 16px;--border-radius: 24px;">
       <input type="password">
     </s-text-field>
 
-    <s-text-field label="请输入名称" style="margin: 16px;">
-      <textarea>ss</textarea>
+    <s-text-field label="请输入名称" style="margin: 16px;--padding: 40px">
+      <input type="text" placeholder="请输入">
     </s-text-field>
 
+    <s-text-field label="请输入名称" style="margin: 16px;">
+      <textarea placeholder="请输入" style="min-height: 96px;"></textarea>
+    </s-text-field>
+
+    <hr>
+    <s-picker onchange="console.log(this.selectedIndex)">
+      <s-picker-item selected="true">北京</s-picker-item>
+      <s-picker-item>上海</s-picker-item>
+      <s-picker-item>成都</s-picker-item>
+      <s-picker-item>贵阳</s-picker-item>
+      <s-picker-item>西安</s-picker-item>
+    </s-picker>
+    <s-picker label="请选择" onchange="console.log(this.selectedIndex)">
+      <s-picker-item>北京</s-picker-item>
+      <s-picker-item>上海</s-picker-item>
+      <s-picker-item>成都</s-picker-item>
+      <s-picker-item>贵阳</s-picker-item>
+      <s-picker-item>西安</s-picker-item>
+    </s-picker>
+    <s-picker onchange="console.log(this.selectedIndex)">
+      <s-button slot="trigger">选择</s-button>
+      <s-picker-item>北京</s-picker-item>
+      <s-picker-item>上海</s-picker-item>
+      <s-picker-item>成都</s-picker-item>
+      <s-picker-item>贵阳</s-picker-item>
+      <s-picker-item>西安</s-picker-item>
+    </s-picker>
     <hr>
     <s-rate></s-rate>
     <s-rate readonly="true"></s-rate>
@@ -411,29 +445,6 @@
         </s-icon-button>
       </s-appbar>
     </s-appbar>
-    <hr>
-    <s-picker onchange="console.log(this.selectedIndex)">
-      <s-picker-item selected="true">北京</s-picker-item>
-      <s-picker-item>上海</s-picker-item>
-      <s-picker-item>成都</s-picker-item>
-      <s-picker-item>贵阳</s-picker-item>
-      <s-picker-item>西安</s-picker-item>
-    </s-picker>
-    <s-picker label="请选择" onchange="console.log(this.selectedIndex)">
-      <s-picker-item>北京</s-picker-item>
-      <s-picker-item>上海</s-picker-item>
-      <s-picker-item>成都</s-picker-item>
-      <s-picker-item>贵阳</s-picker-item>
-      <s-picker-item>西安</s-picker-item>
-    </s-picker>
-    <s-picker onchange="console.log(this.selectedIndex)">
-      <s-button slot="trigger">选择</s-button>
-      <s-picker-item>北京</s-picker-item>
-      <s-picker-item>上海</s-picker-item>
-      <s-picker-item>成都</s-picker-item>
-      <s-picker-item>贵阳</s-picker-item>
-      <s-picker-item>西安</s-picker-item>
-    </s-picker>
     <hr>
     <s-popup>
       <s-button slot="trigger"> popup </s-button>

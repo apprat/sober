@@ -9,11 +9,12 @@ const props = {
 
 const style = /*css*/`
 :host{
-  display: grid;
+  display: inline-grid;
+  vertical-align: middle;
   color: var(--s-color-primary, #5256a9);
   font-size: .875rem;
+  min-width: 280px;
   min-height: 48px;
-  max-width: 280px;
   --border-radius: 4px;
   --border-color: var(--s-color-outline, #777680);
   --border-width: 1px;
@@ -107,16 +108,14 @@ const style = /*css*/`
   left: var(--border-radius);
   top: 0;
   height: 100%;
-  width: calc(100%  - (var(--border-radius)*2));
+  width: calc(100%  - (var(--border-radius) * 2));
   display: flex;
-  align-items: center;
-  transform: translateY(-50%);
 }
 .outline{
   position: relative;
 }
 .outline.left{
-  width: calc(var(--padding) - var(--border-radius) - 4px);
+  width: calc(var(--padding) - var(--border-radius));
 }
 .outline.right{
   flex-grow: 1;
@@ -142,17 +141,22 @@ const style = /*css*/`
 }
 .label{
   color: var(--border-color);
-  position: absolute;
   height: 100%;
   display: flex;
+  white-space: nowrap;
+  width: 0;
   align-items: center;
-  transform: translate(calc((var(--border-radius) * -1) + var(--padding)), 50%);
+  transform: translateX(min(calc(var(--padding) - var(--border-radius)), 0px));
   transition: transform .12s;
 }
 .empty .label,
 :host(:focus-within) .label{
-  position: static;
-  transform: translate(0, 0) scale(.8571428571428571);
+  width: auto;
+  transform: translateY(-50%) scale(.8571428571428571);
+}
+.multi .label{
+  height: fit-content;
+  padding: var(--padding) 0;
 }
 :host(:focus-within) .label{
   color: currentColor;
@@ -180,7 +184,6 @@ const style = /*css*/`
 ::slotted(textarea),
 .shadow{
   resize: none;
-  padding: var(--padding);
   scrollbar-width: none;
   line-height: 16px;
   word-wrap: break-word;
@@ -188,6 +191,7 @@ const style = /*css*/`
   white-space: pre-wrap;
   min-height: 100%;
   height: 0;
+  padding: var(--padding);
 }
 .shadow{
   position: absolute;
@@ -201,6 +205,9 @@ const style = /*css*/`
 }
 .shadow::after{
   content: ' ';
+}
+.input .shadow{
+  display: none;
 }
 ::slotted(s-icon-button[slot=start]){
   margin-left: 4px;
@@ -247,8 +254,9 @@ export class TextField extends useElement({
     const label = shadowRoot.querySelector('.label') as HTMLSpanElement
     const inputSlot = shadowRoot.querySelector('.input') as HTMLSlotElement
     const inputShaodw = shadowRoot.querySelector('.shadow') as HTMLDivElement
-    let input: HTMLInputElement | HTMLTextAreaElement
+    let input: HTMLInputElement | HTMLTextAreaElement | null = null
     const onInput = () => {
+      if (!input) return
       input.value === '' ? container.classList.remove('empty') : container.classList.add('empty')
       if (input instanceof HTMLTextAreaElement) {
         inputShaodw.textContent = input.value
@@ -256,9 +264,14 @@ export class TextField extends useElement({
       }
     }
     inputSlot.addEventListener('slotchange', () => {
-      const field = inputSlot.assignedElements()[0]
-      if (!(field instanceof HTMLInputElement) && !(field instanceof HTMLTextAreaElement)) return
-      input = field
+      input = inputSlot.assignedElements()[0] as any
+      if (!(input instanceof HTMLInputElement) && !(input instanceof HTMLTextAreaElement)) {
+        inputShaodw.textContent = ''
+        container.classList.remove('multi', 'empty')
+        input = null
+        return
+      }
+      input instanceof HTMLTextAreaElement ? container.classList.add('multi') : container.classList.remove('multi')
       const descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(input), 'value')
       if (descriptor) {
         const oldSet = descriptor.set

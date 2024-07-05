@@ -93,10 +93,10 @@ const style = /*css*/`
   :host([type=elevated]:active){
     box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
   }
-  :host(:active),
-  :host([type=filled-tonal]:active){
+  :host(:active){
     box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
   }
+  :host([type=filled-tonal]:active),
   :host([type=outlined]:active),
   :host([type=text]:active){
     box-shadow: none;
@@ -106,10 +106,10 @@ const style = /*css*/`
   :host([type=elevated]:hover){
     box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
   }
-  :host(:hover),
-  :host([type=filled-tonal]:hover){
+  :host(:hover){
     box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
   }
+  :host([type=filled-tonal]:hover),
   :host([type=outlined]:hover),
   :host([type=text]:hover){
     box-shadow: none;

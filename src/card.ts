@@ -99,7 +99,7 @@ const template = /*html*/`
 export class Card extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
-    const action = shadowRoot.querySelector('.action') as HTMLElement
+    const action = shadowRoot.querySelector('slot[name=action]') as HTMLElement
     action.addEventListener('pointerdown', (e) => e.stopPropagation())
   }
 }) { }

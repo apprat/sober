@@ -113,6 +113,7 @@ const itemStyle = /*css*/`
 ::slotted(s-icon){
   width: 18px;
   height: 18px;
+  color: inherit;
   flex-shrink: 0;
 }
 ::slotted(s-icon[slot=start]){

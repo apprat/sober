@@ -13,7 +13,7 @@ const style = /*css*/`
   display: inline-grid;
   vertical-align: middle;
   font-size: .875rem;
-  min-height: 48px;
+  --height: 48px;
   --border-radius: 4px;
   --border-color: var(--s-color-outline, #777680);
   --border-width: 1px;
@@ -25,11 +25,10 @@ const style = /*css*/`
 }
 .popup{
   display: grid;
-  height: 100%;
 }
 .trigger{
   display: flex;
-  height: 100%;
+  height: var(--height);
   cursor: pointer;
   border-radius: var(--border-radius);
   position: relative;

@@ -12,7 +12,6 @@ const style = /*css*/`
   align-items: center;
   position: relative;
   padding: 0 8px;
-  z-index: 1;
 }
 ::slotted([slot=navigation]){
   margin-left: 4px;

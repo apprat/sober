@@ -56,10 +56,8 @@ const style = /*css*/`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 var(--padding);
   position: relative;
   margin: 0 calc(var(--border-radius) * -1);
-  width: 100%;
 }
 .text::after{
   content: '';
@@ -69,40 +67,55 @@ const style = /*css*/`
   width: calc(100%  - (var(--border-radius)*2));
   border-bottom: solid var(--border-width) var(--border-color);
 }
-.top{
-  position: absolute;
-  pointer-events: none;
-  left: var(--border-radius);
-  top: 0;
-  height: 100%;
-  width: calc(100%  - (var(--border-radius) * 2));
+.content{
   display: flex;
+  flex-direction: column;
+  height: 100%;
+  pointer-events: none;
 }
-.top::before,
-.top::after{
+.content>.value{
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--padding);
+  margin-right: 12px;
+  color: var(--s-color-on-surface, #1c1b1f);
+}
+.content>.label{
+  transform: translateY(-100%);
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  margin: 0 var(--border-radius);
+}
+.content>.label::before,
+.content>.label::after{
   content: '';
   border-top: solid var(--border-width) var(--border-color);
-  box-sizing: border-box;
 }
-.top::before{
-  width: calc(var(--padding) - var(--border-radius));
-}
-.top::after{
+.content>.label::after{
   flex-grow: 1;
 }
-.label{
-  color: var(--border-color);
+.content>.label>span{
   height: 100%;
   display: flex;
-  white-space: nowrap;
-  width: 0;
   align-items: center;
-  transform: translateX(min(calc(var(--padding) - var(--border-radius)), 0px));
+  border-top: solid var(--border-width) var(--border-color);
   transition: transform .12s;
+  padding: 0 calc(var(--padding) - var(--border-radius) + 12px) 0 calc(var(--padding) - var(--border-radius));
+  color: var(--border-color);
 }
-.value:not(:empty)+.top>.label{
-  width: auto;
+.content>.value:not(:empty)+.label>span{
   transform: translateY(-50%) scale(.8571428571428571);
+  border-top: none;
+  padding: 0;
+}
+.content>.value:not(:empty)+.label::before{
+  width: calc(var(--padding) - var(--border-radius));
+}
+.content>.value:not(:empty)+.label::after{
+  min-width: calc(var(--padding) - var(--border-radius));
 }
 svg{
   width: 24px;
@@ -110,8 +123,9 @@ svg{
   fill: var(--s-color-on-surface, #1c1b1f);
   padding: 2px;
   box-sizing: border-box;
-  margin-right: -10px;
   flex-shrink: 0;
+  position: absolute;
+  right: calc(var(--padding) - 12px);
 }
 .container{
   padding: 8px 0;
@@ -123,10 +137,10 @@ const template = /*html*/ `
   <slot slot="trigger" name="trigger">
     <div class="trigger" part="trigger">
       <div class="text">
-        <div class="value"></div>
-        <div class="top">
-          <div class="label" part="label">
-            <span>${props.label}</span>
+        <div class="content">
+          <div class="value"></div>
+          <div class="label">
+            <span></span>
           </div>
         </div>
         <svg viewBox="0 -960 960 960" slot="end">
@@ -152,7 +166,6 @@ export class Picker extends useElement({
     let options: PickerItem[] = []
     let selectedIndex = -1
     let changed = false
-    const setMinWidth = () => value.style.minWidth = `${label.offsetWidth}px`
     const update = (target: PickerItem) => {
       if (options.length === 0 || !target.selected) {
         value.textContent = ''
@@ -166,7 +179,7 @@ export class Picker extends useElement({
         }
       }
       selectedIndex = options.indexOf(target)
-      value.textContent = options[selectedIndex].textContent
+      value.textContent = options[selectedIndex]?.value === '' ? options[selectedIndex].textContent : options[selectedIndex].value
       if (changed) {
         this.dispatchEvent(new Event('change'))
         changed = false
@@ -193,11 +206,9 @@ export class Picker extends useElement({
       changed = true
     })
     return {
-      mounted: setMinWidth,
       watches: {
         label: (value) => {
           label.textContent = value
-          setMinWidth()
         }
       },
       expose: {
@@ -217,7 +228,8 @@ export class Picker extends useElement({
 
 const itemName = 's-picker-item'
 const itemProps = {
-  selected: false
+  selected: false,
+  value: ''
 }
 
 const itemStyle = /*css*/`
@@ -225,19 +237,33 @@ const itemStyle = /*css*/`
   display: flex;
   height: 44px;
   align-items: center;
-  justify-content: center;
   position: relative;
   cursor: pointer;
   padding: 0 16px;
 }
 :host([selected=true]){
-  background: var(--s-color-surface-container-highest, #e5e1e6);
+  background: var(--s-color-secondary-container, #e5e1e6);
+  color: var(--s-color-on-secondary-container, #1c1b1f);
   pointer-events: none;
+}
+::slotted([slot=start]){
+  flex-shrink: 0;
+  margin-left: -4px;
+  margin-right: 4px;
+  color: inherit;
+}
+::slotted([slot=end]){
+  flex-shrink: 0;
+  margin-right: -4px;
+  margin-left: 4px;
+  color: inherit;
 }
 `
 
 const itemTemplate = /*html*/`
+<slot name="start"></slot>
 <slot></slot>
+<slot name="end"></slot>
 <s-ripple part="ripple" attached="true" ></s-ripple>
 `
 

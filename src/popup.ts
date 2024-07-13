@@ -46,7 +46,6 @@ const style = /*css*/`
   background: var(--s-color-surface-container-low, #f6f2f7);
   border-radius: 4px;
   box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
-  min-width: var(--popup-min-width, auto);
   max-height: 100vh;
 }
 `
@@ -94,7 +93,7 @@ export class Popup extends useElement({
       }
       if (xOrEl === undefined || xOrEl instanceof HTMLElement) {
         const el = !xOrEl ? trigger : xOrEl
-        wrapper.style.setProperty('--popup-min-width', `${el.offsetWidth}px`)
+        //wrapper.style.setProperty('--popup-min-width', `${el.offsetWidth}px`)
         const rect = el.getBoundingClientRect()
         const cWidth = container.offsetWidth
         const cHeight = container.offsetHeight

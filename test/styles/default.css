@@ -6,13 +6,6 @@
   display: none;
 }
 
-a {
-  margin: 8px;
-  display: inline-block;
-  color: var(--s-color-primary);
-  text-decoration: none;
-}
-
 html,
 body {
   height: 100%;

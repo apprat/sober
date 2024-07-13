@@ -27,7 +27,7 @@
 </head>
 
 <body>
-  <s-page theme="auto">
+  <s-page>
     <s-text-field label="请输入名称">
       <textarea style="min-height: 112px"></textarea>
     </s-text-field>
@@ -240,23 +240,30 @@
     </s-text-field>
 
     <hr>
-    <s-picker onchange="console.log(this.selectedIndex)">
+    <s-picker onchange="console.log(this.selectedIndex)" style="--padding: 24px;--border-radius: 16px">
       <s-picker-item selected="true">北京</s-picker-item>
       <s-picker-item>上海</s-picker-item>
       <s-picker-item>成都</s-picker-item>
       <s-picker-item>贵阳</s-picker-item>
       <s-picker-item>西安</s-picker-item>
     </s-picker>
-    <s-picker label="请选择" onchange="console.log(this.selectedIndex)">
+    <s-picker label="请选择地区" onchange="console.log(this.selectedIndex)">
       <s-picker-item>北京</s-picker-item>
-      <s-picker-item>上海</s-picker-item>
+      <s-picker-item value="上海">
+        <s-icon slot="start" type="home"></s-icon>
+        上海
+        <s-icon slot="end" type="close"></s-icon>
+      </s-picker-item>
       <s-picker-item>成都</s-picker-item>
       <s-picker-item>贵阳</s-picker-item>
       <s-picker-item>西安</s-picker-item>
     </s-picker>
     <s-picker onchange="console.log(this.selectedIndex)">
       <s-button slot="trigger">选择</s-button>
-      <s-picker-item>北京</s-picker-item>
+      <s-picker-item value="北京">
+        <s-icon slot="start" type="search"></s-icon>
+        北京
+      </s-picker-item>
       <s-picker-item>上海</s-picker-item>
       <s-picker-item>成都</s-picker-item>
       <s-picker-item>贵阳</s-picker-item>
@@ -473,20 +480,47 @@
         <s-icon type="search"></s-icon>
       </s-icon-button>
     </s-appbar>
-    <s-appbar>
+    <hr>
+    <header>
       <s-appbar>
         <!--左侧菜单按钮-->
         <s-icon-button slot="navigation">
           <s-icon type="menu"></s-icon>
         </s-icon-button>
+        <svg viewBox="0 0 1167 1024" slot="logo">
+          <path
+            d="M716.8 1024l122.713043-512 81.808696-341.426087L962.226087 0h204.8l-40.904348 170.573913-81.808696 341.426087-122.991304 512z m-307.478261 0l-102.121739-426.573913-20.591304-85.426087L204.8 170.573913h204.521739l82.086957 341.426087 20.591304 85.453913L614.4 1024zM0 1024l122.991304-512 64.556522-270.191304 64.834783 270.191304 37.565217 156.382609L204.8 1024z m528.973913-497.808696l3.366957-14.191304h204.772173l-105.73913 440.486957z">
+          </path>
+        </svg>
         <!--标题-->
         <div slot="headline"> Title </div>
+        <s-ripple disabled href="" slot="menu">
+          首页
+        </s-ripple>
+        <s-ripple href="" slot="menu">产品</s-ripple>
+        <s-ripple href="" slot="menu">职位招聘</s-ripple>
+        <s-ripple href="" slot="menu">客服中心</s-ripple>
+        <s-tooltip slot="menu-trigger">
+          <s-icon-button slot="trigger">
+            <s-icon>
+              <svg viewBox="0 -960 960 960">
+                <path
+                  d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z">
+                </path>
+              </svg>
+            </s-icon>
+          </s-icon-button>
+          更多
+        </s-tooltip>
         <!--右侧操作按钮-->
         <s-icon-button slot="action">
           <s-icon type="search"></s-icon>
         </s-icon-button>
+        <s-icon-button slot="action">
+          <s-icon type="close"></s-icon>
+        </s-icon-button>
       </s-appbar>
-    </s-appbar>
+    </header>
     <hr>
     <s-popup>
       <s-button slot="trigger"> popup </s-button>

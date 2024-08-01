@@ -80,11 +80,10 @@ export class Tab extends useElement({
       }
       if (this.isConnected) {
         if (container.scrollWidth !== container.offsetWidth) {
-          const left = target.offsetLeft - container.offsetWidth + container.offsetWidth / 2 + target.offsetWidth / 2
+          const left = (target.offsetLeft - container.offsetLeft) - (container.offsetWidth / 2) + (target.offsetWidth / 2)
           container.scrollTo({ left, behavior: 'smooth' })
         }
         if (old) {
-
           old.indicator.addEventListener('transitionend', () => {
             old?.indicator.removeAttribute('style')
             target.indicator.removeAttribute('style')
@@ -92,7 +91,7 @@ export class Tab extends useElement({
           const oldLeft = old.indicator.getBoundingClientRect().left
           const rect = target.indicator.getBoundingClientRect()
           target.indicator.setAttribute('style', 'transition:none;filter:opacity(0)')
-          old.indicator.setAttribute('style', `transition: transform .12s, width .12s;filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
+          old.indicator.setAttribute('style', `transition: transform .24s, width .24s;filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
         }
       }
     }
@@ -173,11 +172,20 @@ const itemStyle = /*css*/`
 .text{
   display: flex;
   align-items: center;
+  line-height: 1;
+}
+.badge{
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
 }
 .icon .badge{
   position: absolute;
   top: 8px;
   left: 50%;
+  width: 50%;
+  justify-content: center;
+  margin-left: 0;
 }
 ::slotted([slot=icon]){
   height: 42px;
@@ -190,10 +198,10 @@ const itemStyle = /*css*/`
 }
 .icon ::slotted([slot=text]){
   height: 26px;
-  margin-top: -4px;
+  --margin-top: -4px;
 }
 ::slotted([slot=badge]){
-  margin-left: 4px;
+  --margin-left: 4px;
 }
 `
 

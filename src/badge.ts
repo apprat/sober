@@ -22,7 +22,6 @@ const style = /*css*/`
 :host(:empty){
   min-width: 8px;
   height: 8px;
-  margin: 5px;
 }
 `
 

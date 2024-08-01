@@ -151,9 +151,12 @@ const itemStyle = /*css*/`
 }
 .badge{
   position: absolute;
-  top: 8px;
+  top: 0;
   left: 50%;
-  margin-left: 4px;
+  width: 24px;
+  display: flex;
+  justify-content: center;
+  transform: translateY(-20%);
 }
 ::slotted([slot=icon]){
   position: relative;
@@ -170,11 +173,11 @@ const itemStyle = /*css*/`
 const itemTemplate = /*html*/`
 <div class="icon" part="icon">
   <slot name="icon"></slot>
+  <div class="badge" part="badge">
+    <slot name="badge"></slot>
+  </div>
 </div>
 <slot name="text"></slot>
-<div class="badge" part="badge">
-  <slot name="badge"></slot>
-</div>
 <s-ripple attached="true" class="ripple" part="ripple"></s-ripple>
 `
 

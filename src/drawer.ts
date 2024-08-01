@@ -57,6 +57,7 @@ const style = /*css*/`
   height: 100%;
   box-sizing: border-box;
   position: relative;
+  white-space: nowrap;
 }
 ::slotted([slot=start]){
   border-right-style: solid;
@@ -85,6 +86,7 @@ const style = /*css*/`
   max-width: 75%;
   border-style: none;
   box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
+  white-space: normal;
 }
 .folded.show-fold-start>.scrim,
 .folded.show-fold-end>.scrim{
@@ -128,7 +130,7 @@ export class Drawer extends useElement({
       start: null as null | HTMLElement,
       end: null as null | HTMLElement
     }
-    const duration = 200
+    const duration = 240
     const show = (slot: Slot = 'start', folded?: boolean) => {
       const isFold = folded === undefined ? container.classList.contains('folded') : folded
       const className = isFold ? `show-fold-${slot}` : `show-${slot}`

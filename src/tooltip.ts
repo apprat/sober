@@ -53,7 +53,7 @@ export class Tooltip extends useElement({
     const trigger = shadowRoot.querySelector('#trigger') as HTMLDivElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const state = { showed: false, timer: 0 }
-    const show = () => {
+    const show = (align: 'bottom' | 'top' = 'bottom') => {
       if (!this.isConnected || state.showed) return
       const rect = trigger.getBoundingClientRect()
       const stackingContext = getStackingContext(shadowRoot)
@@ -61,7 +61,10 @@ export class Tooltip extends useElement({
       const cWidth = container.offsetWidth
       const cHeight = container.offsetHeight
       const position = {
-        top: rect.top - gap - cHeight,
+        top: {
+          top: rect.top - gap - cHeight,
+          bottom: rect.top + trigger.offsetHeight + gap
+        }[align],
         left: rect.left - ((cWidth - rect.width) / 2),
       }
       //left
@@ -71,6 +74,10 @@ export class Tooltip extends useElement({
       //right
       if (position.left + cWidth > innerWidth) {
         position.left = rect.left + rect.width - cWidth
+      }
+      //top
+      if (position.top + cHeight > innerHeight) {
+        position.top = rect.top - gap - cHeight
       }
       //bottom
       if (position.top < 0) {
@@ -92,7 +99,7 @@ export class Tooltip extends useElement({
     }
     const touchShow = () => {
       clearTimeout(state.timer)
-      state.timer = setTimeout(show, 600)
+      state.timer = setTimeout(() => show('top'), 600)
     }
     const touchDismiss = () => {
       clearTimeout(state.timer)

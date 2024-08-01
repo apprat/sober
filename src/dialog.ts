@@ -20,7 +20,7 @@ const style = /*css*/`
   height: 100%;
   z-index: 2;
   pointer-events: none;
-  transition: filter .12s;
+  transition: filter .24s;
   filter: opacity(0);
 }
 .wrapper.show{
@@ -47,7 +47,7 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   transform: scale(.9);
-  transition: transform .12s;
+  transition: transform .24s;
 }
 .wrapper.show .wrapper-container{
   transform: scale(1);
@@ -55,6 +55,8 @@ const style = /*css*/`
 .container{
   max-width: calc(100% - 48px);
   max-height: calc(100% - 48px);
+  width: 520px;
+  height: calc-size(auto);
   background: var(--s-color-surface-container-highest, #e5e1e6);
   position: relative;
   border-radius: 28px;
@@ -62,6 +64,7 @@ const style = /*css*/`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: width .24s, height .24s, border-radius .24s;
 }
 .wrapper.show .container{
   pointer-events: auto;
@@ -99,11 +102,6 @@ const style = /*css*/`
 ::slotted(s-button[slot=action]){
   min-width: 72px;
   margin: 20px 2px;
-}
-::slotted([slot=text]),
-::slotted(:not([slot])){
-  max-width: 520px;
-  min-width: 280px;
 }
 :host([size=full]) ::slotted([slot=text]),
 :host([size=full]) ::slotted(:not([slot])){

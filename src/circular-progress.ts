@@ -18,7 +18,7 @@ const style = /*css*/`
   color: var(--s-color-primary, #5256a9);
 }
 :host([animated=true]) .known .block{
-  transition: stroke-dashoffset .12s, transform .12s;
+  transition: stroke-dashoffset .24s, transform .24s;
 }
 :host([indeterminate=true]) .known,
 .unknown{

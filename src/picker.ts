@@ -10,21 +10,18 @@ const props = {
 
 const style = /*css*/`
 :host{
-  display: inline-grid;
+  display: inline-block;
   vertical-align: middle;
   font-size: .875rem;
-  --height: 48px;
   --border-radius: 4px;
   --border-color: var(--s-color-outline, #777680);
   --border-width: 1px;
   --padding: 16px;
+  --height: 48px;
 }
 :host([disabled=true]){
   pointer-events: none;
   opacity: .38;
-}
-.popup{
-  display: grid;
 }
 .trigger{
   display: flex;
@@ -129,12 +126,14 @@ svg{
 }
 .container{
   padding: 8px 0;
+  max-height: 324px;
+  box-sizing: border-box;
 }
 `
 
 const template = /*html*/ `
 <s-popup class="popup">
-  <slot slot="trigger" name="trigger">
+  <slot name="trigger" slot="trigger">
     <div class="trigger" part="trigger">
       <div class="text">
         <div class="content">
@@ -160,6 +159,7 @@ export class Picker extends useElement({
   style, template, props, syncProps: ['disabled'],
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector('.popup') as Popup
+    const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const slot = shadowRoot.querySelector('#slot') as HTMLSlotElement
     const label = shadowRoot.querySelector('.label>span') as HTMLDivElement
     const value = shadowRoot.querySelector('.value') as HTMLDivElement
@@ -186,6 +186,14 @@ export class Picker extends useElement({
         popup.dismiss()
       }
     }
+    popup.addEventListener('show', () => {
+      if (selectedIndex !== -1) {
+        const target = options[selectedIndex]
+        if (target) {
+          container.scrollTo({ top: (target.offsetTop - container.offsetTop) - (container.offsetHeight / 2) + (target.offsetHeight / 2) })
+        }
+      }
+    })
     slot.addEventListener('slotchange', () => {
       let target: null | PickerItem = null
       selectedIndex = -1
@@ -219,8 +227,8 @@ export class Picker extends useElement({
           return selectedIndex
         },
         show: popup.show.bind(popup),
-        dismiss: popup.dismiss.bind(popup),
-        toggle: popup.toggle.bind(popup)
+        toggle: popup.toggle.bind(popup),
+        dismiss: popup.dismiss.bind(popup)
       }
     }
   }

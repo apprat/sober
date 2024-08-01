@@ -12,17 +12,21 @@ const style = /*css*/`
   vertical-align: middle;
 }
 .wrapper{
+  --offsetY: 0;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
   pointer-events: none;
   z-index: 2;
   overflow: hidden;
+  box-sizing: border-box;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  transition: transform .24s;
+  transform: translateY(var(--offsetY));
 }
 .container{
   background: var(--s-color-inverse-surface, #313034);
@@ -37,11 +41,11 @@ const style = /*css*/`
   max-width: 480px;
   font-size: .875rem;
   font-weight: 400;
-  margin: 16px;
+  height: fit-content;
   pointer-events: auto;
-  transform: translateY(100%);
+  transform: translateY(calc(-100% - 16px));
   filter: opacity(0);
-  transition: transform .12s, filter .12s;
+  transition: transform .24s, filter .24s;
 }
 .wrapper.show .container{
   transform: translateY(0%);
@@ -63,10 +67,11 @@ const style = /*css*/`
   height: 36px;
 }
 @media (max-width: 320px){
+  .wrapper{
+    padding: 8px;
+  }
   .container{
-    margin: 8px;
-    flex-grow: 1;
-    min-width: auto;
+    min-width: 100%;
   }
 }
 `
@@ -118,14 +123,18 @@ const show = (options: string | {
   snackbar.show()
 }
 
+const task: HTMLDivElement[] = []
+
 class Snackbar extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
     const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
+    const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const action = shadowRoot.querySelector('slot[name=action]') as HTMLElement
     const state = { timer: 0 }
     const show = () => {
+      if (wrapper.classList.contains('show')) return
       const stackingContext = getStackingContext(shadowRoot)
       if (stackingContext.top !== 0 || stackingContext.left !== 0) {
         wrapper.setAttribute('style', `width: ${innerWidth}px;height: ${innerHeight}px;top: ${0 - stackingContext.top}px;left: ${0 - stackingContext.left}px`)
@@ -133,18 +142,34 @@ class Snackbar extends useElement({
       clearTimeout(state.timer)
       getComputedStyle(wrapper).top
       wrapper.classList.add('show')
+      let h = container.offsetHeight + 8
+      for (const item of task) {
+        item.style.setProperty('--offsetY', `${h}px`)
+        h = h + container.offsetHeight + 8
+      }
+      task.unshift(wrapper)
       this.dispatchEvent(new Event('show'))
       if (this.duration > 0) state.timer = setTimeout(dismiss, this.duration)
     }
     const dismiss = () => {
       clearTimeout(state.timer)
       wrapper.classList.remove('show')
+      for (let i = task.indexOf(wrapper) + 1; i < task.length; i++) {
+        const item = task[i]
+        if (!item.classList.contains('show')) continue
+        const old = Number(item.style.getPropertyValue('--offsetY').slice(0, -2))
+        item.style.setProperty('--offsetY', `${old - container.offsetHeight - 8}px`)
+      }
+      task.splice(task.indexOf(wrapper), 1)
       this.dispatchEvent(new Event('dismiss'))
     }
     const transitionEnd = (event: TransitionEvent) => {
       if (event.propertyName !== 'transform') return
       const showed = wrapper.classList.contains('show')
       this.dispatchEvent(new Event(showed ? 'showed' : 'dismissed'))
+      if (!showed) {
+        wrapper.removeAttribute('style')
+      }
     }
     trigger.addEventListener('click', show)
     wrapper.addEventListener('transitionend', transitionEnd)

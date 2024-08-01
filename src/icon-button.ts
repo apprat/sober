@@ -20,7 +20,6 @@ const style = /*css*/`
   color: var(--s-color-on-surface-variant, #46464f);
   position: relative;
   box-sizing: border-box;
-  overflow: hidden;
 }
 :host([disabled=true]){
   pointer-events: none !important;
@@ -32,6 +31,9 @@ const style = /*css*/`
 }
 :host([type=filled][disabled=true]){
   background: color-mix(in srgb ,var(--s-color-on-surface, #1c1b1f) 12%, transparent) !important;
+}
+:host([type=filled]) ::slotted(s-badge[slot=badge]){
+  border: solid 2px currentColor;
 }
 :host([type=filled-tonal]){
   background: var(--s-color-secondary-container, #e2e0f9);
@@ -47,9 +49,19 @@ const style = /*css*/`
   border-color: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f)) !important;
 }
 .ripple{
-  border-radius: 0;
+  border-radius: inherit;
 }
-::slotted(*){
+.badge{
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 50%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+::slotted(:not([slot=badge])){
   color: inherit;
 }
 `
@@ -59,6 +71,9 @@ const template = /*html*/`
 <slot></slot>
 <slot name="end"></slot>
 <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
+<div class="badge">
+  <slot name="badge"></slot>
+</div>
 `
 
 export class IconButton extends useElement({ style, template, props, syncProps: true, }) { }

@@ -37,13 +37,15 @@ const style = /*css*/`
   background: var(--ripple-color, currentColor);
   border-radius: 50%;
   transition: opacity .8s;
-  opacity: var(--ripple-opacity, .2);
+  opacity: var(--ripple-opacity, .24);
   width: var(--size);
   height: var(--size);
   position: absolute;
   transform: translate(-50%, -50%) scale(0);
   left: var(--x);
   top: var(--y);
+  box-shadow: 0 0 64px 0 var(--ripple-color, currentColor);
+  filter: blur(12px);
 }
 .container::before{
   content: '';
@@ -54,12 +56,12 @@ const style = /*css*/`
   top: 0;
   border-radius: inherit;
   background: var(--ripple-color, currentColor);
-  filter: opacity(0);
+  filter: opacity(0) blur(12px);
   transition: filter .12s;
   will-change: filter;
 }
 .container.hover::before{
-  filter: opacity(.1);
+  filter: opacity(.12);
 }
 `
 

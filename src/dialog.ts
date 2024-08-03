@@ -183,7 +183,7 @@ class Dialog extends useElement({
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
     const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
-    const action = shadowRoot.querySelector('.action') as HTMLElement
+    const action = shadowRoot.querySelector('slot[name=action]') as HTMLSlotElement
     const show = () => {
       const stackingContext = getStackingContext(shadowRoot)
       if (stackingContext.top !== 0 || stackingContext.left !== 0) {

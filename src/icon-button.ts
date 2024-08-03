@@ -33,7 +33,7 @@ const style = /*css*/`
   background: color-mix(in srgb ,var(--s-color-on-surface, #1c1b1f) 12%, transparent) !important;
 }
 :host([type=filled]) ::slotted(s-badge[slot=badge]){
-  border: solid 2px currentColor;
+  outline: solid 2px currentColor;
 }
 :host([type=filled-tonal]){
   background: var(--s-color-secondary-container, #e2e0f9);

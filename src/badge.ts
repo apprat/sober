@@ -20,8 +20,10 @@ const style = /*css*/`
   vertical-align: middle;
 }
 :host(:empty){
-  min-width: 8px;
+  width: 8px;
   height: 8px;
+  min-width: auto;
+  padding: 0;
 }
 `
 

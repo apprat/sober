@@ -17,6 +17,7 @@ const style = /*css*/`
   border: solid 1px var(--s-color-color-outline, #777680);
   border-radius: 8px;
   box-sizing: border-box;
+  white-space: nowrap;
   font-size: .875rem;
   position: relative;
   cursor: pointer;

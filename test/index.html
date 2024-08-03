@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
   <link rel="stylesheet" href="./styles/default.css">
   <style>
     s-page {
@@ -70,13 +71,22 @@
     <s-icon type="arrow_upward"></s-icon>
     <s-icon type="arrow_downward"></s-icon>
     <hr>
+    <button>Sheet xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</button>
+    <s-bottom-sheet>
+      <s-button slot="trigger">Sheet xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</s-button>
+      <s-scroll-view style="height: 280px;">
+        <h1>...</h1>
+        <div style="height: 2000px;"></div>
+      </s-scroll-view>
+    </s-bottom-sheet>
+    <hr>
     <s-icon-button>
       <s-icon type="add"></s-icon>
       <s-badge slot="badge"></s-badge>
     </s-icon-button>
     <s-icon-button type="filled">
       <s-icon type="add"></s-icon>
-      <s-badge slot="badge">88</s-badge>
+      <s-badge slot="badge"></s-badge>
     </s-icon-button>
     <s-icon-button type="filled-tonal">
       <s-icon type="add"></s-icon>
@@ -387,6 +397,8 @@
     </s-dialog>
     <hr>
 
+    <s-rate></s-rate>
+
     <div
       style="background: red;width: 1000px;height: 1000px;display: flex;justify-content: center;align-items: center;">
       <div
@@ -555,7 +567,7 @@
         <div slot="text">Item 2</div>
       </s-navigation-item>
       <s-navigation-item>
-        <s-icon type="dark_mode" slot="icon"></s-icon>
+        <s-icon type="home" slot="icon"></s-icon>
         <div slot="text">Item 3</div>
         <s-badge slot="badge">99</s-badge>
       </s-navigation-item>

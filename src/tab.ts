@@ -177,7 +177,6 @@ const itemStyle = /*css*/`
 .badge{
   display: flex;
   align-items: center;
-  margin-left: 4px;
 }
 .icon .badge{
   position: absolute;
@@ -198,10 +197,9 @@ const itemStyle = /*css*/`
 }
 .icon ::slotted([slot=text]){
   height: 26px;
-  --margin-top: -4px;
 }
 ::slotted([slot=badge]){
-  --margin-left: 4px;
+  margin-left: 4px;
 }
 `
 

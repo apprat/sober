@@ -24,8 +24,8 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   filter: opacity(0);
+  transition: filter .24s, backdrop-filter .24s;
   pointer-events: none;
-  transition: filter .12s;
 }
 .start,
 .end{
@@ -91,6 +91,7 @@ const style = /*css*/`
 .folded.show-fold-start>.scrim,
 .folded.show-fold-end>.scrim{
   filter: opacity(.8);
+  backdrop-filter: blur(12px);
   pointer-events: auto;
 }
 .folded.show-fold-start>.start,

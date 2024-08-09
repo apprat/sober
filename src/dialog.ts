@@ -18,14 +18,11 @@ const style = /*css*/`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
+  z-index: var(--z-index, 2);
   pointer-events: none;
-  transition: filter .24s;
-  filter: opacity(0);
-}
-.wrapper.show{
-  filter: opacity(1);
-  pointer-events: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .scrim{
   background: var(--s-color-scrim, #000000);
@@ -34,23 +31,14 @@ const style = /*css*/`
   left: 0;
   width: 100%;
   height: 100%;
-  filter: opacity(.8);
-}
-.wrapper-container{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  filter: opacity(0);
+  transition: filter .24s, backdrop-filter .24s;
   pointer-events: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform: scale(.9);
-  transition: transform .24s;
 }
-.wrapper.show .wrapper-container{
-  transform: scale(1);
+.wrapper.show .scrim{
+  filter: opacity(.8);
+  backdrop-filter: blur(12px);
+  pointer-events: auto;
 }
 .container{
   max-width: calc(100% - 48px);
@@ -64,10 +52,12 @@ const style = /*css*/`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  visibility: hidden;
   transition: width .24s, height .24s, border-radius .24s;
 }
 .wrapper.show .container{
   pointer-events: auto;
+  visibility: visible;
 }
 :host([size=full]) .container{
   width: 100%;
@@ -107,22 +97,23 @@ const style = /*css*/`
 :host([size=full]) ::slotted(:not([slot])){
   max-width: none;
 }
+::slotted(*){
+  --z-index: calc(var(--z-index, 2) + 1);
+}
 `
 
 const template = /*html*/`
 <slot name="trigger"></slot>
 <div class="wrapper" part="wrapper">
   <div class="scrim" part="scrim"></div>
-  <div class="wrapper-container" part="wrapper-container">
-    <div class="container" part="container">
-      <slot name="headline"></slot>
-      <s-scroll-view class="text" part="view">
-        <slot></slot>
-        <slot name="text"></slot>
-      </s-scroll-view>
-      <div class="action" part="action">
-        <slot name="action"></slot>
-      </div>
+  <div class="container" part="container">
+    <slot name="headline"></slot>
+    <s-scroll-view class="text" part="view">
+      <slot></slot>
+      <slot name="text"></slot>
+    </s-scroll-view>
+    <div class="action" part="action">
+      <slot name="action"></slot>
     </div>
   </div>
 </div>
@@ -182,27 +173,34 @@ class Dialog extends useElement({
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
     const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
+    const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
     const action = shadowRoot.querySelector('slot[name=action]') as HTMLSlotElement
     const show = () => {
       const stackingContext = getStackingContext(shadowRoot)
       if (stackingContext.top !== 0 || stackingContext.left !== 0) {
-        wrapper.setAttribute('style', `width: ${innerWidth}px;height: ${innerHeight}px;top: ${0 - stackingContext.top}px;left: ${0 - stackingContext.left}px`)
+        const style = `width: ${innerWidth}px;height: ${innerHeight}px;top: ${0 - stackingContext.top}px;left: ${0 - stackingContext.left}px`
+        scrim.setAttribute('style', style)
+        wrapper.setAttribute('style', style)
       }
       wrapper.classList.add('show')
+      const animation = container.animate([
+        { transform: 'scale(.9)', filter: 'opacity(0)', visibility: 'visible' },
+        { transform: 'scale(1)', filter: 'opacity(1)', visibility: 'visible' }
+      ], { duration: 240 })
+      animation.addEventListener('finish', () => this.dispatchEvent(new Event('showed')))
       this.dispatchEvent(new Event('show'))
     }
     const dismiss = () => {
       wrapper.classList.remove('show')
+      const animation = container.animate([
+        { transform: 'scale(1)', filter: 'opacity(1)', visibility: 'visible' },
+        { transform: 'scale(.9)', filter: 'opacity(0)', visibility: 'visible' }
+      ], { duration: 240 })
+      animation.addEventListener('finish', () => this.dispatchEvent(new Event('dismissed')))
       this.dispatchEvent(new Event('dismiss'))
     }
-    const transitionEnd = (event: TransitionEvent) => {
-      if (event.propertyName !== 'transform') return
-      const showed = wrapper.classList.contains('show')
-      this.dispatchEvent(new Event(showed ? 'showed' : 'dismissed'))
-    }
     trigger.addEventListener('click', show)
-    wrapper.addEventListener('transitionend', transitionEnd)
     scrim.addEventListener('click', dismiss)
     action.addEventListener('click', dismiss)
     return {

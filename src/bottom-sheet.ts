@@ -15,15 +15,11 @@ const style = /*css*/`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
+  z-index: var(--z-index, 2);
   pointer-events: none;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-}
-.show.wrapper{
-  filter: opacity(1);
-  pointer-events: auto;
 }
 .scrim{
   background: var(--s-color-scrim, #000000);
@@ -32,11 +28,14 @@ const style = /*css*/`
   left: 0;
   width: 100%;
   height: 100%;
-  transition: filter .24s;
   filter: opacity(0);
+  transition: filter .24s, backdrop-filter .24s;
+  pointer-events: none;
 }
-.show.wrapper .scrim{
+.wrapper.show .scrim{
   filter: opacity(.8);
+  backdrop-filter: blur(12px);
+  pointer-events: auto;
 }
 .container{
   position: relative;
@@ -51,8 +50,8 @@ const style = /*css*/`
   visibility: hidden;
 }
 .show.wrapper .container{
-  transform: translateY(0%);
   visibility: visible;
+  pointer-events: auto;
 }
 .drag{
   width: 100%;
@@ -93,7 +92,6 @@ export class BottomSheet extends useElement({
     const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-
     const show = () => {
       wrapper.classList.add('show')
       container.animate([
@@ -111,7 +109,7 @@ export class BottomSheet extends useElement({
     trigger.addEventListener('click', show)
     scrim.addEventListener('click', dismiss)
     return {
-      expose: {}
+      expose: { show, dismiss }
     }
   }
 }) { }

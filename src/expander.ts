@@ -4,7 +4,8 @@ import './scroll-view.js'
 
 const name = 's-expander'
 const props = {
-  expand: false
+  expand: false,
+  type: 'elevated' as 'elevated' | 'filled' | 'outlined' | 'text'
 }
 
 const style = /*css*/ `
@@ -13,6 +14,22 @@ const style = /*css*/ `
   display: flex;
   flex-direction: column;
   border-radius: 20px;
+  box-sizing: border-box;
+  background: var(--s-color-surface-container-low, #f6f2f7);
+  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .1));
+}
+:host([type=filled]){
+  background: var(--s-color-surface-container-highest, #e5e1e6);
+  box-shadow: none;
+}
+:host([type=outlined]){
+  background: var(--s-color-surface, #fffbff);
+  border: solid 1px var(--s-color-outline-variant, #c7c5d0);
+  box-shadow: none;
+}
+:host([type=text]){
+  background: none;
+  box-shadow: none;
 }
 .trigger{
   border-radius: 20px;

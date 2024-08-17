@@ -4,14 +4,12 @@ import './scroll-view.js'
 
 const name = 's-expander'
 const props = {
-  expand: false,
+  expand: false
 }
 
 const style = /*css*/ `
 :host{
   display: block;
-}
-.root{
   display: flex;
   flex-direction: column;
   border-radius: 20px;
@@ -30,14 +28,14 @@ const style = /*css*/ `
   overflow: hidden;
   transition: grid-template-rows 0.12s;
 }
-.show .wrapper{
+:host([expand=true]) .wrapper{
   grid-template-rows: 1fr;
 }
 .container{
   padding: 10px;
   max-height: 600px;
 }
-.root:not(.show) .container{
+:host(:not([expand=true])) .container{
   min-height: 0;
   overflow: hidden;
   padding-top: 0;
@@ -48,51 +46,46 @@ const style = /*css*/ `
   transition: transform 0.12s;
   height: 24px;
 }
-.show .icon{
+:host([expand=true]) .icon{
   transform: rotate(180deg);
 }
 `
 
 const template = /*html*/ `
-<div class="root">
-  <div id="trigger" part="trigger">
-    <slot name="trigger">
-      <s-ripple class="trigger" part="trigger">
-        <slot name="text"></slot>
-        <svg viewBox="0 -960 960 960" class="icon">
-          <path d="M480-360 280-560h400L480-360Z"></path>
-        </svg>
-      </s-ripple>
-    </slot>
-  </div>
-  <div class="wrapper" part="wrapper">
-    <s-scroll-view class="container" part="container">
-      <slot></slot>
-    </s-scroll-view>
-  </div>
+<div id="trigger" part="trigger">
+  <slot name="trigger">
+    <s-ripple class="trigger" part="trigger">
+      <slot name="text"></slot>
+      <svg viewBox="0 -960 960 960" class="icon">
+        <path d="M480-360 280-560h400L480-360Z"></path>
+      </svg>
+    </s-ripple>
+  </slot>
+</div>
+<div class="wrapper" part="wrapper">
+  <s-scroll-view class="container" part="container">
+    <slot></slot>
+  </s-scroll-view>
 </div>
 `
 
 export class Expander extends useElement({
-  style,
-  template,
-  props,
+  style, template, props, syncProps: true,
   setup(shadowRoot) {
-    const root = shadowRoot.querySelector('.root') as HTMLDivElement
     const trigger = shadowRoot.querySelector('#trigger') as HTMLDivElement
     const open = () => {
-      if (!this.isConnected || root.classList.contains('show')) return
-      root.classList.add('show')
+      if (!this.isConnected || this.expand) return
+      this.expand = true
       this.dispatchEvent(new Event('open'))
     }
     const close = () => {
-      if (!this.isConnected || !root.classList.contains('show')) return
-      root.classList.remove('show')
+      if (!this.isConnected || !this.expand) return
+      this.expand = false
       this.dispatchEvent(new Event('close'))
     }
     const toggle = () => {
       if (!this.isConnected) return
-      root.classList.contains('show') ? close() : open()
+      this.expand ? close() : open()
     }
     trigger.addEventListener('click', () => toggle())
     return {

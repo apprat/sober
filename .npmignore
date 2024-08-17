@@ -3,6 +3,7 @@ src/
 node_modules/
 .gitattributes
 pnpm-lock.yaml
+yarn.lock
 tsconfig.json
 dev/
 test/

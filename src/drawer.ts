@@ -30,14 +30,13 @@ const style = /*css*/`
   -webkit-backdrop-filter: blur(6px);
   pointer-events: none;
 }
-.view{
-  flex-grow: 1;
-  display: block;
-}
 .start,
 .end{
   flex-shrink: 0;
   display: block;
+}
+::slotted(*){
+  flex-grow: 1;
 }
 ::slotted([slot=start]),
 ::slotted([slot=end]){
@@ -103,7 +102,7 @@ const style = /*css*/`
 
 const template = /*html*/`
 <div class="container show-start show-end" part="container">
-  <slot class="view"></slot>
+  <slot></slot>
   <div class="scrim" part="scrim"></div>
   <slot name="start" class="start" part="start" style="order: -1"></slot>
   <slot name="end"  class="end" part="end"></slot>

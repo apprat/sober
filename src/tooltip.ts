@@ -112,6 +112,9 @@ export class Tooltip extends useElement({
     trigger.addEventListener('touchstart', touchShow, { passive: true })
     trigger.addEventListener('touchend', touchDismiss, { passive: true })
     container.addEventListener('transitionend', transitionEnd)
+    return {
+      expose: { show, dismiss }
+    }
   }
 }) { }
 

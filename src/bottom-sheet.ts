@@ -74,6 +74,7 @@ const style = /*css*/`
 ::slotted([slot=view]){
   flex-grow: 1;
   min-height: 280px;
+  overscroll-behavior: none;
 }
 `
 

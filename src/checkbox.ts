@@ -18,6 +18,9 @@ const style = /*css*/`
   white-space: nowrap;
   height: 40px;
 }
+:host([disabled=true]){
+  pointer-events: none !important;
+}
 .container{
   display: inline-flex;
   align-items: center;
@@ -27,9 +30,6 @@ const style = /*css*/`
   aspect-ratio: 1;
   border-radius: 50%;
   color: var(--s-color-primary, #5256a9);
-}
-:host([disabled=true]) .container{
-  pointer-events: none !important;
 }
 .icon{
   width: 60%;

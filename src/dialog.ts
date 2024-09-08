@@ -25,7 +25,7 @@ const style = /*css*/`
   align-items: center;
 }
 .scrim{
-  background: color-mix(in srgb, var(--s-color-scrim, #000000) 70%, transparent);
+  background: color-mix(in srgb, var(--s-color-scrim, #000000) 80%, transparent);
   position: absolute;
   top: 0;
   left: 0;
@@ -33,8 +33,8 @@ const style = /*css*/`
   height: 100%;
   filter: opacity(0);
   transition: filter .2s;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   pointer-events: none;
 }
 .wrapper.show .scrim{

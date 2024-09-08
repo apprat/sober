@@ -26,7 +26,7 @@ const style = /*css*/`
   white-space: nowrap;
   background: var(--s-color-primary, #5256a9);
   color: var(--s-color-on-primary, #ffffff);
-  transition: box-shadow .12s;
+  transition: box-shadow .1s;
   overflow: hidden;
 }
 :host([disabled=true]){
@@ -89,18 +89,16 @@ const style = /*css*/`
 :host([type=text]) ::slotted(s-icon[slot=end]){
   margin: 0 -4px 0 4px;
 }
-@media (pointer: coarse){
-  :host([type=elevated]:active){
-    box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
-  }
-  :host(:active){
-    box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
-  }
-  :host([type=filled-tonal]:active),
-  :host([type=outlined]:active),
-  :host([type=text]:active){
-    box-shadow: none;
-  }
+:host([rippled]){
+  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+}
+:host([type=elevated][rippled]){
+  box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+}
+:host([type=filled-tonal][rippled]),
+:host([type=outlined][rippled]),
+:host([type=text][rippled]){
+  box-shadow: none;
 }
 @media (pointer: fine){
   :host([type=elevated]:hover){

@@ -14,7 +14,7 @@ const parseType = (value: unknown, old: Prop) => {
 }
 
 const baseStyle = new CSSStyleSheet()
-baseStyle.replaceSync(/*css*/`:host{ user-select: none;-webkit-user-select: none }`)
+baseStyle.replaceSync(/*css*/`:host{ user-select: none;-webkit-user-select: none;-webkit-tap-highlight-color: transparent; }`)
 
 type Setup<P, E> = (this: P & HTMLElement, shadowRoot: ShadowRoot) => {
   mounted?: () => void

@@ -2,13 +2,13 @@ import { useElement, JSXAttributes } from './core/element.js'
 
 const name = 's-drawer'
 const props = {
-  fold: 840
 }
 
 const style = /*css*/`
 :host{
   display: block;
   height: 100%;
+  background: var(--s-color-background, #fffbff);
 }
 .container{
   display: flex;
@@ -17,47 +17,37 @@ const style = /*css*/`
   overflow: hidden;
 }
 .scrim{
-  background: var(--s-color-scrim, #000000);
+  background: color-mix(in srgb, var(--s-color-scrim, #000000) 70%, transparent);
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  cursor: pointer;
   filter: opacity(0);
-  transition: filter .24s, backdrop-filter .24s;
+  transition: filter .2s;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   pointer-events: none;
+}
+.view{
+  flex-grow: 1;
+  display: block;
 }
 .start,
 .end{
-  min-width: 0;
-  height: 100%;
-  width: 0;
-  overflow: hidden;
   flex-shrink: 0;
-}
-.show-start>.start,
-.show-end>.end{
-  width: auto;
-}
-.start{
-  order: -1;
-}
-::slotted(:not([slot])){
-  flex-grow: 1;
-  min-width: 0;
+  display: block;
 }
 ::slotted([slot=start]),
 ::slotted([slot=end]){
   width: 280px;
-  display: flow-root;
-  flex-shrink: 0;
   background: var(--s-color-surface-container-low, #f6f2f7);
   border-color: var(--s-color-surface-container-high, #eae7ec);
   border-width: 1px;
   height: 100%;
   box-sizing: border-box;
   position: relative;
-  white-space: nowrap;
 }
 ::slotted([slot=start]){
   border-right-style: solid;
@@ -65,109 +55,113 @@ const style = /*css*/`
 ::slotted([slot=end]){
   border-left-style: solid;
 }
-.folded>.start,
-.folded>.end{
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-  visibility: hidden;
-  display: flex;
+@media (min-width: 1200px){
+  .start,
+  .end{
+    width: 0;
+    overflow: hidden;
+  }
+  .show-start .start,
+  .show-end .end{
+    width: auto;
+  }
 }
-.folded>.end{
-  justify-content: flex-end;
-}
-.folded ::slotted([slot=start]),
-.folded ::slotted([slot=end]){
-  pointer-events: auto;
-  max-width: 75%;
-  border-style: none;
-  box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
-  white-space: normal;
-}
-.folded.show-fold-start>.scrim,
-.folded.show-fold-end>.scrim{
-  filter: opacity(.8);
-  backdrop-filter: blur(12px);
-  pointer-events: auto;
-}
-.folded.show-fold-start>.start,
-.folded.show-fold-end>.end{
-  visibility: visible;
+@media (max-width: 1200px){
+  .start,
+  .end{
+    position: absolute;
+    left: 0;
+    top: 100%;
+    max-width: 70%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .end{
+    left: auto;
+    right: 0;
+  }
+  .show-start-folded .scrim,
+  .show-end-folded .scrim{
+    filter: opacity(1);
+    pointer-events: auto;
+  }
+  .show-start-folded .start,
+  .show-end-folded .end{
+    top: 0;
+    pointer-events: auto;
+  }
+  ::slotted([slot=start]),
+  ::slotted([slot=end]){
+    max-width: 100%;
+  }
+  .show-start-folded ::slotted([slot=start]),
+  .show-end-folded ::slotted([slot=end]){
+    box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
+  }
 }
 `
 
 const template = /*html*/`
 <div class="container show-start show-end" part="container">
-  <slot></slot>
+  <slot class="view"></slot>
   <div class="scrim" part="scrim"></div>
-  <div class="start" part="start">
-    <slot name="start"></slot>
-  </div>
-  <div class="end" part="end">
-    <slot name="end"></slot>
-  </div>
+  <slot name="start" class="start" part="start" style="order: -1"></slot>
+  <slot name="end"  class="end" part="end"></slot>
 </div>
 `
 
-type Slot = 'start' | 'end'
+const mediaQueryList = matchMedia('(max-width: 1200px)')
+const device = { folded: mediaQueryList.matches }
+mediaQueryList.addEventListener('change', ({ matches }) => device.folded = matches)
 
+type Fn = (slot?: 'start' | 'end', folded?: boolean) => void
 
 export class Drawer extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
-    const elements = {
-      start: shadowRoot.querySelector('.start') as HTMLDivElement,
-      end: shadowRoot.querySelector('.end') as HTMLDivElement,
-      startSlot: shadowRoot.querySelector('slot[name=start]') as HTMLSlotElement,
-      endSlot: shadowRoot.querySelector('slot[name=end]') as HTMLSlotElement
-    }
-    const slots = {
-      start: null as null | HTMLElement,
-      end: null as null | HTMLElement
-    }
-    const duration = 240
-    const show = (slot: Slot = 'start', folded?: boolean) => {
-      const isFold = folded === undefined ? container.classList.contains('folded') : folded
-      const className = isFold ? `show-fold-${slot}` : `show-${slot}`
+    const start = shadowRoot.querySelector('.start') as HTMLSlotElement
+    const end = shadowRoot.querySelector('.end') as HTMLSlotElement
+    const state = { duration: 200 }
+    const getClassName = (slot: Parameters<Fn>[0], folded: Parameters<Fn>[1]) => (folded ?? device.folded) ? `show-${slot}-folded` : `show-${slot}`
+    const show: Fn = (slot = 'start', folded) => {
+      const className = getClassName(slot, folded)
       if (container.classList.contains(className)) return
       container.classList.add(className)
-      const width = slots[slot]?.offsetWidth ?? 0
-      const translate = slot === 'start' ? width * -1 : width
-      const animate = isFold ? [{ transform: `translateX(${translate}px)` }, { transform: `translateX(0px)` }] : [{ width: 0 }, { width: `${width}px` }]
-      elements[slot].animate(animate, { duration })
+      const fold = (folded ?? device.folded)
+      const el = { start, end }[slot] ?? start
+      const animate = fold ?
+        [
+          { transform: `translateX(${{ start: -el.offsetWidth, end: el.offsetWidth }[slot]}px)` },
+          { transform: 'translateX(0)' }
+        ]
+        : [{ width: 0 }, { width: `${el.offsetWidth}px` }]
+      fold === device.folded && el.animate(animate, { duration: state.duration })
     }
-    const dismiss = (slot: Slot = 'start', folded?: boolean) => {
-      const isFold = folded === undefined ? container.classList.contains('folded') : folded
-      const className = isFold ? `show-fold-${slot}` : `show-${slot}`
+    const dismiss: Fn = (slot = 'start', folded) => {
+      const className = getClassName(slot, folded)
       if (!container.classList.contains(className)) return
-      const width = slots[slot]?.offsetWidth ?? 0
+      const el = { start, end }[slot] ?? start
+      const fold = (folded ?? device.folded)
+      const animate = fold ?
+        [
+          { top: 0, transform: 'translateX(0)' },
+          { top: 0, transform: `translateX(${{ start: -el.offsetWidth, end: el.offsetWidth }[slot]}px)` }
+        ]
+        : [{ width: `${el.offsetWidth}px` }, { width: 0 }]
+      fold === device.folded && el.animate(animate, { duration: state.duration })
       container.classList.remove(className)
-      const translate = slot === 'start' ? width * -1 : width
-      const animate = isFold ? [{ transform: `translateX(0px)`, visibility: 'visible' }, { transform: `translateX(${translate}px)`, visibility: 'visible' }] : [{ width: `${width}px` }, { width: 0 }]
-      elements[slot].animate(animate, { duration })
     }
-    const toggle = (slot: Slot = 'start', folded?: boolean) => {
-      const isFold = folded === undefined ? container.classList.contains('folded') : folded
-      const className = isFold ? `show-fold-${slot}` : `show-${slot}`
+    const toggle: Fn = (slot = 'start', folded) => {
+      const className = getClassName(slot, folded)
       container.classList.contains(className) ? dismiss(slot, folded) : show(slot, folded)
     }
-    const obs = new ResizeObserver(() => this.offsetWidth < this.fold ? container.classList.add('folded') : container.classList.remove('folded'))
-    obs.observe(this)
     scrim.addEventListener('click', () => {
-      dismiss('start')
+      dismiss()
       dismiss('end')
     })
-    elements.startSlot.addEventListener('slotchange', () => slots.start = elements.startSlot.assignedElements()[0] as never)
-    elements.endSlot.addEventListener('slotchange', () => slots.end = elements.endSlot.assignedElements()[0] as never)
-    return {
-      expose: { show, dismiss, toggle }
-    }
+    return { expose: { show, dismiss, toggle } }
   }
 }) { }
 

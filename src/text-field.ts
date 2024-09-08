@@ -71,7 +71,7 @@ const style = /*css*/`
   border-width: calc(var(--border-width) * 2);
   border-color: currentColor;
   opacity: 0;
-  transition: opacity .12s;
+  transition: opacity .1s;
 }
 :host(:focus-within) .start::after,
 :host(:focus-within) .end::after{
@@ -97,7 +97,7 @@ const style = /*css*/`
   border-bottom-width: calc(var(--border-width) * 2);
   border-bottom-color: currentColor;
   opacity: 0;
-  transition: opacity .12s;
+  transition: opacity .1s;
 }
 :host(:focus-within) .text::after{
   opacity: 1;
@@ -134,7 +134,7 @@ const style = /*css*/`
   border-top-width: calc(var(--border-width) * 2);
   border-top-color: currentColor;
   opacity: 0;
-  transition: opacity .12s;
+  transition: opacity .1s;
 }
 :host(:focus-within) .outline::after{
   opacity: 1;
@@ -147,7 +147,7 @@ const style = /*css*/`
   width: 0;
   align-items: center;
   transform: translateX(min(calc(var(--padding) - var(--border-radius)), 0px));
-  transition: transform .12s;
+  transition: transform .1s;
 }
 .empty .label,
 :host(:focus-within) .label{

@@ -54,6 +54,7 @@ const style = /*css*/`
   justify-content: space-between;
   align-items: center;
   position: relative;
+  white-space: nowrap;
   margin: 0 calc(var(--border-radius) * -1);
 }
 .text::after{
@@ -99,7 +100,7 @@ const style = /*css*/`
   display: flex;
   align-items: center;
   border-top: solid var(--border-width) var(--border-color);
-  transition: transform .12s;
+  transition: transform .1s;
   padding: 0 calc(var(--padding) - var(--border-radius) + 12px) 0 calc(var(--padding) - var(--border-radius));
   color: var(--border-color);
 }

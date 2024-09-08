@@ -11,6 +11,7 @@
       padding: 24px;
       overflow: auto;
       box-sizing: border-box;
+      color-scheme: light;
     }
 
     s-page>* {
@@ -29,15 +30,14 @@
 
 <body>
   <s-page>
-    <s-text-field label="请输入名称">
-      <textarea style="min-height: 112px"></textarea>
-    </s-text-field>
-    <s-button>
+    <s-file-picker></s-file-picker>
+    <s-button
+      onclick="window.customElements.get('s-snackbar').show({text: `提示：${new Date().getMilliseconds()}`, duration: 0, action:{text:'确定'}})">
       <s-icon type="search" slot="start"></s-icon>
       button
       <s-icon type="close" slot="end"></s-icon>
     </s-button>
-    <s-button type="elevated">
+    <s-button type="elevated" onclick="window.customElements.get('s-dialog').show('xxxxx')">
       <s-icon type="search" slot="start"></s-icon>
       button
       <s-icon type="close" slot="end"></s-icon>
@@ -63,6 +63,14 @@
     <s-button type="outlined" disabled="true"> button </s-button>
     <s-button type="text" disabled="true"> button </s-button>
     <hr>
+
+    <s-checkbox>阅读用户协议</s-checkbox>
+
+    <s-radio-button name="xx">阅读用户协议</s-radio-button>
+    <s-radio-button name="xx">阅读用户协议</s-radio-button>
+    <s-radio-button name="xx">阅读用户协议</s-radio-button>
+
+    <hr>
     <s-icon></s-icon>
     <s-icon type="search"></s-icon>
     <s-icon type="menu"></s-icon>
@@ -71,11 +79,84 @@
     <s-icon type="arrow_upward"></s-icon>
     <s-icon type="arrow_downward"></s-icon>
     <hr>
-    <button>Sheet xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</button>
+    <s-drawer id="drawer" style="height: 500px;">
+      <div slot="start">
+        <s-picker onchange="console.log(this.selectedIndex)">
+          <s-picker-item value="北京">
+            <s-icon slot="start" type="search"></s-icon>
+            北京
+          </s-picker-item>
+          <s-picker-item selected="true">上海</s-picker-item>
+          <s-picker-item>成都</s-picker-item>
+          <s-picker-item>贵阳</s-picker-item>
+          <s-picker-item>西安</s-picker-item>
+        </s-picker>
+        <s-dialog positive="确认">
+          <s-button slot="trigger">
+            Nesting
+          </s-button>
+          <div slot="headline">Dialog Choice</div>
+          <div slot="text">
+            The M3 baseline color scheme uses the same roles and token mapping as user-generated color schemes.
+            <s-button onclick="this.parentNode.parentNode.size='full'">调整大小</s-button>
+            <s-button onclick="this.parentNode.parentNode.size='basic'">调整</s-button>
+          </div>
+          <s-button type="text" slot="action">取消</s-button>
+          <s-button type="text" slot="action">确定</s-button>
+        </s-dialog>
+        <p>
+          先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。<br /><br />
+          宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。<br /><br />
+          侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必能裨补阙漏，有所广益。<br /><br />
+          将军向宠，性行淑均，晓畅军事，试用于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。<br /><br />
+          亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。<br /><br />
+          臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
+          先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
+          愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
+          今当远离临表涕零不知所言。
+        </p>
+      </div>
+      <div>
+
+        <s-button onclick="document.querySelector('s-drawer').toggle()"> toggle start </s-button>
+
+        <s-button onclick="document.querySelector('s-drawer').toggle('end')"> toggle end </s-button>
+
+        将军向宠，性行淑均，晓畅军事，试用于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。<br /><br />
+        亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。<br /><br />
+        臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
+        先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
+        愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
+        今当远离临表涕零不知所言。
+      </div>
+      <s-scroll-view slot="end" style="padding: 24px;">
+        先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。<br /><br />
+        宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。<br /><br />
+        侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必能裨补阙漏，有所广益。<br /><br />
+        将军向宠，性行淑均，晓畅军事，试用于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。<br /><br />
+        亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。<br /><br />
+        臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
+        先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
+        愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
+        今当远离临表涕零不知所言。
+      </s-scroll-view>
+    </s-drawer>
+    <hr>
+    <button>Sheet xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</button>
     <s-bottom-sheet>
-      <s-button slot="trigger">Sheet xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</s-button>
-      <s-scroll-view style="height: 280px;">
+      <s-button slot="trigger">Sheet xxxxxxxxxxxxxxxxxxxxxx</s-button>
+      <s-scroll-view slot="view" style="height: 280px;">
         <h1>...</h1>
+        <s-picker label="地区">
+          <s-picker-item>贵阳</s-picker-item>
+          <s-picker-item>北京</s-picker-item>
+          <s-picker-item>上海</s-picker-item>
+          <s-picker-item>深圳</s-picker-item>
+          <s-picker-item>成都</s-picker-item>
+          <s-picker-item>武汉</s-picker-item>
+          <s-picker-item>南昌</s-picker-item>
+          <s-picker-item>杭州</s-picker-item>
+        </s-picker>
         <div style="height: 2000px;"></div>
       </s-scroll-view>
     </s-bottom-sheet>
@@ -175,7 +256,7 @@
     <hr>
     <s-linear-progress value="20"></s-linear-progress>
     <s-linear-progress style="color: #009688" value="50"></s-linear-progress>
-    <s-linear-progress style="width: 800px;" indeterminate="true"></s-linear-progress>
+    <s-linear-progress indeterminate="true"></s-linear-progress>
 
     <hr>
 
@@ -331,12 +412,7 @@
       提示信息
     </s-tooltip>
     <s-carousel>
-      <img
-        src="https://imgcps.jd.com/img-cubic/creative_server_cia_jdcloud/v2/2000366/100087971198/FocusFullshop/CkNqZnMvdDEvMTcxNzAyLzI3LzQzNzk2LzU1OTIzLzY2MDVjN2JkRjU1OWJkNDljLzFiYTgyZDFhZmNmNmJiNDQuanBnEgo5OTktdHlfMF8xMAE47ot6WP761O30Ag/cr/s/q.jpg">
-      <img
-        src="https://imgcps.jd.com/ling-cubic/ling4/lab/amZzL3QxLzYyMTk2LzE0LzI0Mzc3LzIzMTU4OC82NGMwYjc1N0Y0YWE2ZjZjOC8wMGI4Mjc5ZjU5ZjRiNzJjLnBuZw/5Lqs6YCJ5aW96LSn/5L2g5YC85b6X5oul5pyJ/1635187410014105601/cr/s/q.jpg">
-      <img
-        src="https://img20.360buyimg.com/babel/s1180x940_jfs/t20270328/123726/8/45309/31863/6604db83F9dae4720/4ec7722ceb7165aa.jpg.avif">
+      <div>xx</div>
     </s-carousel>
     <hr>
     <s-chip clickable="true">
@@ -364,6 +440,20 @@
       </button>
       <div slot="headline">出师表</div>
       <div slot="text">
+        <s-picker onchange="console.log(this.selectedIndex)">
+          <s-picker-item value="北京">
+            <s-icon slot="start" type="search"></s-icon>
+            北京
+          </s-picker-item>
+          <s-picker-item selected="true">上海</s-picker-item>
+          <s-picker-item>成都</s-picker-item>
+          <s-picker-item>贵阳</s-picker-item>
+          <s-picker-item>西安</s-picker-item>
+        </s-picker>
+        <s-tooltip>
+          <p slot="trigger">松手</p>
+          松手
+        </s-tooltip>
         先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。<br /><br />
         宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。<br /><br />
         侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必能裨补阙漏，有所广益。<br /><br />
@@ -399,54 +489,9 @@
 
     <s-rate></s-rate>
 
-    <div
-      style="background: red;width: 1000px;height: 1000px;display: flex;justify-content: center;align-items: center;">
-      <div
-        style="display: grid;overflow: hidden;grid-template-rows: 0fr;transition: .3s;max-width: 520px;background: blue;">
-        先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。<br /><br />
-        宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。<br /><br />
-        侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必能裨补阙漏，有所广益。<br /><br />
-      </div>
-    </div>
 
     <hr>
-    <s-drawer id="drawer" style="height: 500px;">
-      <div slot="start" style="display: flex;width: auto;">
-        <p style="max-width: 280px;">
-          先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。<br /><br />
-          宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。<br /><br />
-          侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必能裨补阙漏，有所广益。<br /><br />
-          将军向宠，性行淑均，晓畅军事，试用于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。<br /><br />
-          亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。<br /><br />
-          臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
-          先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
-          愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
-          今当远离临表涕零不知所言。
-        </p>
-      </div>
-      <div>
 
-        <s-button onclick="document.querySelector('s-drawer').toggle()"> open </s-button>
-
-        将军向宠，性行淑均，晓畅军事，试用于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。<br /><br />
-        亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。<br /><br />
-        臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
-        先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
-        愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
-        今当远离临表涕零不知所言。
-      </div>
-      <s-scroll-view slot="end" style="padding: 24px;">
-        先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。<br /><br />
-        宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。<br /><br />
-        侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必能裨补阙漏，有所广益。<br /><br />
-        将军向宠，性行淑均，晓畅军事，试用于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。<br /><br />
-        亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。<br /><br />
-        臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
-        先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
-        愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
-        今当远离临表涕零不知所言。
-      </s-scroll-view>
-    </s-drawer>
     <hr>
     <s-popup>
       <s-button slot="trigger">popup</s-button>
@@ -655,13 +700,13 @@
       <s-button type="text" slot="action"> 关闭 </s-button>
     </s-snackbar>
 
-    <s-snackbar duration="0">
+    <s-snackbar duration="0" type="warning">
       <s-button slot="trigger"> Snackbar 2 </s-button>
       Snackbar Message 2
       <s-button type="text" slot="action"> 关闭 </s-button>
     </s-snackbar>
 
-    <s-snackbar duration="0">
+    <s-snackbar duration="0" type="error">
       <s-button slot="trigger"> Snackbar 3 </s-button>
       Snackbar Message 3
       <s-button type="text" slot="action"> 关闭 </s-button>

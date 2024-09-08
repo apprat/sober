@@ -8,6 +8,7 @@ const style = /*css*/`
 :host{
   display: block;
   overflow: auto;
+  overscroll-behavior: none;
 }
 @media (pointer: fine){
   :host::-webkit-scrollbar{

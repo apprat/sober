@@ -11,17 +11,24 @@ const props = {
 const style = /*css*/`
 :host{
   display: inline-flex;
+  align-items: center;
   vertical-align: middle;
+  cursor: pointer;
+  line-height: 1;
+  white-space: nowrap;
+  height: 40px;
+}
+.container{
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   position: relative;
-  width: 40px;
+  height: 100%;
   aspect-ratio: 1;
   border-radius: 50%;
   color: var(--s-color-primary, #5256a9);
 }
-:host([disabled=true]){
+:host([disabled=true]) .container{
   pointer-events: none !important;
 }
 .icon{
@@ -48,10 +55,13 @@ const svgData = {
 }
 
 const template = /*html*/`
-<svg class="icon color" viewBox="0 -960 960 960">
-  <path d="${svgData.uncheck}"></path>
-</svg>
-<s-ripple class="color" attached="true" part="ripple"></s-ripple>
+<div class="container" part="container">
+  <svg class="icon color" viewBox="0 -960 960 960">
+    <path d="${svgData.uncheck}"></path>
+  </svg>
+  <s-ripple class="color" attached="true" part="ripple"></s-ripple>
+</div>
+<slot></slot>
 `
 
 export class Checkbox extends useElement({

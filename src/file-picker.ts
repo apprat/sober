@@ -1,21 +1,28 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import './ripple.js'
 
-const name = 's-date-picker'
+const name = 's-file-picker'
 const props = {
+  placeholder: ''
 }
 
 const style = /*css*/`
 :host{
-  display: inline-flex;
+  display: inline-block;
   vertical-align: middle;
 }
 `
 
-const template = /*html*/ `<slot></slot>`
+const template = /*html*/`
+`
 
-export class DatePicker extends useElement({ style, template, props }) { }
+export class Card extends useElement({
+  style, template, props, syncProps: true,
+  setup(shadowRoot) {
+  }
+}) { }
 
-DatePicker.define(name)
+Card.define(name)
 
 declare global {
   namespace JSX {
@@ -24,7 +31,7 @@ declare global {
     }
   }
   interface HTMLElementTagNameMap {
-    [name]: DatePicker
+    [name]: Card
   }
 }
 

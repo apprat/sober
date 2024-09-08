@@ -1,8 +1,8 @@
 # Sober
 
 [![npm version](https://badge.fury.io/js/sober.svg)](https://badge.fury.io/js/sober)
-![Static Badge](https://img.shields.io/badge/complete%20build-92kb-blue)
-![Static Badge](https://img.shields.io/badge/gzip-18kb-wheat)
+![Static Badge](https://img.shields.io/badge/complete%20build-99kb-blue)
+![Static Badge](https://img.shields.io/badge/gzip-22kb-wheat)
 
 Sober 是参考 Google Material You 设计规范的 Web Component UI 组件库。   
 

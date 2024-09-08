@@ -19,8 +19,7 @@ const style = /*css*/`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
-  overflow: hidden;
+  z-index: var(--z-index, 1);
 }
 .scrim{
   position: absolute;
@@ -37,6 +36,7 @@ const style = /*css*/`
   pointer-events: none;
   white-space: nowrap;
   opacity: 0;
+  --z-index: var(--z-index, 1);
 }
 .show .container{
   pointer-events: auto;
@@ -93,7 +93,6 @@ export class Popup extends useElement({
       }
       if (xOrEl === undefined || xOrEl instanceof HTMLElement) {
         const el = !xOrEl ? trigger : xOrEl
-        //wrapper.style.setProperty('--popup-min-width', `${el.offsetWidth}px`)
         const rect = el.getBoundingClientRect()
         const cWidth = container.offsetWidth
         const cHeight = container.offsetHeight
@@ -142,13 +141,13 @@ export class Popup extends useElement({
       container.style.top = `${position.top}px`
       container.style.left = `${position.left}px`
       wrapper.classList.add('show')
-      container.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 120 })
+      container.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 100 })
       this.dispatchEvent(new Event('show'))
     }
     const dismiss = () => {
       if (!this.isConnected || !wrapper.classList.contains('show')) return
       wrapper.classList.remove('show')
-      container.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], { duration: 120 })
+      container.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], { duration: 100 })
       this.dispatchEvent(new Event('dismiss'))
     }
     const toggle: ShowOptions = (xOrEl, y, origin) => {

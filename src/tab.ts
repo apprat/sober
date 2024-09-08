@@ -91,7 +91,7 @@ export class Tab extends useElement({
           const oldLeft = old.indicator.getBoundingClientRect().left
           const rect = target.indicator.getBoundingClientRect()
           target.indicator.setAttribute('style', 'transition:none;filter:opacity(0)')
-          old.indicator.setAttribute('style', `transition: transform .24s, width .24s;filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
+          old.indicator.setAttribute('style', `transition: transform .2s, width .2s;filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
         }
       }
     }

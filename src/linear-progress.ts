@@ -17,7 +17,7 @@ const style = /*css*/`
   overflow: hidden;
 }
 :host([animated=true]) .known>.block{
-  transition: transform .24s;
+  transition: transform .2s;
 }
 :host([indeterminate=true]) .known,
 .unknown{

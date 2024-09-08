@@ -20,7 +20,7 @@ const style = /*css*/`
   display: flex;
   justify-content: flex-start;
   height: 100%;
-  transition: transform .24s;
+  transition: transform .2s;
 }
 .dot{
   position: absolute;

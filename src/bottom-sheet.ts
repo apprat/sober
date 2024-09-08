@@ -22,36 +22,38 @@ const style = /*css*/`
   align-items: flex-end;
 }
 .scrim{
-  background: var(--s-color-scrim, #000000);
+  background: color-mix(in srgb, var(--s-color-scrim, #000000) 70%, transparent);
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   filter: opacity(0);
-  transition: filter .24s, backdrop-filter .24s;
+  transition: filter .2s;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   pointer-events: none;
 }
 .wrapper.show .scrim{
-  filter: opacity(.8);
-  backdrop-filter: blur(12px);
+  filter: opacity(1);
   pointer-events: auto;
 }
 .container{
   position: relative;
   border-radius: 24px 24px 0 0;
-  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
   max-width: 520px;
   width: 100%;
   max-height: calc(100% - 56px);
   background: var(--s-color-surface-container-highest, #e5e1e6);
   display: flex;
   flex-direction: column;
-  visibility: hidden;
+  top: 100%;
+  --z-index: var(--z-index, 2);
 }
 .show.wrapper .container{
-  visibility: visible;
+  top: 0;
   pointer-events: auto;
+  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
 }
 .drag{
   width: 100%;
@@ -59,6 +61,7 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   padding: 12px 0;
+  cursor: pointer;
 }
 .drag::before{
   content: '';
@@ -68,7 +71,7 @@ const style = /*css*/`
   background: var(--s-color-on-surface-variant, #46464f);
   opacity: .4;
 }
-::slotted(s-scroll-view){
+::slotted([slot=view]){
   flex-grow: 1;
   min-height: 280px;
 }
@@ -80,8 +83,8 @@ const template = /*html*/`
   <div class="scrim" part="scrim"></div>
   <div class="container" part="container">
     <div class="drag" part="drag"></div>
-    <slot></slot>
-</div>
+    <slot name="view"></slot>
+  </div>
 </div>
 `
 
@@ -94,17 +97,13 @@ export class BottomSheet extends useElement({
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const show = () => {
       wrapper.classList.add('show')
-      container.animate([
-        { transform: 'translateY(100%)', visibility: 'visible' },
-        { transform: 'translateY(0%)', visibility: 'visible' }
-      ], { duration: 240 })
+      container.animate([{ transform: 'translateY(100%)', top: 0 }, { transform: 'translateY(0%)', top: 0 }], { duration: 200 })
+      this.dispatchEvent(new Event('show'))
     }
     const dismiss = () => {
       wrapper.classList.remove('show')
-      container.animate([
-        { transform: 'translateY(0%)', visibility: 'visible' },
-        { transform: 'translateY(100%)', visibility: 'visible' }
-      ], { duration: 240 })
+      container.animate([{ transform: 'translateY(0%)', top: 0 }, { transform: 'translateY(100%)', top: 0 }], { duration: 200 })
+      this.dispatchEvent(new Event('dismiss'))
     }
     trigger.addEventListener('click', show)
     scrim.addEventListener('click', dismiss)

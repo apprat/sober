@@ -25,19 +25,20 @@ const style = /*css*/`
   align-items: center;
 }
 .scrim{
-  background: var(--s-color-scrim, #000000);
+  background: color-mix(in srgb, var(--s-color-scrim, #000000) 70%, transparent);
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   filter: opacity(0);
-  transition: filter .24s, backdrop-filter .24s;
+  transition: filter .2s;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   pointer-events: none;
 }
 .wrapper.show .scrim{
-  filter: opacity(.8);
-  backdrop-filter: blur(12px);
+  filter: opacity(1);
   pointer-events: auto;
 }
 .container{
@@ -45,19 +46,20 @@ const style = /*css*/`
   max-height: calc(100% - 48px);
   width: 520px;
   height: calc-size(auto);
-  background: var(--s-color-surface-container-highest, #e5e1e6);
+  background: var(--s-color-surface-container-low, #f6f2f7);
   position: relative;
   border-radius: 28px;
   box-shadow: var(--s-elevation-level5, 0 10px 14px -6px rgba(0, 0, 0, .2), 0 22px 35px 3px rgba(0, 0, 0, .14), 0 8px 42px 7px rgba(0, 0, 0, .12));
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  visibility: hidden;
-  transition: width .24s, height .24s, border-radius .24s;
+  top: 100%;
+  transition: width .2s, height .2s, border-radius .2s;
+  --z-index: var(--z-index, 2);
 }
 .wrapper.show .container{
   pointer-events: auto;
-  visibility: visible;
+  top: 0;
 }
 :host([size=full]) .container{
   width: 100%;
@@ -89,16 +91,21 @@ const style = /*css*/`
   padding: 0 14px;
   flex-shrink: 0;
 }
-::slotted(s-button[slot=action]){
+::slotted([slot=action]){
   min-width: 72px;
-  margin: 20px 2px;
+  margin: 16px 2px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 24px;
+  color: var(--s-color-primary, #5256a9);
+  box-sizing: border-box;
+  height: 40px;
+  font-size: .875rem;
+  cursor: pointer;
 }
 :host([size=full]) ::slotted([slot=text]),
 :host([size=full]) ::slotted(:not([slot])){
   max-width: none;
-}
-::slotted(*){
-  --z-index: calc(var(--z-index, 2) + 1);
 }
 `
 
@@ -165,7 +172,7 @@ const show = (options: string | {
   }
   root.appendChild(dialog)
   dialog.addEventListener('dismissed', () => root.removeChild(dialog))
-  dialog.show()
+  requestAnimationFrame(dialog.show)
 }
 
 class Dialog extends useElement({
@@ -185,18 +192,18 @@ class Dialog extends useElement({
       }
       wrapper.classList.add('show')
       const animation = container.animate([
-        { transform: 'scale(.9)', filter: 'opacity(0)', visibility: 'visible' },
-        { transform: 'scale(1)', filter: 'opacity(1)', visibility: 'visible' }
-      ], { duration: 240 })
+        { transform: 'scale(.9)', filter: 'opacity(0)', top: 0 },
+        { transform: 'scale(1)', filter: 'opacity(1)', top: 0 }
+      ], { duration: 200, fill: 'forwards' })
       animation.addEventListener('finish', () => this.dispatchEvent(new Event('showed')))
       this.dispatchEvent(new Event('show'))
     }
     const dismiss = () => {
       wrapper.classList.remove('show')
       const animation = container.animate([
-        { transform: 'scale(1)', filter: 'opacity(1)', visibility: 'visible' },
-        { transform: 'scale(.9)', filter: 'opacity(0)', visibility: 'visible' }
-      ], { duration: 240 })
+        { transform: 'scale(1)', filter: 'opacity(1)', top: 0 },
+        { transform: 'scale(.9)', filter: 'opacity(0)', top: 0 }
+      ], { duration: 200, fill: 'forwards' })
       animation.addEventListener('finish', () => this.dispatchEvent(new Event('dismissed')))
       this.dispatchEvent(new Event('dismiss'))
     }

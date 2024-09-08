@@ -55,7 +55,7 @@ const style = /*css*/`
   margin: 0 auto;
   padding: 0;
 }
-@media(max-width: 840px){
+@media(max-width: 768px){
   :host{
     height: 56px;
   }

@@ -33,20 +33,6 @@ const style = /*css*/`
   overflow: hidden;
   border-radius: inherit;
 }
-.animation {
-  background: var(--ripple-color, currentColor);
-  border-radius: 50%;
-  transition: opacity .8s;
-  opacity: var(--ripple-opacity, .24);
-  width: var(--size);
-  height: var(--size);
-  position: absolute;
-  transform: translate(-50%, -50%) scale(0);
-  left: var(--x);
-  top: var(--y);
-  box-shadow: 0 0 64px 0 var(--ripple-color, currentColor);
-  filter: blur(12px);
-}
 .container::before{
   content: '';
   width: 100%;
@@ -56,44 +42,47 @@ const style = /*css*/`
   top: 0;
   border-radius: inherit;
   background: var(--ripple-color, currentColor);
-  filter: opacity(0) blur(12px);
-  transition: filter .12s;
-  will-change: filter;
+  opacity: 0;
+  transition: opacity .1s;
 }
 .container.hover::before{
-  filter: opacity(.12);
+  opacity: .12;
+}
+.ripple {
+  background: color-mix(in srgb, var(--ripple-color, currentColor) 24%, transparent);
+  border-radius: 50%;
+  transition: opacity .8s;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform: translate(-50%, -50%) scale(0);
+  left: 0;
+  top: 0;
+  filter: blur(8px);
 }
 `
 
 const template = /*html*/`
 <slot></slot>
-<div class="container" part="container"></div>
+<div class="container" part="container">
+  <div class="ripple"></div>
+</div>
 `
-
-const pointerUp = (fn: Function) => {
-  const up = () => {
-    fn()
-    document.removeEventListener('pointerup', up)
-    document.removeEventListener('pointercancel', up)
-  }
-  document.addEventListener('pointerup', up)
-  document.addEventListener('pointercancel', up)
-}
 
 export class Ripple extends useElement({
   style, template, props, syncProps: ['attached'],
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
+    const ripple = shadowRoot.querySelector('.ripple') as HTMLDivElement
     const hover = () => !device.touched && container.classList.add('hover')
     const unHover = () => !device.touched && container.classList.remove('hover')
-    const run = (event: PointerEvent, upped?: boolean) => {
-      const el = document.createElement('div')
-      el.className = 'animation'
-      const { offsetWidth, offsetHeight } = container
+    const state = { parentNode: null as null | HTMLElement }
+    const run = (event: PointerEvent) => {
+      const { offsetWidth, offsetHeight } = this
       let size = Math.sqrt(offsetWidth * offsetWidth + offsetHeight * offsetHeight)
       const coordinate = { x: '50%', y: '50%' }
       if (!this.centered) {
-        const { left, top } = container.getBoundingClientRect()
+        const { left, top } = this.getBoundingClientRect()
         const x = event.clientX - left
         const y = event.clientY - top
         const h = offsetHeight / 2
@@ -104,57 +93,67 @@ export class Ripple extends useElement({
         coordinate.x = `${x}px`
         coordinate.y = `${y}px`
       }
-      el.setAttribute('style', `--size: ${size}px;--x: ${coordinate.x};--y: ${coordinate.y};`)
-      const remove = () => el.isConnected && container.removeChild(el)
-      el.addEventListener('transitionend', remove, { once: true })
-      el.addEventListener('transitioncancel', remove, { once: true })
-      const end = () => el.style.opacity = '0'
-      container.appendChild(el)
-      el.animate([
-        { transform: 'translate(-50%, -50%) scale(0)' },
-        { transform: 'translate(-50%, -50%) scale(1)' }
-      ], { duration: 800, fill: 'forwards', easing: 'cubic-bezier(.2, .9, .1, .9)' })
-      if (!upped) return pointerUp(end)
-      window.getComputedStyle(el).top
-      end()
+      const p = (state.parentNode ?? this)
+      p.setAttribute('rippled', '')
+      const keyframes = { transform: 'translate(-50%, -50%) scale(1)', opacity: 1, width: `${size}px`, height: `${size}px`, left: `${coordinate.x}`, top: `${coordinate.y}` }
+      ripple.animate([{ ...keyframes, transform: 'translate(-50%, -50%) scale(0)' }, keyframes], { duration: 800, fill: 'forwards', easing: 'cubic-bezier(.2, .9, .1, .9)' })
+      const remove = () => {
+        p.removeAttribute('rippled')
+        ripple.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 800, fill: 'forwards' })
+      }
+      return remove
     }
-    const start = (event: PointerEvent) => {
-      if (event.pointerType === 'mouse') return run(event)
-      //触屏设备延迟80ms触发优先响应滚动
-      let upped = false
-      const clear = () => clearTimeout(timer)
-      const timer = setTimeout(() => {
-        run(event, upped)
-        document.removeEventListener('pointermove', clear)
-      }, 80)
-      pointerUp(() => upped = true)
-      document.addEventListener('pointermove', clear, { once: true })
-    }
-    const down = (event: PointerEvent) => {
+    const down = async (event: PointerEvent) => {
       if (event.button !== 0) return
-      start(event)
+      const data: { timer?: number, upper?: boolean } = {}
+      if (event.pointerType === 'mouse') {
+        document.addEventListener('pointerup', run(event), { once: true })
+      }
+      if (event.pointerType === 'touch') {
+        let remove: Function
+        //优先响应触屏滚动
+        data.timer = setTimeout(() => {
+          remove = run(event)
+          document.removeEventListener('touchmove', move)
+          if (data.upper) remove()
+        }, 40)
+        document.addEventListener('touchend', () => {
+          if (!remove) return data.upper = true
+          remove()
+        }, { once: true })
+        const move = () => clearTimeout(data.timer)
+        document.addEventListener('touchmove', move, { once: true })
+      }
     }
-    let target: HTMLElement = this
-    const addEvents = () => {
-      target = this.attached ? ((this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode) as HTMLElement) : this
-      target?.addEventListener('mouseover', hover)
-      target?.addEventListener('mouseleave', unHover)
-      target?.addEventListener('wheel', unHover, { passive: true })
-      target?.addEventListener('pointerdown', down)
+    const add = (target: HTMLElement) => {
+      target.addEventListener('mouseover', hover)
+      target.addEventListener('mouseleave', unHover)
+      target.addEventListener('wheel', unHover, { passive: true })
+      target.addEventListener('pointerdown', down)
     }
-    const removeEvents = () => {
-      target?.removeEventListener('mouseover', hover)
-      target?.removeEventListener('mouseleave', unHover)
-      target?.removeEventListener('wheel', unHover)
-      target?.removeEventListener('pointerdown', down)
+    const remove = () => {
+      if (!state.parentNode) return
+      state.parentNode.removeEventListener('mouseover', hover)
+      state.parentNode.removeEventListener('mouseleave', unHover)
+      state.parentNode.removeEventListener('wheel', unHover)
+      state.parentNode.removeEventListener('pointerdown', down)
+      state.parentNode = null
     }
+    add(this)
     return {
-      mounted: addEvents,
-      unmounted: removeEvents,
+      mounted: () => {
+        if (this.attached && this.parentNode) {
+          state.parentNode = (this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode) as HTMLElement
+          add(state.parentNode)
+        }
+      },
+      unmounted: () => this.attached && remove(),
       watches: {
-        attached: () => {
-          removeEvents()
-          addEvents()
+        attached: (value) => {
+          if (!this.isConnected) return
+          if (!value) return remove()
+          const target = (this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode) as HTMLElement
+          add(target)
         }
       }
     }

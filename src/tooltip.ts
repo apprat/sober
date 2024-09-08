@@ -7,7 +7,6 @@ const props = {
 
 const style = /*css*/`
 :host{
-  position: relative;
   display: inline-flex;
   vertical-align: middle;
 }
@@ -15,7 +14,7 @@ const style = /*css*/`
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 1;
+  z-index: var(--z-index, 1);
   background: var(--s-color-inverse-surface, #313034);
   color: var(--s-color-inverse-on-surface, #f3eff4);
   font-size: .875rem;
@@ -25,23 +24,28 @@ const style = /*css*/`
   white-space: nowrap;
   opacity: .85;
   filter: opacity(0);
-  transition: filter .12s;
+  transition: filter .1s;
   pointer-events: none;
+  --z-index: var(--z-index, 1);
 }
 .container.show{
   filter: opacity(1);
+}
+slot[name=trigger]{
+  display: block;
 }
 ::slotted(img){
   display: block;
   border-radius: 4px;
   margin: 2px 0;
 }
+::slotted([slot=trigger]){
+  margin: 0;
+}
 `
 
 const template = /*html*/`
-<div id="trigger" part="trigger">
-  <slot name="trigger"></slot>
-</div>
+<slot name="trigger" part="trigger"></slot>
 <div class="container" part="container">
   <slot></slot>
 </div>
@@ -50,11 +54,11 @@ const template = /*html*/`
 export class Tooltip extends useElement({
   style, template, props,
   setup(shadowRoot) {
-    const trigger = shadowRoot.querySelector('#trigger') as HTMLDivElement
+    const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const state = { showed: false, timer: 0 }
+    const state = { timer: 0 }
     const show = (align: 'bottom' | 'top' = 'bottom') => {
-      if (!this.isConnected || state.showed) return
+      if (!this.isConnected || container.classList.contains('show')) return
       const rect = trigger.getBoundingClientRect()
       const stackingContext = getStackingContext(shadowRoot)
       const gap = 4
@@ -85,16 +89,13 @@ export class Tooltip extends useElement({
       }
       container.setAttribute('style', `left: ${position.left - stackingContext.left}px;top: ${position.top - stackingContext.top}px`)
       container.classList.add('show')
-      state.showed = true
     }
     const dismiss = () => {
-      if (!this.isConnected || !state.showed) return
+      if (!this.isConnected || !container.classList.contains('show')) return
       container.classList.remove('show')
-      state.showed = false
     }
     const transitionEnd = () => {
-      const showed = container.classList.contains('show')
-      if (showed) return
+      if (container.classList.contains('show')) return
       container.removeAttribute('style')
     }
     const touchShow = () => {

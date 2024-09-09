@@ -33,8 +33,8 @@ const style = /*css*/`
   height: 100%;
   filter: opacity(0);
   transition: filter .2s;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   pointer-events: none;
 }
 .wrapper.show .scrim{

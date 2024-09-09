@@ -26,17 +26,19 @@ const style = /*css*/`
   cursor: pointer;
   filter: opacity(0);
   transition: filter .2s;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   pointer-events: none;
 }
 .start,
 .end{
   flex-shrink: 0;
+  min-width: 0;
   display: block;
 }
 ::slotted(*){
   flex-grow: 1;
+  min-width: 0;
 }
 ::slotted([slot=start]),
 ::slotted([slot=end]){
@@ -47,6 +49,7 @@ const style = /*css*/`
   height: 100%;
   box-sizing: border-box;
   position: relative;
+  display: block;
 }
 ::slotted([slot=start]){
   border-right-style: solid;

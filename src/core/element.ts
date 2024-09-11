@@ -1,5 +1,13 @@
 export * from './types/HTMLAttributes.js'
 
+const supports = { CSSStyleSheet: true }
+
+try {
+  new CSSStyleSheet()
+} catch (error) {
+  supports.CSSStyleSheet = false
+}
+
 type Prop = string | number | boolean
 
 const parseType = (value: unknown, old: Prop) => {
@@ -13,8 +21,29 @@ const parseType = (value: unknown, old: Prop) => {
   throw new TypeError()
 }
 
-const baseStyle = new CSSStyleSheet()
-baseStyle.replaceSync(/*css*/`:host{ user-select: none;-webkit-user-select: none;-webkit-tap-highlight-color: transparent; }`)
+const baseStyle = /*css*/`:host{ user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent }`
+
+const setStyle = (shadowRoot: ShadowRoot, css?: string) => {
+  if (supports.CSSStyleSheet) {
+    const baseStyleEl = new CSSStyleSheet()
+    baseStyleEl.replaceSync(baseStyle)
+    shadowRoot.adoptedStyleSheets.push(baseStyleEl)
+    if (css) {
+      const styleEl = new CSSStyleSheet()
+      styleEl.replaceSync(css)
+      shadowRoot.adoptedStyleSheets.push(styleEl)
+    }
+    return
+  }
+  if (css) {
+    const styleEl = document.createElement('style')
+    styleEl.textContent = css
+    shadowRoot.insertBefore(styleEl, shadowRoot.firstChild)
+  }
+  const baseStyleEl = document.createElement('style')
+  baseStyleEl.textContent = baseStyle
+  shadowRoot.insertBefore(baseStyleEl, shadowRoot.firstChild)
+}
 
 type Setup<P, E> = (this: P & HTMLElement, shadowRoot: ShadowRoot) => {
   mounted?: () => void
@@ -40,8 +69,6 @@ export const useElement = <
   readonly define: (name: string) => void
   prototype: HTMLElement
 } => {
-  const sheet = new CSSStyleSheet()
-  sheet.replaceSync(options.style ?? '')
   const attrs: string[] = []
   const upperAttrs: { [key: string]: string } = {}
   for (const key in options.props) {
@@ -58,8 +85,8 @@ export const useElement = <
     constructor() {
       super()
       const shadowRoot = this.attachShadow({ mode: 'open' })
-      shadowRoot.adoptedStyleSheets = [baseStyle, sheet]
       shadowRoot.innerHTML = options.template ?? ''
+      setStyle(shadowRoot, options.style)
       const props = { ...options.props }
       const setups = options.setup?.apply(this as any, [shadowRoot])
       for (const key in options.props) {

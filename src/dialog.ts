@@ -31,14 +31,14 @@ const style = /*css*/`
   left: 0;
   width: 100%;
   height: 100%;
-  filter: opacity(0);
-  transition: filter .2s;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s;
 }
 .wrapper.show .scrim{
-  filter: opacity(1);
+  opacity: 1;
   pointer-events: auto;
 }
 .container{

@@ -56,9 +56,9 @@ const style = /*css*/`
   height: 100%;
   position: absolute;
   transform: translate(-50%, -50%) scale(0);
+  filter: blur(8px);
   left: 0;
   top: 0;
-  filter: blur(8px);
 }
 `
 

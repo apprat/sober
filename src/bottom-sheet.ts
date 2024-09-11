@@ -28,14 +28,14 @@ const style = /*css*/`
   left: 0;
   width: 100%;
   height: 100%;
-  filter: opacity(0);
-  transition: filter .2s;
+  opacity: 0;
+  transition: opacity .2s;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   pointer-events: none;
 }
 .wrapper.show .scrim{
-  filter: opacity(1);
+  opacity: 1;
   pointer-events: auto;
 }
 .container{
@@ -55,15 +55,15 @@ const style = /*css*/`
   pointer-events: auto;
   box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
 }
-.drag{
+.indicator{
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px 0;
+  height: 18px;
   cursor: pointer;
 }
-.drag::before{
+.indicator::before{
   content: '';
   width: 40px;
   height: 4px;
@@ -83,7 +83,7 @@ const template = /*html*/`
 <div class="wrapper" part="wrapper">
   <div class="scrim" part="scrim"></div>
   <div class="container" part="container">
-    <div class="drag" part="drag"></div>
+    <div class="indicator" part="indicator"></div>
     <slot name="view"></slot>
   </div>
 </div>
@@ -96,6 +96,8 @@ export class BottomSheet extends useElement({
     const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
+    const view = shadowRoot.querySelector('slot[name=view]') as HTMLSlotElement
+    let scrollView: HTMLElement | undefined
     const show = () => {
       wrapper.classList.add('show')
       container.animate([{ transform: 'translateY(100%)', top: 0 }, { transform: 'translateY(0%)', top: 0 }], { duration: 200 })
@@ -108,6 +110,7 @@ export class BottomSheet extends useElement({
     }
     trigger.addEventListener('click', show)
     scrim.addEventListener('click', dismiss)
+    view.addEventListener('slotchange', () => scrollView = view.assignedNodes()[0] as HTMLElement)
     return {
       expose: { show, dismiss }
     }

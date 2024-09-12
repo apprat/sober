@@ -26,7 +26,7 @@ const style = /*css*/`
   white-space: nowrap;
   background: var(--s-color-primary, #5256a9);
   color: var(--s-color-on-primary, #ffffff);
-  transition: box-shadow .1s;
+  transition: box-shadow .1s ease-out;
   overflow: hidden;
 }
 :host([disabled=true]){

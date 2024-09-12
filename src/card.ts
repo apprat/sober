@@ -32,7 +32,7 @@ const style = /*css*/`
 }
 :host([clickable=true]){
   cursor: pointer;
-  transition: box-shadow .1s;
+  transition: box-shadow .1s ease-out;
 }
 :host([clickable=true]) .ripple{
   display: block;

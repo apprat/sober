@@ -78,7 +78,7 @@ const style = /*css*/`
   border-radius: 50%;
   background: color-mix(in srgb, currentColor 20%, transparent);
   transform: scale(0);
-  transition: transform .1s;
+  transition: transform .1s ease-out;
 }
 .active .thumb::before{
   transform: scale(1);
@@ -97,7 +97,7 @@ const style = /*css*/`
   font-size: .75rem;
   transform: scale(0);
   transform-origin: center bottom;
-  transition: transform .1s;
+  transition: transform .1s ease-out;
   opacity: .85;
   z-index: 1;
   display: none;

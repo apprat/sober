@@ -24,7 +24,7 @@ const style = /*css*/`
   white-space: nowrap;
   opacity: .85;
   filter: opacity(0);
-  transition: filter .1s;
+  transition: filter .1s ease-out;
   pointer-events: none;
   --z-index: var(--z-index, 1);
 }

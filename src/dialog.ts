@@ -35,7 +35,7 @@ const style = /*css*/`
   -webkit-backdrop-filter: blur(4px);
   pointer-events: none;
   opacity: 0;
-  transition: opacity .2s;
+  transition: opacity .3s ease-out;
 }
 .wrapper.show .scrim{
   opacity: 1;
@@ -54,7 +54,8 @@ const style = /*css*/`
   flex-direction: column;
   overflow: hidden;
   top: 100%;
-  transition: width .2s, height .2s, border-radius .2s;
+  transition: width .3s, height .3s, border-radius .3s;
+  transition-timing-function: ease-out;
   --z-index: var(--z-index, 2);
 }
 .wrapper.show .container{
@@ -183,6 +184,7 @@ class Dialog extends useElement({
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
     const action = shadowRoot.querySelector('slot[name=action]') as HTMLSlotElement
+    const animationOptions = { duration: 300, easing: 'ease-out', fill: 'forwards' } as const
     const show = () => {
       const stackingContext = getStackingContext(shadowRoot)
       if (stackingContext.top !== 0 || stackingContext.left !== 0) {
@@ -194,7 +196,7 @@ class Dialog extends useElement({
       const animation = container.animate([
         { transform: 'scale(.9)', filter: 'opacity(0)', top: 0 },
         { transform: 'scale(1)', filter: 'opacity(1)', top: 0 }
-      ], { duration: 200, fill: 'forwards' })
+      ], animationOptions)
       animation.addEventListener('finish', () => this.dispatchEvent(new Event('showed')))
       this.dispatchEvent(new Event('show'))
     }
@@ -203,7 +205,7 @@ class Dialog extends useElement({
       const animation = container.animate([
         { transform: 'scale(1)', filter: 'opacity(1)', top: 0 },
         { transform: 'scale(.9)', filter: 'opacity(0)', top: 0 }
-      ], { duration: 200, fill: 'forwards' })
+      ], animationOptions)
       animation.addEventListener('finish', () => this.dispatchEvent(new Event('dismissed')))
       this.dispatchEvent(new Event('dismiss'))
     }

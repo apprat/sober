@@ -28,7 +28,7 @@ const style = /*css*/`
   justify-content: center;
   --offset-direction: -1;
   transform: translateY(calc(var(--offset) * var(--offset-direction)));
-  transition: transform .2s;
+  transition: transform .2s ease-out;
 }
 .container{
   background: var(--s-color-inverse-surface, #313034);
@@ -48,6 +48,7 @@ const style = /*css*/`
   transform: translateY(calc(100% - 16px));
   filter: opacity(0);
   transition: transform .2s, filter .2s;
+  transition-timing-function: ease-out;
 }
 .container::before{
   content:'';
@@ -108,7 +109,7 @@ const style = /*css*/`
   }
   .container{
     transform: translateY(calc(-100% - 16px));
-    min-width: 280px;
+    min-width: 240px;
   }
 }
 `

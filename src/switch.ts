@@ -47,7 +47,7 @@ const style = /*css*/`
   aspect-ratio: 1;
   border-radius: 50%;
   top: auto;
-  transition: transform .12s;
+  transition: transform .1s ease-out;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -64,7 +64,8 @@ const style = /*css*/`
   border-radius: 50%;
   width: 40%;
   height: 40%;
-  transition: transform .12s, box-shadow .12s;
+  transition: transform .1s, box-shadow .1s;
+  transition-timing-function: ease-out;
   position: relative;
   display: flex;
   justify-content: center;
@@ -87,7 +88,7 @@ const style = /*css*/`
   height: 70%;
   fill: currentColor;
   opacity: 0;
-  transition: opacity .12s;
+  transition: opacity .1s ease-out;
 }
 :host([checked=true]) .icon{
   opacity: 1;

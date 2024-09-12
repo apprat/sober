@@ -17,11 +17,12 @@ const style = /*css*/`
   cursor: pointer;
   box-sizing: border-box;
   aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
   width: 56px;
   border-radius: 16px;
   background: var(--s-color-primary-container, #e1e0ff);
   color: var(--s-color-on-primary-container, #090764);
-  transition: box-shadow .1s;
+  transition: box-shadow .1s ease-out;
   font-size: .875rem;
   font-weight: 500;
   white-space: nowrap;

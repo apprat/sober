@@ -120,7 +120,7 @@ const itemStyle = /*css*/`
   max-width: 80px;
   text-transform: capitalize;
   color: var(--s-color-on-surface-variant, #46464f);
-  transition: color .12s;
+  transition: color .1s ease-out;
 }
 :host([selected=true]){
   color: var(--s-color-primary, #5256a9);
@@ -143,7 +143,7 @@ const itemStyle = /*css*/`
   left: 0;
   top: 0;
   transform: scale(0);
-  transition: transform .12s;
+  transition: transform .1s ease-out;
   background: var(--s-color-secondary-container, #e2e0f9);
 }
 :host([selected=true]) .icon::before{

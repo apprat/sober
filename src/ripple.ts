@@ -43,7 +43,7 @@ const style = /*css*/`
   border-radius: inherit;
   background: var(--ripple-color, currentColor);
   opacity: 0;
-  transition: opacity .1s;
+  transition: opacity .1s ease-out;
 }
 .container.hover::before{
   opacity: .12;
@@ -51,7 +51,6 @@ const style = /*css*/`
 .ripple {
   background: color-mix(in srgb, var(--ripple-color, currentColor) 24%, transparent);
   border-radius: 50%;
-  transition: opacity .8s;
   width: 100%;
   height: 100%;
   position: absolute;

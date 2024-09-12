@@ -25,7 +25,7 @@ const style = /*css*/`
   height: 100%;
   cursor: pointer;
   opacity: 0;
-  transition: opacity .2s;
+  transition: opacity .3s ease-out;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   pointer-events: none;
@@ -125,7 +125,7 @@ export class Drawer extends useElement({
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
     const start = shadowRoot.querySelector('.start') as HTMLSlotElement
     const end = shadowRoot.querySelector('.end') as HTMLSlotElement
-    const state = { duration: 200 }
+    const state = { duration: 300, easing: 'ease-out' }
     const getClassName = (slot: Parameters<Fn>[0], folded: Parameters<Fn>[1]) => (folded ?? device.folded) ? `show-${slot}-folded` : `show-${slot}`
     const show: Fn = (slot = 'start', folded) => {
       const className = getClassName(slot, folded)
@@ -139,7 +139,7 @@ export class Drawer extends useElement({
           { transform: 'translateX(0)' }
         ]
         : [{ width: 0 }, { width: `${el.offsetWidth}px` }]
-      fold === device.folded && el.animate(animate, { duration: state.duration })
+      fold === device.folded && el.animate(animate, { duration: state.duration, easing: state.easing })
     }
     const dismiss: Fn = (slot = 'start', folded) => {
       const className = getClassName(slot, folded)
@@ -152,7 +152,7 @@ export class Drawer extends useElement({
           { top: 0, transform: `translateX(${{ start: -el.offsetWidth, end: el.offsetWidth }[slot]}px)` }
         ]
         : [{ width: `${el.offsetWidth}px` }, { width: 0 }]
-      fold === device.folded && el.animate(animate, { duration: state.duration })
+      fold === device.folded && el.animate(animate, { duration: state.duration, easing: state.easing })
       container.classList.remove(className)
     }
     const toggle: Fn = (slot = 'start', folded) => {

@@ -29,7 +29,7 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: opacity .2s;
+  transition: opacity .3s ease-out;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   pointer-events: none;
@@ -73,7 +73,7 @@ const style = /*css*/`
 }
 ::slotted([slot=view]){
   flex-grow: 1;
-  min-height: 280px;
+  max-height: 280px;
   overscroll-behavior: none;
 }
 `
@@ -84,7 +84,7 @@ const template = /*html*/`
   <div class="scrim" part="scrim"></div>
   <div class="container" part="container">
     <div class="indicator" part="indicator"></div>
-    <slot name="view"></slot>
+    <slot></slot>
   </div>
 </div>
 `
@@ -96,21 +96,19 @@ export class BottomSheet extends useElement({
     const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const view = shadowRoot.querySelector('slot[name=view]') as HTMLSlotElement
-    let scrollView: HTMLElement | undefined
+    const animationOptions = { duration: 300, easing: 'ease-out' }
     const show = () => {
       wrapper.classList.add('show')
-      container.animate([{ transform: 'translateY(100%)', top: 0 }, { transform: 'translateY(0%)', top: 0 }], { duration: 200 })
+      container.animate([{ transform: 'translateY(100%)', top: 0 }, { transform: 'translateY(0%)', top: 0 }], animationOptions)
       this.dispatchEvent(new Event('show'))
     }
     const dismiss = () => {
       wrapper.classList.remove('show')
-      container.animate([{ transform: 'translateY(0%)', top: 0 }, { transform: 'translateY(100%)', top: 0 }], { duration: 200 })
+      container.animate([{ transform: 'translateY(0%)', top: 0 }, { transform: 'translateY(100%)', top: 0 }], animationOptions)
       this.dispatchEvent(new Event('dismiss'))
     }
     trigger.addEventListener('click', show)
     scrim.addEventListener('click', dismiss)
-    view.addEventListener('slotchange', () => scrollView = view.assignedNodes()[0] as HTMLElement)
     return {
       expose: { show, dismiss }
     }

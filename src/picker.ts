@@ -100,7 +100,7 @@ const style = /*css*/`
   display: flex;
   align-items: center;
   border-top: solid var(--border-width) var(--border-color);
-  transition: transform .1s;
+  transition: transform .1s ease-out;
   padding: 0 calc(var(--padding) - var(--border-radius) + 12px) 0 calc(var(--padding) - var(--border-radius));
   color: var(--border-color);
 }

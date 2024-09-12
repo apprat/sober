@@ -71,6 +71,7 @@ export class Popup extends useElement({
     const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
+    const animationOptions = { duration: 100, easing: 'ease-out' } as const
     const show: ShowOptions = (xOrEl, y, origin) => {
       if (!this.isConnected || wrapper.classList.contains('show')) return
       const stackingContext = getStackingContext(shadowRoot)
@@ -141,13 +142,13 @@ export class Popup extends useElement({
       container.style.top = `${position.top}px`
       container.style.left = `${position.left}px`
       wrapper.classList.add('show')
-      container.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 100 })
+      container.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], animationOptions)
       this.dispatchEvent(new Event('show'))
     }
     const dismiss = () => {
       if (!this.isConnected || !wrapper.classList.contains('show')) return
       wrapper.classList.remove('show')
-      container.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], { duration: 100 })
+      container.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animationOptions)
       this.dispatchEvent(new Event('dismiss'))
     }
     const toggle: ShowOptions = (xOrEl, y, origin) => {

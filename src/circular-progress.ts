@@ -19,6 +19,7 @@ const style = /*css*/`
 }
 :host([animated=true]) .known .block{
   transition: stroke-dashoffset .2s, transform .2s;
+  transition-timing-function: ease-out;
 }
 :host([indeterminate=true]) .known,
 .unknown{

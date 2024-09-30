@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 import './ripple.js'
 
 const name = 's-button'
@@ -24,40 +25,40 @@ const style = /*css*/`
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
-  background: var(--s-color-primary, #5256a9);
-  color: var(--s-color-on-primary, #ffffff);
+  background: var(--s-color-primary, ${Theme.colorPrimary});
+  color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
   transition: box-shadow .1s ease-out;
   overflow: hidden;
 }
 :host([disabled=true]){
   pointer-events: none !important;
-  background: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 12%, transparent) !important;
-  color: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 38%, transparent) !important;
+  background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
+  color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent) !important;
 }
 :host([type=elevated]){
-  background: var(--s-color-surface-container-low, #f6f2f7);
-  color: var(--s-color-primary, #5256a9);
-  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  color: var(--s-color-primary, ${Theme.colorPrimary});
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 :host([type=elevated][disabled=true]){
   box-shadow: none !important;
 }
 :host([type=filled-tonal]){
-  background: var(--s-color-secondary-container, #e2e0f9);
-  color: var(--s-color-on-secondary-container, #191a2c);
+  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
+  color: var(--s-color-on-secondary-container, ${Theme.colorOnSecondaryContainer});
 }
 :host([type=outlined]){
-  border: solid 1px var(--s-color-outline, #777680);
+  border: solid 1px var(--s-color-outline, ${Theme.colorOutline});
   background: none;
-  color: var(--s-color-primary, #5256a9);
+  color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 :host([type=outlined][disabled=true]){
   background: none !important;
-  border-color: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 12%, transparent) !important;
+  border-color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
 }
 :host([type=text]){
   background: none;
-  color: var(--s-color-primary, #5256a9);
+  color: var(--s-color-primary, ${Theme.colorPrimary});
   padding: 0 16px;
 }
 :host([type=text][disabled=true]){
@@ -67,14 +68,17 @@ const style = /*css*/`
   border-radius: 0;
 }
 ::slotted(*){
-  color: inherit;
+  fill: currentColor;
+  color: currentColor;
   width: 18px;
   height: 18px;
 }
-::slotted(s-icon[slot=start]){
+::slotted(s-icon[slot=start]),
+::slotted(svg[slot=start]){
   margin: 0 4px 0 -8px;
 }
-::slotted(s-icon[slot=end]){
+::slotted(s-icon[slot=end]),
+::slotted(svg[slot=end]){
   margin: 0 -8px 0 4px;
 }
 ::slotted(s-circular-progress[slot=start]){
@@ -83,17 +87,19 @@ const style = /*css*/`
 ::slotted(s-circular-progress[slot=end]){
   margin: 0 -8px 0 8px;
 }
-:host([type=text]) ::slotted(s-icon[slot=start]){
+:host([type=text]) ::slotted(s-icon[slot=start]),
+:host([type=text]) ::slotted(svg[slot=start]){
   margin: 0 4px 0 -4px;
 }
-:host([type=text]) ::slotted(s-icon[slot=end]){
+:host([type=text]) ::slotted(s-icon[slot=end]),
+:host([type=text]) ::slotted(svg[slot=end]){
   margin: 0 -4px 0 4px;
 }
 :host([rippled]){
-  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 :host([type=elevated][rippled]){
-  box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
 }
 :host([type=filled-tonal][rippled]),
 :host([type=outlined][rippled]),
@@ -102,10 +108,10 @@ const style = /*css*/`
 }
 @media (pointer: fine){
   :host([type=elevated]:hover){
-    box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+    box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   }
   :host(:hover){
-    box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+    box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   }
   :host([type=filled-tonal]:hover),
   :host([type=outlined]:hover),

@@ -25,30 +25,135 @@
       background: var(--s-color-outline-variant);
       margin: 16px 0;
     }
+
+    .test {
+      display: inline-flex;
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .box {}
+
+    .box>.item {
+      background: rgba(25, 131, 17, 0.08);
+    }
+
+    .box>.shadow {
+      white-space: nowrap;
+      background: rgb(16, 76, 141, 0.5);
+      position: relative;
+      height: 100%;
+    }
   </style>
 </head>
 
 <body>
+  <a href="./in-vue.html">In Vue</a>
   <s-page>
-    <s-file-picker></s-file-picker>
+
+    <div style="width: 240px;border: solid 1px #ddd">
+      <s-menu>
+        <div slot="label">控制台</div>
+        <s-menu-item checked="true">
+          <s-icon slot="start" type="home"></s-icon>
+          首页
+        </s-menu-item>
+        <s-menu-item>
+          <s-icon slot="start" type="search"></s-icon>
+          用户
+        </s-menu-item>
+        <s-menu-item>
+          <s-icon slot="start" type="light_mode"></s-icon>
+          管理资源
+        </s-menu-item>
+        <s-menu-item>
+          <s-icon slot="start" type="dark_mode"></s-icon>
+          模式切换
+        </s-menu-item>
+      </s-menu>
+      <s-menu>
+        <div slot="label">资源</div>
+        <s-menu-item>
+          <s-icon slot="start" type="star"></s-icon>
+          我的收藏
+        </s-menu-item>
+        <s-menu-item>
+          <s-icon slot="start" type="favorite"></s-icon>
+          我喜欢
+        </s-menu-item>
+        <s-menu-item>
+          <s-icon slot="start" type="menu"></s-icon>
+          模块
+        </s-menu-item>
+        <s-menu-item>
+          <s-icon slot="start" type="arrow_upward"></s-icon>
+          上传
+        </s-menu-item>
+      </s-menu>
+    </div>
+
+    <s-field labelFixed="false">
+      <div slot="label">请输入内容</div>
+      <s-button slot="start">按钮</s-button>
+      <div slot="view" style="height: 100%;background: red;width: 56px;margin-left: -24px;"></div>
+    </s-field>
+
+    <s-field style="height: auto;">
+      <div slot="label" style="height: 48px;">请输入内容</div>
+      <s-ripple slot="view" style="height: 200px;display: flex; align-items: center;padding: 0 16px;"
+        onclick="this.parentNode.focused=!this.parentNode.focused;this.parentNode.labelFixed=this.parentNode.focused">请输入内容</s-ripple>
+    </s-field>
+
+    <s-field>
+      <div slot="label">请输入内容</div>
+      <s-icon slot="start" type="home"></s-icon>
+      <div slot="view" onclick="this.parentNode.focused=!this.parentNode.focused">请输入内容啊</div>
+      <s-icon slot="end" type="search"></s-icon>
+    </s-field>
+
+    <s-field style="--field-padding: 24px;--field-border-radius: 24px;">
+      <div slot="label">请输入内容</div>
+      <div slot="view" onclick="this.parentNode.focused=!this.parentNode.focused">请输入内容</div>
+    </s-field>
+
+    <s-menu>
+      <s-menu-item>
+        <div slot="text">文本</div>
+      </s-menu-item>
+    </s-menu>
     <s-button
       onclick="window.customElements.get('s-snackbar').show({text: `提示：${new Date().getMilliseconds()}`, duration: 0, action:{text:'确定'}})">
-      <s-icon type="search" slot="start"></s-icon>
+      <svg slot="start" viewBox="0 -960 960 960">
+        <path
+          d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+        </path>
+      </svg>
       button
       <s-icon type="close" slot="end"></s-icon>
     </s-button>
     <s-button type="elevated" onclick="window.customElements.get('s-dialog').show('xxxxx')">
-      <s-icon type="search" slot="start"></s-icon>
+      <svg slot="start" viewBox="0 -960 960 960">
+        <path
+          d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+        </path>
+      </svg>
       button
       <s-icon type="close" slot="end"></s-icon>
     </s-button>
     <s-button type="filled-tonal">
-      <s-icon type="search" slot="start"></s-icon>
+      <svg slot="start" viewBox="0 -960 960 960">
+        <path
+          d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+        </path>
+      </svg>
       button
       <s-icon type="close" slot="end"></s-icon>
     </s-button>
     <s-button type="outlined">
-      <s-icon type="search" slot="start"></s-icon>
+      <svg slot="start" viewBox="0 -960 960 960">
+        <path
+          d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+        </path>
+      </svg>
       button
       <s-icon type="close" slot="end"></s-icon>
     </s-button>
@@ -63,7 +168,6 @@
     <s-button type="outlined" disabled="true"> button </s-button>
     <s-button type="text" disabled="true"> button </s-button>
     <hr>
-
     <s-checkbox>阅读用户协议</s-checkbox>
 
     <s-radio-button name="xx">阅读用户协议</s-radio-button>
@@ -78,6 +182,19 @@
     <s-icon type="arrow_forward"></s-icon>
     <s-icon type="arrow_upward"></s-icon>
     <s-icon type="arrow_downward"></s-icon>
+    <hr>
+    <s-icon-button disabled="true">
+      <s-icon type="search"></s-icon>
+    </s-icon-button>
+    <s-icon-button type="filled" disabled="true">
+      <s-icon type="menu"></s-icon>
+    </s-icon-button>
+    <s-icon-button type="filled-tonal" disabled="true">
+      <s-icon type="close"></s-icon>
+    </s-icon-button>
+    <s-icon-button type="outlined" disabled="true">
+      <s-icon type="arrow_back"></s-icon>
+    </s-icon-button>
     <hr>
     <s-drawer id="drawer" style="height: 500px;">
       <div slot="start">
@@ -181,29 +298,53 @@
     </s-bottom-sheet>
     <hr>
     <s-icon-button>
-      <s-icon type="add"></s-icon>
+      <svg viewBox="0 -960 960 960">
+        <path
+          d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+        </path>
+      </svg>
       <s-badge slot="badge"></s-badge>
     </s-icon-button>
     <s-icon-button type="filled">
-      <s-icon type="add"></s-icon>
+      <svg viewBox="0 -960 960 960">
+        <path
+          d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+        </path>
+      </svg>
       <s-badge slot="badge"></s-badge>
     </s-icon-button>
     <s-icon-button type="filled-tonal">
-      <s-icon type="add"></s-icon>
+      <svg viewBox="0 -960 960 960">
+        <path
+          d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+        </path>
+      </svg>
       <s-badge slot="badge">2</s-badge>
     </s-icon-button>
     <s-icon-button type="outlined">
-      <s-icon type="add"></s-icon>
+      <svg viewBox="0 -960 960 960">
+        <path
+          d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+        </path>
+      </svg>
       <s-badge slot="badge">99</s-badge>
     </s-icon-button>
     <s-icon-button disabled="true">
-      <s-icon type="add"></s-icon>
+      <svg viewBox="0 -960 960 960">
+        <path
+          d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+        </path>
+      </svg>
     </s-icon-button>
     <s-icon-button type="filled" disabled="true">
       <s-icon type="add"></s-icon>
     </s-icon-button>
     <s-icon-button type="filled-tonal" disabled="true">
-      <s-icon type="add"></s-icon>
+      <svg viewBox="0 -960 960 960">
+        <path
+          d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+        </path>
+      </svg>
     </s-icon-button>
     <s-icon-button type="outlined" disabled="true">
       <s-icon type="add"></s-icon>
@@ -289,8 +430,18 @@
     <hr>
     <s-popup-menu>
       <s-button slot="trigger">菜单</s-button>
-      <s-popup-menu-item>播放</s-popup-menu-item>
-      <s-popup-menu-item>播放相似单曲</s-popup-menu-item>
+      <s-popup-menu-item>
+        <svg viewBox="0 -960 960 960" slot="start">
+          <path
+            d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+          </path>
+        </svg>
+        播放
+      </s-popup-menu-item>
+      <s-popup-menu-item>
+        <s-icon slot="start" type="close"></s-icon>
+        播放单曲
+      </s-popup-menu-item>
       <s-popup-menu-item>我喜欢</s-popup-menu-item>
       <s-popup-menu group="start">
         <s-popup-menu-item slot="trigger">
@@ -330,15 +481,29 @@
     </s-popup-menu>
     <hr>
     <s-text-field label="请输入名称" style="margin: 16px;">
+      <s-icon-button slot="start">
+        <s-icon type="star"></s-icon>
+      </s-icon-button>
       <input type="text">
+      <s-icon-button slot="end">
+        <s-icon type="star"></s-icon>
+      </s-icon-button>
     </s-text-field>
 
-    <s-text-field label="请输入名称" style="margin: 16px;">
-      <s-icon-button slot="start">
-        <s-icon slot="end" type="star"></s-icon>
-      </s-icon-button>
+    <s-text-field label="请输入名称">
+      <s-icon type="star" slot="start"></s-icon>
+      <input type="text">
+      <s-icon type="star" slot="end"></s-icon>
+    </s-text-field>
+
+    <s-text-field label="请输入名称" style="margin: 16px;--text-field-padding: 24px;--text-field-border-radius: 24px;">
+      <s-icon type="star" slot="start"></s-icon>
       <input type="text" value="首饰">
-      <s-icon slot="end" type="favorite"></s-icon>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" slot="end">
+        <path
+          d="M240-160q-33 0-56.5-23.5T160-240q0-33 23.5-56.5T240-320q33 0 56.5 23.5T320-240q0 33-23.5 56.5T240-160Zm240 0q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm240 0q-33 0-56.5-23.5T640-240q0-33 23.5-56.5T720-320q33 0 56.5 23.5T800-240q0 33-23.5 56.5T720-160ZM240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400ZM240-640q-33 0-56.5-23.5T160-720q0-33 23.5-56.5T240-800q33 0 56.5 23.5T320-720q0 33-23.5 56.5T240-640Zm240 0q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Zm240 0q-33 0-56.5-23.5T640-720q0-33 23.5-56.5T720-800q33 0 56.5 23.5T800-720q0 33-23.5 56.5T720-640Z">
+        </path>
+      </svg>
     </s-text-field>
 
     <s-text-field label="请输入名称" style="margin: 16px;--border-radius: 24px;">
@@ -350,6 +515,9 @@
     </s-text-field>
 
     <s-text-field label="请输入名称" style="margin: 16px;">
+      <s-icon-button slot="start">
+        <s-icon type="star"></s-icon>
+      </s-icon-button>
       <textarea placeholder="请输入" style="min-height: 96px;"></textarea>
     </s-text-field>
 
@@ -564,7 +732,7 @@
         <div slot="text">Item 3</div>
       </s-tab-item>
       <s-tab-item selected="true">
-        <div slot="text">Item 3</div>
+        <div slot="text">Item 31</div>
       </s-tab-item>
       <s-tab-item>
         <div slot="text">Item 3</div>
@@ -614,7 +782,11 @@
     <hr>
     <s-navigation>
       <s-navigation-item selected="true">
-        <s-icon type="add" slot="icon"></s-icon>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" slot="icon">
+          <path
+            d="m422-232 207-248H469l29-227-185 267h139l-30 208ZM320-80l40-280H160l360-520h80l-40 320h240L400-80h-80Zm151-390Z">
+          </path>
+        </svg>
         <div slot="text">Item 1</div>
         <s-badge slot="badge"></s-badge>
       </s-navigation-item>

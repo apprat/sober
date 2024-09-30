@@ -147,7 +147,7 @@ export class Ripple extends useElement({
         }
       },
       unmounted: () => this.attached && remove(),
-      watches: {
+      props: {
         attached: (value) => {
           if (!this.isConnected) return
           if (!value) return remove()

@@ -1,11 +1,13 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 import './ripple.js'
 
 const name = 's-radio-button'
 const props = {
   disabled: false,
   checked: false,
-  name: ''
+  name: '',
+  value: ''
 }
 
 const style = /*css*/`
@@ -14,9 +16,9 @@ const style = /*css*/`
   align-items: center;
   vertical-align: middle;
   cursor: pointer;
-  line-height: 1;
   white-space: nowrap;
   height: 40px;
+  --radio-button-color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 :host([disabled=true]){
   pointer-events: none !important;
@@ -28,46 +30,57 @@ const style = /*css*/`
   cursor: pointer;
   width: 40px;
   aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
   border-radius: 50%;
   position: relative;
-  color: var(--s-color-primary, #5256a9);
+  color: var(--radio-button-color);
+}
+:host([disabled=true]) .container{
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface}) !important;
+  opacity: .38 !important;
 }
 .icon{
   width: 60%;
   height: 60%;
   fill: currentColor;
 }
-.color{
-  color: var(--s-color-on-surface-variant, #46464f);
+.icon,
+.ripple{
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
-:host([checked=true]) .color,
-:host([indeterminate=true]) .color{
+:host([checked=true]) .icon,
+:host([checked=true]) .ripple,
+:host([checked=true]) .checked{
   color: currentColor;
 }
-:host([disabled=true]) .color{
-  color: color-mix(in srgb ,var(--s-color-on-surface, #1c1b1f) 38%, transparent) !important;
+.checked{
+  position: absolute;
+  background: currentColor;
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform .1s ease-out, opacity .1s ease-out;
+}
+:host([checked=true]) .checked{
+  transform: scale(.4);
+  opacity: 1;
 }
 `
 
-const svgData = {
-  uncheck: 'M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z',
-  checked: 'M480-280q83 0 141.5-58.5T680-480q0-83-58.5-141.5T480-680q-83 0-141.5 58.5T280-480q0 83 58.5 141.5T480-280Zm0 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z'
-}
-
 const template = /*html*/`
 <div class="container" part="container">
-  <svg class="icon color" viewBox="0 -960 960 960">
-    <path d="${svgData.uncheck}"></path>
+  <svg class="icon" viewBox="0 -960 960 960">
+    <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"></path>
   </svg>
-  <s-ripple class="color" attached="true" part="ripple"></s-ripple>
+  <div class="icon checked"></div>
+  <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 </div>
 <slot></slot>
 `
 
 export class RadioButton extends useElement({
   style, template, props, syncProps: true,
-  setup(shadowRoot) {
-    const iconPath = shadowRoot.querySelector('path') as SVGPathElement
+  setup() {
     this.addEventListener('click', () => {
       this.checked = true
       if (this.name) {
@@ -78,11 +91,6 @@ export class RadioButton extends useElement({
       }
       this.dispatchEvent(new Event('change'))
     })
-    return {
-      watches: {
-        checked: (value) => iconPath.setAttribute('d', value ? svgData.checked : svgData.uncheck)
-      }
-    }
   }
 }) { }
 

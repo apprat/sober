@@ -1,5 +1,6 @@
 import { useElement, JSXAttributes } from './core/element.js'
 import { getStackingContext } from './core/utils.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-snackbar'
 const props = {
@@ -31,11 +32,11 @@ const style = /*css*/`
   transition: transform .2s ease-out;
 }
 .container{
-  background: var(--s-color-inverse-surface, #313034);
-  color: var(--s-color-inverse-on-surface, #f3eff4);
+  background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
+  color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
   min-height: 48px;
   border-radius: 4px;
-  box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
   line-height: 1.6;
   display: inline-flex;
   align-items: center;
@@ -50,26 +51,28 @@ const style = /*css*/`
   transition: transform .2s, filter .2s;
   transition-timing-function: ease-out;
 }
-.container::before{
-  content:'';
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  mask-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgLTk2MCA5NjAgOTYwIj4KICA8cGF0aCBkPSJNNDgwLTI4MHExNyAwIDI4LjUtMTEuNVQ1MjAtMzIwcTAtMTctMTEuNS0yOC41VDQ4MC0zNjBxLTE3IDAtMjguNSAxMS41VDQ0MC0zMjBxMCAxNyAxMS41IDI4LjVUNDgwLTI4MFptLTQwLTE2MGg4MHYtMjQwaC04MHYyNDBabTQwIDM2MHEtODMgMC0xNTYtMzEuNVQxOTctMTk3cS01NC01NC04NS41LTEyN1Q4MC00ODBxMC04MyAzMS41LTE1NlQxOTctNzYzcTU0LTU0IDEyNy04NS41VDQ4MC04ODBxODMgMCAxNTYgMzEuNVQ3NjMtNzYzcTU0IDU0IDg1LjUgMTI3VDg4MC00ODBxMCA4My0zMS41IDE1NlQ3NjMtMTk3cS01NCA1NC0xMjcgODUuNVQ0ODAtODBabTAtODBxMTM0IDAgMjI3LTkzdDkzLTIyN3EwLTEzNC05My0yMjd0LTIyNy05M3EtMTM0IDAtMjI3IDkzdC05MyAyMjdxMCAxMzQgOTMgMjI3dDIyNyA5M1ptMC0zMjBaIj48L3BhdGg+Cjwvc3ZnPg==);
-  background-color: currentColor;
-  margin-left: 16px;
-  margin-right: -4px;
-}
-:host([type=error]) .container{
-  background: var(--s-color-error, #ba1a1a);
-  color: var(--s-color-on-error, #ffffff);
-}
-:host([type=error]) .container::before{
-  mask-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgLTk2MCA5NjAgOTYwIj4KICA8cGF0aCBkPSJtMzM2LTI4MCAxNDQtMTQ0IDE0NCAxNDQgNTYtNTYtMTQ0LTE0NCAxNDQtMTQ0LTU2LTU2LTE0NCAxNDQtMTQ0LTE0NC01NiA1NiAxNDQgMTQ0LTE0NCAxNDQgNTYgNTZaTTQ4MC04MHEtODMgMC0xNTYtMzEuNVQxOTctMTk3cS01NC01NC04NS41LTEyN1Q4MC00ODBxMC04MyAzMS41LTE1NlQxOTctNzYzcTU0LTU0IDEyNy04NS41VDQ4MC04ODBxODMgMCAxNTYgMzEuNVQ3NjMtNzYzcTU0IDU0IDg1LjUgMTI3VDg4MC00ODBxMCA4My0zMS41IDE1NlQ3NjMtMTk3cS01NCA1NC0xMjcgODUuNVQ0ODAtODBabTAtODBxMTM0IDAgMjI3LTkzdDkzLTIyN3EwLTEzNC05My0yMjd0LTIyNy05M3EtMTM0IDAtMjI3IDkzdC05MyAyMjdxMCAxMzQgOTMgMjI3dDIyNyA5M1ptMC0zMjBaIj48L3BhdGg+Cjwvc3ZnPg==);
-}
 .wrapper.show .container{
   transform: translateY(0%);
   filter: opacity(1);
+}
+:host([type=error]) .container{
+  background: var(--s-color-error, ${Theme.colorError});
+  color: var(--s-color-on-error, ${Theme.colorOnError});
+}
+.error,
+:host([type=error]) .hint{
+  display: none;
+}
+:host([type=error]) .error{
+  display: block;
+}
+.icon{
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  fill: currentColor;
+  margin-left: 16px;
+  margin-right: -4px;
 }
 .text{
   margin: 12px 16px;
@@ -84,7 +87,7 @@ const style = /*css*/`
   align-items: center;
   padding: 0 12px;
   border-radius: 4px;
-  color: var(--s-color-inverse-primary, #c0c1ff);
+  color: var(--s-color-inverse-primary, ${Theme.colorInversePrimary});
   margin-right: 8px;
   margin-left: -8px;
   cursor: pointer;
@@ -92,7 +95,7 @@ const style = /*css*/`
   font-size: .875rem;
 }
 :host([type=error]) ::slotted([slot=action]){
-  color: var(--s-color-on-error, #ffffff);
+  color: var(--s-color-on-error, ${Theme.colorOnError});
 }
 @media (max-width: 320px){
   .wrapper{
@@ -118,6 +121,12 @@ const template = /*html*/`
 <slot name="trigger"></slot>
 <div class="wrapper" part="wrapper">
   <div class="container" part="container">
+    <svg class="icon hint" viewBox="0 -960 960 960">
+      <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"></path>
+    </svg>
+    <svg class="icon error" viewBox="0 -960 960 960">
+      <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"></path>
+    </svg>
     <div class="text" part="text">
       <slot></slot>
     </div>
@@ -166,6 +175,7 @@ const show = (options: string | {
   root.appendChild(snackbar)
   snackbar.addEventListener('dismissed', () => root.removeChild(snackbar))
   requestAnimationFrame(snackbar.show)
+  return snackbar
 }
 
 const task: { height: number, wrapper: HTMLElement }[] = []

@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-icon'
 const props = {
@@ -13,7 +14,8 @@ const style = /*css*/`
   align-items: center;
   width: 24px;
   aspect-ratio: 1;
-  color: var(--s-color-on-surface-variant, #46464f);
+  -webkit-aspect-ratio: 1;
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   fill: currentColor;
   box-sizing: border-box;
 }
@@ -68,7 +70,7 @@ export class Icon extends useElement({
   setup(shadowRoot) {
     const path = shadowRoot.querySelector('path') as SVGPathElement
     return {
-      watches: {
+      props: {
         type: (value) => {
           let d = svgData[value]
           if (typeof d === 'object') {

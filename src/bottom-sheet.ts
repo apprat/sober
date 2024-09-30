@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-bottom-sheet'
 const props = {
@@ -22,14 +23,14 @@ const style = /*css*/`
   align-items: flex-end;
 }
 .scrim{
-  background: color-mix(in srgb, var(--s-color-scrim, #000000) 80%, transparent);
+  background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 80%, transparent);
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: opacity .3s ease-out;
+  transition: opacity .2s ease-out;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   pointer-events: none;
@@ -44,7 +45,7 @@ const style = /*css*/`
   max-width: 520px;
   width: 100%;
   max-height: calc(100% - 56px);
-  background: var(--s-color-surface-container-highest, #e5e1e6);
+  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
   display: flex;
   flex-direction: column;
   top: 100%;
@@ -53,7 +54,7 @@ const style = /*css*/`
 .show.wrapper .container{
   top: 0;
   pointer-events: auto;
-  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 .indicator{
   width: 100%;
@@ -62,13 +63,14 @@ const style = /*css*/`
   align-items: center;
   height: 18px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 .indicator::before{
   content: '';
   width: 40px;
   height: 4px;
   border-radius: 2px;
-  background: var(--s-color-on-surface-variant, #46464f);
+  background: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   opacity: .4;
 }
 ::slotted([slot=view]){
@@ -96,7 +98,7 @@ export class BottomSheet extends useElement({
     const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const animationOptions = { duration: 300, easing: 'ease-out' }
+    const animationOptions = { duration: 200, easing: 'ease-out' }
     const show = () => {
       wrapper.classList.add('show')
       container.animate([{ transform: 'translateY(100%)', top: 0 }, { transform: 'translateY(0%)', top: 0 }], animationOptions)

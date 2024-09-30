@@ -1,5 +1,6 @@
 import { useElement, JSXAttributes } from './core/element.js'
 import { device, getStackingContext } from './core/utils.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-tooltip'
 const props = {
@@ -15,8 +16,8 @@ const style = /*css*/`
   left: 0;
   top: 0;
   z-index: var(--z-index, 1);
-  background: var(--s-color-inverse-surface, #313034);
-  color: var(--s-color-inverse-on-surface, #f3eff4);
+  background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
+  color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
   font-size: .875rem;
   font-weight: 400;
   padding: 6px 8px;

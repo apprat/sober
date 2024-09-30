@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes, LowercaseKeys } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-rate'
 const props = {
@@ -13,12 +14,11 @@ const style = /*css*/`
 :host{
   display: inline-flex;
   vertical-align: middle;
-  font-size: 24px;
   position: relative;
   overflow: hidden;
+  font-size: 24px;
   width: calc(1em * 5);
-  --rate-track-color: var(--s-color-secondary-container, #e2e0f9);
-  --rate-indicator-color: var(--s-color-primary, #5256a9);
+  height: 1em;
 }
 .track{
   width: 100%;
@@ -26,8 +26,8 @@ const style = /*css*/`
 }
 .track svg,
 ::slotted([slot=track]){
-  fill: var(--rate-track-color);
-  filter: drop-shadow(1em 0 0 var(--rate-track-color)) drop-shadow(2em 0 0 var(--rate-track-color)) drop-shadow(3em 0 0 var(--rate-track-color));
+  fill: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
+  filter: drop-shadow(1em 0 0 var(--s-color-secondary-container, ${Theme.colorSecondaryContainer})) drop-shadow(2em 0 0 var(--s-color-secondary-container, ${Theme.colorSecondaryContainer})) drop-shadow(3em 0 0 var(--s-color-secondary-container, ${Theme.colorSecondaryContainer}));
 }
 .indicator{
   position: absolute;
@@ -40,13 +40,14 @@ const style = /*css*/`
 }
 .indicator svg,
 ::slotted([slot=indicator]){
-  fill: var(--rate-indicator-color);
-  filter: drop-shadow(1em 0 0 var(--rate-indicator-color)) drop-shadow(2em 0 0 var(--rate-indicator-color)) drop-shadow(3em 0 0 var(--rate-indicator-color));
+  fill: var(--s-color-primary, ${Theme.colorPrimary});
+  filter: drop-shadow(1em 0 0 var(--s-color-primary, ${Theme.colorPrimary})) drop-shadow(2em 0 0 var(--s-color-primary, ${Theme.colorPrimary})) drop-shadow(3em 0 0 var(--s-color-primary, ${Theme.colorPrimary})) drop-shadow(4em 0 0 var(--s-color-primary, ${Theme.colorPrimary}));
 }
 svg,
 ::slotted(*){
-  height: 1em;
-  width: 1em;
+  height: 100%;
+  aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
   flex-shrink: 0;
 }
 input{
@@ -65,20 +66,16 @@ input{
 `
 
 const template = /*html*/`
-<div class="track" part="track">
-  <slot name="track">
-    <svg viewBox="0 -960 960 960">
-      <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"/>
-    </svg>
-  </slot>
-</div>
-<div class="indicator" part="indicator">
-  <slot name="indicator">
-    <svg viewBox="0 -960 960 960">
-      <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"/>
-    </svg>
-  </slot>
-</div>
+<slot name="track" class="track" part="track">
+  <svg viewBox="0 -960 960 960">
+    <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"/>
+  </svg>
+</slot>
+<slot name="indicator" class="indicator" part="indicator">
+  <svg viewBox="0 -960 960 960">
+    <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"/>
+  </svg>
+</slot>
 <input
   type="range"
   max="${props.max}"
@@ -100,33 +97,25 @@ export class Rate extends useElement({
     }
     input.addEventListener('change', () => this.dispatchEvent(new Event('change')))
     input.addEventListener('input', () => {
-      update()
+      this.value = Number(input.value)
       this.dispatchEvent(new Event('input'))
     })
     return {
-      watches: {
+      props: {
         max: (value) => {
-          const val = String(value)
-          if (input.max === val) return
-          input.max = val
+          input.max = String(value)
           update()
         },
         min: (value) => {
-          const val = String(value)
-          if (input.min === val) return
-          input.min = val
+          input.min = String(value)
           update()
         },
         step: (value) => {
-          const val = String(value)
-          if (input.step === val) return
-          input.step = val
+          input.step = String(value)
           update()
         },
         value: (value) => {
-          const val = String(value)
-          if (input.value === val) return
-          input.value = val
+          input.value = String(value)
           update()
         }
       }

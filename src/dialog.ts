@@ -1,5 +1,6 @@
 import { useElement, JSXAttributes } from './core/element.js'
 import { getStackingContext } from './core/utils.js'
+import { Theme } from './core/enum.js'
 import './scroll-view.js'
 
 const name = 's-dialog'
@@ -25,7 +26,7 @@ const style = /*css*/`
   align-items: center;
 }
 .scrim{
-  background: color-mix(in srgb, var(--s-color-scrim, #000000) 80%, transparent);
+  background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 80%, transparent);
   position: absolute;
   top: 0;
   left: 0;
@@ -35,7 +36,7 @@ const style = /*css*/`
   -webkit-backdrop-filter: blur(4px);
   pointer-events: none;
   opacity: 0;
-  transition: opacity .3s ease-out;
+  transition: opacity .2s ease-out;
 }
 .wrapper.show .scrim{
   opacity: 1;
@@ -46,15 +47,15 @@ const style = /*css*/`
   max-height: calc(100% - 48px);
   width: 520px;
   height: calc-size(auto);
-  background: var(--s-color-surface-container-low, #f6f2f7);
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   position: relative;
   border-radius: 28px;
-  box-shadow: var(--s-elevation-level5, 0 10px 14px -6px rgba(0, 0, 0, .2), 0 22px 35px 3px rgba(0, 0, 0, .14), 0 8px 42px 7px rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level5, ${Theme.elevationLevel5});
   display: flex;
   flex-direction: column;
   overflow: hidden;
   top: 100%;
-  transition: width .3s, height .3s, border-radius .3s;
+  transition: width .2s, height .2s, border-radius .2s;
   transition-timing-function: ease-out;
   --z-index: var(--z-index, 2);
 }
@@ -74,7 +75,7 @@ const style = /*css*/`
   font-size: 1.5rem;
   line-height: 1.6;
   font-weight: 600;
-  color: var(--s-color-on-surface, #1c1b1f);
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   flex-shrink: 0;
 }
 .text{
@@ -98,7 +99,7 @@ const style = /*css*/`
   display: inline-flex;
   align-items: center;
   padding: 0 24px;
-  color: var(--s-color-primary, #5256a9);
+  color: var(--s-color-primary, ${Theme.colorPrimary});
   box-sizing: border-box;
   height: 40px;
   font-size: .875rem;
@@ -174,7 +175,11 @@ const show = (options: string | {
   root.appendChild(dialog)
   dialog.addEventListener('dismissed', () => root.removeChild(dialog))
   requestAnimationFrame(dialog.show)
+  return dialog
 }
+
+type EventShowSource = 'TRIGGER'
+type EventDismissSource = 'SCRIM' | 'ACTION'
 
 class Dialog extends useElement({
   style, template, props, syncProps: ['size'],
@@ -184,8 +189,9 @@ class Dialog extends useElement({
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
     const action = shadowRoot.querySelector('slot[name=action]') as HTMLSlotElement
-    const animationOptions = { duration: 300, easing: 'ease-out', fill: 'forwards' } as const
-    const show = () => {
+    const animationOptions = { duration: 200, easing: 'ease-out', fill: 'forwards' } as const
+    const show = (source?: EventShowSource) => {
+      if (!this.dispatchEvent(new CustomEvent('show', { cancelable: true, detail: { source } }))) return
       const stackingContext = getStackingContext(shadowRoot)
       if (stackingContext.top !== 0 || stackingContext.left !== 0) {
         const style = `width: ${innerWidth}px;height: ${innerHeight}px;top: ${0 - stackingContext.top}px;left: ${0 - stackingContext.left}px`
@@ -198,22 +204,24 @@ class Dialog extends useElement({
         { transform: 'scale(1)', filter: 'opacity(1)', top: 0 }
       ], animationOptions)
       animation.addEventListener('finish', () => this.dispatchEvent(new Event('showed')))
-      this.dispatchEvent(new Event('show'))
     }
-    const dismiss = () => {
+    const dismiss = (source?: EventDismissSource) => {
+      if (!this.dispatchEvent(new CustomEvent('dismiss', { cancelable: true, detail: { source } }))) return
       wrapper.classList.remove('show')
       const animation = container.animate([
         { transform: 'scale(1)', filter: 'opacity(1)', top: 0 },
         { transform: 'scale(.9)', filter: 'opacity(0)', top: 0 }
       ], animationOptions)
       animation.addEventListener('finish', () => this.dispatchEvent(new Event('dismissed')))
-      this.dispatchEvent(new Event('dismiss'))
     }
-    trigger.addEventListener('click', show)
-    scrim.addEventListener('click', dismiss)
-    action.addEventListener('click', dismiss)
+    trigger.addEventListener('click', () => show('TRIGGER'))
+    scrim.addEventListener('click', () => dismiss('SCRIM'))
+    action.addEventListener('click', () => dismiss('ACTION'))
     return {
-      expose: { show, dismiss }
+      expose: {
+        show: () => show(),
+        dismiss: () => dismiss()
+      }
     }
   }
 }) {
@@ -225,9 +233,9 @@ Dialog.define(name)
 export { Dialog }
 
 interface EventMap extends HTMLElementEventMap {
-  show: Event
+  show: CustomEvent<{ source?: EventShowSource }>
   showed: Event
-  dismiss: Event
+  dismiss: CustomEvent<{ source?: EventDismissSource }>
   dismissed: Event
 }
 

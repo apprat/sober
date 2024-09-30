@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-linear-progress'
 const props = {
@@ -12,7 +13,7 @@ const style = /*css*/`
 :host{
   display: block;
   height: 4px;
-  color: var(--s-color-primary, #5256a9);
+  color: var(--s-color-primary, ${Theme.colorPrimary});
   border-radius: 2px;
   overflow: hidden;
 }
@@ -41,7 +42,7 @@ const style = /*css*/`
   top: 0;
 }
 .track{
-  background: var(--s-color-secondary-container, #e2e0f9);
+  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
 }
 .indicator{
   background: currentColor;
@@ -52,6 +53,7 @@ const style = /*css*/`
   top: 0;
   height: 100%;
   aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
   background: currentColor;
   border-radius: inherit;
 }
@@ -103,7 +105,7 @@ export class LinearProgress extends useElement({
       indicator.style.transform = `translateX(${percentage - 100}%)`
     }
     return {
-      watches: {
+      props: {
         max: render,
         value: render
       }

@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-table'
 const props = {
@@ -8,8 +9,8 @@ const style = /*css*/`
 :host{
   display: block;
   font-size: .875rem;
-  border: solid 1px var(--s-color-outline-variant, #c7c5d0);
-  background: var(--s-color-surface-container-low, #f6f2f7);
+  border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   border-radius: 8px;
   white-space: nowrap;
   overflow: hidden;
@@ -56,11 +57,11 @@ const tbodyProps = {
 const tbodyStyle = /*css*/`
 :host{
   display: table-row-group;
-  color: var(--s-color-on-surface, #1c1b1f);
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   position: relative;
 }
 ::slotted(s-tr:nth-child(odd)){
-  background: var(--s-color-surface-container-lowest, #ffffff);
+  background: var(--s-color-surface-container-lowest, ${Theme.colorSurfaceContainerLowest});
 }
 `
 

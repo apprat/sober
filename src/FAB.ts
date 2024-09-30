@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 import './ripple.js'
 
 const name = 's-fab'
@@ -20,15 +21,15 @@ const style = /*css*/`
   -webkit-aspect-ratio: 1;
   width: 56px;
   border-radius: 16px;
-  background: var(--s-color-primary-container, #e1e0ff);
-  color: var(--s-color-on-primary-container, #090764);
+  background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
+  color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
   transition: box-shadow .1s ease-out;
   font-size: .875rem;
   font-weight: 500;
   white-space: nowrap;
   line-height: 1;
   text-transform: capitalize;
-  box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
 }
 :host([size=small]){
   width: 48px;
@@ -37,24 +38,32 @@ const style = /*css*/`
 :host([extended=true]){
   padding: 0 16px;
   aspect-ratio: auto;
+  -webkit-aspect-ratio: auto;
   width: auto;
   height: 48px;
 }
 ::slotted(s-icon){
-  color: inherit;
+  color: currentColor;
 }
-::slotted(s-icon[slot=start]){
+::slotted(svg){
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+::slotted(s-icon[slot=start]),
+::slotted(svg[slot=start]){
   margin: 0 8px 0 0;
 }
-::slotted(s-icon[slot=end]){
+::slotted(s-icon[slot=end]),
+::slotted(svg[slot=end]){
   margin: 0 0 0 8px;
 }
 :host([rippled]){
-  box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
 }
 @media (pointer: fine){
   :host(:hover){
-    box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
+    box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
   }
 }
 `

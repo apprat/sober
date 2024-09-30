@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-search'
 const props = {
@@ -12,8 +13,8 @@ const style = /*css*/`
   max-width: 520px;
   min-width: 240px;
   height: 48px;
-  background: var(--s-color-surface-container-high, #eae7ec);
-  color: var(--s-color-on-surface, #1c1b1f);
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   border-radius: 24px;
   font-size: .875rem;
   position: relative;
@@ -46,7 +47,7 @@ const style = /*css*/`
   width: 100%;
   pointer-events: none;
   background: inherit;
-  box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   border-radius: 4px;
   opacity: 0;
   transition: opacity .1s ease-out;
@@ -57,7 +58,7 @@ const style = /*css*/`
   z-index: 1;
 }
 ::slotted([slot=dropdown]){
-  border-top: solid 1px var(--s-color-outline-variant, #c7c5d0);
+  border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
   margin-top: 48px;
   border-radius: 4px;
 }
@@ -82,7 +83,7 @@ const style = /*css*/`
   font-family: inherit;
 }
 ::slotted(input[type=text])::placeholder{
-  color: var(--s-color-outline, #777680);
+  color: var(--s-color-outline, ${Theme.colorOutline});
 }
 :host([size=large]) ::slotted(input[type=text]){
   padding: 0 24px;

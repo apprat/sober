@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-badge'
 const props = {
@@ -11,8 +12,8 @@ const style = /*css*/`
   align-items: center;
   min-width: 18px;
   height: 18px;
-  background: var(--s-color-error, #ba1a1a);
-  color: var(--s-color-on-error, #ffffff);
+  background: var(--s-color-error, ${Theme.colorError});
+  color: var(--s-color-on-error, ${Theme.colorOnError});
   border-radius: 18px;
   padding: 0 3px;
   font-size: .625rem;

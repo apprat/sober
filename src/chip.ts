@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 import './ripple.js'
 
 const name = 's-chip'
@@ -14,7 +15,7 @@ const style = /*css*/`
   vertical-align: middle;
   padding: 0 16px;
   height: 32px;
-  border: solid 1px var(--s-color-color-outline, #777680);
+  border: solid 1px var(--s-color-color-outline, ${Theme.colorOutline});
   border-radius: 8px;
   box-sizing: border-box;
   white-space: nowrap;
@@ -25,11 +26,11 @@ const style = /*css*/`
 }
 :host([type=elevated]){
   border: none;
-  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 :host([type=filled-tonal]){
-  background: var(--s-color-secondary-container, #e2e0f9);
-  color: var(--s-color-on-surface-variant, #46464f);
+  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   border: none;
 }
 .ripple{

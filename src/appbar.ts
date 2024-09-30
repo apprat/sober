@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-appbar'
 const props = {
@@ -8,7 +9,7 @@ const style = /*css*/`
 :host{
   display: flex;
   height: 64px;
-  background: var(--s-color-surface-container, #f0edf1);
+  background: var(--s-color-surface-container, ${Theme.colorSecondaryContainer});
   align-items: center;
   position: relative;
   padding: 0 8px;
@@ -20,7 +21,7 @@ const style = /*css*/`
 ::slotted([slot=logo]){
   margin-left: 12px;
   height: 32px;
-  fill: var(--s-color-on-surface-variant, #46464f);
+  fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   flex-shrink: 0;
 }
 ::slotted([slot=headline]){
@@ -31,7 +32,7 @@ const style = /*css*/`
   text-overflow: ellipsis;
   white-space: nowrap;
   margin: 0 12px;
-  color: var(--s-color-on-surface, #1c1b1f);
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 ::slotted([slot=action]){
   margin: 0 4px;
@@ -45,7 +46,7 @@ const style = /*css*/`
   align-items: center;
 }
 ::slotted(s-search){
-  background: var(--s-color-surface, #fffbff);
+  background: var(--s-color-surface, ${Theme.colorSurface});
 }
 ::slotted(s-appbar){
   height: 100%;

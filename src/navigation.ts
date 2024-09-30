@@ -1,9 +1,12 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
+import Select from './core/select.js'
 import './ripple.js'
 
 const name = 's-navigation'
 const props = {
-  mode: 'bottom' as 'bottom' | 'rail'
+  mode: 'bottom' as 'bottom' | 'rail',
+  value: ''
 }
 
 const style = /*css*/`
@@ -12,8 +15,8 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background: var(--s-color-surface, #fffbff);
-  box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+  background: var(--s-color-surface, ${Theme.colorSurface});
+  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   position: relative;
 }
 :host([mode=rail]){
@@ -51,50 +54,21 @@ export class Navigation extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('#slot') as HTMLSlotElement
-    let options: NavigationItem[] = []
-    let selectedIndex = -1
-    let changed = false
-    const update = (target: NavigationItem) => {
-      if (options.length === 0 || !target.selected) return (selectedIndex = -1)
-      for (const item of options) {
-        if (item === target) continue
-        if (item.selected) {
-          item.removeAttribute('selected')
-        }
-      }
-      selectedIndex = options.indexOf(target)
-      if (changed) {
-        this.dispatchEvent(new Event('change'))
-        changed = false
-      }
-    }
-    slot.addEventListener('slotchange', () => {
-      let target: null | NavigationItem = null
-      selectedIndex = -1
-      options = slot.assignedElements().filter((item) => {
-        if (item instanceof NavigationItem) {
-          if (item.selected) target = item
-          return true
-        }
-      }) as NavigationItem[]
-      if (target) update(target)
-    })
-    this.addEventListener('navigation-item:update', (event: Event) => {
-      event.stopPropagation()
-      update(event.target as NavigationItem)
-    })
-    this.addEventListener('navigation-item:change', (event: Event) => {
-      event.stopPropagation()
-      changed = true
-    })
+    const select = new Select({ context: this, selectClass: NavigationItem, slot })
     return {
       expose: {
+        get value() {
+          return select.value
+        },
+        set value(value) {
+          select.value = value
+        },
         get options() {
-          return options
+          return select.selects
         },
         get selectedIndex() {
-          return selectedIndex
-        }
+          return select.selectedIndex
+        },
       }
     }
   }
@@ -103,6 +77,7 @@ export class Navigation extends useElement({
 const itemName = 's-navigation-item'
 const itemProps = {
   selected: false,
+  value: ''
 }
 
 const itemStyle = /*css*/`
@@ -119,11 +94,11 @@ const itemStyle = /*css*/`
   width: 100%;
   max-width: 80px;
   text-transform: capitalize;
-  color: var(--s-color-on-surface-variant, #46464f);
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   transition: color .1s ease-out;
 }
 :host([selected=true]){
-  color: var(--s-color-primary, #5256a9);
+  color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 .icon{
   position: relative;
@@ -144,7 +119,7 @@ const itemStyle = /*css*/`
   top: 0;
   transform: scale(0);
   transition: transform .1s ease-out;
-  background: var(--s-color-secondary-container, #e2e0f9);
+  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
 }
 :host([selected=true]) .icon::before{
   transform: scale(1);
@@ -158,9 +133,13 @@ const itemStyle = /*css*/`
   justify-content: center;
   transform: translateY(-20%);
 }
+::slotted(svg[slot=icon]){
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
 ::slotted([slot=icon]){
   position: relative;
-  pointer-events: none;
   color: inherit;
 }
 ::slotted([slot=text]){
@@ -185,20 +164,18 @@ export class NavigationItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
-  syncProps: true,
+  syncProps: ['selected'],
   setup() {
     this.addEventListener('click', () => {
       if (this.selected) return
-      if (this.parentNode instanceof Navigation) {
-        this.dispatchEvent(new Event('navigation-item:change', { bubbles: true }))
-      }
-      this.selected = true
+      if (!(this.parentNode instanceof Navigation)) return
+      this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
-      watches: {
+      props: {
         selected: () => {
           if (!(this.parentNode instanceof Navigation)) return
-          this.dispatchEvent(new Event('navigation-item:update', { bubbles: true }))
+          this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
         }
       }
     }

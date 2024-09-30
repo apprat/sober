@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 import { Popup } from './popup.js'
 import './ripple.js'
 import './scroll-view.js'
@@ -13,29 +14,28 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
   font-size: .875rem;
-  color: var(--s-color-on-surface, #1c1b1f);
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 .popup{
   display: block;
 }
 .container{
-  padding: 8px 0;
+  padding: 2px 0;
   max-width: 224px;
   min-height: auto;
   box-sizing: border-box;
-}
-::slotted(s-popup-menu){
-  display: block;
+  display: flex;
+  flex-direction: column;
 }
 ::slotted(s-popup-menu[group=start]){
-  border-top: solid 1px var(--s-color-outline-variant, #c7c5d0);
-  margin-top: 8px;
-  padding-top: 8px;
+  border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
+  margin-top: 4px;
+  padding-top: 4px;
 }
 ::slotted(s-popup-menu[group=end]){
-  border-bottom: solid 1px var(--s-color-outline-variant, #c7c5d0);
-  margin-bottom: 8px;
-  padding-bottom: 8px;
+  border-bottom: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
+  margin-bottom: 4px;
+  padding-bottom: 4px;
 }
 `
 
@@ -60,7 +60,7 @@ export class PopupMenu extends useElement({
       e.stopPropagation()
       show()
     })
-    this.addEventListener('menu-item:click', (event) => {
+    this.addEventListener(`${name}:click`, (event) => {
       event.stopPropagation()
       dismiss()
     })
@@ -79,48 +79,54 @@ const itemProps = {
 
 const itemStyle = /*css*/`
 :host{
-  display: block;
-  height: 44px;
-}
-.container{
   display: flex;
   align-items: center;
-  height: 100%;
+  height: 40px;
+  margin: 2px 4px;
   cursor: pointer;
   position: relative;
+  border-radius: 4px;
 }
 .text{
   flex-grow: 1;
+  line-height: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   padding: 0 16px;
 }
-::slotted([slot=start]){
+::slotted(svg){
+  fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
+}
+::slotted([slot]){
+  height: 24px;
+  width: 24px;
   flex-shrink: 0;
-  margin-left: 16px;
-  margin-right: -4px;
+}
+::slotted([slot=start]){
+  margin-left: 12px;
+  margin-right: -8px;
 }
 ::slotted([slot=end]){
-  flex-shrink: 0;
   margin-right: 8px;
 }
 `
 
 const itemTemplate = /*html*/`
-<s-ripple class="container" part="container">
-  <slot name="start"></slot>
-  <div class="text" part="text">
-    <slot></slot>
-  </div>
-  <slot name="end"></slot>
-</s-ripple>
+<slot name="start"></slot>
+<div class="text" part="text">
+  <slot></slot>
+</div>
+<slot name="end"></slot>
+<s-ripple attached="true"></s-ripple>
 `
 
 export class PopupMenuItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
-  setup(shadowRoot) {
-    const container = shadowRoot.querySelector('.container') as HTMLElement
-    container.addEventListener('click', () => this.dispatchEvent(new Event('menu-item:click', { bubbles: true })))
+  setup() {
+    this.addEventListener('click', () => this.dispatchEvent(new Event(`${name}:click`, { bubbles: true })))
   }
 }) { }
 

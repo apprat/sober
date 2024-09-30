@@ -1,5 +1,6 @@
 import { useElement, JSXAttributes, LowercaseKeys } from './core/element.js'
 import { getStackingContext } from './core/utils.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-popup'
 const props = {
@@ -43,9 +44,9 @@ const style = /*css*/`
   opacity: 1;
 }
 ::slotted(*:not([slot])){
-  background: var(--s-color-surface-container-low, #f6f2f7);
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   border-radius: 4px;
-  box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   max-height: 100vh;
 }
 `

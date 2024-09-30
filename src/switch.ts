@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 import './ripple.js'
 
 const name = 's-switch'
@@ -14,9 +15,10 @@ const style = /*css*/`
   align-items: center;
   cursor: pointer;
   position: relative;
-  color: var(--s-color-primary, #5256a9);
+  color: var(--s-color-primary, ${Theme.colorPrimary});
   width: 52px;
   aspect-ratio: 1.625;
+  -webkit-aspect-ratio: 1.625;
   border-radius: 26px;
 }
 :host([disabled=true]){
@@ -25,26 +27,27 @@ const style = /*css*/`
 .track{
   width: 100%;
   height: 100%;
-  border: solid 2px var(--s-color-outline, #777680);
-  background: var(--s-color-surface-container-highest, #e5e1e6);
+  border: solid 2px var(--s-color-outline, ${Theme.colorOutline});
+  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
   box-sizing: border-box;
   border-radius: inherit;
 }
 :host([disabled=true]) .track{
   background: none;
-  border-color: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 12%, transparent) !important;
+  border-color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
 }
 :host([checked=true]) .track{
   border-width: 0;
   background: currentColor;
 }
 :host([disabled=true][checked=true]) .track{
-  background: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 12%, transparent) !important;
+  background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
 }
 .ripple{
   height: 125%;
   width: auto;
   aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
   border-radius: 50%;
   top: auto;
   transition: transform .1s ease-out;
@@ -52,7 +55,7 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  color: var(--s-color-outline, #777680);
+  color: var(--s-color-outline, ${Theme.colorOutline});
   transform: translateX(-10%);
 }
 :host([checked=true]) .ripple{
@@ -60,7 +63,7 @@ const style = /*css*/`
   color: currentColor;
 }
 .thumb{
-  background: var(--s-color-outline, #777680);
+  background: var(--s-color-outline, ${Theme.colorOutline});
   border-radius: 50%;
   width: 40%;
   height: 40%;
@@ -72,15 +75,15 @@ const style = /*css*/`
   align-items: center;
 }
 :host([disabled=true]) .thumb{
-  background: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 38%, transparent);
+  background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent);
 }
 :host([checked=true]) .thumb{
-  background: var(--s-color-on-primary, #ffffff);
+  background: var(--s-color-on-primary, ${Theme.colorOnPrimary});
   transform: scale(1.5);
-  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 :host([disabled=true][checked=true]) .thumb{
-  background: var(--s-color-surface, #fffbff);
+  background: var(--s-color-surface, ${Theme.colorSurface});
   box-shadow: none;
 }
 .icon{
@@ -94,7 +97,7 @@ const style = /*css*/`
   opacity: 1;
 }
 :host([checked=true][disabled=true]) .icon{
-  fill: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 12%, transparent);
+  fill: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent);
 }
 `
 

@@ -1,8 +1,11 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
+import Select from './core/select.js'
 import './ripple.js'
 
 const name = 's-segmented-button'
 const props = {
+  value: ''
 }
 
 const style = /*css*/`
@@ -10,7 +13,7 @@ const style = /*css*/`
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
-  border: solid 1px var(--s-color-outline, #777680);
+  border: solid 1px var(--s-color-outline, ${Theme.colorOutline});
   border-radius: 20px;
   height: 40px;
   overflow: hidden;
@@ -22,52 +25,21 @@ export class SegmentedButton extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
-    let options: SegmentedButtonItem[] = []
-    let selectedIndex = -1
-    let changed = false
-    const update = (target: SegmentedButtonItem) => {
-      if (options.length === 0 || !target.selected) return (selectedIndex = -1)
-      let old: SegmentedButtonItem | null = null
-      for (const item of options) {
-        if (item === target) continue
-        if (item.selected) {
-          old = item
-          item.removeAttribute('selected')
-        }
-      }
-      selectedIndex = options.indexOf(target)
-      if (changed) {
-        this.dispatchEvent(new Event('change'))
-        changed = false
-      }
-    }
-    slot.addEventListener('slotchange', () => {
-      let target: null | SegmentedButtonItem = null
-      selectedIndex = -1
-      options = slot.assignedElements().filter((item) => {
-        if (item instanceof SegmentedButtonItem) {
-          if (item.selected) target = item
-          return true
-        }
-      }) as SegmentedButtonItem[]
-      if (target) update(target)
-    })
-    this.addEventListener('segmented-button-item:update', (event: Event) => {
-      event.stopPropagation()
-      update(event.target as SegmentedButtonItem)
-    })
-    this.addEventListener('segmented-button-item:change', (event: Event) => {
-      event.stopPropagation()
-      changed = true
-    })
+    const select = new Select({ context: this, selectClass: SegmentedButtonItem, slot })
     return {
       expose: {
+        get value() {
+          return select.value
+        },
+        set value(value) {
+          select.value = value
+        },
         get options() {
-          return options
+          return select.selects
         },
         get selectedIndex() {
-          return selectedIndex
-        }
+          return select.selectedIndex
+        },
       }
     }
   }
@@ -77,7 +49,8 @@ const itemName = 's-segmented-button-item'
 const itemProps = {
   selected: false,
   disabled: false,
-  selectable: true
+  selectable: true,
+  value: ''
 }
 
 const itemStyle = /*css*/`
@@ -86,7 +59,7 @@ const itemStyle = /*css*/`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--s-color-on-surface, #1c1b1f);
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   height: 100%;
   min-width: 48px;
   padding: 0 16px;
@@ -96,19 +69,19 @@ const itemStyle = /*css*/`
   position: relative;
   cursor: pointer;
   box-sizing: border-box;
-  border-left: solid 1px var(--s-color-outline, #777680);
+  border-left: solid 1px var(--s-color-outline, ${Theme.colorOutline});
 }
 :host(:first-child){
   border-left-color: transparent;
   margin-left: -1px;
 }
 :host([selected=true]){
-  background: var(--s-color-secondary-container, #e2e0f9);
-  color: var(--s-color-on-secondary-container, #191a2c);
+  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
+  color: var(--s-color-on-secondary-container, ${Theme.colorOnSecondaryContainer});
 }
 :host([disabled=true]){
   pointer-events: none;
-  color: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 38%, transparent);
+  color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent);
 }
 ::slotted(s-icon){
   width: 18px;
@@ -138,19 +111,14 @@ export class SegmentedButtonItem extends useElement({
   syncProps: ['selected', 'disabled'],
   setup() {
     this.addEventListener('click', () => {
-      if (this.selectable) {
-        if (this.selected) return
-        if (this.parentNode instanceof SegmentedButton) {
-          this.dispatchEvent(new Event('navigation-item:change', { bubbles: true }))
-        }
-        this.selected = true
-      }
+      if (!(this.parentNode instanceof SegmentedButton) || this.selected) return
+      if (this.selectable) this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
-      watches: {
+      props: {
         selected: () => {
           if (!(this.parentNode instanceof SegmentedButton)) return
-          this.dispatchEvent(new Event('segmented-button-item:update', { bubbles: true }))
+          this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
         }
       }
     }

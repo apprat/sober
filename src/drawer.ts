@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-drawer'
 const props = {
@@ -8,7 +9,7 @@ const style = /*css*/`
 :host{
   display: block;
   height: 100%;
-  background: var(--s-color-background, #fffbff);
+  background: var(--s-color-background, ${Theme.colorBackground});
 }
 .container{
   display: flex;
@@ -17,7 +18,7 @@ const style = /*css*/`
   overflow: hidden;
 }
 .scrim{
-  background: color-mix(in srgb, var(--s-color-scrim, #000000) 80%, transparent);
+  background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 80%, transparent);
   position: absolute;
   top: 0;
   left: 0;
@@ -43,8 +44,8 @@ const style = /*css*/`
 ::slotted([slot=start]),
 ::slotted([slot=end]){
   width: 280px;
-  background: var(--s-color-surface-container-low, #f6f2f7);
-  border-color: var(--s-color-surface-container-high, #eae7ec);
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  border-color: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
   border-width: 1px;
   height: 100%;
   box-sizing: border-box;
@@ -74,7 +75,7 @@ const style = /*css*/`
     position: absolute;
     left: 0;
     top: 100%;
-    max-width: 70%;
+    max-width: 80%;
     height: 100%;
     pointer-events: none;
   }
@@ -98,7 +99,7 @@ const style = /*css*/`
   }
   .show-start-folded ::slotted([slot=start]),
   .show-end-folded ::slotted([slot=end]){
-    box-shadow: var(--s-elevation-level3, 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12));
+    box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
   }
 }
 `

@@ -49,10 +49,8 @@ type Setup<P, E> = (this: P & HTMLElement, shadowRoot: ShadowRoot) => {
   mounted?: () => void
   unmounted?: () => void
   adopted?: () => unknown
-  watches?: {
-    [K in keyof P]?: (value: P[K]) => void
-  }
   expose?: E
+  props?: { [K in keyof P]?: (k: P[K]) => unknown }
 } | void
 
 export const useElement = <
@@ -88,9 +86,14 @@ export const useElement = <
       shadowRoot.innerHTML = options.template ?? ''
       setStyle(shadowRoot, options.style)
       const props = { ...options.props }
-      const setups = options.setup?.apply(this as any, [shadowRoot])
+      const advance: { [key: string]: any } = {}
       for (const key in options.props) {
+        const newVal = this[key as never]
+        if (newVal !== undefined && newVal !== props[key]) {
+          advance[key] = newVal
+        }
         Object.defineProperty(this, key, {
+          configurable: true,
           get: () => props[key],
           set: (v) => {
             const value = parseType(v, options.props![key])
@@ -109,12 +112,20 @@ export const useElement = <
               }
             }
             props[key] = value
-            setups?.watches?.[key]?.(value as never)
+            setups?.props?.[key]?.(value as never)
           }
         })
       }
-      for (const key in setups?.expose) {
-        Object.defineProperty(this, key, { get: () => setups?.expose![key as never] })
+      const setups = options.setup?.apply(this as any, [shadowRoot])
+      const exposeDescriptors = Object.getOwnPropertyDescriptors(setups?.expose ?? {})
+      for (const key in exposeDescriptors) {
+        Object.defineProperty(this, key, exposeDescriptors[key])
+      }
+      for (const key in advance) {
+        if (options.syncProps === true || options.syncProps?.includes(key)) {
+          this.setAttribute(key, String(parseType(advance[key], options.props![key])))
+        }
+        this[key] = advance[key]
       }
       map.set(this, setups)
     }

@@ -1,30 +1,28 @@
 import { useElement, JSXAttributes, LowercaseKeys } from './core/element.js'
 import { device } from './core/utils.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-slider'
 const props = {
   disabled: false,
   labeled: false,
-  ranged: false,
   max: 100,
   min: 0,
   step: 1,
-  value: 0,
-  valueStart: 0,
-  valueEnd: 0
+  value: 0
 }
 
 const style = /*css*/`
 :host{
   display: block;
-  color: var(--s-color-primary, #5256a9);
+  color: var(--s-color-primary, ${Theme.colorPrimary});
   height: 16px;
   cursor: pointer;
   position: relative;
 }
 :host([disabled=true]){
   pointer-events: none;
-  color: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 38%, transparent) !important;
+  color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent) !important;
 }
 .container{
   height: 100%;
@@ -41,11 +39,11 @@ const style = /*css*/`
   right: 0;
 }
 .track{
-  background: var(--s-color-secondary-container, #e2e0f9);
+  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
   width: calc(100% - 20px);
 }
 :host([disabled=true]) .track{
-  background: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 12%, transparent) !important;
+  background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
 }
 .indicator{
   left: 0;
@@ -66,7 +64,7 @@ const style = /*css*/`
   width: 100%;
   border-radius: 50%;
   background: currentColor;
-  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12));
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 .thumb::before{
   content: '';
@@ -87,8 +85,8 @@ const style = /*css*/`
   position: absolute;
   bottom: 100%;
   margin-bottom: 12px;
-  background: var(--s-color-inverse-surface, #313034);
-  color: var(--s-color-inverse-on-surface, #f3eff4);
+  background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
+  color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
   justify-content: center;
   align-items: center;
   border-radius: 4px;
@@ -99,7 +97,7 @@ const style = /*css*/`
   transform-origin: center bottom;
   transition: transform .1s ease-out;
   opacity: .85;
-  z-index: 1;
+  z-index: var(--z-index, 1);
   display: none;
 }
 .active .label{
@@ -139,7 +137,7 @@ const template = /*html*/`
 `
 
 export class Slider extends useElement({
-  style, template, props, syncProps: ['disabled', 'labeled', 'ranged'],
+  style, template, props, syncProps: ['disabled', 'labeled'],
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const indicator = shadowRoot.querySelector('.indicator') as HTMLDivElement
@@ -166,7 +164,7 @@ export class Slider extends useElement({
     input.addEventListener('touchend', () => device.touched && container.classList.remove('active'), { passive: true })
     input.addEventListener('touchcancel', () => device.touched && container.classList.remove('active'), { passive: true })
     return {
-      watches: {
+      props: {
         max: (value) => {
           input.max = String(value)
           update()

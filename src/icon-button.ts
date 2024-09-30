@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 import './ripple.js'
 
 const name = 's-icon-button'
@@ -17,36 +18,37 @@ const style = /*css*/`
   border-radius: 50%;
   width: 40px;
   aspect-ratio: 1;
-  color: var(--s-color-on-surface-variant, #46464f);
+  -webkit-aspect-ratio: 1;
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   position: relative;
   box-sizing: border-box;
 }
 :host([disabled=true]){
   pointer-events: none !important;
-  color: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 38%, transparent) !important;
+  color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent) !important;
 }
 :host([type=filled]){
-  background: var(--s-color-primary, #5256a9);
-  color: var(--s-color-on-primary, #ffffff);
+  background: var(--s-color-primary, ${Theme.colorPrimary});
+  color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
 }
 :host([type=filled][disabled=true]){
-  background: color-mix(in srgb ,var(--s-color-on-surface, #1c1b1f) 12%, transparent) !important;
+  background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
 }
 :host([type=filled]) ::slotted(s-badge[slot=badge]){
   outline: solid 2px currentColor;
 }
 :host([type=filled-tonal]){
-  background: var(--s-color-secondary-container, #e2e0f9);
-  color: var(--s-color-on-secondary-container, #191a2c);
+  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
+  color: var(--s-color-on-secondary-container, ${Theme.colorOnSecondaryContainer});
 }
 :host([type=filled-tonal][disabled=true]){
-  background: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f) 12%, transparent) !important;
+  background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
 }
 :host([type=outlined]){
-  border: solid 1px var(--s-color-outline, #777680)
+  border: solid 1px var(--s-color-outline, ${Theme.colorOutline})
 }
 :host([type=outlined][disabled=true]){
-  border-color: color-mix(in srgb, var(--s-color-on-surface, #1c1b1f)) !important;
+  border-color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface})) !important;
 }
 .ripple{
   border-radius: inherit;
@@ -63,6 +65,11 @@ const style = /*css*/`
 }
 ::slotted(:not([slot=badge])){
   color: inherit;
+}
+::slotted(svg){
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
 }
 `
 

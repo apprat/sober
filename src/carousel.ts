@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-carousel'
 const props = {
@@ -9,10 +10,10 @@ const style = /*css*/`
 :host{
   display: block;
   height: 280px;
-  background: var(--s-color-surface-container-low, #f6f2f7);
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   border-radius: 8px;
   position: relative;
-  color: var(--s-color-primary, #5256a9);
+  color: var(--s-color-primary, ${Theme.colorPrimary});
   overflow: hidden;
   max-width: 480px;
 }
@@ -36,7 +37,7 @@ const style = /*css*/`
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--s-color-secondary-container, #e2e0f9);
+  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
   flex-shrink: 0;
   margin: 16px 4px;
   cursor: pointer;
@@ -109,9 +110,9 @@ export class Carousel extends useElement({
     return {
       mounted: runTask,
       unmounted: () => clearInterval(timer),
-      watches: {
+      props: {
         duration: runTask
-      }
+      },
     }
   }
 }) { }

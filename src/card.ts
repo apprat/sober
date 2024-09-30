@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 import './ripple.js'
 
 const name = 's-card'
@@ -11,23 +12,23 @@ const style = /*css*/`
 :host{
   display: inline-block;
   vertical-align: middle;
-  background: var(--s-color-surface-container-low, #f6f2f7);
-  box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .1));
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   border-radius: 12px;
   position: relative;
   font-size: .875rem;
   box-sizing: border-box;
   max-width: 280px;
-  color: var(--s-color-on-surface, #1c1b1f);
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   overflow: hidden;
 }
 :host([type=filled]){
-  background: var(--s-color-surface-container-highest, #e5e1e6);
+  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
   box-shadow: none;
 }
 :host([type=outlined]){
-  background: var(--s-color-surface, #fffbff);
-  border: solid 1px var(--s-color-outline-variant, #c7c5d0);
+  background: var(--s-color-surface, ${Theme.colorSurface});
+  border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
   box-shadow: none;
 }
 :host([clickable=true]){
@@ -48,7 +49,7 @@ const style = /*css*/`
 ::slotted([slot=image]){
   display: block;
   height: 128px;
-  background: var(--s-color-surface-container-high, #eae7ec);
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
 }
 ::slotted([slot=headline]){
   font-size: 1.5rem;
@@ -63,7 +64,7 @@ const style = /*css*/`
 ::slotted([slot=text]){
   line-height: 1.6;
   margin: 8px 16px;
-  color: var(--s-color-on-surface-variant, #46464f);
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
 ::slotted(s-button[slot=action]){
   margin: 16px 4px;
@@ -74,10 +75,10 @@ const style = /*css*/`
 @media (pointer: fine){
   :host([clickable=true][type=filled]:hover),
   :host([clickable=true][type=outlined]:hover){
-    box-shadow: var(--s-elevation-level1, 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .1));
+    box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   }
   :host([clickable=true]:hover){
-    box-shadow: var(--s-elevation-level2, 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12));
+    box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   }
 }
 `

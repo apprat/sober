@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-circular-progress'
 const props = {
@@ -15,7 +16,8 @@ const style = /*css*/`
   position: relative;
   width: 48px;
   aspect-ratio: 1;
-  color: var(--s-color-primary, #5256a9);
+  -webkit-aspect-ratio: 1;
+  color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 :host([animated=true]) .known .block{
   transition: stroke-dashoffset .2s, transform .2s;
@@ -46,7 +48,7 @@ circle{
   stroke-dasharray: var(--dasharray);
 }
 .track{
-  stroke: var(--s-color-secondary-container, #e2e0f9);
+  stroke: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
 }
 @keyframes stroke{
   0% { stroke-dashoffset: var(--dasharray) }
@@ -106,7 +108,7 @@ export class CircularProgress extends useElement({
       indicator.style.strokeDashoffset = `${value}px`
     }
     return {
-      watches: {
+      props: {
         max: update,
         value: update
       }

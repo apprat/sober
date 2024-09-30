@@ -1,4 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 
 const name = 's-scroll-view'
 const props = {
@@ -16,12 +17,12 @@ const style = /*css*/`
     background: transparent;
   }
   :host::-webkit-scrollbar-thumb{
-    background: var(--s-color-outline-variant, #c7c5d0);
+    background: var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
     border-radius: 3px;
   }
   @supports not selector(::-webkit-scrollbar){
     :host{
-      scrollbar-color: var(--s-color-outline-variant, #c7c5d0) transparent;
+      scrollbar-color: var(--s-color-outline-variant, ${Theme.colorOutlineVariant}) transparent;
     }
   }
 }

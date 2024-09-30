@@ -1,11 +1,15 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
 import { Popup } from './popup.js'
+import { Field } from './field.js'
+import Select from './core/select.js'
 import './scroll-view.js'
 
 const name = 's-picker'
 const props = {
   disabled: false,
-  label: ''
+  label: '',
+  value: ''
 }
 
 const style = /*css*/`
@@ -13,142 +17,66 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
   font-size: .875rem;
-  --border-radius: 4px;
-  --border-color: var(--s-color-outline, #777680);
-  --border-width: 1px;
-  --padding: 16px;
-  --height: 48px;
+  --picker-border-radius: 4px;
+  --picker-border-color: var(--s-color-outline, ${Theme.colorOutline});
+  --picker-border-width: 1px;
+  --picker-padding: 16px;
+  --picker-height: 48px;
 }
 :host([disabled=true]){
   pointer-events: none;
   opacity: .38;
 }
-.trigger{
-  display: flex;
-  height: var(--height);
+.popup{
+  display: block;
   cursor: pointer;
-  border-radius: var(--border-radius);
-  position: relative;
 }
-.trigger::before,
-.trigger::after{
-  content: '';
-  height: 100%;
-  width: var(--border-radius);
-  border: solid var(--border-width) var(--border-color);
-  box-sizing: border-box;
-  flex-shrink: 0;
+.field{
+
 }
-.trigger::before{
-  border-right: none;
-  border-top-left-radius: var(--border-radius);
-  border-bottom-left-radius: var(--border-radius);
+.view{
+  width: 100%;
+  padding-left: var(--picker-padding);
 }
-.trigger::after{
-  border-left: none;
-  border-top-right-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
-}
-.text{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  white-space: nowrap;
-  margin: 0 calc(var(--border-radius) * -1);
-}
-.text::after{
-  content: '';
+.ripple{
   position: absolute;
-  bottom: 0;
-  left: var(--border-radius);
-  width: calc(100%  - (var(--border-radius)*2));
-  border-bottom: solid var(--border-width) var(--border-color);
-}
-.content{
-  display: flex;
-  flex-direction: column;
+  left: 0;
+  top: 0;
   height: 100%;
-  pointer-events: none;
-}
-.content>.value{
-  height: 100%;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  padding: 0 var(--padding);
-  margin-right: 12px;
-  color: var(--s-color-on-surface, #1c1b1f);
-}
-.content>.label{
-  transform: translateY(-100%);
-  height: 100%;
-  flex-shrink: 0;
-  display: flex;
-  margin: 0 var(--border-radius);
-}
-.content>.label::before,
-.content>.label::after{
-  content: '';
-  border-top: solid var(--border-width) var(--border-color);
-}
-.content>.label::after{
-  flex-grow: 1;
-}
-.content>.label>span{
-  height: 100%;
-  display: flex;
-  align-items: center;
-  border-top: solid var(--border-width) var(--border-color);
-  transition: transform .1s ease-out;
-  padding: 0 calc(var(--padding) - var(--border-radius) + 12px) 0 calc(var(--padding) - var(--border-radius));
-  color: var(--border-color);
-}
-.content>.value:not(:empty)+.label>span{
-  transform: translateY(-50%) scale(.8571428571428571);
-  border-top: none;
-  padding: 0;
-}
-.content>.value:not(:empty)+.label::before{
-  width: calc(var(--padding) - var(--border-radius));
-}
-.content>.value:not(:empty)+.label::after{
-  min-width: calc(var(--padding) - var(--border-radius));
+  width: 100%;
+  box-sizing: border-box;
 }
 svg{
   width: 24px;
   height: 24px;
-  fill: var(--s-color-on-surface, #1c1b1f);
+  fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   padding: 2px;
   box-sizing: border-box;
   flex-shrink: 0;
-  position: absolute;
-  right: calc(var(--padding) - 12px);
+  margin-left: -12px;
+  margin-right: 4px;
 }
 .container{
-  padding: 8px 0;
   max-height: 324px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  font-size: .875rem;
+  padding: 2px 0;
 }
 `
 
 const template = /*html*/ `
 <s-popup class="popup">
   <slot name="trigger" slot="trigger">
-    <div class="trigger" part="trigger">
-      <div class="text">
-        <div class="content">
-          <div class="value"></div>
-          <div class="label">
-            <span></span>
-          </div>
-        </div>
-        <svg viewBox="0 -960 960 960" slot="end">
+    <s-field labelfixed="false" class="field">
+      <div class="label" slot="label"></div>
+      <div slot="view" class="view"></div>
+      <svg viewBox="0 -960 960 960" slot="end">
           <path d="M480-360 280-560h400L480-360Z"></path>
         </svg>
-      </div>
-      <s-ripple attached="true" part="ripple"></s-ripple>
-    </div>
+      <s-ripple class="ripple" slot="view" attached="true"></s-ripple>
+    </s-field>
   </slot>
   <s-scroll-view class="container" part="container">
     <slot id="slot"></slot>
@@ -160,76 +88,53 @@ export class Picker extends useElement({
   style, template, props, syncProps: ['disabled'],
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector('.popup') as Popup
-    const container = shadowRoot.querySelector('.container') as HTMLDivElement
+    const field = shadowRoot.querySelector('.field') as Field
+    const label = shadowRoot.querySelector('.label') as HTMLDivElement
+    const view = shadowRoot.querySelector('.view') as HTMLDivElement
     const slot = shadowRoot.querySelector('#slot') as HTMLSlotElement
-    const label = shadowRoot.querySelector('.label>span') as HTMLDivElement
-    const value = shadowRoot.querySelector('.value') as HTMLDivElement
-    let options: PickerItem[] = []
-    let selectedIndex = -1
-    let changed = false
-    const update = (target: PickerItem) => {
-      if (options.length === 0 || !target.selected) {
-        value.textContent = ''
-        selectedIndex = -1
+    const container = shadowRoot.querySelector('.container') as HTMLDivElement
+    const select = new Select({ context: this, selectClass: PickerItem, slot })
+    //show
+    popup.addEventListener('show', () => {
+      field.focused = true
+      field.labelFixed = true
+      select.select && container.scrollTo({ top: (select.select.offsetTop - container.offsetTop) - (container.offsetHeight / 2) + (select.select.offsetHeight / 2) })
+    })
+    //dismiss
+    popup.addEventListener('dismiss', () => {
+      field.focused = false
+      !select.select && (field.labelFixed = false)
+    })
+    select.onUpdate = () => {
+      if (!select.select) {
+        field.labelFixed = false
+        view.textContent = ''
         return
       }
-      for (const item of options) {
-        if (item === target) continue
-        if (item.selected) {
-          item.removeAttribute('selected')
-        }
-      }
-      selectedIndex = options.indexOf(target)
-      value.textContent = options[selectedIndex]?.value === '' ? options[selectedIndex].textContent : options[selectedIndex].value
-      if (changed) {
-        this.dispatchEvent(new Event('change'))
-        changed = false
-        popup.dismiss()
-      }
+      field.labelFixed = true
+      view.textContent = select.select.textContent
     }
-    popup.addEventListener('show', () => {
-      if (selectedIndex !== -1) {
-        const target = options[selectedIndex]
-        if (target) {
-          container.scrollTo({ top: (target.offsetTop - container.offsetTop) - (container.offsetHeight / 2) + (target.offsetHeight / 2) })
-        }
-      }
-    })
-    slot.addEventListener('slotchange', () => {
-      let target: null | PickerItem = null
-      selectedIndex = -1
-      options = slot.assignedElements().filter((item) => {
-        if (item instanceof PickerItem) {
-          if (item.selected) target = item
-          return true
-        }
-      }) as PickerItem[]
-      if (target) update(target)
-    })
-    this.addEventListener('picker-item:update', (event: Event) => {
-      event.stopPropagation()
-      update(event.target as PickerItem)
-    })
-    this.addEventListener('picker-item:change', (event: Event) => {
-      event.stopPropagation()
-      changed = true
-    })
+    select.onSelect = () => popup.dismiss()
     return {
-      watches: {
-        label: (value) => {
-          label.textContent = value
-        }
-      },
       expose: {
+        get value() {
+          return select.value
+        },
+        set value(value) {
+          select.value = value
+        },
         get options() {
-          return options
+          return select.selects
         },
         get selectedIndex() {
-          return selectedIndex
+          return select.selectedIndex
         },
         show: popup.show.bind(popup),
         toggle: popup.toggle.bind(popup),
         dismiss: popup.dismiss.bind(popup)
+      },
+      props: {
+        label: (value) => label.textContent = value
       }
     }
   }
@@ -244,34 +149,48 @@ const itemProps = {
 const itemStyle = /*css*/`
 :host{
   display: flex;
-  height: 44px;
   align-items: center;
-  position: relative;
+  height: 40px;
+  margin: 2px 4px;
   cursor: pointer;
-  padding: 0 16px;
+  position: relative;
+  border-radius: 4px;
+  flex-shrink: 0;
 }
 :host([selected=true]){
-  background: var(--s-color-secondary-container, #e5e1e6);
-  color: var(--s-color-on-secondary-container, #1c1b1f);
-  pointer-events: none;
+  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
+  color: var(--s-color-on-secondary-container, ${Theme.colorOnSecondaryContainer});
+}
+.text{
+  flex-grow: 1;
+  line-height: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 0 16px;
+}
+::slotted(svg){
+  fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
+}
+::slotted([slot]){
+  height: 24px;
+  width: 24px;
+  flex-shrink: 0;
 }
 ::slotted([slot=start]){
-  flex-shrink: 0;
-  margin-left: -4px;
-  margin-right: 4px;
-  color: inherit;
+  margin-left: 12px;
+  margin-right: -8px;
 }
 ::slotted([slot=end]){
-  flex-shrink: 0;
-  margin-right: -4px;
-  margin-left: 4px;
-  color: inherit;
+  margin-right: 8px;
 }
 `
 
 const itemTemplate = /*html*/`
 <slot name="start"></slot>
-<slot></slot>
+<div class="text" part="text">
+  <slot></slot>
+</div>
 <slot name="end"></slot>
 <s-ripple part="ripple" attached="true" ></s-ripple>
 `
@@ -284,16 +203,14 @@ export class PickerItem extends useElement({
   setup() {
     this.addEventListener('click', () => {
       if (this.selected) return
-      if (this.parentNode instanceof Picker) {
-        this.dispatchEvent(new Event('picker-item:change', { bubbles: true }))
-      }
-      this.selected = true
+      if (!(this.parentNode instanceof Picker)) return
+      this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
-      watches: {
+      props: {
         selected: () => {
           if (!(this.parentNode instanceof Picker)) return
-          this.dispatchEvent(new Event('picker-item:update', { bubbles: true }))
+          this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
         }
       }
     }

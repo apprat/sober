@@ -1,9 +1,12 @@
 import { useElement, JSXAttributes } from './core/element.js'
+import { Theme } from './core/enum.js'
+import Select from './core/select.js'
 import './ripple.js'
 
 const name = 's-tab'
 const props = {
   mode: 'scrollable' as 'scrollable' | 'fixed',
+  value: ''
 }
 
 const style = /*css*/`
@@ -11,15 +14,15 @@ const style = /*css*/`
   display: flex;
   justify-content: center;
   position: relative;
-  background: var(--s-color-surface, #fffbff);
-  color: var(--s-color-on-surface-variant, #46464f);
+  background: var(--s-color-surface, ${Theme.colorSurface});
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
 :host::before{
   content: '';
   position: absolute;
   width: 100%;
   height: 1px;
-  background: var(--s-color-surface-variant, #e4e1ec);
+  background: var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
   bottom: 0;
   left: 0;
 }
@@ -59,68 +62,39 @@ export class Tab extends useElement({
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    let options: TabItem[] = []
-    let selectedIndex = -1
-    let changed = false
-
-    const update = (target: TabItem) => {
-      if (options.length === 0 || !target.selected) return (selectedIndex = -1)
-      let old: TabItem | null = null
-      for (const item of options) {
-        if (item === target) continue
-        if (item.selected) {
-          old = item
-          item.removeAttribute('selected')
-        }
+    const select = new Select({ context: this, selectClass: TabItem, slot })
+    let old: TabItem | undefined
+    select.onUpdate = () => {
+      if (!this.isConnected || !select.select) {
+        old = undefined
+        return
       }
-      selectedIndex = options.indexOf(target)
-      if (changed) {
-        this.dispatchEvent(new Event('change'))
-        changed = false
+      if (container.scrollWidth !== container.offsetWidth) {
+        const left = (select.select.offsetLeft - container.offsetLeft) - (container.offsetWidth / 2) + (select.select.offsetWidth / 2)
+        container.scrollTo({ left, behavior: 'smooth' })
       }
-      if (this.isConnected) {
-        if (container.scrollWidth !== container.offsetWidth) {
-          const left = (target.offsetLeft - container.offsetLeft) - (container.offsetWidth / 2) + (target.offsetWidth / 2)
-          container.scrollTo({ left, behavior: 'smooth' })
-        }
-        if (old) {
-          old.indicator.addEventListener('transitionend', () => {
-            old?.indicator.removeAttribute('style')
-            target.indicator.removeAttribute('style')
-          }, { once: true })
-          const oldLeft = old.indicator.getBoundingClientRect().left
-          const rect = target.indicator.getBoundingClientRect()
-          target.indicator.setAttribute('style', 'transition:none;filter:opacity(0)')
-          old.indicator.setAttribute('style', `transition: transform .2s ease-out, width .2s ease-out;filter:opacity(1);transform:translateX(${rect.left - oldLeft}px);width: ${rect.width}px`)
-        }
+      if (old) {
+        const oldLeft = old.indicator.getBoundingClientRect().left
+        const rect = select.select.indicator.getBoundingClientRect()
+        const options = { duration: 200, easing: 'ease-out' }
+        select.select.indicator.animate([{ opacity: 0 }, { opacity: 0 }], options)
+        old.indicator.animate([{ filter: 'opacity(1)', transform: `translateX(0)` }, { filter: 'opacity(1)', transform: `translateX(${rect.left - oldLeft}px)` }], options)
       }
+      if (select.select) old = select.select
     }
-    slot.addEventListener('slotchange', () => {
-      let target: null | TabItem = null
-      selectedIndex = -1
-      options = slot.assignedElements().filter((item) => {
-        if (item instanceof TabItem) {
-          if (item.selected) target = item
-          return true
-        }
-      }) as TabItem[]
-      if (target) update(target)
-    })
-    this.addEventListener('tab-item:update', (event: Event) => {
-      event.stopPropagation()
-      update(event.target as TabItem)
-    })
-    this.addEventListener('tab-item:change', (event: Event) => {
-      event.stopPropagation()
-      changed = true
-    })
     return {
       expose: {
+        get value() {
+          return select.value
+        },
+        set value(value) {
+          select.value = value
+        },
         get options() {
-          return options
+          return select.selects
         },
         get selectedIndex() {
-          return selectedIndex
+          return select.selectedIndex
         },
       }
     }
@@ -129,7 +103,8 @@ export class Tab extends useElement({
 
 const itemName = 's-tab-item'
 const itemProps = {
-  selected: false
+  selected: false,
+  value: ''
 }
 
 const itemStyle = /*css*/`
@@ -146,7 +121,7 @@ const itemStyle = /*css*/`
   padding: 0 16px;
 }
 :host([selected=true]){
-  color: var(--s-color-primary, #5256a9);
+  color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 .container{
   display: flex;
@@ -162,7 +137,7 @@ const itemStyle = /*css*/`
   bottom: 0;
   height: 3px;
   width: 100%;
-  background: var(--s-color-primary, #5256a9);
+  background: var(--s-color-primary, ${Theme.colorPrimary});
   border-radius: 1.5px 1.5px 0 0;
   filter: opacity(0);
 }
@@ -188,7 +163,8 @@ const itemStyle = /*css*/`
 }
 ::slotted([slot=icon]){
   height: 42px;
-  color: inherit;
+  color: currentColor;
+  fill: currentColor;
 }
 ::slotted([slot=text]){
   white-space: nowrap;
@@ -221,33 +197,25 @@ export class TabItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
-  syncProps: true,
+  syncProps: ['selected'],
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const indicator = shadowRoot.querySelector('.indicator') as HTMLDivElement
     const iconSlot = shadowRoot.querySelector('[name=icon]') as HTMLSlotElement
-    const iconSlotChange = () => {
+    iconSlot.addEventListener('slotchange', () => {
       const length = iconSlot.assignedElements().length
       container.classList[length > 0 ? 'add' : 'remove']('icon')
-    }
-    iconSlot.addEventListener('slotchange', iconSlotChange)
+    })
     this.addEventListener('click', () => {
-      if (this.selected) return
-      if (this.parentNode instanceof Tab) {
-        this.dispatchEvent(new Event('tab-item:change', { bubbles: true }))
-      }
-      this.selected = true
+      if (!(this.parentNode instanceof Tab) || this.selected) return
+      this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
-      expose: {
-        get indicator() {
-          return indicator
-        }
-      },
-      watches: {
+      expose: { indicator },
+      props: {
         selected: () => {
           if (!(this.parentNode instanceof Tab)) return
-          this.dispatchEvent(new Event('tab-item:update', { bubbles: true }))
+          this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
         },
       }
     }

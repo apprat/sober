@@ -18,7 +18,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "removeComments": true
   },
   "include": [
     "src"

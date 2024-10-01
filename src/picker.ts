@@ -156,6 +156,7 @@ const itemStyle = /*css*/`
   position: relative;
   border-radius: 4px;
   flex-shrink: 0;
+  padding: 0 12px;
 }
 :host([selected=true]){
   background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
@@ -163,11 +164,10 @@ const itemStyle = /*css*/`
 }
 .text{
   flex-grow: 1;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  height: 100%;
   white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  padding: 0 16px;
 }
 ::slotted(svg){
   fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
@@ -178,11 +178,12 @@ const itemStyle = /*css*/`
   flex-shrink: 0;
 }
 ::slotted([slot=start]){
-  margin-left: 12px;
-  margin-right: -8px;
+  margin-left: -4px;
+  margin-right: 8px;
 }
 ::slotted([slot=end]){
-  margin-right: 8px;
+  margin-left: 8px;
+  margin-right: -6px;
 }
 `
 

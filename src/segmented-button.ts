@@ -83,16 +83,17 @@ const itemStyle = /*css*/`
   pointer-events: none;
   color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent);
 }
-::slotted(s-icon){
+::slotted([slot]){
   width: 18px;
   height: 18px;
   color: inherit;
+  fill: currentColor;
   flex-shrink: 0;
 }
-::slotted(s-icon[slot=start]){
+::slotted([slot=start]){
   margin-right: 4px;
 }
-::slotted(s-icon[slot=end]){
+::slotted([slot=end]){
   margin-right: 4px;
 }
 `

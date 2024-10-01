@@ -83,17 +83,16 @@ const itemStyle = /*css*/`
   align-items: center;
   height: 40px;
   margin: 2px 4px;
+  padding: 0 12px;
   cursor: pointer;
   position: relative;
   border-radius: 4px;
 }
 .text{
   flex-grow: 1;
-  line-height: 1;
   white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  padding: 0 16px;
+  display: flex;
+  align-items: center;
 }
 ::slotted(svg){
   fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
@@ -104,11 +103,12 @@ const itemStyle = /*css*/`
   flex-shrink: 0;
 }
 ::slotted([slot=start]){
-  margin-left: 12px;
-  margin-right: -8px;
+  margin-left: -4px;
+  margin-right: 8px;
 }
 ::slotted([slot=end]){
-  margin-right: 8px;
+  margin-left: 8px;
+  margin-right: -6px;
 }
 `
 

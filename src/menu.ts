@@ -14,13 +14,13 @@ const style = /*css*/`
   padding: 4px 0;
 }
 :host(:nth-of-type(n+2)){
-  border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
+  border-top: solid 1px var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
 }
 ::slotted([slot=label]){
   display: flex;
   align-items: center;
   height: 44px;
-  margin: -4px 16px;
+  margin: -4px 20px;
   font-size: .75rem;
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   white-space: nowrap;
@@ -55,6 +55,7 @@ const itemStyle = /*css*/`
   border-radius: 24px;
   cursor: pointer;
   position: relative;
+  padding: 0 20px;
 }
 :host([checked=true]){
   background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
@@ -62,15 +63,12 @@ const itemStyle = /*css*/`
 }
 :host([checked=true]) ::slotted(svg){
   fill: currentColor;
-  color: currentColor;
 }
 .text{
   flex-grow: 1;
-  line-height: 1;
   white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  padding: 0 16px;
+  display: flex;
+  align-items: center;
 }
 ::slotted(svg){
   fill: var(--s-color-on-surface-variant, #46464f);
@@ -81,11 +79,12 @@ const itemStyle = /*css*/`
   flex-shrink: 0;
 }
 ::slotted([slot=start]){
-  margin-left: 16px;
-  margin-right: -4px;
+  margin-left: -4px;
+  margin-right: 12px;
 }
 ::slotted([slot=end]){
-  margin-right: 8px;
+  margin-right: -8px;
+  margin-left: 12px;
 }
 `
 

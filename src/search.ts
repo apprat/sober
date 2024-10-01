@@ -91,10 +91,17 @@ const style = /*css*/`
 ::slotted([slot]){
   flex-shrink: 0;
 }
-::slotted(s-icon[slot=start]){
+::slotted(svg){
+  height: 24px;
+  width: 24px;
+  fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
+}
+::slotted(s-icon[slot=start]),
+::slotted(svg[slot=start]){
   margin: 0 -6px 0 12px;
 }
-::slotted(s-icon[slot=end]){
+::slotted(s-icon[slot=end]),
+::slotted(svg[slot=end]){
   margin: 0 12px 0 -6px;
 }
 :host([size=small]) ::slotted(s-icon-button[slot=start]),
@@ -105,7 +112,7 @@ const style = /*css*/`
 ::slotted(s-icon-button[slot=start]){
   margin: 0 -12px 0 4px;
 }
-::slotted(s-icon-button[slot=end]){
+::slotted(s-icon-button[slot=end]),{
   margin: 0 4px 0 -12px;
 }
 :host([size=small]) ::slotted(s-icon-button[slot=start]){
@@ -114,10 +121,12 @@ const style = /*css*/`
 :host([size=small]) ::slotted(s-icon-button[slot=end]){
   margin: 0 0 0 -12px;
 }
-:host([size=small]) ::slotted(s-icon[slot=start]){
+:host([size=small]) ::slotted(s-icon[slot=start]),
+:host([size=small]) ::slotted(svg[slot=start]){
   margin: 0 -6px 0 8px;
 }
-:host([size=small]) ::slotted(s-icon[slot=end]){
+:host([size=small]) ::slotted(s-icon[slot=end]),
+:host([size=small]) ::slotted(svg[slot=end]){
   margin: 0 8px 0 -6px;
 }
 :host([size=large]) ::slotted(s-icon-button[slot=start]){
@@ -126,10 +135,12 @@ const style = /*css*/`
 :host([size=large]) ::slotted(s-icon-button[slot=end]){
   margin: 0 8px 0 -16px;
 }
-:host([size=large]) ::slotted(s-icon[slot=start]){
+:host([size=large]) ::slotted(s-icon[slot=start]),
+:host([size=large]) ::slotted(svg[slot=start]){
   margin: 0 -8px 0 16px;
 }
-:host([size=large]) ::slotted(s-icon[slot=end]){
+:host([size=large]) ::slotted(s-icon[slot=end]),
+:host([size=large]) ::slotted(svg[slot=end]){
   margin: 0 16px 0 -8px;
 }
 `

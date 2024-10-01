@@ -74,11 +74,11 @@ export class Tab extends useElement({
         container.scrollTo({ left, behavior: 'smooth' })
       }
       if (old) {
-        const oldLeft = old.indicator.getBoundingClientRect().left
+        const oldRect = old.indicator.getBoundingClientRect()
         const rect = select.select.indicator.getBoundingClientRect()
         const options = { duration: 200, easing: 'ease-out' }
         select.select.indicator.animate([{ opacity: 0 }, { opacity: 0 }], options)
-        old.indicator.animate([{ filter: 'opacity(1)', transform: `translateX(0)` }, { filter: 'opacity(1)', transform: `translateX(${rect.left - oldLeft}px)` }], options)
+        old.indicator.animate([{ filter: 'opacity(1)', transform: `translateX(0)`, }, { filter: 'opacity(1)', transform: `translateX(${rect.left - oldRect.left}px)`, width: `${rect.width}px` }], options)
       }
       if (select.select) old = select.select
     }
@@ -162,9 +162,11 @@ const itemStyle = /*css*/`
   margin-left: 0;
 }
 ::slotted([slot=icon]){
-  height: 42px;
+  width: 24px;
+  height: 24px;
   color: currentColor;
   fill: currentColor;
+  margin: 10px 0;
 }
 ::slotted([slot=text]){
   white-space: nowrap;
@@ -172,6 +174,7 @@ const itemStyle = /*css*/`
   line-height: 1;
 }
 .icon ::slotted([slot=text]){
+  margin-top: -6px;
   height: 26px;
 }
 ::slotted([slot=badge]){

@@ -12,20 +12,21 @@ Sober 支持所有前端框架，如 Vue、React、Svelte 等，并且专门为 
 
 Sober supports all front-end frameworks such as Vue, React, Svelte, and more. It is specifically tailored for the Vue framework, providing support for template and JSX completion, as well as the use of syntax like `v-model`.
 
-# 安装 Installation
+# NPM Installation
 ```shell
 npm install sober
 ```
 
-# 使用 Usage
-
-```js
-import 'sober' //引入所有组件 Load All Components
-import 'sober/button' //或只引入单个组件 Loading individual components
-```
+# CDN
 
 ```html
-<s-button> hello </s-button>
+<script src="https://unpkg.com/sober/dist/sober.min.js"></script>
+```
+
+# Usage
+
+```html
+<s-button> Hello Sober </s-button>
 ```
 
 动态创建组件   
@@ -33,10 +34,6 @@ import 'sober/button' //或只引入单个组件 Loading individual components
 Dynamic creation of components
 
 ```js
-import { Button } from 'sober'
-
-const button = new Button()
-//或者 or
 const button2 = document.createElement('s-button')
 
 button.textContent = 'hello'

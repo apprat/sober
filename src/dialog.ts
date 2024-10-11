@@ -1,6 +1,6 @@
 import { useElement, JSXAttributes } from './core/element.js'
-import { getStackingContext } from './core/utils.js'
-import { Theme } from './core/enum.js'
+import { getStackingContext } from './core/utils/getStackingContext.js'
+import { Theme } from './page.js'
 import './scroll-view.js'
 
 const name = 's-dialog'
@@ -138,9 +138,7 @@ const show = (options: string | {
   let root: Element = document.body
   const dialog = new Dialog()
   const page = document.body.firstElementChild
-  if (page && page.tagName === 'S-PAGE') {
-    root = page
-  }
+  if (page && page.tagName === 'S-PAGE') root = page
   if (typeof options === 'string') {
     const text = document.createElement('div')
     text.slot = 'text'

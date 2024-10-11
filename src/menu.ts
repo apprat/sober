@@ -1,5 +1,6 @@
 import { useElement, JSXAttributes } from './core/element.js'
-import { Theme } from './core/enum.js'
+import { Theme } from './page.js'
+import { Fold } from './fold.js'
 import './ripple.js'
 
 const name = 's-menu'
@@ -42,27 +43,29 @@ export class Menu extends useElement({
 
 const itemName = 's-menu-item'
 const itemProps = {
-  checked: false
+  checked: false,
+  folded: true
 }
 
 const itemStyle = /*css*/`
 :host{
   display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
+  margin: 4px 8px;
+}
+.container{
+  display: flex;
   align-items: center;
   height: 40px;
-  margin: 4px 8px;
-  flex-shrink: 0;
   border-radius: 24px;
-  cursor: pointer;
-  position: relative;
   padding: 0 20px;
+  flex-shrink: 0;
 }
-:host([checked=true]){
+:host([checked=true]) .container{
   background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
   color: var(--s-color-on-secondary-container, ${Theme.colorOnSecondaryContainer});
-}
-:host([checked=true]) ::slotted(svg){
-  fill: currentColor;
 }
 .text{
   flex-grow: 1;
@@ -70,13 +73,39 @@ const itemStyle = /*css*/`
   display: flex;
   align-items: center;
 }
-::slotted(svg){
-  fill: var(--s-color-on-surface-variant, #46464f);
+.toggle-icon{
+  width: 24px;
+  height: 24px;
+  display: none;
+  margin-right: -8px;
+  margin-left: 12px;
+  transform: rotate(-90deg);
+  transition: transform .2s ease-out;
+  fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
-::slotted([slot]){
+.show-menu .toggle-icon{
+  display: block;
+}
+:host([folded=false]) .toggle-icon{
+  transform: rotate(0deg);
+}
+.fold{
+  flex-shrink: 0;
+}
+.show-menu+.fold{
+  margin: 0 -8px;
+}
+.menu{
+  display: block;
+  padding-top: 8px;
+}
+::slotted([slot=start]),
+::slotted([slot=end]){
   height: 24px;
   width: 24px;
   flex-shrink: 0;
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
+  fill: currentColor;
 }
 ::slotted([slot=start]){
   margin-left: -4px;
@@ -86,22 +115,53 @@ const itemStyle = /*css*/`
   margin-right: -8px;
   margin-left: 12px;
 }
+:host([checked=true]) ::slotted([slot=start]),
+:host([checked=true]) ::slotted([slot=end]){
+  color: currentColor;
+}
+::slotted([slot=menu]){
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+}
 `
 
 const itemTemplate = /*html*/`
-<slot name="start"></slot>
-<div class="text" part="text">
-  <slot></slot>
-</div>
-<slot name="end"></slot>
-<s-ripple attached="true"></s-ripple>
+<s-ripple class="container" part="container">
+  <slot name="start"></slot>
+  <div class="text" part="text">
+    <slot></slot>
+  </div>
+  <slot name="end">
+    <svg viewBox="0 -960 960 960" class="toggle-icon">
+      <path d="M480-360 280-560h400L480-360Z"></path>
+    </svg>
+  </slot>
+</s-ripple>
+<s-fold class="fold" part="fold" folded="${itemProps.folded}">
+  <slot name="menu" class="menu"></slot>
+</s-fold>
 `
 
 export class MenuItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
-  syncProps: ['checked']
+  syncProps: ['checked', 'folded'],
+  setup(shadowRoot) {
+    const container = shadowRoot.querySelector('.container')!
+    const fold = shadowRoot.querySelector('.fold') as Fold
+    const menu = shadowRoot.querySelector('slot[name=menu]') as HTMLSlotElement
+    fold.addEventListener('click', (event) => event.stopPropagation())
+    menu.addEventListener('slotchange', () => container.classList[menu.assignedElements().length > 0 ? 'add' : 'remove']('show-menu'))
+    container.addEventListener('click', () => {
+      if (!container.classList.contains('show-menu')) return
+      this.folded = !this.folded
+    })
+    return {
+      props: {
+        folded: (value) => fold.folded = value
+      }
+    }
+  }
 }) { }
 
 Menu.define(name)

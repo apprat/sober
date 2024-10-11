@@ -1,5 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
-import { Theme } from './core/enum.js'
+import { Theme } from './page.js'
 import { Popup } from './popup.js'
 import { Field } from './field.js'
 import Select from './core/select.js'

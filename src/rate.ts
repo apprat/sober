@@ -1,5 +1,5 @@
 import { useElement, JSXAttributes, LowercaseKeys } from './core/element.js'
-import { Theme } from './core/enum.js'
+import { Theme } from './page.js'
 
 const name = 's-rate'
 const props = {

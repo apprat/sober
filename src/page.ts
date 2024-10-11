@@ -1,5 +1,79 @@
 import { useElement, JSXAttributes } from './core/element.js'
-import { Theme } from './core/enum.js'
+
+export const enum Theme {
+  colorScrim = '#000000',
+  colorPrimary = '#5256a9',
+  colorOnPrimary = '#ffffff',
+  colorPrimaryContainer = '#e1e0ff',
+  colorOnPrimaryContainer = '#090764',
+  colorSecondary = '#5d5d72',
+  colorOnSecondary = '#ffffff',
+  colorSecondaryContainer = '#e2e0f9',
+  colorOnSecondaryContainer = '#191a2c',
+  colorTertiary = '#79536a',
+  colorOnTertiary = '#ffffff',
+  colorTertiaryContainer = '#ffd8ed',
+  colorOnTertiaryContainer = '#2e1125',
+  colorError = '#ba1a1a',
+  colorOnError = '#ffffff',
+  colorErrorContainer = '#ffdad6',
+  colorOnErrorContainer = '#410002',
+  colorBackground = '#fffbff',
+  colorOnBackground = '#1c1b1f',
+  colorOutline = '#777680',
+  colorOutlineVariant = '#c7c5d0',
+  colorSurface = '#fffbff',
+  colorOnSurface = '#1c1b1f',
+  colorSurfaceVariant = '#e4e1ec',
+  colorOnSurfaceVariant = '#46464f',
+  colorInverseSurface = '#313034',
+  colorInverseOnSurface = '#f3eff4',
+  colorInversePrimary = '#c0c1ff',
+  colorSurfaceContainer = '#f0edf1',
+  colorSurfaceContainerHigh = '#eae7ec',
+  colorSurfaceContainerHighest = '#e5e1e6',
+  colorSurfaceContainerLow = '#f6f2f7',
+  colorSurfaceContainerLowest = '#ffffff',
+
+  colorDarkPrimary = '#c0c1ff',
+  colorDarkOnPrimary = '#222578',
+  colorDarkPrimaryContainer = '#3a3d8f',
+  colorDarkOnPrimaryContainer = '#e1e0ff',
+  colorDarkSecondary = '#c5c4dd',
+  colorDarkOnSecondary = '#2e2f42',
+  colorDarkSecondaryContainer = '#454559',
+  colorDarkOnSecondaryContainer = '#e2e0f9',
+  colorDarkTertiary = '#e8b9d4',
+  colorDarkOnTertiary = '#46263b',
+  colorDarkTertiaryContainer = '#5f3c52',
+  colorDarkOnTertiaryContainer = '#ffd8ed',
+  colorDarkError = '#ffb4ab',
+  colorDarkOnError = '#690005',
+  colorDarkErrorContainer = '#93000a',
+  colorDarkOnErrorContainer = '#ffb4ab',
+  colorDarkBackground = '#1c1b1f',
+  colorDarkOnBackground = '#e5e1e6',
+  colorDarkOutline = '#918f9a',
+  colorDarkOutlineVariant = '#46464f',
+  colorDarkSurface = '#1c1b1f',
+  colorDarkOnSurface = '#e5e1e6',
+  colorDarkSurfaceVariant = '#46464f',
+  colorDarkOnSurfaceVariant = '#c7c5d0',
+  colorDarkInverseSurface = '#e5e1e6',
+  colorDarkInverseOnSurface = '#313034',
+  colorDarkInversePrimary = '#5256a9',
+  colorDarkSurfaceContainer = '#201f23',
+  colorDarkSurfaceContainerHigh = '#2a292d',
+  colorDarkSurfaceContainerHighest = '#353438',
+  colorDarkSurfaceContainerLow = '#1c1b1f',
+  colorDarkSurfaceContainerLowest = '#0e0e11',
+
+  elevationLevel1 = '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12)',
+  elevationLevel2 = '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12)',
+  elevationLevel3 = '0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12)',
+  elevationLevel4 = '0 8px 10px -5px rgba(0, 0, 0, .2), 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12)',
+  elevationLevel5 = '0 10px 14px -6px rgba(0, 0, 0, .2), 0 22px 35px 3px rgba(0, 0, 0, .14), 0 8px 42px 7px rgba(0, 0, 0, .12)',
+}
 
 const name = 's-page'
 const props = {
@@ -134,7 +208,45 @@ const style = /*css*/`
 
 const template = /*html*/`<slot></slot>`
 
-export class Page extends useElement({ style, template, props, syncProps: ['theme'] }) { }
+const styleElement = document.createElement('style')
+styleElement.textContent = /*css*/`
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}`
+
+export class Page extends useElement({
+  style, template, props, syncProps: ['theme'],
+  setup() {
+    const toggle = (theme: typeof props['theme'], trigger?: HTMLElement) => {
+      if (theme === this.theme) return
+      //@ts-ignore
+      if (!document.startViewTransition) {
+        this.theme = theme
+        return
+      }
+      const info = { x: innerWidth / 2, y: 0 }
+      if (trigger) {
+        const rect = trigger.getBoundingClientRect()
+        info.x = rect.x + rect.width / 2
+        info.y = rect.y + rect.height / 2
+      }
+      document.head.appendChild(styleElement)
+      //@ts-ignore
+      const transition = document.startViewTransition(() => this.theme = theme)
+      const radius = Math.hypot(Math.max(info.x, innerWidth - info.x), Math.max(info.y, innerHeight - info.y))
+      transition.ready.then(() => document.documentElement.animate(
+        { clipPath: [`circle(0px at ${info.x}px ${info.y}px)`, `circle(${radius}px at ${info.x}px ${info.y}px)`] },
+        { duration: 400, easing: 'ease-out', pseudoElement: '::view-transition-new(root)' }
+      ))
+      transition.finished.then(() => document.head.removeChild(styleElement))
+    }
+    return {
+      expose: { toggle }
+    }
+  }
+}) { }
 
 Page.define(name)
 

@@ -1,5 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
-import { Theme } from './core/enum.js'
+import { Theme } from './page.js'
 
 const name = 's-bottom-sheet'
 const props = {
@@ -91,7 +91,29 @@ const template = /*html*/`
 </div>
 `
 
-export class BottomSheet extends useElement({
+type View = HTMLElement | ((bottomSheet: BottomSheet) => void)
+
+const show = (options: View | {
+  root?: Element
+  view: View
+}) => {
+  let root: Element = document.body
+  const page = document.body.firstElementChild
+  if (page && page.tagName === 'S-PAGE') root = page
+  const bottomSheet = new BottomSheet()
+  if (typeof options === 'function' || options instanceof HTMLElement) {
+    options instanceof HTMLElement ? bottomSheet.appendChild(options) : options(bottomSheet)
+  } else {
+    if (options.root) root = options.root
+    options.view instanceof HTMLElement ? bottomSheet.appendChild(options.view) : options.view(bottomSheet)
+  }
+  root.appendChild(bottomSheet)
+  bottomSheet.addEventListener('dismissed', () => root.removeChild(bottomSheet))
+  requestAnimationFrame(bottomSheet.show)
+  return bottomSheet
+}
+
+class BottomSheet extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLElement
@@ -99,25 +121,51 @@ export class BottomSheet extends useElement({
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const animationOptions = { duration: 200, easing: 'ease-out' }
-    const show = () => {
+    const show = (source?: EventShowSource) => {
+      if (!this.dispatchEvent(new CustomEvent('show', { cancelable: true, detail: { source } }))) return
       wrapper.classList.add('show')
-      container.animate([{ transform: 'translateY(100%)', top: 0 }, { transform: 'translateY(0%)', top: 0 }], animationOptions)
+      const animation = container.animate([{ transform: 'translateY(100%)', top: 0 }, { transform: 'translateY(0%)', top: 0 }], animationOptions)
       this.dispatchEvent(new Event('show'))
+      animation.addEventListener('finish', () => this.dispatchEvent(new Event('showed')))
     }
-    const dismiss = () => {
+    const dismiss = (source?: EventDismissSource) => {
+      if (!this.dispatchEvent(new CustomEvent('dismiss', { cancelable: true, detail: { source } }))) return
       wrapper.classList.remove('show')
-      container.animate([{ transform: 'translateY(0%)', top: 0 }, { transform: 'translateY(100%)', top: 0 }], animationOptions)
+      const animation = container.animate([{ transform: 'translateY(0%)', top: 0 }, { transform: 'translateY(100%)', top: 0 }], animationOptions)
       this.dispatchEvent(new Event('dismiss'))
+      animation.addEventListener('finish', () => this.dispatchEvent(new Event('dismissed')))
     }
-    trigger.addEventListener('click', show)
-    scrim.addEventListener('click', dismiss)
+    trigger.addEventListener('click', () => show('TRIGGER'))
+    scrim.addEventListener('click', () => dismiss('SCRIM'))
     return {
-      expose: { show, dismiss }
+      expose: {
+        show: () => show(),
+        dismiss: () => dismiss()
+      }
     }
   }
-}) { }
+}) {
+  static readonly show = show
+}
 
 BottomSheet.define(name)
+
+export { BottomSheet }
+
+type EventShowSource = 'TRIGGER'
+type EventDismissSource = 'SCRIM'
+
+interface EventMap extends HTMLElementEventMap {
+  show: CustomEvent<{ source?: EventShowSource }>
+  showed: Event
+  dismiss: CustomEvent<{ source?: EventDismissSource }>
+  dismissed: Event
+}
+
+interface BottomSheet {
+  addEventListener<K extends keyof EventMap>(type: K, listener: (this: BottomSheet, ev: EventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof EventMap>(type: K, listener: (this: BottomSheet, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
+}
 
 declare global {
   namespace JSX {

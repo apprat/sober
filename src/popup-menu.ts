@@ -1,5 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
-import { Theme } from './core/enum.js'
+import { Theme } from './page.js'
 import { Popup } from './popup.js'
 import './ripple.js'
 import './scroll-view.js'
@@ -29,13 +29,13 @@ const style = /*css*/`
 }
 ::slotted(s-popup-menu[group=start]){
   border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
-  margin-top: 4px;
-  padding-top: 4px;
+  margin-top: 2px;
+  padding-top: 2px;
 }
 ::slotted(s-popup-menu[group=end]){
   border-bottom: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
-  margin-bottom: 4px;
-  padding-bottom: 4px;
+  margin-bottom: 2px;
+  padding-bottom: 2px;
 }
 `
 

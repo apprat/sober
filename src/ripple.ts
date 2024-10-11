@@ -1,5 +1,5 @@
 import { useElement, JSXAttributes } from './core/element.js'
-import { device } from './core/utils.js'
+import { device } from './core/utils/device.js'
 
 const name = 's-ripple'
 const props = {
@@ -95,10 +95,11 @@ export class Ripple extends useElement({
       const p = (state.parentNode ?? this)
       p.setAttribute('rippled', '')
       const keyframes = { transform: 'translate(-50%, -50%) scale(1)', opacity: 1, width: `${size}px`, height: `${size}px`, left: `${coordinate.x}`, top: `${coordinate.y}` }
-      ripple.animate([{ ...keyframes, transform: 'translate(-50%, -50%) scale(0)' }, keyframes], { duration: 800, fill: 'forwards', easing: 'cubic-bezier(.2, .9, .1, .9)' })
+      const animation = ripple.animate([{ ...keyframes, transform: 'translate(-50%, -50%) scale(0)' }, keyframes], { duration: 800, fill: 'forwards', easing: 'cubic-bezier(.2, .9, .1, .9)' })
       const remove = () => {
         p.removeAttribute('rippled')
-        ripple.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 800, fill: 'forwards' })
+        const time = Number(animation.currentTime)
+        ripple.animate([{ opacity: 1 }, { opacity: 0 }], { duration: time > 600 ? 200 : 800 - time, fill: 'forwards' })
       }
       return remove
     }

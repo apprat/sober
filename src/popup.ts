@@ -1,6 +1,6 @@
 import { useElement, JSXAttributes, LowercaseKeys } from './core/element.js'
-import { getStackingContext } from './core/utils.js'
-import { Theme } from './core/enum.js'
+import { getStackingContext } from './core/utils/getStackingContext.js'
+import { Theme } from './page.js'
 
 const name = 's-popup'
 const props = {

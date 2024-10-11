@@ -1,6 +1,6 @@
 import { useElement, JSXAttributes, LowercaseKeys } from './core/element.js'
-import { device } from './core/utils.js'
-import { Theme } from './core/enum.js'
+import { device } from './core/utils/device.js'
+import { Theme } from './page.js'
 
 const name = 's-slider'
 const props = {

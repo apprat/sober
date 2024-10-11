@@ -12,7 +12,7 @@ const page = document.body.firstElementChild
 if (page && page.tagName === 'S-PAGE') {
   page.appendChild(tooltip)
   fab.addEventListener('click', () => {
-    page.theme = page.theme === 'dark' ? 'light' : 'dark'
+    page.toggle(page.theme === 'dark' ? 'light' : 'dark', fab)
     icon.type = page.theme === 'dark' ? 'light_mode' : 'dark_mode'
   })
 }

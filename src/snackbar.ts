@@ -5,6 +5,7 @@ import { Theme } from './page.js'
 const name = 's-snackbar'
 const props = {
   type: 'basic' as 'basic' | 'error',
+  position: 'auto' as 'auto' | 'top-center' | 'bottom-center',
   duration: 4000
 }
 
@@ -50,10 +51,6 @@ const style = /*css*/ `
   filter: opacity(0);
   transition: transform .2s, filter .2s;
   transition-timing-function: ease-out;
-}
-.wrapper.show .container{
-  transform: translateY(0%);
-  filter: opacity(1);
 }
 :host([type=error]) .container{
   background: var(--s-color-error, ${Theme.colorError});
@@ -118,6 +115,25 @@ const style = /*css*/ `
     min-width: 240px;
   }
 }
+:host([position=bottom-center]) .wrapper {
+  --offset-direction: -1;
+}
+:host([position=bottom-center]) .container{
+  transform: translateY(calc(100% - 16px));
+  min-width: 320px;
+}
+:host([position=top-center]) .wrapper{
+  align-items: flex-start;
+  --offset-direction: 1;
+}
+:host([position=top-center]) .container{
+  transform: translateY(calc(-100% - 16px));
+  min-width: 240px;
+}
+.wrapper.show .container{
+  transform: translateY(0%);
+  filter: opacity(1);
+}
 `
 
 const template = /*html*/`
@@ -144,6 +160,7 @@ const show = (options: string | {
   root?: Element
   text: string
   type?: typeof props['type']
+  position?: typeof props['position']
   duration?: number
   icon?: string | Element
   action?: string | {
@@ -164,6 +181,7 @@ const show = (options: string | {
     if (options.root) root = options.root
     snackbar.textContent = options.text
     snackbar.type = options.type ?? 'basic'
+    snackbar.position = options.position ?? 'auto'
     if (options.icon) {
       const icon = document.createElement('s-icon')
       icon.slot = 'icon'
@@ -195,10 +213,35 @@ const show = (options: string | {
   return snackbar
 }
 
-const task: { height: number, wrapper: HTMLElement }[] = []
+const task: { height: number, wrapper: HTMLElement, position: 'top-center' | 'bottom-center', propPosition: typeof props['position'] }[] = []
+const isMobileQuery: MediaQueryList = window.matchMedia('(pointer: coarse)')
+let isMobile: boolean = isMobileQuery.matches
+isMobileQuery.addEventListener('change', (query) => {
+  isMobile = query.matches
+  // debugger
+  if (task.length > 0) {
+    for (const item of task) {
+      if (item.propPosition === 'auto') {
+        item.position = isMobile ? 'top-center' : 'bottom-center'
+        // item.wrapper.style.setProperty('--offset', '0px')
+      }
+    }
+    let offsetTop = 0, offsetBottom = 0;
+    for (const item of task) {
+      if (item.position === 'top-center') {
+        item.wrapper.style.setProperty('--offset', `${offsetTop}px`)
+        offsetTop += item.height + 8
+      }
+      if (item.position === 'bottom-center') {
+        item.wrapper.style.setProperty('--offset', `${offsetBottom}px`)
+        offsetBottom += item.height + 8
+      }
+    }
+  }
+})
 
 class Snackbar extends useElement({
-  style, template, props, syncProps: ['type'],
+  style, template, props, syncProps: ['type', 'position'],
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
     const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
@@ -206,6 +249,7 @@ class Snackbar extends useElement({
     const action = shadowRoot.querySelector('slot[name=action]') as HTMLElement
     const state = { timer: 0, task: null as null | typeof task[number] }
     const show = () => {
+      // debugger
       if (wrapper.classList.contains('show')) return
       const stackingContext = getStackingContext(shadowRoot)
       if (stackingContext.top !== 0 || stackingContext.left !== 0) {
@@ -214,14 +258,17 @@ class Snackbar extends useElement({
         wrapper.style.top = `${0 - stackingContext.top}px`
         wrapper.style.left = `${0 - stackingContext.left}px`
       }
+      const position = this.position === 'auto' ? (isMobile ? 'top-center' : 'bottom-center') : this.position
       let offset = container.offsetHeight + 8
       if (task.length > 0) {
         for (const item of task) {
-          item.wrapper.style.setProperty('--offset', `${offset}px`)
-          offset += item.height + 8
+          if (item.position === position) {
+            item.wrapper.style.setProperty('--offset', `${offset}px`)
+            offset += item.height + 8
+          }
         }
       }
-      task.unshift(state.task = { height: container.offsetHeight, wrapper })
+      task.unshift(state.task = { height: container.offsetHeight, wrapper, position: position, propPosition: this.position })
       wrapper.classList.add('show')
       this.dispatchEvent(new Event('show'))
       if (this.duration > 0) state.timer = setTimeout(dismiss, this.duration)
@@ -232,10 +279,13 @@ class Snackbar extends useElement({
       wrapper.classList.remove('show')
       this.dispatchEvent(new Event('dismiss'))
       const indexOf = task.indexOf(state.task!)
+      const position = this.position === 'auto' ? (isMobile ? 'top-center' : 'bottom-center') : this.position
       for (let i = indexOf + 1; i < task.length; i++) {
         const item = task[i]
-        const offset = Number(item.wrapper.style.getPropertyValue('--offset').slice(0, -2))
-        item.wrapper.style.setProperty('--offset', `${offset - 8 - container.offsetHeight}px`)
+        if (item.position === position) {
+          const offset = Number(item.wrapper.style.getPropertyValue('--offset').slice(0, -2))
+          item.wrapper.style.setProperty('--offset', `${offset - 8 - container.offsetHeight}px`)
+        }
       }
       task.splice(indexOf, 1)
     }

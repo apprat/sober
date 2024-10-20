@@ -985,8 +985,29 @@
       <s-button type="text" slot="action"> 关闭 </s-button>
     </s-snackbar>
 
+    <s-snackbar duration="0">
+      <s-button slot="trigger"> Snackbar 4 </s-button>
+      <s-icon slot="icon" type="star"></s-icon>
+      Snackbar Message 4
+      <s-button type="text" slot="action"> 关闭 </s-button>
+    </s-snackbar>
+
+     <s-snackbar duration="0">
+      <s-button slot="trigger"> Snackbar 5 </s-button>
+      <div slot="icon"></div>
+      Snackbar Message 5
+    </s-snackbar>
+
     <s-button
-      onclick="window.customElements.get('s-snackbar').show({text: `提示：${new Date}`, duration:Math.max( Math.random()*10000, 4000)})">Snackbar2</s-button>
+      onclick="window.customElements.get('s-snackbar').show({text: `提示：${new Date}`, duration:Math.max( Math.random()*10000, 4000)})">Snackbar 6</s-button>
+    <s-button
+      onclick="window.customElements.get('s-snackbar').show({text: `提示：${new Date}`, icon: 
+        '<svg viewBox=\&quot;0 -960 960 960\&quot;><path d=\&quot;\M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z&quot;></path></svg>',
+        duration:0})">Snackbar 7</s-button>
+    <s-button
+      onclick="let svg = document.createElement('svg');
+      svg.innerHTML='<svg viewBox=\&quot;0 -960 960 960\&quot;><path d=\&quot;\M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z&quot;></path></svg>';
+      window.customElements.get('s-snackbar').show({text: `提示：${new Date}`, icon: svg, duration:0})">Snackbar 8</s-button>
     <hr>
     <s-tooltip>
       <s-button slot="trigger">Tooltip</s-button>

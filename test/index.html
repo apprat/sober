@@ -968,25 +968,46 @@
     </s-popup-menu>
     <hr>
     <s-snackbar duration="0">
-      <s-button slot="trigger"> Snackbar 1 </s-button>
+      <s-button slot="trigger"> Snackbar 1 (No Duration) </s-button>
       Snackbar Message 1
       <s-button type="text" slot="action"> 关闭 </s-button>
     </s-snackbar>
 
-    <s-snackbar duration="0" type="warning">
-      <s-button slot="trigger"> Snackbar 2 </s-button>
+    <s-snackbar duration="0" type="warning" position="top-center">
+      <s-button slot="trigger"> Snackbar 2 (Top Center) </s-button>
       Snackbar Message 2
       <s-button type="text" slot="action"> 关闭 </s-button>
     </s-snackbar>
 
-    <s-snackbar duration="0" type="error">
-      <s-button slot="trigger"> Snackbar 3 </s-button>
+    <s-snackbar duration="0" type="error" position="bottom-center">
+      <s-button slot="trigger"> Snackbar 3 (Bottom Center) </s-button>
       Snackbar Message 3
       <s-button type="text" slot="action"> 关闭 </s-button>
     </s-snackbar>
 
+    <s-snackbar duration="0">
+      <s-button slot="trigger"> Snackbar 4 (Custom Icon) </s-button>
+      <s-icon slot="icon" type="star"></s-icon>
+      Snackbar Message 4
+      <s-button type="text" slot="action"> 关闭 </s-button>
+    </s-snackbar>
+
+    <s-snackbar>
+      <s-button slot="trigger"> Snackbar 5 (No Icon) </s-button>
+      <div slot="icon"></div>
+      Snackbar Message 5
+    </s-snackbar>
+
     <s-button
-      onclick="window.customElements.get('s-snackbar').show({text: `提示：${new Date}`, duration:Math.max( Math.random()*10000, 4000)})">Snackbar2</s-button>
+      onclick="window.customElements.get('s-snackbar').show({text: `提示：${new Date}`, duration:Math.max( Math.random()*10000, 4000)})">Snackbar 6 (Dynamic) </s-button>
+    <s-button
+      onclick="window.customElements.get('s-snackbar').show({text: `提示：${new Date}`, position: 'top-center', icon: 
+        '<svg viewBox=\&quot;0 -960 960 960\&quot;><path d=\&quot;\M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z&quot;></path></svg>',
+        duration:Math.max( Math.random()*10000, 4000)})">Snackbar 7 (Dynamic with SVG String) </s-button>
+    <s-button
+      onclick="let svg = document.createElement('svg');
+      svg.innerHTML='<svg viewBox=\&quot;0 -960 960 960\&quot;><path d=\&quot;\M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z&quot;></path></svg>';
+      window.customElements.get('s-snackbar').show({text: `提示：${new Date}`, icon: svg, duration:Math.max( Math.random()*10000, 4000)})">Snackbar 8 (Dynamic with SVG Element) </s-button>
     <hr>
     <s-tooltip>
       <s-button slot="trigger">Tooltip</s-button>

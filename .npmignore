@@ -2,6 +2,8 @@
 src/
 node_modules/
 .gitattributes
+package-lock.json
+yarn.lock
 pnpm-lock.yaml
 tsconfig.json
 dev/

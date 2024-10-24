@@ -17,6 +17,7 @@ const style = /*css*/`
   border-radius: 20px;
   height: 40px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 `
 const template = /*html*/`<slot></slot>`
@@ -31,15 +32,15 @@ export class SegmentedButton extends useElement({
         get value() {
           return select.value
         },
-        set value(value) {
-          select.value = value
-        },
         get options() {
           return select.selects
         },
         get selectedIndex() {
           return select.selectedIndex
         },
+      },
+      props: {
+        value: (value) => select.value = value
       }
     }
   }

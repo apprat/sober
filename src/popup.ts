@@ -4,7 +4,7 @@ import { Theme } from './page.js'
 
 const name = 's-popup'
 const props = {
-  showAlign: 'center' as 'center' | 'left' | 'right'
+  align: 'center' as 'center' | 'left' | 'right'
 }
 
 const style = /*css*/`
@@ -106,7 +106,7 @@ export class Popup extends useElement({
           right: { value: rect.x + rect.width - cWidth, origin: 'right' },
           top: { value: rect.top - cHeight, origin: 'bottom' }
         }
-        if (this.showAlign === 'left') {
+        if (this.align === 'left') {
           position.origin[0] = 'right'
           position.left = rect.x - cWidth
           position.top = rect.y
@@ -116,7 +116,7 @@ export class Popup extends useElement({
             top: { value: rect.y + rect.height - cHeight, origin: 'bottom' }
           }
         }
-        if (this.showAlign === 'right') {
+        if (this.align === 'right') {
           position.origin[0] = 'left'
           position.left = rect.x + rect.width
           position.top = rect.y

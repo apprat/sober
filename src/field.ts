@@ -13,7 +13,9 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
   height: 48px;
+  min-height: inherit;
   font-size: .875rem;
+  flex-shrink: 0;
   --field-padding: 16px;
   --field-border-radius: 4px;
   --field-border-width: 1px;
@@ -23,6 +25,7 @@ const style = /*css*/`
 .container{
   display: flex;
   height: 100%;
+  min-height: inherit;
 }
 .side{
   position: relative;
@@ -74,6 +77,7 @@ const style = /*css*/`
   margin: 0 calc(var(--field-border-radius) * -1);
   flex-grow: 1;
   position: static;
+  max-width: 100%;
 }
 .box::before,
 .box::after{
@@ -89,7 +93,9 @@ const style = /*css*/`
   display: flex;
   pointer-events: none;
   position: relative;
+  min-height: 100%;
   height: 0;
+  top: -100%;
 }
 .legend::before,
 .legend::after{
@@ -103,25 +109,22 @@ const style = /*css*/`
   content: '';
 }
 .label{
-  display: flex;
-  align-items: center;
-  transform: translateY(-50%) scale(.8571428571428571);
   color: var(--field-border-color);
-  transition: color .1s ease-out, transform .1s ease-out;
   position: relative;
-  height: fit-content;
-}
-::slotted([slot=label]){
-  height: 48px;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  line-height: 1;
+  height: 100%;
 }
 :host([focused=true]) .label{
   color: var(--s-color-primary, ${Theme.colorPrimary});
 }
-:host([labelfixed=false]) .label{
+::slotted([slot=label]){
+  height: 100%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  transform: translateY(-50%) scale(.8571428571428571);
+  transition: color .1s ease-out, transform .1s ease-out;
+}
+:host([labelfixed=false]) ::slotted([slot=label]){
   transform: translateY(0) scale(1);
 }
 .left,.right{
@@ -162,12 +165,12 @@ const template = /*html*/`
 <div class="container side">
   <slot name="start" class="start side cell"></slot>
   <div class="box side">
+    <slot name="view" class="view"></slot>
     <div class="legend side">
       <div class="left side"></div>
       <slot name="label" class="label"></slot>
       <div class="right side"></div>
     </div>
-    <slot name="view" class="view"></slot>
   </div>
   <slot name="end" class="end side cell"></slot>
 </div>

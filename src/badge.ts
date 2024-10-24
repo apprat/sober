@@ -19,6 +19,7 @@ const style = /*css*/`
   font-size: .625rem;
   box-sizing: border-box;
   vertical-align: middle;
+  flex-shrink: 0;
 }
 :host(:empty){
   width: 8px;

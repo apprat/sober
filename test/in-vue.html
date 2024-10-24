@@ -71,6 +71,10 @@
     <s-slider max="10" v-model="state.num" type="range"></s-slider>
 
     <s-button @click="state.num=2">改变num {{state.num}}</s-button>
+
+    <s-button @click="theme">改变主题</s-button>
+
+    <s-text-field v-model="state.num" type="text" label="请输入内容"></s-text-field>
   </s-page>
 
   <script>
@@ -95,16 +99,24 @@
             state.adds[key] = state.list[key]
           }
         }
+        const theme = () => {
+          soberTheme.create('#009688', document.querySelector('s-page'))
+        }
         return {
-          state, add
+          state, add, theme
         }
       }
     })
     app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('s-')
     app.mount('#app')
   </script>
-  <script type="module" src="../dist/main.js"></script>
+  <!-- <script type="module" src="../dist/main.js"></script> -->
+  <script src="https://unpkg.com/sober/dist/sober.min.js"></script>
+  <script src="https://unpkg.com/sober-theme/dist/sober-theme.min.js"></script>
   <script type="module" src="./scripts/default.js"></script>
+  <script>
+    console.log(soberTheme)
+  </script>
 </body>
 
 </html>

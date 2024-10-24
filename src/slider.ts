@@ -19,6 +19,7 @@ const style = /*css*/`
   height: 16px;
   cursor: pointer;
   position: relative;
+  flex-shrink: 0;
 }
 :host([disabled=true]){
   pointer-events: none;
@@ -124,7 +125,7 @@ const template = /*html*/`
   <div class="track" part="track"></div>
   <div class="handle" part="handle">
     <div class="thumb" part="thumb"></div>
-    <div class="label" part="label"></div>
+    <div class="label" part="label">${props.value}</div>
   </div>
 </div>
 <input

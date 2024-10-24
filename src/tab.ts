@@ -14,6 +14,7 @@ const style = /*css*/`
   display: flex;
   justify-content: center;
   position: relative;
+  flex-shrink: 0;
   background: var(--s-color-surface, ${Theme.colorSurface});
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
@@ -87,15 +88,15 @@ export class Tab extends useElement({
         get value() {
           return select.value
         },
-        set value(value) {
-          select.value = value
-        },
         get options() {
           return select.selects
         },
         get selectedIndex() {
           return select.selectedIndex
         },
+      },
+      props: {
+        value: (value) => select.value = value
       }
     }
   }

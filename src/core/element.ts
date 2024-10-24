@@ -119,7 +119,16 @@ export const useElement = <
       const setups = options.setup?.apply(this as any, [shadowRoot])
       const exposeDescriptors = Object.getOwnPropertyDescriptors(setups?.expose ?? {})
       for (const key in exposeDescriptors) {
-        Object.defineProperty(this, key, exposeDescriptors[key])
+        const item = exposeDescriptors[key]
+        const old = Object.getOwnPropertyDescriptor(this, key)
+        if (old) {
+          if (item.value) old.value == item.value
+          if (item.get) old.get = item.get
+          if (item.set) old.set = item.set
+          Object.defineProperty(this, key, old)
+          continue
+        }
+        Object.defineProperty(this, key, item)
       }
       for (const key in advance) {
         if (options.syncProps === true || options.syncProps?.includes(key)) {

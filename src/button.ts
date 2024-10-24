@@ -23,7 +23,7 @@ const style = /*css*/`
   cursor: pointer;
   font-size: .875rem;
   font-weight: 500;
-  line-height: 1;
+  flex-shrink: 0;
   white-space: nowrap;
   background: var(--s-color-primary, ${Theme.colorPrimary});
   color: var(--s-color-on-primary, ${Theme.colorOnPrimary});

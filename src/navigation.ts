@@ -18,6 +18,8 @@ const style = /*css*/`
   background: var(--s-color-surface, ${Theme.colorSurface});
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   position: relative;
+  flex-shrink: 0;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 :host([mode=rail]){
   flex-direction: column;
@@ -60,15 +62,15 @@ export class Navigation extends useElement({
         get value() {
           return select.value
         },
-        set value(value) {
-          select.value = value
-        },
         get options() {
           return select.selects
         },
         get selectedIndex() {
           return select.selectedIndex
         },
+      },
+      props: {
+        value: (value) => select.value = value
       }
     }
   }

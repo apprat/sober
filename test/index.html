@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>Test</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta name="viewport"
+    content="width=device-width,viewport-fit=cover,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
   <link rel="stylesheet" href="./styles/default.css">
   <style>
     s-page {
@@ -31,12 +33,106 @@
 <body>
   <s-page>
     <a href="./in-vue.html">In Vue</a>
+    <a href="./test.html">Test</a>
+
+    <div style="background: #009688; height: env(safe-area-inset-bottom);overflow: hidden;">safe-area-inset-bottom</div>
 
     <s-date></s-date>
+    <s-carousel>
+      <img src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel4.jpeg" onclick="console.log('???')">
+      <img src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel3.jpeg">
+      <img src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg">
+    </s-carousel>
+    <hr>
+    <h1>test</h1>
+
+    <s-skeleton></s-skeleton>
+
+    <div style="background: #14756b0d;display: inline-grid;">
+      <div>
+        <div style="background: rgba(0,0,0,.04);height: 40px;">text</div>
+        <div style="background: rgba(0,0,0,.02);height: 100%;">
+          <div style="height: 0;min-height: 100%">
+            <div style="background: red;">labelxx</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <s-field style="height: auto;" labelFixed="false">
+      <div slot="label">卧槽</div>
+      <input type="text" slot="view" style="background: rgba(0,0,0,.02);border: none;outline: none;height: 40px;">
+    </s-field>
+
+    <s-field labelFixed="false" style="height: 64px;">
+      <div slot="label">卧槽</div>
+      <div slot="view">文本</div>
+    </s-field>
+
+    <hr>
+    <s-text-field label="请输入名称" style="margin: 16px;">
+      <s-icon-button slot="start">
+        <s-icon type="star"></s-icon>
+      </s-icon-button>
+      <s-icon-button slot="end">
+        <s-icon type="star"></s-icon>
+      </s-icon-button>
+    </s-text-field>
+
+    <s-text-field label="请输入名称">
+      <s-icon type="star" slot="start"></s-icon>
+      <s-icon type="star" slot="end"></s-icon>
+    </s-text-field>
+
+    <s-text-field label="请输入名称" style="margin: 16px;--text-field-padding: 24px;--text-field-border-radius: 24px;">
+      <s-icon type="star" slot="start"></s-icon>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" slot="end">
+        <path
+          d="M240-160q-33 0-56.5-23.5T160-240q0-33 23.5-56.5T240-320q33 0 56.5 23.5T320-240q0 33-23.5 56.5T240-160Zm240 0q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm240 0q-33 0-56.5-23.5T640-240q0-33 23.5-56.5T720-320q33 0 56.5 23.5T800-240q0 33-23.5 56.5T720-160ZM240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400ZM240-640q-33 0-56.5-23.5T160-720q0-33 23.5-56.5T240-800q33 0 56.5 23.5T320-720q0 33-23.5 56.5T240-640Zm240 0q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Zm240 0q-33 0-56.5-23.5T640-720q0-33 23.5-56.5T720-800q33 0 56.5 23.5T800-720q0 33-23.5 56.5T720-640Z">
+        </path>
+      </svg>
+    </s-text-field>
+
+    <s-text-field label="请输入密码" style="margin: 16px;" value="1123"
+      onchange="customElements.get('s-snackbar').show('change')"
+      oninput="customElements.get('s-snackbar').show(this.value)"
+      onfocus="customElements.get('s-snackbar').show('focus')"
+      onblur="customElements.get('s-snackbar').show('blur')">
+    </s-text-field>
+
+    <s-text-field label="请输入数字" style="margin: 16px;" type="number" value="1123">
+    </s-text-field>
+
+    <s-text-field label="请输入名称星" style="margin: 16px;--padding: 40px" oninput="console.log('input')"
+      onfocus="console.log('focus')" onblur="console.log('blur')"
+      onchange="console.log('change')">
+      <div slot="text">输入错误</div>
+    </s-text-field>
+
+    <s-text-field label="请输入名称星" error="true" style="margin: 16px;" oninput="console.log('input')"
+      onfocus="console.log('focus')" onblur="console.log('blur')"
+      onchange="console.log('change')" countered="true" maxlength="20">
+      <div slot="text">输入错误</div>
+    </s-text-field>
+
+    <s-text-field label="请多行输入框" style="margin: 16px;" multiLine="true" countered="true" maxlength="20"
+      value="嘻嘻嘻">
+      <s-icon-button slot="start">
+        <s-icon type="star"></s-icon>
+      </s-icon-button>
+      <s-icon-button slot="end">
+        <s-icon type="star"></s-icon>
+      </s-icon-button>
+    </s-text-field>
+
+
+    <hr>
 
     <s-fold>
       <s-button slot="trigger">Folder</s-button>
-      <div style="background: #ddd;padding: 24px;">
+      <div style="background: var(--s-color-);padding: 24px;">
         先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。<br /><br />
         宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。<br /><br />
         侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必能裨补阙漏，有所广益。<br /><br />
@@ -148,36 +244,6 @@
         </s-menu-item>
       </s-menu>
     </div>
-
-    <s-field labelFixed="false">
-      <div slot="label">请输入内容</div>
-      <s-button slot="start">按钮</s-button>
-      <div slot="view" style="height: 100%;background: red;width: 56px;margin-left: -24px;"></div>
-    </s-field>
-
-    <s-field style="height: auto;">
-      <div slot="label" style="height: 48px;">请输入内容</div>
-      <s-ripple slot="view" style="height: 200px;display: flex; align-items: center;padding: 0 16px;"
-        onclick="this.parentNode.focused=!this.parentNode.focused;this.parentNode.labelFixed=this.parentNode.focused">请输入内容</s-ripple>
-    </s-field>
-
-    <s-field>
-      <div slot="label">请输入内容</div>
-      <s-icon slot="start" type="home"></s-icon>
-      <div slot="view" onclick="this.parentNode.focused=!this.parentNode.focused">请输入内容啊</div>
-      <s-icon slot="end" type="search"></s-icon>
-    </s-field>
-
-    <s-field style="--field-padding: 24px;--field-border-radius: 24px;">
-      <div slot="label">请输入内容</div>
-      <div slot="view" onclick="this.parentNode.focused=!this.parentNode.focused">请输入内容</div>
-    </s-field>
-
-    <s-menu>
-      <s-menu-item>
-        <div slot="text">文本</div>
-      </s-menu-item>
-    </s-menu>
     <s-button
       onclick="window.customElements.get('s-snackbar').show({text: `提示：${new Date().getMilliseconds()}`, duration: 0, action:{text:'确定'}})">
       <svg slot="start" viewBox="0 -960 960 960">
@@ -331,26 +397,16 @@
     <s-bottom-sheet>
       <s-button slot="trigger">Sheet xxxxxxxxxxxxxxxxxxxxxx</s-button>
       <s-scroll-view style="height: 280px;">
-        <div style="height: 2000px;padding: 24px;">
+        <div style="padding: 24px;">
           先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。<br /><br />
           宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。<br /><br />
           侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必能裨补阙漏，有所广益。<br /><br />
-
-          <s-scroll-view style="height: 200px;background: #eee;">
-            将军向宠，性行淑均，晓畅军事，试用于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。<br /><br />
-            亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。<br /><br />
-            臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
-            先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
-            愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
-            今当远离临表涕零不知所言。
-          </s-scroll-view>
           将军向宠，性行淑均，晓畅军事，试用于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。<br /><br />
           亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。<br /><br />
           臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。<br /><br />
           先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐托付不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。<br /><br />
           愿陛下托臣以讨贼兴复之效，不效则治臣之罪以告先帝之灵。若无兴德之言则责攸之、祎、允等之慢以彰其咎陛下亦宜自谋以咨诹善道察纳雅言深追先帝遗诏臣不胜受恩感激。<br /><br />
           今当远离临表涕零不知所言。
-
         </div>
       </s-scroll-view>
     </s-bottom-sheet>
@@ -538,48 +594,6 @@
       </s-popup-menu>
     </s-popup-menu>
     <hr>
-    <s-text-field label="请输入名称" style="margin: 16px;">
-      <s-icon-button slot="start">
-        <s-icon type="star"></s-icon>
-      </s-icon-button>
-      <input type="text">
-      <s-icon-button slot="end">
-        <s-icon type="star"></s-icon>
-      </s-icon-button>
-    </s-text-field>
-
-    <s-text-field label="请输入名称">
-      <s-icon type="star" slot="start"></s-icon>
-      <input type="text">
-      <s-icon type="star" slot="end"></s-icon>
-    </s-text-field>
-
-    <s-text-field label="请输入名称" style="margin: 16px;--text-field-padding: 24px;--text-field-border-radius: 24px;">
-      <s-icon type="star" slot="start"></s-icon>
-      <input type="text" value="首饰">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" slot="end">
-        <path
-          d="M240-160q-33 0-56.5-23.5T160-240q0-33 23.5-56.5T240-320q33 0 56.5 23.5T320-240q0 33-23.5 56.5T240-160Zm240 0q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm240 0q-33 0-56.5-23.5T640-240q0-33 23.5-56.5T720-320q33 0 56.5 23.5T800-240q0 33-23.5 56.5T720-160ZM240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400ZM240-640q-33 0-56.5-23.5T160-720q0-33 23.5-56.5T240-800q33 0 56.5 23.5T320-720q0 33-23.5 56.5T240-640Zm240 0q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Zm240 0q-33 0-56.5-23.5T640-720q0-33 23.5-56.5T720-800q33 0 56.5 23.5T800-720q0 33-23.5 56.5T720-640Z">
-        </path>
-      </svg>
-    </s-text-field>
-
-    <s-text-field label="请输入名称" style="margin: 16px;--border-radius: 24px;">
-      <input type="password">
-    </s-text-field>
-
-    <s-text-field label="请输入名称" style="margin: 16px;--padding: 40px">
-      <input type="text" placeholder="请输入">
-    </s-text-field>
-
-    <s-text-field label="请输入名称" style="margin: 16px;">
-      <s-icon-button slot="start">
-        <s-icon type="star"></s-icon>
-      </s-icon-button>
-      <textarea placeholder="请输入" style="min-height: 96px;"></textarea>
-    </s-text-field>
-
-    <hr>
     <s-picker onchange="console.log(this.selectedIndex)" style="--padding: 24px;--border-radius: 16px">
       <s-picker-item selected="true">北京</s-picker-item>
       <s-picker-item>上海</s-picker-item>
@@ -656,11 +670,7 @@
       <s-button slot="trigger">Tooltip</s-button>
       提示信息
     </s-tooltip>
-    <s-carousel>
-      <div>xx</div>
-      <div style="background: #ddd;">xx</div>
-      <div>xx</div>
-    </s-carousel>
+
     <hr>
     <s-chip clickable="true">
       a
@@ -904,6 +914,12 @@
       </s-icon-button>
       <!--标题-->
       <div slot="headline"> Title </div>
+      <s-search slot="search" placeholder="搜索...">
+        <s-icon type="close" slot="start"></s-icon>
+        <s-icon-button slot="end">
+          <s-icon type="close"></s-icon>
+        </s-icon-button>
+      </s-search>
       <!--右侧操作按钮-->
       <s-icon-button slot="action">
         <s-icon type="search"></s-icon>
@@ -923,12 +939,6 @@
         </svg>
         <!--标题-->
         <div slot="headline"> Title </div>
-        <s-ripple disabled href="" slot="menu">
-          首页
-        </s-ripple>
-        <s-ripple href="" slot="menu">产品</s-ripple>
-        <s-ripple href="" slot="menu">职位招聘</s-ripple>
-        <s-ripple href="" slot="menu">客服中心</s-ripple>
         <s-tooltip slot="menu-trigger">
           <s-icon-button slot="trigger">
             <s-icon>
@@ -969,6 +979,7 @@
     <hr>
     <s-snackbar duration="0">
       <s-button slot="trigger"> Snackbar 1 </s-button>
+      <s-icon type="add" slot="icon"></s-icon>
       Snackbar Message 1
       <s-button type="text" slot="action"> 关闭 </s-button>
     </s-snackbar>

@@ -9,6 +9,7 @@ const style = /*css*/`
 :host{
   display: block;
   height: 1px;
+  flex-shrink: 0;
   background: var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
   margin: 0 16px;
 }

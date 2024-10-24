@@ -18,7 +18,7 @@ const style = /*css*/`
   cursor: pointer;
   white-space: nowrap;
   height: 40px;
-  --radio-button-color: var(--s-color-primary, ${Theme.colorPrimary});
+  flex-shrink: 0;
 }
 :host([disabled=true]){
   pointer-events: none !important;
@@ -33,7 +33,7 @@ const style = /*css*/`
   -webkit-aspect-ratio: 1;
   border-radius: 50%;
   position: relative;
-  color: var(--radio-button-color);
+  color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 :host([disabled=true]) .container{
   color: var(--s-color-on-surface, ${Theme.colorOnSurface}) !important;

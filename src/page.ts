@@ -2,71 +2,72 @@ import { useElement, JSXAttributes } from './core/element.js'
 
 export const enum Theme {
   colorScrim = '#000000',
-  colorPrimary = '#5256a9',
+
+  colorPrimary = '#006782',
   colorOnPrimary = '#ffffff',
-  colorPrimaryContainer = '#e1e0ff',
-  colorOnPrimaryContainer = '#090764',
-  colorSecondary = '#5d5d72',
+  colorPrimaryContainer = '#baeaff',
+  colorOnPrimaryContainer = '#001f29',
+  colorSecondary = '#4c616b',
   colorOnSecondary = '#ffffff',
-  colorSecondaryContainer = '#e2e0f9',
-  colorOnSecondaryContainer = '#191a2c',
-  colorTertiary = '#79536a',
+  colorSecondaryContainer = '#cfe6f1',
+  colorOnSecondaryContainer = '#071e26',
+  colorTertiary = '#5c5b7e',
   colorOnTertiary = '#ffffff',
-  colorTertiaryContainer = '#ffd8ed',
-  colorOnTertiaryContainer = '#2e1125',
+  colorTertiaryContainer = '#e2dfff',
+  colorOnTertiaryContainer = '#181837',
   colorError = '#ba1a1a',
   colorOnError = '#ffffff',
   colorErrorContainer = '#ffdad6',
   colorOnErrorContainer = '#410002',
-  colorBackground = '#fffbff',
-  colorOnBackground = '#1c1b1f',
-  colorOutline = '#777680',
-  colorOutlineVariant = '#c7c5d0',
-  colorSurface = '#fffbff',
-  colorOnSurface = '#1c1b1f',
-  colorSurfaceVariant = '#e4e1ec',
-  colorOnSurfaceVariant = '#46464f',
-  colorInverseSurface = '#313034',
-  colorInverseOnSurface = '#f3eff4',
-  colorInversePrimary = '#c0c1ff',
-  colorSurfaceContainer = '#f0edf1',
-  colorSurfaceContainerHigh = '#eae7ec',
-  colorSurfaceContainerHighest = '#e5e1e6',
-  colorSurfaceContainerLow = '#f6f2f7',
+  colorBackground = '#fbfcfe',
+  colorOnBackground = '#191c1e',
+  colorOutline = '#70787d',
+  colorOutlineVariant = '#c0c8cc',
+  colorSurface = '#fbfcfe',
+  colorOnSurface = '#191c1e',
+  colorSurfaceVariant = '#dce4e8',
+  colorOnSurfaceVariant = '#40484c',
+  colorInverseSurface = '#2e3132',
+  colorInverseOnSurface = '#eff1f3',
+  colorInversePrimary = '#60d4fe',
+  colorSurfaceContainer = '#edeef0',
+  colorSurfaceContainerHigh = '#e7e8ea',
+  colorSurfaceContainerHighest = '#e1e3e4',
+  colorSurfaceContainerLow = '#f2f4f5',
   colorSurfaceContainerLowest = '#ffffff',
 
-  colorDarkPrimary = '#c0c1ff',
-  colorDarkOnPrimary = '#222578',
-  colorDarkPrimaryContainer = '#3a3d8f',
-  colorDarkOnPrimaryContainer = '#e1e0ff',
-  colorDarkSecondary = '#c5c4dd',
-  colorDarkOnSecondary = '#2e2f42',
-  colorDarkSecondaryContainer = '#454559',
-  colorDarkOnSecondaryContainer = '#e2e0f9',
-  colorDarkTertiary = '#e8b9d4',
-  colorDarkOnTertiary = '#46263b',
-  colorDarkTertiaryContainer = '#5f3c52',
-  colorDarkOnTertiaryContainer = '#ffd8ed',
+  colorDarkPrimary = '#60d4fe',
+  colorDarkOnPrimary = '#003545',
+  colorDarkPrimaryContainer = '#004d62',
+  colorDarkOnPrimaryContainer = '#baeaff',
+  colorDarkSecondary = '#b4cad5',
+  colorDarkOnSecondary = '#1e333c',
+  colorDarkSecondaryContainer = '#354a53',
+  colorDarkOnSecondaryContainer = '#cfe6f1',
+  colorDarkTertiary = '#c5c3ea',
+  colorDarkOnTertiary = '#2d2d4d',
+  colorDarkTertiaryContainer = '#444465',
+  colorDarkOnTertiaryContainer = '#e2dfff',
   colorDarkError = '#ffb4ab',
   colorDarkOnError = '#690005',
   colorDarkErrorContainer = '#93000a',
   colorDarkOnErrorContainer = '#ffb4ab',
-  colorDarkBackground = '#1c1b1f',
-  colorDarkOnBackground = '#e5e1e6',
-  colorDarkOutline = '#918f9a',
-  colorDarkOutlineVariant = '#46464f',
-  colorDarkSurface = '#1c1b1f',
-  colorDarkOnSurface = '#e5e1e6',
-  colorDarkSurfaceVariant = '#46464f',
-  colorDarkOnSurfaceVariant = '#c7c5d0',
-  colorDarkInverseSurface = '#e5e1e6',
-  colorDarkInverseOnSurface = '#313034',
-  colorDarkInversePrimary = '#5256a9',
-  colorDarkSurfaceContainer = '#201f23',
-  colorDarkSurfaceContainerHigh = '#2a292d',
-  colorDarkSurfaceContainerHighest = '#353438',
-  colorDarkSurfaceContainerLow = '#1c1b1f',
-  colorDarkSurfaceContainerLowest = '#0e0e11',
+  colorDarkBackground = '#191c1e',
+  colorDarkOnBackground = '#e1e3e4',
+  colorDarkOutline = '#8a9296',
+  colorDarkOutlineVariant = '#40484c',
+  colorDarkSurface = '#191c1e',
+  colorDarkOnSurface = '#e1e3e4',
+  colorDarkSurfaceVariant = '#40484c',
+  colorDarkOnSurfaceVariant = '#c0c8cc',
+  colorDarkInverseSurface = '#e1e3e4',
+  colorDarkInverseOnSurface = '#2e3132',
+  colorDarkInversePrimary = '#006782',
+  colorDarkSurfaceContainer = '#1d2022',
+  colorDarkSurfaceContainerHigh = '#272a2c',
+  colorDarkSurfaceContainerHighest = '#323537',
+  colorDarkSurfaceContainerLow = '#191c1e',
+  colorDarkSurfaceContainerLowest = '#0c0f10',
 
   elevationLevel1 = '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12)',
   elevationLevel2 = '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12)',
@@ -208,21 +209,16 @@ const style = /*css*/`
 
 const template = /*html*/`<slot></slot>`
 
-const styleElement = document.createElement('style')
-styleElement.textContent = /*css*/`
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}`
-
 export class Page extends useElement({
   style, template, props, syncProps: ['theme'],
   setup() {
     const toggle = (theme: typeof props['theme'], trigger?: HTMLElement) => {
-      if (theme === this.theme) return
-      //@ts-ignore
-      if (!document.startViewTransition) {
+      if (this.theme === theme) return
+      const isDark = matchMedia('(prefers-color-scheme: dark)').matches
+      const getTheme = (theme: typeof props['theme']) => theme === 'auto' ? (isDark ? 'dark' : 'light') : theme
+      const oldTheme = getTheme(this.theme)
+      const newTheme = getTheme(theme)
+      if (oldTheme === newTheme || !document.startViewTransition) {
         this.theme = theme
         return
       }
@@ -232,15 +228,19 @@ export class Page extends useElement({
         info.x = rect.x + rect.width / 2
         info.y = rect.y + rect.height / 2
       }
-      document.head.appendChild(styleElement)
-      //@ts-ignore
+      document.styleSheets[0].insertRule(/*css*/`
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation: none;
+        mix-blend-mode: normal
+      }`, 0)
       const transition = document.startViewTransition(() => this.theme = theme)
       const radius = Math.hypot(Math.max(info.x, innerWidth - info.x), Math.max(info.y, innerHeight - info.y))
       transition.ready.then(() => document.documentElement.animate(
         { clipPath: [`circle(0px at ${info.x}px ${info.y}px)`, `circle(${radius}px at ${info.x}px ${info.y}px)`] },
-        { duration: 400, easing: 'ease-out', pseudoElement: '::view-transition-new(root)' }
+        { duration: 600, easing: 'ease-out', pseudoElement: '::view-transition-new(root)' }
       ))
-      transition.finished.then(() => document.head.removeChild(styleElement))
+      transition.finished.then(() => document.styleSheets[0].deleteRule(0))
     }
     return {
       expose: { toggle }

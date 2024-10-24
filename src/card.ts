@@ -4,7 +4,7 @@ import './ripple.js'
 
 const name = 's-card'
 const props = {
-  type: 'elevated' as 'elevated' | 'filled' | 'outlined',
+  type: 'standard' as 'standard' | 'filled' | 'outlined',
   clickable: false
 }
 
@@ -21,6 +21,7 @@ const style = /*css*/`
   max-width: 280px;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   overflow: hidden;
+  flex-shrink: 0;
 }
 :host([type=filled]){
   background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
@@ -41,6 +42,7 @@ const style = /*css*/`
 .action{
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
 }
 .ripple{
   display: none;
@@ -67,7 +69,7 @@ const style = /*css*/`
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
 ::slotted(s-button[slot=action]){
-  margin: 16px 4px;
+  margin: 16px 0;
 }
 ::slotted(s-button[slot=action]:last-of-type){
   margin-right: 16px;

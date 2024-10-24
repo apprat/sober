@@ -13,6 +13,7 @@ const style = /*css*/`
   flex-direction: column;
   font-size: .875rem;
   padding: 4px 0;
+  flex-shrink: 0;
 }
 :host(:nth-of-type(n+2)){
   border-top: solid 1px var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
@@ -120,7 +121,7 @@ const itemStyle = /*css*/`
   color: currentColor;
 }
 ::slotted([slot=menu]){
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
 }
 `
 

@@ -13,6 +13,7 @@ const style = /*css*/`
   align-items: center;
   position: relative;
   padding: 0 8px;
+  flex-shrink: 0;
 }
 ::slotted([slot=navigation]){
   margin-left: 4px;
@@ -21,7 +22,7 @@ const style = /*css*/`
 ::slotted([slot=logo]){
   margin-left: 12px;
   height: 32px;
-  fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
+  fill: var(--s-color-primary, ${Theme.colorPrimary});
   flex-shrink: 0;
 }
 ::slotted([slot=headline]){
@@ -44,9 +45,15 @@ const style = /*css*/`
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
-::slotted(s-search){
+::slotted([slot=search]){
+  flex-shrink: 0;
   background: var(--s-color-surface, ${Theme.colorSurface});
+  height: 40px;
+  border-radius: 20px;
+  max-width: 100%;
+  margin: 0 4px 0 8px;
 }
 ::slotted(s-appbar){
   height: 100%;
@@ -70,6 +77,7 @@ const template = /*html*/`
 <slot name="headline"></slot>
 <div class="view" part="view">
   <slot></slot>
+  <slot name="search"></slot>
 </div>
 <slot name="action"></slot>
 <slot name="end"></slot>

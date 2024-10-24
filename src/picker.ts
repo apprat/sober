@@ -17,6 +17,7 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
   font-size: .875rem;
+  flex-shrink: 0;
   --picker-border-radius: 4px;
   --picker-border-color: var(--s-color-outline, ${Theme.colorOutline});
   --picker-border-width: 1px;
@@ -62,7 +63,8 @@ svg{
   display: flex;
   flex-direction: column;
   font-size: .875rem;
-  padding: 2px 0;
+  padding: 4px 0;
+  gap: 4px;
 }
 `
 
@@ -120,9 +122,6 @@ export class Picker extends useElement({
         get value() {
           return select.value
         },
-        set value(value) {
-          select.value = value
-        },
         get options() {
           return select.selects
         },
@@ -134,7 +133,8 @@ export class Picker extends useElement({
         dismiss: popup.dismiss.bind(popup)
       },
       props: {
-        label: (value) => label.textContent = value
+        label: (value) => label.textContent = value,
+        value: (value) => select.value = value
       }
     }
   }
@@ -151,7 +151,7 @@ const itemStyle = /*css*/`
   display: flex;
   align-items: center;
   height: 40px;
-  margin: 2px 4px;
+  margin: 0 4px;
   cursor: pointer;
   position: relative;
   border-radius: 4px;

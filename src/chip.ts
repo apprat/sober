@@ -14,6 +14,7 @@ const style = /*css*/`
   align-items: center;
   vertical-align: middle;
   padding: 0 16px;
+  flex-shrink: 0;
   height: 32px;
   border: solid 1px var(--s-color-color-outline, ${Theme.colorOutline});
   border-radius: 8px;

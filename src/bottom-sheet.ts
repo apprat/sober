@@ -49,6 +49,7 @@ const style = /*css*/`
   display: flex;
   flex-direction: column;
   top: 100%;
+  padding-bottom: env(safe-area-inset-bottom);
   --z-index: var(--z-index, 2);
 }
 .show.wrapper .container{

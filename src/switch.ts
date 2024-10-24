@@ -20,6 +20,7 @@ const style = /*css*/`
   aspect-ratio: 1.625;
   -webkit-aspect-ratio: 1.625;
   border-radius: 26px;
+  flex-shrink: 0;
 }
 :host([disabled=true]){
   pointer-events: none;

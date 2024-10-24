@@ -19,6 +19,7 @@ const style = /*css*/`
   font-size: 24px;
   width: calc(1em * 5);
   height: 1em;
+  flex-shrink: 0;
 }
 .track{
   width: 100%;

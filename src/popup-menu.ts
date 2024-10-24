@@ -20,22 +20,23 @@ const style = /*css*/`
   display: block;
 }
 .container{
-  padding: 2px 0;
+  padding: 4px 0;
   max-width: 224px;
   min-height: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 ::slotted(s-popup-menu[group=start]){
   border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
-  margin-top: 2px;
-  padding-top: 2px;
+  margin-top: 4px;
+  padding-top: 4px;
 }
 ::slotted(s-popup-menu[group=end]){
   border-bottom: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
-  margin-bottom: 2px;
-  padding-bottom: 2px;
+  margin-bottom: 4px;
+  padding-bottom: 4px;
 }
 `
 
@@ -66,7 +67,7 @@ export class PopupMenu extends useElement({
     })
     return {
       mounted: () => {
-        if (this.parentNode instanceof PopupMenu) popup.setAttribute('showalign', 'right')
+        if (this.parentNode instanceof PopupMenu) popup.setAttribute('align', 'right')
       },
       expose: { show, dismiss, toggle }
     }
@@ -82,7 +83,7 @@ const itemStyle = /*css*/`
   display: flex;
   align-items: center;
   height: 40px;
-  margin: 2px 4px;
+  margin: 0 4px;
   padding: 0 12px;
   cursor: pointer;
   position: relative;

@@ -17,7 +17,7 @@ const style = /*css*/`
   cursor: pointer;
   white-space: nowrap;
   height: 40px;
-  --checkbox-color: var(--s-color-primary, ${Theme.colorPrimary});
+  flex-shrink: 0;
 }
 :host([disabled=true]){
   pointer-events: none;
@@ -31,7 +31,7 @@ const style = /*css*/`
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   border-radius: 50%;
-  color: var(--checkbox-color);
+  color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 :host([disabled=true]) .container{
   color: var(--s-color-on-surface, ${Theme.colorOnSurface}) !important;

@@ -5,30 +5,41 @@ import { Field } from './field.js'
 const name = 's-text-field'
 const props = {
   label: '',
+  placeholder: '',
   disabled: false,
+  type: 'text' as 'text' | 'number' | 'password',
   error: false,
+  value: '',
+  maxLength: -1,
+  readOnly: false,
+  multiLine: false,
+  countered: false
 }
-
 
 const style = /*css*/`
 :host{
   display: inline-grid;
   vertical-align: middle;
   font-size: .875rem;
-  line-height: 16px;
-  min-width: 280px;
-  min-height: var(--text-field-height);
+  flex-shrink: 0;
+  line-height: 1.6;
+  min-height: 48px;
+  width: 280px;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   --text-field-border-radius: 4px;
   --text-field-border-color: var(--s-color-outline, ${Theme.colorOutline});
   --text-field-padding: 16px;
-  --text-field-height: 48px;
 }
 :host([disabled=true]){
   pointer-events: none;
   opacity: .38;
 }
-.container{
+:host([multiline=true]){
+  height: auto;
+  min-height: 96px;
+  --text-field-padding: 12px;
+}
+.field{
   display: block;
   height: 100%;
   font-size: inherit;
@@ -36,24 +47,28 @@ const style = /*css*/`
   --field-border-color: var(--text-field-border-color);
   --field-padding: var(--text-field-padding);
 }
-:host([error=true]) .container{
+:host([error=true]) .field{
   --s-color-primary: var(--s-color-error, ${Theme.colorError});
   --field-border-color: var(--s-color-error, ${Theme.colorError});
   --field-border-width: 2px;
 }
 .label{
-  height: var(--text-field-height);
+  height: 100%;
 }
-.multi .label{
-  height: calc(var(--text-field-padding) * 2 + 1em);
+:host([multiline=true]) .label{
+  height: fit-content;
+  box-sizing: border-box;
+  padding: var(--text-field-padding) 0;
+  max-height: 100%;
 }
 .view{
   flex-grow: 1;
   padding: 0;
   flex-direction: column;
+  position: relative;
 }
-::slotted(input),
-::slotted(textarea){
+input,
+textarea{
   border: none;
   height: 100%;
   width: 100%;
@@ -63,53 +78,82 @@ const style = /*css*/`
   font-size: inherit;
   color: inherit;
   box-sizing: border-box;
-  line-height: 1;
-  font-family: inherit;
-  display: block;
-}
-::slotted(textarea){
-  resize: none;
-  scrollbar-width: none;
   line-height: inherit;
-  word-wrap: break-word;
-  word-break: break-all;
-  white-space: pre-wrap;
-  min-height: 100%;
-  padding: var(--text-field-padding);
-  height: 0;
-}
-::slotted(input)::placeholder,
-::slotted(textarea)::placeholder{
-  color: var(--text-field-border-color);
-}
-.shadow{
-  width: 100%;
-  height: 0;
-  pointer-events: none;
-  display: none;
-  position: relative;
-}
-.multi .shadow{
+  font-family: inherit;
+  caret-color: var(--s-color-primary, ${Theme.colorPrimary});
   display: block;
+  -moz-appearance: textfield;
 }
-.shadow>span{
+textarea{
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
-  display: block;
-  box-sizing: border-box;
+  height: 100%;
+  resize: none;
+  scrollbar-width: none;
+  display: none;
+}
+input::placeholder,
+textarea::placeholder{
+  color: var(--text-field-border-color);
+}
+input::selection,
+textarea::selection{
+  background: var(--s-color-primary, ${Theme.colorPrimary});
+  color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
+}
+:host([multiline=true]) input,
+.text>.counter{
+  display: none;
+}
+textarea,
+.shadow{
   line-height: inherit;
   word-wrap: break-word;
   word-break: break-all;
   white-space: pre-wrap;
+  box-sizing: border-box;
   padding: var(--text-field-padding);
-  height: auto;
-  visibility: hidden;
-  pointer-events: none;
 }
-.shadow>span::after{
+:host([multiline=true]) textarea,
+:host([multiline=true]) .shadow,
+:host([countered=true]) .counter{
+  display: block;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+}
+.shadow{
+  pointer-events: none;
+  display: none;
+  opacity: 0;
+  width: 100%;
+  min-height: 100%;
+}
+.shadow::after{
   content: ' ';
+}
+.text{
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 var(--text-field-padding);
+  font-size: .75rem;
+  color: var(--text-field-border-color);
+}
+:host([error=true]) .text{
+  color: var(--s-color-error, ${Theme.colorError});
+}
+.text>slot[name=text]{
+  display: block;
+  flex-grow: 1;
+}
+.text>.counter,
+::slotted([slot=text]){
+  margin-top: 4px;
 }
 ::slotted(svg){
   fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
@@ -137,80 +181,106 @@ const style = /*css*/`
 `
 
 const template = /*html*/`
-<s-field class="container" labelFixed="false">
+<s-field class="field" labelFixed="false">
   <div slot="label" class="label"></div>
   <div slot="view" class="view">
-    <div class="shadow">
-      <span></span>
-    </div>
-    <slot id="inputSlot"></slot>
+    <div class="shadow"></div>
+    <input type="text">
+    <textarea></textarea>
   </div>
   <slot slot="start" name="start"></slot>
   <slot slot="end" name="end"></slot>
 </s-field>
+<div class="text">
+  <slot name="text"></slot>
+  <div class="counter"></div>
+</div>
 `
 
 export class TextField extends useElement({
-  style, template, props, syncProps: ['disabled', 'error'],
+  style, template, props, syncProps: ['disabled', 'error', 'multiLine', 'countered'],
   setup(shadowRoot) {
-    const container = shadowRoot.querySelector('.container') as Field
+    const field = shadowRoot.querySelector('.field') as Field
     const label = shadowRoot.querySelector('.label') as HTMLDivElement
-    const inputSlot = shadowRoot.querySelector('#inputSlot') as HTMLSlotElement
-    const inputShaodw = shadowRoot.querySelector('.shadow>span') as HTMLDivElement
-    let input: HTMLInputElement | HTMLTextAreaElement
-    let oldDescriptorSet: ((v: any) => void) | undefined = undefined
-    const onInput = () => {
-      if (input.value !== '') container.labelFixed = true
-      if (input instanceof HTMLTextAreaElement) {
-        inputShaodw.textContent = input.value
-        if (input.offsetHeight !== inputShaodw.offsetHeight) input.style.height = `${inputShaodw.offsetHeight}px`
-      }
+    const textAreaShadow = shadowRoot.querySelector('.shadow')!
+    const counter = shadowRoot.querySelector('.counter')!
+    const inputs = {
+      input: shadowRoot.querySelector('input')!,
+      textarea: shadowRoot.querySelector('textarea')!
     }
-    const obs = new MutationObserver(onInput)
+    const getInput = () => this.multiLine ? inputs.textarea : inputs.input
+    const onCounter = () => {
+      if (!this.countered) return
+      counter.textContent = `${getInput().value.length}/${this.maxLength}`
+    }
+    const onChange = () => this.dispatchEvent(new Event('change'))
     const onFocus = () => {
-      container.labelFixed = true
-      container.focused = true
+      field.labelFixed = true
+      field.focused = true
     }
     const onBlur = () => {
-      if (input.value === '') container.labelFixed = false
-      container.focused = false
+      field.focused = false
+      if (getInput().value === '' && !this.error) field.labelFixed = false
     }
-    const addEvent = () => {
-      input.addEventListener('input', onInput)
-      input.addEventListener('focus', onFocus)
-      input.addEventListener('blur', onBlur)
-      obs.observe(input, { attributeFilter: ['value'] })
-    }
-    const removeEvent = () => {
-      if (!input) return
-      input.removeEventListener('input', onInput)
-      input.removeEventListener('focus', onFocus)
-      input.removeEventListener('blur', onBlur)
-      const descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(input), 'value')
-      if (descriptor && oldDescriptorSet) descriptor.set = oldDescriptorSet
-      input = undefined as never
-      inputShaodw.textContent = ''
-    }
-    inputSlot.addEventListener('slotchange', () => {
-      const [element] = inputSlot.assignedElements()
-      if (!element || (!(element instanceof HTMLInputElement) && !(element instanceof HTMLTextAreaElement))) return removeEvent()
-      element instanceof HTMLTextAreaElement ? container.classList.add('multi') : container.classList.remove('multi')
-      input = element
-      const descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(input), 'value')
-      if (descriptor) {
-        oldDescriptorSet = descriptor.set
-        descriptor.set = (val: string) => {
-          oldDescriptorSet?.apply(input, [val])
-          onInput()
-        }
-        Object.defineProperty(input, 'value', descriptor)
-      }
-      onInput()
-      addEvent()
+    inputs.input.addEventListener('input', onCounter)
+    inputs.input.addEventListener('focus', onFocus)
+    inputs.input.addEventListener('blur', onBlur)
+    inputs.input.addEventListener('change', onChange)
+    inputs.textarea.addEventListener('focus', onFocus)
+    inputs.textarea.addEventListener('blur', onBlur)
+    inputs.textarea.addEventListener('change', onChange)
+    inputs.textarea.addEventListener('input', () => {
+      textAreaShadow.textContent = inputs.textarea.value
+      onCounter()
     })
     return {
+      expose: {
+        get native() {
+          return getInput()
+        },
+        get value() {
+          return getInput().value
+        }
+      },
       props: {
-        label: (value) => label.textContent = value
+        label: (value) => label.textContent = value,
+        type: (value) => inputs.input.type = value,
+        error: (value) => {
+          if (value) {
+            field.labelFixed = true
+            return
+          }
+          if (getInput().value === '') field.labelFixed = false
+        },
+        value: (value) => {
+          inputs.input.value = value
+          inputs.textarea.value = value
+          textAreaShadow.textContent = value
+          onCounter()
+          if (value) field.labelFixed = true
+        },
+        placeholder: (value) => {
+          inputs.input.placeholder = value
+          inputs.textarea.placeholder = value
+        },
+        readOnly: (value) => {
+          inputs.input.readOnly = value
+          inputs.textarea.readOnly = value
+        },
+        maxLength: (value) => {
+          inputs.input.maxLength = value
+          inputs.textarea.maxLength = value
+          onCounter()
+        },
+        multiLine: (value) => {
+          if (value) {
+            inputs.textarea.value = inputs.input.value
+            textAreaShadow.textContent = inputs.input.value
+            return
+          }
+          inputs.input.value = inputs.textarea.value
+        },
+        countered: onCounter
       }
     }
   }

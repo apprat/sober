@@ -15,6 +15,7 @@ const style = /*css*/`
   vertical-align: middle;
   position: relative;
   width: 48px;
+  flex-shrink: 0;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   color: var(--s-color-primary, ${Theme.colorPrimary});

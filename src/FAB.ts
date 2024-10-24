@@ -4,8 +4,7 @@ import './ripple.js'
 
 const name = 's-fab'
 const props = {
-  size: 'medium' as 'medium' | 'small',
-  extended: false,
+  extended: false
 }
 
 const style = /*css*/`
@@ -17,6 +16,7 @@ const style = /*css*/`
   position: relative;
   cursor: pointer;
   box-sizing: border-box;
+  flex-shrink: 0;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   width: 56px;
@@ -27,13 +27,8 @@ const style = /*css*/`
   font-size: .875rem;
   font-weight: 500;
   white-space: nowrap;
-  line-height: 1;
   text-transform: capitalize;
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
-}
-:host([size=small]){
-  width: 48px;
-  border-radius: 12px;
 }
 :host([extended=true]){
   padding: 0 16px;

@@ -5,7 +5,7 @@ import './scroll-view.js'
 
 const name = 's-dialog'
 const props = {
-  size: 'basic' as 'basic' | 'full'
+  size: 'standard' as 'standard' | 'full'
 }
 
 const style = /*css*/`

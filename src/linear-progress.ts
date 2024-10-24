@@ -16,6 +16,7 @@ const style = /*css*/`
   color: var(--s-color-primary, ${Theme.colorPrimary});
   border-radius: 2px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 :host([animated=true]) .known>.block{
   transition: transform .2s ease-out;

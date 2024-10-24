@@ -3,32 +3,25 @@ import { Theme } from './page.js'
 
 const name = 's-search'
 const props = {
-  size: 'medium' as 'medium' | 'small' | 'large'
+  placeholder: '',
+  disabled: false,
+  value: '',
+  maxLength: -1,
+  readOnly: false
 }
 
 const style = /*css*/`
 :host{
   display: inline-flex;
   vertical-align: middle;
-  max-width: 520px;
-  min-width: 240px;
-  height: 48px;
+  width: 220px;
+  height: 40px;
   background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   border-radius: 24px;
   font-size: .875rem;
+  flex-shrink: 0;
   position: relative;
-}
-:host([size=small]){
-  height: 40px;
-  min-width: 196px;
-  border-radius: 20px;
-}
-:host([size=large]){
-  height: 56px;
-  min-width: 280px;
-  font-size: 1rem;
-  border-radius: 28px;
 }
 .container{
   display: flex;
@@ -38,7 +31,29 @@ const style = /*css*/`
   flex-grow: 1;
 }
 :host(:focus-within) .container{
-  z-index: 1;
+  z-index: var(--z-index, 1);
+}
+input{
+  border: none;
+  padding: 0 16px;
+  height: 100%;
+  width: 0;
+  flex-grow: 1;
+  background: none;
+  outline: none;
+  font-size: inherit;
+  color: inherit;
+  box-sizing: border-box;
+  line-height: 1;
+  font-family: inherit;
+  caret-color: var(--s-color-primary, ${Theme.colorPrimary});
+}
+input::placeholder{
+  color: var(--s-color-outline, ${Theme.colorOutline});
+}
+input::selection{
+  background: var(--s-color-primary, ${Theme.colorPrimary});
+  color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
 }
 .dropdown{
   position: absolute;
@@ -50,43 +65,17 @@ const style = /*css*/`
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   border-radius: 4px;
   opacity: 0;
-  transition: opacity .1s ease-out;
+  transition: opacity .2s ease-out;
 }
 :host(:focus-within) .dropdown{
   opacity: 1;
   pointer-events: auto;
-  z-index: 1;
+  z-index: var(--z-index, 1);
 }
 ::slotted([slot=dropdown]){
   border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
-  margin-top: 48px;
-  border-radius: 4px;
-}
-:host([size=small]:focus-within) ::slotted([slot=dropdown]){
   margin-top: 40px;
-}
-:host([size=large]:focus-within) ::slotted([slot=dropdown]){
-  margin-top: 56px;
-}
-::slotted(input[type=text]){
-  border: none;
-  padding: 0 16px;
-  height: 100%;
-  width: 100%;
-  flex-grow: 1;
-  background: none;
-  outline: none;
-  font-size: inherit;
-  color: inherit;
-  box-sizing: border-box;
-  line-height: 1;
-  font-family: inherit;
-}
-::slotted(input[type=text])::placeholder{
-  color: var(--s-color-outline, ${Theme.colorOutline});
-}
-:host([size=large]) ::slotted(input[type=text]){
-  padding: 0 24px;
+  border-radius: 4px;
 }
 ::slotted([slot]){
   flex-shrink: 0;
@@ -98,50 +87,17 @@ const style = /*css*/`
 }
 ::slotted(s-icon[slot=start]),
 ::slotted(svg[slot=start]){
-  margin: 0 -6px 0 12px;
+  margin: 0 -8px 0 8px;
 }
 ::slotted(s-icon[slot=end]),
 ::slotted(svg[slot=end]){
-  margin: 0 12px 0 -6px;
-}
-:host([size=small]) ::slotted(s-icon-button[slot=start]),
-:host([size=small]) ::slotted(s-icon-button[slot=end]){
-  width: 40px;
-  height: 40px;
+  margin: 0 8px 0 -8px;
 }
 ::slotted(s-icon-button[slot=start]){
-  margin: 0 -12px 0 4px;
+  margin-right: -16px;
 }
-::slotted(s-icon-button[slot=end]),{
-  margin: 0 4px 0 -12px;
-}
-:host([size=small]) ::slotted(s-icon-button[slot=start]){
-  margin: 0 -12px 0 0;
-}
-:host([size=small]) ::slotted(s-icon-button[slot=end]){
-  margin: 0 0 0 -12px;
-}
-:host([size=small]) ::slotted(s-icon[slot=start]),
-:host([size=small]) ::slotted(svg[slot=start]){
-  margin: 0 -6px 0 8px;
-}
-:host([size=small]) ::slotted(s-icon[slot=end]),
-:host([size=small]) ::slotted(svg[slot=end]){
-  margin: 0 8px 0 -6px;
-}
-:host([size=large]) ::slotted(s-icon-button[slot=start]){
-  margin: 0 -16px 0 8px;
-}
-:host([size=large]) ::slotted(s-icon-button[slot=end]){
-  margin: 0 8px 0 -16px;
-}
-:host([size=large]) ::slotted(s-icon[slot=start]),
-:host([size=large]) ::slotted(svg[slot=start]){
-  margin: 0 -8px 0 16px;
-}
-:host([size=large]) ::slotted(s-icon[slot=end]),
-:host([size=large]) ::slotted(svg[slot=end]){
-  margin: 0 16px 0 -8px;
+::slotted(s-icon-button[slot=end]){
+  margin-left: -16px;
 }
 `
 
@@ -151,7 +107,7 @@ const template = /*html*/`
 </div>
 <div class="container" part="container">
   <slot name="start"></slot>
-  <slot></slot>
+  <input type="text">
   <slot name="end"></slot>
 </div>
 `
@@ -159,8 +115,23 @@ const template = /*html*/`
 export class Search extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
+    const input = shadowRoot.querySelector('input') as HTMLInputElement
     const dropdown = shadowRoot.querySelector('[name=dropdown]') as HTMLSlotElement
     dropdown.addEventListener('mousedown', (e) => e.preventDefault())
+    input.addEventListener('change', () => this.dispatchEvent(new Event('change')))
+    return {
+      expose: {
+        get value() {
+          return input.value
+        }
+      },
+      props: {
+        value: (value) => input.value = value,
+        placeholder: (placeholder) => input.placeholder = placeholder,
+        maxLength: (maxLength) => input.maxLength = maxLength,
+        readOnly: (readOnly) => input.readOnly = readOnly
+      }
+    }
   }
 }) { }
 

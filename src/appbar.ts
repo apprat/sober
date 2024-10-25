@@ -67,6 +67,10 @@ const style = /*css*/`
   :host{
     height: 56px;
   }
+  ::slotted([slot=search]){
+    width: auto;
+    flex-grow: 1;
+  }
 }
 `
 

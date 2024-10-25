@@ -126,10 +126,7 @@ export class Search extends useElement({
         }
       },
       props: {
-        value: (value) => {
-          input.value = value
-          console.log('设置')
-        },
+        value: (value) => input.value = value,
         placeholder: (placeholder) => input.placeholder = placeholder,
         maxLength: (maxLength) => input.maxLength = maxLength,
         readOnly: (readOnly) => input.readOnly = readOnly

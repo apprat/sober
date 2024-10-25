@@ -25,7 +25,7 @@
       <s-picker-item v-for="(item, key) of state.adds" :value="key">{{item}}</s-picker-item>
     </s-picker>
 
-    <s-navigation style="max-height: 600px;" label="地区" type="select" v-model.lazy="state.select">
+    <s-navigation style="max-height: 600px;" label="地区" v-model.lazy="state.select">
       <s-navigation-item v-for="(item, key) of state.list" :value="key">
         <s-icon type="add" slot="icon"></s-icon>
         <div slot="text">{{item}}</div>
@@ -61,10 +61,10 @@
     <s-radio-button type="radio" value="C" v-model="state.select">广州</s-radio-button>
     <s-radio-button type="radio" value="D" v-model="state.select">深圳</s-radio-button>
     <hr>
-    <input type="radio" value="A" v-model="state.select">上海 <br>
-    <input type="radio" value="B" v-model="state.select"> 北京 <br>
-    <input type="radio" value="C" v-model="state.select"> 广州 <br>
-    <input type="radio" value="D" v-model="state.select">深圳 <br>
+    <input type="radio" value="A" v-model="state.select">上海
+    <input type="radio" value="B" v-model="state.select"> 北京
+    <input type="radio" value="C" v-model="state.select"> 广州
+    <input type="radio" value="D" v-model="state.select">深圳
     <hr>
     <s-rate v-model="state.num" type="range"></s-rate>
     <input type="range" v-model="state.num" max="10">
@@ -73,8 +73,27 @@
     <s-button @click="state.num=2">改变num {{state.num}}</s-button>
 
     <s-button @click="theme">改变主题</s-button>
+    <hr>
+    <s-text-field v-model="state.input2" label="请输入内容" type="text"></s-text-field>
+    {{state.input2}}
+    <s-icon-button @click="state.input2=''">
+      <s-icon type="add"></s-icon>
+    </s-icon-button>
+    <hr>
+    <s-search v-model="state.input">
+      <s-icon-button slot="end" @click="state.input=''">
+        <s-icon type="add"></s-icon>
+      </s-icon-button>
+    </s-search>
 
-    <s-text-field v-model="state.num" type="text" label="请输入内容"></s-text-field>
+    {{state.input}}
+
+    <s-icon-button @click="state.input=''">
+      <s-icon type="add"></s-icon>
+    </s-icon-button>
+
+    <s-button @click="state.num=8">更新num {{state.num}}</s-button>
+
   </s-page>
 
   <script>
@@ -85,6 +104,8 @@
         const state = reactive({
           num: 5,
           bool: false,
+          input: '',
+          input2: '',
           select: 'C',
           list: {
             'A': '上海',
@@ -110,12 +131,12 @@
     app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('s-')
     app.mount('#app')
   </script>
-  <!-- <script type="module" src="../dist/main.js"></script> -->
-  <script src="https://unpkg.com/sober/dist/sober.min.js"></script>
+  <script type="module" src="../dist/main.js"></script>
+  <!-- <script src="https://unpkg.com/sober/dist/sober.min.js"></script> -->
   <script src="https://unpkg.com/sober-theme/dist/sober-theme.min.js"></script>
   <script type="module" src="./scripts/default.js"></script>
   <script>
-    console.log(soberTheme)
+
   </script>
 </body>
 

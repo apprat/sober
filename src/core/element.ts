@@ -97,7 +97,7 @@ export const useElement = <
           get: () => props[key],
           set: (v) => {
             const value = parseType(v, options.props![key])
-            if (value === props[key]) return
+            if (value === this[key as any]) return
             if (options.syncProps === true || options.syncProps?.includes(key)) {
               const lowerKey = key.toLowerCase()
               const attrValue = this.getAttribute(lowerKey)

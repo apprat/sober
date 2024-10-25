@@ -113,7 +113,7 @@ const template = /*html*/`
 `
 
 export class Search extends useElement({
-  style, template, props, syncProps: true,
+  style, template, props, syncProps: ['disabled', 'readOnly'],
   setup(shadowRoot) {
     const input = shadowRoot.querySelector('input') as HTMLInputElement
     const dropdown = shadowRoot.querySelector('[name=dropdown]') as HTMLSlotElement
@@ -126,7 +126,10 @@ export class Search extends useElement({
         }
       },
       props: {
-        value: (value) => input.value = value,
+        value: (value) => {
+          input.value = value
+          console.log('设置')
+        },
         placeholder: (placeholder) => input.placeholder = placeholder,
         maxLength: (maxLength) => input.maxLength = maxLength,
         readOnly: (readOnly) => input.readOnly = readOnly

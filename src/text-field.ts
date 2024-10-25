@@ -257,7 +257,7 @@ export class TextField extends useElement({
           inputs.textarea.value = value
           textAreaShadow.textContent = value
           onCounter()
-          if (value) field.labelFixed = true
+          if (!this.error) field.labelFixed = value !== ''
         },
         placeholder: (value) => {
           inputs.input.placeholder = value

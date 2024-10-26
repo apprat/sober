@@ -10,9 +10,16 @@ const props = {
 
 const style = /*css*/`
 :host{
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
   vertical-align: middle;
   border-radius: 20px;
@@ -23,11 +30,16 @@ const style = /*css*/`
   cursor: pointer;
   font-size: .875rem;
   font-weight: 500;
+  -ms-flex-negative: 0;
   flex-shrink: 0;
   white-space: nowrap;
   background: var(--s-color-primary, ${Theme.colorPrimary});
   color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
+  -webkit-transition: -webkit-box-shadow .1s ease-out;
+  transition: -webkit-box-shadow .1s ease-out;
+  -o-transition: box-shadow .1s ease-out;
   transition: box-shadow .1s ease-out;
+  transition: box-shadow .1s ease-out, -webkit-box-shadow .1s ease-out;
   overflow: hidden;
 }
 :host([disabled=true]){
@@ -38,9 +50,11 @@ const style = /*css*/`
 :host([type=elevated]){
   background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   color: var(--s-color-primary, ${Theme.colorPrimary});
+  -webkit-box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 :host([type=elevated][disabled=true]){
+  -webkit-box-shadow: none !important;
   box-shadow: none !important;
 }
 :host([type=filled-tonal]){
@@ -96,26 +110,32 @@ const style = /*css*/`
   margin: 0 -4px 0 4px;
 }
 :host([rippled]){
+  -webkit-box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 :host([type=elevated][rippled]){
+  -webkit-box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
 }
 :host([type=filled-tonal][rippled]),
 :host([type=outlined][rippled]),
 :host([type=text][rippled]){
+  -webkit-box-shadow: none;
   box-shadow: none;
 }
 @media (pointer: fine){
   :host([type=elevated]:hover){
+    -webkit-box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
     box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   }
   :host(:hover){
+    -webkit-box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
     box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   }
   :host([type=filled-tonal]:hover),
   :host([type=outlined]:hover),
   :host([type=text]:hover){
+    -webkit-box-shadow: none;
     box-shadow: none;
   }
 }

@@ -15,13 +15,20 @@ const style = /*css*/`
   vertical-align: middle;
   position: relative;
   width: 48px;
+  -ms-flex-negative: 0;
   flex-shrink: 0;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 :host([animated=true]) .known .block{
+  -webkit-transition: stroke-dashoffset .2s, -webkit-transform .2s;
+  transition: stroke-dashoffset .2s, -webkit-transform .2s;
+  -o-transition: stroke-dashoffset .2s, transform .2s;
   transition: stroke-dashoffset .2s, transform .2s;
+  transition: stroke-dashoffset .2s, transform .2s, -webkit-transform .2s;
+  -webkit-transition-timing-function: ease-out;
+  -o-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
 :host([indeterminate=true]) .known,
@@ -51,28 +58,50 @@ circle{
 .track{
   stroke: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
 }
+@-webkit-keyframes stroke{
+  0% { stroke-dashoffset: var(--dasharray) }
+  50% { stroke-dashoffset: calc(var(--dasharray) / 4) }
+  100% { stroke-dashoffset: var(--dasharray) }
+}
 @keyframes stroke{
   0% { stroke-dashoffset: var(--dasharray) }
   50% { stroke-dashoffset: calc(var(--dasharray) / 4) }
   100% { stroke-dashoffset: var(--dasharray) }
 }
+@-webkit-keyframes stroke-rotate{
+  0% { -webkit-transform: rotate(0deg); transform: rotate(0deg) }
+  12.5% { -webkit-transform: rotate(0deg); transform: rotate(0deg) }
+  25% { -webkit-transform: rotate(270deg); transform: rotate(270deg)}
+  37.5% { -webkit-transform: rotate(270deg); transform: rotate(270deg)}
+  50% { -webkit-transform: rotate(540deg); transform: rotate(540deg)}
+  62.5% { -webkit-transform: rotate(540deg); transform: rotate(540deg)}
+  75% { -webkit-transform: rotate(810deg); transform: rotate(810deg)}
+  87.5% { -webkit-transform: rotate(810deg); transform: rotate(810deg)}
+  100% { -webkit-transform: rotate(1080deg); transform: rotate(1080deg) }
+  100% { -webkit-transform: rotate(1080deg); transform: rotate(1080deg) }
+}
 @keyframes stroke-rotate{
-  0% { transform: rotate(0deg) }
-  12.5% { transform: rotate(0deg) }
-  25% {transform: rotate(270deg)}
-  37.5% {transform: rotate(270deg)}
-  50% {transform: rotate(540deg)}
-  62.5% {transform: rotate(540deg)}
-  75% {transform: rotate(810deg)}
-  87.5% {transform: rotate(810deg)}
-  100% { transform: rotate(1080deg) }
-  100% { transform: rotate(1080deg) }
+  0% { -webkit-transform: rotate(0deg); transform: rotate(0deg) }
+  12.5% { -webkit-transform: rotate(0deg); transform: rotate(0deg) }
+  25% { -webkit-transform: rotate(270deg); transform: rotate(270deg)}
+  37.5% { -webkit-transform: rotate(270deg); transform: rotate(270deg)}
+  50% { -webkit-transform: rotate(540deg); transform: rotate(540deg)}
+  62.5% { -webkit-transform: rotate(540deg); transform: rotate(540deg)}
+  75% { -webkit-transform: rotate(810deg); transform: rotate(810deg)}
+  87.5% { -webkit-transform: rotate(810deg); transform: rotate(810deg)}
+  100% { -webkit-transform: rotate(1080deg); transform: rotate(1080deg) }
+  100% { -webkit-transform: rotate(1080deg); transform: rotate(1080deg) }
+}
+@-webkit-keyframes rotate{
+  0% { -webkit-transform: rotate(0deg); transform: rotate(0deg) }
+  100% { -webkit-transform: rotate(360deg); transform: rotate(360deg) }
 }
 @keyframes rotate{
-  0% { transform: rotate(0deg) }
-  100% { transform: rotate(360deg) }
+  0% { -webkit-transform: rotate(0deg); transform: rotate(0deg) }
+  100% { -webkit-transform: rotate(360deg); transform: rotate(360deg) }
 }
 .unknown{
+  -webkit-animation: rotate 1568ms linear infinite;
   animation: rotate 1568ms linear infinite;
 }
 `

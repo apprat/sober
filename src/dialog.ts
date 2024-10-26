@@ -21,8 +21,14 @@ const style = /*css*/`
   height: 100%;
   z-index: var(--z-index, 2);
   pointer-events: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 .scrim{
@@ -36,6 +42,8 @@ const style = /*css*/`
   -webkit-backdrop-filter: blur(4px);
   pointer-events: none;
   opacity: 0;
+  -webkit-transition: opacity .2s ease-out;
+  -o-transition: opacity .2s ease-out;
   transition: opacity .2s ease-out;
 }
 .wrapper.show .scrim{
@@ -50,12 +58,22 @@ const style = /*css*/`
   background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   position: relative;
   border-radius: 28px;
+  -webkit-box-shadow: var(--s-elevation-level5, ${Theme.elevationLevel5});
   box-shadow: var(--s-elevation-level5, ${Theme.elevationLevel5});
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
   overflow: hidden;
   top: 100%;
+  -webkit-transition: width .2s, height .2s, border-radius .2s;
+  -o-transition: width .2s, height .2s, border-radius .2s;
   transition: width .2s, height .2s, border-radius .2s;
+  -webkit-transition-timing-function: ease-out;
+  -o-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
   --z-index: var(--z-index, 2);
 }
@@ -76,11 +94,16 @@ const style = /*css*/`
   line-height: 1.6;
   font-weight: 600;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
+  -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 .text{
+  -moz-user-select: text;
+  -ms-user-select: text;
   user-select: text;
   -webkit-user-select: text;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
   flex-grow: 1;
 }
 ::slotted([slot=text]){
@@ -88,18 +111,28 @@ const style = /*css*/`
   line-height: 1.6;
 }
 .action{
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
   justify-content: flex-end;
   padding: 0 14px;
+  -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 ::slotted([slot=action]){
   min-width: 72px;
   margin: 16px 2px;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   padding: 0 24px;
   color: var(--s-color-primary, ${Theme.colorPrimary});
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   height: 40px;
   font-size: .875rem;

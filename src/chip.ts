@@ -10,14 +10,20 @@ const props = {
 
 const style = /*css*/`
 :host{
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   vertical-align: middle;
   padding: 0 16px;
+  -ms-flex-negative: 0;
   flex-shrink: 0;
   height: 32px;
   border: solid 1px var(--s-color-color-outline, ${Theme.colorOutline});
   border-radius: 8px;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   white-space: nowrap;
   font-size: .875rem;
@@ -27,6 +33,7 @@ const style = /*css*/`
 }
 :host([type=elevated]){
   border: none;
+  -webkit-box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 :host([type=filled-tonal]){
@@ -56,6 +63,7 @@ const style = /*css*/`
   width: 24px;
   height: 24px;
   padding: 3px;
+  -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 `

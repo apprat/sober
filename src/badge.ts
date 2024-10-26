@@ -7,8 +7,14 @@ const props = {
 
 const style = /*css*/`
 :host{
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   min-width: 18px;
   height: 18px;
@@ -17,8 +23,10 @@ const style = /*css*/`
   border-radius: 18px;
   padding: 0 3px;
   font-size: .625rem;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   vertical-align: middle;
+  -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 :host(:empty){

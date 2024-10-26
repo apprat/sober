@@ -7,22 +7,29 @@ const props = {
 
 const style = /*css*/`
 :host{
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   height: 64px;
   background: var(--s-color-surface-container, ${Theme.colorSecondaryContainer});
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   position: relative;
   padding: 0 8px;
+  -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 ::slotted([slot=navigation]){
   margin-left: 4px;
+  -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 ::slotted([slot=logo]){
   margin-left: 12px;
   height: 32px;
   fill: var(--s-color-primary, ${Theme.colorPrimary});
+  -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 ::slotted([slot=headline]){
@@ -30,6 +37,7 @@ const style = /*css*/`
   font-weight: 400;
   overflow: hidden;
   text-transform: capitalize;
+  -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
   white-space: nowrap;
   margin: 0 12px;
@@ -37,17 +45,25 @@ const style = /*css*/`
 }
 ::slotted([slot=action]){
   margin: 0 4px;
+  -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 .view{
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
   flex-grow: 1;
   min-width: 0;
   height: 100%;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
   justify-content: flex-end;
 }
 ::slotted([slot=search]){
+  -ms-flex-negative: 0;
   flex-shrink: 0;
   background: var(--s-color-surface, ${Theme.colorSurface});
   height: 40px;
@@ -69,10 +85,12 @@ const style = /*css*/`
   }
   ::slotted([slot=search]){
     width: auto;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
     flex-grow: 1;
   }
 }
-`
+`;
 
 const template = /*html*/`
 <slot name="start"></slot>

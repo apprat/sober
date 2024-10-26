@@ -11,8 +11,12 @@ const props = {
 
 const style = /*css*/`
 :host{
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   height: 240px;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   position: relative;
   overflow: hidden;
@@ -21,19 +25,33 @@ const style = /*css*/`
   cursor: pointer;
 }
 .container{
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
   justify-content: flex-start;
   height: 100%;
+  -webkit-transition: -webkit-transform .3s ease-out;
+  transition: -webkit-transform .3s ease-out;
+  -o-transition: transform .3s ease-out;
   transition: transform .3s ease-out;
+  transition: transform .3s ease-out, -webkit-transform .3s ease-out;
 }
 .track{
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 8px;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
   pointer-events: none;
   padding: 12px 0;
@@ -44,7 +62,9 @@ const style = /*css*/`
   border-radius: 4px;
   background: white;
   opacity: .3;
+  -webkit-box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
+  -ms-flex-negative: 0;
   flex-shrink: 0;
   cursor: pointer;
   pointer-events: auto;
@@ -54,9 +74,11 @@ const style = /*css*/`
 }
 ::slotted(*){
   display: block;
+  -ms-flex-negative: 0;
   flex-shrink: 0;
   width: 100%;
   height: 100%;
+  -o-object-fit: cover;
   object-fit: cover;
   user-drag: none;
   -webkit-user-drag: none;

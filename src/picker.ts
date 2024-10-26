@@ -32,8 +32,12 @@ const style = /*css*/`
   display: block;
   cursor: pointer;
 }
-.field{
-
+.field {
+  --field-border-radius: var(--picker-border-radius);
+  --field-border-color: var(--picker-border-color);
+  --field-border-width: var(--picker-border-width);
+  --field-padding: var(--picker-padding);
+  height: var(--picker-height);
 }
 .view{
   width: 100%;

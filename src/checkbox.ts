@@ -11,20 +11,31 @@ const props = {
 
 const style = /*css*/`
 :host{
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   vertical-align: middle;
   cursor: pointer;
   white-space: nowrap;
   height: 40px;
+  -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 :host([disabled=true]){
   pointer-events: none;
 }
 .container{
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
   position: relative;
   height: 100%;
@@ -53,13 +64,21 @@ const style = /*css*/`
 .checked,
 .indeterminate{
   position: absolute;
+  -webkit-transform: scale(.5);
+  -ms-transform: scale(.5);
   transform: scale(.5);
   opacity: 0;
+  -webkit-transition: opacity .1s ease-out, -webkit-transform .1s ease-out;
+  transition: opacity .1s ease-out, -webkit-transform .1s ease-out;
+  -o-transition: transform .1s ease-out, opacity .1s ease-out;
   transition: transform .1s ease-out, opacity .1s ease-out;
+  transition: transform .1s ease-out, opacity .1s ease-out, -webkit-transform .1s ease-out;
 }
 :host([checked=true]:not([indeterminate=true])) .checked,
 :host([indeterminate=true]) .indeterminate{
   opacity: 1;
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
   transform: scale(1);
 }
 `

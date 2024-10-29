@@ -33,7 +33,11 @@ const style = /*css*/`
   cursor: pointer;
 }
 .field{
-
+  --field-border-radius: var(--picker-border-radius);
+  --field-border-color: var(--picker-border-color);
+  --field-border-width: var(--picker-border-width);
+  --field-padding: var(--picker-padding);
+  height: var(--picker-height);
 }
 .view{
   width: 100%;
@@ -71,7 +75,7 @@ svg{
 const template = /*html*/ `
 <s-popup class="popup">
   <slot name="trigger" slot="trigger">
-    <s-field labelfixed="false" class="field">
+    <s-field labelfixed="false" class="field" part="field">
       <div class="label" slot="label"></div>
       <div slot="view" class="view"></div>
       <svg viewBox="0 -960 960 960" slot="end">

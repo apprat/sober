@@ -75,7 +75,7 @@ export const useElement = <
     upperAttrs[value] = key
   }
   const map = new Map<HTMLElement, ReturnType<Setup<P, E>>>()
-  class Protoptype extends HTMLElement {
+  class Prototype extends HTMLElement {
     static observedAttributes = attrs
     static define(name: string) {
       customElements.define(name, this)
@@ -151,7 +151,7 @@ export const useElement = <
       this[upperAttrs[key]] = newValue ?? undefined
     }
   }
-  return Protoptype as never
+  return Prototype as never
 }
 
 export type LowercaseKeys<T> = {

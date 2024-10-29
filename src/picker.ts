@@ -32,7 +32,11 @@ const style = /*css*/`
   display: block;
   cursor: pointer;
 }
+<<<<<<< HEAD
 .field{
+=======
+.field {
+>>>>>>> 7fe8cded0407ad0343cd3ab29fd5a70671f9b71c
   --field-border-radius: var(--picker-border-radius);
   --field-border-color: var(--picker-border-color);
   --field-border-width: var(--picker-border-width);

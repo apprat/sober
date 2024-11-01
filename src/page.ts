@@ -81,41 +81,6 @@ const props = {
   theme: 'light' as 'auto' | 'light' | 'dark'
 }
 
-const dark = `
-  --s-color-primary: var(--s-color-dark-primary) !important;
-  --s-color-on-primary: var(--s-color-dark-on-primary) !important;
-  --s-color-primary-container: var(--s-color-dark-primary-container) !important;
-  --s-color-on-primary-container: var(--s-color-dark-on-primary-container) !important;
-  --s-color-secondary: var(--s-color-dark-secondary) !important;
-  --s-color-on-secondary: var(--s-color-dark-on-secondary) !important;
-  --s-color-secondary-container: var(--s-color-dark-secondary-container) !important;
-  --s-color-on-secondary-container: var(--s-color-dark-on-secondary-container) !important;
-  --s-color-tertiary: var(--s-color-dark-tertiary) !important;
-  --s-color-on-tertiary: var(--s-color-dark-on-tertiary) !important;
-  --s-color-tertiary-container: var(--s-color-dark-tertiary-container) !important;
-  --s-color-on-tertiary-container: var(--s-color-dark-on-tertiary-container) !important;
-  --s-color-error: var(--s-color-dark-error) !important;
-  --s-color-on-error: var(--s-color-dark-on-error) !important;
-  --s-color-error-container: var(--s-color-dark-error-container) !important;
-  --s-color-on-error-container: var(--s-color-dark-on-error-container) !important;
-  --s-color-background: var(--s-color-dark-background) !important;
-  --s-color-on-background: var(--s-color-dark-on-background) !important;
-  --s-color-outline: var(--s-color-dark-outline) !important;
-  --s-color-outline-variant: var(--s-color-dark-outline-variant) !important;
-  --s-color-surface: var(--s-color-dark-surface) !important;
-  --s-color-on-surface: var(--s-color-dark-on-surface) !important;
-  --s-color-surface-variant: var(--s-color-dark-surface-variant) !important;
-  --s-color-on-surface-variant: var(--s-color-dark-on-surface-variant) !important;
-  --s-color-inverse-surface: var(--s-color-dark-inverse-surface) !important;
-  --s-color-inverse-on-surface: var(--s-color-dark-inverse-on-surface) !important;
-  --s-color-inverse-primary: var(--s-color-dark-inverse-primary) !important;
-  --s-color-surface-container: var(--s-color-dark-surface-container) !important;
-  --s-color-surface-container-high: var(--s-color-dark-surface-container-high) !important;
-  --s-color-surface-container-highest: var(--s-color-dark-surface-container-highest) !important;
-  --s-color-surface-container-low: var(--s-color-dark-surface-container-low) !important;
-  --s-color-surface-container-lowest: var(--s-color-dark-surface-container-lowest) !important;
-`
-
 const style = /*css*/`
 :host{
   display: flow-root;
@@ -158,39 +123,6 @@ const style = /*css*/`
   --s-color-surface-container-low: ${Theme.colorSurfaceContainerLow};
   --s-color-surface-container-lowest: ${Theme.colorSurfaceContainerLowest};
 
-  --s-color-dark-primary: ${Theme.colorDarkPrimary};
-  --s-color-dark-on-primary: ${Theme.colorDarkOnPrimary};
-  --s-color-dark-primary-container: ${Theme.colorDarkPrimaryContainer};
-  --s-color-dark-on-primary-container: ${Theme.colorDarkOnPrimaryContainer};
-  --s-color-dark-secondary: ${Theme.colorDarkSecondary};
-  --s-color-dark-on-secondary: ${Theme.colorDarkOnSecondary};
-  --s-color-dark-secondary-container: ${Theme.colorDarkSecondaryContainer};
-  --s-color-dark-on-secondary-container: ${Theme.colorDarkOnSecondaryContainer};
-  --s-color-dark-tertiary: ${Theme.colorDarkTertiary};
-  --s-color-dark-on-tertiary: ${Theme.colorDarkOnTertiary};
-  --s-color-dark-tertiary-container: ${Theme.colorDarkTertiaryContainer};
-  --s-color-dark-on-tertiary-container: ${Theme.colorDarkOnTertiaryContainer};
-  --s-color-dark-error: ${Theme.colorDarkError};
-  --s-color-dark-on-error: ${Theme.colorDarkOnError};
-  --s-color-dark-error-container: ${Theme.colorDarkErrorContainer};
-  --s-color-dark-on-error-container: ${Theme.colorDarkOnErrorContainer};
-  --s-color-dark-background: ${Theme.colorDarkBackground};
-  --s-color-dark-on-background: ${Theme.colorDarkOnBackground};
-  --s-color-dark-outline: ${Theme.colorDarkOutline};
-  --s-color-dark-outline-variant: ${Theme.colorDarkOutlineVariant};
-  --s-color-dark-surface: ${Theme.colorDarkSurface};
-  --s-color-dark-on-surface: ${Theme.colorDarkOnSurface};
-  --s-color-dark-surface-variant: ${Theme.colorDarkSurfaceVariant};
-  --s-color-dark-on-surface-variant: ${Theme.colorDarkOnSurfaceVariant};
-  --s-color-dark-inverse-surface: ${Theme.colorDarkInverseSurface};
-  --s-color-dark-inverse-on-surface: ${Theme.colorDarkInverseOnSurface};
-  --s-color-dark-inverse-primary: ${Theme.colorDarkInversePrimary};
-  --s-color-dark-surface-container: ${Theme.colorDarkSurfaceContainer};
-  --s-color-dark-surface-container-high: ${Theme.colorDarkSurfaceContainerHigh};
-  --s-color-dark-surface-container-highest: ${Theme.colorDarkSurfaceContainerHighest};
-  --s-color-dark-surface-container-low: ${Theme.colorDarkSurfaceContainerLow};
-  --s-color-dark-surface-container-lowest: ${Theme.colorDarkSurfaceContainerLowest};
-
   --s-elevation-level1: ${Theme.elevationLevel1};
   --s-elevation-level2: ${Theme.elevationLevel2};
   --s-elevation-level3: ${Theme.elevationLevel3};
@@ -198,7 +130,38 @@ const style = /*css*/`
   --s-elevation-level5: ${Theme.elevationLevel5};
 }
 :host([dark]){
-  ${dark}
+  --s-color-primary: ${Theme.colorDarkPrimary};
+  --s-color-on-primary: ${Theme.colorDarkOnPrimary};
+  --s-color-primary-container: ${Theme.colorDarkPrimaryContainer};
+  --s-color-on-primary-container: ${Theme.colorDarkOnPrimaryContainer};
+  --s-color-secondary: ${Theme.colorDarkSecondary};
+  --s-color-on-secondary: ${Theme.colorDarkOnSecondary};
+  --s-color-secondary-container: ${Theme.colorDarkSecondaryContainer};
+  --s-color-on-secondary-container: ${Theme.colorDarkOnSecondaryContainer};
+  --s-color-tertiary: ${Theme.colorDarkTertiary};
+  --s-color-on-tertiary: ${Theme.colorDarkOnTertiary};
+  --s-color-tertiary-container: ${Theme.colorDarkTertiaryContainer};
+  --s-color-on-tertiary-container: ${Theme.colorDarkOnTertiaryContainer};
+  --s-color-error: ${Theme.colorDarkError};
+  --s-color-on-error: ${Theme.colorDarkOnError};
+  --s-color-error-container: ${Theme.colorDarkErrorContainer};
+  --s-color-on-error-container: ${Theme.colorDarkOnErrorContainer};
+  --s-color-background: ${Theme.colorDarkBackground};
+  --s-color-on-background: ${Theme.colorDarkOnBackground};
+  --s-color-outline: ${Theme.colorDarkOutline};
+  --s-color-outline-variant: ${Theme.colorDarkOutlineVariant};
+  --s-color-surface: ${Theme.colorDarkSurface};
+  --s-color-on-surface: ${Theme.colorDarkOnSurface};
+  --s-color-surface-variant: ${Theme.colorDarkSurfaceVariant};
+  --s-color-on-surface-variant: ${Theme.colorDarkOnSurfaceVariant};
+  --s-color-inverse-surface: ${Theme.colorDarkInverseSurface};
+  --s-color-inverse-on-surface: ${Theme.colorDarkInverseOnSurface};
+  --s-color-inverse-primary: ${Theme.colorDarkInversePrimary};
+  --s-color-surface-container: ${Theme.colorDarkSurfaceContainer};
+  --s-color-surface-container-high: ${Theme.colorDarkSurfaceContainerHigh};
+  --s-color-surface-container-highest: ${Theme.colorDarkSurfaceContainerHighest};
+  --s-color-surface-container-low: ${Theme.colorDarkSurfaceContainerLow};
+  --s-color-surface-container-lowest: ${Theme.colorDarkSurfaceContainerLowest};
 }
 `
 

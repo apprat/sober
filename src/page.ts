@@ -197,24 +197,20 @@ const style = /*css*/`
   --s-elevation-level4: ${Theme.elevationLevel4};
   --s-elevation-level5: ${Theme.elevationLevel5};
 }
-:host([theme=dark]){
+:host([dark]){
   ${dark}
-}
-@media (prefers-color-scheme: dark){
-  :host([theme=auto]){
-    ${dark}
-  }
 }
 `
 
 const template = /*html*/`<slot></slot>`
 
 export class Page extends useElement({
-  style, template, props, syncProps: ['theme'],
+  style, template, props,
   setup() {
+    const darker = matchMedia('(prefers-color-scheme: dark)')
     const toggle = (theme: typeof props['theme'], trigger?: HTMLElement) => {
       if (this.theme === theme) return
-      const isDark = matchMedia('(prefers-color-scheme: dark)').matches
+      const isDark = darker.matches
       const getTheme = (theme: typeof props['theme']) => theme === 'auto' ? (isDark ? 'dark' : 'light') : theme
       const oldTheme = getTheme(this.theme)
       const newTheme = getTheme(theme)
@@ -243,7 +239,16 @@ export class Page extends useElement({
       transition.finished.then(() => document.styleSheets[0].deleteRule(0))
     }
     return {
-      expose: { toggle }
+      expose: { toggle },
+      props: {
+        theme: (value) => {
+          if (value === 'light') return this.removeAttribute('dark')
+          if (value === 'dark') return this.setAttribute('dark', '')
+          const change = () => darker.matches ? this.setAttribute('dark', '') : this.removeAttribute('dark')
+          darker.onchange = change
+          change()
+        }
+      }
     }
   }
 }) { }

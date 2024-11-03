@@ -7,18 +7,27 @@ const props = {
 
 const style = /*css*/`
 :host{
-  display: block;
+  display: inline-block;
   font-size: .875rem;
   border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
   background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
-  border-radius: 8px;
+  border-radius: 4px;
   white-space: nowrap;
-  overflow: hidden;
 }
 .container{
+  overflow: hidden;
+  width: fit-content;
+}
+slot{
   display: table;
-  width: 100%;
   border-collapse: collapse;
+  border: solid 1px transparent;
+  box-sizing: border-box;
+  position: relative;
+  left: -1px;
+  top: -1px;
+  margin-bottom: -2px;
+  min-width: calc(100% + 2px);
 }
 `
 
@@ -38,7 +47,7 @@ const theadStyle = /*css*/`
 :host{
   display: table-header-group;
   font-weight: 600;
-  color: var(--s-color-on-surface-variant, #46464f);
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
 `
 
@@ -82,9 +91,6 @@ const trStyle = /*css*/`
 :host{
   display: table-row;
 }
-::slotted(*:first-child){
-  width: 0;
-}
 `
 
 const trTemplate =/*html*/`<slot></slot>`
@@ -103,6 +109,7 @@ const thStyle = /*css*/`
 :host{
   display: table-cell;
   padding: 16px;
+  border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
 }
 `
 
@@ -123,6 +130,7 @@ const tdStyle = /*css*/`
   display: table-cell;
   user-select: text;
   padding: 12px 16px;
+  border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
 }
 `
 

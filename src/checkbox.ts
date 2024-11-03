@@ -18,6 +18,10 @@ const style = /*css*/`
   white-space: nowrap;
   height: 40px;
   flex-shrink: 0;
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
+}
+:host([checked=true]){
+  color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 :host([disabled=true]){
   pointer-events: none;
@@ -31,7 +35,6 @@ const style = /*css*/`
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   border-radius: 50%;
-  color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 :host([disabled=true]) .container{
   color: var(--s-color-on-surface, ${Theme.colorOnSurface}) !important;
@@ -41,14 +44,6 @@ const style = /*css*/`
   width: 60%;
   height: 60%;
   fill: currentColor;
-}
-.icon,
-.ripple{
-  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
-}
-:host([checked=true]) .icon,
-:host([checked=true]) .ripple{
-  color: currentColor;
 }
 .checked,
 .indeterminate{

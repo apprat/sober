@@ -21,6 +21,7 @@ const style = /*css*/`
 .view{
   display: block;
   min-height: 0;
+  overflow: hidden;
 }
 `
 

@@ -12,7 +12,7 @@ const props = {
 const style = /*css*/`
 :host{
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
   flex-shrink: 0;
   background: var(--s-color-surface, ${Theme.colorSurface});

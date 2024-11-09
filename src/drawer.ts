@@ -9,7 +9,6 @@ const style = /*css*/`
 :host{
   display: block;
   height: 100%;
-  background: var(--s-color-background, ${Theme.colorBackground});
 }
 .container{
   display: flex;
@@ -44,8 +43,8 @@ const style = /*css*/`
 ::slotted([slot=start]),
 ::slotted([slot=end]){
   width: 280px;
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
-  border-color: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  border-color: var(--s-color-surface-container-lowest, ${Theme.colorSurfaceContainerLowest});
   border-width: 1px;
   height: 100%;
   box-sizing: border-box;

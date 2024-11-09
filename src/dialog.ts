@@ -47,7 +47,7 @@ const style = /*css*/`
   max-height: calc(100% - 48px);
   width: 520px;
   height: calc-size(auto);
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
   position: relative;
   border-radius: 28px;
   box-shadow: var(--s-elevation-level5, ${Theme.elevationLevel5});

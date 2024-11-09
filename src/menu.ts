@@ -16,7 +16,7 @@ const style = /*css*/`
   flex-shrink: 0;
 }
 :host(:nth-of-type(n+2)){
-  border-top: solid 1px var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  border-top: solid 1px var(--s-color-surface-container-lowest, ${Theme.colorSurfaceContainerLowest});
 }
 ::slotted([slot=label]){
   display: flex;
@@ -121,7 +121,7 @@ const itemStyle = /*css*/`
   color: currentColor;
 }
 ::slotted([slot=menu]){
-  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
 }
 `
 

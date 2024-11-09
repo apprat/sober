@@ -44,6 +44,7 @@ const style = /*css*/`
 ::slotted(*){
   width: 18px;
   height: 18px;
+  flex-shrink: 0;
 }
 ::slotted([slot=start]){
   margin: 0 8px 0 -8px;
@@ -56,7 +57,6 @@ const style = /*css*/`
   width: 24px;
   height: 24px;
   padding: 3px;
-  flex-shrink: 0;
 }
 `
 

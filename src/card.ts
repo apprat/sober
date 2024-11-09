@@ -12,7 +12,7 @@ const style = /*css*/`
 :host{
   display: inline-block;
   vertical-align: middle;
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
   box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   border-radius: 12px;
   position: relative;
@@ -24,7 +24,7 @@ const style = /*css*/`
   flex-shrink: 0;
 }
 :host([type=filled]){
-  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   box-shadow: none;
 }
 :host([type=outlined]){
@@ -51,6 +51,9 @@ const style = /*css*/`
 ::slotted([slot=image]){
   display: block;
   height: 128px;
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+}
+:host([type=filled]) ::slotted([slot=image]){
   background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
 }
 ::slotted([slot=headline]){

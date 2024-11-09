@@ -36,7 +36,7 @@ const style = /*css*/`
   color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent) !important;
 }
 :host([type=elevated]){
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
   color: var(--s-color-primary, ${Theme.colorPrimary});
   box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }

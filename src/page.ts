@@ -2,73 +2,70 @@ import { useElement, JSXAttributes } from './core/element.js'
 
 export const enum Theme {
   colorScrim = '#000000',
-
-  colorPrimary = '#006782',
+  colorPrimary = '#00687b',
   colorOnPrimary = '#ffffff',
-  colorPrimaryContainer = '#baeaff',
-  colorOnPrimaryContainer = '#001f29',
-  colorSecondary = '#4c616b',
+  colorPrimaryContainer = '#aeecff',
+  colorOnPrimaryContainer = '#001f26',
+  colorSecondary = '#4b6269',
   colorOnSecondary = '#ffffff',
-  colorSecondaryContainer = '#cfe6f1',
-  colorOnSecondaryContainer = '#071e26',
-  colorTertiary = '#5c5b7e',
+  colorSecondaryContainer = '#cee7ef',
+  colorOnSecondaryContainer = '#061f25',
+  colorTertiary = '#575c7e',
   colorOnTertiary = '#ffffff',
-  colorTertiaryContainer = '#e2dfff',
-  colorOnTertiaryContainer = '#181837',
+  colorTertiaryContainer = '#dee1ff',
+  colorOnTertiaryContainer = '#141937',
   colorError = '#ba1a1a',
   colorOnError = '#ffffff',
   colorErrorContainer = '#ffdad6',
   colorOnErrorContainer = '#410002',
   colorBackground = '#fbfcfe',
-  colorOnBackground = '#191c1e',
-  colorOutline = '#70787d',
-  colorOutlineVariant = '#c0c8cc',
+  colorOnBackground = '#191c1d',
+  colorOutline = '#70797c',
+  colorOutlineVariant = '#bfc8cb',
   colorSurface = '#fbfcfe',
-  colorOnSurface = '#191c1e',
-  colorSurfaceVariant = '#dce4e8',
-  colorOnSurfaceVariant = '#40484c',
+  colorOnSurface = '#191c1d',
+  colorSurfaceVariant = '#dbe4e7',
+  colorOnSurfaceVariant = '#3f484b',
   colorInverseSurface = '#2e3132',
-  colorInverseOnSurface = '#eff1f3',
-  colorInversePrimary = '#60d4fe',
-  colorSurfaceContainer = '#edeef0',
-  colorSurfaceContainerHigh = '#e7e8ea',
-  colorSurfaceContainerHighest = '#e1e3e4',
-  colorSurfaceContainerLow = '#f2f4f5',
-  colorSurfaceContainerLowest = '#ffffff',
-
-  colorDarkPrimary = '#60d4fe',
-  colorDarkOnPrimary = '#003545',
-  colorDarkPrimaryContainer = '#004d62',
-  colorDarkOnPrimaryContainer = '#baeaff',
-  colorDarkSecondary = '#b4cad5',
-  colorDarkOnSecondary = '#1e333c',
-  colorDarkSecondaryContainer = '#354a53',
-  colorDarkOnSecondaryContainer = '#cfe6f1',
-  colorDarkTertiary = '#c5c3ea',
-  colorDarkOnTertiary = '#2d2d4d',
-  colorDarkTertiaryContainer = '#444465',
-  colorDarkOnTertiaryContainer = '#e2dfff',
+  colorInverseOnSurface = '#eff1f2',
+  colorInversePrimary = '#56d6f5',
+  colorSurfaceContainer = '#eceeef',
+  colorSurfaceContainerLowest = '#e1e3e4',
+  colorSurfaceContainerLow = '#e6e8e9',
+  colorSurfaceContainerHigh = '#f2f4f5',
+  colorSurfaceContainerHighest = '#ffffff',
+  colorDarkPrimary = '#56d6f5',
+  colorDarkOnPrimary = '#003641',
+  colorDarkPrimaryContainer = '#004e5d',
+  colorDarkOnPrimaryContainer = '#aeecff',
+  colorDarkSecondary = '#b2cbd3',
+  colorDarkOnSecondary = '#1d343a',
+  colorDarkSecondaryContainer = '#344a51',
+  colorDarkOnSecondaryContainer = '#cee7ef',
+  colorDarkTertiary = '#bfc4eb',
+  colorDarkOnTertiary = '#292e4d',
+  colorDarkTertiaryContainer = '#3f4565',
+  colorDarkOnTertiaryContainer = '#dee1ff',
   colorDarkError = '#ffb4ab',
   colorDarkOnError = '#690005',
   colorDarkErrorContainer = '#93000a',
   colorDarkOnErrorContainer = '#ffb4ab',
-  colorDarkBackground = '#191c1e',
+  colorDarkBackground = '#191c1d',
   colorDarkOnBackground = '#e1e3e4',
-  colorDarkOutline = '#8a9296',
-  colorDarkOutlineVariant = '#40484c',
-  colorDarkSurface = '#191c1e',
+  colorDarkOutline = '#899295',
+  colorDarkOutlineVariant = '#3f484b',
+  colorDarkSurface = '#191c1d',
   colorDarkOnSurface = '#e1e3e4',
-  colorDarkSurfaceVariant = '#40484c',
-  colorDarkOnSurfaceVariant = '#c0c8cc',
+  colorDarkSurfaceVariant = '#3f484b',
+  colorDarkOnSurfaceVariant = '#bfc8cb',
   colorDarkInverseSurface = '#e1e3e4',
   colorDarkInverseOnSurface = '#2e3132',
-  colorDarkInversePrimary = '#006782',
-  colorDarkSurfaceContainer = '#1d2022',
+  colorDarkInversePrimary = '#00687b',
+  colorDarkSurfaceContainer = '#1d2021',
+  colorDarkSurfaceContainerLowest = '#0b0f10',
+  colorDarkSurfaceContainerLow = '#191c1d',
   colorDarkSurfaceContainerHigh = '#272a2c',
-  colorDarkSurfaceContainerHighest = '#323537',
-  colorDarkSurfaceContainerLow = '#191c1e',
-  colorDarkSurfaceContainerLowest = '#0c0f10',
-
+  colorDarkSurfaceContainerHighest = '#323536',
   elevationLevel1 = '0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12)',
   elevationLevel2 = '0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12)',
   elevationLevel3 = '0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12)',
@@ -89,7 +86,6 @@ const style = /*css*/`
   font-family: Roboto, system-ui;
   height: 100%;
   --s-color-scrim: ${Theme.colorScrim};
-
   --s-color-primary: ${Theme.colorPrimary};
   --s-color-on-primary: ${Theme.colorOnPrimary};
   --s-color-primary-container: ${Theme.colorPrimaryContainer};
@@ -122,7 +118,38 @@ const style = /*css*/`
   --s-color-surface-container-highest: ${Theme.colorSurfaceContainerHighest};
   --s-color-surface-container-low: ${Theme.colorSurfaceContainerLow};
   --s-color-surface-container-lowest: ${Theme.colorSurfaceContainerLowest};
-
+  --s-color-dark-primary: ${Theme.colorDarkPrimary};
+  --s-color-dark-on-primary: ${Theme.colorDarkOnPrimary};
+  --s-color-dark-primary-container: ${Theme.colorDarkPrimaryContainer};
+  --s-color-dark-on-primary-container: ${Theme.colorDarkOnPrimaryContainer};
+  --s-color-dark-secondary: ${Theme.colorDarkSecondary};
+  --s-color-dark-on-secondary: ${Theme.colorDarkOnSecondary};
+  --s-color-dark-secondary-container: ${Theme.colorDarkSecondaryContainer};
+  --s-color-dark-on-secondary-container: ${Theme.colorDarkOnSecondaryContainer};
+  --s-color-dark-tertiary: ${Theme.colorDarkTertiary};
+  --s-color-dark-on-tertiary: ${Theme.colorDarkOnTertiary};
+  --s-color-dark-tertiary-container: ${Theme.colorDarkTertiaryContainer};
+  --s-color-dark-on-tertiary-container: ${Theme.colorDarkOnTertiaryContainer};
+  --s-color-dark-error: ${Theme.colorDarkError};
+  --s-color-dark-on-error: ${Theme.colorDarkOnError};
+  --s-color-dark-error-container: ${Theme.colorDarkErrorContainer};
+  --s-color-dark-on-error-container: ${Theme.colorDarkOnErrorContainer};
+  --s-color-dark-background: ${Theme.colorDarkBackground};
+  --s-color-dark-on-background: ${Theme.colorDarkOnBackground};
+  --s-color-dark-outline: ${Theme.colorDarkOutline};
+  --s-color-dark-outline-variant: ${Theme.colorDarkOutlineVariant};
+  --s-color-dark-surface: ${Theme.colorDarkSurface};
+  --s-color-dark-on-surface: ${Theme.colorDarkOnSurface};
+  --s-color-dark-surface-variant: ${Theme.colorDarkSurfaceVariant};
+  --s-color-dark-on-surface-variant: ${Theme.colorDarkOnSurfaceVariant};
+  --s-color-dark-inverse-surface: ${Theme.colorDarkInverseSurface};
+  --s-color-dark-inverse-on-surface: ${Theme.colorDarkInverseOnSurface};
+  --s-color-dark-inverse-primary: ${Theme.colorDarkInversePrimary};
+  --s-color-dark-surface-container: ${Theme.colorDarkSurfaceContainer};
+  --s-color-dark-surface-container-high: ${Theme.colorDarkSurfaceContainerHigh};
+  --s-color-dark-surface-container-highest: ${Theme.colorDarkSurfaceContainerHighest};
+  --s-color-dark-surface-container-low: ${Theme.colorDarkSurfaceContainerLow};
+  --s-color-dark-surface-container-lowest: ${Theme.colorDarkSurfaceContainerLowest};
   --s-elevation-level1: ${Theme.elevationLevel1};
   --s-elevation-level2: ${Theme.elevationLevel2};
   --s-elevation-level3: ${Theme.elevationLevel3};
@@ -130,38 +157,38 @@ const style = /*css*/`
   --s-elevation-level5: ${Theme.elevationLevel5};
 }
 :host([dark]){
-  --s-color-primary: ${Theme.colorDarkPrimary};
-  --s-color-on-primary: ${Theme.colorDarkOnPrimary};
-  --s-color-primary-container: ${Theme.colorDarkPrimaryContainer};
-  --s-color-on-primary-container: ${Theme.colorDarkOnPrimaryContainer};
-  --s-color-secondary: ${Theme.colorDarkSecondary};
-  --s-color-on-secondary: ${Theme.colorDarkOnSecondary};
-  --s-color-secondary-container: ${Theme.colorDarkSecondaryContainer};
-  --s-color-on-secondary-container: ${Theme.colorDarkOnSecondaryContainer};
-  --s-color-tertiary: ${Theme.colorDarkTertiary};
-  --s-color-on-tertiary: ${Theme.colorDarkOnTertiary};
-  --s-color-tertiary-container: ${Theme.colorDarkTertiaryContainer};
-  --s-color-on-tertiary-container: ${Theme.colorDarkOnTertiaryContainer};
-  --s-color-error: ${Theme.colorDarkError};
-  --s-color-on-error: ${Theme.colorDarkOnError};
-  --s-color-error-container: ${Theme.colorDarkErrorContainer};
-  --s-color-on-error-container: ${Theme.colorDarkOnErrorContainer};
-  --s-color-background: ${Theme.colorDarkBackground};
-  --s-color-on-background: ${Theme.colorDarkOnBackground};
-  --s-color-outline: ${Theme.colorDarkOutline};
-  --s-color-outline-variant: ${Theme.colorDarkOutlineVariant};
-  --s-color-surface: ${Theme.colorDarkSurface};
-  --s-color-on-surface: ${Theme.colorDarkOnSurface};
-  --s-color-surface-variant: ${Theme.colorDarkSurfaceVariant};
-  --s-color-on-surface-variant: ${Theme.colorDarkOnSurfaceVariant};
-  --s-color-inverse-surface: ${Theme.colorDarkInverseSurface};
-  --s-color-inverse-on-surface: ${Theme.colorDarkInverseOnSurface};
-  --s-color-inverse-primary: ${Theme.colorDarkInversePrimary};
-  --s-color-surface-container: ${Theme.colorDarkSurfaceContainer};
-  --s-color-surface-container-high: ${Theme.colorDarkSurfaceContainerHigh};
-  --s-color-surface-container-highest: ${Theme.colorDarkSurfaceContainerHighest};
-  --s-color-surface-container-low: ${Theme.colorDarkSurfaceContainerLow};
-  --s-color-surface-container-lowest: ${Theme.colorDarkSurfaceContainerLowest};
+  --s-color-primary: var(--s-color-dark-primary) !important;
+  --s-color-on-primary: var(--s-color-dark-on-primary) !important;
+  --s-color-primary-container: var(--s-color-dark-primary-container) !important;
+  --s-color-on-primary-container: var(--s-color-dark-on-primary-container) !important;
+  --s-color-secondary: var(--s-color-dark-secondary) !important;
+  --s-color-on-secondary: var(--s-color-dark-on-secondary) !important;
+  --s-color-secondary-container: var(--s-color-dark-secondary-container) !important;
+  --s-color-on-secondary-container: var(--s-color-dark-on-secondary-container) !important;
+  --s-color-tertiary: var(--s-color-dark-tertiary) !important;
+  --s-color-on-tertiary: var(--s-color-dark-on-tertiary) !important;
+  --s-color-tertiary-container: var(--s-color-dark-tertiary-container) !important;
+  --s-color-on-tertiary-container: var(--s-color-dark-on-tertiary-container) !important;
+  --s-color-error: var(--s-color-dark-error) !important;
+  --s-color-on-error: var(--s-color-dark-on-error) !important;
+  --s-color-error-container: var(--s-color-dark-error-container) !important;
+  --s-color-on-error-container: var(--s-color-dark-on-error-container) !important;
+  --s-color-background: var(--s-color-dark-background) !important;
+  --s-color-on-background: var(--s-color-dark-on-background) !important;
+  --s-color-outline: var(--s-color-dark-outline) !important;
+  --s-color-outline-variant: var(--s-color-dark-outline-variant) !important;
+  --s-color-surface: var(--s-color-dark-surface) !important;
+  --s-color-on-surface: var(--s-color-dark-on-surface) !important;
+  --s-color-surface-variant: var(--s-color-dark-surface-variant) !important;
+  --s-color-on-surface-variant: var(--s-color-dark-on-surface-variant) !important;
+  --s-color-inverse-surface: var(--s-color-dark-inverse-surface) !important;
+  --s-color-inverse-on-surface: var(--s-color-dark-inverse-on-surface) !important;
+  --s-color-inverse-primary: var(--s-color-dark-inverse-primary) !important;
+  --s-color-surface-container: var(--s-color-dark-surface-container) !important;
+  --s-color-surface-container-high: var(--s-color-dark-surface-container-high) !important;
+  --s-color-surface-container-highest: var(--s-color-dark-surface-container-highest) !important;
+  --s-color-surface-container-low: var(--s-color-dark-surface-container-low) !important;
+  --s-color-surface-container-lowest: var(--s-color-dark-surface-container-lowest) !important;
 }
 `
 

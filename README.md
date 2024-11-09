@@ -12,8 +12,6 @@ Sober 支持所有前端框架，如 Vue、React、Svelte 等，并且专门为 
 
 Sober supports all front-end frameworks such as Vue, React, Svelte, and more. It is specifically tailored for the Vue framework, providing support for template and JSX completion, as well as the use of syntax like `v-model`.
 
-<img src="https://raw.githubusercontent.com/apprat/sober/refs/heads/main/test/preview.jpg" alt="Sober Preview" width="320" max-width="100%">
-
 # NPM Installation
 ```shell
 npm install sober

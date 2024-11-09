@@ -10,7 +10,7 @@ const style = /*css*/`
   display: inline-block;
   font-size: .875rem;
   border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
   border-radius: 4px;
   white-space: nowrap;
 }
@@ -70,7 +70,7 @@ const tbodyStyle = /*css*/`
   position: relative;
 }
 ::slotted(s-tr:nth-child(odd)){
-  background: var(--s-color-surface-container-lowest, ${Theme.colorSurfaceContainerLowest});
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
 }
 `
 

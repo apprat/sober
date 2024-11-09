@@ -24,6 +24,7 @@ const style = /*css*/`
   display: flex;
   justify-content: flex-start;
   height: 100%;
+  min-width: 100%;
   transition: transform .3s ease-out;
 }
 .track{
@@ -150,7 +151,6 @@ export class Carousel extends useElement({
       },
       props: {
         duration: runTask,
-        autoPlay: runTask,
         value: (value) => {
           if (value < 0 || value > state.count - 1) return
           state.selectIndex = value

@@ -44,7 +44,7 @@ const style = /*css*/`
   opacity: 1;
 }
 ::slotted(*:not([slot])){
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
   border-radius: 4px;
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   max-height: 100vh;

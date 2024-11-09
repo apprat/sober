@@ -29,7 +29,7 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   border: solid 2px var(--s-color-outline, ${Theme.colorOutline});
-  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   box-sizing: border-box;
   border-radius: inherit;
 }

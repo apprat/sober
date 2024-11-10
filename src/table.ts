@@ -70,7 +70,7 @@ const tbodyStyle = /*css*/`
   position: relative;
 }
 ::slotted(s-tr:nth-child(odd)){
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
 }
 `
 

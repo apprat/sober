@@ -44,7 +44,7 @@ const style = /*css*/`
 ::slotted([slot=end]){
   width: 280px;
   background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
-  border-color: var(--s-color-surface-container-lowest, ${Theme.colorSurfaceContainerLowest});
+  border-color: var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
   border-width: 1px;
   height: 100%;
   box-sizing: border-box;

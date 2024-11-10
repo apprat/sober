@@ -16,7 +16,7 @@ const style = /*css*/`
   flex-shrink: 0;
 }
 :host(:nth-of-type(n+2)){
-  border-top: solid 1px var(--s-color-surface-container-lowest, ${Theme.colorSurfaceContainerLowest});
+  border-top: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
 }
 ::slotted([slot=label]){
   display: flex;

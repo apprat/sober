@@ -49,7 +49,7 @@ const style = /*css*/`
 }
 ::slotted([slot=search]){
   flex-shrink: 0;
-  background: var(--s-color-surface, ${Theme.colorSurface});
+  background: var(--s-color-surface-container-highest, ${Theme.colorDarkSurfaceContainerHighest});
   height: 40px;
   border-radius: 20px;
   max-width: 100%;

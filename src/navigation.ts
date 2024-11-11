@@ -17,6 +17,7 @@ const style = /*css*/`
   overflow: hidden;
   background: var(--s-color-surface, ${Theme.colorSurface});
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   position: relative;
   flex-shrink: 0;
   padding-bottom: env(safe-area-inset-bottom);
@@ -96,7 +97,6 @@ const itemStyle = /*css*/`
   width: 100%;
   max-width: 80px;
   text-transform: capitalize;
-  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   transition: color .1s ease-out;
 }
 :host([selected=true]){

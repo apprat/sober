@@ -29,12 +29,10 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
   border: solid 2px var(--s-color-outline, ${Theme.colorOutline});
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   box-sizing: border-box;
   border-radius: inherit;
 }
 :host([disabled=true]) .track{
-  background: none;
   border-color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
 }
 :host([checked=true]) .track{

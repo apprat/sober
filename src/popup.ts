@@ -144,13 +144,11 @@ export class Popup extends useElement({
       container.style.left = `${position.left}px`
       wrapper.classList.add('show')
       container.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], animationOptions)
-      this.dispatchEvent(new Event('show'))
     }
     const dismiss = () => {
       if (!this.isConnected || !wrapper.classList.contains('show')) return
       wrapper.classList.remove('show')
       container.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animationOptions)
-      this.dispatchEvent(new Event('dismiss'))
     }
     const toggle: ShowOptions = (xOrEl, y, origin) => {
       if (!this.isConnected) return

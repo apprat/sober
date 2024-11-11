@@ -14,6 +14,7 @@ const style = /*css*/`
   font-size: .875rem;
   padding: 4px 0;
   flex-shrink: 0;
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 :host(:nth-of-type(n+2)){
   border-top: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
@@ -53,7 +54,6 @@ const itemStyle = /*css*/`
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   margin: 4px 8px;
 }
 .container{

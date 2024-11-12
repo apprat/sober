@@ -75,7 +75,6 @@ input::selection{
 ::slotted([slot=dropdown]){
   border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
   margin-top: 40px;
-  border-radius: 4px;
 }
 ::slotted([slot]){
   flex-shrink: 0;

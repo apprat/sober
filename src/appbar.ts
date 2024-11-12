@@ -9,7 +9,7 @@ const style = /*css*/`
 :host{
   display: flex;
   height: 64px;
-  background: var(--s-color-surface-container, ${Theme.colorSecondaryContainer});
+  background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
   align-items: center;
   position: relative;
   padding: 0 8px;

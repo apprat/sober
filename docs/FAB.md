@@ -8,10 +8,10 @@
 </s-fab>
 ```
 
-设置 `extended` 来启用扩展浮动按钮
+扩展浮动按钮
 
 ```html preview
-<s-fab extended="true">
+<s-fab>
   <s-icon type="add" slot="start"></s-icon>
   Button
   <s-icon type="close" slot="end"></s-icon>
@@ -33,14 +33,6 @@
   <s-icon type="add"></s-icon>
 </s-fab>
 ```
-
----
-
-## 属性
-
-| 名称     | 类型     | 默认值 | 是否同步 | 介绍        |
-| -------- | ------- | ------ | ------- | ----------- |
-| extended | boolean | false  | 是      | 启用扩展按钮 |
 
 ---
 

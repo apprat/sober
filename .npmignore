@@ -6,3 +6,4 @@ pnpm-lock.yaml
 tsconfig.json
 dev/
 test/
+docs/

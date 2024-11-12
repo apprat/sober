@@ -26,15 +26,13 @@ const style = /*css*/`
   box-sizing: border-box;
   padding: 16px;
   display: flex;
-  align-items: flex-end;
   justify-content: center;
-  --offset-direction: -1;
-  transform: translateY(calc(var(--offset) * var(--offset-direction)));
   transition: transform .2s ease-out;
 }
 .container{
   background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
   color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
+  align-self: flex-end;
   min-height: 48px;
   border-radius: 4px;
   box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
@@ -51,6 +49,14 @@ const style = /*css*/`
   filter: opacity(0);
   transition: transform .2s, filter .2s;
   transition-timing-function: ease-out;
+}
+:host([align=top]) .container{
+  align-self: flex-start;
+  transform: translateY(calc(-100% - 16px));
+}
+:host([align=bottom]) .container{
+  align-self: flex-end;
+  transform: translateY(calc(100% - 16px));
 }
 .wrapper.show .container{
   transform: translateY(0%);
@@ -109,11 +115,8 @@ const style = /*css*/`
   }
 }
 @media (pointer: coarse){
-  .wrapper{
-    align-items: flex-start;
-    --offset-direction: 1;
-  }
   .container{
+    align-self: flex-start;
     transform: translateY(calc(-100% - 16px));
     min-width: 240px;
   }
@@ -145,6 +148,7 @@ const show = (options: string | {
   icon?: string | Element
   text: string
   type?: typeof props['type']
+  align: typeof props['align']
   duration?: number
   action?: string | {
     text: string
@@ -162,6 +166,7 @@ const show = (options: string | {
     snackbar.textContent = options
   } else {
     if (options.root) root = options.root
+    if (options.align) snackbar.align = options.align
     if (options.icon) {
       if (options.icon instanceof Element) {
         options.icon.slot = 'icon'
@@ -193,16 +198,20 @@ const show = (options: string | {
   return snackbar
 }
 
-const task: { height: number, wrapper: HTMLElement }[] = []
+const bottomTask: HTMLElement[] = []
+const topTask: typeof bottomTask[number][] = []
+const coarse = matchMedia('(pointer: coarse)')
 
 class Snackbar extends useElement({
-  style, template, props, syncProps: ['type'],
+  style, template, props, syncProps: ['type', 'align'],
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
-    const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
+    const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement & { task: typeof bottomTask[number][], offset: number }
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const action = shadowRoot.querySelector('slot[name=action]') as HTMLElement
-    const state = { timer: 0, task: null as null | typeof task[number] }
+    const state = { timer: 0 }
+    const gap = 8
+    const getAlign = () => this.align === 'auto' ? (coarse.matches ? 'top' : 'bottom') : this.align
     const show = () => {
       if (wrapper.classList.contains('show')) return
       const stackingContext = getStackingContext(shadowRoot)
@@ -212,14 +221,18 @@ class Snackbar extends useElement({
         wrapper.style.top = `${0 - stackingContext.top}px`
         wrapper.style.left = `${0 - stackingContext.left}px`
       }
-      let offset = container.offsetHeight + 8
-      if (task.length > 0) {
-        for (const item of task) {
-          item.wrapper.style.setProperty('--offset', `${offset}px`)
-          offset += item.height + 8
+      const align = getAlign()
+      const height = container.offsetHeight
+      wrapper.task = { top: topTask, bottom: bottomTask }[align]
+      wrapper.offset = align === 'top' ? 1 : -1
+      let h = height + gap
+      if (wrapper.task.length > 0) {
+        for (const item of wrapper.task) {
+          item.style.transform = `translateY(${h * wrapper.offset}px)`
+          h += (item.firstElementChild as HTMLElement).offsetHeight + gap
         }
       }
-      task.unshift(state.task = { height: container.offsetHeight, wrapper })
+      wrapper.task.unshift(wrapper)
       wrapper.classList.add('show')
       this.dispatchEvent(new Event('show'))
       if (this.duration > 0) state.timer = setTimeout(dismiss, this.duration)
@@ -229,13 +242,13 @@ class Snackbar extends useElement({
       clearTimeout(state.timer)
       wrapper.classList.remove('show')
       this.dispatchEvent(new Event('dismiss'))
-      const indexOf = task.indexOf(state.task!)
-      for (let i = indexOf + 1; i < task.length; i++) {
-        const item = task[i]
-        const offset = Number(item.wrapper.style.getPropertyValue('--offset').slice(0, -2))
-        item.wrapper.style.setProperty('--offset', `${offset - 8 - container.offsetHeight}px`)
+      const indexOf = wrapper.task.indexOf(wrapper)
+      for (let i = indexOf + 1; i < wrapper.task.length; i++) {
+        const item = wrapper.task[i]
+        const h = Math.abs(Number(item.style.transform.slice(11).slice(0, -3)))
+        item.style.transform = `translateY(${(h - container.offsetHeight - gap) * wrapper.offset}px)`
       }
-      task.splice(indexOf, 1)
+      wrapper.task.splice(indexOf, 1)
     }
     const transitionEnd = (event: TransitionEvent) => {
       if (event.propertyName !== 'transform') return

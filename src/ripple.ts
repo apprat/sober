@@ -13,6 +13,7 @@ const style = /*css*/`
   vertical-align: middle;
   position: relative;
   cursor: pointer;
+  --ripple-color: currentColor;
 }
 :host([attached=true]){
   position: absolute;
@@ -41,7 +42,7 @@ const style = /*css*/`
   left: 0;
   top: 0;
   border-radius: inherit;
-  background: var(--ripple-color, currentColor);
+  background: var(--ripple-color);
   opacity: 0;
   transition: opacity .1s ease-out;
 }
@@ -49,7 +50,7 @@ const style = /*css*/`
   opacity: .12;
 }
 .ripple {
-  background: color-mix(in srgb, var(--ripple-color, currentColor) 24%, transparent);
+  background: color-mix(in srgb, var(--ripple-color) 24%, transparent);
   border-radius: 50%;
   width: 100%;
   height: 100%;
@@ -75,7 +76,7 @@ export class Ripple extends useElement({
     const ripple = shadowRoot.querySelector('.ripple') as HTMLDivElement
     const hover = () => !device.touched && container.classList.add('hover')
     const unHover = () => !device.touched && container.classList.remove('hover')
-    const state = { parentNode: null as null | HTMLElement }
+    const state = { parentNode: null as null | HTMLElement, rippled: false }
     const run = (event: PointerEvent) => {
       const { offsetWidth, offsetHeight } = this
       let size = Math.sqrt(offsetWidth * offsetWidth + offsetHeight * offsetHeight)
@@ -92,14 +93,24 @@ export class Ripple extends useElement({
         coordinate.x = `${x}px`
         coordinate.y = `${y}px`
       }
-      const p = (state.parentNode ?? this)
-      p.setAttribute('rippled', '')
+      let newRipple = ripple
+      let callback = () => { }
+      if (state.rippled) {
+        newRipple = ripple.cloneNode() as HTMLDivElement
+        container.appendChild(newRipple)
+        callback = () => newRipple.remove()
+      } else {
+        state.rippled = true
+        callback = () => state.rippled = false
+      }
+      const parent = (state.parentNode ?? this)
+      parent.setAttribute('rippled', '')
       const keyframes = { transform: 'translate(-50%, -50%) scale(1)', opacity: 1, width: `${size}px`, height: `${size}px`, left: `${coordinate.x}`, top: `${coordinate.y}` }
-      const animation = ripple.animate([{ ...keyframes, transform: 'translate(-50%, -50%) scale(0)' }, keyframes], { duration: 800, fill: 'forwards', easing: 'cubic-bezier(.2, .9, .1, .9)' })
+      const animation = newRipple.animate([{ ...keyframes, transform: 'translate(-50%, -50%) scale(0)' }, keyframes], { duration: 800, fill: 'forwards', easing: 'cubic-bezier(.2, .9, .1, .9)' })
       const remove = () => {
-        p.removeAttribute('rippled')
+        parent.removeAttribute('rippled')
         const time = Number(animation.currentTime)
-        ripple.animate([{ opacity: 1 }, { opacity: 0 }], { duration: time > 600 ? 200 : 800 - time, fill: 'forwards' })
+        newRipple.animate([{ opacity: 1 }, { opacity: 0 }], { duration: time > 600 ? 200 : 800 - time, fill: 'forwards' }).finished.then(callback)
       }
       return remove
     }

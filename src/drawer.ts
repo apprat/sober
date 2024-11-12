@@ -95,6 +95,7 @@ const style = /*css*/`
   ::slotted([slot=start]),
   ::slotted([slot=end]){
     max-width: 100%;
+    border: none;
   }
   .show-start-folded ::slotted([slot=start]),
   .show-end-folded ::slotted([slot=end]){

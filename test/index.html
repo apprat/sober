@@ -35,24 +35,31 @@
     <a href="./in-vue.html">In Vue</a>
     <a href="./test.html">Test</a>
 
-    <div style="display: flex; flex-direction: column;">
-      <div>
-        <div style="display: inline-block;">
-          <table border="1">
-            <tbody>
-              <tr>
-                <td>
-                  N
-                </td>
-                <td style="width: 100%;">
-                  A
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <s-button
+      onclick="customElements.get('s-snackbar').show({text: new Date().toLocaleTimeString(),action:'关闭',duration:0,align: 'top'})">
+      s-nackbar </s-button>
+    <s-button
+      onclick="customElements.get('s-snackbar').show({text: new Date().toLocaleTimeString(),action:'关闭',duration:0,align: 'bottom'})">
+      s-nackbar </s-button>
+
+    <s-snackbar duration="0" align="bottom">
+      <s-button slot="trigger"> Snackbar bottom </s-button>
+      <s-icon type="add" slot="icon"></s-icon>
+      Snackbar Message 1
+      <s-button type="text" slot="action"> 关闭 </s-button>
+    </s-snackbar>
+
+    <s-snackbar duration="0" align="top">
+      <s-button slot="trigger"> Snackbar top </s-button>
+      Snackbar Message 2
+      <s-button type="text" slot="action"> 关闭 </s-button>
+    </s-snackbar>
+
+    <s-snackbar duration="0">
+      <s-button slot="trigger"> Snackbar auto </s-button>
+      Snackbar Message 3
+      <s-button type="text" slot="action"> 关闭 </s-button>
+    </s-snackbar>
 
     <hr>
     <s-table>
@@ -1057,24 +1064,7 @@
       <s-popup-menu-item>选项5</s-popup-menu-item>
     </s-popup-menu>
     <hr>
-    <s-snackbar duration="0">
-      <s-button slot="trigger"> Snackbar 1 </s-button>
-      <s-icon type="add" slot="icon"></s-icon>
-      Snackbar Message 1
-      <s-button type="text" slot="action"> 关闭 </s-button>
-    </s-snackbar>
 
-    <s-snackbar duration="0" type="warning">
-      <s-button slot="trigger"> Snackbar 2 </s-button>
-      Snackbar Message 2
-      <s-button type="text" slot="action"> 关闭 </s-button>
-    </s-snackbar>
-
-    <s-snackbar duration="0" type="error">
-      <s-button slot="trigger"> Snackbar 3 </s-button>
-      Snackbar Message 3
-      <s-button type="text" slot="action"> 关闭 </s-button>
-    </s-snackbar>
 
     <s-button
       onclick="window.customElements.get('s-snackbar').show({text: `提示：${new Date}`, duration:Math.max( Math.random()*10000, 4000)})">Snackbar2</s-button>

@@ -4,7 +4,6 @@ import './ripple.js'
 
 const name = 's-fab'
 const props = {
-  extended: false
 }
 
 const style = /*css*/`
@@ -17,25 +16,17 @@ const style = /*css*/`
   cursor: pointer;
   box-sizing: border-box;
   flex-shrink: 0;
-  aspect-ratio: 1;
-  -webkit-aspect-ratio: 1;
-  width: 56px;
+  height: 56px;
   border-radius: 16px;
   background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
   color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
   transition: box-shadow .1s ease-out;
-  font-size: .875rem;
+  font-size: 1rem;
   font-weight: 500;
   white-space: nowrap;
   text-transform: capitalize;
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
-}
-:host([extended=true]){
   padding: 0 16px;
-  aspect-ratio: auto;
-  -webkit-aspect-ratio: auto;
-  width: auto;
-  height: 48px;
 }
 ::slotted(s-icon){
   color: currentColor;
@@ -70,7 +61,7 @@ const template = /*html*/`
 <s-ripple attached="true" part="ripple"></s-ripple>
 `
 
-export class FAB extends useElement({ style, template, props, syncProps: true }) { }
+export class FAB extends useElement({ style, template, props }) { }
 
 FAB.define(name)
 

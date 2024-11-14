@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+</head>
+
+<body>
+  <s-page class="gap">
+    <s-popup-menu>
+      <s-button slot="trigger">菜单</s-button>
+      <s-popup-menu-item>播放</s-popup-menu-item>
+      <s-popup-menu-item>播放相似单曲</s-popup-menu-item>
+      <s-popup-menu-item>我喜欢</s-popup-menu-item>
+      <s-popup-menu group="start">
+        <s-popup-menu-item slot="trigger">
+          添加到
+          <s-icon slot="end" type="arrow_drop_right"></s-icon>
+        </s-popup-menu-item>
+        <s-popup-menu-item>试听列表</s-popup-menu-item>
+        <s-popup-menu-item>添加到新歌单</s-popup-menu-item>
+      </s-popup-menu>
+      <s-popup-menu group="end">
+        <s-popup-menu-item slot="trigger">
+          更换音质
+          <s-icon slot="end" type="arrow_drop_right"></s-icon>
+        </s-popup-menu-item>
+        <s-popup-menu-item>标准品质</s-popup-menu-item>
+        <s-popup-menu-item>HQ高品质</s-popup-menu-item>
+        <s-popup-menu-item>SQ无损品质</s-popup-menu-item>
+      </s-popup-menu>
+      <s-popup-menu-item>查看评论(520)</s-popup-menu-item>
+      <s-popup-menu>
+        <s-popup-menu-item slot="trigger">
+          删除
+          <s-icon slot="end" type="arrow_drop_right"></s-icon>
+        </s-popup-menu-item>
+        <s-popup-menu-item>删除</s-popup-menu-item>
+        <s-popup-menu-item>删除(包括文件)</s-popup-menu-item>
+      </s-popup-menu>
+      <s-popup-menu>
+        <s-popup-menu-item slot="trigger">
+          更多操作
+          <s-icon slot="end" type="arrow_drop_right"></s-icon>
+        </s-popup-menu-item>
+        <s-popup-menu-item>复制歌曲信息</s-popup-menu-item>
+        <s-popup-menu-item>查看文件信息</s-popup-menu-item>
+        <s-popup-menu-item>取消匹配歌曲</s-popup-menu-item>
+      </s-popup-menu>
+    </s-popup-menu>
+  </s-page>
+</body>
+
+</html>

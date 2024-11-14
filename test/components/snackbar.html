@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+</head>
+
+<body>
+  <s-page class="gap">
+    <s-snackbar>
+      <s-button slot="trigger"> 提示 </s-button>
+      Message
+    </s-snackbar>
+    <hr>
+    <s-snackbar>
+      <s-button slot="trigger"> 提示 </s-button>
+      <s-icon type="light_mode" slot="icon"></s-icon>
+      Message
+      <s-button type="text" slot="action"> 关闭 </s-button>
+    </s-snackbar>
+    <hr>
+    <s-snackbar type="error">
+      <s-button slot="trigger" type="filled-tonal"> 错误 </s-button>
+      Message
+    </s-snackbar>
+  </s-page>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+</head>
+
+<body>
+  <s-page class="gap">
+    <s-ripple style="padding: 16px"> click me </s-ripple>
+    <s-ripple style="padding: 16px; color: #009688"> click me </s-ripple>
+    <hr>
+    <s-ripple style="padding: 16px 32px">
+      <s-button onpointerdown="event.stopPropagation()">阻止动画</s-button>
+    </s-ripple>
+    <hr>
+    <div style="position: relative; padding: 16px">
+      container
+      <s-ripple attached="true"></s-ripple>
+    </div>
+  </s-page>
+</body>
+
+</html>

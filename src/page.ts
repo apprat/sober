@@ -218,7 +218,7 @@ export class Page extends useElement({
       ::view-transition-old(root),
       ::view-transition-new(root) {
         animation: none;
-        mix-blend-mode: normal
+        mix-blend-mode: normal;
       }`, 0)
       const transition = document.startViewTransition(() => this.theme = theme)
       const radius = Math.hypot(Math.max(info.x, innerWidth - info.x), Math.max(info.y, innerHeight - info.y))

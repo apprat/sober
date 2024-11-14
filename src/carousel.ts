@@ -117,6 +117,7 @@ export class Carousel extends useElement({
       const width = container.offsetWidth
       const min = state.selectIndex === 0 ? 0 : width
       const max = state.selectIndex === state.count - 1 ? 0 : width * -1
+      const now = Date.now()
       let left: number
       stopTask()
       const move = (event: MouseEvent | TouchEvent) => {
@@ -125,22 +126,24 @@ export class Carousel extends useElement({
         const y = point.pageY - pageY
         if (Math.abs(y) > Math.abs(x)) return up()
         left = Math.max(Math.min(x, min), max)
+        event.cancelable && event.preventDefault()
         container.style.transition = 'none'
         container.style.pointerEvents = 'none'
         container.style.transform = `translateX(calc(-${state.selectIndex * 100}% + ${left}px))`
       }
+      const events = device.touched ? ['touchmove', 'touchend'] as const : ['mousemove', 'mouseup'] as const
       const up = () => {
-        document.removeEventListener(events[0], move, { capture: true })
+        document.removeEventListener(events[0], move)
         let old = state.selectIndex
-        if (Math.abs(left) > width / 3) state.selectIndex = left < 0 ? state.selectIndex + 1 : state.selectIndex - 1
+        const threshold = (Date.now() - now) > 150 ? width / 3 : 40
+        if (Math.abs(left) > threshold) state.selectIndex = left < 0 ? state.selectIndex + 1 : state.selectIndex - 1
         if (old !== state.selectIndex) update()
         container.style.removeProperty('transition')
         container.style.removeProperty('pointer-events')
         container.style.transform = `translateX(-${state.selectIndex * 100}%)`
         runTask()
       }
-      const events = device.touched ? ['touchmove', 'touchend'] as const : ['mousemove', 'mouseup'] as const
-      document.addEventListener(events[0], move, { passive: true, capture: true })
+      document.addEventListener(events[0], move, { passive: false })
       document.addEventListener(events[1], up, { once: true })
     })
     return {

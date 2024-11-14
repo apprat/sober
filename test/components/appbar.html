@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+</head>
+
+<body>
+  <s-page>
+    <s-appbar>
+      <s-icon-button slot="navigation">
+        <s-icon type="menu"></s-icon>
+      </s-icon-button>
+      <div slot="headline"> Title </div>
+      <s-search slot="search" placeholder="搜索关键字">
+        <s-icon type="search" slot="start"></s-icon>
+        <s-icon-button slot="end">
+          <s-icon type="close"></s-icon>
+        </s-icon-button>
+      </s-search>
+      <s-icon-button slot="action">
+        <s-icon type="search"></s-icon>
+      </s-icon-button>
+    </s-appbar>
+  </s-page>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+</head>
+
+<body>
+  <s-page>
+    <s-tab>
+      <s-tab-item>
+        <div slot="text">Item 1</div>
+      </s-tab-item>
+      <s-tab-item selected="true">
+        <div slot="text">Item 2</div>
+      </s-tab-item>
+      <s-tab-item>
+        <div slot="text">Item 3</div>
+      </s-tab-item>
+    </s-tab>
+    <hr>
+    <s-tab>
+      <s-tab-item>
+        <s-icon type="home" slot="icon"></s-icon>
+        <div slot="text">Item 1</div>
+        <s-badge slot="badge"></s-badge>
+      </s-tab-item>
+      <s-tab-item selected="true">
+        <s-icon type="home" slot="icon"></s-icon>
+        <div slot="text">Item 2</div>
+      </s-tab-item>
+      <s-tab-item>
+        <s-icon type="home" slot="icon"></s-icon>
+        <div slot="text">Item 3</div>
+        <s-badge slot="badge">99</s-badge>
+      </s-tab-item>
+    </s-tab>
+    <hr>
+    <s-tab mode="fixed">
+      <s-tab-item>
+        <div slot="text">Item 1</div>
+      </s-tab-item>
+      <s-tab-item selected="true">
+        <div slot="text">Item 2</div>
+      </s-tab-item>
+      <s-tab-item>
+        <div slot="text">Item 3</div>
+      </s-tab-item>
+    </s-tab>
+  </s-page>
+</body>
+
+</html>

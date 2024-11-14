@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+</head>
+
+<body>
+  <s-page class="gap">
+    <s-search placeholder="搜索关键字">
+      <s-icon type="search" slot="start"></s-icon>
+      <s-icon-button slot="end">
+        <s-icon type="close"></s-icon>
+      </s-icon-button>
+    </s-search>
+
+    <hr>
+    <s-search placeholder="搜索关键字">
+      <s-icon type="search" slot="start"></s-icon>
+      <s-icon type="close" slot="end"></s-icon>
+      <div slot="dropdown" style="height: 128px">
+        ...
+      </div>
+    </s-search>
+  </s-page>
+</body>
+
+</html>

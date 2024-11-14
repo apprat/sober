@@ -33,7 +33,9 @@
 计数器（需要同时设置 `maxLength` 属性）
 
 ```html preview
-<s-text-field label="请输入内容" maxLength="20" countered="true"></s-text-field>
+<s-text-field label="请输入内容" maxLength="20" countered="true">
+  <div slot="text">支持中英文2-20个字符</div>
+</s-text-field>
 ```
 
 ---

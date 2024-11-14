@@ -8,13 +8,16 @@ body {
   margin: 0;
 }
 
-main {
-  padding: 8px;
-  border: solid 1px var(--s-color-outline-variant);
-  margin: 16px;
-  display: flow-root;
+s-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
-main>* {
+s-page.gap {
+  padding: 16px;
+}
+
+s-page.gap>* {
   margin: 8px;
 }

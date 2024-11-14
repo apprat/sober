@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+</head>
+
+<body>
+  <s-page class="gap">
+    <s-text-field label="请输入内容"></s-text-field>
+    <s-text-field label="请输入内容" value="My Name">
+      <s-icon slot="start" type="search"></s-icon>
+      <s-icon-button slot="end">
+        <s-icon type="close"></s-icon>
+      </s-icon-button>
+    </s-text-field>
+    <hr>
+    <s-text-field style="display: grid; width: auto" label="请输入名称"></s-text-field>
+    <hr>
+    <s-text-field label="请输入名称" multiLine="true"></s-text-field>
+    <hr>
+    <s-text-field error="true" label="请输入内容"></s-text-field>
+    <hr>
+    <s-text-field label="请输入内容" maxLength="20" countered="true">
+      <div slot="text">help</div>
+    </s-text-field>
+  </s-page>
+</body>
+
+</html>

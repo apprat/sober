@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+</head>
+
+<body>
+  <s-page>
+    <s-navigation>
+      <s-navigation-item selected="true">
+        <s-icon type="add" slot="icon"></s-icon>
+        <div slot="text">Item 1</div>
+        <s-badge slot="badge"></s-badge>
+      </s-navigation-item>
+      <s-navigation-item>
+        <s-icon type="search" slot="icon"></s-icon>
+        <div slot="text">Item 2</div>
+      </s-navigation-item>
+      <s-navigation-item>
+        <s-icon type="dark_mode" slot="icon"></s-icon>
+        <div slot="text">Item 3</div>
+        <s-badge slot="badge">99</s-badge>
+      </s-navigation-item>
+    </s-navigation>
+    <hr>
+    <s-navigation mode="rail">
+      <s-navigation-item selected="true">
+        <s-icon type="add" slot="icon"></s-icon>
+        <div slot="text">Item 1</div>
+        <s-badge slot="badge"></s-badge>
+      </s-navigation-item>
+      <s-navigation-item>
+        <s-icon type="search" slot="icon"></s-icon>
+        <div slot="text">Item 2</div>
+      </s-navigation-item>
+      <s-navigation-item>
+        <s-icon type="dark_mode" slot="icon"></s-icon>
+        <div slot="text">Item 3</div>
+        <s-badge slot="badge">99</s-badge>
+      </s-navigation-item>
+    </s-navigation>
+  </s-page>
+</body>
+
+</html>

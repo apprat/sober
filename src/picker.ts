@@ -38,6 +38,7 @@ const style = /*css*/`
   --field-border-width: var(--picker-border-width);
   --field-padding: var(--picker-padding);
   height: var(--picker-height);
+  width: 100%;
 }
 .view{
   width: 100%;
@@ -104,6 +105,7 @@ export class Picker extends useElement({
     popup.addEventListener('show', () => {
       field.focused = true
       field.labelFixed = true
+      container.style.minWidth = `${this.offsetWidth}px`
       select.select && container.scrollTo({ top: (select.select.offsetTop - container.offsetTop) - (container.offsetHeight / 2) + (select.select.offsetHeight / 2) })
     })
     //dismiss
@@ -111,6 +113,7 @@ export class Picker extends useElement({
       field.focused = false
       !select.select && (field.labelFixed = false)
     })
+    popup.addEventListener('dismissed', () => container.style.removeProperty('min-width'))
     select.onUpdate = () => {
       if (!select.select) {
         field.labelFixed = false

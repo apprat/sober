@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+</head>
+
+<body>
+  <s-page>
+    <s-menu style="max-width: 280px">
+      <div slot="label">控制台</div>
+      <s-menu-item checked="true">
+        <s-icon slot="start" type="home"></s-icon>
+        选项1
+      </s-menu-item>
+      <s-menu-item>
+        <s-icon slot="start" type="search"></s-icon>
+        选项2
+        <s-icon slot="end" type="add"></s-icon>
+      </s-menu-item>
+      <s-menu-item>
+        <s-icon slot="start" type="light_mode"></s-icon>
+        选项3
+      </s-menu-item>
+      <s-menu-item>
+        <s-icon slot="start" type="favorite"></s-icon>
+        选项4
+        <s-menu slot="menu">
+          <s-menu-item> 选项1 </s-menu-item>
+          <s-menu-item> 选项2 </s-menu-item>
+        </s-menu>
+      </s-menu-item>
+      <s-menu-item>
+        <s-icon slot="start" type="add"></s-icon>
+        选项5
+      </s-menu-item>
+    </s-menu>
+    <s-menu style="max-width: 280px">
+      <div slot="label">其他</div>
+      <s-menu-item> 选项6 </s-menu-item>
+      <s-menu-item> 选项7 </s-menu-item>
+    </s-menu>
+  </s-page>
+</body>
+
+</html>

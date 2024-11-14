@@ -65,7 +65,7 @@ const template = /*html*/`
 
 type ShowOptions = (xOrEl?: HTMLElement | number, y?: number, origin?: string) => void
 
-export class Popup extends useElement({
+class Popup extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('#trigger') as HTMLDivElement
@@ -75,6 +75,7 @@ export class Popup extends useElement({
     const animationOptions = { duration: 100, easing: 'ease-out' } as const
     const show: ShowOptions = (xOrEl, y, origin) => {
       if (!this.isConnected || wrapper.classList.contains('show')) return
+      if (!this.dispatchEvent(new Event('show', { cancelable: true }))) return
       const stackingContext = getStackingContext(shadowRoot)
       if (stackingContext.top !== 0 || stackingContext.left !== 0) {
         wrapper.setAttribute('style', `width: ${innerWidth}px;height: ${innerHeight}px;top: ${0 - stackingContext.top}px;left: ${0 - stackingContext.left}px`)
@@ -143,12 +144,15 @@ export class Popup extends useElement({
       container.style.top = `${position.top}px`
       container.style.left = `${position.left}px`
       wrapper.classList.add('show')
-      container.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], animationOptions)
+      const animation = container.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], animationOptions)
+      animation.addEventListener('finish', () => this.dispatchEvent(new Event('showed')))
     }
     const dismiss = () => {
       if (!this.isConnected || !wrapper.classList.contains('show')) return
+      if (!this.dispatchEvent(new Event('dismiss', { cancelable: true }))) return
       wrapper.classList.remove('show')
-      container.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animationOptions)
+      const animation = container.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animationOptions)
+      animation.addEventListener('finish', () => this.dispatchEvent(new Event('dismissed')))
     }
     const toggle: ShowOptions = (xOrEl, y, origin) => {
       if (!this.isConnected) return
@@ -165,6 +169,20 @@ export class Popup extends useElement({
 }) { }
 
 Popup.define(name)
+
+export { Popup }
+
+interface EventMap extends HTMLElementEventMap {
+  show: Event
+  showed: Event
+  dismiss: Event
+  dismissed: Event
+}
+
+interface Popup {
+  addEventListener<K extends keyof EventMap>(type: K, listener: (this: Popup, ev: EventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof EventMap>(type: K, listener: (this: Popup, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
+}
 
 declare global {
   namespace JSX {

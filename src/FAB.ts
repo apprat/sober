@@ -28,13 +28,12 @@ const style = /*css*/`
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   padding: 0 16px;
 }
-::slotted(s-icon){
-  color: currentColor;
-}
-::slotted(svg){
+::slotted(*){
+  flex-shrink: 0;
   width: 24px;
   height: 24px;
   fill: currentColor;
+  color: currentColor;
 }
 ::slotted(s-icon[slot=start]),
 ::slotted(svg[slot=start]){

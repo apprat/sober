@@ -16,3 +16,5 @@ if (page && page.tagName === 'S-PAGE') {
     icon.type = page.theme === 'dark' ? 'light_mode' : 'dark_mode'
   })
 }
+
+document.addEventListener('gesturestart', (event) => event.preventDefault())

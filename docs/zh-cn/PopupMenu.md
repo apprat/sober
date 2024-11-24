@@ -109,6 +109,7 @@ class PopupMenu extends HTMLElement {
 | ------------------------- | --------- |
 | --s-color-on-surface      | 文本颜色   |
 | --s-color-outline-variant | 分割线颜色 |
+| --z-index                 | 弹出层权重     |
 
 ---
 

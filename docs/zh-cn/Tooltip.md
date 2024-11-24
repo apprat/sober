@@ -32,3 +32,4 @@ class Tooltip extends HTMLElement {
 | ---------------------------- | -------------- |
 | --s-color-inverse-surface    | 工具提示背景颜色 |
 | --s-color-inverse-on-surface | 工具提示文本颜色 |
+| --z-index                    | 弹出层权重     |

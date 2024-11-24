@@ -61,6 +61,7 @@ export default class <S extends Select, SI extends SelectItem> {
         return true
       }) as never[]
       this.flag = false
+      this.onSlotChange?.()
       this.onUpdate?.()
     })
   }
@@ -87,4 +88,5 @@ export default class <S extends Select, SI extends SelectItem> {
   }
   declare onUpdate?: () => void
   declare onSelect?: () => void
+  declare onSlotChange?: () => void
 }

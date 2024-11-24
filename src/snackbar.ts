@@ -143,7 +143,7 @@ const template = /*html*/`
 </div>
 `
 
-const show = (options: string | {
+const builder = (options: string | {
   root?: Element
   icon?: string | Element
   text: string
@@ -264,7 +264,7 @@ class Snackbar extends useElement({
     }
   }
 }) {
-  static readonly show = show
+  static readonly builder = builder
 }
 
 Snackbar.define(name)

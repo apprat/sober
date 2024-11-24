@@ -91,6 +91,7 @@ class Picker extends HTMLElement {
 | --picker-padding             | `私有` 内边距   |
 | --picker-height              | `私有` 高度     |
 | --s-color-on-surface-variant | 图标颜色        |
+| --z-index                    | 弹出层权重     |
 
 ---
 

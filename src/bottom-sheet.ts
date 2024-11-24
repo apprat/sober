@@ -94,7 +94,7 @@ const template = /*html*/`
 
 type View = HTMLElement | ((bottomSheet: BottomSheet) => void)
 
-const show = (options: View | {
+const builder = (options: View | {
   root?: Element
   view: View
 }) => {
@@ -146,7 +146,7 @@ class BottomSheet extends useElement({
     }
   }
 }) {
-  static readonly show = show
+  static readonly builder = builder
 }
 
 BottomSheet.define(name)

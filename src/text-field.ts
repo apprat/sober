@@ -185,8 +185,8 @@ const template = /*html*/`
   <div slot="label" class="label"></div>
   <div slot="view" class="view">
     <div class="shadow"></div>
-    <input type="text">
-    <textarea></textarea>
+    <input type="text" part="input">
+    <textarea part="textarea"></textarea>
   </div>
   <slot slot="start" name="start"></slot>
   <slot slot="end" name="end"></slot>

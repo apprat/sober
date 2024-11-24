@@ -86,9 +86,9 @@ interface Options {
 }
 
 class Dialog extends HTMLElement {
-  static show(options: string | Options): Dialog //动态创建对话框
-  show(): void //显示对话框
-  dismiss(): void //隐藏对话框
+  static readonly builder(options: string | Options): Dialog //动态创建对话框
+  readonly show(): void //显示对话框
+  readonly dismiss(): void //隐藏对话框
 } 
 ```
 
@@ -103,3 +103,4 @@ class Dialog extends HTMLElement {
 | --s-color-on-surface                | 标题颜色            |
 | --s-color-primary                   | 操作按钮文本颜色     |
 | --s-elevation-level5                | 对话框弹出层阴影     |
+| --z-index                           | 弹出层权重          |

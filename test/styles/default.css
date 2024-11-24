@@ -21,3 +21,20 @@ s-page.gap {
 s-page.gap>* {
   margin: 8px;
 }
+
+:not(:defined) {
+  display: none;
+}
+
+/**fluent2**/
+
+s-button {
+  height: 30px;
+  border-radius: 4px;
+  padding: 0 12px;
+  min-width: 96px;
+}
+
+s-button[type=outlined] {
+  color: var(--s-color-on-surface);
+}

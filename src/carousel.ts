@@ -1,11 +1,13 @@
 import { useElement, JSXAttributes } from './core/element.js'
 import { device } from './core/utils/device.js'
+import Select from './core/select.js'
 import './ripple.js'
 import { Theme } from './page.js'
 
 const name = 's-carousel'
 const props = {
-  value: -1,
+  value: '',
+  autoplay: false,
   duration: 4000
 }
 
@@ -17,7 +19,6 @@ const style = /*css*/`
   position: relative;
   overflow: hidden;
   border-radius: 8px;
-  max-width: 480px;
   cursor: pointer;
 }
 .container{
@@ -26,6 +27,7 @@ const style = /*css*/`
   height: 100%;
   min-width: 100%;
   transition: transform .3s ease-out;
+  transform: translateX(100%);
 }
 .track{
   position: absolute;
@@ -53,15 +55,6 @@ const style = /*css*/`
 .track .indicator.checked{
   opacity: 1;
 }
-::slotted(*){
-  display: block;
-  flex-shrink: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  user-drag: none;
-  -webkit-user-drag: none;
-}
 `
 
 const template = /*html*/`
@@ -77,104 +70,144 @@ export class Carousel extends useElement({
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const track = shadowRoot.querySelector('.track') as HTMLDivElement
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
-    const state = { selectIndex: 0, count: 0, timer: -1 }
-    const update = () => {
-      container.style.transform = `translateX(-${state.selectIndex * 100}%)`
-      track.querySelector('.checked')?.classList.remove('checked')
-      track.children[state.selectIndex]?.classList.add('checked')
+    const select = new Select({ context: this, selectClass: CarouselItem, slot })
+    let timer = -1
+    select.onUpdate = () => {
+      track.childNodes.forEach((item) => (item as Element).classList.remove('checked'))
+      container.style.transform = `translateX(${-select.selectedIndex * 100}%)`
+      if (select.selectedIndex === -1) return
+      (track.childNodes[select.selectedIndex] as Element).classList.add('checked')
+      play()
     }
-    const runTask = () => {
-      clearTimeout(state.timer)
-      if (state.count === 0) return
-      state.timer = setTimeout(() => {
-        const next = state.selectIndex + 1
-        state.selectIndex = next === state.count ? 0 : next
-        update()
-        runTask()
+    const play = () => {
+      stopPlay()
+      if (!this.autoplay) return
+      if (select.selects.length === 0) return
+      timer = setTimeout(() => {
+        let next = select.selectedIndex + 1
+        if (next >= select.selects.length) next = 0
+        select.selects[next].selected = true
+        this.dispatchEvent(new Event('change'))
       }, this.duration)
     }
-    const stopTask = () => clearTimeout(state.timer)
-    slot.addEventListener('slotchange', () => {
+    const stopPlay = () => clearInterval(timer)
+    select.onSlotChange = () => {
       track.innerHTML = ''
-      const elements = slot.assignedElements()
       const fragment = document.createDocumentFragment()
-      elements.forEach((_, index) => {
+      select.selects.forEach((item) => {
         const div = document.createElement('div')
-        div.classList.add('indicator')
-        div.setAttribute('part', 'indicator')
-        div.addEventListener('click', () => this.value = index)
+        div.className = 'indicator'
+        div.addEventListener('click', () => item.dispatchEvent(new Event(`${name}:select`, { bubbles: true })))
         fragment.appendChild(div)
       })
       track.appendChild(fragment)
-      state.count = elements.length
-      state.selectIndex = 0
-      update()
-      runTask()
-    })
-    container.addEventListener('pointerdown', (event: PointerEvent) => {
-      if (state.count <= 1 || event.button !== 0) return
-      const { pageX, pageY } = event
+    }
+    container.addEventListener('pointerdown', (event) => {
+      if (select.selects.length <= 1) return
+      stopPlay()
+      const x = event.pageX
       const width = container.offsetWidth
-      const min = state.selectIndex === 0 ? 0 : width
-      const max = state.selectIndex === state.count - 1 ? 0 : width * -1
-      const now = Date.now()
-      let left: number
-      stopTask()
-      const move = (event: MouseEvent | TouchEvent) => {
-        const point = event instanceof MouseEvent ? event : event.changedTouches[0]
-        const x = point.pageX - pageX
-        const y = point.pageY - pageY
-        if (Math.abs(y) > Math.abs(x)) return up()
-        left = Math.max(Math.min(x, min), max)
-        event.cancelable && event.preventDefault()
+      const prev = select.selects[select.selectedIndex - 1]
+      const next = select.selects[select.selectedIndex + 1]
+      const move = (event: PointerEvent) => {
         container.style.transition = 'none'
-        container.style.pointerEvents = 'none'
-        container.style.transform = `translateX(calc(-${state.selectIndex * 100}% + ${left}px))`
+        const left = Math.min(Math.max(event.pageX - x, width * -1), width)
+        let translateX = left
+        //first
+        if (!prev && left > 0) translateX = left * 0.2
+        if (next && left < 0) {
+          console.log('next', translateX)
+          next.style.transform = `scale(${Math.abs((Math.abs(left) / width) * 0.05) + 0.95})`
+        }
+        container.style.transform = `translateX(${translateX}px)`
       }
-      const events = device.touched ? ['touchmove', 'touchend'] as const : ['mousemove', 'mouseup'] as const
-      const up = () => {
-        document.removeEventListener(events[0], move)
-        let old = state.selectIndex
-        const threshold = (Date.now() - now) > 150 ? width / 3 : 40
-        if (Math.abs(left) > threshold) state.selectIndex = left < 0 ? state.selectIndex + 1 : state.selectIndex - 1
-        if (old !== state.selectIndex) update()
+      document.addEventListener('pointermove', move)
+      document.addEventListener('pointerup', () => {
+        document.removeEventListener('pointermove', move)
         container.style.removeProperty('transition')
-        container.style.removeProperty('pointer-events')
-        container.style.transform = `translateX(-${state.selectIndex * 100}%)`
-        runTask()
-      }
-      document.addEventListener(events[0], move, { passive: false })
-      document.addEventListener(events[1], up, { once: true })
+        play()
+      }, { once: true })
     })
     return {
       expose: {
         get value() {
-          return state.selectIndex
+          return select.value
+        },
+        get options() {
+          return select.selects
+        },
+        get selectedIndex() {
+          return select.selectedIndex
+        },
+        togglePrev: () => {
+        },
+        toggleNext: () => {
         }
       },
       props: {
-        duration: runTask,
-        value: (value) => {
-          if (value < 0 || value > state.count - 1) return
-          state.selectIndex = value
-          runTask()
-          update()
+        value: (value) => select.value = value,
+        autoplay: play
+      }
+    }
+  }
+}) { }
+
+const itemName = 's-carousel-item'
+const itemProps = {
+  selected: false,
+  value: ''
+}
+
+const itemStyle = /*css*/`
+:host{
+  user-drag: none;
+  -webkit-user-drag: none;
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background: #eee;
+  transform: scale(0.95);
+  transition: transform .3s ease-out;
+  background-repeat: round;
+}
+:host([selected=true]){
+  transform: scale(1);
+}
+`
+
+const itemTemplate = /*html*/`<slot></slot>`
+
+export class CarouselItem extends useElement({
+  style: itemStyle,
+  template: itemTemplate,
+  props: itemProps,
+  syncProps: ['selected'],
+  setup() {
+    return {
+      props: {
+        selected: () => {
+          if (!(this.parentNode instanceof Carousel)) return
+          this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
         }
-      },
+      }
     }
   }
 }) { }
 
 Carousel.define(name)
+CarouselItem.define(itemName)
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
       [name]: Partial<typeof props> & JSXAttributes
+      [itemName]: Partial<typeof itemProps> & JSXAttributes
     }
   }
   interface HTMLElementTagNameMap {
     [name]: Carousel
+    [itemName]: CarouselItem
   }
 }
 
@@ -182,5 +215,6 @@ declare global {
 declare module 'vue' {
   export interface GlobalComponents {
     [name]: typeof props
+    [itemName]: typeof itemProps
   }
 }

@@ -17,8 +17,6 @@
 </s-appbar>
 ```
 
-> 在屏幕宽度小于 **840px** 时，它的高度会变为 **56px**。
-
 你可以嵌套该组件，内部的 appbar 会居中并且设置一个最大宽度，默认为 **1280px**。
 
 ```html preview
@@ -36,6 +34,16 @@
     </s-icon-button>
   </s-appbar>
 </s-appbar>
+```
+
+在屏幕宽度小于 **768px** 时，它的高度会变为 **56px**，所以你可能需要处理一些布局。
+
+```css
+@media(max-width: 768px){
+  div {
+    height: calc(100% - 56px);
+  }
+}
 ```
 
 ---

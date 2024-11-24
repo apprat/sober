@@ -11,11 +11,26 @@
 
 <body>
   <s-page class="gap">
-    <s-carousel>
-      <div style="background: #936d6d"></div>
-      <div style="background: #6d936f"></div>
-      <div style="background: #856d93"></div>
+    <s-carousel autoplay="false" onchangex="console.log('change',this.selectedIndex)"
+      style="border: solid 1px #ddd;max-width: 480px;margin-left: 200px;">
+      <s-carousel-item selected="true" value="1"
+        style="background-image: url('https://img.youpin.mi-img.com/ferriswheel/2b1aac43_8370_4641_956d_3e25a284d150.jpeg@base@tag=imgScale&F=webp&h=1180&q=90&w=2560');"></s-carousel-item>
+      <s-carousel-item value="2"
+        style="background-image: url('https://img.youpin.mi-img.com/ferriswheel/04e1ed7e_237f_455c_bcba_813225a450f1.jpeg@base@tag=imgScale&F=webp&h=1080&q=90&w=2560');"></s-carousel-item>
+      <s-carousel-item value="3"
+        style="background-image: url('https://img.youpin.mi-img.com/ferriswheel/2b1aac43_8370_4641_956d_3e25a284d150.jpeg@base@tag=imgScale&F=webp&h=1180&q=90&w=2560');"></s-carousel-item>
+      <s-carousel-item value="4"
+        style="background-image: url('https://img.youpin.mi-img.com/ferriswheel/04e1ed7e_237f_455c_bcba_813225a450f1.jpeg@base@tag=imgScale&F=webp&h=1080&q=90&w=2560');"></s-carousel-item>
+      <s-carousel-item value="5"
+        style="background-image: url('https://img.youpin.mi-img.com/ferriswheel/04e1ed7e_237f_455c_bcba_813225a450f1.jpeg@base@tag=imgScale&F=webp&h=1080&q=90&w=2560');"></s-carousel-item>
     </s-carousel>
+
+    <s-button onclick="document.querySelector('s-carousel').value='1'">1</s-button>
+    <s-button onclick="document.querySelector('s-carousel').value='2'">2</s-button>
+    <s-button onclick="document.querySelector('s-carousel').value='3'">3</s-button>
+    <s-button onclick="document.querySelector('s-carousel').value='4'">4</s-button>
+    <s-button onclick="document.querySelector('s-carousel').value='5'">5</s-button>
+
   </s-page>
 </body>
 

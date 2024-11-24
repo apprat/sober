@@ -128,7 +128,7 @@ const template = /*html*/`
 </div>
 `
 
-const show = (options: string | {
+const builder = (options: string | {
   root?: Element
   headline?: string
   text?: string
@@ -223,7 +223,7 @@ class Dialog extends useElement({
     }
   }
 }) {
-  static readonly show = show
+  static readonly builder = builder
 }
 
 Dialog.define(name)

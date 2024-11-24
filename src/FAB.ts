@@ -17,6 +17,7 @@ const style = /*css*/`
   box-sizing: border-box;
   flex-shrink: 0;
   height: 56px;
+  font-size: .875rem;
   border-radius: 16px;
   background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
   color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});

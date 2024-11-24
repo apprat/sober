@@ -24,7 +24,11 @@
 ## 原型
 
 ```ts
+type View = HTMLElement | ((bottomSheet: BottomSheet) => void)
+
 class BottomSheet extends HTMLElement {
+  //动态创建弹出框
+  static readonly builder(options: View | { root?: Element, view: View }): BottomSheet
   //显示弹出框
   readonly show(): void
   //隐藏弹出框
@@ -42,3 +46,4 @@ class BottomSheet extends HTMLElement {
 | --s-color-surface-container-highest | 弹出层背景颜色 |
 | --s-color-on-surface-variant        | 指示器颜色     |
 | --s-elevation-level1                | 弹出层阴影     |
+| --z-index                           | 弹出层权重     |

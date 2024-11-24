@@ -82,9 +82,9 @@ interface Options {
 }
 
 class Snackbar extends HTMLElement {
-  static show(options: string | Options): Dialog //动态创建提示框
-  show(): void //显示提示框
-  dismiss(): void //隐藏提示框
+  static readonly builder(options: string | Options): Dialog //动态创建提示框
+  readonly show(): void //显示提示框
+  readonly dismiss(): void //隐藏提示框
 } 
 ```
 

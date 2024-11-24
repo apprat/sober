@@ -79,3 +79,4 @@ class Popup extends HTMLElement {
 | -------------------------------- | ------------- |
 | --s-color-surface-container-high | 弹出框背景颜色 |
 | --s-elevation-level2             | 弹出框阴影     |
+| --z-index                        | 弹出层权重     |

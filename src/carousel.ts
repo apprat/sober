@@ -105,28 +105,64 @@ export class Carousel extends useElement({
     container.addEventListener('pointerdown', (event) => {
       if (select.selects.length <= 1) return
       stopPlay()
-      const x = event.pageX
+      const pageX = event.pageX
+      const pageY = event.pageY
       const width = container.offsetWidth
       const prev = select.selects[select.selectedIndex - 1]
       const next = select.selects[select.selectedIndex + 1]
-      const move = (event: PointerEvent) => {
-        container.style.transition = 'none'
-        const left = Math.min(Math.max(event.pageX - x, width * -1), width)
-        let translateX = left
-        //first
-        if (!prev && left > 0) translateX = left * 0.2
-        if (next && left < 0) {
-          console.log('next', translateX)
-          next.style.transform = `scale(${Math.abs((Math.abs(left) / width) * 0.05) + 0.95})`
+      const state = { now: 0, left: 0, next: undefined as undefined | CarouselItem }
+      const move = (event: PointerEvent | TouchEvent) => {
+        let eventInfo: { pageX: number, pageY: number } = event instanceof TouchEvent ? event.touches[0] : event
+        const x = eventInfo!.pageX - pageX
+        const y = eventInfo!.pageY - pageY
+        if (Math.abs(x) < Math.abs(y) && !state.next) return up()
+        state.left = x
+        if (state.now === 0) state.now = Date.now()
+        if (prev) state.left = Math.min(state.left, width)
+        if (next) state.left = Math.max(state.left, width * -1)
+        if ((!prev && state.left > 0) || (!next && state.left < 0)) {
+          state.left = state.left * 0.2
         }
-        container.style.transform = `translateX(${translateX}px)`
+        if ((state.left < 0 && next) || (state.left > 0 && prev)) {
+          const scale = (Math.abs(state.left) / width) * 0.05
+          select.select!.style.transition = 'none'
+          select.select!.style.transform = `scale(${(0.05 - scale) + 0.95})`
+          state.next = state.left < 0 ? next : prev
+          state.next.style.transition = 'none'
+          state.next.style.transform = `scale(${scale + 0.95})`
+        }
+        container.style.transition = 'none'
+        container.style.pointerEvents = 'none'
+        container.style.transform = `translateX(calc(${-select.selectedIndex * 100}% + ${state.left}px))`
+        event.cancelable && event.preventDefault()
       }
-      document.addEventListener('pointermove', move)
-      document.addEventListener('pointerup', () => {
-        document.removeEventListener('pointermove', move)
+      const up = () => {
+        document.removeEventListener(eventName.up, up)
+        document.removeEventListener(eventName.move, move)
+        container.style.removeProperty('pointer-events')
         container.style.removeProperty('transition')
+        select.select!.style.removeProperty('transition')
+        select.select!.style.removeProperty('transform')
+        state.next?.style.removeProperty('transition')
+        state.next?.style.removeProperty('transform')
+        const index = select.selectedIndex
+        const is = (index === 0 && state.left > 0) || (index === select.selects.length - 1 && state.left < 0)
+        if (!is) {
+          const threshold = (Date.now() - state.now) > 300 ? width / 2 : 20
+          if (Math.abs(state.left) > threshold) {
+            state.next?.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
+            return
+          }
+        }
+        container.style.transform = `translateX(${-select.selectedIndex * 100}%)`
         play()
-      }, { once: true })
+      }
+      const eventName = {
+        move: device.touched ? 'touchmove' : 'pointermove',
+        up: device.touched ? 'touchend' : 'pointerup'
+      } as const
+      document.addEventListener(eventName.move, move, { passive: false })
+      document.addEventListener(eventName.up, up)
     })
     return {
       expose: {
@@ -139,9 +175,15 @@ export class Carousel extends useElement({
         get selectedIndex() {
           return select.selectedIndex
         },
-        togglePrev: () => {
+        togglePrevious: () => {
+          const prev = select.selects[select.selectedIndex - 1]
+          if (!prev) return
+          prev.selected = true
         },
         toggleNext: () => {
+          const next = select.selects[select.selectedIndex + 1]
+          if (!next) return
+          next.selected = true
         }
       },
       props: {
@@ -167,7 +209,7 @@ const itemStyle = /*css*/`
   height: 100%;
   border-radius: 8px;
   background: #eee;
-  transform: scale(0.95);
+  transform: scale(.95);
   transition: transform .3s ease-out;
   background-repeat: round;
 }

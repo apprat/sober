@@ -9,6 +9,7 @@ const style = /*css*/`
 :host{
   display: inline-block;
   font-size: .875rem;
+  overflow: hidden;
   border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
   background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
   border-radius: 4px;
@@ -67,7 +68,6 @@ const tbodyStyle = /*css*/`
 :host{
   display: table-row-group;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
-  position: relative;
 }
 ::slotted(s-tr:nth-child(odd)){
   background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});

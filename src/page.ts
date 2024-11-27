@@ -208,7 +208,7 @@ export class Page extends useElement({
         this.theme = theme
         return
       }
-      const info = { x: innerWidth / 2, y: 0 }
+      const info = { x: innerWidth / 2, y: innerHeight / 2 }
       if (trigger) {
         const rect = trigger.getBoundingClientRect()
         info.x = rect.x + rect.width / 2

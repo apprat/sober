@@ -12,6 +12,7 @@ s-page {
   max-width: 1280px;
   margin: 0 auto;
   box-sizing: border-box;
+  overflow: auto;
 }
 
 s-page.gap {
@@ -27,14 +28,3 @@ s-page.gap>* {
 }
 
 /**fluent2**/
-
-s-button {
-  height: 30px;
-  border-radius: 4px;
-  padding: 0 12px;
-  min-width: 96px;
-}
-
-s-button[type=outlined] {
-  color: var(--s-color-on-surface);
-}

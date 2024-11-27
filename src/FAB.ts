@@ -22,7 +22,6 @@ const style = /*css*/`
   background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
   color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
   transition: box-shadow .1s ease-out;
-  font-size: 1rem;
   font-weight: 500;
   white-space: nowrap;
   text-transform: capitalize;

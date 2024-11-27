@@ -63,7 +63,7 @@ svg{
   margin-right: 4px;
 }
 .container{
-  max-height: 324px;
+  max-height: 408px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

@@ -9,7 +9,7 @@ const style = /*css*/`
 :host{
   display: inline-block;
   font-size: .875rem;
-  overflow: hidden;
+  overflow: auto;
   border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
   background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
   border-radius: 4px;
@@ -17,7 +17,7 @@ const style = /*css*/`
 }
 .container{
   overflow: hidden;
-  width: fit-content;
+  min-width: fit-content;
 }
 slot{
   display: table;
@@ -29,6 +29,22 @@ slot{
   top: -1px;
   margin-bottom: -2px;
   min-width: calc(100% + 2px);
+}
+@media (pointer: fine){
+  :host::-webkit-scrollbar{
+    width: 6px;
+    height: 6px;
+    background: transparent;
+  }
+  :host::-webkit-scrollbar-thumb{
+    background: var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
+    border-radius: 3px;
+  }
+  @supports not selector(::-webkit-scrollbar){
+    :host{
+      scrollbar-color: var(--s-color-outline-variant, ${Theme.colorOutlineVariant}) transparent;
+    }
+  }
 }
 `
 
@@ -109,6 +125,7 @@ const thStyle = /*css*/`
 :host{
   display: table-cell;
   padding: 16px;
+  text-transform: capitalize;
   border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
 }
 `

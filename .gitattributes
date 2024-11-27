@@ -1,4 +1,8 @@
 test/* linguist-vendored
 dev/* linguist-vendored
 dist/* linguist-vendored
+<<<<<<< HEAD
 docs/* linguist-vendored
+=======
+docs/* linguist-vendored
+>>>>>>> 1e2ae8893849cc8100c67ed3914506e18bc00b44

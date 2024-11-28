@@ -38,7 +38,7 @@
 加载 SVG 路径图标
 
 ```html preview
-<s-icon src="图标路径.svg"></s-icon>
+<s-icon src="/images/sentiment_neutral.svg"></s-icon>
 ```
 
 组件自带的图标无法满足所有需求，你可以在内部放置 SVG 图标。

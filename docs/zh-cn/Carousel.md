@@ -3,10 +3,12 @@
 轮播图。
 
 ```html preview
-<s-carousel>
-  <div style="background: #936d6d"></div>
-  <div style="background: #6d936f"></div>
-  <div style="background: #856d93"></div>
+<s-carousel autoplay="true" style="max-width: 560px; height: 256px">
+  <s-carousel-item selected="true" style="background-image: url('/images/carousel/0.jpg')"></s-carousel-item>
+  <s-carousel-item style="background-image: url('/images/carousel/1.jpg')"></s-carousel-item>
+  <s-carousel-item style="background-image: url('/images/carousel/2.jpg')"></s-carousel-item>
+  <s-carousel-item style="background-image: url('/images/carousel/3.jpg')"></s-carousel-item>
+  <s-carousel-item style="background-image: url('/images/carousel/4.jpg')"></s-carousel-item>
 </s-carousel>
 ```
 

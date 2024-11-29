@@ -4,6 +4,7 @@ import './ripple.js'
 
 const name = 's-fab'
 const props = {
+  hidden: false
 }
 
 const style = /*css*/`
@@ -21,12 +22,16 @@ const style = /*css*/`
   border-radius: 16px;
   background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
   color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
-  transition: box-shadow .1s ease-out;
+  transition: box-shadow .1s ease-out, transform .1s ease-out;
   font-weight: 500;
   white-space: nowrap;
   text-transform: capitalize;
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   padding: 0 16px;
+}
+:host([hidden=true]){
+  transform: scale(0);
+  pointer-events: none;
 }
 ::slotted(*){
   flex-shrink: 0;
@@ -60,7 +65,7 @@ const template = /*html*/`
 <s-ripple attached="true" part="ripple"></s-ripple>
 `
 
-export class FAB extends useElement({ style, template, props }) { }
+export class FAB extends useElement({ style, template, props, syncProps: ['hidden'] }) { }
 
 FAB.define(name)
 

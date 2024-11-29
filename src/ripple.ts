@@ -50,15 +50,17 @@ const style = /*css*/`
   opacity: .12;
 }
 .ripple {
-  background: color-mix(in srgb, var(--ripple-color) 24%, transparent);
+  color: color-mix(in srgb, var(--ripple-color) 24%, transparent);
+  background: currentColor;
   border-radius: 50%;
-  width: 100%;
-  height: 100%;
+  width: 105%;
+  height: 105%;
   position: absolute;
   transform: translate(-50%, -50%) scale(0);
   filter: blur(8px);
   left: 0;
   top: 0;
+  box-shadow: 0 0 0 16px currentColor;
 }
 `
 

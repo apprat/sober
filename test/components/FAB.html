@@ -19,6 +19,11 @@
       Button
       <s-icon type="close" slot="end"></s-icon>
     </s-fab>
+
+    <s-fab hidden="false" id="fab">
+      <s-icon type="add"></s-icon>
+    </s-fab>
+    <s-button onclick="this.previousElementSibling.hidden=!this.previousElementSibling.hidden">Toggle</s-button>
   </s-page>
 </body>
 

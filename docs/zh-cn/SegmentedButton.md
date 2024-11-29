@@ -92,6 +92,7 @@ class SegmentedButton extends HTMLElement {
 | selected   | boolean | false  | 是      | 是否选中       |
 | disabled   | boolean | false  | 是      | 是否禁用       |
 | selectable | boolean | true   | 否      | 是否启用可选中 |
+| value      | string  |        | 否      | 值            |
 
 ---
 

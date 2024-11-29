@@ -20,7 +20,8 @@ const style = /*css*/`
   fill: currentColor;
   box-sizing: border-box;
 }
-svg{
+svg,
+img{
   width: 100%;
   height: 100%;
 }
@@ -63,6 +64,7 @@ export class Icon extends useElement({
   style, template, props, syncProps: ['type'],
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
+    const img = document.createElement('img')
     const getSVG = (d = svgData.none, transform = '') => `<svg viewBox="0 -960 960 960"><path d="${d}" transform="${transform}"></path></svg>`
     return {
       props: {
@@ -73,13 +75,19 @@ export class Icon extends useElement({
         src: async (value) => {
           try {
             const res = await fetch(value)
-            const svg = await res.text()
-            const temp = document.createElement('template')
-            temp.innerHTML = svg
-            const el = temp.content.childNodes[0]
-            if (!(el instanceof SVGElement)) throw new Error('Invalid SVG')
-            slot.innerHTML = ''
-            slot.appendChild(el)
+            const mimeType = res.headers.get('content-type')
+            if (mimeType === 'image/svg+xml') {
+              slot.innerHTML = ''
+              const svg = await res.text()
+              const temp = document.createElement('template')
+              temp.innerHTML = svg
+              const el = temp.content.childNodes[0]
+              if (!(el instanceof SVGElement)) throw new Error('Invalid SVG')
+              slot.appendChild(el)
+            } else {
+              img.src = URL.createObjectURL(await res.blob())
+              slot.appendChild(img)
+            }
             this.dispatchEvent(new Event('load'))
           } catch (error) {
             this.dispatchEvent(new Event('error'))

@@ -3,7 +3,7 @@
 轮播图。
 
 ```html preview
-<s-carousel autoplay="true" style="max-width: 560px; height: 256px">
+<s-carousel autoplay="true" style="max-width: 560px">
   <s-carousel-item selected="true" style="background-image: url('/images/carousel/0.jpg')"></s-carousel-item>
   <s-carousel-item style="background-image: url('/images/carousel/1.jpg')"></s-carousel-item>
   <s-carousel-item style="background-image: url('/images/carousel/2.jpg')"></s-carousel-item>
@@ -54,3 +54,18 @@ class Carousel extends HTMLElement {
 | 名称                 | 介绍       |
 | -------------------- | --------- |
 | --s-elevation-level1 | 指示器阴影 |
+
+---
+
+# Carousel Item
+
+该组件仅作为 Carousel 的子组件，不可单独使用。
+
+---
+
+## 子属性
+
+| 名称       | 类型     | 默认值 | 是否同步 | 介绍          |
+| ---------- | ------- | ------ | ------- | ------------- |
+| selected   | boolean | false  | 是      | 是否选中       |
+| value      | string  |        | 否      | 值            |

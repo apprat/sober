@@ -30,6 +30,12 @@ class Page extends HTMLElement {
 }
 ```
 
+## 标记属性
+
+| 名称 | 介绍            |
+| ---- | -------------- |
+| dark | 暗色模式时被设置 |
+
 ---
 
 # CSS 变量

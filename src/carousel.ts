@@ -14,19 +14,20 @@ const props = {
 const style = /*css*/`
 :host{
   display: flex;
-  height: 240px;
   align-items: center;
   position: relative;
   overflow: hidden;
   border-radius: 8px;
   cursor: pointer;
+  aspect-ratio: 2;
+  -webkit-aspect-ratio: 2;
 }
 .container{
   display: flex;
   justify-content: flex-start;
   height: 100%;
   min-width: 100%;
-  transition: transform .3s ease-out;
+  transition: transform .4s ease-out;
   transform: translateX(100%);
 }
 .track{
@@ -115,7 +116,7 @@ export class Carousel extends useElement({
         let eventInfo: { pageX: number, pageY: number } = event instanceof TouchEvent ? event.touches[0] : event
         const x = eventInfo!.pageX - pageX
         const y = eventInfo!.pageY - pageY
-        if (Math.abs(x) < Math.abs(y) && !state.next) return up()
+        if (event instanceof TouchEvent && Math.abs(x) < Math.abs(y) && !state.next) return up()
         state.left = x
         if (state.now === 0) state.now = Date.now()
         if (prev) state.left = Math.min(state.left, width)
@@ -210,7 +211,7 @@ const itemStyle = /*css*/`
   border-radius: 8px;
   background: #eee;
   transform: scale(.95);
-  transition: transform .3s ease-out;
+  transition: transform .4s ease-out;
   background-repeat: round;
 }
 :host([selected=true]){

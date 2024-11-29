@@ -35,13 +35,16 @@
 <s-icon type="add" style="color: #009688"></s-icon>
 ```
 
-加载 SVG 路径图标
+加载图标
 
 ```html preview
 <s-icon src="/images/sentiment_neutral.svg"></s-icon>
 ```
 
-组件自带的图标无法满足所有需求，你可以在内部放置 SVG 图标。
+> [warning]
+> 注意如果目标文件的 `content-type` 为 `image/svg+xml` 则会加载完成后在内部渲染，因此它支持定义颜色，反之将会使用 `img` 来渲染。
+
+你也可以直接在内部放置 SVG 图标。
 
 ```html preview
 <s-icon>
@@ -62,7 +65,7 @@
 | 名称   | 类型     | 默认值 | 是否同步 | 介绍        |
 | ------ | ------- | ------ | ------- | ----------- |
 | type   | string  | none   | 是      | 自带图标名称 |
-| src    | string  |        | 否      | 链接 SVG    |
+| src    | string  |        | 否      | 图标路径     |
 
 ---
 

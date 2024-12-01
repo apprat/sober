@@ -60,7 +60,6 @@ const style = /*css*/`
   filter: blur(8px);
   left: 0;
   top: 0;
-  box-shadow: 0 0 0 16px currentColor;
 }
 `
 
@@ -107,7 +106,7 @@ export class Ripple extends useElement({
       }
       const parent = (state.parentNode ?? this)
       parent.setAttribute('rippled', '')
-      const keyframes = { transform: 'translate(-50%, -50%) scale(1)', opacity: 1, width: `${size}px`, height: `${size}px`, left: `${coordinate.x}`, top: `${coordinate.y}` }
+      const keyframes = { transform: 'translate(-50%, -50%) scale(1)', boxShadow: '0 0 0 16px currentColor', opacity: 1, width: `${size}px`, height: `${size}px`, left: `${coordinate.x}`, top: `${coordinate.y}` }
       const animation = newRipple.animate([{ ...keyframes, transform: 'translate(-50%, -50%) scale(0)' }, keyframes], { duration: 800, fill: 'forwards', easing: 'cubic-bezier(.2, .9, .1, .9)' })
       const remove = () => {
         parent.removeAttribute('rippled')

@@ -7,6 +7,11 @@
   <s-button slot="trigger">Tooltip</s-button>
   提示信息
 </s-tooltip>
+
+<s-tooltip>
+  <s-button slot="trigger">Image</s-button>
+  <img src="/images/qrcode_qq_group.jpg" style="max-width: 128px">
+</s-tooltip>
 ```
 
 工具提示支持自定义布局，例如放置图片，但请注意，无论你放置什么布局，都无法触发任何事件。

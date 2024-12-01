@@ -198,6 +198,11 @@ export class Page extends useElement({
   style, template, props,
   setup() {
     const darker = matchMedia('(prefers-color-scheme: dark)')
+    const isDark = () => {
+      if (this.theme === 'auto') return darker.matches
+      if (this.theme === 'dark') return true
+      return false
+    }
     const toggle = (theme: typeof props['theme'], trigger?: HTMLElement) => {
       if (this.theme === theme) return
       const isDark = darker.matches
@@ -229,12 +234,20 @@ export class Page extends useElement({
       transition.finished.then(() => document.styleSheets[0].deleteRule(0))
     }
     return {
-      expose: { toggle },
+      expose: {
+        toggle,
+        get isDark() {
+          return isDark()
+        },
+      },
       props: {
         theme: (value) => {
           if (value === 'light') return this.removeAttribute('dark')
           if (value === 'dark') return this.setAttribute('dark', '')
-          const change = () => darker.matches ? this.setAttribute('dark', '') : this.removeAttribute('dark')
+          const change = () => {
+            darker.matches ? this.setAttribute('dark', '') : this.removeAttribute('dark')
+            this.dispatchEvent(new Event('change'))
+          }
           darker.onchange = change
           change()
         }

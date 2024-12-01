@@ -21,10 +21,20 @@
 
 ---
 
+## 事件
+
+| 名称   | 参数   | 冒泡 | 可取消 | 介绍                               |
+| ------ |------ |------| ------ |---------------------------------- |
+| change | Event | 否   | 否     | 模式变化后触发（仅 auto 模式时有效） |
+
+---
+
 ## 原型
 
 ```ts
 class Page extends HTMLElement {
+  //是否处于暗色模式
+  readonly isDark: boolean
   //切换主题(带动画过渡) trigger=触发中心元素
   readonly toggle(theme: 'light'|'dark'|'auto', trigger?: HTMLElement): void
 }

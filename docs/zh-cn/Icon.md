@@ -41,8 +41,7 @@
 <s-icon src="/images/sentiment_neutral.svg"></s-icon>
 ```
 
-> [warning]
-> 注意如果目标文件的 `content-type` 为 `image/svg+xml` 则会加载完成后在内部渲染，因此它支持定义颜色，反之将会使用 `img` 来渲染。
+> 注意：如果目标文件的 `content-type` 为 `image/svg+xml` 则会加载完成后在内部渲染，因此它支持定义颜色，反之将会使用 `img` 来渲染。
 
 你也可以直接在内部放置 SVG 图标。
 

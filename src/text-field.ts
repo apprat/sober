@@ -125,6 +125,10 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button{
   -webkit-appearance: none;
 }
+input::-ms-clear,
+input::-ms-reveal{
+  display: none;
+}
 .shadow{
   pointer-events: none;
   display: none;

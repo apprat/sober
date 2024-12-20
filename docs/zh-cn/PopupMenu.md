@@ -24,7 +24,7 @@
   <s-popup-menu group="start">
     <s-popup-menu-item slot="trigger">
       添加到
-      <s-icon slot="end" type="arrow_drop_right"></s-icon>
+      <s-icon slot="end" name="arrow_drop_right"></s-icon>
     </s-popup-menu-item>
     <s-popup-menu-item>试听列表</s-popup-menu-item>
     <s-popup-menu-item>添加到新歌单</s-popup-menu-item>
@@ -32,7 +32,7 @@
   <s-popup-menu group="end">
     <s-popup-menu-item slot="trigger">
       更换音质
-      <s-icon slot="end" type="arrow_drop_right"></s-icon>
+      <s-icon slot="end" name="arrow_drop_right"></s-icon>
     </s-popup-menu-item>
     <s-popup-menu-item>标准品质</s-popup-menu-item>
     <s-popup-menu-item>HQ高品质</s-popup-menu-item>
@@ -42,7 +42,7 @@
   <s-popup-menu>
     <s-popup-menu-item slot="trigger">
       删除
-      <s-icon slot="end" type="arrow_drop_right"></s-icon>
+      <s-icon slot="end" name="arrow_drop_right"></s-icon>
     </s-popup-menu-item>
     <s-popup-menu-item>删除</s-popup-menu-item>
     <s-popup-menu-item>删除(包括文件)</s-popup-menu-item>
@@ -50,7 +50,7 @@
   <s-popup-menu>
     <s-popup-menu-item slot="trigger">
       更多操作
-      <s-icon slot="end" type="arrow_drop_right"></s-icon>
+      <s-icon slot="end" name="arrow_drop_right"></s-icon>
     </s-popup-menu-item>
     <s-popup-menu-item>复制歌曲信息</s-popup-menu-item>
     <s-popup-menu-item>查看文件信息</s-popup-menu-item>
@@ -65,9 +65,9 @@
 
 ## 属性
 
-| 名称  | 类型        | 默认值 | 是否同步 | 介绍 |
-| ----- | ---------- | ------ | ------- | ---- |
-| group | start, end |        | 是      | 分组 |
+| 名称  | 类型        | 默认值 | 同步 | 介绍 |
+| ----- | ---------- | ------ | --- | ---- |
+| group | start, end |        | 是  | 分组 |
 
 ---
 
@@ -76,7 +76,7 @@
 | 名称    | 参数   | 冒泡 | 可取消 | 介绍            |
 | ------- |------ |------|------ |---------------- |
 | show    | Event | 否   | 否    | `扩展` 显示后触发 |
-| dismiss | Event | 否   | 否    | `扩展` 隐藏后触发 |
+| close   | Event | 否   | 否    | 隐藏后触发        |
 
 ---
 
@@ -84,12 +84,7 @@
 
 ```ts
 class PopupMenu extends HTMLElement {
-  //显示弹出框 xOrEl=x坐标或者元素，y=y坐标，origin=展开方向 CSS transform-origin 的参数值
-  readonly show(xOrEl?: HTMLElement | number, y?: number, origin?: string): void
-  //显示或隐藏弹出框
-  readonly toggle(xOrEl?: HTMLElement | number, y?: number, origin?: string): void
-  //隐藏弹出框
-  readonly dismiss(): void
+
 } 
 ```
 
@@ -133,3 +128,12 @@ class PopupMenu extends HTMLElement {
 | 名称                         | 介绍       |
 | ---------------------------- | --------- |
 | --s-color-on-surface-variant | svg 颜色   |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Popup](./popup)
+- [Ripple](./ripple)

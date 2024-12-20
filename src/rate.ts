@@ -1,4 +1,4 @@
-import { useElement, JSXAttributes, LowercaseKeys } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 
 const name = 's-rate'
@@ -127,19 +127,22 @@ export class Rate extends useElement({
 Rate.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<LowercaseKeys<typeof props>> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Rate
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: LowercaseKeys<typeof props>
+    [name]: typeof props
   }
 }

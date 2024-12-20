@@ -1,9 +1,9 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 
 const name = 's-icon'
 const props = {
-  type: 'none' as keyof typeof svgData,
+  name: 'none' as keyof typeof svgData,
   src: ''
 }
 
@@ -16,9 +16,9 @@ const style = /*css*/`
   width: 24px;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
-  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   fill: currentColor;
   box-sizing: border-box;
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
 svg,
 img{
@@ -61,14 +61,14 @@ const svgData = {
 const template = /*html*/`<slot></slot>`
 
 export class Icon extends useElement({
-  style, template, props, syncProps: ['type'],
+  style, template, props, syncProps: ['name'],
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
     const img = document.createElement('img')
     const getSVG = (d = svgData.none, transform = '') => `<svg viewBox="0 -960 960 960"><path d="${d}" transform="${transform}"></path></svg>`
     return {
       props: {
-        type: (value) => {
+        name: (value) => {
           const data = svgData[value]
           slot.innerHTML = typeof data === 'string' ? getSVG(data) : getSVG(svgData[data.name], `rotate(${data.angle} 480 -480)`)
         },
@@ -101,13 +101,16 @@ export class Icon extends useElement({
 Icon.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Icon
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

@@ -27,13 +27,13 @@
 
 ## 属性
 
-| 名称        | 类型     | 默认值 | 是否同步 | 介绍    |
-| ----------- | ------- | ------ | ------- | ------- |
-| placeholder | boolean | false  | 是      | 占位内容 |
-| disabled    | boolean | false  | 是      | 是否禁用 |
-| value       | boolean | false  | 是      | 值      |
-| maxLength   | boolean | false  | 是      | 最大长度 |
-| readOnly    | boolean | false  | 是      | 是否只读 |
+| 名称        | 类型     | 默认值 | 同步 | 介绍    |
+| ----------- | ------- | ------ | --- | ------- |
+| placeholder | boolean | false  | 是  | 占位内容 |
+| disabled    | boolean | false  | 是  | 是否禁用 |
+| value       | boolean | false  | 是  | 值      |
+| maxLength   | boolean | false  | 是  | 最大长度 |
+| readOnly    | boolean | false  | 是  | 是否只读 |
 
 ---
 
@@ -55,6 +55,27 @@
 | start    |  开始位置插槽，默认支持 svg、icon, icon button |
 | end      |  开始位置插槽，默认支持同 start                |
 | dropdown |  下拉框                                      |
+
+---
+
+## 原型
+
+```ts
+class Search extends HTMLElement {
+  //原生编辑框对象
+  readonly native: HTMLInputElement
+  //占位文本
+  placeholder: string = ''
+  //是否禁用
+  disabled: boolean = false
+  //是否只读
+  readOnly: boolean = false
+  //最大长度
+  maxLength: number = -1
+  //值
+  value: string = ''
+}
+```
 
 ---
 

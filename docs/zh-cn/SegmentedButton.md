@@ -44,9 +44,9 @@
 
 ## 属性
 
-| 名称  | 类型    | 默认值 | 是否同步 | 介绍                                |
-| ----- | ------ | ------ | ------- | ----------------------------------- |
-| value | string |        | 否      | 选中的值，需 item 同时设置 value 属性 |
+| 名称  | 类型    | 默认值 | 同步 | 介绍                                |
+| ----- | ------ | ------ | --- | ----------------------------------- |
+| value | string |        | 否  | 选中的值，需 item 同时设置 value 属性 |
 
 ---
 
@@ -87,12 +87,12 @@ class SegmentedButton extends HTMLElement {
 
 ## 子属性
 
-| 名称       | 类型     | 默认值 | 是否同步 | 介绍          |
-| ---------- | ------- | ------ | ------- | ------------- |
-| selected   | boolean | false  | 是      | 是否选中       |
-| disabled   | boolean | false  | 是      | 是否禁用       |
-| selectable | boolean | true   | 否      | 是否启用可选中 |
-| value      | string  |        | 否      | 值            |
+| 名称       | 类型     | 默认值 | 同步 | 介绍          |
+| ---------- | ------- | ------ | --- | ------------- |
+| selected   | boolean | false  | 是  | 是否选中       |
+| disabled   | boolean | false  | 是  | 是否禁用       |
+| selectable | boolean | true   | 否  | 是否启用可选中 |
+| value      | string  |        | 否  | 值            |
 
 ---
 
@@ -114,3 +114,11 @@ class SegmentedButton extends HTMLElement {
 | --s-color-secondary-container    | 选中背景色 |
 | --s-color-on-secondary-container | 选中前景色 |
 | --s-color-on-surface             | 禁用前景色 |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Ripple](./ripple)

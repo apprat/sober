@@ -4,19 +4,19 @@
 
 ```html preview folded=true
 <s-icon-button>
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-icon-button>
 
 <s-icon-button type="filled">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-icon-button>
 
 <s-icon-button type="filled-tonal">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-icon-button>
 
 <s-icon-button type="outlined">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-icon-button>
 ```
 
@@ -24,19 +24,19 @@
 
 ```html preview folded=true
 <s-icon-button disabled="true">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-icon-button>
 
 <s-icon-button type="filled" disabled="true">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-icon-button>
 
 <s-icon-button type="filled-tonal" disabled="true">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-icon-button>
 
 <s-icon-button type="outlined" disabled="true">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-icon-button>
 ```
 
@@ -44,22 +44,22 @@
 
 ```html preview folded=true
 <s-icon-button>
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
   <s-badge slot="badge"></s-badge>
 </s-icon-button>
 
 <s-icon-button type="filled">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
   <s-badge slot="badge">1</s-badge>
 </s-icon-button>
 
 <s-icon-button type="filled-tonal">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
   <s-badge slot="badge">2</s-badge>
 </s-icon-button>
 
 <s-icon-button type="outlined">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
   <s-badge slot="badge">3</s-badge>
 </s-icon-button>
 ```
@@ -70,10 +70,10 @@
 
 ## 属性
 
-| 名称     | 类型                                  | 默认值 | 是否同步 | 介绍    |
-| -------- | ------------------------------------ | ------ | ------- | ------- |
-| type     | text, filled, filled-tonal, outlined | text   | 是      | 样式     |
-| disabled | boolean                              | false  | 是      | 是否禁用 |
+| 名称     | 类型                                  | 默认值 | 同步 | 介绍    |
+| -------- | ------------------------------------ | ------ | --- | ------- |
+| type     | text, filled, filled-tonal, outlined | text   | 是  | 样式     |
+| disabled | boolean                              | false  | 是  | 是否禁用 |
 
 ---
 
@@ -96,3 +96,11 @@
 | --s-color-on-secondary-container | filled-tonal 前景颜色                  |
 | --s-color-outline                | outlined 边框颜色                      |
 | --s-color-on-surface             | 禁用背景前景颜色，outlined 禁用边框颜色  |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Ripple](./ripple)

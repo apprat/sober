@@ -14,6 +14,19 @@
 <s-checkbox disabled="true" indeterminate="true"></s-checkbox>
 ```
 
+在 Vue 中使用 `v-model.lazy` 双向绑定。
+
+```html
+<template>
+  <s-checkbox v-model.lazy="checked" type="checkbox"></s-checkbox>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+const checked = ref(false)
+</script>
+```
+
 自定义颜色
 
 ```html preview
@@ -33,11 +46,11 @@ s-checkbox[checked=true] {
 
 ## 属性
 
-| 名称          | 类型     | 默认值 | 是否同步 | 介绍    |
-| ------------- | ------- | ------ | ------- | ------- |
-| checked       | boolean | false  | 是      | 是否选中 |
-| disabled      | boolean | false  | 是      | 是否禁用 |
-| indeterminate | boolean | false  | 是      | 是否未知 |
+| 名称          | 类型     | 默认值 | 同步 | 介绍    |
+| ------------- | ------- | ------ | --- | ------- |
+| checked       | boolean | false  | 是  | 是否选中 |
+| disabled      | boolean | false  | 是  | 是否禁用 |
+| indeterminate | boolean | false  | 是  | 是否未知 |
 
 ---
 
@@ -56,3 +69,11 @@ s-checkbox[checked=true] {
 | --s-color-on-surface-variant | 图标/文本颜色     |
 | --s-color-primary            | 选中图标/文本颜色 |
 | --s-color-on-surface         | 禁用前景背景颜色  |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Ripple](./ripple)

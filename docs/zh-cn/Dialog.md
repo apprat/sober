@@ -40,26 +40,39 @@
 </s-dialog>
 ```
 
-> 注意：该组件使用了 fixed 定位，在该组件的祖先元素中，应当避免**同时**出现滚动和[层叠上下文](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context)。
+在 Vue 中使用 `v-model.lazy` 控制显隐。
+
+```html
+<template>
+  <s-dialog v-model.lazy="showed"> Test </s-dialog>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+const showed = ref(false)
+</script>
+```
 
 ---
 
 ## 属性
 
-| 名称 | 类型         | 默认值 | 是否同步 | 介绍      |
-| ---- | ----------- | ------ | ------- | --------- |
-| size | basic, full | basic  | 是      | 对话框尺寸 |
+| 名称  | 类型         | 默认值 | 同步 | 介绍      |
+| ----- | ----------- | ------ | --- | --------- |
+| size  | basic, full | basic  | 是  | 对话框尺寸 |
+| value | boolean     | false  | 是  | 显示状态   |
 
 ---
 
 ## 事件
 
-| 名称      | 参数                                           | 冒泡 | 可取消 | 介绍                |
-| --------- |---------------------------------------------- |------|------ |-------------------- |
-| show      | CustomEvent<{ source?: 'TRIGGER' }>           | 否   | 是    | `扩展` 显示时触发     |
-| showed    | Event                                         | 否   | 否    | `扩展` 显示完成后触发 |
-| dismiss   | CustomEvent<{ source?: 'SCRIM' \| 'ACTION' }> | 否   | 是    | `扩展` 隐藏时触发     |
-| dismissed | Event                                         | 否   | 否    | `扩展` 隐藏完成后触发 |
+| 名称   | 参数                                           | 冒泡 | 可取消 | 介绍                |
+| ------ |---------------------------------------------- |------|------ |-------------------- |
+| show   | CustomEvent<{ source?: 'TRIGGER' }>           | 否   | 是    | `扩展` 显示时触发     |
+| showed | Event                                         | 否   | 否    | `扩展` 显示完成后触发 |
+| close  | CustomEvent<{ source?: 'SCRIM' \| 'ACTION' }> | 否   | 是    | 隐藏时触发           |
+| closed | Event                                         | 否   | 否    | `扩展` 隐藏完成后触发 |
+| change | Event                                         | 否   | 否    | 显隐变更时触发        |
 
 ---
 
@@ -68,6 +81,7 @@
 | 名称     | 介绍     |
 | -------- | ------- |
 | trigger  | 触发器   |
+| custom   | 容器     |
 | headline | 标题     |
 | text     | 文本     |
 | action   | 操作按钮 |
@@ -87,8 +101,10 @@ interface Options {
 
 class Dialog extends HTMLElement {
   static readonly builder(options: string | Options): Dialog //动态创建对话框
-  readonly show(): void //显示对话框
-  readonly dismiss(): void //隐藏对话框
+  //对话框尺寸
+  size: 'basic' | 'full' = 'basic'
+  //显示状态
+  value: boolean = false
 } 
 ```
 
@@ -103,4 +119,11 @@ class Dialog extends HTMLElement {
 | --s-color-on-surface                | 标题颜色            |
 | --s-color-primary                   | 操作按钮文本颜色     |
 | --s-elevation-level5                | 对话框弹出层阴影     |
-| --z-index                           | 弹出层权重          |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [ScrollView](./scroll-view)

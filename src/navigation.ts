@@ -1,6 +1,6 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
-import Select from './core/select.js'
+import { Select } from './core/utils/select.js'
 import './ripple.js'
 
 const name = 's-navigation'
@@ -57,18 +57,18 @@ export class Navigation extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('#slot') as HTMLSlotElement
-    const select = new Select({ context: this, selectClass: NavigationItem, slot })
+    const select = new Select({ context: this, class: NavigationItem, slot })
     return {
       expose: {
         get value() {
           return select.value
         },
         get options() {
-          return select.selects
+          return select.list
         },
         get selectedIndex() {
           return select.selectedIndex
-        },
+        }
       },
       props: {
         value: (value) => select.value = value
@@ -188,15 +188,19 @@ Navigation.define(name)
 NavigationItem.define(itemName)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-      [itemName]: Partial<typeof itemProps> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Navigation
     [itemName]: NavigationItem
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        //@ts-ignore
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+      }
+    }
   }
 }
 

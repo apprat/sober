@@ -18,10 +18,10 @@
 
 ## 属性
 
-| 名称      | 类型                              | 默认值   | 是否同步 | 介绍       |
-| --------- | -------------------------------- | -------- | ------- | ---------- |
-| type      | outlined, elevated, filled-tonal | outlined | 是      | 样式        |
-| clickable | boolean                          | false    | 是      | 是否启用点击 |
+| 名称      | 类型                              | 默认值   | 同步 | 介绍       |
+| --------- | -------------------------------- | -------- | --- | ---------- |
+| type      | outlined, elevated, filled-tonal | outlined | 是  | 样式        |
+| clickable | boolean                          | false    | 是  | 是否启用点击 |
 
 ---
 
@@ -43,3 +43,11 @@
 | --s-color-secondary-container    | filled-tonal 背景颜色 |
 | --s-color-on-secondary-container | filled-tonal 前景颜色 |
 | --s-elevation-level1             | outlined 阴影         |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Ripple](./ripple)

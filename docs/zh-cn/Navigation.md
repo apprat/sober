@@ -5,16 +5,16 @@
 ```html preview
 <s-navigation>
   <s-navigation-item selected="true">
-    <s-icon type="add" slot="icon"></s-icon>
+    <s-icon name="add" slot="icon"></s-icon>
     <div slot="text">Item 1</div>
     <s-badge slot="badge"></s-badge>
   </s-navigation-item>
   <s-navigation-item>
-    <s-icon type="search" slot="icon"></s-icon>
+    <s-icon name="search" slot="icon"></s-icon>
     <div slot="text">Item 2</div>
   </s-navigation-item>
   <s-navigation-item>
-    <s-icon type="dark_mode" slot="icon"></s-icon>
+    <s-icon name="dark_mode" slot="icon"></s-icon>
     <div slot="text">Item 3</div>
     <s-badge slot="badge">99</s-badge>
   </s-navigation-item>
@@ -26,28 +26,45 @@
 ```html preview
 <s-navigation mode="rail">
   <s-navigation-item selected="true">
-    <s-icon type="add" slot="icon"></s-icon>
+    <s-icon name="add" slot="icon"></s-icon>
     <div slot="text">Item 1</div>
   </s-navigation-item>
   <s-navigation-item>
-    <s-icon type="search" slot="icon"></s-icon>
+    <s-icon name="search" slot="icon"></s-icon>
     <div slot="text">Item 2</div>
   </s-navigation-item>
   <s-navigation-item>
-    <s-icon type="dark_mode" slot="icon"></s-icon>
+    <s-icon name="dark_mode" slot="icon"></s-icon>
     <div slot="text">Item 3</div>
   </s-navigation-item>
 </s-navigation>
+```
+
+在 Vue 中使用 `v-model.lazy` 双向绑定。
+
+```html
+<template>
+  <s-navigation v-model.lazy="select">
+    <s-navigation-item value="a"></s-navigation-item>
+    <s-navigation-item value="b"></s-navigation-item>
+    <s-navigation-item value="c"></s-navigation-item>
+  </s-navigation>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+const select = ref('b')
+</script>
 ```
 
 ---
 
 ## 属性
 
-| 名称  | 类型          | 默认值 | 是否同步 | 介绍                                |
-| ----- | ------------ | ------ | ------- | ----------------------------------- |
-| value | string       |        | 否      | 选中的值，需 item 同时设置 value 属性 |
-| mode  | bottom, rail | bottom | 是      | 模式                                |
+| 名称  | 类型          | 默认值 | 同步 | 介绍                                |
+| ----- | ------------ | ------ | --- | ----------------------------------- |
+| value | string       |        | 否  | 选中的值，需 item 同时设置 value 属性 |
+| mode  | bottom, rail | bottom | 是  | 模式                                |
 
 ---
 
@@ -90,10 +107,10 @@ class Navigation extends HTMLElement {
 
 ## 子属性
 
-| 名称     | 类型     | 默认值 | 是否同步 | 介绍          |
-| -------- | ------- | ------ | ------- | ------------- |
-| selected | boolean | false  | 是      | 是否选中       |
-| value    | string  |        | 否      | 值            |
+| 名称     | 类型     | 默认值 | 同步 | 介绍          |
+| -------- | ------- | ------ | --- | ------------- |
+| selected | boolean | false  | 是  | 是否选中       |
+| value    | string  |        | 否  | 值            |
 
 ---
 
@@ -113,3 +130,11 @@ class Navigation extends HTMLElement {
 | ----------------------------- | -------------- |
 | --s-color-primary             | 选中文本图标颜色 |
 | --s-color-secondary-container | 图标容器背景颜色 |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Ripple](./ripple)

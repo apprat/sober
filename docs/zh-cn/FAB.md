@@ -4,7 +4,7 @@
 
 ```html preview
 <s-fab>
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-fab>
 ```
 
@@ -12,9 +12,9 @@
 
 ```html preview
 <s-fab>
-  <s-icon type="add" slot="start"></s-icon>
+  <s-icon name="add" slot="start"></s-icon>
   Button
-  <s-icon type="close" slot="end"></s-icon>
+  <s-icon name="close" slot="end"></s-icon>
 </s-fab>
 ```
 
@@ -22,15 +22,15 @@
 
 ```html preview
 <s-fab style="background: #009688; color: #fff; border-radius: 50%;">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-fab>
 
 <s-fab style="background: #2d8d1d; color: #fff; border-radius: 50%; width: 48px; height: 48px">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-fab>
 
 <s-fab style="background: #945ab3; color: #fff; border-radius: 8px;">
-  <s-icon type="add"></s-icon>
+  <s-icon name="add"></s-icon>
 </s-fab>
 ```
 
@@ -38,9 +38,9 @@
 
 ## 属性
 
-| 名称   | 类型     | 默认值 | 是否同步 | 介绍    |
-| ------ | ------- | ------ | ------- | ------- |
-| hidden | boolean | false  | 是      | 是否隐藏 |
+| 名称   | 类型     | 默认值 | 同步 | 介绍    |
+| ------ | ------- | ------ | --- | ------- |
+| hidden | boolean | false  | 是  | 是否隐藏 |
 
 ---
 
@@ -61,3 +61,11 @@
 | --s-color-on-primary-container | 前景颜色           |
 | --s-elevation-level2           | 阴影               |
 | --s-elevation-level3           | hover/pressed 阴影 |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Ripple](./ripple)

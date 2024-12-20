@@ -11,13 +11,31 @@
 <s-page theme="dark"></s-page>
 ```
 
+根据主题模式修改状态栏颜色（如果浏览器支持）
+
+```html
+<s-page theme="auto" onchange="themeChange()"></s-page>
+<script>
+  //<s-page>
+  const page = document.querySelector('s-page')
+  //<meta name="theme-color" />
+  const themeColor = document.createElement('meta')
+  themeColor.name = 'theme-color'
+  document.head.appendChild(themeColor)
+  //onChange
+  function themeChange() {
+    themeColor.content = getComputedStyle(page).getPropertyValue(page.isDark?'--s-color-surface-container-high':'--s-color-dark-surface-container-high')
+  }
+</script>
+```
+
 ---
 
 ## 属性
 
-| 名称  | 类型               | 默认值 | 是否同步 | 介绍 |
-| ----- | ----------------- | ------ | ------- | ---- |
-| theme | light, dark, auto | light  | 否      | 主题 |
+| 名称  | 类型               | 默认值 | 同步 | 介绍 |
+| ----- | ----------------- | ------ | --- | ---- |
+| theme | light, dark, auto | light  | 否  | 主题 |
 
 ---
 

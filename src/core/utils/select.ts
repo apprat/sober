@@ -1,25 +1,25 @@
-type Select = {
+type Parent = {
   value: string
 } & HTMLElement
 
-type SelectItem = {
+type Item = {
   selected: boolean
   value: string
 } & HTMLElement
 
-export default class <S extends Select, SI extends SelectItem> {
-  selects: SI[] = []
-  select?: SI
+export class Select<P extends Parent, I extends Item> {
+  list: I[] = []
+  select?: I
   selectValue?: string
   flag = false
-  constructor(options: { context: S, selectClass: { new(): SI }, slot: HTMLSlotElement }) {
+  constructor(options: { context: P, class: { new(): I }, slot: HTMLSlotElement }) {
     const { context } = options
     context.addEventListener(`${context.tagName.toLocaleLowerCase()}:select`, (event) => {
       event.stopPropagation()
-      if (!(event.target instanceof options.selectClass)) return
+      if (!(event.target instanceof options.class)) return
       this.flag = true
       event.target.selected = true
-      this.selects.forEach((item) => item !== event.target && (item.selected = false))
+      this.list.forEach((item) => item !== event.target && (item.selected = false))
       this.select = event.target
       this.flag = false
       context.dispatchEvent(new Event('change'))
@@ -28,13 +28,13 @@ export default class <S extends Select, SI extends SelectItem> {
     })
     context.addEventListener(`${context.tagName.toLocaleLowerCase()}:update`, (event) => {
       event.stopPropagation()
-      if (this.flag || this.selects.length === 0 || !(event.target instanceof options.selectClass)) return
+      if (this.flag || this.list.length === 0 || !(event.target instanceof options.class)) return
       this.flag = true
       if (!event.target.selected) {
         delete this.select
       } else {
         this.select = event.target
-        this.selects.forEach((item) => item !== event.target && (item.selected = false))
+        this.list.forEach((item) => item !== event.target && (item.selected = false))
       }
       this.flag = false
       this.onUpdate?.()
@@ -42,8 +42,8 @@ export default class <S extends Select, SI extends SelectItem> {
     options.slot.addEventListener('slotchange', () => {
       this.flag = true
       delete this.select
-      this.selects = options.slot.assignedElements().filter((item) => {
-        if (!(item instanceof options.selectClass)) return
+      this.list = options.slot.assignedElements().filter((item) => {
+        if (!(item instanceof options.class)) return
         if (this.selectValue !== undefined) {
           if (item.value === this.selectValue) {
             this.select = item
@@ -66,13 +66,13 @@ export default class <S extends Select, SI extends SelectItem> {
     })
   }
   get value() {
-    return this.selects[this.selects.indexOf(this.select!)]?.value ?? ''
+    return this.list[this.list.indexOf(this.select!)]?.value ?? ''
   }
   set value(value: string) {
     this.selectValue = value
-    if (this.selects.length === 0) return
+    if (this.list.length === 0) return
     this.flag = true
-    this.selects.forEach((item) => {
+    this.list.forEach((item) => {
       if (item.value === value) {
         item.selected = true
         this.select = item
@@ -84,7 +84,7 @@ export default class <S extends Select, SI extends SelectItem> {
     this.flag = false
   }
   get selectedIndex() {
-    return this.selects.indexOf(this.select!)
+    return this.list.indexOf(this.select!)
   }
   declare onUpdate?: () => void
   declare onSelect?: () => void

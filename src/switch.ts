@@ -1,4 +1,4 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 import './ripple.js'
 
@@ -124,13 +124,16 @@ export class Switch extends useElement({
 Switch.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Switch
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

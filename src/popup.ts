@@ -1,26 +1,34 @@
-import { useElement, JSXAttributes, LowercaseKeys } from './core/element.js'
-import { getStackingContext } from './core/utils/getStackingContext.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 
 const name = 's-popup'
 const props = {
-  align: 'center' as 'center' | 'left' | 'right'
+  align: 'center' as 'center' | 'left' | 'right',
+  showed: false
 }
 
 const style = /*css*/`
 :host{
   display: inline-block;
   vertical-align: middle;
-  text-align: start;
 }
-.wrapper{
-  pointer-events: none;
-  position: fixed;
+dialog{
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: var(--z-index, 1);
+  background: none;
+  border: none;
+  padding: 0;
+  max-width: none;
+  max-height: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  color: inherit;
+}
+dialog::backdrop{
+  background: none;
 }
 .scrim{
   position: absolute;
@@ -29,141 +37,128 @@ const style = /*css*/`
   width: 100%;
   height: 100%;
 }
-.show .scrim{
-  pointer-events: auto;
-}
 .container{
-  position: absolute;
-  pointer-events: none;
-  white-space: nowrap;
-  opacity: 0;
-  --z-index: var(--z-index, 1);
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  max-height: 100%;
 }
-.show .container{
-  pointer-events: auto;
-  opacity: 1;
-}
-::slotted(*:not([slot])){
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+::slotted(:not([slot])){
   border-radius: 4px;
+  max-width: 100%;
+  max-height: 100%;
+  white-space: nowrap;
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
-  max-height: 100vh;
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
 }
 `
 
 const template = /*html*/`
-<div id="trigger" part="trigger">
-  <slot name="trigger"></slot>
-</div>
-<div class="wrapper" part="wrapper">
+<slot name="trigger"></slot>
+<dialog class="popup" part="popup">
   <div class="scrim" part="scrim"></div>
   <div class="container" part="container">
     <slot></slot>
   </div>
-</div>
+</dialog>
 `
 
-type ShowOptions = (xOrEl?: HTMLElement | number, y?: number, origin?: string) => void
+type ShowOptions = { x: number, y: number, origin?: string }
 
 class Popup extends useElement({
   style, template, props,
   setup(shadowRoot) {
-    const trigger = shadowRoot.querySelector('#trigger') as HTMLDivElement
-    const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
-    const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
+    const dialog = shadowRoot.querySelector('dialog') as HTMLDialogElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const animationOptions = { duration: 100, easing: 'ease-out' } as const
-    const show: ShowOptions = (xOrEl, y, origin) => {
-      if (!this.isConnected || wrapper.classList.contains('show')) return
+    const animateOptions = { duration: 200, easing: 'ease-out' } as const
+    const show = (option?: HTMLElement | ShowOptions) => {
+      if (!this.isConnected || dialog.open) return
       if (!this.dispatchEvent(new Event('show', { cancelable: true }))) return
-      const stackingContext = getStackingContext(shadowRoot)
-      if (stackingContext.top !== 0 || stackingContext.left !== 0) {
-        wrapper.setAttribute('style', `width: ${innerWidth}px;height: ${innerHeight}px;top: ${0 - stackingContext.top}px;left: ${0 - stackingContext.left}px`)
-      }
       const position = { top: 0, left: 0, origin: [] as string[] }
-      if (typeof xOrEl === 'number' && y) {
-        position.top = y
-        position.left = xOrEl
-        position.origin = origin ? origin.split(' ') : ['left', 'top']
-        if (xOrEl + container.offsetWidth > innerWidth) {
-          position.left = xOrEl - container.offsetWidth
+      dialog.showModal()
+      const cWidth = container.offsetWidth
+      const cHeight = container.offsetHeight
+      if (!option || option instanceof HTMLElement) {
+        const el = option ?? this
+        if (!el) return
+        const rect = el.getBoundingClientRect()
+        position.origin = ['center', 'top']
+        position.top = rect.top + rect.height
+        position.left = rect.left - ((cWidth - rect.width) / 2)
+        if (this.align === 'center') {
+          if (position.left < 0) {
+            position.left = rect.left, 0
+            position.origin[0] = 'left'
+          }
+          if (position.left + cWidth > innerWidth) {
+            position.left = rect.left + rect.width - cWidth, 0
+            position.origin[0] = 'right'
+          }
+          if (position.top + rect.height + cHeight > innerHeight) {
+            position.top = rect.top - cHeight
+            position.origin[1] = 'bottom'
+          }
+        }
+        const calls = {
+          left() {
+            position.top = rect.top
+            position.left = rect.left - cWidth
+            position.origin[0] = 'right'
+          },
+          right() {
+            position.top = rect.top
+            position.left = rect.left + rect.width
+            position.origin[0] = 'left'
+          },
+          bottom() {
+            position.top = rect.top - cHeight + rect.height
+            position.origin[1] = 'bottom'
+          }
+        }
+        if (this.align === 'left') {
+          calls.left()
+          if (position.top + cHeight > innerHeight) calls.bottom()
+        }
+        if (this.align === 'right') {
+          calls.right()
+          if (position.left + cWidth > innerWidth) calls.left()
+          if (position.top + cHeight > innerHeight) calls.bottom()
+        }
+      } else {
+        position.top = option.y
+        position.left = option.x
+        position.origin = option.origin?.split(' ') ?? ['left', 'top']
+        if (option.x + cWidth > innerWidth) {
+          position.left = option.x - cWidth
           position.origin[0] = 'right'
         }
-        if (y + container.offsetHeight > innerHeight) {
-          position.top = y - container.offsetHeight
+        if (option.y + cHeight > innerHeight) {
+          position.top = option.y - cHeight
           position.origin[1] = 'bottom'
         }
       }
-      if (xOrEl === undefined || xOrEl instanceof HTMLElement) {
-        const el = !xOrEl ? trigger : xOrEl
-        const rect = el.getBoundingClientRect()
-        const cWidth = container.offsetWidth
-        const cHeight = container.offsetHeight
-        position.origin = ['center', 'top']
-        position.top = rect.y + rect.height
-        position.left = rect.x - ((cWidth - rect.width) / 2)
-        let offsets = {
-          left: { value: rect.x, origin: 'left' },
-          right: { value: rect.x + rect.width - cWidth, origin: 'right' },
-          top: { value: rect.top - cHeight, origin: 'bottom' }
-        }
-        if (this.align === 'left') {
-          position.origin[0] = 'right'
-          position.left = rect.x - cWidth
-          position.top = rect.y
-          offsets = {
-            left: { value: rect.x + rect.width, origin: 'left' },
-            right: { value: position.left, origin: position.origin[0] },
-            top: { value: rect.y + rect.height - cHeight, origin: 'bottom' }
-          }
-        }
-        if (this.align === 'right') {
-          position.origin[0] = 'left'
-          position.left = rect.x + rect.width
-          position.top = rect.y
-          offsets = {
-            left: { value: position.left, origin: position.origin[0] },
-            right: { value: rect.x - cWidth, origin: 'right' },
-            top: { value: rect.y + rect.height - cHeight, origin: 'bottom' }
-          }
-        }
-        if (position.left < 0) {
-          position.origin[0] = offsets.left.origin
-          position.left = offsets.left.value
-        }
-        if (position.left + cWidth > innerWidth) {
-          position.origin[0] = offsets.right.origin
-          position.left = Math.max(offsets.right.value, 0)
-        }
-        if (position.top + cHeight > innerHeight) {
-          position.origin[1] = offsets.top.origin
-          position.top = Math.max(offsets.top.value, 0)
-        }
-      }
       container.style.transformOrigin = position.origin.join(' ')
-      container.style.top = `${position.top}px`
-      container.style.left = `${position.left}px`
-      wrapper.classList.add('show')
-      const animation = container.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], animationOptions)
-      animation.addEventListener('finish', () => this.dispatchEvent(new Event('showed')))
+      container.style.top = `${Math.max(position.top, 0)}px`
+      container.style.left = `${Math.max(position.left, 0)}px`
+      const animation = container.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], animateOptions)
+      animation.finished.then(() => this.dispatchEvent(new Event('showed')))
     }
-    const dismiss = () => {
-      if (!this.isConnected || !wrapper.classList.contains('show')) return
-      if (!this.dispatchEvent(new Event('dismiss', { cancelable: true }))) return
-      wrapper.classList.remove('show')
-      const animation = container.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animationOptions)
-      animation.addEventListener('finish', () => this.dispatchEvent(new Event('dismissed')))
+    const close = () => {
+      if (!this.isConnected || !dialog.open) return
+      if (!this.dispatchEvent(new Event('close', { cancelable: true }))) return
+      const animation = container.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animateOptions)
+      animation.finished.then(() => {
+        dialog.close()
+        this.dispatchEvent(new Event('closed'))
+      })
     }
-    const toggle: ShowOptions = (xOrEl, y, origin) => {
-      if (!this.isConnected) return
-      wrapper.classList.contains('show') ? dismiss() : show(xOrEl, y, origin)
-    }
-    trigger.addEventListener('click', () => show())
-    scrim.addEventListener('pointerdown', dismiss)
+    const toggle = (option?: HTMLElement | ShowOptions) => dialog.open ? close() : show(option)
+    shadowRoot.querySelector('slot[name=trigger]')!.addEventListener('click', () => show())
+    shadowRoot.querySelector('.scrim')!.addEventListener('pointerdown', close)
     return {
-      expose: { show, dismiss, toggle },
-      mounted: () => addEventListener('resize', dismiss),
-      unmounted: () => removeEventListener('resize', dismiss)
+      expose: { show },
+      mounted: () => addEventListener('resize', close),
+      unmounted: () => removeEventListener('resize', close)
     }
   }
 }) { }
@@ -172,32 +167,37 @@ Popup.define(name)
 
 export { Popup }
 
-interface EventMap extends HTMLElementEventMap {
+interface EventMap {
   show: Event
   showed: Event
-  dismiss: Event
-  dismissed: Event
+  close: Event
+  closed: Event
 }
 
+type ElementEventMap = EventMap & HTMLElementEventMap
+
 interface Popup {
-  addEventListener<K extends keyof EventMap>(type: K, listener: (this: Popup, ev: EventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof EventMap>(type: K, listener: (this: Popup, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
+  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Popup, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Popup, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<LowercaseKeys<typeof props>> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Popup
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props> & { [K in keyof EventMap as `on${K}`]?: (ev: EventMap[K]) => void }
+      }
+    }
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: LowercaseKeys<typeof props>
+    [name]: typeof props
   }
 }

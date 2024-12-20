@@ -1,5 +1,5 @@
-import { useElement, JSXAttributes, LowercaseKeys } from './core/element.js'
-import { device } from './core/utils/device.js'
+import { useElement } from './core/element.js'
+import { mediaQueryList } from './core/utils/mediaQuery.js'
 import { Theme } from './page.js'
 
 const name = 's-slider'
@@ -159,11 +159,11 @@ export class Slider extends useElement({
       this.value = Number(input.value)
       this.dispatchEvent(new Event('input'))
     })
-    input.addEventListener('mousedown', (event) => event.button === 0 && !device.touched && container.classList.add('active'))
-    input.addEventListener('mouseup', () => !device.touched && container.classList.remove('active'))
-    input.addEventListener('touchstart', () => device.touched && container.classList.add('active'), { passive: true })
-    input.addEventListener('touchend', () => device.touched && container.classList.remove('active'), { passive: true })
-    input.addEventListener('touchcancel', () => device.touched && container.classList.remove('active'), { passive: true })
+    input.addEventListener('mousedown', (event) => event.button === 0 && !mediaQueryList.pointerCoarse.matches && container.classList.add('active'))
+    input.addEventListener('mouseup', () => !mediaQueryList.pointerCoarse.matches && container.classList.remove('active'))
+    input.addEventListener('touchstart', () => mediaQueryList.pointerCoarse.matches && container.classList.add('active'), { passive: true })
+    input.addEventListener('touchend', () => mediaQueryList.pointerCoarse.matches && container.classList.remove('active'), { passive: true })
+    input.addEventListener('touchcancel', () => mediaQueryList.pointerCoarse.matches && container.classList.remove('active'), { passive: true })
     return {
       props: {
         max: (value) => {
@@ -190,19 +190,22 @@ export class Slider extends useElement({
 Slider.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<LowercaseKeys<typeof props>> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Slider
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: LowercaseKeys<typeof props>
+    [name]: typeof props
   }
 }

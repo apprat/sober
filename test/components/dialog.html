@@ -7,20 +7,54 @@
   <script type="module" src="../../dist/main.js"></script>
   <link rel="stylesheet" href="../styles/default.css">
   <script type="module" src="../scripts/default.js"></script>
+  <style>
+    dialog::backdrop {
+      background: none;
+    }
+  </style>
 </head>
 
 <body>
-  <s-page class="gap">
-    <s-dialog>
+  <s-page class="gap" xstyle="transform: scale(1);">
+    <s-dialog showed="true">
       <s-button slot="trigger"> dialog </s-button>
       <div slot="headline"> Title </div>
       <div slot="text">问人生、头白京国，算来何事消得。不如罨画清溪上，蓑笠扁舟一只。人不识，且笑煮、鲈鱼趁著莼丝碧。无端酸鼻，向岐路消魂，征轮驿骑，断雁西风急。
         英雄辈，事业东西南北。临风因甚泣。酬知有愿频挥手，零雨凄其此日。休太息，须信道、诸公衮衮皆虚掷。年来踪迹。有多少雄心，几翻恶梦，泪点霜华织。
+        <s-picker>
+          <s-picker-item>1</s-picker-item>
+          <s-picker-item>2</s-picker-item>
+          <s-picker-item>3</s-picker-item>
+          <s-picker-item>4</s-picker-item>
+          <s-picker-item>5</s-picker-item>
+        </s-picker>
       </div>
       <s-button slot="action" type="text">取消</s-button>
       <s-button slot="action" type="text">确定</s-button>
     </s-dialog>
+    <hr>
+    <s-dialog>
+      <s-button slot="trigger"> dialog </s-button>
+      <div slot="custom">
+        1212
+      </div>
+    </s-dialog>
+
+    <s-button id="create">Create</s-button>
+
+    <input type="number" maxlength="2">
+
   </s-page>
+  <script type="module">
+    import { Dialog } from '../../dist/dialog.js'
+    const create = document.querySelector('#create')
+    create.onclick = () => {
+      const dialog = new Dialog()
+      dialog.textContent = 'xxxx'
+      dialog.value = true
+      document.body.appendChild(dialog)
+    }
+  </script>
 </body>
 
 </html>

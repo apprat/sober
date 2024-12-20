@@ -16,7 +16,13 @@
 
 工具提示支持自定义布局，例如放置图片，但请注意，无论你放置什么布局，都无法触发任何事件。
 
-> 注意：该组件使用了 fixed 定位，在该组件的祖先元素中，应当避免**同时**出现滚动和[层叠上下文](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context)。
+---
+
+## 属性
+
+| 名称  | 类型               | 默认值 | 同步 | 介绍 |
+| ----- | ----------------- | ------ | --- | ---- |
+| align | auto, bottom, top | auto   | 否  | 位置 |
 
 ---
 
@@ -24,7 +30,7 @@
 
 ```ts
 class Tooltip extends HTMLElement {
-  show(align?: 'bottom' | 'top'): void //显示提示框
+  show(): void //显示提示框
   dismiss(): void //隐藏提示框
 } 
 ```

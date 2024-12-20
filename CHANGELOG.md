@@ -1,5 +1,50 @@
 # 更新日志
 
+## 0.8.0 (2025-12-25)
+
+> 这是一个正式版之前的前瞻版本，对很多组件的 api 进行了调整使得它们容易和前端框架搭配使用。
+
+1. *BottomSheet*
+  - 更新：`top-layer` 渲染，显示时始终处于顶层，不再受父级和层级影响。
+  - 变更：`dismiss` 和 `dismissed` 事件名称变更为 `close` 和 `closed`。
+  - 新增：`showed` 属性，用于控制显隐。
+  - 新增：`text` 插槽，用于定义纯文本。
+  - 移除：`show()`、`dismiss()` 方法。
+
+2. *Dialog*
+  - 更新：`top-layer` 渲染，显示时始终处于顶层，不再受父级和层级影响。
+  - 变更：`dismiss` 和 `dismissed` 事件名称变更为 `close` 和 `closed`。
+  - 新增：`custom` 插槽，用于自定义对话框容器。
+  - 新增：`showed` 属性，用于控制显隐。
+  - 移除：`show()`、`dismiss()`、`toggle()` 方法。
+
+3. *Divider*
+  - 新增：匿名插槽
+
+4. *Drawer*
+  - 移除：`show()`、`toggle()` 方法第二个参数被移除。
+  - 变更：`dismiss()` 方法变更为 `close()`。
+
+5. *Field*
+  - 变更：`view` 插槽变更为匿名。
+  - 变更：`labelFixed` 属性变更为 `fixed`。
+
+6. *Icon*
+  - 变更：`type` 属性变更为 `name`。
+
+7. *Picler*
+  - 变更：`dismiss()` 方法名称变更为 `close()`。
+
+8. *Tooltip*
+  - 更新：`top-layer` 渲染，显示时始终处于顶层，不再受父级和层级影响。
+  - 新增：`align` 属性，用于设置默认对齐方式。
+
+9. **Popup*
+  - 修改：`show()`、`toggle()` 方法参数发生了变更。
+  - 变更：`dismiss()` 方法名称变更为 `close()`。
+
+
+
 ## 0.7.2 (2024-12-02)
 
 - 修复：TextField 在 Edge 浏览器中显示清除按钮和密码显示按钮。

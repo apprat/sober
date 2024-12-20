@@ -1,4 +1,4 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 
 const name = 's-scroll-view'
@@ -35,13 +35,16 @@ export class ScrollView extends useElement({ style, template, props, }) { }
 ScrollView.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: ScrollView
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

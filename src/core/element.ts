@@ -1,5 +1,3 @@
-export * from './types/HTMLAttributes.js'
-
 const supports = { CSSStyleSheet: true }
 
 try {
@@ -21,7 +19,13 @@ const parseType = (value: unknown, old: Prop) => {
   throw new TypeError()
 }
 
-const baseStyle = /*css*/`:host{ user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent }`
+const baseStyle = /*css*/`
+:host{
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+`
 
 const setStyle = (shadowRoot: ShadowRoot, css?: string) => {
   if (supports.CSSStyleSheet) {
@@ -154,6 +158,6 @@ export const useElement = <
   return Prototype as never
 }
 
-export type LowercaseKeys<T> = {
-  [K in keyof T as K extends string ? Lowercase<K> : never]: T[K]
-}
+// export type LowercaseKeys<T> = {
+//   [K in keyof T as K extends string ? Lowercase<K> : never]: T[K]
+// }

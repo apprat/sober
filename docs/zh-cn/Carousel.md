@@ -12,15 +12,32 @@
 </s-carousel>
 ```
 
+在 Vue 中使用 `v-model.lazy` 双向绑定。
+
+```html
+<template>
+  <s-carousel v-model.lazy="select" autoplay="true" style="max-width: 560px">
+    <s-carousel-item value="a" style="background-image: url('/images/carousel/0.jpg')"></s-carousel-item>
+    <s-carousel-item value="b" style="background-image: url('/images/carousel/1.jpg')"></s-carousel-item>
+    <s-carousel-item value="c" style="background-image: url('/images/carousel/2.jpg')"></s-carousel-item>
+  </s-carousel>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+const select = ref('b')
+</script>
+```
+
 ---
 
 ## 属性
 
-| 名称     | 类型     | 默认值 | 是否同步 | 介绍                                |
-| -------- | ------- | ------ | ------- | ----------------------------------- |
-| value    | string  |        | 否      | 选中的值，需 item 同时设置 value 属性 |
-| duration | number  | 4000   | 否      | 切换间隔，单位毫秒                    |
-| autoplay | boolean | false  | 否      | 是否自动播放                         |
+| 名称     | 类型     | 默认值 | 同步 | 介绍                                |
+| -------- | ------- | ------ | --- | ----------------------------------- |
+| value    | string  |        | 否  | 选中的值，需 item 同时设置 value 属性 |
+| duration | number  | 4000   | 否  | 切换间隔，单位毫秒                    |
+| autoplay | boolean | false  | 否  | 是否自动播放                         |
 
 ---
 
@@ -44,6 +61,12 @@ class Carousel extends HTMLElement {
   readonly togglePrevious(): void
   //切换下一个
   readonly toggleNext(): void
+  //选中的值
+  value: string = ''
+  //切换间隔
+  duration: number = 4000
+  //是否自动播放
+  autoplay: boolean = false
 }
 ```
 
@@ -65,7 +88,15 @@ class Carousel extends HTMLElement {
 
 ## 子属性
 
-| 名称       | 类型     | 默认值 | 是否同步 | 介绍          |
-| ---------- | ------- | ------ | ------- | ------------- |
-| selected   | boolean | false  | 是      | 是否选中       |
-| value      | string  |        | 否      | 值            |
+| 名称       | 类型     | 默认值 | 同步 | 介绍          |
+| ---------- | ------- | ------ | --- | ------------- |
+| selected   | boolean | false  | 是  | 是否选中       |
+| value      | string  |        | 否  | 值            |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Ripple](./ripple)

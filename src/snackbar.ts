@@ -1,12 +1,14 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { getStackingContext } from './core/utils/getStackingContext.js'
+import { mediaQueries, mediaQueryList } from './core/utils/mediaQuery.js'
 import { Theme } from './page.js'
 
 const name = 's-snackbar'
 const props = {
   type: 'standard' as 'standard' | 'error',
   align: 'auto' as 'auto' | 'top' | 'bottom',
-  duration: 4000
+  duration: 4000,
+  value: false
 }
 
 const style = /*css*/`
@@ -14,30 +16,30 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
 }
-.wrapper{
+.popup{
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: var(--z-index, 2);
+  top: auto;
+  bottom: 0;
+  margin: 0 auto;
+  background: none;
+  border: none;
+  outline: none;
+  max-width: none;
+  max-height: none;
+  display: none;
   overflow: hidden;
   box-sizing: border-box;
+  pointer-events: none;
   padding: 16px;
-  display: flex;
   justify-content: center;
   transition: transform .2s ease-out;
+  background: red;
 }
 .container{
-  background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
-  color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
-  align-self: flex-end;
   min-height: 48px;
   border-radius: 4px;
-  box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
   line-height: 1.6;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   min-width: 320px;
   max-width: 480px;
@@ -45,20 +47,24 @@ const style = /*css*/`
   font-weight: 400;
   height: fit-content;
   pointer-events: auto;
-  transform: translateY(calc(100% - 16px));
-  filter: opacity(0);
+  --transform: translateY(100%);
+  box-sizing: border-box;
+  --filter: opacity(0);
   transition: transform .2s, filter .2s;
   transition-timing-function: ease-out;
+  box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
+  background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
+  color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
 }
 :host([align=top]) .container{
-  align-self: flex-start;
+  top: 0;
   transform: translateY(calc(-100% - 16px));
 }
 :host([align=bottom]) .container{
-  align-self: flex-end;
+  bottom: 0;
   transform: translateY(calc(100% - 16px));
 }
-.wrapper.show .container{
+.popup.show .container{
   transform: translateY(0%);
   filter: opacity(1);
 }
@@ -106,8 +112,8 @@ const style = /*css*/`
 :host([type=error]) ::slotted([slot=action]){
   color: var(--s-color-on-error, ${Theme.colorOnError});
 }
-@media (max-width: 320px){
-  .wrapper{
+@media (max-width: ${mediaQueries.mobileM}px){
+  .popup{
     padding: 8px;
   }
   .container{
@@ -116,7 +122,6 @@ const style = /*css*/`
 }
 @media (pointer: coarse){
   .container{
-    align-self: flex-start;
     transform: translateY(calc(-100% - 16px));
     min-width: 240px;
   }
@@ -125,7 +130,7 @@ const style = /*css*/`
 
 const template = /*html*/`
 <slot name="trigger"></slot>
-<div class="wrapper" part="wrapper">
+<div class="popup" popover="manual" part="popup">
   <div class="container" part="container">
     <slot name="icon">
       <svg class="icon hint" viewBox="0 -960 960 960">
@@ -193,74 +198,85 @@ const builder = (options: string | {
     if (typeof options.duration === 'number') snackbar.duration = options.duration
   }
   root.appendChild(snackbar)
-  snackbar.addEventListener('dismissed', () => root.removeChild(snackbar))
-  requestAnimationFrame(snackbar.show)
+  snackbar.addEventListener('closed', () => root.removeChild(snackbar))
+  //requestAnimationFrame(snackbar.show)
   return snackbar
 }
 
 const bottomTask: HTMLElement[] = []
 const topTask: typeof bottomTask[number][] = []
-const coarse = matchMedia('(pointer: coarse)')
 
 class Snackbar extends useElement({
   style, template, props, syncProps: ['type', 'align'],
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
-    const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement & { task: typeof bottomTask[number][], offset: number }
+    const popup = shadowRoot.querySelector('.popup') as HTMLDivElement
+    //const popup = shadowRoot.querySelector('.popup') as HTMLDivElement & { task: typeof bottomTask[number][], offset: number }
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const action = shadowRoot.querySelector('slot[name=action]') as HTMLElement
     const state = { timer: 0 }
     const gap = 8
-    const getAlign = () => this.align === 'auto' ? (coarse.matches ? 'top' : 'bottom') : this.align
+    const getAlign = () => this.align === 'auto' ? (mediaQueryList.pointerCoarse.matches ? 'top' : 'bottom') : this.align
     const show = () => {
-      if (wrapper.classList.contains('show')) return
-      const stackingContext = getStackingContext(shadowRoot)
-      if (stackingContext.top !== 0 || stackingContext.left !== 0) {
-        wrapper.style.width = `${innerWidth}px`
-        wrapper.style.height = `${innerHeight}px`
-        wrapper.style.top = `${0 - stackingContext.top}px`
-        wrapper.style.left = `${0 - stackingContext.left}px`
+      if (!this.isConnected) return
+      popup.style.display = 'flex'
+      if (popup.showPopover) {
+        popup.showPopover()
       }
-      const align = getAlign()
-      const height = container.offsetHeight
-      wrapper.task = { top: topTask, bottom: bottomTask }[align]
-      wrapper.offset = align === 'top' ? 1 : -1
-      let h = height + gap
-      if (wrapper.task.length > 0) {
-        for (const item of wrapper.task) {
-          item.style.transform = `translateY(${h * wrapper.offset}px)`
-          h += (item.firstElementChild as HTMLElement).offsetHeight + gap
-        }
-      }
-      wrapper.task.unshift(wrapper)
-      wrapper.classList.add('show')
-      this.dispatchEvent(new Event('show'))
-      if (this.duration > 0) state.timer = setTimeout(dismiss, this.duration)
     }
-    const dismiss = () => {
-      if (!wrapper.classList.contains('show')) return
-      clearTimeout(state.timer)
-      wrapper.classList.remove('show')
-      this.dispatchEvent(new Event('dismiss'))
-      const indexOf = wrapper.task.indexOf(wrapper)
-      for (let i = indexOf + 1; i < wrapper.task.length; i++) {
-        const item = wrapper.task[i]
-        const h = Math.abs(Number(item.style.transform.slice(11).slice(0, -3)))
-        item.style.transform = `translateY(${(h - container.offsetHeight - gap) * wrapper.offset}px)`
-      }
-      wrapper.task.splice(indexOf, 1)
+    const close = () => {
+
     }
-    const transitionEnd = (event: TransitionEvent) => {
-      if (event.propertyName !== 'transform') return
-      const showed = wrapper.classList.contains('show')
-      this.dispatchEvent(new Event(showed ? 'showed' : 'dismissed'))
-      !showed && wrapper.removeAttribute('style')
-    }
-    trigger.addEventListener('click', show)
-    container.addEventListener('transitionend', transitionEnd)
-    action.addEventListener('click', dismiss)
+    // const show = () => {
+    //   if (popup.classList.contains('show')) return
+    //   const stackingContext = getStackingContext(shadowRoot)
+    //   if (stackingContext.top !== 0 || stackingContext.left !== 0) {
+    //     popup.style.width = `${innerWidth}px`
+    //     popup.style.height = `${innerHeight}px`
+    //     popup.style.top = `${0 - stackingContext.top}px`
+    //     popup.style.left = `${0 - stackingContext.left}px`
+    //   }
+    //   const align = getAlign()
+    //   const height = container.offsetHeight
+    //   popup.task = { top: topTask, bottom: bottomTask }[align]
+    //   popup.offset = align === 'top' ? 1 : -1
+    //   let h = height + gap
+    //   if (popup.task.length > 0) {
+    //     for (const item of popup.task) {
+    //       item.style.transform = `translateY(${h * popup.offset}px)`
+    //       h += (item.firstElementChild as HTMLElement).offsetHeight + gap
+    //     }
+    //   }
+    //   popup.task.unshift(popup)
+    //   popup.classList.add('show')
+    //   this.dispatchEvent(new Event('show'))
+    //   if (this.duration > 0) state.timer = setTimeout(dismiss, this.duration)
+    // }
+    // const dismiss = () => {
+    //   if (!popup.classList.contains('show')) return
+    //   clearTimeout(state.timer)
+    //   popup.classList.remove('show')
+    //   this.dispatchEvent(new Event('dismiss'))
+    //   const indexOf = popup.task.indexOf(popup)
+    //   for (let i = indexOf + 1; i < popup.task.length; i++) {
+    //     const item = popup.task[i]
+    //     const h = Math.abs(Number(item.style.transform.slice(11).slice(0, -3)))
+    //     item.style.transform = `translateY(${(h - container.offsetHeight - gap) * popup.offset}px)`
+    //   }
+    //   popup.task.splice(indexOf, 1)
+    // }
+    // const transitionEnd = (event: TransitionEvent) => {
+    //   if (event.propertyName !== 'transform') return
+    //   const showed = popup.classList.contains('show')
+    //   this.dispatchEvent(new Event(showed ? 'showed' : 'dismissed'))
+    //   !showed && popup.removeAttribute('style')
+    // }
+    // trigger.addEventListener('click', show)
+    // container.addEventListener('transitionend', transitionEnd)
+    // action.addEventListener('click', dismiss)
+    shadowRoot.querySelector('slot[name=trigger]')!.addEventListener('click', show)
     return {
-      expose: { show, dismiss }
+      expose: { show, close }
     }
   }
 }) {
@@ -272,8 +288,8 @@ Snackbar.define(name)
 interface EventMap extends HTMLElementEventMap {
   show: Event
   showed: Event
-  dismiss: Event
-  dismissed: Event
+  close: Event
+  closed: Event
 }
 
 interface Snackbar {
@@ -284,13 +300,16 @@ interface Snackbar {
 export { Snackbar }
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Snackbar
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

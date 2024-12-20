@@ -1,4 +1,5 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
+import { mediaQueries } from './core/utils/mediaQuery.js'
 import { Theme } from './page.js'
 
 const name = 's-appbar'
@@ -9,11 +10,11 @@ const style = /*css*/`
 :host{
   display: flex;
   height: 64px;
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
   align-items: center;
   position: relative;
   padding: 0 8px;
   flex-shrink: 0;
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
 }
 ::slotted([slot=navigation]){
   margin-left: 4px;
@@ -22,7 +23,8 @@ const style = /*css*/`
 ::slotted([slot=logo]){
   margin-left: 12px;
   height: 32px;
-  fill: var(--s-color-primary, ${Theme.colorPrimary});
+  color: var(--s-color-primary, ${Theme.colorPrimary});
+  fill: currentColor;
   flex-shrink: 0;
 }
 ::slotted([slot=headline]){
@@ -49,21 +51,21 @@ const style = /*css*/`
 }
 ::slotted([slot=search]){
   flex-shrink: 0;
-  background: var(--s-color-surface-container-highest, ${Theme.colorDarkSurfaceContainerHighest});
   height: 40px;
   border-radius: 20px;
   max-width: 100%;
   margin: 0 4px 0 8px;
+  background: var(--s-color-surface-container-highest, ${Theme.colorDarkSurfaceContainerHighest});
 }
 ::slotted(s-appbar){
   height: 100%;
   width: 100%;
-  max-width: 1280px;
+  max-width: ${mediaQueries.laptopL}px;
   background: none;
   margin: 0 auto;
   padding: 0;
 }
-@media(max-width: 768px){
+@media (max-width: ${mediaQueries.laptop}px) {
   :host{
     height: 56px;
   }
@@ -93,20 +95,20 @@ export class Appbar extends useElement({
 
 Appbar.define(name)
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
-  interface HTMLElementTagNameMap {
-    [name]: Appbar
-  }
-}
-
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
     [name]: typeof props
+  }
+}
+
+declare global {
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }

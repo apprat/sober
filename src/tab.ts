@@ -1,6 +1,6 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
-import Select from './core/select.js'
+import { Select } from './core/utils/select.js'
 import './ripple.js'
 
 const name = 's-tab'
@@ -63,7 +63,7 @@ export class Tab extends useElement({
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const select = new Select({ context: this, selectClass: TabItem, slot })
+    const select = new Select({ context: this, class: TabItem, slot })
     let old: TabItem | undefined
     select.onUpdate = () => {
       if (!this.isConnected || !select.select) {
@@ -89,7 +89,7 @@ export class Tab extends useElement({
           return select.value
         },
         get options() {
-          return select.selects
+          return select.list
         },
         get selectedIndex() {
           return select.selectedIndex
@@ -230,15 +230,19 @@ Tab.define(name)
 TabItem.define(itemName)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-      [itemName]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Tab
     [itemName]: TabItem
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        //@ts-ignore
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+      }
+    }
   }
 }
 

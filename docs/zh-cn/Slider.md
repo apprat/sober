@@ -28,14 +28,14 @@
 
 ## 属性
 
-| 名称     | 类型     | 默认值 | 是否同步 | 介绍           |
-| -------- | ------- | ------ | ------- | -------------- |
-| labeled  | boolean | false  | 是      | 是否启用文本标签 |
-| disabled | boolean | false  | 是      | 是否禁用        |
-| max      | number  | 100    | 否      | 最大值          |
-| min      | number  | 0      | 否      | 最小值          |
-| step     | number  | 1      | 否      | 步进值          |
-| value    | number  | 50     | 否      | 当前值          |
+| 名称     | 类型     | 默认值 | 同步 | 介绍           |
+| -------- | ------- | ------ | --- | -------------- |
+| labeled  | boolean | false  | 是  | 是否启用文本标签 |
+| disabled | boolean | false  | 是  | 是否禁用        |
+| max      | number  | 100    | 否  | 最大值          |
+| min      | number  | 0      | 否  | 最小值          |
+| step     | number  | 1      | 否  | 步进值          |
+| value    | number  | 50     | 否  | 当前值          |
 
 ---
 

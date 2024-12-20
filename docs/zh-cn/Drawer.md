@@ -17,9 +17,6 @@
 <s-button onclick="document.querySelector('#drawer').toggle('end')"> 切换右抽屉 </s-button>
 ```
 
-
-> 当屏幕的宽度小于 `1200` 时，抽屉会切换为折叠模式，以便于腾出更多空间。
-
 ---
 
 ## 插槽
@@ -34,13 +31,15 @@
 ## 原型
 
 ```ts
+type SlotName = 'start' | 'end'
+
 class Drawer extends HTMLElement {
-  //显示抽屉 slot=插槽，folded=是否仅折叠模式(默认自动)
-  readonly show(slot?: 'start'|'end', folded?: boolean): void
-  //显示或隐藏抽屉
-  readonly toggle(slot?: 'start'|'end', folded?: boolean): void
+  //显示抽屉 slot=插槽，默认为start
+  readonly show(slot?: SlotName): void
   //隐藏抽屉
-  readonly dismiss(slot?: 'start'|'end', folded?: boolean): void
+  readonly close(slot?: SlotName): void
+  //显示或隐藏抽屉
+  readonly toggle(slot?: SlotName): void
 }
 ```
 

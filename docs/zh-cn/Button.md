@@ -37,16 +37,16 @@
 <s-button style="background: #459958; color: #fff; box-shadow: none"> button </s-button>
 ```
 
-> 如果你需要高度的自定义按钮样式，使用 [Ripple](/component/ripple) 组件更加方便。
+> 如果你需要高度的自定义按钮样式，使用 [Ripple](/component/ripple) 组件也许更加方便，因为它没有默认样式。
 
 ---
 
 ## 属性
 
-| 名称     | 类型                                            | 默认值 | 是否同步 | 介绍    |
-| -------- | ---------------------------------------------- | ------ | ------- | ------- |
-| type     | filled, elevated, filled-tonal, outlined, text | filled | 是      | 样式     |
-| disabled | boolean                                        | false  | 是      | 是否禁用 |
+| 名称     | 类型                                            | 默认值 | 同步 | 介绍    |
+| -------- | ---------------------------------------------- | ------ | --- | ------- |
+| type     | filled, elevated, filled-tonal, outlined, text | filled | 是  | 样式     |
+| disabled | boolean                                        | false  | 是  | 是否禁用 |
 
 ---
 
@@ -72,3 +72,11 @@
 | --s-color-on-surface             | 禁用背景前景颜色，outlined 禁用边框颜色    |
 | --s-elevation-level1             | filled hover/pressed 阴影，elevated 阴影 |
 | --s-elevation-level2             | elevated hover/pressed 阴影             |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Ripple](./ripple)

@@ -1,4 +1,4 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 
 const name = 's-divider'
@@ -7,11 +7,22 @@ const props = {
 
 const style = /*css*/`
 :host{
-  display: block;
-  height: 1px;
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
-  background: var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
   margin: 0 16px;
+  gap: 8px;
+  font-size: .75rem;
+  color: var(--s-color-outline, ${Theme.colorOutline});
+ }
+:host::before,
+:host::after{
+  content: '';
+  flex-grow: 1;
+  border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
+}
+:host(:empty){
+  gap: 0;
 }
 `
 
@@ -22,13 +33,16 @@ export class Divider extends useElement({ style, template, props }) { }
 Divider.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Divider
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

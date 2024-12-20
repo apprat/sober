@@ -38,11 +38,11 @@
 
 ## 属性
 
-| 名称     | 类型     | 默认值 | 是否同步 | 介绍                               |
-| -------- | ------- | ------ | ------- | ---------------------------------- |
-| label    | string  |        | 否      | 标签文本                            |
-| value    | string  |        | 否      | 选中的值，需 item 同时设置 value 属性 |
-| disabled | boolean | false  | 否      | 是否禁用                            |
+| 名称     | 类型     | 默认值 | 同步 | 介绍                               |
+| -------- | ------- | ------ | --- | ---------------------------------- |
+| label    | string  |        | 否  | 标签文本                            |
+| value    | string  |        | 否  | 选中的值，需 item 同时设置 value 属性 |
+| disabled | boolean | false  | 否  | 是否禁用                            |
 
 ---
 
@@ -65,17 +65,11 @@
 ## 原型
 
 ```ts
-class Picker extends HTMLElement {
+class Picker extends Popup {
   //子项目
   readonly options: PickerButtonItem[] = []
   //当前选中下标 
   readonly selectedIndex: number = -1
-  //显示弹出框 xOrEl=x坐标或者元素，y=y坐标，origin=展开方向 CSS transform-origin 的参数值
-  readonly show(xOrEl?: HTMLElement | number, y?: number, origin?: string): void
-  //显示或隐藏弹出框
-  readonly toggle(xOrEl?: HTMLElement | number, y?: number, origin?: string): void
-  //隐藏弹出框
-  readonly dismiss(): void
 }
 ```
 
@@ -91,7 +85,6 @@ class Picker extends HTMLElement {
 | --picker-padding             | `私有` 内边距   |
 | --picker-height              | `私有` 高度     |
 | --s-color-on-surface-variant | 图标颜色        |
-| --z-index                    | 弹出层权重     |
 
 ---
 
@@ -103,10 +96,10 @@ class Picker extends HTMLElement {
 
 ## 子属性
 
-| 名称     | 类型     | 默认值 | 是否同步 | 介绍     |
-| -------- | ------- | ------ | ------- | ------- |
-| selected | boolean | false  | 是      | 是否选中 |
-| value    | string  |        | 否      | 值      |
+| 名称     | 类型     | 默认值 | 同步 | 介绍     |
+| -------- | ------- | ------ | --- | ------- |
+| selected | boolean | false  | 是  | 是否选中 |
+| value    | string  |        | 否  | 值      |
 
 ---
 
@@ -126,3 +119,14 @@ class Picker extends HTMLElement {
 | --s-color-secondary-container    | 选中背景色 |
 | --s-color-on-secondary-container | 选中前景色 |
 | --s-color-on-surface-variant     | svg 颜色   |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Field](./field)
+- [Popup](./popup)
+- [Ripple](./ripple)
+- [ScrollView](./scroll-view)

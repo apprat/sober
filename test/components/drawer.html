@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+  <style>
+    @media (max-width: 768px) {
+      body {
+        background: #fff;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <s-page>
+    <s-drawer style="height: 1000px;">
+      <div slot="start">
+        问人生、头白京国，算来何事消得。不如罨画清溪上，蓑笠扁舟一只。人不识，且笑煮、鲈鱼趁著莼丝碧。无端酸鼻，向岐路消魂，征轮驿骑，断雁西风急。
+        英雄辈，事业东西南北。临风因甚泣。酬知有愿频挥手，零雨凄其此日。休太息，须信道、诸公衮衮皆虚掷。年来踪迹。有多少雄心，几翻恶梦，泪点霜华织
+      </div>
+      <s-scroll-view style="padding: 24px;">
+        <s-button onclick="document.querySelector('s-drawer').show()"
+          style="position: relative;z-index: 1;">show</s-button>
+        <s-button onclick="document.querySelector('s-drawer').close()">close</s-button>
+        <s-button onclick="document.querySelector('s-drawer').toggle()">toggle</s-button>
+        <hr>
+        <s-button onclick="document.querySelector('s-drawer').show('end')"
+          style="position: relative;z-index: 1;">show</s-button>
+        <s-button onclick="document.querySelector('s-drawer').close('end')">close</s-button>
+        <s-button onclick="document.querySelector('s-drawer').toggle('end')">toggle</s-button>
+        <div style="height: 2024px;"></div>
+      </s-scroll-view>
+      <div slot="end">
+        33
+      </div>
+    </s-drawer>
+  </s-page>
+</body>
+
+</html>

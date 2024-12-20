@@ -1,10 +1,11 @@
-import { useElement, JSXAttributes } from './core/element.js'
-import { getStackingContext } from './core/utils/getStackingContext.js'
+import { useElement } from './core/element.js'
+import { mediaQueries } from './core/utils/mediaQuery.js'
 import { Theme } from './page.js'
 import './scroll-view.js'
 
 const name = 's-dialog'
 const props = {
+  showed: false,
   size: 'standard' as 'standard' | 'full'
 }
 
@@ -13,17 +14,30 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
 }
-.wrapper{
-  position: fixed;
+dialog{
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: var(--z-index, 2);
-  pointer-events: none;
+  background: none;
+  border: none;
+  padding: 0;
+  max-width: none;
+  max-height: none;
+  outline: none;
+  color: inherit;
+}
+dialog::backdrop{
+  background: none;
+}
+.wrapper{
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  pointer-events: none;
 }
 .scrim{
   background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 80%, transparent);
@@ -34,34 +48,26 @@ const style = /*css*/`
   height: 100%;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  pointer-events: none;
   opacity: 0;
   transition: opacity .2s ease-out;
 }
-.wrapper.show .scrim{
+dialog.show .scrim{
   opacity: 1;
-  pointer-events: auto;
 }
-.container{
+.container,
+::slotted([slot=custom]){
   max-width: calc(100% - 48px);
   max-height: calc(100% - 48px);
-  width: 520px;
-  height: calc-size(auto);
-  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
+  pointer-events: auto;
   position: relative;
   border-radius: 28px;
-  box-shadow: var(--s-elevation-level5, ${Theme.elevationLevel5});
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  top: 100%;
-  transition: width .2s, height .2s, border-radius .2s;
   transition-timing-function: ease-out;
-  --z-index: var(--z-index, 2);
-}
-.wrapper.show .container{
-  pointer-events: auto;
-  top: 0;
+  width: ${mediaQueries.mobileL}px;
+  box-shadow: var(--s-elevation-level5, ${Theme.elevationLevel5});
+  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
 }
 :host([size=full]) .container{
   width: 100%;
@@ -105,27 +111,25 @@ const style = /*css*/`
   font-size: .875rem;
   cursor: pointer;
 }
-:host([size=full]) ::slotted([slot=text]),
-:host([size=full]) ::slotted(:not([slot])){
-  max-width: none;
-}
 `
 
 const template = /*html*/`
 <slot name="trigger"></slot>
-<div class="wrapper" part="wrapper">
+<dialog part="popup">
   <div class="scrim" part="scrim"></div>
-  <div class="container" part="container">
-    <slot name="headline"></slot>
-    <s-scroll-view class="text" part="view">
-      <slot></slot>
-      <slot name="text"></slot>
-    </s-scroll-view>
-    <div class="action" part="action">
-      <slot name="action"></slot>
+  <slot name="custom" class="wrapper" part="wrapper">
+    <div class="container" part="container">
+      <slot name="headline"></slot>
+      <s-scroll-view class="text" part="view">
+        <slot></slot>
+        <slot name="text"></slot>
+      </s-scroll-view>
+      <div class="action" part="action">
+        <slot name="action"></slot>
+      </div>
     </div>
-  </div>
-</div>
+  </slot>
+</dialog>
 `
 
 const builder = (options: string | {
@@ -170,55 +174,51 @@ const builder = (options: string | {
       dialog.appendChild(action)
     }
   }
+  dialog.showed = true
+  dialog.addEventListener('closed', () => root.removeChild(dialog))
   root.appendChild(dialog)
-  dialog.addEventListener('dismissed', () => root.removeChild(dialog))
-  requestAnimationFrame(dialog.show)
   return dialog
 }
 
 type EventShowSource = 'TRIGGER'
-type EventDismissSource = 'SCRIM' | 'ACTION'
+type EventCloseSource = 'SCRIM' | 'ACTION'
 
 class Dialog extends useElement({
-  style, template, props, syncProps: ['size'],
+  style, template, props, syncProps: ['size', 'showed'],
   setup(shadowRoot) {
-    const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
+    const dialog = shadowRoot.querySelector('dialog') as HTMLDialogElement
     const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
-    const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
-    const action = shadowRoot.querySelector('slot[name=action]') as HTMLSlotElement
-    const animationOptions = { duration: 200, easing: 'ease-out', fill: 'forwards' } as const
-    const show = (source?: EventShowSource) => {
-      if (!this.dispatchEvent(new CustomEvent('show', { cancelable: true, detail: { source } }))) return
-      const stackingContext = getStackingContext(shadowRoot)
-      if (stackingContext.top !== 0 || stackingContext.left !== 0) {
-        const style = `width: ${innerWidth}px;height: ${innerHeight}px;top: ${0 - stackingContext.top}px;left: ${0 - stackingContext.left}px`
-        scrim.setAttribute('style', style)
-        wrapper.setAttribute('style', style)
-      }
-      wrapper.classList.add('show')
-      const animation = container.animate([
-        { transform: 'scale(.9)', filter: 'opacity(0)', top: 0 },
-        { transform: 'scale(1)', filter: 'opacity(1)', top: 0 }
-      ], animationOptions)
+    shadowRoot.querySelector('slot[name=trigger]')!.addEventListener('click', () => {
+      if (this.showed || !this.dispatchEvent(new CustomEvent('show', { cancelable: true, detail: { source: 'TRIGGER' } }))) return
+      this.showed = true
+    })
+    const onClose = (source: EventCloseSource) => {
+      if (!this.showed || !this.dispatchEvent(new CustomEvent('close', { cancelable: true, detail: { source } }))) return
+      this.showed = false
+    }
+    shadowRoot.querySelector('.scrim')!.addEventListener('click', () => onClose('SCRIM'))
+    shadowRoot.querySelector('slot[name=action]')!.addEventListener('click', () => onClose('ACTION'))
+    const animateOptions = { duration: 200, easing: 'ease-out' } as const
+    const show = () => {
+      if (!this.isConnected || dialog.open) return
+      dialog.showModal()
+      const animation = wrapper.animate([{ transform: 'scale(.9)', opacity: 0 }, { opacity: 1 }], animateOptions)
+      dialog.classList.add('show')
       animation.addEventListener('finish', () => this.dispatchEvent(new Event('showed')))
     }
-    const dismiss = (source?: EventDismissSource) => {
-      if (!this.dispatchEvent(new CustomEvent('dismiss', { cancelable: true, detail: { source } }))) return
-      wrapper.classList.remove('show')
-      const animation = container.animate([
-        { transform: 'scale(1)', filter: 'opacity(1)', top: 0 },
-        { transform: 'scale(.9)', filter: 'opacity(0)', top: 0 }
-      ], animationOptions)
-      animation.addEventListener('finish', () => this.dispatchEvent(new Event('dismissed')))
+    const close = () => {
+      if (!this.isConnected || !dialog.open) return
+      const animation = wrapper.animate([{ opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animateOptions)
+      dialog.classList.remove('show')
+      animation.addEventListener('finish', () => {
+        dialog.close()
+        this.dispatchEvent(new Event('closed'))
+      })
     }
-    trigger.addEventListener('click', () => show('TRIGGER'))
-    scrim.addEventListener('click', () => dismiss('SCRIM'))
-    action.addEventListener('click', () => dismiss('ACTION'))
     return {
-      expose: {
-        show: () => show(),
-        dismiss: () => dismiss()
+      mounted: () => this.showed && show(),
+      props: {
+        showed: (value) => value ? show() : close()
       }
     }
   }
@@ -230,26 +230,31 @@ Dialog.define(name)
 
 export { Dialog }
 
-interface EventMap extends HTMLElementEventMap {
+interface EventMap {
   show: CustomEvent<{ source?: EventShowSource }>
   showed: Event
-  dismiss: CustomEvent<{ source?: EventDismissSource }>
-  dismissed: Event
+  close: CustomEvent<{ source?: EventCloseSource }>
+  closed: Event
 }
 
+type ElementEventMap = EventMap & HTMLElementEventMap
+
 interface Dialog {
-  addEventListener<K extends keyof EventMap>(type: K, listener: (this: Dialog, ev: EventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof EventMap>(type: K, listener: (this: Dialog, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
+  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Dialog, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Dialog, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Dialog
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props> & { [K in keyof EventMap as `on${K}`]?: (ev: EventMap[K]) => void }
+      }
+    }
   }
 }
 

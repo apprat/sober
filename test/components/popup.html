@@ -7,12 +7,29 @@
   <script type="module" src="../../dist/main.js"></script>
   <link rel="stylesheet" href="../styles/default.css">
   <script type="module" src="../scripts/default.js"></script>
+  <style>
+    @media (max-width: 768px) {
+      body {
+        background: #fff;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <s-page class="gap">
-    <s-popup>
+  <s-page>
+    <s-popup style="margin-left: 300px;margin-top: 800px;">
       <s-button slot="trigger"> popup </s-button>
+      <div style="min-height: 280px; width: 480px"></div>
+    </s-popup>
+
+    <s-popup align="left">
+      <s-button slot="trigger"> left </s-button>
+      <div style="min-height: 280px; width: 128px"></div>
+    </s-popup>
+
+    <s-popup align="right">
+      <s-button slot="trigger"> right </s-button>
       <div style="min-height: 280px; width: 128px"></div>
     </s-popup>
   </s-page>

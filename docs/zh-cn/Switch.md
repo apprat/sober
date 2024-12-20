@@ -51,3 +51,11 @@
 | --s-color-on-primary                | 选中thumb颜色           |
 | --s-color-surface                   | 禁用thumb颜色           |
 | --s-elevation-level1                | thumb 阴影             |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Ripple](./ripple)

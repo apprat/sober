@@ -3,36 +3,36 @@
 用于显示图标
 
 ```html preview
-<s-icon type="home"></s-icon>
-<s-icon type="add"></s-icon>
-<s-icon type="search"></s-icon>
-<s-icon type="menu"></s-icon>
-<s-icon type="arrow_back"></s-icon>
-<s-icon type="arrow_forward"></s-icon>
-<s-icon type="arrow_upward"></s-icon>
-<s-icon type="arrow_downward"></s-icon>
-<s-icon type="arrow_drop_up"></s-icon>
-<s-icon type="arrow_drop_down"></s-icon>
-<s-icon type="arrow_drop_left"></s-icon>
-<s-icon type="arrow_drop_right"></s-icon>
-<s-icon type="more_vert"></s-icon>
-<s-icon type="more_horiz"></s-icon>
-<s-icon type="close"></s-icon>
-<s-icon type="done"></s-icon>
-<s-icon type="chevron_up"></s-icon>
-<s-icon type="chevron_down"></s-icon>
-<s-icon type="chevron_left"></s-icon>
-<s-icon type="chevron_right"></s-icon>
-<s-icon type="light_mode"></s-icon>
-<s-icon type="dark_mode"></s-icon>
-<s-icon type="star"></s-icon>
-<s-icon type="favorite"></s-icon>
+<s-icon name="home"></s-icon>
+<s-icon name="add"></s-icon>
+<s-icon name="search"></s-icon>
+<s-icon name="menu"></s-icon>
+<s-icon name="arrow_back"></s-icon>
+<s-icon name="arrow_forward"></s-icon>
+<s-icon name="arrow_upward"></s-icon>
+<s-icon name="arrow_downward"></s-icon>
+<s-icon name="arrow_drop_up"></s-icon>
+<s-icon name="arrow_drop_down"></s-icon>
+<s-icon name="arrow_drop_left"></s-icon>
+<s-icon name="arrow_drop_right"></s-icon>
+<s-icon name="more_vert"></s-icon>
+<s-icon name="more_horiz"></s-icon>
+<s-icon name="close"></s-icon>
+<s-icon name="done"></s-icon>
+<s-icon name="chevron_up"></s-icon>
+<s-icon name="chevron_down"></s-icon>
+<s-icon name="chevron_left"></s-icon>
+<s-icon name="chevron_right"></s-icon>
+<s-icon name="light_mode"></s-icon>
+<s-icon name="dark_mode"></s-icon>
+<s-icon name="star"></s-icon>
+<s-icon name="favorite"></s-icon>
 ```
 
 使用 color 设置颜色
 
 ```html preview
-<s-icon type="add" style="color: #009688"></s-icon>
+<s-icon name="add" style="color: #009688"></s-icon>
 ```
 
 加载图标
@@ -41,7 +41,7 @@
 <s-icon src="/images/sentiment_neutral.svg"></s-icon>
 ```
 
-> 注意：如果目标文件的 `content-type` 为 `image/svg+xml` 则会加载完成后在内部渲染，因此它支持定义颜色，反之将会使用 `img` 来渲染。
+> 注意：如果目标文件的 `content-type` 为 `image/svg+xml` 则会加载完成后在内部渲染，因此它支持定义颜色，反之将会使用 `<img />` 来渲染。
 
 你也可以直接在内部放置 SVG 图标。
 
@@ -61,10 +61,10 @@
 
 ## 属性
 
-| 名称   | 类型     | 默认值 | 是否同步 | 介绍        |
-| ------ | ------- | ------ | ------- | ----------- |
-| type   | string  | none   | 是      | 自带图标名称 |
-| src    | string  |        | 否      | 图标路径     |
+| 名称 | 类型     | 默认值 | 同步 | 介绍        |
+| ---- | ------- | ------ | --- | ----------- |
+| name | string  | none   | 是  | 自带图标名称 |
+| src  | string  |        | 否  | 图标路径     |
 
 ---
 

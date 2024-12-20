@@ -1,13 +1,15 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 import { Popup } from './popup.js'
 import { Field } from './field.js'
-import Select from './core/select.js'
+import { Select } from './core/utils/select.js'
+import './ripple.js'
 import './scroll-view.js'
 
 const name = 's-picker'
 const props = {
   disabled: false,
+  showed: false,
   label: '',
   value: ''
 }
@@ -76,13 +78,13 @@ svg{
 const template = /*html*/ `
 <s-popup class="popup">
   <slot name="trigger" slot="trigger">
-    <s-field labelfixed="false" class="field" part="field">
+    <s-field fixed="false" class="field" part="field">
       <div class="label" slot="label"></div>
-      <div slot="view" class="view"></div>
+      <div class="view"></div>
       <svg viewBox="0 -960 960 960" slot="end">
           <path d="M480-360 280-560h400L480-360Z"></path>
         </svg>
-      <s-ripple class="ripple" slot="view" attached="true"></s-ripple>
+      <s-ripple class="ripple" attached="true"></s-ripple>
     </s-field>
   </slot>
   <s-scroll-view class="container" part="container">
@@ -100,48 +102,49 @@ export class Picker extends useElement({
     const view = shadowRoot.querySelector('.view') as HTMLDivElement
     const slot = shadowRoot.querySelector('#slot') as HTMLSlotElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const select = new Select({ context: this, selectClass: PickerItem, slot })
+    const select = new Select({ context: this, class: PickerItem, slot })
     //show
     popup.addEventListener('show', () => {
       field.focused = true
-      field.labelFixed = true
+      field.fixed = true
       container.style.minWidth = `${this.offsetWidth}px`
       select.select && container.scrollTo({ top: (select.select.offsetTop - container.offsetTop) - (container.offsetHeight / 2) + (select.select.offsetHeight / 2) })
     })
-    //dismiss
-    popup.addEventListener('dismiss', () => {
+    //close
+    popup.addEventListener('close', () => {
       field.focused = false
-      !select.select && (field.labelFixed = false)
+      !select.select && (field.fixed = false)
     })
-    popup.addEventListener('dismissed', () => container.style.removeProperty('min-width'))
+    popup.addEventListener('closed', () => container.style.removeProperty('min-width'))
     select.onUpdate = () => {
       if (!select.select) {
-        field.labelFixed = false
+        field.fixed = false
         view.textContent = ''
         return
       }
-      field.labelFixed = true
+      field.fixed = true
       view.textContent = select.select.textContent
     }
-    select.onSelect = () => popup.dismiss()
+    select.onSelect = () => popup.showed = false
     return {
       expose: {
         get value() {
           return select.value
         },
         get options() {
-          return select.selects
+          return select.list
         },
         get selectedIndex() {
           return select.selectedIndex
         },
         show: popup.show.bind(popup),
-        toggle: popup.toggle.bind(popup),
-        dismiss: popup.dismiss.bind(popup)
+        //toggle: popup.toggle.bind(popup),
+        //close: popup.close.bind(popup)
       },
       props: {
         label: (value) => label.textContent = value,
-        value: (value) => select.value = value
+        value: (value) => select.value = value,
+        showed: (value) => { }
       }
     }
   }
@@ -229,15 +232,19 @@ Picker.define(name)
 PickerItem.define(itemName)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-      [itemName]: Partial<typeof itemProps> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Picker
     [itemName]: PickerItem
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        //@ts-ignore
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+      }
+    }
   }
 }
 

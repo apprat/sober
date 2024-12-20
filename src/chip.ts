@@ -1,4 +1,4 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 import './ripple.js'
 
@@ -71,21 +71,23 @@ const template = /*html*/`
 export class Chip extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
-    const action = shadowRoot.querySelector('slot[name=action]') as HTMLSlotElement
-    action.addEventListener('pointerdown', (e) => e.stopPropagation())
+    shadowRoot.querySelector('slot[name=action]')!.addEventListener('pointerdown', (e) => e.stopPropagation())
   }
 }) { }
 
 Chip.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Chip
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

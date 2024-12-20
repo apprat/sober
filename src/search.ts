@@ -1,4 +1,4 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 
 const name = 's-search'
@@ -122,6 +122,9 @@ export class Search extends useElement({
       expose: {
         get value() {
           return input.value
+        },
+        get native() {
+          return input
         }
       },
       props: {
@@ -137,13 +140,16 @@ export class Search extends useElement({
 Search.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Search
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

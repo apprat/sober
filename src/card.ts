@@ -1,4 +1,4 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 import './ripple.js'
 
@@ -12,25 +12,25 @@ const style = /*css*/`
 :host{
   display: inline-block;
   vertical-align: middle;
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
-  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   border-radius: 12px;
   position: relative;
   font-size: .875rem;
   box-sizing: border-box;
   max-width: 280px;
-  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   overflow: hidden;
   flex-shrink: 0;
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 :host([type=filled]){
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   box-shadow: none;
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
 }
 :host([type=outlined]){
+  box-shadow: none;
   background: var(--s-color-surface, ${Theme.colorSurface});
   border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
-  box-shadow: none;
 }
 :host([clickable=true]){
   cursor: pointer;
@@ -113,13 +113,16 @@ export class Card extends useElement({
 Card.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Card
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

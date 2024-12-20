@@ -1,5 +1,5 @@
-import { useElement, JSXAttributes } from './core/element.js'
-import { device } from './core/utils/device.js'
+import { useElement } from './core/element.js'
+import { mediaQueryList } from './core/utils/mediaQuery.js'
 
 const name = 's-ripple'
 const props = {
@@ -53,8 +53,8 @@ const style = /*css*/`
   color: color-mix(in srgb, var(--ripple-color) 24%, transparent);
   background: currentColor;
   border-radius: 50%;
-  width: 105%;
-  height: 105%;
+  width: 100%;
+  height: 100%;
   position: absolute;
   transform: translate(-50%, -50%) scale(0);
   filter: blur(8px);
@@ -75,8 +75,8 @@ export class Ripple extends useElement({
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const ripple = shadowRoot.querySelector('.ripple') as HTMLDivElement
-    const hover = () => !device.touched && container.classList.add('hover')
-    const unHover = () => !device.touched && container.classList.remove('hover')
+    const hover = () => !mediaQueryList.pointerCoarse.matches && container.classList.add('hover')
+    const unHover = () => !mediaQueryList.pointerCoarse.matches && container.classList.remove('hover')
     const state = { parentNode: null as null | HTMLElement, rippled: false }
     const run = (event: PointerEvent) => {
       const { offsetWidth, offsetHeight } = this
@@ -175,13 +175,16 @@ export class Ripple extends useElement({
 Ripple.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Ripple
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

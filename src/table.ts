@@ -1,4 +1,4 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 
 const name = 's-table'
@@ -167,16 +167,6 @@ Th.define(thName)
 Td.define(tdName)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-      [theadName]: Partial<typeof theadProps> & JSXAttributes
-      [tbodyName]: Partial<typeof tbodyProps> & JSXAttributes
-      [trName]: Partial<typeof trProps> & JSXAttributes
-      [thName]: Partial<typeof thProps> & JSXAttributes
-      [tdName]: Partial<typeof tdProps> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Table
     [theadName]: Thead
@@ -184,6 +174,24 @@ declare global {
     [trName]: Tr
     [thName]: Th
     [tdName]: Td
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        //@ts-ignore
+        [theadName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof theadProps>
+        //@ts-ignore
+        [tbodyName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof tbodyProps>
+        //@ts-ignore
+        [trName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof trProps>
+        //@ts-ignore
+        [thName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof thProps>
+        //@ts-ignore
+        [tdName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof tdProps>
+      }
+    }
   }
 }
 

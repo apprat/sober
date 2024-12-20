@@ -1,7 +1,7 @@
 const tooltip = document.createElement('s-tooltip')
 const fab = document.createElement('s-fab')
 const icon = document.createElement('s-icon')
-icon.type = 'dark_mode'
+icon.name = 'dark_mode'
 fab.appendChild(icon)
 fab.slot = 'trigger'
 tooltip.setAttribute('style', `position: fixed;right: 24px;bottom: 24px;transform: scale(1);`)
@@ -13,7 +13,7 @@ if (page && page.tagName === 'S-PAGE') {
   page.appendChild(tooltip)
   fab.addEventListener('click', () => {
     page.toggle(page.theme === 'dark' ? 'light' : 'dark', fab)
-    icon.type = page.theme === 'dark' ? 'light_mode' : 'dark_mode'
+    icon.name = page.theme === 'dark' ? 'light_mode' : 'dark_mode'
   })
 }
 

@@ -1,6 +1,6 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
-import Select from './core/select.js'
+import { Select } from './core/utils/select.js'
 import './ripple.js'
 
 const name = 's-segmented-button'
@@ -26,14 +26,14 @@ export class SegmentedButton extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
-    const select = new Select({ context: this, selectClass: SegmentedButtonItem, slot })
+    const select = new Select({ context: this, class: SegmentedButtonItem, slot })
     return {
       expose: {
         get value() {
           return select.value
         },
         get options() {
-          return select.selects
+          return select.list
         },
         get selectedIndex() {
           return select.selectedIndex
@@ -132,15 +132,19 @@ SegmentedButtonItem.define(itemName)
 
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-      [itemName]: Partial<typeof itemProps> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: SegmentedButton
     [itemName]: SegmentedButtonItem
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        //@ts-ignore
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+      }
+    }
   }
 }
 

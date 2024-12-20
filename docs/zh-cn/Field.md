@@ -5,7 +5,7 @@
 ```html preview
 <s-field>
   <div slot="label">请选择内容</div>
-  <div slot="view"> ... </div>
+  <div> ... </div>
 </s-field>
 
 <s-field focused="true">
@@ -17,10 +17,10 @@
 
 ## 属性
 
-| 名称       | 类型     | 默认值 | 是否同步 | 介绍        |
-| ---------- | ------- | ------ | ------- | ----------- |
-| focused    | boolean | false  | 否      | 是否聚焦     |
-| labelFixed | boolean | false  | 否      | 是否固定标签 |
+| 名称    | 类型     | 默认值 | 同步 | 介绍        |
+| ------- | ------- | ------ | --- | ----------- |
+| focused | boolean | false  | 是  | 是否聚焦     |
+| fixed   | boolean | false  | 是  | 是否固定标签 |
 
 ---
 
@@ -29,7 +29,6 @@
 | 名称  | 介绍    |
 | ----- | ------ |
 | start | 开始   |
-| view  | 主视图 |
 | end   | 结束   |
 
 ---

@@ -1,4 +1,4 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 import './ripple.js'
 
@@ -20,14 +20,14 @@ const style = /*css*/`
   height: 56px;
   font-size: .875rem;
   border-radius: 16px;
-  background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
-  color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
   transition: box-shadow .1s ease-out, transform .1s ease-out;
   font-weight: 500;
   white-space: nowrap;
   text-transform: capitalize;
-  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   padding: 0 16px;
+  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
+  background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
+  color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
 }
 :host([hidden=true]){
   transform: scale(0);
@@ -70,13 +70,16 @@ export class FAB extends useElement({ style, template, props, syncProps: ['hidde
 FAB.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: FAB
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

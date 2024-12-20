@@ -1,6 +1,6 @@
-import { useElement, JSXAttributes } from './core/element.js'
-import { device } from './core/utils/device.js'
-import Select from './core/select.js'
+import { useElement } from './core/element.js'
+import { mediaQueryList } from './core/utils/mediaQuery.js'
+import { Select } from './core/utils/select.js'
 import './ripple.js'
 import { Theme } from './page.js'
 
@@ -48,10 +48,10 @@ const style = /*css*/`
   border-radius: 4px;
   background: white;
   opacity: .3;
-  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   flex-shrink: 0;
   cursor: pointer;
   pointer-events: auto;
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 .track .indicator.checked{
   opacity: 1;
@@ -71,7 +71,7 @@ export class Carousel extends useElement({
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const track = shadowRoot.querySelector('.track') as HTMLDivElement
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
-    const select = new Select({ context: this, selectClass: CarouselItem, slot })
+    const select = new Select({ context: this, class: CarouselItem, slot })
     let timer = -1
     select.onUpdate = () => {
       track.childNodes.forEach((item) => (item as Element).classList.remove('checked'))
@@ -83,11 +83,11 @@ export class Carousel extends useElement({
     const play = () => {
       stopPlay()
       if (!this.autoplay) return
-      if (select.selects.length === 0) return
+      if (select.list.length === 0) return
       timer = setTimeout(() => {
         let next = select.selectedIndex + 1
-        if (next >= select.selects.length) next = 0
-        select.selects[next].selected = true
+        if (next >= select.list.length) next = 0
+        select.list[next].selected = true
         this.dispatchEvent(new Event('change'))
       }, this.duration)
     }
@@ -95,7 +95,7 @@ export class Carousel extends useElement({
     select.onSlotChange = () => {
       track.innerHTML = ''
       const fragment = document.createDocumentFragment()
-      select.selects.forEach((item) => {
+      select.list.forEach((item) => {
         const div = document.createElement('div')
         div.className = 'indicator'
         div.addEventListener('click', () => item.dispatchEvent(new Event(`${name}:select`, { bubbles: true })))
@@ -104,13 +104,13 @@ export class Carousel extends useElement({
       track.appendChild(fragment)
     }
     container.addEventListener('pointerdown', (event) => {
-      if (select.selects.length <= 1) return
+      if (select.list.length <= 1) return
       stopPlay()
       const pageX = event.pageX
       const pageY = event.pageY
       const width = container.offsetWidth
-      const prev = select.selects[select.selectedIndex - 1]
-      const next = select.selects[select.selectedIndex + 1]
+      const prev = select.list[select.selectedIndex - 1]
+      const next = select.list[select.selectedIndex + 1]
       const state = { now: 0, left: 0, next: undefined as undefined | CarouselItem }
       const move = (event: PointerEvent | TouchEvent) => {
         let eventInfo: { pageX: number, pageY: number } = event instanceof TouchEvent ? event.touches[0] : event
@@ -147,7 +147,7 @@ export class Carousel extends useElement({
         state.next?.style.removeProperty('transition')
         state.next?.style.removeProperty('transform')
         const index = select.selectedIndex
-        const is = (index === 0 && state.left > 0) || (index === select.selects.length - 1 && state.left < 0)
+        const is = (index === 0 && state.left > 0) || (index === select.list.length - 1 && state.left < 0)
         if (!is) {
           const threshold = (Date.now() - state.now) > 300 ? width / 2 : 20
           if (Math.abs(state.left) > threshold) {
@@ -159,8 +159,8 @@ export class Carousel extends useElement({
         play()
       }
       const eventName = {
-        move: device.touched ? 'touchmove' : 'pointermove',
-        up: device.touched ? 'touchend' : 'pointerup'
+        move: mediaQueryList.pointerCoarse.matches ? 'touchmove' : 'pointermove',
+        up: mediaQueryList.pointerCoarse.matches ? 'touchend' : 'pointerup'
       } as const
       document.addEventListener(eventName.move, move, { passive: false })
       document.addEventListener(eventName.up, up)
@@ -171,18 +171,18 @@ export class Carousel extends useElement({
           return select.value
         },
         get options() {
-          return select.selects
+          return select.list
         },
         get selectedIndex() {
           return select.selectedIndex
         },
         togglePrevious: () => {
-          const prev = select.selects[select.selectedIndex - 1]
+          const prev = select.list[select.selectedIndex - 1]
           if (!prev) return
           prev.selected = true
         },
         toggleNext: () => {
-          const next = select.selects[select.selectedIndex + 1]
+          const next = select.list[select.selectedIndex + 1]
           if (!next) return
           next.selected = true
         }
@@ -242,15 +242,19 @@ Carousel.define(name)
 CarouselItem.define(itemName)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-      [itemName]: Partial<typeof itemProps> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Carousel
     [itemName]: CarouselItem
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        //@ts-ignore
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+      }
+    }
   }
 }
 

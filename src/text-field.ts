@@ -1,4 +1,4 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 import { Field } from './field.js'
 
@@ -185,9 +185,9 @@ input::-ms-reveal{
 `
 
 const template = /*html*/`
-<s-field class="field" labelFixed="false">
+<s-field class="field" fixed="false">
   <div slot="label" class="label"></div>
-  <div slot="view" class="view">
+  <div class="view">
     <div class="shadow"></div>
     <input type="text" part="input">
     <textarea part="textarea"></textarea>
@@ -219,12 +219,12 @@ export class TextField extends useElement({
     }
     const onChange = () => this.dispatchEvent(new Event('change'))
     const onFocus = () => {
-      field.labelFixed = true
+      field.fixed = true
       field.focused = true
     }
     const onBlur = () => {
       field.focused = false
-      if (getInput().value === '' && !this.error) field.labelFixed = false
+      if (getInput().value === '' && !this.error) field.fixed = false
     }
     inputs.input.addEventListener('input', onCounter)
     inputs.input.addEventListener('focus', onFocus)
@@ -251,17 +251,17 @@ export class TextField extends useElement({
         type: (value) => inputs.input.type = value,
         error: (value) => {
           if (value) {
-            field.labelFixed = true
+            field.fixed = true
             return
           }
-          if (getInput().value === '') field.labelFixed = false
+          if (getInput().value === '') field.fixed = false
         },
         value: (value) => {
           inputs.input.value = value
           inputs.textarea.value = value
           textAreaShadow.textContent = value
           onCounter()
-          if (!this.error) field.labelFixed = value !== ''
+          if (!this.error) field.fixed = value !== ''
         },
         placeholder: (value) => {
           inputs.input.placeholder = value
@@ -293,13 +293,16 @@ export class TextField extends useElement({
 TextField.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: TextField
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

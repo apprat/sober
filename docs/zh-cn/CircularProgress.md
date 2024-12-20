@@ -23,12 +23,12 @@
 
 ## 属性
 
-| 名称          | 类型     | 默认值 | 是否同步 | 介绍                  |
-| ------------- | ------- | ------ | ------- | -------------------- |
-| indeterminate | boolean | false  | 是      | 是否未知              |
-| animated      | boolean | false  | 是      | 是否启用变更时过渡动画 |
-| max           | number  | 100    | 否      | 最大值                |
-| value         | number  | 0      | 否      | 当前值                |
+| 名称          | 类型     | 默认值 | 同步 | 介绍                  |
+| ------------- | ------- | ------ | --- | -------------------- |
+| indeterminate | boolean | false  | 是  | 是否未知              |
+| animated      | boolean | false  | 是  | 是否启用变更时过渡动画 |
+| max           | number  | 100    | 否  | 最大值                |
+| value         | number  | 0      | 否  | 当前值                |
 
 ---
 

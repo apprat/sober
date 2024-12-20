@@ -47,10 +47,10 @@
 
 ## 属性
 
-| 名称      | 类型                        | 默认值   | 是否同步 | 介绍            |
-| --------- | -------------------------- | -------- | ------- | -------------- |
-| type      | elevated, filled, outlined | elevated | 是      | 样式            |
-| clickable | boolean                    | false    | 是      | 是否启用单击效果 |
+| 名称      | 类型                        | 默认值   | 同步 | 介绍            |
+| --------- | -------------------------- | -------- | --- | -------------- |
+| type      | elevated, filled, outlined | elevated | 是  | 样式            |
+| clickable | boolean                    | false    | 是  | 是否启用单击效果 |
 
 ---
 
@@ -81,3 +81,11 @@
 | --s-color-on-surface-variant        | text 插槽文本颜色         |
 | --s-elevation-level1                | elevated 阴影/hover 阴影 |
 | --s-elevation-level2                | elevated hover 阴影      |
+
+---
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Ripple](./ripple)

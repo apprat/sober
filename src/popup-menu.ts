@@ -1,4 +1,4 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 import { Popup } from './popup.js'
 import './ripple.js'
@@ -54,22 +54,22 @@ export class PopupMenu extends useElement({
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector('.popup') as Popup
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
-    const show = popup.show.bind(popup)
-    const dismiss = popup.dismiss.bind(popup)
-    const toggle = popup.toggle.bind(popup)
+
     trigger.addEventListener('click', (e) => {
       e.stopPropagation()
-      show()
+      popup.show()
     })
     this.addEventListener(`${name}:click`, (event) => {
       event.stopPropagation()
-      dismiss()
+      popup.showed = false
     })
     return {
       mounted: () => {
         if (this.parentNode instanceof PopupMenu) popup.setAttribute('align', 'right')
       },
-      expose: { show, dismiss, toggle }
+      expose: {
+        show: popup.show.bind(popup),
+      }
     }
   }
 }) { }
@@ -135,15 +135,19 @@ PopupMenu.define(name)
 PopupMenuItem.define(itemName)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-      [itemName]: Partial<typeof itemProps> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: PopupMenu
     [itemName]: PopupMenuItem
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        //@ts-ignore
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+      }
+    }
   }
 }
 

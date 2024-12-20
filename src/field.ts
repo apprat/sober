@@ -1,11 +1,11 @@
-import { useElement, JSXAttributes } from './core/element.js'
+import { useElement } from './core/element.js'
 import { Theme } from './page.js'
 import './ripple.js'
 
 const name = 's-field'
 const props = {
   focused: false,
-  labelFixed: true
+  fixed: true
 }
 
 const style = /*css*/`
@@ -104,8 +104,8 @@ const style = /*css*/`
   width: calc(100% - var(--field-border-radius) * 2);
   content: none;
 }
-:host([labelfixed=false]) .legend::before,
-:host([labelfixed=false]) .legend::after{
+:host([fixed=false]) .legend::before,
+:host([fixed=false]) .legend::after{
   content: '';
 }
 .label{
@@ -124,7 +124,7 @@ const style = /*css*/`
   transform: translateY(-50%) scale(.8571428571428571);
   transition: color .1s ease-out, transform .1s ease-out;
 }
-:host([labelfixed=false]) ::slotted([slot=label]){
+:host([fixed=false]) ::slotted([slot=label]){
   transform: translateY(0) scale(1);
 }
 .left,.right{
@@ -149,7 +149,7 @@ const style = /*css*/`
 ::slotted([slot=start]){
   margin-right: var(--field-border-radius);
 }
-::slotted([slot=view]){
+::slotted(:not([slot])){
   padding: 0 var(--field-padding);
   display: flex;
   align-items: center;
@@ -165,7 +165,7 @@ const template = /*html*/`
 <div class="container side">
   <slot name="start" class="start side cell"></slot>
   <div class="box side">
-    <slot name="view" class="view"></slot>
+    <slot class="view"></slot>
     <div class="legend side">
       <div class="left side"></div>
       <slot name="label" class="label"></slot>
@@ -177,21 +177,22 @@ const template = /*html*/`
 `
 
 export class Field extends useElement({
-  style, template, props, syncProps: true,
-  setup() {
-  }
+  style, template, props, syncProps: true
 }) { }
 
 Field.define(name)
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [name]: Partial<typeof props> & JSXAttributes
-    }
-  }
   interface HTMLElementTagNameMap {
     [name]: Field
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        //@ts-ignore
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+      }
+    }
   }
 }
 

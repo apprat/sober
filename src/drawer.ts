@@ -119,12 +119,12 @@ export class Drawer extends useElement({
       end: shadowRoot.querySelector('.end') as HTMLSlotElement
     }
     const getElement = (name: SlotName = 'start') => slots[name]
-    const getClassName = () => mediaQueryList.laptop.matches ? 'show-laptop' : 'show'
+    const getClassName = (folded?: boolean) => folded ?? mediaQueryList.laptop.matches ? 'show-laptop' : 'show'
     const getOffset = (name: SlotName = 'start') => ({ start: -1, end: 1 }[name])
     const animateOptions = { duration: 300, easing: 'ease-out' } as const
-    const show = (slot?: SlotName) => {
+    const show = (slot?: SlotName, folded?: boolean) => {
       const element = getElement(slot)
-      const className = getClassName()
+      const className = getClassName(folded)
       if (element.classList.contains(className)) return
       const offset = getOffset(slot)
       element.classList.add(className)
@@ -132,9 +132,9 @@ export class Drawer extends useElement({
       scrim.classList.add(className)
       element.animate(keyframe, animateOptions)
     }
-    const close = (slot?: SlotName) => {
+    const close = (slot?: SlotName, folded?: boolean) => {
       const element = getElement(slot)
-      const className = getClassName()
+      const className = getClassName(folded)
       if (!element.classList.contains(className)) return
       const offset = getOffset(slot)
       const keyframe = mediaQueryList.laptop.matches ? [{ transform: `translateX(0)`, display: 'block' }, { transform: `translateX(${element.offsetWidth * offset}px)`, display: 'block' }] : [{ width: element.offsetWidth + 'px', display: 'block' }, { width: 0, display: 'block' }]
@@ -142,14 +142,14 @@ export class Drawer extends useElement({
       element.classList.remove(className)
       scrim.classList.remove(className)
     }
-    const toggle = (slot?: SlotName) => {
+    const toggle = (slot?: SlotName, folded?: boolean) => {
       const element = getElement(slot)
-      const className = getClassName()
-      element.classList.contains(className) ? close(slot) : show(slot)
+      const className = getClassName(folded)
+      element.classList.contains(className) ? close(slot, folded) : show(slot, folded)
     }
     scrim.addEventListener('pointerdown', () => {
-      close()
-      close('end')
+      close('start', true)
+      close('end', true)
     })
     return {
       expose: { show, close, toggle }

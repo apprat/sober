@@ -5,7 +5,7 @@ import { Theme } from './page.js'
 
 const name = 's-tooltip'
 const props = {
-  align: 'auto' as 'bottom' | 'top' | 'auto'
+  align: 'auto' as 'auto' | 'bottom' | 'top'
 }
 
 const style = /*css*/`
@@ -63,6 +63,7 @@ export class Tooltip extends useElement({
         const rect = getStackingContext(shadowRoot)
         popup.style.marginLeft = `${-rect.left}px`
         popup.style.marginTop = `${-rect.top}px`
+        popup.style.zIndex = '2'
       }
       const rect = this.getBoundingClientRect()
       const gap = 4

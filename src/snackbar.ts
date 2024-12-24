@@ -7,8 +7,7 @@ const name = 's-snackbar'
 const props = {
   type: 'standard' as 'standard' | 'error',
   align: 'auto' as 'auto' | 'top' | 'bottom',
-  duration: 4000,
-  value: false
+  duration: 4000
 }
 
 const style = /*css*/`
@@ -18,9 +17,10 @@ const style = /*css*/`
 }
 .popup{
   position: fixed;
-  top: auto;
-  bottom: 0;
-  margin: 0 auto;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: none;
   border: none;
   outline: none;
@@ -33,40 +33,27 @@ const style = /*css*/`
   padding: 16px;
   justify-content: center;
   transition: transform .2s ease-out;
-  background: red;
+}
+.popup.show{
+  display: flex;
 }
 .container{
+  align-self: flex-end;
   min-height: 48px;
   border-radius: 4px;
   line-height: 1.6;
   display: flex;
   align-items: center;
-  min-width: 320px;
-  max-width: 480px;
+  width: 100%;
+  max-width: ${mediaQueries.mobileS}px;
   font-size: .875rem;
   font-weight: 400;
   height: fit-content;
-  pointer-events: auto;
-  --transform: translateY(100%);
+  opacity: 0;
   box-sizing: border-box;
-  --filter: opacity(0);
-  transition: transform .2s, filter .2s;
-  transition-timing-function: ease-out;
   box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
   background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
   color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
-}
-:host([align=top]) .container{
-  top: 0;
-  transform: translateY(calc(-100% - 16px));
-}
-:host([align=bottom]) .container{
-  bottom: 0;
-  transform: translateY(calc(100% - 16px));
-}
-.popup.show .container{
-  transform: translateY(0%);
-  filter: opacity(1);
 }
 :host([type=error]) .container{
   background: var(--s-color-error, ${Theme.colorError});
@@ -115,15 +102,6 @@ const style = /*css*/`
 @media (max-width: ${mediaQueries.mobileM}px){
   .popup{
     padding: 8px;
-  }
-  .container{
-    min-width: 100%;
-  }
-}
-@media (pointer: coarse){
-  .container{
-    transform: translateY(calc(-100% - 16px));
-    min-width: 240px;
   }
 }
 `
@@ -199,81 +177,79 @@ const builder = (options: string | {
   }
   root.appendChild(snackbar)
   snackbar.addEventListener('closed', () => root.removeChild(snackbar))
-  //requestAnimationFrame(snackbar.show)
+  snackbar.show()
   return snackbar
 }
 
-const bottomTask: HTMLElement[] = []
-const topTask: typeof bottomTask[number][] = []
+const tasks = {
+  top: [] as HTMLElement[],
+  bottom: [] as HTMLElement[],
+}
 
 class Snackbar extends useElement({
-  style, template, props, syncProps: ['type', 'align'],
+  style, template, props, syncProps: ['type'],
   setup(shadowRoot) {
-    const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
     const popup = shadowRoot.querySelector('.popup') as HTMLDivElement
-    //const popup = shadowRoot.querySelector('.popup') as HTMLDivElement & { task: typeof bottomTask[number][], offset: number }
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const action = shadowRoot.querySelector('slot[name=action]') as HTMLElement
-    const state = { timer: 0 }
-    const gap = 8
+    const state = { timer: 0, gap: 8 }
     const getAlign = () => this.align === 'auto' ? (mediaQueryList.pointerCoarse.matches ? 'top' : 'bottom') : this.align
     const show = () => {
-      if (!this.isConnected) return
-      popup.style.display = 'flex'
+      if (!this.isConnected || popup.classList.contains('show')) return
+      popup.classList.add('show')
       if (popup.showPopover) {
         popup.showPopover()
+      } else {
+        const rect = getStackingContext(shadowRoot)
+        popup.style.marginLeft = `${-rect.left}px`
+        popup.style.marginTop = `${-rect.top}px`
+        popup.style.zIndex = '2'
       }
+      const align = getAlign()
+      container.style.alignSelf = { top: 'start', bottom: 'end' }[align]
+      const task = tasks[align]
+      const offset = { top: 1, bottom: -1 }[align]
+      let height = container.offsetHeight + state.gap
+      for (const item of task) {
+        item.style.transform = `translateY(${height * offset}px)`
+        height += (item.firstElementChild as HTMLElement).offsetHeight + state.gap
+      }
+      const animation = container.animate([
+        { opacity: 0, transform: `translateY(calc(${offset * -100}% + 16px))` },
+        { opacity: 1, pointerEvents: 'auto' }
+      ], { duration: 200, easing: 'ease-out', fill: 'forwards' })
+      this.dispatchEvent(new Event('show'))
+      this.duration && (state.timer = setTimeout(close, this.duration))
+      popup.dataset.align = align
+      task.unshift(popup)
+      animation.finished.then(() => this.dispatchEvent(new Event('showed')))
     }
     const close = () => {
-
+      if (!this.isConnected || !popup.classList.contains('show')) return
+      clearTimeout(state.timer)
+      const align = popup.dataset.align as 'top' | 'bottom'
+      const task = tasks[align]
+      const offset = { top: 1, bottom: -1 }[align]
+      const indexOf = task.indexOf(popup)
+      for (let i = indexOf + 1; i < task.length; i++) {
+        const item = task[i]
+        const h = Math.abs(Number(item.style.transform.slice(11).slice(0, -3)))
+        item.style.transform = `translateY(${(h - container.offsetHeight - state.gap) * offset}px)`
+      }
+      const animation = container.animate([
+        { opacity: 1 },
+        { opacity: 0, transform: `translateY(calc(${offset * -100}% + 16px))` }
+      ], { duration: 200, easing: 'ease-out' })
+      if (popup.hidePopover) popup.hidePopover()
+      this.dispatchEvent(new Event('close'))
+      animation.finished.then(() => {
+        popup.removeAttribute('style')
+        popup.classList.remove('show')
+        this.dispatchEvent(new Event('closed'))
+      })
+      task.splice(indexOf, 1)
     }
-    // const show = () => {
-    //   if (popup.classList.contains('show')) return
-    //   const stackingContext = getStackingContext(shadowRoot)
-    //   if (stackingContext.top !== 0 || stackingContext.left !== 0) {
-    //     popup.style.width = `${innerWidth}px`
-    //     popup.style.height = `${innerHeight}px`
-    //     popup.style.top = `${0 - stackingContext.top}px`
-    //     popup.style.left = `${0 - stackingContext.left}px`
-    //   }
-    //   const align = getAlign()
-    //   const height = container.offsetHeight
-    //   popup.task = { top: topTask, bottom: bottomTask }[align]
-    //   popup.offset = align === 'top' ? 1 : -1
-    //   let h = height + gap
-    //   if (popup.task.length > 0) {
-    //     for (const item of popup.task) {
-    //       item.style.transform = `translateY(${h * popup.offset}px)`
-    //       h += (item.firstElementChild as HTMLElement).offsetHeight + gap
-    //     }
-    //   }
-    //   popup.task.unshift(popup)
-    //   popup.classList.add('show')
-    //   this.dispatchEvent(new Event('show'))
-    //   if (this.duration > 0) state.timer = setTimeout(dismiss, this.duration)
-    // }
-    // const dismiss = () => {
-    //   if (!popup.classList.contains('show')) return
-    //   clearTimeout(state.timer)
-    //   popup.classList.remove('show')
-    //   this.dispatchEvent(new Event('dismiss'))
-    //   const indexOf = popup.task.indexOf(popup)
-    //   for (let i = indexOf + 1; i < popup.task.length; i++) {
-    //     const item = popup.task[i]
-    //     const h = Math.abs(Number(item.style.transform.slice(11).slice(0, -3)))
-    //     item.style.transform = `translateY(${(h - container.offsetHeight - gap) * popup.offset}px)`
-    //   }
-    //   popup.task.splice(indexOf, 1)
-    // }
-    // const transitionEnd = (event: TransitionEvent) => {
-    //   if (event.propertyName !== 'transform') return
-    //   const showed = popup.classList.contains('show')
-    //   this.dispatchEvent(new Event(showed ? 'showed' : 'dismissed'))
-    //   !showed && popup.removeAttribute('style')
-    // }
-    // trigger.addEventListener('click', show)
-    // container.addEventListener('transitionend', transitionEnd)
-    // action.addEventListener('click', dismiss)
+    shadowRoot.querySelector('slot[name=trigger]')!.addEventListener('click', show)
+    shadowRoot.querySelector('slot[name=action]')!.addEventListener('click', close)
     shadowRoot.querySelector('slot[name=trigger]')!.addEventListener('click', show)
     return {
       expose: { show, close }
@@ -285,16 +261,18 @@ class Snackbar extends useElement({
 
 Snackbar.define(name)
 
-interface EventMap extends HTMLElementEventMap {
+interface EventMap {
   show: Event
   showed: Event
   close: Event
   closed: Event
 }
 
+type ElementEventMap = EventMap & HTMLElementEventMap
+
 interface Snackbar {
-  addEventListener<K extends keyof EventMap>(type: K, listener: (this: Snackbar, ev: EventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof EventMap>(type: K, listener: (this: Snackbar, ev: EventMap[K]) => any, options?: boolean | EventListenerOptions): void
+  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Snackbar, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Snackbar, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
 export { Snackbar }
@@ -307,7 +285,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props> & { [K in keyof EventMap as `on${K}`]?: (ev: EventMap[K]) => void }
       }
     }
   }

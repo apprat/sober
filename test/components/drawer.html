@@ -22,11 +22,12 @@
       <div slot="start">
         问人生、头白京国，算来何事消得。不如罨画清溪上，蓑笠扁舟一只。人不识，且笑煮、鲈鱼趁著莼丝碧。无端酸鼻，向岐路消魂，征轮驿骑，断雁西风急。
         英雄辈，事业东西南北。临风因甚泣。酬知有愿频挥手，零雨凄其此日。休太息，须信道、诸公衮衮皆虚掷。年来踪迹。有多少雄心，几翻恶梦，泪点霜华织
+        <s-button onclick="document.querySelector('s-drawer').close('start',true)">close</s-button>
       </div>
       <s-scroll-view style="padding: 24px;">
         <s-button onclick="document.querySelector('s-drawer').show()"
           style="position: relative;z-index: 1;">show</s-button>
-        <s-button onclick="document.querySelector('s-drawer').close()">close</s-button>
+        <s-button onclick="document.querySelector('s-drawer').close('start')">close</s-button>
         <s-button onclick="document.querySelector('s-drawer').toggle()">toggle</s-button>
         <hr>
         <s-button onclick="document.querySelector('s-drawer').show('end')"

@@ -18,11 +18,18 @@
       <s-button onpointerdown="event.stopPropagation()">阻止动画</s-button>
     </s-ripple>
     <hr>
-    <div style="position: relative; padding: 16px">
-      container
-      <s-ripple attached="true"></s-ripple>
+    <div id="test">
+      title
+      <s-ripple style="padding: 16px">
+        ripple
+      </s-ripple>
     </div>
   </s-page>
+  <script>
+    document.getElementById('test').addEventListener('pointerdown', (event) => {
+      event.stopPropagation()
+    }, { capture: true })
+  </script>
 </body>
 
 </html>

@@ -1,11 +1,11 @@
-export const mediaQueries = {
-  mobileS: 320,
-  mobileM: 375,
-  mobileL: 425,
-  tablet: 768,
-  laptop: 1024,
-  laptopL: 1440,
-} as const
+export const enum mediaQueries {
+  mobileS = 320,
+  mobileM = 375,
+  mobileL = 425,
+  tablet = 768,
+  laptop = 1024,
+  laptopL = 1440,
+}
 
 export const mediaQueryList = {
   mobileS: matchMedia(`(max-width: ${mediaQueries.mobileS}px)`),

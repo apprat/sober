@@ -34,6 +34,23 @@
 </s-picker>
 ```
 
+在 Vue 中使用 `v-model.lazy` 双向绑定。
+
+```html
+<template>
+  <s-picker v-model.lazy="select">
+    <s-picker-item value="a">贵阳</s-picker-item>
+    <s-picker-item value="b">北京</s-picker-item>
+    <s-picker-item value="c">上海</s-picker-item>
+  </s-picker>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+const select = ref('b')
+</script>
+```
+
 ---
 
 ## 属性
@@ -70,6 +87,12 @@ class Picker extends Popup {
   readonly options: PickerButtonItem[] = []
   //当前选中下标 
   readonly selectedIndex: number = -1
+  //标签文本
+  label: string = ''
+  //选中的值
+  value: string = ''
+  //是否禁用
+  disabled: boolean = false
 }
 ```
 

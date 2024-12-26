@@ -4,9 +4,9 @@
 
 ```html preview
 <s-search placeholder="搜索关键字">
-  <s-icon type="search" slot="start"></s-icon>
+  <s-icon name="search" slot="start"></s-icon>
   <s-icon-button slot="end">
-    <s-icon type="close"></s-icon>
+    <s-icon name="close"></s-icon>
   </s-icon-button>
 </s-search>
 ```
@@ -15,8 +15,8 @@
 
 ```html preview
 <s-search placeholder="搜索关键字">
-  <s-icon type="search" slot="start"></s-icon>
-  <s-icon type="close" slot="end"></s-icon>
+  <s-icon name="search" slot="start"></s-icon>
+  <s-icon name="close" slot="end"></s-icon>
   <div slot="dropdown" style="height: 128px">
     ...
   </div>

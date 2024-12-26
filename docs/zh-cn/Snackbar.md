@@ -14,7 +14,7 @@
 ```html preview
 <s-snackbar>
   <s-button slot="trigger"> 提示 </s-button>
-  <s-icon type="light_mode" slot="icon"></s-icon>
+  <s-icon name="light_mode" slot="icon"></s-icon>
   Message
   <s-button type="text" slot="action"> 关闭 </s-button>
 </s-snackbar>
@@ -38,7 +38,7 @@
 
 | 名称     | 类型               | 默认值 | 同步 | 介绍    |
 | -------- | ----------------- | ------ | --- | ------- |
-| type     | basic, error      | filled | 是  | 样式    |
+| type     | basic, error      | basic  | 是  | 样式    |
 | duration | number            | 4000   | 否  | 持续时间 |
 | align    | auto, top, bottom | auto   | 是  | 位置    |
 
@@ -82,9 +82,18 @@ interface Options {
 }
 
 class Snackbar extends HTMLElement {
-  static readonly builder(options: string | Options): Dialog //动态创建提示框
-  readonly show(): void //显示提示框
-  readonly dismiss(): void //隐藏提示框
+  //动态创建提示框
+  static readonly builder(options: string | Options): Dialog
+  //显示提示框
+  readonly show(): void
+  //隐藏提示框
+  readonly close(): void
+  //样式
+  type: string = 'basic'
+  //持续时间
+  duration: number = 4000
+  //位置
+  align: string = 'auto'
 } 
 ```
 

@@ -34,7 +34,6 @@
 | 名称   | 类型                 | 默认值 | 同步 | 介绍    |
 | ------ | ------------------- | ------ | --- | ------- |
 | align  | center, left, right | center | 是  | 位置     |
-| showed | boolean             | false  | 是  | 显示状态 |
 
 ---
 
@@ -65,6 +64,12 @@ type Position = { x: number; y: number; origin?: string }
 class Popup extends HTMLElement {
   //显示弹出框
   readonly show(option?: HTMLElement | Position): void
+  //切换弹出框
+  readonly toggle(option?: HTMLElement | Position): void
+  //关闭弹出框
+  readonly close(): void
+  //位置
+  align: string = 'center'
 } 
 ```
 

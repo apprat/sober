@@ -231,9 +231,9 @@ Dialog.define(name)
 export { Dialog }
 
 interface EventMap {
-  show: CustomEvent<{ source?: EventShowSource }>
+  show: CustomEvent<{ source: EventShowSource }>
   showed: Event
-  close: CustomEvent<{ source?: EventCloseSource }>
+  close: CustomEvent<{ source: EventCloseSource }>
   closed: Event
 }
 

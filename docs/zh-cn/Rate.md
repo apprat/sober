@@ -21,6 +21,18 @@
 </s-rate>
 ```
 
+在 Vue 中使用 `v-model` 绑定。
+
+```html
+<template>
+  <s-rate v-model="rate"></s-rate>
+</template>
+<script setup>
+import { ref } from 'vue'
+const rate = ref(2.5)
+</script>
+```
+
 ---
 
 ## 属性

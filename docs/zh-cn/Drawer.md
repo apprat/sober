@@ -34,12 +34,12 @@
 type SlotName = 'start' | 'end'
 
 class Drawer extends HTMLElement {
-  //显示抽屉 slot=插槽，默认为start
-  readonly show(slot?: SlotName): void
+  //显示抽屉 slot=插槽，folded=是否仅折叠
+  readonly show(slot?: SlotName, folded?: boolean): void
   //隐藏抽屉
-  readonly close(slot?: SlotName): void
+  readonly close(slot?: SlotName, folded?: boolean)): void
   //显示或隐藏抽屉
-  readonly toggle(slot?: SlotName): void
+  readonly toggle(slot?: SlotName, folded?: boolean)): void
 }
 ```
 

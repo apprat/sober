@@ -15,7 +15,6 @@
 <template>
   <s-dialog :showed="showed" @close="showed=false"> Test </s-dialog>
 </template>
-
 <script setup>
 import { ref } from 'vue'
 const showed = ref(false)
@@ -34,12 +33,12 @@ const showed = ref(false)
 
 ## 事件
 
-| 名称   | 参数                                 | 冒泡 | 可取消 | 介绍                |
-| ------ |------------------------------------ |------|------ |-------------------- |
+| 名称   | 参数                                | 冒泡 | 可取消 | 介绍                |
+| ------ |----------------------------------- |------|------ |-------------------- |
 | show   | CustomEvent<{ source: 'TRIGGER' }> | 否   | 是    | `扩展` 显示时触发     |
-| showed | Event                               | 否   | 否    | `扩展` 显示完成后触发 |
+| showed | Event                              | 否   | 否    | `扩展` 显示完成后触发 |
 | close  | CustomEvent<{ source: 'SCRIM' }>   | 否   | 是    | 隐藏时触发           |
-| closed | Event                               | 否   | 否    | `扩展` 隐藏完成后触发 |
+| closed | Event                              | 否   | 否    | `扩展` 隐藏完成后触发 |
 
 ---
 

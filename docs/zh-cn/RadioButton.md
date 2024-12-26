@@ -23,7 +23,6 @@
   <s-radio-button value="b" v-model.lazy="select" type="radio"></s-radio-button>
   <s-radio-button value="c" v-model.lazy="select" type="radio"></s-radio-button>
 </template>
-
 <script setup>
 import { ref } from 'vue'
 const select = ref('b')
@@ -44,8 +43,6 @@ s-radio-button[checked=true] {
   color: #ff0000;
 }
 ```
-
-> 如果你使用 Vue 框架的 `v-model.lazy` 语法糖，那么 `name` 并不是必须的。
 
 ---
 

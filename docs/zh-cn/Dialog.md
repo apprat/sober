@@ -40,11 +40,11 @@
 </s-dialog>
 ```
 
-在 Vue 中使用 `v-model.lazy` 控制显隐。
+在 Vue 中绑定状态。
 
 ```html
 <template>
-  <s-dialog v-model.lazy="showed"> Test </s-dialog>
+  <s-dialog :showed="showed" @close="showed=false"> Test </s-dialog>
 </template>
 
 <script setup>
@@ -57,22 +57,21 @@ const showed = ref(false)
 
 ## 属性
 
-| 名称  | 类型         | 默认值 | 同步 | 介绍      |
-| ----- | ----------- | ------ | --- | --------- |
-| size  | basic, full | basic  | 是  | 对话框尺寸 |
-| value | boolean     | false  | 是  | 显示状态   |
+| 名称   | 类型         | 默认值 | 同步 | 介绍      |
+| ------ | ----------- | ------ | --- | --------- |
+| size   | basic, full | basic  | 是  | 对话框尺寸 |
+| showed | boolean     | false  | 是  | 显示状态   |
 
 ---
 
 ## 事件
 
-| 名称   | 参数                                           | 冒泡 | 可取消 | 介绍                |
-| ------ |---------------------------------------------- |------|------ |-------------------- |
-| show   | CustomEvent<{ source?: 'TRIGGER' }>           | 否   | 是    | `扩展` 显示时触发     |
-| showed | Event                                         | 否   | 否    | `扩展` 显示完成后触发 |
-| close  | CustomEvent<{ source?: 'SCRIM' \| 'ACTION' }> | 否   | 是    | 隐藏时触发           |
-| closed | Event                                         | 否   | 否    | `扩展` 隐藏完成后触发 |
-| change | Event                                         | 否   | 否    | 显隐变更时触发        |
+| 名称   | 参数                                          | 冒泡 | 可取消 | 介绍                |
+| ------ |--------------------------------------------- |------|------ |-------------------- |
+| show   | CustomEvent<{ source: 'TRIGGER' }>           | 否   | 是    | `扩展` 显示时触发     |
+| showed | Event                                        | 否   | 否    | `扩展` 显示完成后触发 |
+| close  | CustomEvent<{ source: 'SCRIM' \| 'ACTION' }> | 否   | 是    | 隐藏时触发           |
+| closed | Event                                        | 否   | 否    | `扩展` 隐藏完成后触发 |
 
 ---
 
@@ -104,7 +103,7 @@ class Dialog extends HTMLElement {
   //对话框尺寸
   size: 'basic' | 'full' = 'basic'
   //显示状态
-  value: boolean = false
+  showed: boolean = false
 } 
 ```
 

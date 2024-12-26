@@ -71,20 +71,11 @@
 
 ---
 
-## 事件
-
-| 名称    | 参数   | 冒泡 | 可取消 | 介绍            |
-| ------- |------ |------|------ |---------------- |
-| show    | Event | 否   | 否    | `扩展` 显示后触发 |
-| close   | Event | 否   | 否    | 隐藏后触发        |
-
----
-
 ## 原型
 
 ```ts
-class PopupMenu extends HTMLElement {
-
+class PopupMenu extends Popup {
+  group: 'start' | 'end' | '' = ''
 } 
 ```
 
@@ -104,7 +95,6 @@ class PopupMenu extends HTMLElement {
 | ------------------------- | --------- |
 | --s-color-on-surface      | 文本颜色   |
 | --s-color-outline-variant | 分割线颜色 |
-| --z-index                 | 弹出层权重     |
 
 ---
 

@@ -21,6 +21,18 @@
 <s-switch style="color: #b54e4e" checked="true"></s-switch>
 ```
 
+在 Vue 中使用 `v-model.lazy` 双向绑定。
+
+```html
+<template>
+  <s-switch v-model.lazy="checked" type="checkbox"></s-switch>
+</template>
+<script setup>
+import { ref } from 'vue'
+const checked = ref(false)
+</script>
+```
+
 ---
 
 ## 属性

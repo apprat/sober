@@ -20,7 +20,6 @@
 <template>
   <s-checkbox v-model.lazy="checked" type="checkbox"></s-checkbox>
 </template>
-
 <script setup>
 import { ref } from 'vue'
 const checked = ref(false)

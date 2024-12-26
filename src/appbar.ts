@@ -97,6 +97,9 @@ Appbar.define(name)
 
 //@ts-ignore
 declare module 'vue' {
+  interface HTMLElementTagNameMap {
+    [name]: Appbar
+  }
   export interface GlobalComponents {
     [name]: typeof props
   }

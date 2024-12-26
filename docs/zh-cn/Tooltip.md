@@ -30,8 +30,12 @@
 
 ```ts
 class Tooltip extends HTMLElement {
-  show(): void //显示提示框
-  dismiss(): void //隐藏提示框
+  //显示提示框
+  readonly show(): void
+  //隐藏提示框
+  readonly close(): void
+  //位置
+  align: 'auto' | 'bottom' | 'top' = 'auto'
 } 
 ```
 

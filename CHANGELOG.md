@@ -37,14 +37,14 @@
 8. *Picker*
   - 变更：`dismiss()` 方法名称变更为 `close()`。
 
-10. *Popup*
+9. *Popup*
   - 修改：`show()`、`toggle()` 方法参数发生了变更。
   - 变更：`dismiss()` 方法名称变更为 `close()`。
 
-11. *Snackbar*
+10. *Snackbar*
   - 更新：支持 **top-layer** 渲染，显示时始终处于顶层，不再受父级和层级影响。
 
-9. *Tooltip*
+11. *Tooltip*
   - 更新：支持 **top-layer** 渲染，显示时始终处于顶层，不再受父级和层级影响。
   - 新增：`align` 属性，用于设置默认对齐方式。
 

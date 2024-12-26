@@ -2,7 +2,7 @@
 
 按钮用来触发一些操作   
 
-```html preview folded=true
+```html preview
 <s-icon-button>
   <s-icon name="add"></s-icon>
 </s-icon-button>
@@ -22,7 +22,7 @@
 
 设置 `disabled` 来禁用按钮
 
-```html preview folded=true
+```html preview
 <s-icon-button disabled="true">
   <s-icon name="add"></s-icon>
 </s-icon-button>
@@ -42,7 +42,7 @@
 
 使用 `badge` 插槽放置徽章
 
-```html preview folded=true
+```html preview
 <s-icon-button>
   <s-icon name="add"></s-icon>
   <s-badge slot="badge"></s-badge>

@@ -264,7 +264,6 @@ Snackbar.define(name)
 interface EventMap {
   show: Event
   showed: Event
-  close: Event
   closed: Event
 }
 

@@ -72,6 +72,23 @@
 </s-tab>
 ```
 
+在 Vue 中使用 `v-model.lazy` 双向绑定。
+
+```html
+<template>
+  <s-tab v-model.lazy="select">
+    <s-tab-item value="a">A</s-tab-item>
+    <s-tab-item value="b">B</s-tab-item>
+    <s-tab-item value="c">C</s-tab-item>
+  </s-tab>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+const select = ref('b')
+</script>
+```
+
 ---
 
 ## 属性

@@ -38,6 +38,18 @@
 </s-text-field>
 ```
 
+在 Vue 中使用 `v-model` 双向绑定。
+
+```html
+<template>
+  <s-text-field label="请输入内容" v-model="input"></s-text-field>
+</template>
+<script setup>
+import { ref } from 'vue'
+const input = ref('')
+</script>
+```
+
 ---
 
 ## 属性

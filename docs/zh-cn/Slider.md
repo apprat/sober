@@ -24,6 +24,19 @@
 <s-slider style="color: #009688; --s-color-secondary-container: #b4deda"></s-slider>
 ```
 
+在 Vue 中使用 `v-model` 绑定。
+
+```html
+<template>
+  <s-slider v-model="slider"></s-slider>
+</template>
+<script setup>
+import { ref } from 'vue'
+const slider = ref(2.5)
+</script>
+```
+
+
 ---
 
 ## 属性

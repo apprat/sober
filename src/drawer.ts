@@ -10,7 +10,6 @@ const style = /*css*/`
 :host{
   display: flex;
   height: 100%;
-  border: solid 1px #ccc;
   overflow: hidden;
   position: relative;
 }

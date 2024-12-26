@@ -82,8 +82,7 @@ rate.readOnly = true
 
 # 标注
 
-某些组件的事件会标注为 `扩展` ，表示该事件为自定义事件，该事件无法通过 onEventName 的方式绑定。   
-在 React 中也无法通过 `onEventName={}` 的方式绑定。所以你必须通过 `addEventListener` 的方式绑定。
+某些组件的事件会标注为 `扩展` ，表示该事件为自定义事件，该事件无法通过 onEventName 的方式绑定，你必须通过 `addEventListener` 的方式绑定。
 
 ```html
 <!--错误，该事件无法通过 HTML 属性绑定-->

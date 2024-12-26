@@ -41,8 +41,8 @@
 
 在支持鼠标的设备上，组件还会添加一个 `hover` 效果，同理你可以监听 `mouseover` 事件来阻止该行为。
 
-```html preview
-<s-ripple style="padding: 16px 32px">
+```html
+<s-ripple>
   <s-button onmouseover="event.stopPropagation()">阻止动画</s-button>
 </s-ripple>
 ```

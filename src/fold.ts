@@ -33,7 +33,7 @@ const template = /*html*/ `
 `
 
 export class Fold extends useElement({
-  style, template, props, syncProps: ['folded'],
+  style, template, props, syncProps: true,
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('slot[name=trigger]')!
     trigger.addEventListener('click', () => this.folded = !this.folded)

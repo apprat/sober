@@ -9,7 +9,6 @@ import './scroll-view.js'
 const name = 's-picker'
 const props = {
   disabled: false,
-  showed: false,
   label: '',
   value: ''
 }
@@ -125,7 +124,7 @@ export class Picker extends useElement({
       field.fixed = true
       view.textContent = select.select.textContent
     }
-    select.onSelect = () => popup.showed = false
+    select.onSelect = popup.close
     return {
       expose: {
         get value() {
@@ -138,13 +137,12 @@ export class Picker extends useElement({
           return select.selectedIndex
         },
         show: popup.show.bind(popup),
-        //toggle: popup.toggle.bind(popup),
-        //close: popup.close.bind(popup)
+        toggle: popup.toggle.bind(popup),
+        close: popup.close.bind(popup)
       },
       props: {
         label: (value) => label.textContent = value,
         value: (value) => select.value = value,
-        showed: (value) => { }
       }
     }
   }

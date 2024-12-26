@@ -24,7 +24,7 @@
   document.head.appendChild(themeColor)
   //onChange
   function themeChange() {
-    themeColor.content = getComputedStyle(page).getPropertyValue(page.isDark?'--s-color-surface-container-high':'--s-color-dark-surface-container-high')
+    themeColor.content = getComputedStyle(page).getPropertyValue(`--s-color${page.isDark?'-dark':''}-surface-container-high`)
   }
 </script>
 ```

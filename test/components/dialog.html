@@ -28,6 +28,7 @@
           <s-picker-item>4</s-picker-item>
           <s-picker-item>5</s-picker-item>
         </s-picker>
+        <s-button id="snackbar">Snackbar</s-button>
       </div>
       <s-button slot="action" type="text">取消</s-button>
       <s-button slot="action" type="text">确定</s-button>
@@ -47,6 +48,12 @@
   </s-page>
   <script type="module">
     import { Dialog } from '../../dist/dialog.js'
+    import { Snackbar } from '../../dist/main.js'
+
+    const snackbar = document.querySelector('#snackbar')
+    snackbar.addEventListener('click', () => {
+      Snackbar.builder('你好')
+    })
     const create = document.querySelector('#create')
     create.onclick = () => {
       const dialog = new Dialog()

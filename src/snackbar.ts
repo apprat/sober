@@ -239,9 +239,9 @@ class Snackbar extends useElement({
         { opacity: 1 },
         { opacity: 0, transform: `translateY(calc(${offset * -100}% + 16px))` }
       ], { duration: 200, easing: 'ease-out' })
-      if (popup.hidePopover) popup.hidePopover()
       this.dispatchEvent(new Event('close'))
       animation.finished.then(() => {
+        if (popup.hidePopover) popup.hidePopover()
         popup.removeAttribute('style')
         popup.classList.remove('show')
         this.dispatchEvent(new Event('closed'))

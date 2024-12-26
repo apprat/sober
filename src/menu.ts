@@ -146,7 +146,7 @@ export class MenuItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
-  syncProps: ['checked', 'folded'],
+  syncProps: true,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container')!
     const fold = shadowRoot.querySelector('.fold') as Fold

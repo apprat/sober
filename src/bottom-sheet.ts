@@ -127,7 +127,7 @@ type EventShowSource = 'TRIGGER'
 type EventCloseSource = 'SCRIM'
 
 class BottomSheet extends useElement({
-  style, template, props,
+  style, template, props, syncProps: ['showed'],
   setup(shadowRoot) {
     const dialog = shadowRoot.querySelector('dialog') as HTMLDialogElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
@@ -158,7 +158,7 @@ class BottomSheet extends useElement({
       })
     }
     return {
-      mounted: () => this.showed && show(),
+      mounted: () => this.showed && !dialog.open && show(),
       props: {
         showed: (value) => value ? show() : close()
       }
@@ -173,9 +173,9 @@ BottomSheet.define(name)
 export { BottomSheet }
 
 interface EventMap {
-  show: CustomEvent<{ source?: EventShowSource }>
+  show: CustomEvent<{ source: EventShowSource }>
   showed: Event
-  close: CustomEvent<{ source?: EventCloseSource }>
+  close: CustomEvent<{ source: EventCloseSource }>
   closed: Event
 }
 

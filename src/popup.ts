@@ -3,8 +3,7 @@ import { Theme } from './page.js'
 
 const name = 's-popup'
 const props = {
-  align: 'center' as 'center' | 'left' | 'right',
-  showed: false
+  align: 'center' as 'center' | 'left' | 'right'
 }
 
 const style = /*css*/`
@@ -156,7 +155,7 @@ class Popup extends useElement({
     shadowRoot.querySelector('slot[name=trigger]')!.addEventListener('click', () => show())
     shadowRoot.querySelector('.scrim')!.addEventListener('pointerdown', close)
     return {
-      expose: { show },
+      expose: { show, toggle, close },
       mounted: () => addEventListener('resize', close),
       unmounted: () => removeEventListener('resize', close)
     }
@@ -170,7 +169,6 @@ export { Popup }
 interface EventMap {
   show: Event
   showed: Event
-  close: Event
   closed: Event
 }
 

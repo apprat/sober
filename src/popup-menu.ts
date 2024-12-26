@@ -50,18 +50,16 @@ const template = /*html*/`
 `
 
 export class PopupMenu extends useElement({
-  style, template, props, syncProps: ['group'],
+  style, template, props, syncProps: true,
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector('.popup') as Popup
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
-
     trigger.addEventListener('click', (e) => {
       e.stopPropagation()
       popup.show()
     })
     this.addEventListener(`${name}:click`, (event) => {
       event.stopPropagation()
-      popup.showed = false
     })
     return {
       mounted: () => {
@@ -69,6 +67,8 @@ export class PopupMenu extends useElement({
       },
       expose: {
         show: popup.show.bind(popup),
+        close: popup.close.bind(popup),
+        toggle: popup.toggle.bind(popup)
       }
     }
   }

@@ -71,7 +71,7 @@ const template = /*html*/`
 `
 
 export class Ripple extends useElement({
-  style, template, props, syncProps: ['attached'],
+  style, template, props, syncProps: true,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const ripple = shadowRoot.querySelector('.ripple') as HTMLDivElement

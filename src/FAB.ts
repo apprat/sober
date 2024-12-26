@@ -4,7 +4,8 @@ import './ripple.js'
 
 const name = 's-fab'
 const props = {
-  hidden: false
+  hidden: false,
+  disabled: false,
 }
 
 const style = /*css*/`
@@ -28,6 +29,12 @@ const style = /*css*/`
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
   color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
+}
+:host([disabled=true]){
+  pointer-events: none;
+  background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
+  color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent) !important;
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 :host([hidden=true]){
   transform: scale(0);
@@ -65,7 +72,7 @@ const template = /*html*/`
 <s-ripple attached="true" part="ripple"></s-ripple>
 `
 
-export class FAB extends useElement({ style, template, props, syncProps: ['hidden'] }) { }
+export class FAB extends useElement({ style, template, props, syncProps: true }) { }
 
 FAB.define(name)
 

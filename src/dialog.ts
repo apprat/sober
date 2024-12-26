@@ -184,7 +184,7 @@ type EventShowSource = 'TRIGGER'
 type EventCloseSource = 'SCRIM' | 'ACTION'
 
 class Dialog extends useElement({
-  style, template, props, syncProps: ['size', 'showed'],
+  style, template, props, syncProps: true,
   setup(shadowRoot) {
     const dialog = shadowRoot.querySelector('dialog') as HTMLDialogElement
     const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
@@ -216,7 +216,7 @@ class Dialog extends useElement({
       })
     }
     return {
-      mounted: () => this.showed && show(),
+      mounted: () => this.showed && !dialog.open && show(),
       props: {
         showed: (value) => value ? show() : close()
       }

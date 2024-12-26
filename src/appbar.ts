@@ -97,15 +97,15 @@ Appbar.define(name)
 
 //@ts-ignore
 declare module 'vue' {
-  interface HTMLElementTagNameMap {
-    [name]: Appbar
-  }
   export interface GlobalComponents {
     [name]: typeof props
   }
 }
 
 declare global {
+  interface HTMLElementTagNameMap {
+    [name]: Appbar
+  }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {

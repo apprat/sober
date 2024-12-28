@@ -24,7 +24,7 @@ const style = /*css*/`
   max-width: none;
   max-height: none;
   display: none;
-  filter: opacity(.85);
+  filter: opacity(.95);
   background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
   color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
   font-size: .875rem;

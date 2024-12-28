@@ -41,6 +41,7 @@ const style = /*css*/`
   flex-grow: 1;
   min-width: 0;
   height: 100%;
+  position: relative;
 }
 ::slotted([slot=start]),
 ::slotted([slot=end]){

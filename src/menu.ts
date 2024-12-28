@@ -54,13 +54,13 @@ const itemStyle = /*css*/`
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  margin: 4px 8px;
+  margin: 4px 8px 4px 0;
 }
 .container{
   display: flex;
   align-items: center;
   height: 40px;
-  border-radius: 24px;
+  border-radius: 0 24px 24px 0;
   padding: 0 20px;
   flex-shrink: 0;
 }
@@ -94,7 +94,7 @@ const itemStyle = /*css*/`
   flex-shrink: 0;
 }
 .show-menu+.fold{
-  margin: 0 -8px;
+  margin: 0 -8px 0 0;
 }
 .menu{
   display: block;

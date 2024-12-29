@@ -41,10 +41,10 @@ import * as sober from 'sober'
 Dynamic creation of components
 
 ```js
-const button2 = document.createElement('s-button')
+const button = document.createElement('s-button')
 
 button.textContent = 'hello'
-button.theme = 'outlined'
+button.type = 'outlined'
 document.body.appendChild(button)
 ```
 

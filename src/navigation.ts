@@ -17,7 +17,6 @@ const style = /*css*/`
   overflow: hidden;
   background: var(--s-color-surface, ${Theme.colorSurface});
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
-  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   position: relative;
   flex-shrink: 0;
   padding-bottom: env(safe-area-inset-bottom);
@@ -98,6 +97,7 @@ const itemStyle = /*css*/`
   max-width: 80px;
   text-transform: capitalize;
   transition: color .1s ease-out;
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 :host([selected=true]){
   color: var(--s-color-primary, ${Theme.colorPrimary});
@@ -142,7 +142,9 @@ const itemStyle = /*css*/`
 }
 ::slotted([slot=icon]){
   position: relative;
-  color: inherit;
+}
+:host([selected=true]) ::slotted([slot=icon]){
+  color: currentColor;
 }
 ::slotted([slot=text]){
   position: relative;

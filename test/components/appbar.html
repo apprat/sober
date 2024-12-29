@@ -26,6 +26,58 @@
         <s-icon name="search"></s-icon>
       </s-icon-button>
     </s-appbar>
+    <hr>
+    <s-appbar style="background: #009688;color: #fff;">
+      <s-icon-button slot="navigation">
+        <s-icon name="menu"></s-icon>
+      </s-icon-button>
+      <div slot="headline"> Title </div>
+      test
+      <s-search slot="search" placeholder="搜索关键字">
+        <s-icon name="search" slot="start"></s-icon>
+        <s-icon-button slot="end">
+          <s-icon name="close"></s-icon>
+        </s-icon-button>
+      </s-search>
+
+      <s-picker slot="action">
+        <s-tooltip slot="trigger">
+          <s-icon-button slot="trigger">
+            <s-icon name="favorite"></s-icon>
+          </s-icon-button>
+          Picker
+        </s-tooltip>
+        <s-picker-item value="gui yang">贵阳</s-picker-item>
+        <s-picker-item value="bei jing">北京</s-picker-item>
+        <s-picker-item value="shang hai">上海</s-picker-item>
+        <s-picker-item value="shen zhen">深圳</s-picker-item>
+        <s-picker-item value="cheng du">成都</s-picker-item>
+        <s-picker-item value="wu han">武汉</s-picker-item>
+        <s-picker-item value="nan chang">南昌</s-picker-item>
+        <s-picker-item value="hang zhou">杭州</s-picker-item>
+      </s-picker>
+      <s-popup-menu slot="action">
+        <s-icon-button slot="trigger">
+          <s-icon name="star"></s-icon>
+        </s-icon-button>
+        <s-popup-menu-item>选项1</s-popup-menu-item>
+        <s-popup-menu-item>选项2</s-popup-menu-item>
+        <s-popup-menu-item>选项3</s-popup-menu-item>
+        <s-popup-menu-item>选项4</s-popup-menu-item>
+        <s-popup-menu-item>选项5</s-popup-menu-item>
+      </s-popup-menu>
+      <s-tooltip slot="action">
+        <s-icon-button slot="trigger">
+          <s-icon name="search"></s-icon>
+        </s-icon-button>
+        搜索
+      </s-tooltip>
+    </s-appbar>
+
+    <s-tooltip>
+      <s-button slot="trigger">Tooltip</s-button>
+      提示信息
+    </s-tooltip>
   </s-page>
 </body>
 

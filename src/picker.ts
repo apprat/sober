@@ -165,6 +165,7 @@ const itemStyle = /*css*/`
   border-radius: 4px;
   flex-shrink: 0;
   padding: 0 12px;
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 :host([selected=true]){
   background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
@@ -172,10 +173,9 @@ const itemStyle = /*css*/`
 }
 .text{
   flex-grow: 1;
-  display: flex;
-  align-items: center;
-  height: 100%;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 ::slotted(svg){
   fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});

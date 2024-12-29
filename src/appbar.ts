@@ -4,6 +4,7 @@ import { Theme } from './page.js'
 
 const name = 's-appbar'
 const props = {
+
 }
 
 const style = /*css*/`
@@ -14,11 +15,12 @@ const style = /*css*/`
   position: relative;
   padding: 0 8px;
   flex-shrink: 0;
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
 }
 ::slotted([slot=navigation]){
   margin-left: 4px;
   flex-shrink: 0;
+
 }
 ::slotted([slot=logo]){
   margin-left: 12px;

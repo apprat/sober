@@ -18,9 +18,14 @@
 
 <body>
   <s-page>
-    <s-popup style="margin-left: 300px;margin-top: 800px;" showed="true">
-      <s-button slot="trigger"> popup1 </s-button>
-      <div style="min-height: 280px; width: 480px"></div>
+    <s-popup>
+      <s-button slot="trigger"> bottom </s-button>
+      <div style="min-height: 280px; width: 128px"></div>
+    </s-popup>
+
+    <s-popup align="top" style="margin-top: 400px;">
+      <s-button slot="trigger"> top </s-button>
+      <div style="min-height: 280px; width: 128px"></div>
     </s-popup>
 
     <s-popup align="left">

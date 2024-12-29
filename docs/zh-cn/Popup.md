@@ -31,9 +31,9 @@
 
 ## 属性
 
-| 名称   | 类型                 | 默认值 | 同步 | 介绍    |
-| ------ | ------------------- | ------ | --- | ------- |
-| align  | center, left, right | center | 是  | 位置     |
+| 名称   | 类型                      | 默认值 | 同步 | 介绍    |
+| ------ | ------------------------ | ------ | --- | ------- |
+| align  | bottom, top, left, right | bottom | 否  | 位置    |
 
 ---
 
@@ -69,7 +69,7 @@ class Popup extends HTMLElement {
   //关闭弹出框
   readonly close(): void
   //位置
-  align: string = 'center'
+  align: 'top' | 'bottom' | 'left' | 'right' = 'bottom'
 } 
 ```
 

@@ -5,13 +5,14 @@ import { Theme } from './page.js'
 
 const name = 's-tooltip'
 const props = {
-  align: 'auto' as 'auto' | 'bottom' | 'top'
+  align: 'top' as 'top' | 'bottom' | 'left' | 'right'
 }
 
 const style = /*css*/`
 :host{
   display: inline-flex;
   vertical-align: middle;
+  text-align: left;
 }
 .popup{
   position: fixed;
@@ -24,14 +25,13 @@ const style = /*css*/`
   max-width: none;
   max-height: none;
   display: none;
-  filter: opacity(.95);
-  background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
-  color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
   font-size: .875rem;
   font-weight: 400;
   padding: 6px 8px;
   border-radius: 4px;
   white-space: nowrap;
+  background: color-mix(in srgb, var(--s-color-inverse-surface, ${Theme.colorInverseSurface}) 90%, transparent);
+  color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
 }
 ::slotted(img){
   display: block;
@@ -69,17 +69,57 @@ export class Tooltip extends useElement({
       const gap = 4
       const cWidth = popup.offsetWidth
       const cHeight = popup.offsetHeight
-      const position = {
-        top: {
-          top: rect.top - gap - cHeight,
-          bottom: rect.top + this.offsetHeight + gap
-        }[this.align === 'auto' ? (mediaQueryList.pointerCoarse.matches ? 'top' : 'bottom') : this.align],
-        left: rect.left - ((cWidth - rect.width) / 2),
+      const position = { top: 0, left: 0 }
+      const calls = {
+        middle(align: 'top' | 'bottom') {
+          position.left = rect.left - ((cWidth - rect.width) / 2)
+          const bottom = () => {
+            position.top = rect.top + rect.height + gap
+            return position.top + cHeight > innerHeight
+          }
+          const top = () => {
+            position.top = rect.top - cHeight - gap
+            return position.top < 0
+          }
+          if (position.left < 0) position.left = rect.left
+          if (position.left + cWidth > innerWidth) position.left = rect.left + rect.width - cWidth
+          if (align === 'top') top() && bottom()
+          if (align === 'bottom') bottom() && top()
+        },
+        left() {
+          position.left = rect.left - cWidth - gap
+          position.top = rect.top - ((cHeight - rect.height) / 2)
+          return position.left < 0
+        },
+        right() {
+          position.left = rect.left + rect.width + gap
+          position.top = rect.top - ((cHeight - rect.height) / 2)
+          return position.left + cWidth > innerWidth
+        }
       }
-      if (position.left < 0) position.left = rect.left //left
-      if (position.left + cWidth > innerWidth) position.left = rect.left + rect.width - cWidth //right
-      if (position.top + cHeight > innerHeight) position.top = rect.top - gap - cHeight //top
-      if (position.top < 0) position.top = rect.top + this.offsetHeight + gap //bottom
+      switch (this.align) {
+        case 'bottom':
+        case 'top':
+          calls.middle(this.align)
+          break
+        case 'left':
+          calls.left() && calls.right()
+          break
+        case 'right':
+          calls.right() && calls.left()
+          break
+      }
+      // const position = {
+      //   top: {
+      //     top: rect.top - gap - cHeight,
+      //     bottom: rect.top + this.offsetHeight + gap
+      //   }[this.align === 'auto' ? (mediaQueryList.pointerCoarse.matches ? 'top' : 'bottom') : this.align],
+      //   left: rect.left - ((cWidth - rect.width) / 2),
+      // }
+      // if (position.left < 0) position.left = rect.left //left
+      // if (position.left + cWidth > innerWidth) position.left = rect.left + rect.width - cWidth //right
+      // if (position.top + cHeight > innerHeight) position.top = rect.top - gap - cHeight //top
+      // if (position.top < 0) position.top = rect.top + this.offsetHeight + gap //bottom
       popup.style.top = `${position.top}px`
       popup.style.left = `${position.left}px`
       popup.animate([{ opacity: 0 }, { opacity: 1 }], animateOptions)

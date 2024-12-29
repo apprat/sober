@@ -3,13 +3,14 @@ import { Theme } from './page.js'
 
 const name = 's-popup'
 const props = {
-  align: 'center' as 'center' | 'left' | 'right'
+  align: 'bottom' as 'top' | 'bottom' | 'left' | 'right'
 }
 
 const style = /*css*/`
 :host{
   display: inline-block;
   vertical-align: middle;
+  text-align: left;
 }
 dialog{
   top: 0;
@@ -81,47 +82,55 @@ class Popup extends useElement({
         const el = option ?? this
         if (!el) return
         const rect = el.getBoundingClientRect()
-        position.origin = ['center', 'top']
-        position.top = rect.top + rect.height
-        position.left = rect.left - ((cWidth - rect.width) / 2)
-        if (this.align === 'center') {
-          if (position.left < 0) {
-            position.left = rect.left, 0
-            position.origin[0] = 'left'
-          }
-          if (position.left + cWidth > innerWidth) {
-            position.left = rect.left + rect.width - cWidth, 0
-            position.origin[0] = 'right'
-          }
-          if (position.top + rect.height + cHeight > innerHeight) {
-            position.top = rect.top - cHeight
-            position.origin[1] = 'bottom'
-          }
-        }
         const calls = {
+          middle(align: 'top' | 'bottom') {
+            position.origin[0] = 'center'
+            position.left = rect.left - ((cWidth - rect.width) / 2)
+            const bottom = () => {
+              position.top = rect.top + rect.height
+              position.origin[1] = 'top'
+              return position.top + cHeight > innerHeight
+            }
+            const top = () => {
+              position.top = rect.top - cHeight
+              position.origin[1] = 'bottom'
+              return position.top < 0
+            }
+            if (position.left < 0) {
+              position.left = rect.left
+              position.origin[0] = 'left'
+            }
+            if (position.left + cWidth > innerWidth) {
+              position.left = rect.left + rect.width - cWidth
+              position.origin[0] = 'right'
+            }
+            if (align === 'top') top() && bottom()
+            if (align === 'bottom') bottom() && top()
+          },
           left() {
-            position.top = rect.top
+            position.origin = ['right', 'top']
             position.left = rect.left - cWidth
-            position.origin[0] = 'right'
+            position.top = rect.top
+            return position.left < 0
           },
           right() {
-            position.top = rect.top
+            position.origin = ['left', 'top']
             position.left = rect.left + rect.width
-            position.origin[0] = 'left'
-          },
-          bottom() {
-            position.top = rect.top - cHeight + rect.height
-            position.origin[1] = 'bottom'
+            position.top = rect.top
+            return position.left + cWidth > innerWidth
           }
         }
-        if (this.align === 'left') {
-          calls.left()
-          if (position.top + cHeight > innerHeight) calls.bottom()
-        }
-        if (this.align === 'right') {
-          calls.right()
-          if (position.left + cWidth > innerWidth) calls.left()
-          if (position.top + cHeight > innerHeight) calls.bottom()
+        switch (this.align) {
+          case 'bottom':
+          case 'top':
+            calls.middle(this.align)
+            break
+          case 'left':
+            calls.left() && calls.right()
+            break
+          case 'right':
+            calls.right() && calls.left()
+            break
         }
       } else {
         position.top = option.y

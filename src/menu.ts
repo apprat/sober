@@ -14,7 +14,6 @@ const style = /*css*/`
   font-size: .875rem;
   padding: 4px 0;
   flex-shrink: 0;
-  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 :host(:nth-of-type(n+2)){
   border-top: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
@@ -55,6 +54,7 @@ const itemStyle = /*css*/`
   flex-direction: column;
   flex-shrink: 0;
   margin: 4px 8px 4px 0;
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 .container{
   display: flex;
@@ -71,8 +71,8 @@ const itemStyle = /*css*/`
 .text{
   flex-grow: 1;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .toggle-icon{
   width: 24px;

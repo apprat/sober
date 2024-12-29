@@ -20,9 +20,9 @@
 
 ## 属性
 
-| 名称  | 类型               | 默认值 | 同步 | 介绍 |
-| ----- | ----------------- | ------ | --- | ---- |
-| align | auto, bottom, top | auto   | 否  | 位置 |
+| 名称  | 类型                      | 默认值 | 同步 | 介绍 |
+| ----- | ------------------------ | ------ | --- | ---- |
+| align | top, bottom, left, right | top    | 否  | 位置 |
 
 ---
 
@@ -35,7 +35,7 @@ class Tooltip extends HTMLElement {
   //隐藏提示框
   readonly close(): void
   //位置
-  align: 'auto' | 'bottom' | 'top' = 'auto'
+  align: 'top' | 'bottom' | 'left' | 'right' = 'top'
 } 
 ```
 

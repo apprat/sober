@@ -42,6 +42,18 @@
       <s-picker-item value="nan chang">南昌</s-picker-item>
       <s-picker-item value="hang zhou">杭州</s-picker-item>
     </s-picker>
+
+    <s-picker onchange="this.firstElementChild.textContent = this.options[this.selectedIndex].textContent">
+      <s-button slot="trigger">地区</s-button>
+      <s-picker-item>贵阳</s-picker-item>
+      <s-picker-item>北京</s-picker-item>
+      <s-picker-item>上海</s-picker-item>
+      <s-picker-item>深圳</s-picker-item>
+      <s-picker-item>成都</s-picker-item>
+      <s-picker-item>武汉</s-picker-item>
+      <s-picker-item>南昌</s-picker-item>
+      <s-picker-item>杭州</s-picker-item>
+    </s-picker>
   </s-page>
 </body>
 

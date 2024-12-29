@@ -60,7 +60,6 @@ const itemStyle = /*css*/`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   height: 100%;
   min-width: 48px;
   padding: 0 16px;
@@ -70,6 +69,7 @@ const itemStyle = /*css*/`
   position: relative;
   cursor: pointer;
   box-sizing: border-box;
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   border-left: solid 1px var(--s-color-outline, ${Theme.colorOutline});
 }
 :host(:first-child){

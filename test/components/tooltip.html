@@ -11,17 +11,26 @@
 
 <body>
   <s-page class="gap">
+    <hr style="height: 200px;">
     <s-tooltip>
-      <s-button slot="trigger">Tooltip</s-button>
+      <s-button slot="trigger">top</s-button>
       提示信息
     </s-tooltip>
-    <hr>
-    <div style="transform: scale(1);">
-      <s-tooltip>
-        <s-button slot="trigger">Tooltip</s-button>
-        提示信息
-      </s-tooltip>
-    </div>
+
+    <s-tooltip align="bottom">
+      <s-button slot="trigger">bottom</s-button>
+      提示信息
+    </s-tooltip>
+
+    <s-tooltip align="left">
+      <s-button slot="trigger">left</s-button>
+      提示信息
+    </s-tooltip>
+
+    <s-tooltip align="right">
+      <s-button slot="trigger">right</s-button>
+      提示信息
+    </s-tooltip>
   </s-page>
 </body>
 

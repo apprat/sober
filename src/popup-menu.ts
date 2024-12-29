@@ -14,7 +14,6 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
   font-size: .875rem;
-  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 .popup{
   display: block;
@@ -60,6 +59,7 @@ export class PopupMenu extends useElement({
     })
     this.addEventListener(`${name}:click`, (event) => {
       event.stopPropagation()
+      popup.close()
     })
     return {
       mounted: () => {
@@ -88,12 +88,13 @@ const itemStyle = /*css*/`
   cursor: pointer;
   position: relative;
   border-radius: 4px;
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 .text{
   flex-grow: 1;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 ::slotted(svg){
   fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});

@@ -19,8 +19,8 @@ const style = /*css*/`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: none;
   border: none;
   outline: none;
@@ -200,6 +200,8 @@ class Snackbar extends useElement({
         popup.showPopover()
       } else {
         const rect = getStackingContext(shadowRoot)
+        popup.style.width = `${innerWidth}px`
+        popup.style.height = `${innerHeight}px`
         popup.style.marginLeft = `${-rect.left}px`
         popup.style.marginTop = `${-rect.top}px`
         popup.style.zIndex = '2'

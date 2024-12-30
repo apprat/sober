@@ -1,6 +1,6 @@
 {
   "name": "sober",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Sober is a library of UI components designed with reference to Material You.",
   "type": "module",
   "scripts": {

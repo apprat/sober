@@ -54,7 +54,7 @@ class Page extends HTMLElement {
   //是否处于暗色模式
   readonly isDark: boolean
   //切换主题(带动画过渡) trigger=触发中心元素
-  readonly toggle(theme: 'light'|'dark'|'auto', trigger?: HTMLElement): void
+  readonly toggle(theme: 'light'|'dark'|'auto', trigger?: HTMLElement): Promise<Animation | void>
 }
 ```
 

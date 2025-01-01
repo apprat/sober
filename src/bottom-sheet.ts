@@ -82,6 +82,11 @@ dialog.show .scrim{
   padding: 24px;
   line-height: 1.6;
 }
+@media (max-width: ${mediaQueries.tablet}px){
+  .container{
+    max-width: ${mediaQueries.tablet}px;
+  }
+}
 `
 
 const template = /*html*/`

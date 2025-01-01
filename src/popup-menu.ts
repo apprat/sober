@@ -96,12 +96,14 @@ const itemStyle = /*css*/`
   overflow: hidden;
   text-overflow: ellipsis;
 }
-::slotted(svg){
-  fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
-}
-::slotted([slot]){
+::slotted(svg),
+::slotted(s-icon){
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
+  fill: currentColor;
   height: 24px;
   width: 24px;
+}
+::slotted([slot]){
   flex-shrink: 0;
 }
 ::slotted([slot=start]){

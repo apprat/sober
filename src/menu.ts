@@ -100,13 +100,19 @@ const itemStyle = /*css*/`
   display: block;
   padding-top: 8px;
 }
-::slotted([slot=start]),
-::slotted([slot=end]){
-  height: 24px;
-  width: 24px;
-  flex-shrink: 0;
+::slotted(svg),
+::slotted(s-icon){
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   fill: currentColor;
+  height: 24px;
+  width: 24px;
+}
+:host([checked=true]) ::slotted(svg),
+:host([checked=true]) ::slotted(s-icon){
+  color: currentColor;
+}
+::slotted([slot]){
+  flex-shrink: 0;
 }
 ::slotted([slot=start]){
   margin-left: -4px;
@@ -116,12 +122,8 @@ const itemStyle = /*css*/`
   margin-right: -8px;
   margin-left: 12px;
 }
-:host([checked=true]) ::slotted([slot=start]),
-:host([checked=true]) ::slotted([slot=end]){
-  color: currentColor;
-}
 ::slotted([slot=menu]){
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
 }
 `
 

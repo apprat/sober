@@ -204,34 +204,34 @@ export class Page extends useElement({
       return false
     }
     const toggle = (theme: typeof props['theme'], trigger?: HTMLElement) => {
-      if (this.theme === theme) return
-      const isDark = darker.matches
-      const getTheme = (theme: typeof props['theme']) => theme === 'auto' ? (isDark ? 'dark' : 'light') : theme
-      const oldTheme = getTheme(this.theme)
-      const newTheme = getTheme(theme)
-      if (oldTheme === newTheme || !document.startViewTransition) {
-        this.theme = theme
-        return
-      }
-      const info = { x: innerWidth / 2, y: innerHeight / 2 }
-      if (trigger) {
-        const rect = trigger.getBoundingClientRect()
-        info.x = rect.x + rect.width / 2
-        info.y = rect.y + rect.height / 2
-      }
-      document.styleSheets[0].insertRule(/*css*/`
-      ::view-transition-old(root),
-      ::view-transition-new(root) {
-        animation: none;
-        mix-blend-mode: normal;
-      }`, 0)
-      const transition = document.startViewTransition(() => this.theme = theme)
-      const radius = Math.hypot(Math.max(info.x, innerWidth - info.x), Math.max(info.y, innerHeight - info.y))
-      transition.ready.then(() => document.documentElement.animate(
-        { clipPath: [`circle(0px at ${info.x}px ${info.y}px)`, `circle(${radius}px at ${info.x}px ${info.y}px)`] },
-        { duration: 600, easing: 'ease-out', pseudoElement: '::view-transition-new(root)' }
-      ))
-      transition.finished.then(() => document.styleSheets[0].deleteRule(0))
+      return new Promise<Animation | void>((resolve) => {
+        if (this.theme === theme) return
+        const isDark = darker.matches
+        const getTheme = (theme: typeof props['theme']) => theme === 'auto' ? (isDark ? 'dark' : 'light') : theme
+        const oldTheme = getTheme(this.theme)
+        const newTheme = getTheme(theme)
+        if (oldTheme === newTheme || !document.startViewTransition) {
+          this.theme = theme
+          return resolve()
+        }
+        const info = { x: innerWidth / 2, y: innerHeight / 2 }
+        if (trigger && trigger.isConnected) {
+          const rect = trigger.getBoundingClientRect()
+          info.x = rect.x + rect.width / 2
+          info.y = rect.y + rect.height / 2
+        }
+        document.styleSheets[0].insertRule(/*css*/`::view-transition-old(root),::view-transition-new(root) { animation: none;mix-blend-mode: normal}`, 0)
+        const transition = document.startViewTransition(() => this.theme = theme)
+        transition.ready.then(async () => {
+          const animation = document.documentElement.animate(
+            { clipPath: [`circle(0px at ${info.x}px ${info.y}px)`, `circle(${Math.hypot(Math.max(info.x, innerWidth - info.x), Math.max(info.y, innerHeight - info.y))}px at ${info.x}px ${info.y}px)`] },
+            { duration: 600, easing: 'ease-out', pseudoElement: '::view-transition-new(root)' }
+          )
+          resolve(animation)
+          await transition.finished
+          document.styleSheets[0].deleteRule(0)
+        })
+      })
     }
     return {
       expose: {

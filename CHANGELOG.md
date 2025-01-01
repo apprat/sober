@@ -1,5 +1,10 @@
 # 更新日志
 
+## 1.0.1 (2025-01-01)
+
+- 新增：Page 组件 `toggle()` 方法返回值新增为 `Promise<Animation | void>` 对象，以便于监听变更完成和动画完成。
+- 修复：Picker、MenuItem、PopMenuItem 组件 `start`、`end` 插槽始终被设置颜色的问题。
+
 ## 1.0.0 (2024-12-30)
 
 1. *Tooltip*

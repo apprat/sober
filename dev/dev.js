@@ -23,15 +23,10 @@ const mineTypeMap = {
 
 try {
   const root = './'
-  childProcess.execSync('tsc', { cwd: root, windowsHide: true, stdio: 'inherit' })
-  const tsc = childProcess.exec('npx tsc -w', { cwd: root, windowsHide: true })
-  tsc.stdout?.pipe(process.stdout)
-  const rollup = childProcess.exec('npx rollup --config dev/rollup.config.js -w', { cwd: root, windowsHide: true })
-  rollup.stdout?.pipe(process.stdout)
-  process.on('exit', () => {
-    tsc.kill()
-    rollup.kill()
-  })
+  if (!process.argv.includes('--preview')) {
+    const tsc = childProcess.exec('tsc -w', { cwd: root, windowsHide: true })
+    tsc.stdout?.pipe(process.stdout)
+  }
   const server = http.createServer((_, res) => {
     const filename = path.resolve(root, res.req.url.slice(1))
     const extname = path.extname(filename).slice(1)

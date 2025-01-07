@@ -13,13 +13,11 @@
     "rootDir": "./src",
     "noImplicitAny": false,
     "declaration": true,
-    "sourceMap": false,
     "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true,
-    "removeComments": true
+    "experimentalDecorators": true
   },
   "include": [
     "src"

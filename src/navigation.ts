@@ -1,6 +1,6 @@
 import { useElement } from './core/element.js'
-import { Theme } from './page.js'
 import { Select } from './core/utils/select.js'
+import { Theme } from './core/theme.js'
 import './ripple.js'
 
 const name = 's-navigation'

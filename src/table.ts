@@ -1,5 +1,5 @@
 import { useElement } from './core/element.js'
-import { Theme } from './page.js'
+import { Theme } from './core/theme.js'
 
 const name = 's-table'
 const props = {

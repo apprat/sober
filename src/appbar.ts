@@ -1,6 +1,6 @@
 import { useElement } from './core/element.js'
 import { mediaQueries } from './core/utils/mediaQuery.js'
-import { Theme } from './page.js'
+import { Theme } from './core/theme.js'
 
 const name = 's-appbar'
 const props = {

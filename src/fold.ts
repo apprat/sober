@@ -25,7 +25,7 @@ const style = /*css*/`
 }
 `
 
-const template = /*html*/ `
+const template = /*html*/`
 <slot name="trigger"></slot>
 <div class="container" part="container">
   <slot class="view" part="view"></slot>

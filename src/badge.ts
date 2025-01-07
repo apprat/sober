@@ -1,5 +1,5 @@
 import { useElement } from './core/element.js'
-import { Theme } from './page.js'
+import { Theme } from './core/theme.js'
 
 const name = 's-badge'
 const props = {
@@ -28,7 +28,7 @@ const style = /*css*/`
   padding: 0;
 }
 `
-const template = /*html*/ `<slot></slot>`
+const template = /*html*/`<slot></slot>`
 
 
 export class Badge extends useElement({ style, template, props }) { }

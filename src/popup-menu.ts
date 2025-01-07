@@ -1,5 +1,5 @@
 import { useElement } from './core/element.js'
-import { Theme } from './page.js'
+import { Theme } from './core/theme.js'
 import { Popup } from './popup.js'
 import './ripple.js'
 import './scroll-view.js'

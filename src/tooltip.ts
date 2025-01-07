@@ -1,7 +1,7 @@
 import { useElement } from './core/element.js'
 import { mediaQueryList } from './core/utils/mediaQuery.js'
 import { getStackingContext } from './core/utils/getStackingContext.js'
-import { Theme } from './page.js'
+import { Theme } from './core/theme.js'
 
 const name = 's-tooltip'
 const props = {
@@ -109,17 +109,6 @@ export class Tooltip extends useElement({
           calls.right() && calls.left()
           break
       }
-      // const position = {
-      //   top: {
-      //     top: rect.top - gap - cHeight,
-      //     bottom: rect.top + this.offsetHeight + gap
-      //   }[this.align === 'auto' ? (mediaQueryList.pointerCoarse.matches ? 'top' : 'bottom') : this.align],
-      //   left: rect.left - ((cWidth - rect.width) / 2),
-      // }
-      // if (position.left < 0) position.left = rect.left //left
-      // if (position.left + cWidth > innerWidth) position.left = rect.left + rect.width - cWidth //right
-      // if (position.top + cHeight > innerHeight) position.top = rect.top - gap - cHeight //top
-      // if (position.top < 0) position.top = rect.top + this.offsetHeight + gap //bottom
       popup.style.top = `${position.top}px`
       popup.style.left = `${position.left}px`
       popup.animate([{ opacity: 0 }, { opacity: 1 }], animateOptions)

@@ -1,7 +1,7 @@
 import { useElement } from './core/element.js'
 import { getStackingContext } from './core/utils/getStackingContext.js'
 import { mediaQueries, mediaQueryList } from './core/utils/mediaQuery.js'
-import { Theme } from './page.js'
+import { Theme } from './core/theme.js'
 
 const name = 's-snackbar'
 const props = {

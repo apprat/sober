@@ -1,5 +1,5 @@
 import { useElement } from './core/element.js'
-import { Theme } from './page.js'
+import { Theme } from './core/theme.js'
 
 const name = 's-skeleton'
 const props = {
@@ -24,8 +24,7 @@ const style = /*css*/`
 }
 `
 
-const template = /*html*/`
-`
+const template = ``
 
 export class Skeleton extends useElement({ style, template, props }) { }
 

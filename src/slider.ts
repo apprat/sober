@@ -1,6 +1,6 @@
 import { useElement } from './core/element.js'
 import { mediaQueryList } from './core/utils/mediaQuery.js'
-import { Theme } from './page.js'
+import { Theme } from './core/theme.js'
 
 const name = 's-slider'
 const props = {

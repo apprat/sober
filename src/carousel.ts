@@ -1,8 +1,8 @@
 import { useElement } from './core/element.js'
 import { mediaQueryList } from './core/utils/mediaQuery.js'
 import { Select } from './core/utils/select.js'
+import { Theme } from './core/theme.js'
 import './ripple.js'
-import { Theme } from './page.js'
 
 const name = 's-carousel'
 const props = {

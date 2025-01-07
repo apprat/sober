@@ -5,9 +5,9 @@
 ```html preview
 <s-text-field label="请输入内容"></s-text-field>
 <s-text-field label="请输入内容" value="My Name">
-  <s-icon slot="start" type="search"></s-icon>
+  <s-icon slot="start" name="search"></s-icon>
   <s-icon-button slot="end">
-    <s-icon type="close"></s-icon>
+    <s-icon name="close"></s-icon>
   </s-icon-button>
 </s-text-field>
 ```

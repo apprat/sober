@@ -1,5 +1,5 @@
 import { useElement } from './core/element.js'
-import { Theme } from './page.js'
+import { Theme } from './core/theme.js'
 import { Popup } from './popup.js'
 import { Field } from './field.js'
 import { Select } from './core/utils/select.js'
@@ -74,7 +74,7 @@ svg{
 }
 `
 
-const template = /*html*/ `
+const template = /*html*/`
 <s-popup class="popup">
   <slot name="trigger" slot="trigger">
     <s-field fixed="false" class="field" part="field">

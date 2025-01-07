@@ -1,18 +1,11 @@
 # 原型
 
-**Sober** 的组件均继承于 `HTMLElement` ，因此组件支持 `HTMLElement` 的所有属性和事件，例如 `id` 属性和 `click`、`mousedown` 等事件。
+**Sober** 的所有组件均继承于 `HTMLElement` ，因此组件支持 `HTMLElement` 的所有属性和事件，例如 `id` 属性和 `click`、`mousedown` 等事件。
 
 ```js
-class Component extends HTMLElement {}
-```
-
-你可以单独给组件设置样式来定义它们的颜色和尺寸。
-
-```html preview folded=true
-<s-button style="background: #009688"> button </s-button>
-<s-checkbox checked="true" style="height: 56px"></s-checkbox>
-<s-switch checked="true" style="color: #9fa42a"></s-switch>
-<s-switch checked="true" style="color: #8b54ba; width: 32px"></s-switch>
+const button = document.createElement('s-button') // HTMLElement
+button.id = 'btn'
+button.addEventListener('click',() => console.log('click'))
 ```
 
 ---
@@ -22,16 +15,15 @@ class Component extends HTMLElement {}
 大多数组件都拥有一些额外属性，这些属性可以通过 HTML 属性设置，也可以通过组件 Element 对象进行设置或者获取
 
 ```html
+<!--通过HTML属性设置-->
 <s-button type="outlined"> button </s-button>
+<script>
+  const button = document.querySelector('s-button')
+  button.type = 'outlined' //通过Element对象设置
+</script>
 ```
 
-```javascript
-const button = document.querySelector('s-button')
-consoe.log(button.type) //filled
-button.type = 'outlined'
-```
-
-在你通过 `JavaScript` 设置属性时，组件会转换为该属性的原始类型。
+在你通过 Element 对象设置属性时，属性值会转换为该属性的原始类型，如果转换失败则会抛出 `TypeError` 错误。
 
 ```html
 <s-button> button </s-button>
@@ -47,20 +39,15 @@ button.type = 'outlined'
 ```html
 <s-button> button </s-button>
 <script>
+  // 会同步设置HTML属性 <s-button type="outlined">
   document.querySelector('s-button').type = 'outlined'
 </script>
 ```
 
-这时 `s-button` 会同步设置为 
-
-```html
-<s-button type="outlined"> button </s-button>
-```
-
-这使得你可以做一些样式定义，如
+这使得你可以通过 CSS 属性选择器做一些样式定义，比如：
 
 ```css
-s-button[type=outlined]{
+s-button[type=outlined] {
   color: #009688;
 }
 ```
@@ -82,7 +69,7 @@ rate.readOnly = true
 
 # 标注
 
-某些组件的事件会标注为 `扩展` ，表示该事件为自定义事件，该事件无法通过 onEventName 的方式绑定，你必须通过 `addEventListener` 的方式绑定。
+某些组件的事件会标注为 `扩展` ，表示该事件为自定义事件，该事件无法通过 onEventName 的方式绑定，你必须通过 `addEventListener` 来绑定。
 
 ```html
 <!--错误，该事件无法通过 HTML 属性绑定-->
@@ -92,8 +79,12 @@ rate.readOnly = true
 某些 CSS 变量被标记为 `私有`，表示该 CSS 变量仅支持在组件对象上绑定，无法通过祖先元素继承。
 
 ```html
-<!--错误，私有变量必须设置在指定元素上-->
+<!--错误：私有变量必须设置在指定元素上-->
 <div style="--picker-padding: 20px">
   <s-picker></s-picker>
+</div>
+<!--正确写法-->
+<div>
+  <s-picker style="--picker-padding: 20px"></s-picker>
 </div>
 ```

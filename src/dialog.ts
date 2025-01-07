@@ -1,6 +1,6 @@
 import { useElement } from './core/element.js'
 import { mediaQueries } from './core/utils/mediaQuery.js'
-import { Theme } from './page.js'
+import { Theme } from './core/theme.js'
 import './scroll-view.js'
 
 const name = 's-dialog'

@@ -1,5 +1,5 @@
 import { useElement } from './core/element.js'
-import { Theme } from './page.js'
+import { Theme } from './core/theme.js'
 import './ripple.js'
 
 const name = 's-button'
@@ -121,7 +121,7 @@ const style = /*css*/`
 }
 `
 
-const template = /*html*/ `
+const template = /*html*/`
 <slot name="start"></slot>
 <slot></slot>
 <slot name="end"></slot>

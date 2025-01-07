@@ -95,6 +95,7 @@ const style = /*css*/`
   }
   ::slotted([slot=start]),
   ::slotted([slot=end]){
+    border-left-style: none;
     border-right-style: none;
     box-shadow: var(--s-elevation-level-3, ${Theme.elevationLevel3});
   }

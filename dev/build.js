@@ -39,7 +39,7 @@ esbuild.build({
   plugins: [replacePlugin],
 }).then(() => {
   esbuild.build({
-    entryPoints: ['./dist/main.js'],
+    entryPoints: ['./dev/bundle.js'],
     bundle: true,
     outfile: 'dist/sober.min.js',
     platform: 'browser',

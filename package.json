@@ -1,6 +1,6 @@
 {
   "name": "sober",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Sober is a library of UI components designed with reference to Material You.",
   "type": "module",
   "scripts": {
@@ -8,7 +8,7 @@
     "check": "tsc --noEmit",
     "preview": "node dev/dev.js --preview",
     "build": "node dev/build.js",
-    "publish": "node dev/build.js && npm publish"
+    "publish": "npm publish"
   },
   "keywords": [
     "sober",
@@ -35,9 +35,8 @@
   "devDependencies": {
     "esbuild": "^0.24.2",
     "esbuild-plugin-d.ts": "^1.3.1",
+    "html-minifier": "^4.0.0",
     "typescript": "^5.7.2"
   },
-  "dependencies": {
-    "html-minifier": "^4.0.0"
-  }
+  "dependencies": {}
 }

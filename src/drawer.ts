@@ -69,7 +69,7 @@ const style = /*css*/`
     display: block;
   }
 }
-@media (max-width: ${mediaQueries.laptop}px){
+@media not (min-width: ${mediaQueries.laptop}px){
   .scrim{
     display: block;
     z-index: 1;

@@ -13,14 +13,88 @@
   <s-page class="gap">
     <s-field>
       <div slot="label">请选择内容</div>
-      ...
+      <div onclick="this.parentElement.fixed=!this.parentElement.fixed">def</div>
     </s-field>
+
+    <s-field fixed="false">
+      <div slot="label">请选择内容</div>
+      <div onclick="this.parentElement.fixed=!this.parentElement.fixed">def</div>
+    </s-field>
+    <hr>
+
+    <s-field>
+      <div slot="label"></div>
+      <div>empty label</div>
+    </s-field>
+    <s-field fixed="false">
+      <div slot="label"></div>
+      <div onclick="this.parentElement.fixed=!this.parentElement.fixed">empty label</div>
+    </s-field>
+    <hr>
+
+    <s-field>
+      <div>not label</div>
+    </s-field>
+
+    <s-field fixed="false" focused="true">
+      <div onclick="this.parentElement.fixed=!this.parentElement.fixed">not label</div>
+    </s-field>
+
+    <hr>
+
+    focused
 
     <s-field focused="true">
       <div slot="label">请选择内容</div>
-      <div>...</div>
+      <div onclick="this.parentElement.fixed=!this.parentElement.fixed">def</div>
     </s-field>
+
+    <hr>
+    <s-field focused="true" style="--field-padding: 24px;--field-border-radius: 24px;">
+      <div slot="label">请选择内容</div>
+      <div onclick="this.parentElement.fixed=!this.parentElement.fixed">def</div>
+    </s-field>
+
+    <hr>
+
+    <s-field>
+      <div slot="label" style="padding: 12px 0;height: auto;">请选择内容</div>
+      <div style="height: 96px;" onclick="this.parentElement.fixed=!this.parentElement.fixed">def</div>
+    </s-field>
+
+    <s-field fixed="false">
+      <div slot="label" style="padding: 12px 0;height: auto;">请选择内容</div>
+      <div style="height: 96px;" onclick="this.parentElement.fixed=!this.parentElement.fixed">def</div>
+    </s-field>
+    <s-drawer id="drawer">
+      <div slot="start">
+        <s-menu style="max-width: 280px">
+          <div slot="label">Menu</div>
+          <s-menu-item checked="true">
+            <s-icon slot="start" name="home"></s-icon>
+            Home
+          </s-menu-item>
+          <s-menu-item>
+            <s-icon slot="start" name="search"></s-icon>
+            Search
+          </s-menu-item>
+        </s-menu>
+      </div>
+      <div>
+        <s-appbar>
+          <s-icon-button slot="navigation" onclick="document.querySelector('#drawer').toggle()">
+            <s-icon name="menu"></s-icon>
+          </s-icon-button>
+          <div id="headline" slot="headline">Header</div>
+        </s-appbar>
+        <s-scroll-view>
+          Hello World!
+        </s-scroll-view>
+      </div>
+    </s-drawer>
   </s-page>
+
+  <legend></legend>
 </body>
 
 </html>

@@ -23,16 +23,16 @@
 ```html preview
 <s-tab>
   <s-tab-item>
-    <s-icon type="home" slot="icon"></s-icon>
+    <s-icon name="home" slot="icon"></s-icon>
     <div slot="text">Item 1</div>
     <s-badge slot="badge"></s-badge>
   </s-tab-item>
   <s-tab-item selected="true">
-    <s-icon type="home" slot="icon"></s-icon>
+    <s-icon name="home" slot="icon"></s-icon>
     <div slot="text">Item 2</div>
   </s-tab-item>
   <s-tab-item>
-    <s-icon type="home" slot="icon"></s-icon>
+    <s-icon name="home" slot="icon"></s-icon>
     <div slot="text">Item 3</div>
     <s-badge slot="badge">99</s-badge>
   </s-tab-item>

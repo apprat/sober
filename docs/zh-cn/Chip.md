@@ -9,7 +9,7 @@
   Chip3
   <!--操作按钮-->
   <s-icon-button slot="action">
-    <s-icon type="close"></s-icon>
+    <s-icon name="close"></s-icon>
   </s-icon-button>
 </s-chip>
 ```

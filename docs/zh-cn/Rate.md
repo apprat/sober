@@ -16,8 +16,8 @@
 
 ```html preview
 <s-rate>
-  <s-icon slot="track" type="favorite"></s-icon>
-  <s-icon slot="indicator" type="favorite"></s-icon>
+  <s-icon slot="track" name="favorite"></s-icon>
+  <s-icon slot="indicator" name="favorite"></s-icon>
 </s-rate>
 ```
 

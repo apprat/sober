@@ -3,7 +3,7 @@
 表格，组件支持滚动，你只需要添加 CSS `overflow` 属性。
 
 ```html preview
-<s-table>
+<s-table style="overflow: auto">
   <s-thead>
     <s-tr>
       <s-th>title1</s-th>

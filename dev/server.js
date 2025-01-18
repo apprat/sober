@@ -24,7 +24,7 @@ const mineTypeMap = {
 try {
   const root = './'
   if (!process.argv.includes('--preview')) {
-    const tsc = childProcess.exec('tsc -w', { cwd: root, windowsHide: true })
+    const tsc = childProcess.exec('tsc --declaration false -w', { cwd: root, windowsHide: true })
     tsc.stdout?.pipe(process.stdout)
   }
   const server = http.createServer((_, res) => {

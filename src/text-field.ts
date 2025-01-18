@@ -22,13 +22,16 @@ const style = /*css*/`
   vertical-align: middle;
   font-size: .875rem;
   flex-shrink: 0;
-  line-height: 1.6;
   min-height: 48px;
   width: 280px;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   --text-field-border-radius: 4px;
   --text-field-border-color: var(--s-color-outline, ${Theme.colorOutline});
   --text-field-padding: 16px;
+  --text-field-padding-top: var(--text-field-padding);
+  --text-field-padding-bottom: var(--text-field-padding);
+  --text-field-padding-left: var(--text-field-padding);
+  --text-field-padding-right: var(--text-field-padding);
 }
 :host([disabled=true]){
   pointer-events: none;
@@ -37,7 +40,9 @@ const style = /*css*/`
 :host([multiline=true]){
   height: auto;
   min-height: 96px;
-  --text-field-padding: 12px;
+  line-height: 1.6;
+  --text-field-padding-top: 12px;
+  --text-field-padding-bottom: 12px;
 }
 .field{
   display: block;
@@ -46,20 +51,24 @@ const style = /*css*/`
   --field-border-radius: var(--text-field-border-radius);
   --field-border-color: var(--text-field-border-color);
   --field-padding: var(--text-field-padding);
+  --field-padding-top: var(--text-field-padding-top);
+  --field-padding-bottom: var(--text-field-padding-bottom);
+  --field-padding-left: var(--text-field-padding-left);
+  --field-padding-right: var(--text-field-padding-right);
 }
 :host([error=true]) .field{
   --s-color-primary: var(--s-color-error, ${Theme.colorError});
   --field-border-color: var(--s-color-error, ${Theme.colorError});
   --field-border-width: 2px;
 }
-.label{
-  height: 100%;
+:host([multiline=true]) .field::part(top){
+  --height: 0;
 }
 :host([multiline=true]) .label{
   height: fit-content;
   box-sizing: border-box;
-  padding: var(--text-field-padding) 0;
-  max-height: 100%;
+  padding-top: var(--text-field-padding-top);
+  padding-bottom: var(--text-field-padding-bottom);
 }
 .view{
   flex-grow: 1;
@@ -72,7 +81,8 @@ textarea{
   border: none;
   height: 100%;
   width: 100%;
-  padding: 0 var(--text-field-padding);
+  padding-left: var(--field-padding-left);
+  padding-right: var(--field-padding-right);
   background: none;
   outline: none;
   font-size: inherit;
@@ -114,7 +124,10 @@ textarea,
   word-break: break-all;
   white-space: pre-wrap;
   box-sizing: border-box;
-  padding: var(--text-field-padding);
+  padding-top: var(--text-field-padding-top);
+  padding-bottom: var(--text-field-padding-bottom);
+  padding-left: var(--text-field-padding-left);
+  padding-right: var(--text-field-padding-right);
 }
 :host([multiline=true]) textarea,
 :host([multiline=true]) .shadow,
@@ -144,7 +157,6 @@ input::-ms-reveal{
   align-items: flex-end;
   width: 100%;
   box-sizing: border-box;
-  padding: 0 var(--text-field-padding);
   font-size: .75rem;
   color: var(--text-field-border-color);
 }
@@ -166,21 +178,21 @@ input::-ms-reveal{
 }
 ::slotted(s-icon-button[slot=start]){
   margin-left: 4px;
-  margin-right: calc(var(--text-field-border-radius) - var(--text-field-padding) + 4px);
+  margin-right: calc(var(--text-field-border-radius) - var(--text-field-padding-left) + 4px);
 }
 ::slotted(s-icon-button[slot=end]){
   margin-right: 4px;
-  margin-left: calc(var(--text-field-border-radius) - var(--text-field-padding) + 4px);
+  margin-left: calc(var(--text-field-border-radius) - var(--text-field-padding-right) + 4px);
 }
 ::slotted(s-icon[slot=start]),
 ::slotted(svg[slot=start]){
   margin-left: 12px;
-  margin-right: calc(var(--text-field-border-radius) - var(--text-field-padding) + 8px);
+  margin-right: calc(var(--text-field-border-radius) - var(--text-field-padding-left) + 8px);
 }
 ::slotted(s-icon[slot=end]),
 ::slotted(svg[slot=end]){
   margin-right: 12px;
-  margin-left: calc(var(--text-field-border-radius) - var(--text-field-padding) + 8px);
+  margin-left: calc(var(--text-field-border-radius) - var(--text-field-padding-right) + 8px);
 }
 `
 
@@ -195,9 +207,9 @@ const template = /*html*/`
   <slot slot="start" name="start"></slot>
   <slot slot="end" name="end"></slot>
 </s-field>
-<div class="text">
+<div class="text" part="text">
   <slot name="text"></slot>
-  <div class="counter"></div>
+  <div class="counter" part="counter"></div>
 </div>
 `
 
@@ -310,5 +322,15 @@ declare global {
 declare module 'vue' {
   export interface GlobalComponents {
     [name]: typeof props
+  }
+}
+
+//@ts-ignore
+declare module 'solid-js' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+    }
   }
 }

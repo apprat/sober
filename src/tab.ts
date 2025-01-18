@@ -22,8 +22,7 @@ const style = /*css*/`
   content: '';
   position: absolute;
   width: 100%;
-  height: 1px;
-  background: var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
+  border-bottom: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
   bottom: 0;
   left: 0;
 }
@@ -251,5 +250,17 @@ declare module 'vue' {
   export interface GlobalComponents {
     [name]: typeof props
     [itemName]: typeof itemProps
+  }
+}
+
+//@ts-ignore
+declare module 'solid-js' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      //@ts-ignore
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+    }
   }
 }

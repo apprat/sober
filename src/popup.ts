@@ -188,6 +188,10 @@ interface Popup {
   removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Popup, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
+type Events = {
+  [K in keyof EventMap as `on${K}`]?: (ev: EventMap[K]) => void
+}
+
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Popup
@@ -196,7 +200,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props> & { [K in keyof EventMap as `on${K}`]?: (ev: EventMap[K]) => void }
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props> & Events
       }
     }
   }
@@ -206,5 +210,15 @@ declare global {
 declare module 'vue' {
   export interface GlobalComponents {
     [name]: typeof props
+  }
+}
+
+//@ts-ignore
+declare module 'solid-js' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props> & Events
+    }
   }
 }

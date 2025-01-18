@@ -206,3 +206,23 @@ declare module 'vue' {
     [tdName]: typeof tdProps
   }
 }
+
+//@ts-ignore
+declare module 'solid-js' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      //@ts-ignore
+      [theadName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof theadProps>
+      //@ts-ignore
+      [tbodyName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof tbodyProps>
+      //@ts-ignore
+      [trName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof trProps>
+      //@ts-ignore
+      [thName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof thProps>
+      //@ts-ignore
+      [tdName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof tdProps>
+    }
+  }
+}

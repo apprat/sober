@@ -38,6 +38,10 @@
 | 名称                         | 介绍                 |
 | ---------------------------- | ------------------- |
 | --field-padding              | `私有` 内边距        |
+| --field-padding-top          | `私有` 顶部内边距    |
+| --field-padding-bottom       | `私有` 底部内边距    |
+| --field-padding-left         | `私有` 左内边距      |
+| --field-padding-right        | `私有` 右内边距      |
 | --field-border-radius        | `私有` 边框圆角      |
 | --field-border-width         | `私有` 边框宽度      |
 | --field-border-color         | `私有` 边框颜色      |

@@ -26,7 +26,7 @@
 <s-button>
   <s-circular-progress indeterminate="true" slot="start"></s-circular-progress>
   button
-  <s-icon slot="end" type="close"></s-icon>
+  <s-icon slot="end" name="close"></s-icon>
 </s-button>
 ```
 

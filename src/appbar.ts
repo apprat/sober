@@ -3,9 +3,7 @@ import { mediaQueries } from './core/utils/mediaQuery.js'
 import { Theme } from './core/theme.js'
 
 const name = 's-appbar'
-const props = {
-
-}
+const props = {}
 
 const style = /*css*/`
 :host{
@@ -20,7 +18,6 @@ const style = /*css*/`
 ::slotted([slot=navigation]){
   margin-left: 4px;
   flex-shrink: 0;
-
 }
 ::slotted([slot=logo]){
   margin-left: 12px;
@@ -97,13 +94,6 @@ export class Appbar extends useElement({
 
 Appbar.define(name)
 
-//@ts-ignore
-declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
-  }
-}
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Appbar
@@ -114,6 +104,23 @@ declare global {
         //@ts-ignore
         [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue' {
+  export interface GlobalComponents {
+    [name]: typeof props
+  }
+}
+
+//@ts-ignore
+declare module 'solid-js' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

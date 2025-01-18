@@ -1,6 +1,65 @@
+# 介绍
+
+Soer 是基于 [Web Components](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_components) 的 UI 组件库，因此它有一些限制，例如元素名称必须使用 `-` 连接符，且不支持自闭合标签写法。
+```html
+<s-button> 按钮 </s-button> <!--正确写法-->
+<s-button /> <!--错误写法-->
+```
+
+除此之外你还可以动态创建组件，例如：
+
+```js
+const button = document.createElement('s-button')
+document.body.appendChild(button)
+```
+
+自定义组件样式是非常简单的，你可以使用 CSS 选择器，或是内联样式：
+
+```css
+s-button {
+  backgrouund: #009688;
+  color: #fff;
+}
+```
+
+一些组件在内部创建了 DOM 元素，要为这些元素设置样式，你可以使用 CSS [::part()](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part) 选择器：
+
+```css
+s-dailog::part(container) {
+  color: #fff;
+}
+```
+
+---
+
+# 属性
+
+大多数组件都拥有一些额外属性，属性支持三种基本类型：`string`、`number`、`boolean`，你可以通过 HTML 来设置属性，也可以使用 JavaScript 来设置（注意如果属性类型不匹配组件会尝试转换其类型）。
+
+```html
+<s-button type="outline"> 按钮 </s-button>
+<script>
+  const button = document.querySelector('s-button')
+  button.type = 'text'
+</script>
+```
+
+在文档中，某些组件被标注为 `同步`，表示该属性被赋值时在 DOM 节点上同步更新，因此你可以使用属性选择器来选中：
+
+```css
+s-button[type=text] {
+  color: #009688;
+}
+```
+
+> [!WARNING]
+> 属性名称是区分大小写的，但是 HTML 并不区分大小写。
+
+---
+
 # 原型
 
-**Sober** 的所有组件均继承于 `HTMLElement` ，因此组件支持 `HTMLElement` 的所有属性和事件，例如 `id` 属性和 `click`、`mousedown` 等事件。
+所有组件均继承于 `HTMLElement` ，因此组件支持 `HTMLElement` 的所有属性和事件，例如 `id` 属性和 `click`、`mousedown` 等事件。
 
 ```js
 const button = document.createElement('s-button') // HTMLElement
@@ -10,66 +69,9 @@ button.addEventListener('click',() => console.log('click'))
 
 ---
 
-# 属性
-
-大多数组件都拥有一些额外属性，这些属性可以通过 HTML 属性设置，也可以通过组件 Element 对象进行设置或者获取
-
-```html
-<!--通过HTML属性设置-->
-<s-button type="outlined"> button </s-button>
-<script>
-  const button = document.querySelector('s-button')
-  button.type = 'outlined' //通过Element对象设置
-</script>
-```
-
-在你通过 Element 对象设置属性时，属性值会转换为该属性的原始类型，如果转换失败则会抛出 `TypeError` 错误。
-
-```html
-<s-button> button </s-button>
-<script>
-  const button = document.querySelector('s-button')
-  button.disabled = 'true' //设置 string
-  console.log(button.disabled, typeof button.disabled)  //输出 true boolean
-</script>
-```
-
-某些属性是同步的，该属性被设置时，HTML 属性也会同步更新
-
-```html
-<s-button> button </s-button>
-<script>
-  // 会同步设置HTML属性 <s-button type="outlined">
-  document.querySelector('s-button').type = 'outlined'
-</script>
-```
-
-这使得你可以通过 CSS 属性选择器做一些样式定义，比如：
-
-```css
-s-button[type=outlined] {
-  color: #009688;
-}
-```
-
-属性是区别大小写的，但是在 HTML 属性中，属性名是不区分大小写的，所以下列两种写法是等价的。
-
-```html
-<s-rate readonly="true"></s-rate>
-<s-rate readOnly="true"></s-rate>
-```
-
-而在 JavaScript 中访问时，你必须使用使用大小写匹配的属性名。
-
-```js
-rate.readOnly = true
-```
-
----
-
 # 标注
 
-某些组件的事件会标注为 `扩展` ，表示该事件为自定义事件，该事件无法通过 onEventName 的方式绑定，你必须通过 `addEventListener` 来绑定。
+某些组件的事件会标注为 `扩展` ，表示该事件为自定义事件，该事件无法通过 onEventName 的方式绑定，必须通过 `addEventListener` 来绑定。
 
 ```html
 <!--错误，该事件无法通过 HTML 属性绑定-->

@@ -29,8 +29,6 @@
 </s-snackbar>
 ```
 
-> 注意：该组件使用了 fixed 定位，在该组件的祖先元素中，应当避免**同时**出现滚动和[层叠上下文](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context)。
-
 ---
 
 ## 属性

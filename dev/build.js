@@ -8,20 +8,18 @@ const replacePlugin = {
   setup(build) {
     build.onLoad({ filter: /\.js$/ }, (args) => {
       let contents = fs.readFileSync(args.path, 'utf8')
-      const cssRegex = /\/\*css\*\/ `([\s\S]*?)`/g
+      const cssRegex = /\/\*css\*\/ `([\s\S]*?)`;/g
       contents = contents.replace(cssRegex, (_, css) => {
-        css = css.replace(/\${(.*?) \/\*(.*?)\*\/}/g, (_, v) => v.startsWith('"') && v.endsWith('"') ? v.slice(1, -1) : v)
+        //处理const num以便于能被css压缩
+        css = css.replace(/\${(.*?) \/\*.*?\*\/}/g, (_, v) => v.startsWith('"') && v.endsWith('"') ? v.slice(1, -1) : v)
         const res = esbuild.transformSync(css, { loader: 'css', minify: true })
         return `\`${res.code.trim()}\``
       })
-      const htmlRegex = /\/\*html\*\/ `([\s\S]*?)`/g
+      const htmlRegex = /\/\*html\*\/ `([\s\S]*?)`;/g
       contents = contents.replace(htmlRegex, (_, html) => {
-        return `\`${minify(html, { collapseWhitespace: true })}\``
+        return `\`${minify(html, { collapseWhitespace: true }).trim()}\``
       })
-      return {
-        contents: contents,
-        loader: 'js'
-      }
+      return { contents }
     })
   }
 }
@@ -30,11 +28,11 @@ const replacePlugin = {
 childProcess.execSync('tsc')
 esbuild.build({
   entryPoints: ['./dist/**/**.js'],
-  bundle: false,
   outdir: 'dist',
   platform: 'browser',
+  format: 'esm',
   allowOverwrite: true,
-  minify: true,
+  //minify: true,
   sourcemap: true,
   plugins: [replacePlugin],
 }).then(() => {

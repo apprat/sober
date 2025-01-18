@@ -63,13 +63,13 @@ const style = /*css*/`
 ::slotted(s-scroll-view:not([slot])){
   flex-grow: 1;
 }
-@media (min-width: ${mediaQueries.laptop}px){
+@media not (max-width: ${mediaQueries.laptop}px){
   .start.show,
   .end.show{
     display: block;
   }
 }
-@media not (min-width: ${mediaQueries.laptop}px){
+@media (max-width: ${mediaQueries.laptop}px){
   .scrim{
     display: block;
     z-index: 1;

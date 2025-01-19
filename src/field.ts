@@ -48,7 +48,7 @@ const style = /*css*/`
   border-width: var(--field-focused-border-width);
   border-color: var(--s-color-primary, ${Theme.colorPrimary});
   opacity: 0;
-  transition: opacity 2.2s ease-out;
+  transition: opacity .2s ease-out;
 }
 :host([focused=true]) .line::after{
   opacity: 1;
@@ -78,6 +78,8 @@ const style = /*css*/`
   border-right-style: solid;
   border-top-right-radius: var(--field-border-radius);
   border-bottom-right-radius: var(--field-border-radius);
+  left: auto;
+  right: 0;
 }
 .box{
   display: grid;
@@ -93,19 +95,16 @@ const style = /*css*/`
   height: 100%;
   display: flex;
   grid-area: a;
-}
-.view{
-  align-items: center;
   position: relative;
   box-sizing: border-box;
   margin-left: calc(var(--field-border-radius) * -1);
   margin-right: calc(var(--field-border-radius) * -1);
 }
+.view{
+  align-items: center;
+}
 .top{
-  margin-left: calc(var(--field-border-radius) * -1);
-  margin-right: calc(var(--field-border-radius) * -1);
   pointer-events: none;
-  position: relative;
 }
 .top>.left::before,
 .top>.right::before,
@@ -114,37 +113,40 @@ const style = /*css*/`
   border-top-style: solid;
 }
 .top>.left{
-  width: var(--field-padding-left);
+  width: calc(var(--field-padding-left) - var(--field-border-radius) - 4px);
+  margin-left: max(4px, var(--field-border-radius));
+  margin-right: min(4px, calc(var(--field-padding-left) - var(--field-border-radius)));
   flex-shrink: 0;
+}
+:host([fixed=false]) .top>.left{
+  width: calc(var(--field-padding-left) - var(--field-border-radius));
+  margin-right: 0;
 }
 .top>.right{
   flex-grow: 1;
-  min-width: var(--field-padding-right);
-}
-.top>.left{
-  clip-path: polygon(var(--field-border-radius) 0, max(calc(100% - 4px), var(--field-border-radius)) 0, max(calc(100% - 4px), var(--field-border-radius)) 100%,var(--field-border-radius) 100%);
-}
-:host([fixed=false]) .top>.left{
-  clip-path: polygon(var(--field-border-radius) 0, max(100%, var(--field-border-radius)) 0, max(100%, var(--field-border-radius)) 100%,var(--field-border-radius) 100%);
-}
-.top>.right{
-  clip-path: polygon(4px 0, max(4px, calc(100% - var(--field-border-radius))) 0, max(4px, 100% - var(--field-border-radius)) 100%, 4px 100%);
+  width: calc(var(--field-padding-right) - var(--field-border-radius) - 4px);
+  margin-left: min(4px, calc(var(--field-padding-right) - var(--field-border-radius)));
+  margin-right: max(4px, var(--field-border-radius));
 }
 :host([fixed=false]) .top>.right{
-  clip-path: polygon(0 0, min(100%, calc(100% - var(--field-border-radius))) 0, min(100%, 100% - var(--field-border-radius)) 100%, 0 100%);
+  width: calc(var(--field-padding-left) - var(--field-border-radius));
+  margin-left: 0;
 }
 .label{
   display: block;
   height: 100%;
   flex-shrink: 0;
 }
-.label>.line{
-  width: 8px;
-  margin: 0 -4px;
+.label>.line::before,
+.label>.line::after,
+:host([fixed=false]) .label::before,
+:host([fixed=false]) .label::after{
+  border-top-style: solid;
 }
 .label>.line::before,
 .label>.line::after{
-  border-top-style: solid;
+  transform: translateX(-50%);
+  width: min(calc(var(--field-padding-right) - var(--field-border-radius)), 8px);
 }
 ::slotted([slot=label]){
   display: flex;
@@ -154,48 +156,36 @@ const style = /*css*/`
   align-items: center;
   transform: translateY(-50%);
   color: var(--field-border-color);
-  transition: transform 2.2s ease-out, font-size 2.2s ease-out;
+  transition: transform .2s ease-out;
   box-sizing: border-box;
   position: relative;
 }
-:host([focused=true]) ::slotted([slot=label]){
-  color: var(--s-color-primary, ${Theme.colorPrimary});
-}
-:host([fixed=false]) ::slotted([slot=label]){
+:host([fixed=false]) ::slotted([slot=label]),
+::slotted([slot=label]:empty){
   font-size: inherit;
   transform: translateY(0);
 }
-::slotted([slot=label]:not(:empty))::before{
+::slotted([slot=label]:empty)::before,
+::slotted([slot=label]:empty)::after{
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  border-top: solid var(--field-border-width) var(--field-border-color);
+  transform: translateX(-50%);
+  width: min(calc(var(--field-padding-right) - var(--field-border-radius)), 8px);
+  border-top: solid var(--field-border-width); var(--field-border-color);
+}
+::slotted([slot=label]:empty)::after{
   opacity: 0;
-  transform: translateY(50%);
-  transition: transform 2.2s ease-out;
-  background: rgba(0,0,0,0.05);
-  box-sizing: border-box;
+  border-width: var(--field-focused-border-width);
+  transition: opacity .2s ease-out;
+  border-color: var(--s-color-primary, ${Theme.colorPrimary});
 }
-:host([fixed=false]) ::slotted([slot=label]:not(:empty))::before{
+:host([focused=true]) ::slotted([slot=label]:empty)::after{
   opacity: 1;
-  transform: translateY(0%);
 }
-::slotted([slot=label]:empty){
-  transition: none;
-}
-::slotted([slot=label]:empty)::before{
-  content: '';
-  width: 8px;
-  margin: 0 -4px;
-  border-top: solid var(--field-border-width) var(--field-border-color);
-  position: relative;
-  top: .5px;
-}
-:host([fixed=false]) ::slotted([slot=label]:empty)::before{
-  content: none;
+:host([focused=true]) ::slotted([slot=label]){
+  color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 ::slotted(:not([slot])){
   padding-left: var(--field-padding-left);
@@ -218,7 +208,7 @@ const template = /*html*/`
     <slot class="view"></slot>
     <div class="top" part="top">
       <div class="line left"></div>
-      <slot name="label" class="label">
+      <slot name="label" class="label line">
         <div class="line"></div>
       </slot>
       <div class="line right"></div>

@@ -136,7 +136,6 @@ class BottomSheet extends useElement({
   template,
   props,
   syncProps: ['showed'],
-  events: ['show', 'showed', 'closed'],
   setup(shadowRoot) {
     const dialog = shadowRoot.querySelector('dialog') as HTMLDialogElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement

@@ -38,15 +38,13 @@ const style = /*css*/`
   opacity: .38;
 }
 :host([multiline=true]){
-  height: auto;
-  min-height: 96px;
   line-height: 1.6;
   --text-field-padding-top: 12px;
   --text-field-padding-bottom: 12px;
 }
 .field{
   display: block;
-  height: 100%;
+  min-height: inherit;
   font-size: inherit;
   --field-border-radius: var(--text-field-border-radius);
   --field-border-color: var(--text-field-border-color);
@@ -60,9 +58,6 @@ const style = /*css*/`
   --s-color-primary: var(--s-color-error, ${Theme.colorError});
   --field-border-color: var(--s-color-error, ${Theme.colorError});
   --field-border-width: 2px;
-}
-:host([multiline=true]) .field::part(top){
-  --height: 0;
 }
 :host([multiline=true]) .label{
   height: fit-content;

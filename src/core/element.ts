@@ -59,13 +59,11 @@ type Setup<P, E> = (this: P & HTMLElement, shadowRoot: ShadowRoot) => {
 
 export const useElement = <
   P extends { [key: string]: Prop } = {},
-  E extends {} = {},
-  ET extends string[] = []
+  E extends {} = {}
 >(options: {
   style?: string
   props?: P
   syncProps?: (keyof P)[] | true
-  events?: ET
   template?: string
   setup?: Setup<P, E>
 }): {

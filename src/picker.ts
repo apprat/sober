@@ -18,7 +18,6 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
   font-size: .875rem;
-  flex-shrink: 0;
   --picker-border-radius: 4px;
   --picker-border-color: var(--s-color-outline, ${Theme.colorOutline});
   --picker-border-width: 1px;
@@ -32,6 +31,10 @@ const style = /*css*/`
 .popup{
   display: block;
   cursor: pointer;
+  position: relative;
+}
+.ripple{
+  border-radius: var(--picker-border-radius);
 }
 .field{
   --field-border-radius: var(--picker-border-radius);
@@ -40,28 +43,23 @@ const style = /*css*/`
   --field-padding: var(--picker-padding);
   height: var(--picker-height);
   width: 100%;
+  position: relative;
 }
 .view{
   width: 100%;
-  padding-left: var(--picker-padding);
-}
-.ripple{
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding: 0 var(--picker-padding);
 }
 svg{
   width: 24px;
   height: 24px;
-  fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   padding: 2px;
   box-sizing: border-box;
   flex-shrink: 0;
-  margin-left: -12px;
-  margin-right: 4px;
+  margin-left: min(0px, calc((var(--picker-padding) * -1) + 4px));
+  margin-right: max(0px, calc(var(--picker-padding) - 12px));
+  fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
 .container{
   max-height: 408px;
@@ -81,10 +79,10 @@ const template = /*html*/`
       <div class="label" slot="label"></div>
       <div class="view"></div>
       <svg viewBox="0 -960 960 960" slot="end">
-          <path d="M480-360 280-560h400L480-360Z"></path>
-        </svg>
-      <s-ripple class="ripple" attached="true"></s-ripple>
+        <path d="M480-360 280-560h400L480-360Z"></path>
+      </svg>
     </s-field>
+    <s-ripple class="ripple" attached="true"></s-ripple>
   </slot>
   <s-scroll-view class="container" part="container">
     <slot id="slot"></slot>

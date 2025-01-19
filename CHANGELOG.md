@@ -1,10 +1,11 @@
 # 更新日志
 
-#### 1.0.5 (2025-01-15)
+#### 1.0.5 (2025-01-20)
 
-- 所有组件的扩展事件支持通过 HTML 属性绑定 inline code。
-- 添加对 Solidjs 的 JSX Typescript 类型支持。
-- 更新：Field、TextField、Picker 修复 `label` 未对齐文本的问题，并且新增 `--field-padding-top`、`--field-padding-bottom`、`--field-padding-left`、`--field-padding-right` 私有CSS变量。
+- 添加：对 Solidjs 的 JSX Typescript 类型支持。
+- 新增：Field 新增 `--field-padding-top`、`--field-padding-bottom`、`--field-padding-left`、`--field-padding-right` 私有CSS变量。
+- 新增：TextField 组件新增 `--text-field-padding-top`、`--text-field-padding-bottom`、`--text-field-padding-left`、`--text-field-padding-right` 私有CSS变量。
+- 修复: [#33](https://github.com/apprat/sober/issues/33)
 
 #### 1.0.4 (2025-01-07)
 

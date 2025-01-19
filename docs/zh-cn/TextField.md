@@ -21,7 +21,7 @@
 多行文本输入
 
 ```html preview
-<s-text-field label="请输入名称" multiLine="true"></s-text-field>
+<s-text-field label="请输入名称" multiLine="true" style="min-height: 96px"></s-text-field>
 ```
 
 错误状态
@@ -127,12 +127,16 @@ class TextField extends HTMLElement {
 | ---------------------------- | ---------------------------- |
 | --text-field-border-radius   | `私有` 边框圆角大小            |
 | --text-field-border-color    | `私有` 边框/label文本颜色      |
-| --text-field-padding         | `私有` 内边距                 |
-| --s-color-on-surface         | 文本颜色                      |
-| --s-color-primary            | 获得焦点时的边框/label文本颜色 |
-| --s-color-on-primary         | 选择文本颜色背景颜色           |
-| --s-color-error              | 错误颜色                      |
-| --s-color-on-surface-variant | 插槽SVG 颜色                  |
+| --text-field-padding         | `私有` 内边距                  |
+| --text-field-padding-top     | `私有` 顶部内边距              |
+| --text-field-padding-bottom  | `私有` 底部内边距              |
+| --text-field-padding-left    | `私有` 左内边距                |
+| --text-field-padding-right   | `私有` 右内边距                |
+| --s-color-on-surface         | 文本颜色                       |
+| --s-color-primary            | 获得焦点时的边框/label文本颜色  |
+| --s-color-on-primary         | 选择文本颜色背景颜色            |
+| --s-color-error              | 错误颜色                       |
+| --s-color-on-surface-variant | 插槽SVG 颜色                   |
 
 ---
 

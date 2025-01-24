@@ -48,7 +48,7 @@ const template = /*html*/`
 </div>
 `
 
-export class Tooltip extends useElement({
+class STooltip extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
@@ -135,11 +135,13 @@ export class Tooltip extends useElement({
   }
 }) { }
 
-Tooltip.define(name)
+STooltip.define(name)
+
+export { STooltip as Tooltip }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Tooltip
+    [name]: STooltip
   }
   namespace React {
     namespace JSX {

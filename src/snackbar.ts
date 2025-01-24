@@ -139,7 +139,7 @@ const builder = (options: string | {
   }
 }) => {
   let root: Element = document.body
-  const snackbar = new Snackbar()
+  const snackbar = new SSnackbar()
   snackbar.style.display = 'block'
   const page = document.body.firstElementChild
   if (page && page.tagName === 'S-PAGE') {
@@ -186,7 +186,7 @@ const tasks = {
   bottom: [] as HTMLElement[],
 }
 
-class Snackbar extends useElement({
+class SSnackbar extends useElement({
   style, template, props, syncProps: ['type'],
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector('.popup') as HTMLDivElement
@@ -261,7 +261,9 @@ class Snackbar extends useElement({
   static readonly builder = builder
 }
 
-Snackbar.define(name)
+SSnackbar.define(name)
+
+export { SSnackbar as Snackbar }
 
 interface EventMap {
   show: Event
@@ -271,12 +273,10 @@ interface EventMap {
 
 type ElementEventMap = EventMap & HTMLElementEventMap
 
-interface Snackbar {
-  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Snackbar, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Snackbar, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
+interface SSnackbar {
+  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SSnackbar, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SSnackbar, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
-
-export { Snackbar }
 
 type Events = {
   [K in keyof EventMap as `on${K}`]?: (ev: EventMap[K]) => void
@@ -284,7 +284,7 @@ type Events = {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Snackbar
+    [name]: SSnackbar
   }
   namespace React {
     namespace JSX {

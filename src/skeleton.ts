@@ -26,13 +26,15 @@ const style = /*css*/`
 
 const template = ``
 
-export class Skeleton extends useElement({ style, template, props }) { }
+class SSkeleton extends useElement({ style, template, props }) { }
 
-Skeleton.define(name)
+SSkeleton.define(name)
+
+export { SSkeleton as Skeleton }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Skeleton
+    [name]: SSkeleton
   }
   namespace React {
     namespace JSX {

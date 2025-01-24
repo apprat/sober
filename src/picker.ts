@@ -90,7 +90,7 @@ const template = /*html*/`
 </s-popup>
 `
 
-export class Picker extends useElement({
+class SPicker extends useElement({
   style, template, props, syncProps: ['disabled'],
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector('.popup') as Popup
@@ -99,7 +99,7 @@ export class Picker extends useElement({
     const view = shadowRoot.querySelector('.view') as HTMLDivElement
     const slot = shadowRoot.querySelector('#slot') as HTMLSlotElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const select = new Select({ context: this, class: PickerItem, slot })
+    const select = new Select({ context: this, class: SPickerItem, slot })
     //show
     popup.addEventListener('show', () => {
       field.focused = true
@@ -208,7 +208,7 @@ const itemTemplate = /*html*/`
 <s-ripple part="ripple" attached="true" ></s-ripple>
 `
 
-export class PickerItem extends useElement({
+class SPickerItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
@@ -216,13 +216,13 @@ export class PickerItem extends useElement({
   setup() {
     this.addEventListener('click', () => {
       if (this.selected) return
-      if (!(this.parentNode instanceof Picker)) return
+      if (!(this.parentNode instanceof SPicker)) return
       this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
       props: {
         selected: () => {
-          if (!(this.parentNode instanceof Picker)) return
+          if (!(this.parentNode instanceof SPicker)) return
           this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
         }
       }
@@ -230,13 +230,15 @@ export class PickerItem extends useElement({
   }
 }) { }
 
-Picker.define(name)
-PickerItem.define(itemName)
+SPicker.define(name)
+SPickerItem.define(itemName)
+
+export { SPicker as Picker, SPickerItem as PickerItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Picker
-    [itemName]: PickerItem
+    [name]: SPicker
+    [itemName]: SPickerItem
   }
   namespace React {
     namespace JSX {

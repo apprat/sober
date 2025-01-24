@@ -4,19 +4,22 @@
 
 ```html preview
 <s-drawer style="height: 320px" id="drawer">
-  <div slot="start"> 1 </div>
-  <div>
-    2
-  </div>
-  <div slot="end"> 3 </div>
+  <div slot="start"></div>
+  <s-appbar>
+    <s-icon-button slot="navigation" onclick="document.querySelector('#drawer').toggle()">
+      <s-icon name="menu"></s-icon>
+    </s-icon-button>
+    <div slot="headline"> Title </div>
+    <s-icon-button slot="action" onclick="document.querySelector('#drawer').toggle('end')">
+      <s-icon name="arrow_back"></s-icon>
+    </s-icon-button>
+  </s-appbar>
+  <s-scroll-view style="display: flex; justify-content: center; align-items: center;">
+    hello world
+  </s-scroll-view>
+  <div slot="end"></div>
 </s-drawer>
 ```
-
-```html preview
-<s-button onclick="document.querySelector('#drawer').toggle()"> 切换左抽屉 </s-button>
-<s-button onclick="document.querySelector('#drawer').toggle('end')"> 切换右抽屉 </s-button>
-```
-
 ---
 
 ## 插槽

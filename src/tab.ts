@@ -57,13 +57,13 @@ const template = /*html*/`
 </div>
 `
 
-export class Tab extends useElement({
+class STab extends useElement({
   style, template, props, syncProps: ['mode'],
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const select = new Select({ context: this, class: TabItem, slot })
-    let old: TabItem | undefined
+    const select = new Select({ context: this, class: STabItem, slot })
+    let old: STabItem | undefined
     select.onUpdate = () => {
       if (!this.isConnected || !select.select) {
         old = undefined
@@ -196,7 +196,7 @@ const itemTemplate = /*html*/`
 <s-ripple attached="true" part="ripple"></s-ripple>
 `
 
-export class TabItem extends useElement({
+class STabItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
@@ -210,14 +210,14 @@ export class TabItem extends useElement({
       container.classList[length > 0 ? 'add' : 'remove']('icon')
     })
     this.addEventListener('click', () => {
-      if (!(this.parentNode instanceof Tab) || this.selected) return
+      if (!(this.parentNode instanceof STab) || this.selected) return
       this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
       expose: { indicator },
       props: {
         selected: () => {
-          if (!(this.parentNode instanceof Tab)) return
+          if (!(this.parentNode instanceof STab)) return
           this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
         },
       }
@@ -225,13 +225,15 @@ export class TabItem extends useElement({
   }
 }) { }
 
-Tab.define(name)
-TabItem.define(itemName)
+STab.define(name)
+STabItem.define(itemName)
+
+export { STab as Tab, STabItem as TabItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Tab
-    [itemName]: TabItem
+    [name]: STab
+    [itemName]: STabItem
   }
   namespace React {
     namespace JSX {

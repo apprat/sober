@@ -22,11 +22,11 @@ const style = /*css*/`
 `
 const template = /*html*/`<slot></slot>`
 
-export class SegmentedButton extends useElement({
+class SSegmentedButton extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
-    const select = new Select({ context: this, class: SegmentedButtonItem, slot })
+    const select = new Select({ context: this, class: SSegmentedButtonItem, slot })
     return {
       expose: {
         get value() {
@@ -106,20 +106,20 @@ const itemTemplate =/*html*/`
 <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 `
 
-export class SegmentedButtonItem extends useElement({
+class SSegmentedButtonItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
   syncProps: ['selected', 'disabled'],
   setup() {
     this.addEventListener('click', () => {
-      if (!(this.parentNode instanceof SegmentedButton) || this.selected) return
+      if (!(this.parentNode instanceof SSegmentedButton) || this.selected) return
       if (this.selectable) this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
       props: {
         selected: () => {
-          if (!(this.parentNode instanceof SegmentedButton)) return
+          if (!(this.parentNode instanceof SSegmentedButton)) return
           this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
         }
       }
@@ -127,14 +127,15 @@ export class SegmentedButtonItem extends useElement({
   }
 }) { }
 
-SegmentedButton.define(name)
-SegmentedButtonItem.define(itemName)
+SSegmentedButton.define(name)
+SSegmentedButtonItem.define(itemName)
 
+export { SSegmentedButton as SegmentedButton, SSegmentedButtonItem as SegmentedButtonItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SegmentedButton
-    [itemName]: SegmentedButtonItem
+    [name]: SSegmentedButton
+    [itemName]: SSegmentedButtonItem
   }
   namespace React {
     namespace JSX {

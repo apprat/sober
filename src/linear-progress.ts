@@ -95,7 +95,7 @@ const template = /*html*/`
 </div>
 `
 
-export class LinearProgress extends useElement({
+class SLinearProgress extends useElement({
   style, template, props, syncProps: ['indeterminate', 'animated'],
   setup(shadowRoot) {
     const track = shadowRoot.querySelector('.known>.track') as HTMLDivElement
@@ -114,11 +114,13 @@ export class LinearProgress extends useElement({
   }
 }) { }
 
-LinearProgress.define(name)
+SLinearProgress.define(name)
+
+export { SLinearProgress as LinearProgress }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: LinearProgress
+    [name]: SLinearProgress
   }
   namespace React {
     namespace JSX {

@@ -137,7 +137,7 @@ const template = /*html*/`
 />
 `
 
-export class Slider extends useElement({
+class SSlider extends useElement({
   style, template, props, syncProps: ['disabled', 'labeled'],
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
@@ -187,11 +187,13 @@ export class Slider extends useElement({
   }
 }) { }
 
-Slider.define(name)
+SSlider.define(name)
+
+export { SSlider as Slider }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Slider
+    [name]: SSlider
   }
   namespace React {
     namespace JSX {

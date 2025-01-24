@@ -111,7 +111,7 @@ const template = /*html*/`
 </div>
 `
 
-export class Search extends useElement({
+class SSearch extends useElement({
   style, template, props, syncProps: ['disabled', 'readOnly'],
   setup(shadowRoot) {
     const input = shadowRoot.querySelector('input') as HTMLInputElement
@@ -137,11 +137,13 @@ export class Search extends useElement({
   }
 }) { }
 
-Search.define(name)
+SSearch.define(name)
+
+export { SSearch as Search }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Search
+    [name]: SSearch
   }
   namespace React {
     namespace JSX {

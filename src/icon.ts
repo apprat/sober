@@ -60,7 +60,7 @@ const svgData = {
 
 const template = /*html*/`<slot></slot>`
 
-export class Icon extends useElement({
+class SIcon extends useElement({
   style, template, props, syncProps: ['name'],
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
@@ -98,11 +98,13 @@ export class Icon extends useElement({
   }
 }) { }
 
-Icon.define(name)
+SIcon.define(name)
+
+export { SIcon as Icon }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Icon
+    [name]: SIcon
   }
   namespace React {
     namespace JSX {

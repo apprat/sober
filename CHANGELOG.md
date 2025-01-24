@@ -1,6 +1,6 @@
 # 更新日志
 
-#### 1.0.5 (2025-01-20)
+#### 1.0.6 (2025-01-20)
 
 - 添加：对 Solidjs 的 JSX Typescript 类型支持。
 - 新增：Field 新增 `--field-padding-top`、`--field-padding-bottom`、`--field-padding-left`、`--field-padding-right` 私有CSS变量。

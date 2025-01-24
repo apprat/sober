@@ -52,11 +52,11 @@ const template = /*html*/`
 <slot name="end"></slot>
 `
 
-export class Navigation extends useElement({
+class SNavigation extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('#slot') as HTMLSlotElement
-    const select = new Select({ context: this, class: NavigationItem, slot })
+    const select = new Select({ context: this, class: SNavigationItem, slot })
     return {
       expose: {
         get value() {
@@ -164,7 +164,7 @@ const itemTemplate = /*html*/`
 <s-ripple attached="true" class="ripple" part="ripple"></s-ripple>
 `
 
-export class NavigationItem extends useElement({
+class SNavigationItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
@@ -172,13 +172,13 @@ export class NavigationItem extends useElement({
   setup() {
     this.addEventListener('click', () => {
       if (this.selected) return
-      if (!(this.parentNode instanceof Navigation)) return
+      if (!(this.parentNode instanceof SNavigation)) return
       this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
       props: {
         selected: () => {
-          if (!(this.parentNode instanceof Navigation)) return
+          if (!(this.parentNode instanceof SNavigation)) return
           this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
         }
       }
@@ -186,13 +186,15 @@ export class NavigationItem extends useElement({
   }
 }) { }
 
-Navigation.define(name)
-NavigationItem.define(itemName)
+SNavigation.define(name)
+SNavigationItem.define(itemName)
+
+export { SNavigation as Navigation, SNavigationItem as NavigationItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Navigation
-    [itemName]: NavigationItem
+    [name]: SNavigation
+    [itemName]: SNavigationItem
   }
   namespace React {
     namespace JSX {

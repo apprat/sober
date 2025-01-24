@@ -30,13 +30,15 @@ const style = /*css*/`
 
 const template = /*html*/`<slot></slot>`
 
-export class ScrollView extends useElement({ style, template, props, }) { }
+class SScrollView extends useElement({ style, template, props, }) { }
 
-ScrollView.define(name)
+SScrollView.define(name)
+
+export { SScrollView as ScrollView }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: ScrollView
+    [name]: SScrollView
   }
   namespace React {
     namespace JSX {

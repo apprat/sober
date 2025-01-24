@@ -72,13 +72,15 @@ const template = /*html*/`
 <s-ripple attached="true" part="ripple"></s-ripple>
 `
 
-export class FAB extends useElement({ style, template, props, syncProps: true }) { }
+class SFloatingActionButton extends useElement({ style, template, props, syncProps: true }) { }
 
-FAB.define(name)
+SFloatingActionButton.define(name)
+
+export { SFloatingActionButton as FAB }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: FAB
+    [name]: SFloatingActionButton
   }
   namespace React {
     namespace JSX {

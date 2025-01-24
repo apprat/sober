@@ -65,7 +65,7 @@ const template = /*html*/`
 
 type ShowOptions = { x: number, y: number, origin?: string }
 
-class Popup extends useElement({
+class SPopup extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const dialog = shadowRoot.querySelector('dialog') as HTMLDialogElement
@@ -171,9 +171,9 @@ class Popup extends useElement({
   }
 }) { }
 
-Popup.define(name)
+SPopup.define(name)
 
-export { Popup }
+export { SPopup as Popup }
 
 interface EventMap {
   show: Event
@@ -183,9 +183,9 @@ interface EventMap {
 
 type ElementEventMap = EventMap & HTMLElementEventMap
 
-interface Popup {
-  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Popup, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Popup, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
+interface SPopup {
+  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SPopup, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SPopup, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
 type Events = {
@@ -194,7 +194,7 @@ type Events = {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Popup
+    [name]: SPopup
   }
   namespace React {
     namespace JSX {

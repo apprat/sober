@@ -68,18 +68,20 @@ const template = /*html*/`
 <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 `
 
-export class Chip extends useElement({
+class SChip extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
     shadowRoot.querySelector('slot[name=action]')!.addEventListener('pointerdown', (e) => e.stopPropagation())
   }
 }) { }
 
-Chip.define(name)
+SChip.define(name)
+
+export { SChip as Chip }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Chip
+    [name]: SChip
   }
   namespace React {
     namespace JSX {

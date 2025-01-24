@@ -25,7 +25,7 @@ s-button {
 一些组件在内部创建了 DOM 元素，要为这些元素设置样式，你可以使用 CSS [::part()](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part) 选择器：
 
 ```css
-s-dailog::part(container) {
+s-dialog::part(container) {
   color: #fff;
 }
 ```

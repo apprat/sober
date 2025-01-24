@@ -101,7 +101,7 @@ const template = /*html*/`
 </dialog>
 `
 
-type View = HTMLElement | ((bottomSheet: BottomSheet) => void)
+type View = HTMLElement | ((bottomSheet: SBottomSheet) => void)
 
 const builder = (options: string | View | {
   root?: Element
@@ -110,7 +110,7 @@ const builder = (options: string | View | {
   let root: Element = document.body
   const page = document.body.firstElementChild
   if (page && page.tagName === 'S-PAGE') root = page
-  const bottomSheet = new BottomSheet()
+  const bottomSheet = new SBottomSheet()
   if (typeof options === 'function' || options instanceof HTMLElement) {
     options instanceof HTMLElement ? bottomSheet.appendChild(options) : options(bottomSheet)
   } else if (typeof options === 'string') {
@@ -131,7 +131,7 @@ const builder = (options: string | View | {
 type EventShowSource = 'TRIGGER'
 type EventCloseSource = 'SCRIM'
 
-class BottomSheet extends useElement({
+class SBottomSheet extends useElement({
   style,
   template,
   props,
@@ -176,9 +176,9 @@ class BottomSheet extends useElement({
   static readonly builder = builder
 }
 
-BottomSheet.define(name)
+SBottomSheet.define(name)
 
-export { BottomSheet }
+export { SBottomSheet as BottomSheet }
 
 interface EventMap {
   show: CustomEvent<{ source: EventShowSource }>
@@ -189,9 +189,9 @@ interface EventMap {
 
 type ElementEventMap = EventMap & HTMLElementEventMap
 
-interface BottomSheet {
-  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: BottomSheet, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: BottomSheet, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
+interface SBottomSheet {
+  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SBottomSheet, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SBottomSheet, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
 type Events = {
@@ -200,7 +200,7 @@ type Events = {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: BottomSheet
+    [name]: SBottomSheet
   }
   namespace React {
     namespace JSX {

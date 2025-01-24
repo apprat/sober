@@ -128,13 +128,16 @@ const template = /*html*/`
 <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 `
 
-export class Button extends useElement({ style, template, props, syncProps: true, }) { }
+class SButton extends useElement({ style, template, props, syncProps: true, }) { }
 
-Button.define(name)
+SButton.define(name)
+
+export { SButton as Button }
+
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Button
+    [name]: SButton
   }
   namespace React {
     namespace JSX {

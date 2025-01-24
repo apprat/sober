@@ -95,7 +95,7 @@ const template = /*html*/`
 </div>
 `
 
-export class CircularProgress extends useElement({
+class SCircularProgress extends useElement({
   style, template, props, syncProps: ['indeterminate', 'animated'],
   setup(shadowRoot) {
     const track = shadowRoot.querySelector('.known .track') as SVGCircleElement
@@ -117,11 +117,13 @@ export class CircularProgress extends useElement({
   }
 }) { }
 
-CircularProgress.define(name)
+SCircularProgress.define(name)
+
+export { SCircularProgress as CircularProgress }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: CircularProgress
+    [name]: SCircularProgress
   }
   namespace React {
     namespace JSX {

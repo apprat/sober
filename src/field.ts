@@ -220,15 +220,17 @@ const template = /*html*/`
 </div>
 `
 
-export class Field extends useElement({
+class SField extends useElement({
   style, template, props, syncProps: true
 }) { }
 
-Field.define(name)
+SField.define(name)
+
+export { SField as Field }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Field
+    [name]: SField
   }
   namespace React {
     namespace JSX {

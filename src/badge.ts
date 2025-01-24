@@ -31,13 +31,15 @@ const style = /*css*/`
 const template = /*html*/`<slot></slot>`
 
 
-export class Badge extends useElement({ style, template, props }) { }
+class SBadge extends useElement({ style, template, props }) { }
 
-Badge.define(name)
+SBadge.define(name)
+
+export { SBadge as Badge }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Badge
+    [name]: SBadge
   }
   namespace React {
     namespace JSX {

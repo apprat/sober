@@ -88,15 +88,17 @@ const template = /*html*/`
 <slot name="end"></slot>
 `
 
-export class Appbar extends useElement({
+class SAppbar extends useElement({
   style, template, props
 }) { }
 
-Appbar.define(name)
+SAppbar.define(name)
+
+export { SAppbar as Appbar }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Appbar
+    [name]: SAppbar
   }
   namespace React {
     namespace JSX {

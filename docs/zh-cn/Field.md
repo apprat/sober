@@ -1,6 +1,6 @@
 # Field
 
-该组件是一个容器，没有事件和行为，它提供给其他组件使用，当然你也可以使用它来自定义布局。
+该组件是一个容器，没有事件和行为，它使用纯 CSS 实现提供给其他组件使用，当然你也可以使用它来自定义布局。
 
 ```html preview
 <s-field>
@@ -10,6 +10,16 @@
 
 <s-field focused="true">
   <div slot="label">请选择内容</div>
+  <div> btn </div>
+</s-field>
+```
+
+#### 自定义样式
+
+```html preview
+<s-field focused="true" style="--field-padding: 24px; --field-border-radius: 24px">
+  <div slot="label">请选择内容</div>
+  <div style="height: 48px" onclick="this.parentElement.fixed=!this.parentElement.fixed;this.parentElement.focused=!this.parentElement.focused"> btn </div>
 </s-field>
 ```
 

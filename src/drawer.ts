@@ -111,7 +111,7 @@ const template = /*html*/`
 
 type SlotName = 'start' | 'end'
 
-export class Drawer extends useElement({
+class SDrawer extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
@@ -158,11 +158,13 @@ export class Drawer extends useElement({
   }
 }) { }
 
-Drawer.define(name)
+SDrawer.define(name)
+
+export { SDrawer as Drawer }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Drawer
+    [name]: SDrawer
   }
   namespace React {
     namespace JSX {

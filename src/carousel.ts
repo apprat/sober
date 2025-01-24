@@ -65,13 +65,13 @@ const template = /*html*/`
 <div class="track"></div>
 `
 
-export class Carousel extends useElement({
+class SCarousel extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const track = shadowRoot.querySelector('.track') as HTMLDivElement
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
-    const select = new Select({ context: this, class: CarouselItem, slot })
+    const select = new Select({ context: this, class: SCarouselItem, slot })
     let timer = -1
     select.onUpdate = () => {
       track.childNodes.forEach((item) => (item as Element).classList.remove('checked'))
@@ -111,7 +111,7 @@ export class Carousel extends useElement({
       const width = container.offsetWidth
       const prev = select.list[select.selectedIndex - 1]
       const next = select.list[select.selectedIndex + 1]
-      const state = { now: 0, left: 0, next: undefined as undefined | CarouselItem }
+      const state = { now: 0, left: 0, next: undefined as undefined | SCarouselItem }
       const move = (event: PointerEvent | TouchEvent) => {
         let eventInfo: { pageX: number, pageY: number } = event instanceof TouchEvent ? event.touches[0] : event
         const x = eventInfo!.pageX - pageX
@@ -221,7 +221,7 @@ const itemStyle = /*css*/`
 
 const itemTemplate = /*html*/`<slot></slot>`
 
-export class CarouselItem extends useElement({
+class SCarouselItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
@@ -230,7 +230,7 @@ export class CarouselItem extends useElement({
     return {
       props: {
         selected: () => {
-          if (!(this.parentNode instanceof Carousel)) return
+          if (!(this.parentNode instanceof SCarousel)) return
           this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
         }
       }
@@ -238,13 +238,15 @@ export class CarouselItem extends useElement({
   }
 }) { }
 
-Carousel.define(name)
-CarouselItem.define(itemName)
+SCarousel.define(name)
+SCarouselItem.define(itemName)
+
+export { SCarousel as Carousel, SCarouselItem as CarouselItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Carousel
-    [itemName]: CarouselItem
+    [name]: SCarousel
+    [itemName]: SCarouselItem
   }
   namespace React {
     namespace JSX {

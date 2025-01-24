@@ -36,7 +36,7 @@ const template = /*html*/`
 <slot></slot>
 `
 
-export class Menu extends useElement({
+class SMenu extends useElement({
   style, template, props,
   setup() {
   }
@@ -144,7 +144,7 @@ const itemTemplate = /*html*/`
 </s-fold>
 `
 
-export class MenuItem extends useElement({
+class SMenuItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
@@ -167,13 +167,15 @@ export class MenuItem extends useElement({
   }
 }) { }
 
-Menu.define(name)
-MenuItem.define(itemName)
+SMenu.define(name)
+SMenuItem.define(itemName)
+
+export { SMenu as Menu, SMenuItem as MenuItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Menu
-    [itemName]: MenuItem
+    [name]: SMenu
+    [itemName]: SMenuItem
   }
   namespace React {
     namespace JSX {
@@ -204,3 +206,4 @@ declare module 'solid-js' {
     }
   }
 }
+

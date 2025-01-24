@@ -102,7 +102,7 @@ const template = /*html*/`
 <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 `
 
-export class Card extends useElement({
+class SCard extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
     const action = shadowRoot.querySelector('slot[name=action]') as HTMLElement
@@ -110,11 +110,13 @@ export class Card extends useElement({
   }
 }) { }
 
-Card.define(name)
+SCard.define(name)
+
+export { SCard as Card }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Card
+    [name]: SCard
   }
   namespace React {
     namespace JSX {

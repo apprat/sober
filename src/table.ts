@@ -54,7 +54,7 @@ const template = /*html*/`
 </div>
 `
 
-export class Table extends useElement({ style, template, props, }) { }
+class STable extends useElement({ style, template, props, }) { }
 
 const theadName = 's-thead'
 const theadProps = {
@@ -70,7 +70,7 @@ const theadStyle = /*css*/`
 
 const theadTemplate =/*html*/`<slot></slot>`
 
-export class Thead extends useElement({
+class SThead extends useElement({
   style: theadStyle,
   template: theadTemplate,
   props: theadProps
@@ -92,7 +92,7 @@ const tbodyStyle = /*css*/`
 
 const tbodyTemplate =/*html*/`<slot></slot>`
 
-export class Tbody extends useElement({
+class STbody extends useElement({
   style: tbodyStyle,
   template: tbodyTemplate,
   props: tbodyProps
@@ -111,7 +111,7 @@ const trStyle = /*css*/`
 
 const trTemplate =/*html*/`<slot></slot>`
 
-export class Tr extends useElement({
+class STr extends useElement({
   style: trStyle,
   template: trTemplate,
   props: trProps
@@ -132,7 +132,7 @@ const thStyle = /*css*/`
 
 const thTemplate =/*html*/`<slot></slot>`
 
-export class Th extends useElement({
+class STh extends useElement({
   style: thStyle,
   template: thTemplate,
   props: thProps
@@ -153,27 +153,36 @@ const tdStyle = /*css*/`
 
 const tdTemplate = /*html*/`<slot></slot>`
 
-export class Td extends useElement({
+class STd extends useElement({
   style: tdStyle,
   template: tdTemplate,
   props: tdProps
 }) { }
 
-Table.define(name)
-Thead.define(theadName)
-Tbody.define(tbodyName)
-Tr.define(trName)
-Th.define(thName)
-Td.define(tdName)
+STable.define(name)
+SThead.define(theadName)
+STbody.define(tbodyName)
+STr.define(trName)
+STh.define(thName)
+STd.define(tdName)
+
+export {
+  STable as Table,
+  SThead as Thead,
+  STbody as Tbody,
+  STr as Tr,
+  STh as Th,
+  STd as Td
+}
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Table
-    [theadName]: Thead
-    [tbodyName]: Tbody
-    [trName]: Tr
-    [thName]: Th
-    [tdName]: Td
+    [name]: STable
+    [theadName]: SThead
+    [tbodyName]: STbody
+    [trName]: STr
+    [thName]: STh
+    [tdName]: STd
   }
   namespace React {
     namespace JSX {

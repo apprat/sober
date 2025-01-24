@@ -208,7 +208,7 @@ const template = /*html*/`
 </div>
 `
 
-export class TextField extends useElement({
+class STextField extends useElement({
   style, template, props, syncProps: ['disabled', 'error', 'multiLine', 'countered'],
   setup(shadowRoot) {
     const field = shadowRoot.querySelector('.field') as Field
@@ -297,11 +297,13 @@ export class TextField extends useElement({
   }
 }) { }
 
-TextField.define(name)
+STextField.define(name)
+
+export { STextField as TextField }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: TextField
+    [name]: STextField
   }
   namespace React {
     namespace JSX {

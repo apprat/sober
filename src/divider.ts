@@ -28,13 +28,15 @@ const style = /*css*/`
 
 const template = /*html*/`<slot></slot>`
 
-export class Divider extends useElement({ style, template, props }) { }
+class SDivider extends useElement({ style, template, props }) { }
 
-Divider.define(name)
+SDivider.define(name)
+
+export { SDivider as Divider }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Divider
+    [name]: SDivider
   }
   namespace React {
     namespace JSX {

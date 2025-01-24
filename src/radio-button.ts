@@ -72,7 +72,7 @@ const template = /*html*/`
 <slot></slot>
 `
 
-export class RadioButton extends useElement({
+class SRadioButton extends useElement({
   style, template, props, syncProps: true,
   setup() {
     this.addEventListener('click', () => {
@@ -88,11 +88,13 @@ export class RadioButton extends useElement({
   }
 }) { }
 
-RadioButton.define(name)
+SRadioButton.define(name)
+
+export { SRadioButton as RadioButton }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: RadioButton
+    [name]: SRadioButton
   }
   namespace React {
     namespace JSX {

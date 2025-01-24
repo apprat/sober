@@ -32,7 +32,7 @@ const template = /*html*/`
 </div>
 `
 
-export class Fold extends useElement({
+class SFold extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('slot[name=trigger]')!
@@ -40,11 +40,13 @@ export class Fold extends useElement({
   }
 }) { }
 
-Fold.define(name)
+SFold.define(name)
+
+export { SFold as Fold }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Fold
+    [name]: SFold
   }
   namespace React {
     namespace JSX {

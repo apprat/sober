@@ -50,7 +50,7 @@ const style = /*css*/`
   opacity: .12;
 }
 .ripple {
-  color: color-mix(in srgb, var(--ripple-color) 24%, transparent);
+  color: color-mix(in srgb, var(--ripple-color) 16%, transparent);
   background: currentColor;
   border-radius: 50%;
   width: 100%;
@@ -70,7 +70,7 @@ const template = /*html*/`
 </div>
 `
 
-export class Ripple extends useElement({
+class SRipple extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
@@ -172,11 +172,13 @@ export class Ripple extends useElement({
   }
 }) { }
 
-Ripple.define(name)
+SRipple.define(name)
+
+export { SRipple as Ripple }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Ripple
+    [name]: SRipple
   }
   namespace React {
     namespace JSX {

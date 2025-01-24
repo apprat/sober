@@ -84,13 +84,15 @@ const template = /*html*/`
 </div>
 `
 
-export class IconButton extends useElement({ style, template, props, syncProps: true, }) { }
+class SIconButton extends useElement({ style, template, props, syncProps: true, }) { }
 
-IconButton.define(name)
+SIconButton.define(name)
+
+export { SIconButton as IconButton }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: IconButton
+    [name]: SIconButton
   }
   namespace React {
     namespace JSX {

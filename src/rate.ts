@@ -86,7 +86,7 @@ const template = /*html*/`
 />
 `
 
-export class Rate extends useElement({
+class SRate extends useElement({
   style, template, props, syncProps: ['readOnly'],
   setup(shadowRoot) {
     const indicator = shadowRoot.querySelector('.indicator') as HTMLDivElement
@@ -124,11 +124,13 @@ export class Rate extends useElement({
   }
 }) { }
 
-Rate.define(name)
+SRate.define(name)
+
+export { SRate as Rate }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Rate
+    [name]: SRate
   }
   namespace React {
     namespace JSX {

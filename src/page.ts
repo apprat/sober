@@ -122,7 +122,7 @@ const style = /*css*/`
 
 const template = /*html*/`<slot></slot>`
 
-export class Page extends useElement({
+class SPage extends useElement({
   style, template, props,
   setup() {
     const darker = matchMedia('(prefers-color-scheme: dark)')
@@ -184,11 +184,13 @@ export class Page extends useElement({
   }
 }) { }
 
-Page.define(name)
+SPage.define(name)
+
+export { SPage as Page }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Page
+    [name]: SPage
   }
   namespace React {
     namespace JSX {

@@ -136,11 +136,11 @@ const builder = (options: string | {
   root?: Element
   headline?: string
   text?: string
-  view?: HTMLElement | ((dialog: Dialog) => void)
+  view?: HTMLElement | ((dialog: SDialog) => void)
   actions?: { text: string, click?: (event: MouseEvent) => unknown }[],
 }) => {
   let root: Element = document.body
-  const dialog = new Dialog()
+  const dialog = new SDialog()
   const page = document.body.firstElementChild
   if (page && page.tagName === 'S-PAGE') root = page
   if (typeof options === 'string') {
@@ -183,7 +183,7 @@ const builder = (options: string | {
 type EventShowSource = 'TRIGGER'
 type EventCloseSource = 'SCRIM' | 'ACTION'
 
-class Dialog extends useElement({
+class SDialog extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
     const dialog = shadowRoot.querySelector('dialog') as HTMLDialogElement
@@ -226,9 +226,9 @@ class Dialog extends useElement({
   static readonly builder = builder
 }
 
-Dialog.define(name)
+SDialog.define(name)
 
-export { Dialog }
+export { SDialog as Dialog }
 
 interface EventMap {
   show: CustomEvent<{ source: EventShowSource }>
@@ -239,9 +239,9 @@ interface EventMap {
 
 type ElementEventMap = EventMap & HTMLElementEventMap
 
-interface Dialog {
-  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Dialog, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Dialog, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
+interface SDialog {
+  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SDialog, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SDialog, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
 type Events = {
@@ -250,7 +250,7 @@ type Events = {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Dialog
+    [name]: SDialog
   }
   namespace React {
     namespace JSX {

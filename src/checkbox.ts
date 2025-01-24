@@ -75,7 +75,7 @@ const template = /*html*/`
 <slot></slot>
 `
 
-export class Checkbox extends useElement({
+class SCheckbox extends useElement({
   style, template, props, syncProps: true,
   setup() {
     this.addEventListener('click', () => {
@@ -86,11 +86,13 @@ export class Checkbox extends useElement({
   }
 }) { }
 
-Checkbox.define(name)
+export { SCheckbox as Checkbox }
+
+SCheckbox.define(name)
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Checkbox
+    [name]: SCheckbox
   }
   namespace React {
     namespace JSX {

@@ -48,7 +48,7 @@ const template = /*html*/`
 </s-popup>
 `
 
-export class PopupMenu extends useElement({
+class SPopupMenu extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector('.popup') as Popup
@@ -63,7 +63,7 @@ export class PopupMenu extends useElement({
     })
     return {
       mounted: () => {
-        if (this.parentNode instanceof PopupMenu) popup.setAttribute('align', 'right')
+        if (this.parentNode instanceof SPopupMenu) popup.setAttribute('align', 'right')
       },
       expose: {
         show: popup.show.bind(popup),
@@ -125,7 +125,7 @@ const itemTemplate = /*html*/`
 <s-ripple attached="true"></s-ripple>
 `
 
-export class PopupMenuItem extends useElement({
+class SPopupMenuItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
@@ -134,13 +134,15 @@ export class PopupMenuItem extends useElement({
   }
 }) { }
 
-PopupMenu.define(name)
-PopupMenuItem.define(itemName)
+SPopupMenu.define(name)
+SPopupMenuItem.define(itemName)
+
+export { SPopupMenu as PopupMenu, SPopupMenuItem as PopupMenuItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: PopupMenu
-    [itemName]: PopupMenuItem
+    [name]: SPopupMenu
+    [itemName]: SPopupMenuItem
   }
   namespace React {
     namespace JSX {

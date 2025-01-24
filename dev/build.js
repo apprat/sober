@@ -32,7 +32,7 @@ esbuild.build({
   platform: 'browser',
   format: 'esm',
   allowOverwrite: true,
-  //minify: true,
+  minify: true,
   sourcemap: true,
   plugins: [replacePlugin],
 }).then(() => {

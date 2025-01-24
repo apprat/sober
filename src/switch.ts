@@ -111,7 +111,7 @@ const template = /*html*/`
 </s-ripple>
 `
 
-export class Switch extends useElement({
+class SSwitch extends useElement({
   style, template, props, syncProps: true,
   setup() {
     this.addEventListener('click', () => {
@@ -121,11 +121,13 @@ export class Switch extends useElement({
   }
 }) { }
 
-Switch.define(name)
+SSwitch.define(name)
+
+export { SSwitch as Switch }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Switch
+    [name]: SSwitch
   }
   namespace React {
     namespace JSX {

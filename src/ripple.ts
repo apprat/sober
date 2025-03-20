@@ -1,5 +1,6 @@
 import { useElement } from './core/element.js'
 import { mediaQueryList } from './core/utils/mediaQuery.js'
+import { Theme } from './core/theme.js'
 
 const name = 's-ripple'
 const props = {
@@ -13,7 +14,6 @@ const style = /*css*/`
   vertical-align: middle;
   position: relative;
   cursor: pointer;
-  --ripple-color: currentColor;
 }
 :host([attached=true]){
   position: absolute;
@@ -42,15 +42,15 @@ const style = /*css*/`
   left: 0;
   top: 0;
   border-radius: inherit;
-  background: var(--ripple-color);
+  background: var(--ripple-color, currentColor);
   opacity: 0;
-  transition: opacity .1s ease-out;
+  transition: opacity var(--s-motion-duration-short4, ${Theme.motionDurationShort2}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
 }
 .container.hover::before{
-  opacity: .12;
+  opacity: var(--ripple-hover-opacity, .12);
 }
 .ripple {
-  color: color-mix(in srgb, var(--ripple-color) 16%, transparent);
+  color: color-mix(in srgb, var(--ripple-color, currentColor) calc(100% * var(--ripple-opacity, .18)), transparent);
   background: currentColor;
   border-radius: 50%;
   width: 100%;
@@ -75,9 +75,20 @@ class SRipple extends useElement({
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
     const ripple = shadowRoot.querySelector('.ripple') as HTMLDivElement
-    const hover = () => !mediaQueryList.pointerCoarse.matches && container.classList.add('hover')
-    const unHover = () => !mediaQueryList.pointerCoarse.matches && container.classList.remove('hover')
-    const state = { parentNode: null as null | HTMLElement, rippled: false }
+    const computedStyle = getComputedStyle(this)
+    const getAnimateOptions = () => {
+      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard')
+      const duration = computedStyle.getPropertyValue('--s-motion-duration-long4')
+      const shortDuration = computedStyle.getPropertyValue('--s-motion-duration-short4')
+      return {
+        easing: easing === '' ? Theme.motionEasingStandard : easing,
+        duration: Number((duration === '' ? Theme.motionDurationLong4 : duration).slice(0, -2)),
+        shortDuration: Number((shortDuration === '' ? Theme.motionDurationShort4 : shortDuration).slice(0, -2)),
+      }
+    }
+    const hover = () => !mediaQueryList.anyPointerCoarse.matches && container.classList.add('hover')
+    const unHover = () => !mediaQueryList.anyPointerCoarse.matches && container.classList.remove('hover')
+    const state = { parentNode: null as null | HTMLElement, pressed: false }
     const run = (event: PointerEvent) => {
       const { offsetWidth, offsetHeight } = this
       let size = Math.sqrt(offsetWidth * offsetWidth + offsetHeight * offsetHeight)
@@ -96,22 +107,24 @@ class SRipple extends useElement({
       }
       let newRipple = ripple
       let callback = () => { }
-      if (state.rippled) {
+      if (state.pressed) {
         newRipple = ripple.cloneNode() as HTMLDivElement
         container.appendChild(newRipple)
         callback = () => newRipple.remove()
       } else {
-        state.rippled = true
-        callback = () => state.rippled = false
+        state.pressed = true
+        callback = () => state.pressed = false
       }
       const parent = (state.parentNode ?? this)
-      parent.setAttribute('rippled', '')
+      const animateOptions = getAnimateOptions()
+      parent.setAttribute('pressed', '')
       const keyframes = { transform: 'translate(-50%, -50%) scale(1)', boxShadow: '0 0 0 16px currentColor', opacity: 1, width: `${size}px`, height: `${size}px`, left: `${coordinate.x}`, top: `${coordinate.y}` }
-      const animation = newRipple.animate([{ ...keyframes, transform: 'translate(-50%, -50%) scale(0)' }, keyframes], { duration: 800, fill: 'forwards', easing: 'cubic-bezier(.2, .9, .1, .9)' })
+      const animation = newRipple.animate([{ ...keyframes, transform: 'translate(-50%, -50%) scale(0)' }, keyframes], { duration: animateOptions.duration, fill: 'forwards', easing: animateOptions.easing })
       const remove = () => {
-        parent.removeAttribute('rippled')
+        parent.removeAttribute('pressed')
         const time = Number(animation.currentTime)
-        newRipple.animate([{ opacity: 1 }, { opacity: 0 }], { duration: time > 600 ? 200 : 800 - time, fill: 'forwards' }).finished.then(callback)
+        const diff = animateOptions.duration - animateOptions.shortDuration
+        newRipple.animate([{ opacity: 1 }, { opacity: 0 }], { duration: time > diff ? animateOptions.shortDuration : animateOptions.duration - time, fill: 'forwards' }).finished.then(callback)
       }
       return remove
     }
@@ -138,14 +151,14 @@ class SRipple extends useElement({
       }
     }
     const add = (target: HTMLElement) => {
-      target.addEventListener('mouseover', hover)
+      target.addEventListener('mouseenter', hover)
       target.addEventListener('mouseleave', unHover)
       target.addEventListener('wheel', unHover, { passive: true })
       target.addEventListener('pointerdown', down)
     }
     const remove = () => {
       if (!state.parentNode) return
-      state.parentNode.removeEventListener('mouseover', hover)
+      state.parentNode.removeEventListener('mouseenter', hover)
       state.parentNode.removeEventListener('mouseleave', unHover)
       state.parentNode.removeEventListener('wheel', unHover)
       state.parentNode.removeEventListener('pointerdown', down)
@@ -153,20 +166,18 @@ class SRipple extends useElement({
     }
     add(this)
     return {
-      mounted: () => {
+      onMounted: () => {
         if (this.attached && this.parentNode) {
           state.parentNode = (this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode) as HTMLElement
           add(state.parentNode)
         }
       },
-      unmounted: () => this.attached && remove(),
-      props: {
-        attached: (value) => {
-          if (!this.isConnected) return
-          if (!value) return remove()
-          const target = (this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode) as HTMLElement
-          add(target)
-        }
+      onUnmounted: () => this.attached && remove(),
+      attached: (value) => {
+        if (!this.isConnected) return
+        if (!value) return remove()
+        const target = (this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode) as HTMLElement
+        add(target)
       }
     }
   }

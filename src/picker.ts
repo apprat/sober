@@ -90,7 +90,7 @@ const template = /*html*/`
 </s-popup>
 `
 
-class SPicker extends useElement({
+class Picker extends useElement({
   style, template, props, syncProps: ['disabled'],
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector('.popup') as Popup
@@ -104,8 +104,14 @@ class SPicker extends useElement({
     popup.addEventListener('show', () => {
       field.focused = true
       field.fixed = true
+      if (!select.select) {
+        view.textContent = this.label
+        view.style.opacity = '0'
+      }
       container.style.minWidth = `${this.offsetWidth}px`
-      select.select && container.scrollTo({ top: (select.select.offsetTop - container.offsetTop) - (container.offsetHeight / 2) + (select.select.offsetHeight / 2) })
+      if (select.select) {
+        container.scrollTo({ top: (select.select.offsetTop - container.offsetTop) - (container.offsetHeight / 2 - select.select.offsetHeight / 2) })
+      }
     })
     //close
     popup.addEventListener('close', () => {
@@ -120,9 +126,10 @@ class SPicker extends useElement({
         return
       }
       field.fixed = true
+      view.style.removeProperty('opacity')
       view.textContent = select.select.textContent
     }
-    select.onSelect = popup.close
+    select.onSelect = () => popup.close()
     return {
       expose: {
         get value() {
@@ -134,14 +141,12 @@ class SPicker extends useElement({
         get selectedIndex() {
           return select.selectedIndex
         },
-        show: popup.show.bind(popup),
-        toggle: popup.toggle.bind(popup),
-        close: popup.close.bind(popup)
+        show: popup.show,
+        toggle: popup.toggle,
+        close: popup.close
       },
-      props: {
-        label: (value) => label.textContent = value,
-        value: (value) => select.value = value,
-      }
+      label: (value) => label.textContent = value,
+      value: (value) => select.value = value,
     }
   }
 }) { }
@@ -216,28 +221,26 @@ class SPickerItem extends useElement({
   setup() {
     this.addEventListener('click', () => {
       if (this.selected) return
-      if (!(this.parentNode instanceof SPicker)) return
+      if (!(this.parentNode instanceof Picker)) return
       this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
-      props: {
-        selected: () => {
-          if (!(this.parentNode instanceof SPicker)) return
-          this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
-        }
+      selected: () => {
+        if (!(this.parentNode instanceof Picker)) return
+        this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
       }
     }
   }
 }) { }
 
-SPicker.define(name)
+Picker.define(name)
 SPickerItem.define(itemName)
 
-export { SPicker as Picker, SPickerItem as PickerItem }
+export { Picker, SPickerItem as PickerItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SPicker
+    [name]: Picker
     [itemName]: SPickerItem
   }
   namespace React {

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+</head>
+
+<body>
+  <s-page class="gap">
+    <s-avatar> US </s-avatar>
+    <s-avatar src="https://mui.com/static/images/avatar/2.jpg"></s-avatar>
+    <s-avatar>
+      <s-icon name="home"></s-icon>
+    </s-avatar>
+    <s-avatar src="https://mui.com/static/images/avatar/2.jpg">
+      <s-badge slot="badge"></s-badge>
+    </s-avatar>
+    <s-avatar src="https://mui.com/static/images/avatar/2.jpg">
+      <s-badge slot="badge">9</s-badge>
+    </s-avatar>
+    <s-avatar src="https://mui.com/static/images/avatar/2.jpg" onerror="console.log('错误')">
+      NS
+      <s-badge slot="badge">99</s-badge>
+    </s-avatar>
+  </s-page>
+</body>
+
+</html>

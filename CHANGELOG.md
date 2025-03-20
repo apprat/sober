@@ -1,8 +1,18 @@
 # 更新日志
 
+#### 1.1.0 (2025-02-08)
+
+- 更新：新增对 Preact 的 JSX 类型支持，完善了 Vue 的模版和 JSX 类型支持，所有组件的动画速度和运动曲线进行了优化，设备在同时支持鼠标和触屏时进行了优化。
+- 新增：Alert、Avatar、Date、DatePicker，Pagination 组件。
+- 新增：Switch 新增 icon 插槽，默认图标被移除。
+- 更新：SegmentedButton 组件 UI 更新，新增属性 `mode`。
+- 新增：BottomSheet 组件新增手势滑动，新增属性 `disabledGesture` 属性。
+- 新增：Checkbox 新增 **unckecked**、**checked**、**indeterminate** 插槽，用于自定义切换图标。
+- 更新：Chip 外观更新，新增属性 `checked`，`disabled`，type 属性值 elevated, filled-tonal 已弃用。
+
 #### 1.0.6 (2025-01-20)
 
-- 添加：对 Solidjs 的 JSX Typescript 类型支持。
+- 添加：对 Solidjs 的 JSX 类型支持。
 - 新增：Field 新增 `--field-padding-top`、`--field-padding-bottom`、`--field-padding-left`、`--field-padding-right` 私有CSS变量。
 - 新增：TextField 组件新增 `--text-field-padding-top`、`--text-field-padding-bottom`、`--text-field-padding-left`、`--text-field-padding-right` 私有CSS变量。
 - 修复: [#33](https://github.com/apprat/sober/issues/33)

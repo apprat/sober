@@ -1,8 +1,10 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
+type Props = {}
+
 const name = 's-table'
-const props = {
+const props: Props = {
 }
 
 const style = /*css*/`
@@ -11,24 +13,14 @@ const style = /*css*/`
   font-size: .875rem;
   overflow: auto;
   border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
   border-radius: 4px;
   white-space: nowrap;
-}
-.container{
-  overflow: hidden;
-  min-width: fit-content;
 }
 slot{
   display: table;
   border-collapse: collapse;
-  border: solid 1px transparent;
   box-sizing: border-box;
-  position: relative;
-  left: -1px;
-  top: -1px;
-  margin-bottom: -2px;
-  min-width: calc(100% + 2px);
+  min-width: 100%;
 }
 @media (pointer: fine){
   :host::-webkit-scrollbar{
@@ -49,35 +41,35 @@ slot{
 `
 
 const template = /*html*/`
-<div class="container" part="container">
-  <slot></slot>
-</div>
+<slot></slot>
 `
 
-class STable extends useElement({ style, template, props, }) { }
+class Table extends useElement({ style, template, props }) { }
 
 const theadName = 's-thead'
-const theadProps = {
+const theadProps: Props = {
 }
 
 const theadStyle = /*css*/`
 :host{
   display: table-header-group;
   font-weight: 600;
+  border-bottom: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
+  background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
 `
 
 const theadTemplate =/*html*/`<slot></slot>`
 
-class SThead extends useElement({
+class Thead extends useElement({
   style: theadStyle,
   template: theadTemplate,
   props: theadProps
 }) { }
 
 const tbodyName = 's-tbody'
-const tbodyProps = {
+const tbodyProps: Props = {
 }
 
 const tbodyStyle = /*css*/`
@@ -85,14 +77,14 @@ const tbodyStyle = /*css*/`
   display: table-row-group;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
-::slotted(s-tr:nth-child(odd)){
-  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
+::slotted(s-tr:not(:first-child)){
+  border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
 }
 `
 
 const tbodyTemplate =/*html*/`<slot></slot>`
 
-class STbody extends useElement({
+class Tbody extends useElement({
   style: tbodyStyle,
   template: tbodyTemplate,
   props: tbodyProps
@@ -100,7 +92,7 @@ class STbody extends useElement({
 
 
 const trName = 's-tr'
-const trProps = {
+const trProps: Props = {
 }
 
 const trStyle = /*css*/`
@@ -111,35 +103,34 @@ const trStyle = /*css*/`
 
 const trTemplate =/*html*/`<slot></slot>`
 
-class STr extends useElement({
+class Tr extends useElement({
   style: trStyle,
   template: trTemplate,
   props: trProps
 }) { }
 
 const thName = 's-th'
-const thProps = {
+const thProps: Props = {
 }
 
 const thStyle = /*css*/`
 :host{
   display: table-cell;
-  padding: 16px;
+  padding: 12px 16px;
   text-transform: capitalize;
-  border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
 }
 `
 
 const thTemplate =/*html*/`<slot></slot>`
 
-class STh extends useElement({
+class Th extends useElement({
   style: thStyle,
   template: thTemplate,
   props: thProps
 }) { }
 
 const tdName = 's-td'
-const tdProps = {
+const tdProps: Props = {
 }
 
 const tdStyle = /*css*/`
@@ -147,42 +138,34 @@ const tdStyle = /*css*/`
   display: table-cell;
   user-select: text;
   padding: 12px 16px;
-  border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
 }
 `
 
 const tdTemplate = /*html*/`<slot></slot>`
 
-class STd extends useElement({
+class Td extends useElement({
   style: tdStyle,
   template: tdTemplate,
   props: tdProps
 }) { }
 
-STable.define(name)
-SThead.define(theadName)
-STbody.define(tbodyName)
-STr.define(trName)
-STh.define(thName)
-STd.define(tdName)
+Table.define(name)
+Thead.define(theadName)
+Tbody.define(tbodyName)
+Tr.define(trName)
+Th.define(thName)
+Td.define(tdName)
 
-export {
-  STable as Table,
-  SThead as Thead,
-  STbody as Tbody,
-  STr as Tr,
-  STh as Th,
-  STd as Td
-}
+export { Table, Thead, Tbody, Tr, Th, Td }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: STable
-    [theadName]: SThead
-    [tbodyName]: STbody
-    [trName]: STr
-    [thName]: STh
-    [tdName]: STd
+    [name]: Table
+    [theadName]: Thead
+    [tbodyName]: Tbody
+    [trName]: Tr
+    [thName]: Th
+    [tdName]: Td
   }
   namespace React {
     namespace JSX {

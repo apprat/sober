@@ -69,9 +69,7 @@ class SNavigation extends useElement({
           return select.selectedIndex
         }
       },
-      props: {
-        value: (value) => select.value = value
-      }
+      value: (value) => select.value = value
     }
   }
 }) { }
@@ -176,11 +174,9 @@ class SNavigationItem extends useElement({
       this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
-      props: {
-        selected: () => {
-          if (!(this.parentNode instanceof SNavigation)) return
-          this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
-        }
+      selected: () => {
+        if (!(this.parentNode instanceof SNavigation)) return
+        this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
       }
     }
   }

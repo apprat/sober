@@ -2,8 +2,13 @@ import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
+type Props = {
+  focused: boolean,
+  fixed: boolean
+}
+
 const name = 's-field'
-const props = {
+const props: Props = {
   focused: false,
   fixed: true
 }
@@ -156,7 +161,7 @@ const style = /*css*/`
   align-items: center;
   transform: translateY(-50%);
   color: var(--field-border-color);
-  transition: transform .2s ease-out;
+  transition: transform .2s ease-out, font-size .2s ease-out;
   box-sizing: border-box;
   position: relative;
 }
@@ -220,23 +225,23 @@ const template = /*html*/`
 </div>
 `
 
-class SField extends useElement({
+class Field extends useElement({
   style, template, props, syncProps: true
 }) { }
 
-SField.define(name)
+Field.define(name)
 
-export { SField as Field }
+export { Field }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SField
+    [name]: Field
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -245,7 +250,7 @@ declare global {
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof props
+    [name]: Props
   }
 }
 
@@ -254,7 +259,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

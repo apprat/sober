@@ -58,3 +58,12 @@
 | --s-color-primary           | Logo 颜色     |
 | --s-color-on-surface        | 标题颜色      |
 | --s-color-surface           | 搜索框背景颜色 |
+
+---
+
+## 原型
+
+```ts
+export class Appbar extends HTMLElement implements Props {
+} 
+```

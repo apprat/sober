@@ -23,6 +23,19 @@ const showed = ref(false)
 </script>
 ```
 
+#### 滚动行为
+
+该组件支持手势关闭，但是如果内部存在竖向的 ScrollView 时，子元素的滚动和滑动关闭会引起冲突，你需要在滚动的元素上在监听 `scroll` 事件，并调用该组件的 `scrollingBehavior(event)` 方法来处理冲突。
+
+```html preview
+<s-bottom-sheet>
+  <s-button slot="trigger"> Bottom Sheet </s-button>
+  <s-scroll-view onscroll="this.parentElement.scrollingBehavior(event)">
+    问人生、头白京国，算来何事消得。不如罨画清溪上，蓑笠扁舟一只。人不识，且笑煮、鲈鱼趁著莼丝碧。无端酸鼻，向岐路消魂，征轮驿骑，断雁西风急。 英雄辈，事业东西南北。临风因甚泣。酬知有愿频挥手，零雨凄其此日。休太息，须信道、诸公衮衮皆虚掷。年来踪迹。有多少雄心，几翻恶梦，泪点霜华织。
+  </s-scroll-view>
+</s-bottom-sheet>
+```
+
 ---
 
 ## 属性

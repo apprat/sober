@@ -20,6 +20,12 @@
 <s-button type="text" disabled="true"> button </s-button>
 ```
 
+设置样式 `width: stretch` 来占满横向空间。
+
+```html preview
+<s-button style="width: stretch"> button </s-button>
+```
+
 使用 `start` 和 `end` 插槽放置其他组件。
 
 ```html preview

@@ -11,6 +11,7 @@
 
 <body>
   <s-page class="gap">
+    <s-button> buttonsssssssssssssssssssssssssssssssssss </s-button>
     <s-button> button </s-button>
     <s-button type="elevated"> button </s-button>
     <s-button type="filled-tonal"> button </s-button>
@@ -24,6 +25,31 @@
     <s-button type="filled-tonal" disabled="true"> button </s-button>
     <s-button type="outlined" disabled="true"> button </s-button>
     <s-button type="text" disabled="true"> button </s-button>
+
+    <hr>
+
+    <s-button>
+      <s-icon slot="start" name="home"></s-icon>
+      button
+    </s-button>
+    <s-button type="elevated">
+      button
+      <svg slot="end" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path>
+      </svg>
+    </s-button>
+    <s-button type="filled-tonal">
+      <s-circular-progress slot="start" indeterminate="true"></s-circular-progress>
+      button
+    </s-button>
+    <s-button type="outlined"> button </s-button>
+    <s-button type="text">
+      <s-icon slot="start" name="home"></s-icon>
+      button
+      <svg slot="end" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path>
+      </svg>
+    </s-button>
   </s-page>
 </body>
 

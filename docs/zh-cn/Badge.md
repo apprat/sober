@@ -15,3 +15,12 @@
 | ------------------- | ------- |
 | --s-color-error     | 背景颜色 |
 | ---s-color-on-error | 文本颜色 |
+
+---
+
+## 原型
+
+```ts
+export class Badge extends HTMLElement implements Props {
+} 
+```

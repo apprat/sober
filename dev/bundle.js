@@ -1,3 +1,4 @@
 import * as sober from '../dist/main.js'
 
-globalThis.sober = sober
+if (!globalThis.sober) globalThis.sober = {}
+globalThis.sober = { ...globalThis.sober, ...sober }

@@ -1,9 +1,14 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
+type Props = {
+  name: keyof typeof svgData,
+  src: string
+}
+
 const name = 's-icon'
-const props = {
-  name: 'none' as keyof typeof svgData,
+const props: Props = {
+  name: 'none',
   src: ''
 }
 
@@ -60,57 +65,62 @@ const svgData = {
 
 const template = /*html*/`<slot></slot>`
 
-class SIcon extends useElement({
+class Icon extends useElement({
   style, template, props, syncProps: ['name'],
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
     const img = document.createElement('img')
     const getSVG = (d = svgData.none, transform = '') => `<svg viewBox="0 -960 960 960"><path d="${d}" transform="${transform}"></path></svg>`
     return {
-      props: {
-        name: (value) => {
-          const data = svgData[value]
-          slot.innerHTML = typeof data === 'string' ? getSVG(data) : getSVG(svgData[data.name], `rotate(${data.angle} 480 -480)`)
-        },
-        src: async (value) => {
-          try {
-            const res = await fetch(value)
-            const mimeType = res.headers.get('content-type')
-            if (mimeType === 'image/svg+xml') {
-              slot.innerHTML = ''
-              const svg = await res.text()
-              const temp = document.createElement('template')
-              temp.innerHTML = svg
-              const el = temp.content.childNodes[0]
-              if (!(el instanceof SVGElement)) throw new Error('Invalid SVG')
-              slot.appendChild(el)
-            } else {
-              img.src = URL.createObjectURL(await res.blob())
-              slot.appendChild(img)
-            }
+      name: () => {
+        const data = svgData[this.name]
+        if (typeof data === 'string') return slot.innerHTML = getSVG(data)
+        const n = data.name as keyof typeof svgData
+        if (typeof svgData[n] === 'string') slot.innerHTML = getSVG(svgData[n], `rotate(${data.angle} 480 -480)`)
+      },
+      src: async () => {
+        try {
+          const url = new URL(this.src, location.href)
+          if (url.pathname.endsWith('.svg')) {
+            const res = await fetch(url.href)
+            const svg = await res.text()
+            const temp = document.createElement('template')
+            temp.innerHTML = svg
+            const el = temp.content.childNodes[0]
+            if (!(el instanceof SVGElement)) throw new Error('Invalid SVG')
+            slot.innerHTML = ''
+            slot.appendChild(el)
             this.dispatchEvent(new Event('load'))
-          } catch (error) {
-            this.dispatchEvent(new Event('error'))
+          } else {
+            img.src = url.href
+            img.onload = () => {
+              slot.innerHTML = ''
+              slot.appendChild(img)
+              this.dispatchEvent(new Event('load'))
+            }
+            img.onerror = () => this.dispatchEvent(new ErrorEvent('error'))
           }
+        } catch (error) {
+          this.dispatchEvent(new ErrorEvent('error'))
         }
       }
     }
   }
 }) { }
 
-SIcon.define(name)
+Icon.define(name)
 
-export { SIcon as Icon }
+export { Icon }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SIcon
+    [name]: Icon
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -119,7 +129,7 @@ declare global {
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof props
+    [name]: Props
   }
 }
 
@@ -128,7 +138,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

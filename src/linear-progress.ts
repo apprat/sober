@@ -106,10 +106,8 @@ class SLinearProgress extends useElement({
       indicator.style.transform = `translateX(${percentage - 100}%)`
     }
     return {
-      props: {
-        max: render,
-        value: render
-      }
+      max: render,
+      value: render
     }
   }
 }) { }

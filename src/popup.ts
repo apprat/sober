@@ -1,9 +1,13 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
+type Props = {
+  align: 'top' | 'bottom' | 'left' | 'right'
+}
+
 const name = 's-popup'
-const props = {
-  align: 'bottom' as 'top' | 'bottom' | 'left' | 'right'
+const props: Props = {
+  align: 'bottom'
 }
 
 const style = /*css*/`
@@ -65,17 +69,17 @@ const template = /*html*/`
 
 type ShowOptions = { x: number, y: number, origin?: string }
 
-class SPopup extends useElement({
+class Popup extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const dialog = shadowRoot.querySelector('dialog') as HTMLDialogElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const animateOptions = { duration: 200, easing: 'ease-out' } as const
+    const animateOptions = { duration: 300, easing: 'cubic-bezier(0.2, 0, 0, 1)' } as const
     const show = (option?: HTMLElement | ShowOptions) => {
       if (!this.isConnected || dialog.open) return
-      if (!this.dispatchEvent(new Event('show', { cancelable: true }))) return
       const position = { top: 0, left: 0, origin: [] as string[] }
       dialog.showModal()
+      if (!this.dispatchEvent(new Event('show', { cancelable: true }))) return dialog.close()
       const cWidth = container.offsetWidth
       const cHeight = container.offsetHeight
       if (!option || option instanceof HTMLElement) {
@@ -149,12 +153,14 @@ class SPopup extends useElement({
       container.style.top = `${Math.max(position.top, 0)}px`
       container.style.left = `${Math.max(position.left, 0)}px`
       const animation = container.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], animateOptions)
+      this.setAttribute('showed', '')
       animation.finished.then(() => this.dispatchEvent(new Event('showed')))
     }
     const close = () => {
       if (!this.isConnected || !dialog.open) return
       if (!this.dispatchEvent(new Event('close', { cancelable: true }))) return
       const animation = container.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animateOptions)
+      this.removeAttribute('showed')
       animation.finished.then(() => {
         dialog.close()
         this.dispatchEvent(new Event('closed'))
@@ -165,42 +171,42 @@ class SPopup extends useElement({
     shadowRoot.querySelector('.scrim')!.addEventListener('pointerdown', close)
     return {
       expose: { show, toggle, close },
-      mounted: () => addEventListener('resize', close),
-      unmounted: () => removeEventListener('resize', close)
+      onMounted: () => addEventListener('resize', close),
+      onUnmounted: () => removeEventListener('resize', close)
     }
   }
 }) { }
 
-SPopup.define(name)
+Popup.define(name)
 
-export { SPopup as Popup }
+export { Popup }
 
-interface EventMap {
-  show: Event
-  showed: Event
-  closed: Event
+interface Events {
+  Show: Event
+  Showed: Event
+  Closed: Event
 }
 
-type ElementEventMap = EventMap & HTMLElementEventMap
+type EventMaps = Events & HTMLElementEventMap
 
-interface SPopup {
-  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SPopup, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SPopup, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
+interface Popup {
+  addEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Popup, ev: EventMaps[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Popup, ev: EventMaps[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
-type Events = {
-  [K in keyof EventMap as `on${K}`]?: (ev: EventMap[K]) => void
+type JSXEvents<L extends boolean = false> = {
+  [K in keyof EventMaps as `on${L extends false ? K : Lowercase<K>}`]?: (ev: EventMaps[K]) => void
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SPopup
+    [name]: Popup
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props> & Events
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props> & Events<true>
       }
     }
   }
@@ -208,8 +214,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props> & JSXEvents
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props> & JSXEvents
+    }
   }
 }
 
@@ -218,7 +238,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props> & Events
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
     }
   }
 }

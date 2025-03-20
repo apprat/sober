@@ -9,6 +9,17 @@
 </s-snackbar>
 ```
 
+#### 动态调用
+
+大多数时候，你更应该使用动态调用的方式来触发提示框。
+
+```ts
+import { Snackbar } from 'sober'
+
+Snackbar.builder('hello world')
+```
+
+
 使用插槽。
 
 ```html preview
@@ -20,14 +31,27 @@
 </s-snackbar>
 ```
 
-错误框。
+使用 `type` 设置提示框类型。
 
 ```html preview
-<s-snackbar type="error">
-  <s-button slot="trigger" type="filled-tonal"> 错误 </s-button>
-  Message
+<s-snackbar type="info"> 
+  <s-button slot="trigger"> info </s-button>
+  Message 
+</s-snackbar>
+<s-snackbar type="success"> 
+  <s-button slot="trigger"> success </s-button>
+  Message 
+</s-snackbar>
+<s-snackbar type="warning"> 
+  <s-button slot="trigger"> warning </s-button>
+  Message 
+</s-snackbar>
+<s-snackbar type="error"> 
+  <s-button slot="trigger"> error </s-button>
+  Message 
 </s-snackbar>
 ```
+
 
 ---
 

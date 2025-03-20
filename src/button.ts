@@ -2,10 +2,15 @@ import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
+type Props = {
+  disabled: boolean
+  type: 'filled' | 'elevated' | 'filled-tonal' | 'outlined' | 'text'
+}
+
 const name = 's-button'
-const props = {
+const props: Props = {
   disabled: false,
-  type: 'filled' as 'filled' | 'elevated' | 'filled-tonal' | 'outlined' | 'text'
+  type: 'filled'
 }
 
 const style = /*css*/`
@@ -23,11 +28,10 @@ const style = /*css*/`
   cursor: pointer;
   font-size: .875rem;
   font-weight: 500;
-  flex-shrink: 0;
-  white-space: nowrap;
+  max-width: 100%;
   background: var(--s-color-primary, ${Theme.colorPrimary});
   color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
-  transition: box-shadow .1s ease-out;
+  transition: box-shadow var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
   overflow: hidden;
 }
 :host([disabled=true]){
@@ -36,7 +40,7 @@ const style = /*css*/`
   color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent) !important;
 }
 :host([type=elevated]){
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   color: var(--s-color-primary, ${Theme.colorPrimary});
   box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
@@ -64,86 +68,86 @@ const style = /*css*/`
 :host([type=text][disabled=true]){
   background: none !important;
 }
-.ripple{
-  border-radius: 0;
-}
 ::slotted(*){
+  flex-shrink: 0;
+}
+::slotted(:is(svg, s-icon, s-circular-progress)){
   fill: currentColor;
   color: currentColor;
   width: 18px;
   height: 18px;
 }
-::slotted(s-icon[slot=start]),
-::slotted(svg[slot=start]){
-  margin: 0 4px 0 -8px;
+::slotted(:is(svg[slot=start], s-icon[slot=start])){
+  margin-right: 4px;
+  margin-left: -8px;
 }
-::slotted(s-icon[slot=end]),
-::slotted(svg[slot=end]){
-  margin: 0 -8px 0 4px;
+::slotted(:is(svg[slot=end], s-icon[slot=end])){
+  margin-right: -8px;
+  margin-left: 4px;
 }
 ::slotted(s-circular-progress[slot=start]){
-  margin: 0 8px 0 -8px;
+  margin-left: -8px;
+  margin-right: 8px;
 }
 ::slotted(s-circular-progress[slot=end]){
-  margin: 0 -8px 0 8px;
+  margin-left: 8px;
+  margin-right: -8px;
 }
-:host([type=text]) ::slotted(s-icon[slot=start]),
-:host([type=text]) ::slotted(svg[slot=start]){
-  margin: 0 4px 0 -4px;
+:host([type=text]) ::slotted(:is(s-icon[slot=start], svg[slot=start])){
+  margin-left: -4px;
+  margin-right: 4px;
 }
-:host([type=text]) ::slotted(s-icon[slot=end]),
-:host([type=text]) ::slotted(svg[slot=end]){
-  margin: 0 -4px 0 4px;
+:host([type=text]) ::slotted(:is(s-icon[slot=end], svg[slot=end])){
+  margin-left: 4px;
+  margin-right: -4px;
 }
-:host([rippled]){
+:host(:not([type])[pressed]){
   box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
-:host([type=elevated][rippled]){
+:host([type=elevated][pressed]){
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
 }
-:host([type=filled-tonal][rippled]),
-:host([type=outlined][rippled]),
-:host([type=text][rippled]){
-  box-shadow: none;
+.text{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
-@media (pointer: fine){
-  :host([type=elevated]:hover){
-    box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
-  }
-  :host(:hover){
+@media (any-pointer: fine){
+  :host(:not([type]):hover){
     box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   }
-  :host([type=filled-tonal]:hover),
-  :host([type=outlined]:hover),
-  :host([type=text]:hover){
-    box-shadow: none;
+  :host([type=elevated]:hover){
+    box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   }
 }
 `
 
 const template = /*html*/`
 <slot name="start"></slot>
-<slot></slot>
+<div class="text" part="text">
+  <slot></slot>
+</div>
 <slot name="end"></slot>
 <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 `
 
-class SButton extends useElement({ style, template, props, syncProps: true, }) { }
+class Button extends useElement({ style, template, props, syncProps: true, }) { }
 
-SButton.define(name)
+Button.define(name)
 
-export { SButton as Button }
+export { Button }
 
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SButton
+    [name]: Button
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -151,8 +155,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -161,7 +179,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

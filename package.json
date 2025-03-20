@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node dev/server.js",
-    "check": "tsc --noEmit",
+    "check": "npx tsc --noEmit",
     "build": "node dev/build.js"
   },
   "keywords": [

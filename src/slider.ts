@@ -148,7 +148,7 @@ class SSlider extends useElement({
     const input = shadowRoot.querySelector('input') as HTMLInputElement
     const update = () => {
       const value = Number(input.value)
-      const percentage = ((value - this.min) * 100) / this.max - this.min
+      const percentage = ((value - this.min) * 100) / (this.max - this.min)
       handle.style.left = `calc(${percentage}% - ${percentage * 0.16}px)`
       indicator.style.width = `calc(${percentage}% - ${4 + (percentage * 0.16)}px)`
       track.style.width = `calc(${100 - percentage}% - ${20 - (percentage * 0.16)}px)`
@@ -159,29 +159,27 @@ class SSlider extends useElement({
       this.value = Number(input.value)
       this.dispatchEvent(new Event('input'))
     })
-    input.addEventListener('mousedown', (event) => event.button === 0 && !mediaQueryList.pointerCoarse.matches && container.classList.add('active'))
-    input.addEventListener('mouseup', () => !mediaQueryList.pointerCoarse.matches && container.classList.remove('active'))
-    input.addEventListener('touchstart', () => mediaQueryList.pointerCoarse.matches && container.classList.add('active'), { passive: true })
-    input.addEventListener('touchend', () => mediaQueryList.pointerCoarse.matches && container.classList.remove('active'), { passive: true })
-    input.addEventListener('touchcancel', () => mediaQueryList.pointerCoarse.matches && container.classList.remove('active'), { passive: true })
+    input.addEventListener('mousedown', (event) => event.button === 0 && !mediaQueryList.anyPointerCoarse.matches && container.classList.add('active'))
+    input.addEventListener('mouseup', () => !mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active'))
+    input.addEventListener('touchstart', () => mediaQueryList.anyPointerCoarse.matches && container.classList.add('active'), { passive: true })
+    input.addEventListener('touchend', () => mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active'), { passive: true })
+    input.addEventListener('touchcancel', () => mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active'), { passive: true })
     return {
-      props: {
-        max: (value) => {
-          input.max = String(value)
-          update()
-        },
-        min: (value) => {
-          input.min = String(value)
-          update()
-        },
-        step: (value) => {
-          input.step = String(value)
-          update()
-        },
-        value: (value) => {
-          input.value = String(value)
-          update()
-        }
+      max: (value) => {
+        input.max = String(value)
+        update()
+      },
+      min: (value) => {
+        input.min = String(value)
+        update()
+      },
+      step: (value) => {
+        input.step = String(value)
+        update()
+      },
+      value: (value) => {
+        input.value = String(value)
+        update()
       }
     }
   }

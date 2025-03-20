@@ -20,22 +20,21 @@
 
 ## 属性
 
-| 名称  | 类型                      | 默认值 | 同步 | 介绍 |
-| ----- | ------------------------ | ------ | --- | ---- |
-| align | top, bottom, left, right | top    | 否  | 位置 |
+| 名称     | 类型                      | 默认值 | 同步 | 介绍    |
+| -------- | ------------------------ | ------ | --- | ------- |
+| align    | top, bottom, left, right | top    | 否  | 位置     |
+| disabled | boolean                  | false  | 是  | 是否禁用 |
 
 ---
 
 ## 原型
 
 ```ts
-class Tooltip extends HTMLElement {
+class Tooltip extends HTMLElement implements Props {
   //显示提示框
   readonly show(): void
   //隐藏提示框
   readonly close(): void
-  //位置
-  align: 'top' | 'bottom' | 'left' | 'right' = 'top'
 } 
 ```
 

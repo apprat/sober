@@ -16,12 +16,12 @@ const style = /*css*/`
   vertical-align: middle;
   width: 220px;
   height: 40px;
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
-  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   border-radius: 24px;
   font-size: .875rem;
-  flex-shrink: 0;
   position: relative;
+  border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 .container{
   display: flex;
@@ -127,12 +127,10 @@ class SSearch extends useElement({
           return input
         }
       },
-      props: {
-        value: (value) => input.value = value,
-        placeholder: (placeholder) => input.placeholder = placeholder,
-        maxLength: (maxLength) => input.maxLength = maxLength,
-        readOnly: (readOnly) => input.readOnly = readOnly
-      }
+      value: (value) => input.value = value,
+      placeholder: (placeholder) => input.placeholder = placeholder,
+      maxLength: (maxLength) => input.maxLength = maxLength,
+      readOnly: (readOnly) => input.readOnly = readOnly
     }
   }
 }) { }

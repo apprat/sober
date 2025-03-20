@@ -3,9 +3,15 @@ import { Theme } from './core/theme.js'
 import { Select } from './core/utils/select.js'
 import './ripple.js'
 
+type Props = {
+  value: string
+  mode: 'auto' | 'fiexd'
+}
+
 const name = 's-segmented-button'
-const props = {
-  value: ''
+const props: Props = {
+  value: '',
+  mode: 'auto'
 }
 
 const style = /*css*/`
@@ -13,20 +19,53 @@ const style = /*css*/`
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
-  border: solid 1px var(--s-color-outline, ${Theme.colorOutline});
   border-radius: 20px;
   height: 40px;
+  padding: 3px;
   overflow: hidden;
-  flex-shrink: 0;
+  box-sizing: border-box;
+  border: solid 1px var(--s-color-surface-variant, ${Theme.colorOutlineVariant});
+  background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
+}
+:host([mode=fixed]){
+  display: flex;
+}
+:host([mode=fixed]) ::slotted(s-segmented-button-item){
+  flex-basis: 100%;
 }
 `
 const template = /*html*/`<slot></slot>`
 
-class SSegmentedButton extends useElement({
-  style, template, props,
+class SegmentedButton extends useElement({
+  style, template, props, syncProps: ['mode'],
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
-    const select = new Select({ context: this, class: SSegmentedButtonItem, slot })
+    const select = new Select({ context: this, class: SegmentedButtonItem, slot })
+    const computedStyle = getComputedStyle(this)
+    const getAnimateOptions = () => {
+      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard')
+      const duration = computedStyle.getPropertyValue('--s-motion-duration-medium4')
+      return {
+        easing: easing === '' ? Theme.motionEasingStandard : easing,
+        duration: Number((duration === '' ? Theme.motionDurationMedium4 : duration).slice(0, -2)),
+      }
+    }
+    select.onUpdate = (old) => {
+      if (!old || !select.select || !this.isConnected) return
+      const oldRect = old.shadowRoot!.querySelector('.indicator')!.getBoundingClientRect()
+      const indicator = select.select.shadowRoot?.querySelector('.indicator') as HTMLDivElement
+      const rect = indicator.getBoundingClientRect()
+      const offset = oldRect.left - rect.left
+      indicator.style.transform = `translateX(${rect.left > oldRect.left ? offset : Math.abs(offset)}px)`
+      indicator.style.width = `${oldRect.width}px`
+      old.style.zIndex = '1'
+      const animation = indicator.animate([{ transform: `translateX(0)`, width: `${rect.width}px` }], getAnimateOptions())
+      animation.onfinish = animation.oncancel = animation.onremove = () => {
+        indicator.style.removeProperty('transform')
+        indicator.style.removeProperty('width')
+        old.style.removeProperty('z-index')
+      }
+    }
     return {
       expose: {
         get value() {
@@ -39,15 +78,20 @@ class SSegmentedButton extends useElement({
           return select.selectedIndex
         },
       },
-      props: {
-        value: (value) => select.value = value
-      }
+      value: (value) => select.value = value
     }
   }
 }) { }
 
+type ItemProps = {
+  selected: boolean
+  disabled: boolean
+  selectable: boolean
+  value: string
+}
+
 const itemName = 's-segmented-button-item'
-const itemProps = {
+const itemProps: ItemProps = {
   selected: false,
   disabled: false,
   selectable: true,
@@ -56,33 +100,41 @@ const itemProps = {
 
 const itemStyle = /*css*/`
 :host{
-  flex-basis: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-  min-width: 48px;
+  min-width: 64px;
   padding: 0 16px;
   text-transform: capitalize;
-  font-weight: 500;
-  font-size: .875rem;
-  position: relative;
   cursor: pointer;
+  font-weight: 500;
+  font-size: .8125rem;
+  position: relative;
   box-sizing: border-box;
+  border-radius: 20px;
+  transition: color var(--s-motion-duration-medium4, ${Theme.motionDurationMedium4}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
-  border-left: solid 1px var(--s-color-outline, ${Theme.colorOutline});
-}
-:host(:first-child){
-  border-left-color: transparent;
-  margin-left: -1px;
 }
 :host([selected=true]){
-  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
-  color: var(--s-color-on-secondary-container, ${Theme.colorOnSecondaryContainer});
+  color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
 }
 :host([disabled=true]){
   pointer-events: none;
   color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent);
+}
+.indicator{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border-radius: inherit;
+  background: var(--s-color-primary, ${Theme.colorPrimary});
+}
+:host([selected=true]) .indicator{
+  opacity: 1;
 }
 ::slotted([slot]){
   width: 18px;
@@ -90,6 +142,7 @@ const itemStyle = /*css*/`
   color: inherit;
   fill: currentColor;
   flex-shrink: 0;
+  position: relative;
 }
 ::slotted([slot=start]){
   margin-right: 4px;
@@ -97,53 +150,61 @@ const itemStyle = /*css*/`
 ::slotted([slot=end]){
   margin-right: 4px;
 }
+.text{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  position: relative;
+}
 `
 
 const itemTemplate =/*html*/`
+<div class="indicator" part="indicator"></div>
 <slot name="start"></slot>
-<slot></slot>
+<div class="text" part="text">
+  <slot></slot>
+</div>
 <slot name="end"></slot>
-<s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
+<s-ripple attached="true" part="ripple"></s-ripple>
 `
 
-class SSegmentedButtonItem extends useElement({
+class SegmentedButtonItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
   syncProps: ['selected', 'disabled'],
   setup() {
     this.addEventListener('click', () => {
-      if (!(this.parentNode instanceof SSegmentedButton) || this.selected) return
+      if (!(this.parentNode instanceof SegmentedButton) || this.selected) return
       if (this.selectable) this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
-      props: {
-        selected: () => {
-          if (!(this.parentNode instanceof SSegmentedButton)) return
-          this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
-        }
+      selected: () => {
+        if (!(this.parentNode instanceof SegmentedButton)) return
+        this.dispatchEvent(new CustomEvent(`${name}:update`, { bubbles: true, detail: {} }))
       }
     }
   }
 }) { }
 
-SSegmentedButton.define(name)
-SSegmentedButtonItem.define(itemName)
+SegmentedButton.define(name)
+SegmentedButtonItem.define(itemName)
 
-export { SSegmentedButton as SegmentedButton, SSegmentedButtonItem as SegmentedButtonItem }
+export { SegmentedButton, SegmentedButtonItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SSegmentedButton
-    [itemName]: SSegmentedButtonItem
+    [name]: SegmentedButton
+    [itemName]: SegmentedButtonItem
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<ItemProps>
       }
     }
   }
@@ -152,8 +213,8 @@ declare global {
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof props
-    [itemName]: typeof itemProps
+    [name]: Props
+    [itemName]: ItemProps
   }
 }
 
@@ -162,9 +223,9 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<ItemProps>
     }
   }
 }

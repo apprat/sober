@@ -1,8 +1,15 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
+type Props = {
+  indeterminate: boolean
+  animated: boolean
+  max: number
+  value: number
+}
+
 const name = 's-circular-progress'
-const props = {
+const props: Props = {
   indeterminate: false,
   animated: false,
   max: 100,
@@ -15,14 +22,14 @@ const style = /*css*/`
   vertical-align: middle;
   position: relative;
   width: 48px;
-  flex-shrink: 0;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   color: var(--s-color-primary, ${Theme.colorPrimary});
 }
 :host([animated=true]) .known .block{
-  transition: stroke-dashoffset .2s, transform .2s;
-  transition-timing-function: ease-out;
+  transition-duration: var(--s-motion-duration-medium4, ${Theme.motionDurationMedium4});
+  transition-timing-function: var(--s-motion-easing-emphasized, ${Theme.motionEasingEmphasized});
+  transition-name: stroke-dashoffset, transform;
 }
 :host([indeterminate=true]) .known,
 .unknown{
@@ -95,11 +102,11 @@ const template = /*html*/`
 </div>
 `
 
-class SCircularProgress extends useElement({
+class CircularProgress extends useElement({
   style, template, props, syncProps: ['indeterminate', 'animated'],
   setup(shadowRoot) {
-    const track = shadowRoot.querySelector('.known .track') as SVGCircleElement
-    const indicator = shadowRoot.querySelector('.known .indicator') as SVGCircleElement
+    const track = shadowRoot.querySelector<SVGCircleElement>('.known .track')!
+    const indicator = shadowRoot.querySelector<SVGCircleElement>('.known .indicator')!
     const update = () => {
       const percentage = Math.min(this.value, this.max) / this.max * 100
       const value = dasharray - (dasharray * (percentage / 100))
@@ -109,27 +116,25 @@ class SCircularProgress extends useElement({
       indicator.style.strokeDashoffset = `${value}px`
     }
     return {
-      props: {
-        max: update,
-        value: update
-      }
+      max: update,
+      value: update
     }
   }
 }) { }
 
-SCircularProgress.define(name)
+CircularProgress.define(name)
 
-export { SCircularProgress as CircularProgress }
+export { CircularProgress }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SCircularProgress
+    [name]: CircularProgress
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -137,8 +142,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -147,7 +166,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

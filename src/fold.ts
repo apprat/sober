@@ -1,7 +1,11 @@
 import { useElement } from './core/element.js'
 
+type Props = {
+  folded: boolean
+}
+
 const name = 's-fold'
-const props = {
+const props: Props = {
   folded: false
 }
 
@@ -13,7 +17,7 @@ const style = /*css*/`
   grid-template-rows: 1fr;
   display: grid;
   overflow: hidden;
-  transition: grid-template-rows .2s ease-out;
+  transition: grid-template-rows .3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
 }
 :host([folded=true]) .container{
   grid-template-rows: 0fr;
@@ -32,7 +36,7 @@ const template = /*html*/`
 </div>
 `
 
-class SFold extends useElement({
+class Fold extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('slot[name=trigger]')!
@@ -40,19 +44,19 @@ class SFold extends useElement({
   }
 }) { }
 
-SFold.define(name)
+Fold.define(name)
 
-export { SFold as Fold }
+export { Fold }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SFold
+    [name]: Fold
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -61,7 +65,7 @@ declare global {
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof props
+    [name]: Props
   }
 }
 
@@ -70,7 +74,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

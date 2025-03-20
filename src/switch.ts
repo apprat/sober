@@ -69,9 +69,6 @@ const style = /*css*/`
   transition: transform .1s, box-shadow .1s;
   transition-timing-function: ease-out;
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 :host([disabled=true]) .thumb{
   background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent);
@@ -86,17 +83,26 @@ const style = /*css*/`
   box-shadow: none;
 }
 .icon{
-  width: 70%;
-  height: 70%;
-  fill: currentColor;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
   opacity: 0;
   transition: opacity .1s ease-out;
+  color: currentColor;
+}
+::slotted([slot=icon]),
+svg{
+  color: currentColor;
+  fill: currentColor;
+  width: 70%;
+  height: 70%;
 }
 :host([checked=true]) .icon{
   opacity: 1;
 }
 :host([checked=true][disabled=true]) .icon{
-  fill: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent);
+  color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent);
 }
 `
 
@@ -104,9 +110,11 @@ const template = /*html*/`
 <div class="track" part="track"></div>
 <s-ripple attached="true" centered="true" class="ripple" part="ripple">
   <div class="thumb" part="thumb">
-    <svg class="icon" viewBox="0 -960 960 960">
-      <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path>
-    </svg>
+    <slot name="icon" class="icon">
+      <svg viewBox="0 -960 960 960">
+        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path>
+      </svg>
+    </slot>
   </div>
 </s-ripple>
 `

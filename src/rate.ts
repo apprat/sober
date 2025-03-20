@@ -102,23 +102,21 @@ class SRate extends useElement({
       this.dispatchEvent(new Event('input'))
     })
     return {
-      props: {
-        max: (value) => {
-          input.max = String(value)
-          update()
-        },
-        min: (value) => {
-          input.min = String(value)
-          update()
-        },
-        step: (value) => {
-          input.step = String(value)
-          update()
-        },
-        value: (value) => {
-          input.value = String(value)
-          update()
-        }
+      max: (value) => {
+        input.max = String(value)
+        update()
+      },
+      min: (value) => {
+        input.min = String(value)
+        update()
+      },
+      step: (value) => {
+        input.step = String(value)
+        update()
+      },
+      value: (value) => {
+        input.value = String(value)
+        update()
       }
     }
   }

@@ -24,8 +24,8 @@ const replacePlugin = {
   }
 }
 
-
-childProcess.execSync('tsc')
+console.log('Building...')
+childProcess.execSync('npx tsc')
 esbuild.build({
   entryPoints: ['./dist/**/**.js'],
   outdir: 'dist',

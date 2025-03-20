@@ -2,8 +2,13 @@ import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
+type Props = {
+  hidden: boolean,
+  disabled: boolean,
+}
+
 const name = 's-fab'
-const props = {
+const props: Props = {
   hidden: false,
   disabled: false,
 }
@@ -17,16 +22,17 @@ const style = /*css*/`
   position: relative;
   cursor: pointer;
   box-sizing: border-box;
-  flex-shrink: 0;
-  height: 56px;
+  min-height: 48px;
   font-size: .875rem;
-  border-radius: 16px;
-  transition: box-shadow .1s ease-out, transform .1s ease-out;
+  border-radius: 28px;
   font-weight: 500;
   white-space: nowrap;
   text-transform: capitalize;
-  padding: 0 16px;
-  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
+  padding: 0 24px;
+  transition-property: box-shadow, transform;
+  transition-duration: var(--s-motion-duration-short4, ${Theme.motionDurationShort4});
+  transition-timing-function: var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
+  box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
   background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
   color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
 }
@@ -34,7 +40,6 @@ const style = /*css*/`
   pointer-events: none;
   background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
   color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent) !important;
-  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 :host([hidden=true]){
   transform: scale(0);
@@ -42,25 +47,30 @@ const style = /*css*/`
 }
 ::slotted(*){
   flex-shrink: 0;
+}
+::slotted(:is(svg, s-icon)){
   width: 24px;
   height: 24px;
   fill: currentColor;
   color: currentColor;
 }
-::slotted(s-icon[slot=start]),
-::slotted(svg[slot=start]){
-  margin: 0 8px 0 0;
+::slotted(:is(svg, s-icon):not([slot])){
+  margin: 16px -8px;
 }
-::slotted(s-icon[slot=end]),
-::slotted(svg[slot=end]){
-  margin: 0 0 0 8px;
+::slotted(:is(svg[slot=start], s-icon[slot=start])){
+  margin-left: -8px;
+  margin-right: 8px;
 }
-:host([rippled]){
-  box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
+::slotted(:is(svg[slot=end], s-icon[slot=end])){
+  margin-left: 8px;
+  margin-right: -8px;
 }
-@media (pointer: fine){
+:host([pressed]){
+  box-shadow: var(--s-elevation-level4, ${Theme.elevationLevel4});
+}
+@media (any-pointer: fine){
   :host(:hover){
-    box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
+    box-shadow: var(--s-elevation-level4, ${Theme.elevationLevel4});
   }
 }
 `
@@ -72,21 +82,21 @@ const template = /*html*/`
 <s-ripple attached="true" part="ripple"></s-ripple>
 `
 
-class SFloatingActionButton extends useElement({ style, template, props, syncProps: true }) { }
+class FloatingActionButton extends useElement({ style, template, props, syncProps: true }) { }
 
-SFloatingActionButton.define(name)
+FloatingActionButton.define(name)
 
-export { SFloatingActionButton as FAB }
+export { FloatingActionButton as FAB }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SFloatingActionButton
+    [name]: FloatingActionButton
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -95,7 +105,7 @@ declare global {
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof props
+    [name]: Props
   }
 }
 
@@ -104,7 +114,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

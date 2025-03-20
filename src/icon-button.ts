@@ -2,10 +2,15 @@ import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
+type Props = {
+  disabled: boolean
+  type: 'standard' | 'filled' | 'filled-tonal' | 'outlined'
+}
+
 const name = 's-icon-button'
-const props = {
+const props: Props = {
   disabled: false,
-  type: 'standard' as 'standard' | 'filled' | 'filled-tonal' | 'outlined',
+  type: 'standard',
 }
 
 const style = /*css*/`
@@ -84,21 +89,21 @@ const template = /*html*/`
 </div>
 `
 
-class SIconButton extends useElement({ style, template, props, syncProps: true, }) { }
+class IconButton extends useElement({ style, template, props, syncProps: true, }) { }
 
-SIconButton.define(name)
+IconButton.define(name)
 
-export { SIconButton as IconButton }
+export { IconButton }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SIconButton
+    [name]: IconButton
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -107,7 +112,7 @@ declare global {
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof props
+    [name]: Props
   }
 }
 
@@ -116,7 +121,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

@@ -1,10 +1,17 @@
 import { useElement } from './core/element.js'
 import { mediaQueries } from './core/utils/mediaQuery.js'
+import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 
+type Props = {
+  showed: boolean
+  disabledGesture: boolean
+}
+
 const name = 's-bottom-sheet'
-const props = {
-  showed: false
+const props: Props = {
+  showed: false,
+  disabledGesture: false
 }
 
 const style = /*css*/`
@@ -35,16 +42,12 @@ dialog[open]{
   display: flex;
 }
 .scrim{
-  background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 80%, transparent);
+  background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 76%, transparent);
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
   opacity: 0;
-  transition: opacity .2s ease-out;
 }
 dialog.show .scrim{
   opacity: 1;
@@ -58,8 +61,8 @@ dialog.show .scrim{
   flex-direction: column;
   padding-bottom: env(safe-area-inset-bottom);
   max-width: ${mediaQueries.mobileL}px;
-  box-shadow: var(--s-elevation-level-3, ${Theme.elevationLevel3});
-  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
 }
 .indicator{
   width: 100%;
@@ -75,12 +78,15 @@ dialog.show .scrim{
   width: 40px;
   height: 4px;
   border-radius: 2px;
-  background: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
+  background: var(--s-color-outline, ${Theme.colorOutline});
   opacity: .4;
 }
 ::slotted([slot=text]){
   padding: 24px;
   line-height: 1.6;
+}
+::slotted(:not([slot])){
+  overscroll-behavior: none;
 }
 @media (max-width: ${mediaQueries.tablet}px){
   .container{
@@ -96,31 +102,42 @@ const template = /*html*/`
   <div class="container" part="container">
     <div class="indicator" part="indicator"></div>
     <slot name="text"></slot>
-    <slot></slot>
+    <slot id="view"></slot>
   </div>
 </dialog>
 `
 
-type View = HTMLElement | ((bottomSheet: SBottomSheet) => void)
+type View = HTMLElement | ((bottomSheet: BottomSheet) => void)
 
 const builder = (options: string | View | {
   root?: Element
-  view: View
+  view: View | string
+  disabledGesture: boolean
 }) => {
   let root: Element = document.body
   const page = document.body.firstElementChild
   if (page && page.tagName === 'S-PAGE') root = page
-  const bottomSheet = new SBottomSheet()
+  const bottomSheet = new BottomSheet()
+  const text = document.createElement('div')
+  text.slot = 'text'
   if (typeof options === 'function' || options instanceof HTMLElement) {
     options instanceof HTMLElement ? bottomSheet.appendChild(options) : options(bottomSheet)
   } else if (typeof options === 'string') {
-    const text = document.createElement('div')
-    text.slot = 'text'
     text.textContent = options
     bottomSheet.appendChild(text)
   } else {
     if (options.root) root = options.root
-    options.view instanceof HTMLElement ? bottomSheet.appendChild(options.view) : options.view(bottomSheet)
+    if (options.disabledGesture) bottomSheet.disabledGesture = options.disabledGesture
+    if (typeof options.view === 'string') {
+      text.textContent = options.view
+      bottomSheet.appendChild(text)
+    }
+    if (options.view instanceof HTMLElement) {
+      bottomSheet.appendChild(options.view)
+    }
+    if (typeof options.view === 'function') {
+      options.view(bottomSheet)
+    }
   }
   bottomSheet.addEventListener('closed', () => root.removeChild(bottomSheet))
   bottomSheet.showed = true
@@ -129,84 +146,126 @@ const builder = (options: string | View | {
 }
 
 type EventShowSource = 'TRIGGER'
-type EventCloseSource = 'SCRIM'
+type EventCloseSource = 'SCRIM' | 'GESTURE'
 
-class SBottomSheet extends useElement({
+class BottomSheet extends useElement({
   style,
   template,
   props,
   syncProps: ['showed'],
   setup(shadowRoot) {
-    const dialog = shadowRoot.querySelector('dialog') as HTMLDialogElement
-    const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    shadowRoot.querySelector('slot[name=trigger]')!.addEventListener('click', () => {
+    const dialog = shadowRoot.querySelector<HTMLDialogElement>('dialog')!
+    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
+    const scrim = shadowRoot.querySelector<HTMLDivElement>('.scrim')!
+    const indicator = shadowRoot.querySelector<HTMLDivElement>('.indicator')!
+    const computedStyle = getComputedStyle(this)
+    let scrollView: null | HTMLElement = null
+    const getAnimateOptions = () => {
+      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
+      const duration = computedStyle.getPropertyValue('--s-motion-duration-medium4') || Theme.motionDurationMedium4
+      return { easing: easing, duration: convertCSSDuration(duration) }
+    }
+    shadowRoot.querySelector<HTMLSlotElement>('#view')!.onslotchange = (event) => {
+      const target = event.target as HTMLSlotElement
+      scrollView = (target.assignedElements()[0] as HTMLElement) ?? null
+    }
+    shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!.onclick = () => {
       if (this.showed || !this.dispatchEvent(new CustomEvent('show', { cancelable: true, detail: { source: 'TRIGGER' } }))) return
       this.showed = true
-    })
+    }
     const onClose = (source: EventCloseSource) => {
       if (!this.showed || !this.dispatchEvent(new CustomEvent('close', { cancelable: true, detail: { source } }))) return
       this.showed = false
     }
-    shadowRoot.querySelector('.scrim')!.addEventListener('click', () => onClose('SCRIM'))
-    const animateOptions = { duration: 200, easing: 'ease-out' } as const
+    scrim.onclick = () => onClose('SCRIM')
+    //gesture
+    let touchs: null | { y: number, x: number, disabled: boolean, top: number, h: number, now: number } = null
+    container.ontouchmove = (event) => {
+      const target = event.target as HTMLElement
+      if (this.disabledGesture) return
+      const touch = event.touches[0]
+      if (!touchs) return touchs = { y: touch.pageY, x: touch.pageX, disabled: false, top: 0, h: container.offsetHeight, now: Date.now() }
+      if (touchs.disabled) return
+      const top = touch.pageY - touchs.y
+      const left = touch.pageX - touchs.x
+      touchs.top = Math.min(touchs.h, Math.max(0, top))
+      if ((target !== indicator && scrollView && scrollView.scrollTop > 0) || Math.abs(top) < Math.abs(left)) return touchs.disabled = true
+      container.style.transform = `translateY(${touchs.top}px)`
+    }
+    container.ontouchend = () => {
+      if (!touchs || touchs.disabled) return touchs = null
+      const threshold = (Date.now() - touchs.now) > 300 ? (touchs.h / 3) : 20
+      if (touchs.top > threshold) {
+        if (!this.dispatchEvent(new CustomEvent('close', { cancelable: true, detail: { source: 'GESTURE' } }))) return
+        this.showed = false
+      } else {
+        container.animate([{ transform: container.style.transform }, { transform: 'translateY(0)' }], getAnimateOptions())
+        container.style.removeProperty('transform')
+      }
+      touchs = null
+    }
     const show = () => {
       if (!this.isConnected || dialog.open) return
       dialog.showModal()
-      const animation = container.animate([{ transform: 'translateY(100%)', opacity: 0 }, { opacity: 1 }], animateOptions)
       dialog.classList.add('show')
-      animation.addEventListener('finish', () => this.dispatchEvent(new Event('showed')))
+      const animateOptions = getAnimateOptions()
+      scrim.animate([{ opacity: 0 }, { opacity: 1 }], animateOptions)
+      const animation = container.animate([{ transform: 'translateY(100%)', opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }], animateOptions)
+      animation.finished.then(() => this.dispatchEvent(new Event('showed')))
     }
     const close = () => {
       if (!this.isConnected || !dialog.open) return
-      const animation = container.animate([{ opacity: 1 }, { transform: 'translateY(100%)' }], animateOptions)
       dialog.classList.remove('show')
-      animation.addEventListener('finish', () => {
+      const animateOptions = getAnimateOptions()
+      const oldTransform = container.style.transform
+      scrim.animate([{ opacity: 1 }, { opacity: 0 }], animateOptions)
+      const animation = container.animate([{ transform: oldTransform === '' ? 'translateY(0)' : oldTransform, opacity: 1 }, { transform: 'translateY(100%)', opacity: 0 }], animateOptions)
+      animation.finished.then(() => {
         dialog.close()
+        if (oldTransform) container.style.removeProperty('transform')
         this.dispatchEvent(new Event('closed'))
       })
     }
     return {
-      mounted: () => this.showed && !dialog.open && show(),
-      props: {
-        showed: (value) => value ? show() : close()
-      }
+      onMounted: () => this.showed && !dialog.open && show(),
+      showed: (value) => value ? show() : close()
     }
   }
 }) {
   static readonly builder = builder
 }
 
-SBottomSheet.define(name)
+BottomSheet.define(name)
 
-export { SBottomSheet as BottomSheet }
-
-interface EventMap {
-  show: CustomEvent<{ source: EventShowSource }>
-  showed: Event
-  close: CustomEvent<{ source: EventCloseSource }>
-  closed: Event
-}
-
-type ElementEventMap = EventMap & HTMLElementEventMap
-
-interface SBottomSheet {
-  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SBottomSheet, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SBottomSheet, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
-}
+export { BottomSheet }
 
 type Events = {
-  [K in keyof EventMap as `on${K}`]?: (ev: EventMap[K]) => void
+  Show: CustomEvent<{ source: EventShowSource }>
+  Showed: Event
+  Close: CustomEvent<{ source: EventCloseSource }>
+  Closed: Event
+}
+
+type EventMaps = Events & HTMLElementEventMap
+
+interface BottomSheet {
+  addEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: BottomSheet, ev: EventMaps[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: BottomSheet, ev: EventMaps[K]) => any, options?: boolean | EventListenerOptions): void
+}
+
+type JSXEvents<L extends boolean = false> = {
+  [K in keyof EventMaps as `on${L extends false ? K : Lowercase<K>}`]?: (ev: EventMaps[K]) => void
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SBottomSheet
+    [name]: BottomSheet
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props> & Events
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props> & Events<true>
       }
     }
   }
@@ -214,8 +273,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props> & JSXEvents
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props> & JSXEvents
+    }
   }
 }
 
@@ -224,7 +297,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props> & Events
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
     }
   }
 }

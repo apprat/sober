@@ -11,10 +11,61 @@
 
 <body>
   <s-page class="gap">
-    <s-chip>Chip1</s-chip>
-    <s-chip type="filled-tonal">Chip2</s-chip>
-    <s-chip type="elevated">
-      Chip3
+    <s-chip>
+      <s-icon slot="start" name="home"></s-icon>
+      Chip1
+      <s-icon-button slot="action">
+        <s-icon name="close"></s-icon>
+      </s-icon-button>
+    </s-chip>
+    <s-chip disabled="true">
+      <svg slot="start" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z">
+        </path>
+      </svg>
+      Chip1
+      <s-icon-button slot="action">
+        <s-icon name="close"></s-icon>
+      </s-icon-button>
+    </s-chip>
+    <s-chip checked="true" disabled="true">
+      <s-icon slot="start" name="home"></s-icon>
+      Chip1
+      <s-icon-button slot="action">
+        <s-icon name="close"></s-icon>
+      </s-icon-button>
+    </s-chip>
+    <s-chip disabled="true" type="outlined">
+      <s-icon slot="start" name="home"></s-icon>
+      Chip1
+      <s-icon-button slot="action">
+        <s-icon name="close"></s-icon>
+      </s-icon-button>
+    </s-chip>
+    <s-chip checked="true" disabled="true" type="outlined">
+      <s-icon slot="start" name="home"></s-icon>
+      Chip1
+      <s-icon-button slot="action">
+        <s-icon name="close"></s-icon>
+      </s-icon-button>
+    </s-chip>
+    <hr>
+
+    <s-chip clickable="true">Cats OK</s-chip>
+    <s-chip clickable="true">Smoke-free</s-chip>
+    <s-chip clickable="true">
+      <s-avatar slot="start">US</s-avatar>
+      Garden
+      <s-icon-button slot="action">
+        <s-icon name="close"></s-icon>
+      </s-icon-button>
+    </s-chip>
+    <hr>
+    <s-chip clickable="true" type="outlined">Cats OK</s-chip>
+    <s-chip clickable="true" type="outlined">Smoke-free</s-chip>
+    <s-chip clickable="true" type="outlined">
+      <s-avatar slot="start" type="outlined">US</s-avatar>
+      Garden
       <s-icon-button slot="action">
         <s-icon name="close"></s-icon>
       </s-icon-button>

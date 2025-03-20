@@ -18,10 +18,11 @@
 
 ## 属性
 
-| 名称      | 类型                              | 默认值   | 同步 | 介绍       |
-| --------- | -------------------------------- | -------- | --- | ---------- |
-| type      | outlined, elevated, filled-tonal | outlined | 是  | 样式        |
-| clickable | boolean                          | false    | 是  | 是否启用点击 |
+| 名称      | 类型              | 默认值   | 同步 | 介绍           |
+| --------- | ---------------- | -------- | --- | -------------- |
+| type      | filled, outlined | outlined | 是  | 样式            |
+| clickable | boolean          | false    | 是  | 是否启用点击选中 |
+| disabled  | boolean           | false  | 是  | 是否禁用 |
 
 ---
 

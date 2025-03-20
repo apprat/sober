@@ -1,11 +1,17 @@
 import { useElement } from './core/element.js'
+import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 import { Select } from './core/utils/select.js'
 import './ripple.js'
 
+type Props = {
+  mode: 'scrollable' | 'fixed',
+  value: string
+}
+
 const name = 's-tab'
-const props = {
-  mode: 'scrollable' as 'scrollable' | 'fixed',
+const props: Props = {
+  mode: 'scrollable',
   value: ''
 }
 
@@ -14,7 +20,6 @@ const style = /*css*/`
   display: flex;
   justify-content: flex-start;
   position: relative;
-  flex-shrink: 0;
   background: var(--s-color-surface, ${Theme.colorSurface});
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
@@ -57,30 +62,35 @@ const template = /*html*/`
 </div>
 `
 
-class STab extends useElement({
+class Tab extends useElement({
   style, template, props, syncProps: ['mode'],
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const select = new Select({ context: this, class: STabItem, slot })
-    let old: STabItem | undefined
-    select.onUpdate = () => {
-      if (!this.isConnected || !select.select) {
-        old = undefined
-        return
-      }
-      if (container.scrollWidth !== container.offsetWidth) {
-        const left = (select.select.offsetLeft - container.offsetLeft) - (container.offsetWidth / 2) + (select.select.offsetWidth / 2)
+    const select = new Select({ context: this, class: TabItem, slot })
+    const computedStyle = getComputedStyle(this)
+    const getAnimateOptions = () => {
+      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
+      const duration = computedStyle.getPropertyValue('--s-motion-duration-medium4') || Theme.motionDurationMedium4
+      return { easing: easing, duration: convertCSSDuration(duration) }
+    }
+    select.onUpdate = (old) => {
+      if (select.select && container.scrollWidth !== container.offsetWidth) {
+        const left = select.select.offsetLeft - (container.offsetWidth / 2) + (select.select.offsetWidth / 2)
         container.scrollTo({ left, behavior: 'smooth' })
       }
-      if (old) {
-        const oldRect = old.indicator.getBoundingClientRect()
-        const rect = select.select.indicator.getBoundingClientRect()
-        const options = { duration: 200, easing: 'ease-out' }
-        select.select.indicator.animate([{ opacity: 0 }, { opacity: 0 }], options)
-        old.indicator.animate([{ filter: 'opacity(1)', transform: `translateX(0)`, }, { filter: 'opacity(1)', transform: `translateX(${rect.left - oldRect.left}px)`, width: `${rect.width}px` }], options)
+      if (!old || !select.select || !this.isConnected) return
+      const oldRect = old.shadowRoot!.querySelector('.indicator')!.getBoundingClientRect()
+      const indicator = select.select.shadowRoot?.querySelector('.indicator') as HTMLDivElement
+      const rect = indicator.getBoundingClientRect()
+      const offset = oldRect.left - rect.left
+      indicator.style.transform = `translateX(${rect.left > oldRect.left ? offset : Math.abs(offset)}px)`
+      indicator.style.width = `${oldRect.width}px`
+      const animation = indicator.animate([{ transform: `translateX(0)`, width: `${rect.width}px` }], getAnimateOptions())
+      animation.onfinish = animation.oncancel = animation.onremove = () => {
+        indicator.style.removeProperty('transform')
+        indicator.style.removeProperty('width')
       }
-      if (select.select) old = select.select
     }
     return {
       expose: {
@@ -94,15 +104,18 @@ class STab extends useElement({
           return select.selectedIndex
         },
       },
-      props: {
-        value: (value) => select.value = value
-      }
+      value: (value) => select.value = value
     }
   }
 }) { }
 
+type ItemProps = {
+  selected: boolean,
+  value: string
+}
+
 const itemName = 's-tab-item'
-const itemProps = {
+const itemProps: ItemProps = {
   selected: false,
   value: ''
 }
@@ -139,27 +152,15 @@ const itemStyle = /*css*/`
   width: 100%;
   background: var(--s-color-primary, ${Theme.colorPrimary});
   border-radius: 1.5px 1.5px 0 0;
-  filter: opacity(0);
+  opacity: 0;
 }
 :host([selected=true]) .indicator{
-  filter: opacity(1);
+  opacity: 1;
 }
 .text{
   display: flex;
   align-items: center;
   line-height: 1;
-}
-.badge{
-  display: flex;
-  align-items: center;
-}
-.icon .badge{
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  width: 50%;
-  justify-content: center;
-  margin-left: 0;
 }
 ::slotted([slot=icon]){
   width: 24px;
@@ -180,6 +181,16 @@ const itemStyle = /*css*/`
 ::slotted([slot=badge]){
   margin-left: 4px;
 }
+::slotted([slot=badge]:not(:empty)){
+  width: auto;
+}
+.icon ::slotted([slot=badge]){
+  position: absolute;
+  right: 0;
+  width: 8px;
+  top: 12px;
+  margin-left: 0;
+}
 `
 
 const itemTemplate = /*html*/`
@@ -187,61 +198,55 @@ const itemTemplate = /*html*/`
   <slot name="icon"></slot>
   <div class="text" part="text">
     <slot name="text"></slot>
-    <div class="badge" part="badge">
-      <slot name="badge"></slot>
-    </div>
+    <slot name="badge"></slot>
   </div>
   <div class="indicator" part="indicator"></div>
 </div>
 <s-ripple attached="true" part="ripple"></s-ripple>
 `
 
-class STabItem extends useElement({
+class TabItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
   syncProps: ['selected'],
   setup(shadowRoot) {
     const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const indicator = shadowRoot.querySelector('.indicator') as HTMLDivElement
-    const iconSlot = shadowRoot.querySelector('[name=icon]') as HTMLSlotElement
-    iconSlot.addEventListener('slotchange', () => {
-      const length = iconSlot.assignedElements().length
+    shadowRoot.querySelector('[name=icon]')!.addEventListener('slotchange', (event) => {
+      const slot = event.target as HTMLSlotElement
+      const length = slot.assignedElements().length
       container.classList[length > 0 ? 'add' : 'remove']('icon')
     })
     this.addEventListener('click', () => {
-      if (!(this.parentNode instanceof STab) || this.selected) return
+      if (!(this.parentNode instanceof Tab) || this.selected) return
       this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
-      expose: { indicator },
-      props: {
-        selected: () => {
-          if (!(this.parentNode instanceof STab)) return
-          this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
-        },
-      }
+      selected: () => {
+        if (!(this.parentNode instanceof Tab)) return
+        this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
+      },
     }
   }
 }) { }
 
-STab.define(name)
-STabItem.define(itemName)
+Tab.define(name)
+TabItem.define(itemName)
 
-export { STab as Tab, STabItem as TabItem }
+export { Tab, TabItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: STab
-    [itemName]: STabItem
+    [name]: Tab
+    [itemName]: TabItem
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<ItemProps>
       }
     }
   }
@@ -250,8 +255,8 @@ declare global {
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof props
-    [itemName]: typeof itemProps
+    [name]: Props
+    [itemName]: ItemProps
   }
 }
 
@@ -260,9 +265,21 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      //@ts-ignore
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<ItemProps>
     }
   }
 }

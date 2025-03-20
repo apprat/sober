@@ -6,6 +6,7 @@
   <title>Test</title>
   <meta name="viewport"
     content="width=device-width,viewport-fit=cover,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../dist/main.js"></script>
   <style>
     body {
       margin: 0;
@@ -34,7 +35,9 @@
 
 <body>
   <main>
+    <a href="./components/alert.html">alert</a>
     <a href="./components/appbar.html">appbar</a>
+    <a href="./components/avatar.html">avatar</a>
     <a href="./components/badge.html">badge</a>
     <a href="./components/bottom-sheet.html">bottoms-sheet</a>
     <a href="./components/button.html">button</a>
@@ -56,6 +59,7 @@
     <a href="./components/menu.html">menu</a>
     <a href="./components/navigation.html">navigation</a>
     <a href="./components/page.html">page</a>
+    <a href="./components/pagination.html">pagination</a>
     <a href="./components/picker.html">picker</a>
     <a href="./components/popup-menu.html">popup-menu</a>
     <a href="./components/popup.html">popup</a>
@@ -77,6 +81,39 @@
   <main>
     <a href="./vue.html">vue</a>
   </main>
+  <s-scroll-view style="height: 200px;">
+    <div style="height: 400px;"></div>
+    <div style="position: relative;background: red;height: 40px;z-index: 2;"></div>
+  </s-scroll-view>
+
+  <s-page>
+    <div style="height: 56px;background: var(--s-color-surface-container-lowest);">--s-color-surface-container-lowest
+    </div>
+
+    <div style="height: 56px;background: var(--s-color-surface-container-low);">--s-color-surface-container-low</div>
+
+    <div style="height: 56px;background: var(--s-color-surface-container);">--s-color-surface-container</div>
+    <div style="height: 56px;">--s-color-background</div>
+    <div style="height: 56px;background: var(--s-color-surface-container-high);">--s-color-surface-container-high</div>
+
+    <div style="height: 56px;background: var(--s-color-surface-container-highest);">--s-color-surface-container-highest
+    </div>
+  </s-page>
+  <s-page theme="dark">
+    <div style="height: 56px;background: var(--s-color-surface-container-lowest);">--s-color-surface-container-lowest
+    </div>
+    <div style="height: 56px;">--s-color-background</div>
+    <div style="height: 56px;background: var(--s-color-surface-container-low);">--s-color-surface-container-low</div>
+
+    <div style="height: 56px;background: var(--s-color-surface-container);">--s-color-surface-container</div>
+
+    <div style="height: 56px;background: var(--s-color-surface-container-high);">--s-color-surface-container-high</div>
+
+    <div style="height: 56px;background: var(--s-color-surface-container-highest);">--s-color-surface-container-highest
+    </div>
+  </s-page>
+
+
 </body>
 
 </html>

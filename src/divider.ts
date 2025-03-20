@@ -1,8 +1,10 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
+type Props = {}
+
 const name = 's-divider'
-const props = {
+const props: Props = {
 }
 
 const style = /*css*/`
@@ -28,21 +30,21 @@ const style = /*css*/`
 
 const template = /*html*/`<slot></slot>`
 
-class SDivider extends useElement({ style, template, props }) { }
+class Divider extends useElement({ style, template, props }) { }
 
-SDivider.define(name)
+Divider.define(name)
 
-export { SDivider as Divider }
+export { Divider }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SDivider
+    [name]: Divider
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -51,7 +53,7 @@ declare global {
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof props
+    [name]: Props
   }
 }
 
@@ -60,7 +62,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

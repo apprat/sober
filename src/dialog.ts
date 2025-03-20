@@ -1,12 +1,18 @@
 import { useElement } from './core/element.js'
 import { mediaQueries } from './core/utils/mediaQuery.js'
+import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 import './scroll-view.js'
 
+type Props = {
+  showed: boolean
+  size: 'standard' | 'full'
+}
+
 const name = 's-dialog'
-const props = {
+const props: Props = {
   showed: false,
-  size: 'standard' as 'standard' | 'full'
+  size: 'standard'
 }
 
 const style = /*css*/`
@@ -40,16 +46,12 @@ dialog::backdrop{
   pointer-events: none;
 }
 .scrim{
-  background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 80%, transparent);
+  background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 76%, transparent);
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
   opacity: 0;
-  transition: opacity .2s ease-out;
 }
 dialog.show .scrim{
   opacity: 1;
@@ -67,7 +69,7 @@ dialog.show .scrim{
   transition-timing-function: ease-out;
   width: ${mediaQueries.mobileL}px;
   box-shadow: var(--s-elevation-level5, ${Theme.elevationLevel5});
-  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
 }
 :host([size=full]) .container{
   width: 100%;
@@ -136,11 +138,11 @@ const builder = (options: string | {
   root?: Element
   headline?: string
   text?: string
-  view?: HTMLElement | ((dialog: SDialog) => void)
+  view?: HTMLElement | ((dialog: Dialog) => void)
   actions?: { text: string, click?: (event: MouseEvent) => unknown }[],
 }) => {
   let root: Element = document.body
-  const dialog = new SDialog()
+  const dialog = new Dialog()
   const page = document.body.firstElementChild
   if (page && page.tagName === 'S-PAGE') root = page
   if (typeof options === 'string') {
@@ -170,7 +172,7 @@ const builder = (options: string | {
       action.slot = 'action'
       action.type = 'text'
       action.textContent = item.text
-      if (item.click) action.addEventListener('click', item.click)
+      if (item.click) action.onclick = item.click
       dialog.appendChild(action)
     }
   }
@@ -183,80 +185,88 @@ const builder = (options: string | {
 type EventShowSource = 'TRIGGER'
 type EventCloseSource = 'SCRIM' | 'ACTION'
 
-class SDialog extends useElement({
+class Dialog extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
-    const dialog = shadowRoot.querySelector('dialog') as HTMLDialogElement
-    const wrapper = shadowRoot.querySelector('.wrapper') as HTMLDivElement
-    shadowRoot.querySelector('slot[name=trigger]')!.addEventListener('click', () => {
+    const dialog = shadowRoot.querySelector<HTMLDialogElement>('dialog')!
+    const scrim = shadowRoot.querySelector<HTMLDivElement>('.scrim')!
+    const wrapper = shadowRoot.querySelector<HTMLDivElement>('.wrapper')!
+    const containerStyle = getComputedStyle(this)
+    const getAnimateOptions = () => {
+      const easing = containerStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
+      const duration = containerStyle.getPropertyValue('--s-motion-duration-medium4') || Theme.motionDurationMedium4
+      return { easing: easing, duration: convertCSSDuration(duration) }
+    }
+    shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!.onclick = () => {
       if (this.showed || !this.dispatchEvent(new CustomEvent('show', { cancelable: true, detail: { source: 'TRIGGER' } }))) return
       this.showed = true
-    })
+    }
     const onClose = (source: EventCloseSource) => {
       if (!this.showed || !this.dispatchEvent(new CustomEvent('close', { cancelable: true, detail: { source } }))) return
       this.showed = false
     }
-    shadowRoot.querySelector('.scrim')!.addEventListener('click', () => onClose('SCRIM'))
-    shadowRoot.querySelector('slot[name=action]')!.addEventListener('click', () => onClose('ACTION'))
-    const animateOptions = { duration: 200, easing: 'ease-out' } as const
+    shadowRoot.querySelector<HTMLElement>('.scrim')!.onclick = () => onClose('SCRIM');
+    shadowRoot.querySelector<HTMLSlotElement>('slot[name=action]')!.onclick = () => onClose('ACTION')
     const show = () => {
       if (!this.isConnected || dialog.open) return
+      const animateOptions = getAnimateOptions()
       dialog.showModal()
-      const animation = wrapper.animate([{ transform: 'scale(.9)', opacity: 0 }, { opacity: 1 }], animateOptions)
       dialog.classList.add('show')
+      scrim.animate([{ opacity: 0 }, { opacity: 1 }], animateOptions)
+      const animation = wrapper.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], animateOptions)
       animation.addEventListener('finish', () => this.dispatchEvent(new Event('showed')))
     }
     const close = () => {
       if (!this.isConnected || !dialog.open) return
-      const animation = wrapper.animate([{ opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animateOptions)
-      dialog.classList.remove('show')
+      const animateOptions = getAnimateOptions()
+      scrim.animate([{ opacity: 1 }, { opacity: 0 }], animateOptions)
+      const animation = wrapper.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animateOptions)
       animation.addEventListener('finish', () => {
         dialog.close()
+        dialog.classList.remove('show')
         this.dispatchEvent(new Event('closed'))
       })
     }
     return {
       mounted: () => this.showed && !dialog.open && show(),
-      props: {
-        showed: (value) => value ? show() : close()
-      }
+      showed: (value) => value ? show() : close()
     }
   }
 }) {
   static readonly builder = builder
 }
 
-SDialog.define(name)
+Dialog.define(name)
 
-export { SDialog as Dialog }
+export { Dialog }
 
-interface EventMap {
-  show: CustomEvent<{ source: EventShowSource }>
-  showed: Event
-  close: CustomEvent<{ source: EventCloseSource }>
-  closed: Event
+interface Events {
+  Show: CustomEvent<{ source: EventShowSource }>
+  Showed: Event
+  Close: CustomEvent<{ source: EventCloseSource }>
+  Closed: Event
 }
 
-type ElementEventMap = EventMap & HTMLElementEventMap
+type EventMaps = Events & HTMLElementEventMap
 
-interface SDialog {
-  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SDialog, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SDialog, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
+interface Dialog {
+  addEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Dialog, ev: EventMaps[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Dialog, ev: EventMaps[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
-type Events = {
-  [K in keyof EventMap as `on${K}`]?: (ev: EventMap[K]) => void
+type JSXEvents<L extends boolean = false> = {
+  [K in keyof EventMaps as `on${L extends false ? K : Lowercase<K>}`]?: (ev: EventMaps[K]) => void
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SDialog
+    [name]: Dialog
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props> & Events
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props> & Events<true>
       }
     }
   }
@@ -264,8 +274,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props> & JSXEvents
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props> & JSXEvents
+    }
   }
 }
 
@@ -274,7 +298,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props> & Events
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
     }
   }
 }

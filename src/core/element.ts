@@ -49,14 +49,6 @@ const setStyle = (shadowRoot: ShadowRoot, css?: string) => {
   shadowRoot.insertBefore(baseStyleEl, shadowRoot.firstChild)
 }
 
-type Setup<P, E> = (this: P & HTMLElement, shadowRoot: ShadowRoot) => {
-  mounted?: () => void
-  unmounted?: () => void
-  adopted?: () => unknown
-  expose?: E
-  props?: { [K in keyof P]?: (k: P[K]) => unknown }
-} | void
-
 export const useElement = <
   P extends { [key: string]: Prop } = {},
   E extends {} = {}
@@ -65,7 +57,14 @@ export const useElement = <
   props?: P
   syncProps?: (keyof P)[] | true
   template?: string
-  setup?: Setup<P, E>
+  setup?: (this: P & HTMLElement, shadowRoot: ShadowRoot) => {
+    onMounted?: () => void
+    onUnmounted?: () => void
+    onAdopted?: () => void
+    expose?: E
+  } & {
+    [K in keyof P]?: ((v: P[K], old: P[K]) => void) | { get?: (old: P[K]) => P[K], set?: (v: P[K], old: P[K]) => void }
+  } | void
 }): {
   new(): P & E & HTMLElement
   readonly define: (name: string) => void
@@ -78,8 +77,11 @@ export const useElement = <
     attrs.push(value)
     upperAttrs[value] = key
   }
-  const map = new Map<HTMLElement, ReturnType<Setup<P, E>>>()
+  type ReturnType<T extends ((...args: any) => any) | undefined> = T extends (...args: any) => infer R ? R : T
+  let fragment: null | DocumentFragment = null
+  const map: { [key: symbol]: ReturnType<typeof options.setup> } = {}
   class Prototype extends HTMLElement {
+    symbol = Symbol()
     static observedAttributes = attrs
     static define(name: string) {
       customElements.define(name, this)
@@ -87,21 +89,34 @@ export const useElement = <
     constructor() {
       super()
       const shadowRoot = this.attachShadow({ mode: 'open' })
-      shadowRoot.innerHTML = options.template ?? ''
+      if (!fragment) {
+        const template = document.createElement('template')
+        template.innerHTML = options.template ?? ''
+        fragment = template.content
+      }
+      shadowRoot.appendChild(fragment.cloneNode(true))
       setStyle(shadowRoot, options.style)
       const props = { ...options.props }
-      const advance: { [key: string]: any } = {}
       for (const key in options.props) {
-        const newVal = this[key as never]
-        if (newVal !== undefined && newVal !== props[key]) {
-          advance[key] = newVal
+        const k = key as keyof this
+        if (this[k] !== undefined) {
+          props[key] == this[k]
+          continue
         }
+        this[k] = props[key] as never
+      }
+      const setup = options.setup?.apply(this as any, [shadowRoot])
+      for (const key in options.props) {
         Object.defineProperty(this, key, {
           configurable: true,
-          get: () => props[key],
+          get: () => {
+            const call = setup?.[key]
+            if (!call || typeof call === 'function' || !call.get) return props[key]
+            return call.get?.(props[key] as never)
+          },
           set: (v) => {
             const value = parseType(v, options.props![key])
-            if (value === this[key as any]) return
+            if (value === this[key as keyof this]) return
             if (options.syncProps === true || options.syncProps?.includes(key)) {
               const lowerKey = key.toLowerCase()
               const attrValue = this.getAttribute(lowerKey)
@@ -115,44 +130,35 @@ export const useElement = <
                 return
               }
             }
+            const old = props[key]
             props[key] = value
-            setups?.props?.[key]?.(value as never)
+            const call = setup?.[key]
+            if (!call) return
+            try {
+              typeof call === 'function' ? call(value as never, old as never) : call.set?.(value as never, old as never)
+            } catch (error) {
+              props[key] = old
+              throw error
+            }
           }
         })
       }
-      const setups = options.setup?.apply(this as any, [shadowRoot])
-      const exposeDescriptors = Object.getOwnPropertyDescriptors(setups?.expose ?? {})
-      for (const key in exposeDescriptors) {
-        const item = exposeDescriptors[key]
-        const old = Object.getOwnPropertyDescriptor(this, key)
-        if (old) {
-          if (item.value) old.value == item.value
-          if (item.get) old.get = item.get
-          if (item.set) old.set = item.set
-          Object.defineProperty(this, key, old)
-          continue
-        }
-        Object.defineProperty(this, key, item)
+      for (const key in setup?.expose) {
+        Object.defineProperty(this, key, { get: () => setup?.expose?.[key] })
       }
-      for (const key in advance) {
-        if (options.syncProps === true || options.syncProps?.includes(key)) {
-          this.setAttribute(key, String(parseType(advance[key], options.props![key])))
-        }
-        this[key] = advance[key]
-      }
-      map.set(this, setups)
+      map[this.symbol] = setup
     }
     connectedCallback() {
-      map.get(this)?.mounted?.()
+      map[this.symbol]?.onMounted?.()
     }
     disconnectedCallback() {
-      map.get(this)?.unmounted?.()
+      map[this.symbol]?.onUnmounted?.()
     }
     adoptedCallback() {
-      map.get(this)?.adopted?.()
+      map[this.symbol]?.onAdopted?.()
     }
-    attributeChangedCallback(key: string, _: unknown, newValue: string | null) {
-      this[upperAttrs[key]] = newValue ?? undefined
+    attributeChangedCallback(key: string, _: unknown, value: string | null) {
+      this[upperAttrs[key] as keyof this] = (value ?? undefined) as never
     }
   }
   return Prototype as never

@@ -4,8 +4,14 @@ import { Select } from './core/utils/select.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
+type Props = {
+  value: string,
+  autoplay: boolean,
+  duration: number
+}
+
 const name = 's-carousel'
-const props = {
+const props: Props = {
   value: '',
   autoplay: false,
   duration: 4000
@@ -27,7 +33,7 @@ const style = /*css*/`
   justify-content: flex-start;
   height: 100%;
   min-width: 100%;
-  transition: transform .4s ease-out;
+  transition: transform var(--s-motion-duration-long4, ${Theme.motionDurationLong4}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
   transform: translateX(100%);
 }
 .track{
@@ -65,13 +71,13 @@ const template = /*html*/`
 <div class="track"></div>
 `
 
-class SCarousel extends useElement({
+class Carousel extends useElement({
   style, template, props,
   setup(shadowRoot) {
-    const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const track = shadowRoot.querySelector('.track') as HTMLDivElement
-    const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
-    const select = new Select({ context: this, class: SCarouselItem, slot })
+    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
+    const track = shadowRoot.querySelector<HTMLDivElement>('.track')!
+    const slot = shadowRoot.querySelector('slot')!
+    const select = new Select({ context: this, class: CarouselItem, slot })
     let timer = -1
     select.onUpdate = () => {
       track.childNodes.forEach((item) => (item as Element).classList.remove('checked'))
@@ -81,9 +87,8 @@ class SCarousel extends useElement({
       play()
     }
     const play = () => {
+      if (!this.autoplay || select.list.length === 0 || !this.isConnected) return
       stopPlay()
-      if (!this.autoplay) return
-      if (select.list.length === 0) return
       timer = setTimeout(() => {
         let next = select.selectedIndex + 1
         if (next >= select.list.length) next = 0
@@ -103,7 +108,7 @@ class SCarousel extends useElement({
       })
       track.appendChild(fragment)
     }
-    container.addEventListener('pointerdown', (event) => {
+    container.onpointerdown = (event) => {
       if (select.list.length <= 1) return
       stopPlay()
       const pageX = event.pageX
@@ -111,11 +116,11 @@ class SCarousel extends useElement({
       const width = container.offsetWidth
       const prev = select.list[select.selectedIndex - 1]
       const next = select.list[select.selectedIndex + 1]
-      const state = { now: 0, left: 0, next: undefined as undefined | SCarouselItem }
+      const state = { now: 0, left: 0, next: undefined as undefined | CarouselItem }
       const move = (event: PointerEvent | TouchEvent) => {
-        let eventInfo: { pageX: number, pageY: number } = event instanceof TouchEvent ? event.touches[0] : event
-        const x = eventInfo!.pageX - pageX
-        const y = eventInfo!.pageY - pageY
+        const eventInfo: { pageX: number, pageY: number } = event instanceof TouchEvent ? event.touches[0] : event
+        const x = eventInfo.pageX - pageX
+        const y = eventInfo.pageY - pageY
         if (event instanceof TouchEvent && Math.abs(x) < Math.abs(y) && !state.next) return up()
         state.left = x
         if (state.now === 0) state.now = Date.now()
@@ -159,17 +164,14 @@ class SCarousel extends useElement({
         play()
       }
       const eventName = {
-        move: mediaQueryList.pointerCoarse.matches ? 'touchmove' : 'pointermove',
-        up: mediaQueryList.pointerCoarse.matches ? 'touchend' : 'pointerup'
+        move: mediaQueryList.anyPointerCoarse.matches ? 'touchmove' : 'pointermove',
+        up: mediaQueryList.anyPointerCoarse.matches ? 'touchend' : 'pointerup'
       } as const
       document.addEventListener(eventName.move, move, { passive: false })
       document.addEventListener(eventName.up, up)
-    })
+    }
     return {
       expose: {
-        get value() {
-          return select.value
-        },
         get options() {
           return select.list
         },
@@ -187,16 +189,27 @@ class SCarousel extends useElement({
           next.selected = true
         }
       },
-      props: {
-        value: (value) => select.value = value,
-        autoplay: play
-      }
+      onMounted: play,
+      onUnmounted: stopPlay,
+      value: {
+        get: () => select.value,
+        set: () => {
+          select.value = this.value
+          play()
+        }
+      },
+      autoplay: play,
     }
   }
 }) { }
 
+type ItemProps = {
+  selected: boolean,
+  value: string
+}
+
 const itemName = 's-carousel-item'
-const itemProps = {
+const itemProps: ItemProps = {
   selected: false,
   value: ''
 }
@@ -209,9 +222,9 @@ const itemStyle = /*css*/`
   width: 100%;
   height: 100%;
   border-radius: 8px;
-  background: #eee;
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
   transform: scale(.95);
-  transition: transform .4s ease-out;
+  transition: transform var(--s-motion-duration-long4, ${Theme.motionDurationLong4}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
   background-repeat: round;
 }
 :host([selected=true]){
@@ -221,40 +234,38 @@ const itemStyle = /*css*/`
 
 const itemTemplate = /*html*/`<slot></slot>`
 
-class SCarouselItem extends useElement({
+class CarouselItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
   syncProps: ['selected'],
   setup() {
     return {
-      props: {
-        selected: () => {
-          if (!(this.parentNode instanceof SCarousel)) return
-          this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
-        }
+      selected: () => {
+        if (!(this.parentNode instanceof Carousel)) return
+        this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
       }
     }
   }
 }) { }
 
-SCarousel.define(name)
-SCarouselItem.define(itemName)
+Carousel.define(name)
+CarouselItem.define(itemName)
 
-export { SCarousel as Carousel, SCarouselItem as CarouselItem }
+export { Carousel, CarouselItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SCarousel
-    [itemName]: SCarouselItem
+    [name]: Carousel
+    [itemName]: CarouselItem
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<ItemProps>
       }
     }
   }
@@ -262,19 +273,50 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
-    [itemName]: typeof itemProps
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+    [itemName]: new () => {
+      $props: HTMLAttributes & Partial<ItemProps>
+    }
   }
 }
 
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+      //@ts-ignore
+      [itemName]: IntrinsicElements['div'] & Partial<ItemProps>
+    }
+  }
+}
 
 //@ts-ignore
 declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.ButtonHTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.ButtonHTMLAttributes<HTMLElement> & Partial<Props>
+      //@ts-ignore
+      [itemName]: JSX.ButtonHTMLAttributes<HTMLElement> & Partial<ItemProps>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      //@ts-ignore
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<ItemProps>
     }
   }
 }

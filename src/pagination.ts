@@ -1,10 +1,17 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
-type Props = {}
+type Props = {
+  current: number
+  total: number
+  pageSize: number
+}
 
-const name = 's-badge'
+const name = 's-pagination'
 const props: Props = {
+  current: 1,
+  total: -1,
+  pageSize: 20
 }
 
 const style = /*css*/`
@@ -12,36 +19,19 @@ const style = /*css*/`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 8px;
-  height: 8px;
-  border-radius: 8px;
-  font-size: .625rem;
-  vertical-align: middle;
-  background: var(--s-color-error, ${Theme.colorError});
-  color: var(--s-color-on-error, ${Theme.colorOnError});
-}
-:host(:not(:empty)) .text{
-  padding: 2px 5px;
-  text-align: center;
-  display: block;
-  background: inherit;
-  color: inherit;
-  border: inherit;
-  border-radius: 24px;
-  box-sizing: border-box;
 }
 `
 const template = /*html*/`<slot class="text" part="text"></slot>`
 
-class Badge extends useElement({ style, template, props }) { }
+class Pagination extends useElement({ style, template, props }) { }
 
-Badge.define(name)
+Pagination.define(name)
 
-export { Badge }
+export { Pagination }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Badge
+    [name]: Pagination
   }
   namespace React {
     namespace JSX {
@@ -55,22 +45,8 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  //@ts-ignore
-  import { HTMLAttributes } from 'vue'
-  interface GlobalComponents {
-    [name]: new () => {
-      $props: HTMLAttributes & Partial<Props>
-    }
-  }
-}
-
-//@ts-ignore
-declare module 'vue/jsx-runtime' {
-  namespace JSX {
-    export interface IntrinsicElements {
-      //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
-    }
+  export interface GlobalComponents {
+    [name]: Props
   }
 }
 

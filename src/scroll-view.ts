@@ -1,8 +1,10 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
+type Props = {}
+
 const name = 's-scroll-view'
-const props = {
+const props: Props = {
 }
 
 const style = /*css*/`
@@ -10,7 +12,7 @@ const style = /*css*/`
   display: block;
   overflow: auto;
 }
-@media (pointer: fine){
+@media (any-pointer: fine){
   :host::-webkit-scrollbar{
     width: 6px;
     height: 6px;
@@ -30,21 +32,23 @@ const style = /*css*/`
 
 const template = /*html*/`<slot></slot>`
 
-class SScrollView extends useElement({ style, template, props, }) { }
+class ScrollView extends useElement({
+  style, template, props
+}) { }
 
-SScrollView.define(name)
+ScrollView.define(name)
 
-export { SScrollView as ScrollView }
+export { ScrollView }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SScrollView
+    [name]: ScrollView
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -53,7 +57,7 @@ declare global {
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof props
+    [name]: Props
   }
 }
 
@@ -62,7 +66,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

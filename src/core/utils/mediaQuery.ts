@@ -14,5 +14,6 @@ export const mediaQueryList = {
   tablet: matchMedia(`(max-width: ${mediaQueries.tablet}px)`),
   laptop: matchMedia(`(max-width: ${mediaQueries.laptop}px)`),
   laptopL: matchMedia(`(max-width: ${mediaQueries.laptopL}px)`),
-  pointerCoarse: matchMedia('(pointer: coarse)')
+  anyPointerCoarse: matchMedia('(any-pointer: coarse)'),
+  anyPointerFine: matchMedia('(any-pointer: fine)')
 }

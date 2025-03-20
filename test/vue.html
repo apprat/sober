@@ -4,45 +4,25 @@
 <head>
   <meta charset="UTF-8" />
   <title>Test</title>
-  <meta name="viewport"
-    content="width=device-width,viewport-fit=cover,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-  <script type="module" src="../dist/main.js"></script>
-  <style>
-  </style>
 </head>
 
 <body>
   <main id="app">
-
-    <s-dialog v-model.lazy="state.showed">
-      <s-button slot="trigger"> dialog </s-button>
-      <div slot="headline"> Title </div>
-      <div slot="text">问人生、头白京国，算来何事消得。不如罨画清溪上，蓑笠扁舟一只。人不识，且笑煮、鲈鱼趁著莼丝碧。无端酸鼻，向岐路消魂，征轮驿骑，断雁西风急。
-        英雄辈，事业东西南北。临风因甚泣。酬知有愿频挥手，零雨凄其此日。休太息，须信道、诸公衮衮皆虚掷。年来踪迹。有多少雄心，几翻恶梦，泪点霜华织。
-      </div>
-      <s-button slot="action" type="text">取消</s-button>
-      <s-button slot="action" type="text">确定</s-button>
-    </s-dialog>
-
-    <s-button @click="()=> state.showed = !state.showed">切换</s-button>
-
-    {{state.showed}}
-
-
+    <s-text-field label="label" v-model="textRef"></s-text-field>
+    {{textRef}}
+    <s-button @click="submit">submit</s-button>
   </main>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script>
-    const { createApp, reactive } = Vue
+  <script src="https://unpkg.com/sober@1.0.6/dist/sober.min.js"></script>
+  <script type="module">
+    import { createApp, ref } from 'https://unpkg.com/vue@3.5.13/dist/vue.esm-browser.prod.js'
 
     const app = createApp({
       setup() {
-        const state = reactive({ showed: false })
-        const toggle = () => {
-          state.showed = !state.showed
+        const textRef = ref('')
+        const submit = () => {
+          console.log(textRef.value)
         }
-        return {
-          state, toggle
-        }
+        return { textRef, submit }
       }
     })
     app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('s-')

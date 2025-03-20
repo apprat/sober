@@ -12,22 +12,42 @@
 <body>
   <s-page class="gap">
     <s-snackbar>
-      <s-button slot="trigger"> 提示auto </s-button>
+      <s-button slot="trigger"> auto </s-button>
       Message
       <s-button type="text" slot="action"> 关闭 </s-button>
     </s-snackbar>
-    <hr>
     <s-snackbar align="top">
-      <s-button slot="trigger"> 提示 top</s-button>
+      <s-button slot="trigger"> top</s-button>
       <s-icon name="light_mode" slot="icon"></s-icon>
       Message
       <s-button type="text" slot="action"> 关闭 </s-button>
     </s-snackbar>
-    <hr>
-    <s-snackbar type="error" align="bottom">
-      <s-button slot="trigger" type="filled-tonal"> 错误 bottom </s-button>
+    <s-snackbar align="bottom">
+      <s-button slot="trigger" type="filled-tonal"> bottom </s-button>
       Message
     </s-snackbar>
+    <hr>
+    <s-snackbar type="info">
+      <s-button slot="trigger"> info </s-button>
+      Message
+      <s-button type="text" slot="action"> 关闭 </s-button>
+    </s-snackbar>
+    <s-snackbar type="success">
+      <s-button slot="trigger"> success </s-button>
+      Message
+      <s-button type="text" slot="action"> 关闭 </s-button>
+    </s-snackbar>
+    <s-snackbar type="warning">
+      <s-button slot="trigger"> warning </s-button>
+      Message
+      <s-button type="text" slot="action"> 关闭 </s-button>
+    </s-snackbar>
+    <s-snackbar type="error">
+      <s-button slot="trigger"> error </s-button>
+      Message
+      <s-button type="text" slot="action"> 关闭 </s-button>
+    </s-snackbar>
+    <hr>
     <s-button id="create"> create </s-button>
   </s-page>
   <script type="module">
@@ -36,8 +56,7 @@
     create.addEventListener('click', () => {
       Snackbar.builder('你好')
     })
-  </script>>
-
+  </script>
   </script>
 </body>
 

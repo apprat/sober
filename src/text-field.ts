@@ -164,7 +164,7 @@ input::-ms-reveal{
 }
 .text>.counter,
 ::slotted([slot=text]){
-  margin-top: 4px;
+  margin-top: 8px;
 }
 ::slotted(svg){
   fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
@@ -253,46 +253,44 @@ class STextField extends useElement({
           return getInput().value
         }
       },
-      props: {
-        label: (value) => label.textContent = value,
-        type: (value) => inputs.input.type = value,
-        error: (value) => {
-          if (value) {
-            field.fixed = true
-            return
-          }
-          if (getInput().value === '') field.fixed = false
-        },
-        value: (value) => {
-          inputs.input.value = value
-          inputs.textarea.value = value
-          textAreaShadow.textContent = value
-          onCounter()
-          if (!this.error) field.fixed = value !== ''
-        },
-        placeholder: (value) => {
-          inputs.input.placeholder = value
-          inputs.textarea.placeholder = value
-        },
-        readOnly: (value) => {
-          inputs.input.readOnly = value
-          inputs.textarea.readOnly = value
-        },
-        maxLength: (value) => {
-          inputs.input.maxLength = value
-          inputs.textarea.maxLength = value
-          onCounter()
-        },
-        multiLine: (value) => {
-          if (value) {
-            inputs.textarea.value = inputs.input.value
-            textAreaShadow.textContent = inputs.input.value
-            return
-          }
-          inputs.input.value = inputs.textarea.value
-        },
-        countered: onCounter
-      }
+      label: (value) => label.textContent = value,
+      type: (value) => inputs.input.type = value,
+      error: (value) => {
+        if (value) {
+          field.fixed = true
+          return
+        }
+        if (getInput().value === '') field.fixed = false
+      },
+      value: (value) => {
+        inputs.input.value = value
+        inputs.textarea.value = value
+        textAreaShadow.textContent = value
+        onCounter()
+        if (!this.error) field.fixed = value !== ''
+      },
+      placeholder: (value) => {
+        inputs.input.placeholder = value
+        inputs.textarea.placeholder = value
+      },
+      readOnly: (value) => {
+        inputs.input.readOnly = value
+        inputs.textarea.readOnly = value
+      },
+      maxLength: (value) => {
+        inputs.input.maxLength = value
+        inputs.textarea.maxLength = value
+        onCounter()
+      },
+      multiLine: (value) => {
+        if (value) {
+          inputs.textarea.value = inputs.input.value
+          textAreaShadow.textContent = inputs.input.value
+          return
+        }
+        inputs.input.value = inputs.textarea.value
+      },
+      countered: onCounter
     }
   }
 }) { }

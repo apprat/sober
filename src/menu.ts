@@ -13,7 +13,7 @@ const style = /*css*/`
   flex-direction: column;
   font-size: .875rem;
   padding: 4px 0;
-  flex-shrink: 0;
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
 }
 :host(:nth-of-type(n+2)){
   border-top: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
@@ -123,7 +123,7 @@ const itemStyle = /*css*/`
   margin-left: 12px;
 }
 ::slotted([slot=menu]){
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
 }
 `
 
@@ -160,9 +160,7 @@ class SMenuItem extends useElement({
       this.folded = !this.folded
     })
     return {
-      props: {
-        folded: (value) => fold.folded = value
-      }
+      folded: (value) => fold.folded = value
     }
   }
 }) { }

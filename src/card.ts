@@ -2,9 +2,14 @@ import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
+type Props = {
+  type: 'elevated' | 'filled' | 'outlined'
+  clickable: boolean
+}
+
 const name = 's-card'
-const props = {
-  type: 'standard' as 'standard' | 'filled' | 'outlined',
+const props: Props = {
+  type: 'elevated',
   clickable: false
 }
 
@@ -16,16 +21,15 @@ const style = /*css*/`
   position: relative;
   font-size: .875rem;
   box-sizing: border-box;
-  max-width: 280px;
+  width: 280px;
   overflow: hidden;
-  flex-shrink: 0;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
 :host([type=filled]){
   box-shadow: none;
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
+  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
 }
 :host([type=outlined]){
   box-shadow: none;
@@ -34,7 +38,7 @@ const style = /*css*/`
 }
 :host([clickable=true]){
   cursor: pointer;
-  transition: box-shadow .1s ease-out;
+  transition: box-shadow var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
 }
 :host([clickable=true]) .ripple{
   display: block;
@@ -51,10 +55,7 @@ const style = /*css*/`
 ::slotted([slot=image]){
   display: block;
   height: 128px;
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
-}
-:host([type=filled]) ::slotted([slot=image]){
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
 }
 ::slotted([slot=headline]){
   font-size: 1.5rem;
@@ -77,7 +78,7 @@ const style = /*css*/`
 ::slotted(s-button[slot=action]:last-of-type){
   margin-right: 16px;
 }
-@media (pointer: fine){
+@media (any-pointer: fine){
   :host([clickable=true][type=filled]:hover),
   :host([clickable=true][type=outlined]:hover){
     box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
@@ -102,27 +103,27 @@ const template = /*html*/`
 <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 `
 
-class SCard extends useElement({
+class Card extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
-    const action = shadowRoot.querySelector('slot[name=action]') as HTMLElement
-    action.addEventListener('pointerdown', (e) => e.stopPropagation())
+    const action = shadowRoot.querySelector<HTMLElement>('slot[name=action]')!
+    action.onpointerdown = (e) => e.stopPropagation()
   }
 }) { }
 
-SCard.define(name)
+Card.define(name)
 
-export { SCard as Card }
+export { Card }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SCard
+    [name]: Card
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -130,8 +131,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -140,7 +155,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

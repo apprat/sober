@@ -17,27 +17,37 @@ export class Select<P extends Parent, I extends Item> {
     context.addEventListener(`${context.tagName.toLocaleLowerCase()}:select`, (event) => {
       event.stopPropagation()
       if (!(event.target instanceof options.class)) return
+      let old: I | undefined
       this.flag = true
       event.target.selected = true
-      this.list.forEach((item) => item !== event.target && (item.selected = false))
+      this.list.forEach((item) => {
+        if (item === event.target) return
+        if (item.selected) old = item
+        item.selected = false
+      })
       this.select = event.target
       this.flag = false
       context.dispatchEvent(new Event('change'))
-      this.onUpdate?.()
+      this.onUpdate?.(old)
       this.onSelect?.()
     })
     context.addEventListener(`${context.tagName.toLocaleLowerCase()}:update`, (event) => {
       event.stopPropagation()
       if (this.flag || this.list.length === 0 || !(event.target instanceof options.class)) return
       this.flag = true
+      let old: I | undefined
       if (!event.target.selected) {
         delete this.select
       } else {
         this.select = event.target
-        this.list.forEach((item) => item !== event.target && (item.selected = false))
+        this.list.forEach((item) => {
+          if (item === event.target) return
+          if (item.selected) old = item
+          item.selected = false
+        })
       }
       this.flag = false
-      this.onUpdate?.()
+      this.onUpdate?.(old)
     })
     options.slot.addEventListener('slotchange', () => {
       this.flag = true
@@ -86,7 +96,7 @@ export class Select<P extends Parent, I extends Item> {
   get selectedIndex() {
     return this.list.indexOf(this.select!)
   }
-  declare onUpdate?: () => void
+  declare onUpdate?: (old?: I) => void
   declare onSelect?: () => void
   declare onSlotChange?: () => void
 }

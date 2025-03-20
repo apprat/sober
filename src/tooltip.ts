@@ -3,9 +3,15 @@ import { mediaQueryList } from './core/utils/mediaQuery.js'
 import { getStackingContext } from './core/utils/getStackingContext.js'
 import { Theme } from './core/theme.js'
 
+type Props = {
+  align: 'top' | 'bottom' | 'left' | 'right'
+  disabled: boolean
+}
+
 const name = 's-tooltip'
-const props = {
-  align: 'top' as 'top' | 'bottom' | 'left' | 'right'
+const props: Props = {
+  align: 'top',
+  disabled: false,
 }
 
 const style = /*css*/`
@@ -16,8 +22,7 @@ const style = /*css*/`
 }
 .popup{
   position: fixed;
-  left: 0;
-  top: 0;
+  inset: 0;
   margin: 0;
   background: none;
   border: none;
@@ -30,7 +35,7 @@ const style = /*css*/`
   padding: 6px 8px;
   border-radius: 4px;
   white-space: nowrap;
-  background: color-mix(in srgb, var(--s-color-inverse-surface, ${Theme.colorInverseSurface}) 90%, transparent);
+  background: color-mix(in srgb, var(--s-color-inverse-surface, ${Theme.colorInverseSurface}) 88%, transparent);
   color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
 }
 ::slotted(img){
@@ -48,14 +53,14 @@ const template = /*html*/`
 </div>
 `
 
-class STooltip extends useElement({
+class Tooltip extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
     const popup = shadowRoot.querySelector('.popup') as HTMLDivElement
     const animateOptions = { duration: 200, fill: 'forwards' } as const
     const show = () => {
-      if (!this.isConnected) return
+      if (!this.isConnected || this.disabled) return
       popup.style.display = 'block'
       if (popup.showPopover) {
         popup.showPopover()
@@ -120,34 +125,34 @@ class STooltip extends useElement({
         popup.style.removeProperty('display')
       })
     }
-    const state = { timer: 0 }
+    let timer = 0
     trigger.addEventListener('touchstart', () => {
-      if (!mediaQueryList.pointerCoarse.matches) return
-      clearTimeout(state.timer)
-      state.timer = setTimeout(() => show(), 600)
-    }, { passive: true })
+      if (!mediaQueryList.anyPointerCoarse.matches) return
+      clearTimeout(timer)
+      timer = setTimeout(() => show(), 600)
+    }, { passive: false })
     trigger.addEventListener('touchend', () => {
-      clearTimeout(state.timer)
+      clearTimeout(timer)
       close()
-    }, { passive: true })
-    trigger.addEventListener('mouseenter', () => !mediaQueryList.pointerCoarse.matches && show())
-    trigger.addEventListener('mouseleave', () => !mediaQueryList.pointerCoarse.matches && close())
+    })
+    trigger.addEventListener('mouseenter', () => !mediaQueryList.anyPointerCoarse.matches && show())
+    trigger.addEventListener('mouseleave', () => !mediaQueryList.anyPointerCoarse.matches && close())
   }
 }) { }
 
-STooltip.define(name)
+Tooltip.define(name)
 
-export { STooltip as Tooltip }
+export { Tooltip }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: STooltip
+    [name]: Tooltip
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -156,7 +161,7 @@ declare global {
 //@ts-ignore
 declare module 'vue' {
   export interface GlobalComponents {
-    [name]: typeof props
+    [name]: Props
   }
 }
 
@@ -165,7 +170,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

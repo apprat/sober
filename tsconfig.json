@@ -11,7 +11,7 @@
     "checkJs": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "declaration": true,
     "moduleResolution": "Bundler",
     "esModuleInterop": true,

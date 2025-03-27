@@ -56,7 +56,6 @@ const style = /*css*/`
   border-radius: 20px;
   max-width: 100%;
   margin: 0 4px 0 8px;
-  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
 }
 ::slotted(s-appbar){
   height: 100%;

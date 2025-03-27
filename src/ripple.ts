@@ -1,9 +1,15 @@
 import { useElement } from './core/element.js'
 import { mediaQueryList } from './core/utils/mediaQuery.js'
+import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 
+type Props = {
+  centered: boolean
+  attached: boolean
+}
+
 const name = 's-ripple'
-const props = {
+const props: Props = {
   centered: false,
   attached: false
 }
@@ -15,33 +21,22 @@ const style = /*css*/`
   position: relative;
   cursor: pointer;
 }
-:host([attached=true]){
+:host([attached=true]),
+.container,
+.container::before,
+.ripple{
   position: absolute;
-  left: 0;
-  top: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
   border-radius: inherit;
 }
 .container{
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  pointer-events: none;
   overflow: hidden;
-  border-radius: inherit;
 }
 .container::before{
   content: '';
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  border-radius: inherit;
   background: var(--ripple-color, currentColor);
   opacity: 0;
   transition: opacity var(--s-motion-duration-short4, ${Theme.motionDurationShort2}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
@@ -53,13 +48,8 @@ const style = /*css*/`
   color: color-mix(in srgb, var(--ripple-color, currentColor) calc(100% * var(--ripple-opacity, .18)), transparent);
   background: currentColor;
   border-radius: 50%;
-  width: 100%;
-  height: 100%;
-  position: absolute;
   transform: translate(-50%, -50%) scale(0);
   filter: blur(8px);
-  left: 0;
-  top: 0;
 }
 `
 
@@ -70,28 +60,24 @@ const template = /*html*/`
 </div>
 `
 
-class SRipple extends useElement({
+class Ripple extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
-    const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const ripple = shadowRoot.querySelector('.ripple') as HTMLDivElement
+    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
+    const ripple = shadowRoot.querySelector<HTMLDivElement>('.ripple')!
     const computedStyle = getComputedStyle(this)
     const getAnimateOptions = () => {
-      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard')
-      const duration = computedStyle.getPropertyValue('--s-motion-duration-long4')
-      const shortDuration = computedStyle.getPropertyValue('--s-motion-duration-short4')
-      return {
-        easing: easing === '' ? Theme.motionEasingStandard : easing,
-        duration: Number((duration === '' ? Theme.motionDurationLong4 : duration).slice(0, -2)),
-        shortDuration: Number((shortDuration === '' ? Theme.motionDurationShort4 : shortDuration).slice(0, -2)),
-      }
+      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
+      const duration = computedStyle.getPropertyValue('--s-motion-duration-long4') || Theme.motionDurationLong4
+      const shortDuration = computedStyle.getPropertyValue('--s-motion-duration-short4') || Theme.motionDurationShort4
+      return { easing: easing, duration: convertCSSDuration(duration), shortDuration: convertCSSDuration(shortDuration) }
     }
     const hover = () => !mediaQueryList.anyPointerCoarse.matches && container.classList.add('hover')
     const unHover = () => !mediaQueryList.anyPointerCoarse.matches && container.classList.remove('hover')
     const state = { parentNode: null as null | HTMLElement, pressed: false }
     const run = (event: PointerEvent) => {
       const { offsetWidth, offsetHeight } = this
-      let size = Math.sqrt(offsetWidth * offsetWidth + offsetHeight * offsetHeight)
+      let size = Math.sqrt(offsetWidth ** 2 + offsetHeight ** 2)
       const coordinate = { x: '50%', y: '50%' }
       if (!this.centered) {
         const { left, top } = this.getBoundingClientRect()
@@ -101,7 +87,7 @@ class SRipple extends useElement({
         const w = offsetWidth / 2
         const edgeW = (Math.abs(h - y) + h) * 2
         const edgeH = (Math.abs(w - x) + w) * 2
-        size = Math.sqrt(edgeW * edgeW + edgeH * edgeH)
+        size = Math.sqrt(edgeW ** 2 + edgeH ** 2)
         coordinate.x = `${x}px`
         coordinate.y = `${y}px`
       }
@@ -124,7 +110,7 @@ class SRipple extends useElement({
         parent.removeAttribute('pressed')
         const time = Number(animation.currentTime)
         const diff = animateOptions.duration - animateOptions.shortDuration
-        newRipple.animate([{ opacity: 1 }, { opacity: 0 }], { duration: time > diff ? animateOptions.shortDuration : animateOptions.duration - time, fill: 'forwards' }).finished.then(callback)
+        newRipple.animate({ opacity: [1, 0] }, { duration: time > diff ? animateOptions.shortDuration : animateOptions.duration - time, easing: animateOptions.easing, fill: 'forwards' }).finished.then(callback)
       }
       return remove
     }
@@ -183,19 +169,19 @@ class SRipple extends useElement({
   }
 }) { }
 
-SRipple.define(name)
+Ripple.define(name)
 
-export { SRipple as Ripple }
+export { Ripple }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SRipple
+    [name]: Ripple
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -203,8 +189,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -213,7 +213,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

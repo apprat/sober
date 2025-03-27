@@ -225,9 +225,7 @@ const template = /*html*/`
 </div>
 `
 
-class Field extends useElement({
-  style, template, props, syncProps: true
-}) { }
+class Field extends useElement({ style, template, props, syncProps: true }) { }
 
 Field.define(name)
 
@@ -249,8 +247,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: Props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -260,6 +272,16 @@ declare module 'solid-js' {
     interface IntrinsicElements {
       //@ts-ignore
       [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

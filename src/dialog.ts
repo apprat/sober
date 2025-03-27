@@ -212,15 +212,15 @@ class Dialog extends useElement({
       const animateOptions = getAnimateOptions()
       dialog.showModal()
       dialog.classList.add('show')
-      scrim.animate([{ opacity: 0 }, { opacity: 1 }], animateOptions)
-      const animation = wrapper.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], animateOptions)
+      scrim.animate({ opacity: [0, 1] }, animateOptions)
+      const animation = wrapper.animate({ transform: ['scale(.9)', 'scale(1)'], opacity: [0, 1] }, animateOptions)
       animation.addEventListener('finish', () => this.dispatchEvent(new Event('showed')))
     }
     const close = () => {
       if (!this.isConnected || !dialog.open) return
       const animateOptions = getAnimateOptions()
-      scrim.animate([{ opacity: 1 }, { opacity: 0 }], animateOptions)
-      const animation = wrapper.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animateOptions)
+      scrim.animate({ opacity: [1, 0] }, animateOptions)
+      const animation = wrapper.animate({ transform: ['scale(1)', 'scale(.9)'], opacity: [1, 0] }, animateOptions)
       animation.addEventListener('finish', () => {
         dialog.close()
         dialog.classList.remove('show')

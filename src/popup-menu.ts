@@ -4,9 +4,12 @@ import { Popup } from './popup.js'
 import './ripple.js'
 import './scroll-view.js'
 
+type Props = {
+  group: 'start' | 'end' | ''
+}
 const name = 's-popup-menu'
-const props = {
-  group: '' as 'start' | 'end' | ''
+const props: Props = {
+  group: ''
 }
 
 const style = /*css*/`
@@ -48,34 +51,42 @@ const template = /*html*/`
 </s-popup>
 `
 
-class SPopupMenu extends useElement({
+class PopupMenu extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
-    const popup = shadowRoot.querySelector('.popup') as Popup
-    const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
-    trigger.addEventListener('click', (e) => {
+    const popup = shadowRoot.querySelector<Popup>('.popup')!
+    const trigger = shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!
+    trigger.onclick = (e) => {
       e.stopPropagation()
       popup.show()
-    })
+    }
     this.addEventListener(`${name}:click`, (event) => {
       event.stopPropagation()
       popup.close()
     })
     return {
-      mounted: () => {
-        if (this.parentNode instanceof SPopupMenu) popup.setAttribute('align', 'right')
+      onMounted: () => {
+        if (this.parentNode instanceof PopupMenu) popup.setAttribute('align', 'right')
       },
       expose: {
-        show: popup.show.bind(popup),
-        close: popup.close.bind(popup),
-        toggle: popup.toggle.bind(popup)
+        get show() {
+          return popup.show
+        },
+        get toggle() {
+          return popup.toggle
+        },
+        get close() {
+          return popup.close
+        }
       }
     }
   }
 }) { }
 
+type ItemProps = {}
+
 const itemName = 's-popup-menu-item'
-const itemProps = {
+const itemProps: ItemProps = {
 }
 
 const itemStyle = /*css*/`
@@ -96,8 +107,7 @@ const itemStyle = /*css*/`
   overflow: hidden;
   text-overflow: ellipsis;
 }
-::slotted(svg),
-::slotted(s-icon){
+::slotted(:is(svg, s-icon)){
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   fill: currentColor;
   height: 24px;
@@ -125,7 +135,7 @@ const itemTemplate = /*html*/`
 <s-ripple attached="true"></s-ripple>
 `
 
-class SPopupMenuItem extends useElement({
+class PopupMenuItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
@@ -134,23 +144,23 @@ class SPopupMenuItem extends useElement({
   }
 }) { }
 
-SPopupMenu.define(name)
-SPopupMenuItem.define(itemName)
+PopupMenu.define(name)
+PopupMenuItem.define(itemName)
 
-export { SPopupMenu as PopupMenu, SPopupMenuItem as PopupMenuItem }
+export { PopupMenu, PopupMenuItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SPopupMenu
-    [itemName]: SPopupMenuItem
+    [name]: PopupMenu
+    [itemName]: PopupMenuItem
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<ItemProps>
       }
     }
   }
@@ -158,9 +168,27 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
-    [itemName]: typeof itemProps
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+    [itemName]: new () => {
+      $props: HTMLAttributes & Partial<ItemProps>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+      //@ts-ignore
+      [itemName]: IntrinsicElements['div'] & Partial<ItemProps>
+    }
   }
 }
 
@@ -169,9 +197,21 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      //@ts-ignore
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<ItemProps>
     }
   }
 }

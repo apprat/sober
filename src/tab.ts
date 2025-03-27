@@ -65,8 +65,8 @@ const template = /*html*/`
 class Tab extends useElement({
   style, template, props, syncProps: ['mode'],
   setup(shadowRoot) {
-    const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
-    const container = shadowRoot.querySelector('.container') as HTMLDivElement
+    const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
+    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const select = new Select({ context: this, class: TabItem, slot })
     const computedStyle = getComputedStyle(this)
     const getAnimateOptions = () => {
@@ -76,7 +76,7 @@ class Tab extends useElement({
     }
     select.onUpdate = (old) => {
       if (select.select && container.scrollWidth !== container.offsetWidth) {
-        const left = select.select.offsetLeft - (container.offsetWidth / 2) + (select.select.offsetWidth / 2)
+        const left = (select.select.offsetLeft - container.offsetLeft) - (container.offsetWidth / 2 - select.select.offsetWidth / 2)
         container.scrollTo({ left, behavior: 'smooth' })
       }
       if (!old || !select.select || !this.isConnected) return
@@ -211,12 +211,12 @@ class TabItem extends useElement({
   props: itemProps,
   syncProps: ['selected'],
   setup(shadowRoot) {
-    const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    shadowRoot.querySelector('[name=icon]')!.addEventListener('slotchange', (event) => {
+    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
+    shadowRoot.querySelector<HTMLSlotElement>('[name=icon]')!.onslotchange = (event) => {
       const slot = event.target as HTMLSlotElement
       const length = slot.assignedElements().length
       container.classList[length > 0 ? 'add' : 'remove']('icon')
-    })
+    }
     this.addEventListener('click', () => {
       if (!(this.parentNode instanceof Tab) || this.selected) return
       this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
@@ -254,9 +254,27 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: Props
-    [itemName]: ItemProps
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+    [itemName]: new () => {
+      $props: HTMLAttributes & Partial<ItemProps>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+      //@ts-ignore
+      [itemName]: IntrinsicElements['div'] & Partial<ItemProps>
+    }
   }
 }
 

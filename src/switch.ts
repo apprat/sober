@@ -2,8 +2,13 @@ import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
+type Props = {
+  disabled: boolean
+  checked: boolean
+}
+
 const name = 's-switch'
-const props = {
+const props: Props = {
   disabled: false,
   checked: false
 }
@@ -19,8 +24,7 @@ const style = /*css*/`
   width: 52px;
   aspect-ratio: 1.625;
   -webkit-aspect-ratio: 1.625;
-  border-radius: 26px;
-  flex-shrink: 0;
+  border-radius: 16px;
 }
 :host([disabled=true]){
   pointer-events: none;
@@ -48,8 +52,8 @@ const style = /*css*/`
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   border-radius: 50%;
-  top: auto;
-  transition: transform .1s ease-out;
+  inset: auto;
+  transition: transform var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-emphasized, ${Theme.motionEasingEmphasized});
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,8 +70,7 @@ const style = /*css*/`
   border-radius: 50%;
   width: 40%;
   height: 40%;
-  transition: transform .1s, box-shadow .1s;
-  transition-timing-function: ease-out;
+  transition: transform var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-emphasized, ${Theme.motionEasingEmphasized});
   position: relative;
 }
 :host([disabled=true]) .thumb{
@@ -88,7 +91,7 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   opacity: 0;
-  transition: opacity .1s ease-out;
+  transition: opacity var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-emphasized, ${Theme.motionEasingEmphasized});
   color: currentColor;
 }
 ::slotted([slot=icon]),
@@ -108,18 +111,14 @@ svg{
 
 const template = /*html*/`
 <div class="track" part="track"></div>
-<s-ripple attached="true" centered="true" class="ripple" part="ripple">
+<s-ripple attached="true" class="ripple" part="ripple">
   <div class="thumb" part="thumb">
-    <slot name="icon" class="icon">
-      <svg viewBox="0 -960 960 960">
-        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path>
-      </svg>
-    </slot>
+    <slot name="icon" class="icon"></slot>
   </div>
 </s-ripple>
 `
 
-class SSwitch extends useElement({
+class Switch extends useElement({
   style, template, props, syncProps: true,
   setup() {
     this.addEventListener('click', () => {
@@ -129,19 +128,19 @@ class SSwitch extends useElement({
   }
 }) { }
 
-SSwitch.define(name)
+Switch.define(name)
 
-export { SSwitch as Switch }
+export { Switch }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SSwitch
+    [name]: Switch
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -149,8 +148,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -159,7 +172,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

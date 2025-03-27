@@ -1,5 +1,6 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
+import { convertCSSDuration } from './core/utils/CSSUtils.js'
 
 type Props = {
   align: 'top' | 'bottom' | 'left' | 'right'
@@ -53,7 +54,7 @@ dialog::backdrop{
   max-height: 100%;
   white-space: nowrap;
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
 }
 `
 
@@ -72,9 +73,14 @@ type ShowOptions = { x: number, y: number, origin?: string }
 class Popup extends useElement({
   style, template, props,
   setup(shadowRoot) {
-    const dialog = shadowRoot.querySelector('dialog') as HTMLDialogElement
-    const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const animateOptions = { duration: 300, easing: 'cubic-bezier(0.2, 0, 0, 1)' } as const
+    const dialog = shadowRoot.querySelector<HTMLDialogElement>('dialog')!
+    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
+    const computedStyle = getComputedStyle(this)
+    const getAnimateOptions = () => {
+      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
+      const duration = computedStyle.getPropertyValue('--s-motion-duration-medium4') || Theme.motionDurationMedium4
+      return { easing: easing, duration: convertCSSDuration(duration) }
+    }
     const show = (option?: HTMLElement | ShowOptions) => {
       if (!this.isConnected || dialog.open) return
       const position = { top: 0, left: 0, origin: [] as string[] }
@@ -152,14 +158,14 @@ class Popup extends useElement({
       container.style.transformOrigin = position.origin.join(' ')
       container.style.top = `${Math.max(position.top, 0)}px`
       container.style.left = `${Math.max(position.left, 0)}px`
-      const animation = container.animate([{ transform: 'scale(.9)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], animateOptions)
+      const animation = container.animate({ transform: ['scale(.9)', 'scale(1)'], opacity: [0, 1] }, getAnimateOptions())
       this.setAttribute('showed', '')
       animation.finished.then(() => this.dispatchEvent(new Event('showed')))
     }
     const close = () => {
       if (!this.isConnected || !dialog.open) return
       if (!this.dispatchEvent(new Event('close', { cancelable: true }))) return
-      const animation = container.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.9)', opacity: 0 }], animateOptions)
+      const animation = container.animate({ transform: ['scale(1)', 'scale(.9)'], opacity: [1, 0] }, getAnimateOptions())
       this.removeAttribute('showed')
       animation.finished.then(() => {
         dialog.close()

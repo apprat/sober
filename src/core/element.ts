@@ -81,7 +81,7 @@ export const useElement = <
   let fragment: null | DocumentFragment = null
   const map: { [key: symbol]: ReturnType<typeof options.setup> } = {}
   class Prototype extends HTMLElement {
-    symbol = Symbol()
+    #symbol = Symbol()
     static observedAttributes = attrs
     static define(name: string) {
       customElements.define(name, this)
@@ -146,16 +146,16 @@ export const useElement = <
       for (const key in setup?.expose) {
         Object.defineProperty(this, key, { get: () => setup?.expose?.[key] })
       }
-      map[this.symbol] = setup
+      map[this.#symbol] = setup
     }
     connectedCallback() {
-      map[this.symbol]?.onMounted?.()
+      map[this.#symbol]?.onMounted?.()
     }
     disconnectedCallback() {
-      map[this.symbol]?.onUnmounted?.()
+      map[this.#symbol]?.onUnmounted?.()
     }
     adoptedCallback() {
-      map[this.symbol]?.onAdopted?.()
+      map[this.#symbol]?.onAdopted?.()
     }
     attributeChangedCallback(key: string, _: unknown, value: string | null) {
       this[upperAttrs[key] as keyof this] = (value ?? undefined) as never

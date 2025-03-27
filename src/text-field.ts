@@ -2,12 +2,25 @@ import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 import { Field } from './field.js'
 
+type Props = {
+  label: string
+  placeholder: string
+  disabled: boolean
+  type: 'text' | 'number' | 'password'
+  error: boolean
+  value: string
+  maxLength: number
+  readOnly: boolean
+  multiLine: boolean
+  countered: boolean
+}
+
 const name = 's-text-field'
-const props = {
+const props: Props = {
   label: '',
   placeholder: '',
   disabled: false,
-  type: 'text' as 'text' | 'number' | 'password',
+  type: 'text',
   error: false,
   value: '',
   maxLength: -1,
@@ -179,13 +192,11 @@ input::-ms-reveal{
   margin-right: 4px;
   margin-left: calc(var(--text-field-border-radius) - var(--text-field-padding-right) + 4px);
 }
-::slotted(s-icon[slot=start]),
-::slotted(svg[slot=start]){
+::slotted(:is(s-icon[slot=start], svg[slot=start])){
   margin-left: 12px;
   margin-right: calc(var(--text-field-border-radius) - var(--text-field-padding-left) + 8px);
 }
-::slotted(s-icon[slot=end]),
-::slotted(svg[slot=end]){
+::slotted(:is(s-icon[slot=end], svg[slot=end])){
   margin-right: 12px;
   margin-left: calc(var(--text-field-border-radius) - var(--text-field-padding-right) + 8px);
 }
@@ -208,13 +219,13 @@ const template = /*html*/`
 </div>
 `
 
-class STextField extends useElement({
+class TextField extends useElement({
   style, template, props, syncProps: ['disabled', 'error', 'multiLine', 'countered'],
   setup(shadowRoot) {
-    const field = shadowRoot.querySelector('.field') as Field
-    const label = shadowRoot.querySelector('.label') as HTMLDivElement
-    const textAreaShadow = shadowRoot.querySelector('.shadow')!
-    const counter = shadowRoot.querySelector('.counter')!
+    const field = shadowRoot.querySelector<Field>('.field')!
+    const label = shadowRoot.querySelector<HTMLDivElement>('.label')!
+    const textAreaShadow = shadowRoot.querySelector<HTMLDivElement>('.shadow')!
+    const counter = shadowRoot.querySelector<HTMLDivElement>('.counter')!
     const inputs = {
       input: shadowRoot.querySelector('input')!,
       textarea: shadowRoot.querySelector('textarea')!
@@ -233,17 +244,17 @@ class STextField extends useElement({
       field.focused = false
       if (getInput().value === '' && !this.error) field.fixed = false
     }
-    inputs.input.addEventListener('input', onCounter)
-    inputs.input.addEventListener('focus', onFocus)
-    inputs.input.addEventListener('blur', onBlur)
-    inputs.input.addEventListener('change', onChange)
-    inputs.textarea.addEventListener('focus', onFocus)
-    inputs.textarea.addEventListener('blur', onBlur)
-    inputs.textarea.addEventListener('change', onChange)
-    inputs.textarea.addEventListener('input', () => {
+    inputs.input.oninput = onCounter
+    inputs.input.onfocus = onFocus
+    inputs.input.onblur = onBlur
+    inputs.input.onchange = onChange
+    inputs.textarea.onfocus = onFocus
+    inputs.textarea.onblur = onBlur
+    inputs.textarea.onchange = onChange
+    inputs.textarea.oninput = () => {
       textAreaShadow.textContent = inputs.textarea.value
       onCounter()
-    })
+    }
     return {
       expose: {
         get native() {
@@ -295,19 +306,19 @@ class STextField extends useElement({
   }
 }) { }
 
-STextField.define(name)
+TextField.define(name)
 
-export { STextField as TextField }
+export { TextField }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: STextField
+    [name]: TextField
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -315,8 +326,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -325,7 +350,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

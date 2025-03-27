@@ -21,6 +21,7 @@ const style = /*css*/`
   align-items: center;
   vertical-align: middle;
   cursor: pointer;
+  position: relative;
   height: 40px;
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
@@ -72,10 +73,15 @@ const style = /*css*/`
   opacity: 1;
   transform: scale(1);
 }
+.ripple{
+  aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
+  height: 100%;
+  width: auto;
+  border-radius: 50%;
+}
 svg,
-::slotted([slot=checked]),
-::slotted([slot=unchecked]),
-::slotted([slot=indeterminate]){
+::slotted(:is([slot=checked], [slot=unchecked], [slot=indeterminate])){
   color: currentColor;
   fill: currentColor;
   width: 60%;
@@ -100,9 +106,9 @@ const template = /*html*/`
       <path d="M280-440h400v-80H280v80Zm-80 320q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Z"></path>
     </svg>
   </slot>
-  <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 </div>
 <slot></slot>
+<s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 `
 
 class Checkbox extends useElement({

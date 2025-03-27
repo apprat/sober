@@ -3,9 +3,14 @@ import { Select } from './core/utils/select.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
+type Props = {
+  mode: 'bottom' | 'rail',
+  value: string
+}
+
 const name = 's-navigation'
-const props = {
-  mode: 'bottom' as 'bottom' | 'rail',
+const props: Props = {
+  mode: 'bottom',
   value: ''
 }
 
@@ -18,7 +23,6 @@ const style = /*css*/`
   background: var(--s-color-surface, ${Theme.colorSurface});
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   position: relative;
-  flex-shrink: 0;
   padding-bottom: env(safe-area-inset-bottom);
 }
 :host([mode=rail]){
@@ -28,6 +32,7 @@ const style = /*css*/`
   box-shadow: none;
   height: 100%;
   background: none;
+  padding-bottom: 0;
 }
 ::slotted(s-navigation-item){
   height: 64px;
@@ -52,11 +57,11 @@ const template = /*html*/`
 <slot name="end"></slot>
 `
 
-class SNavigation extends useElement({
+class Navigation extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
-    const slot = shadowRoot.querySelector('#slot') as HTMLSlotElement
-    const select = new Select({ context: this, class: SNavigationItem, slot })
+    const slot = shadowRoot.querySelector<HTMLSlotElement>('#slot')!
+    const select = new Select({ context: this, class: NavigationItem, slot })
     return {
       expose: {
         get value() {
@@ -74,8 +79,13 @@ class SNavigation extends useElement({
   }
 }) { }
 
+type ItemProps = {
+  selected: boolean,
+  value: string
+}
+
 const itemName = 's-navigation-item'
-const itemProps = {
+const itemProps: ItemProps = {
   selected: false,
   value: ''
 }
@@ -94,7 +104,7 @@ const itemStyle = /*css*/`
   width: 100%;
   max-width: 80px;
   text-transform: capitalize;
-  transition: color .1s ease-out;
+  transition: color var(--s-motion-duration-short4, ${Theme.motionDurationMedium4}) var(--s-motion-easing-emphasized, ${Theme.motionEasingEmphasized});
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 :host([selected=true]){
@@ -108,61 +118,42 @@ const itemStyle = /*css*/`
   height: 28px;
   width: 48px;
   border-radius: 14px;
+  transition: background-color var(--s-motion-duration-short4, ${Theme.motionDurationMedium4}) var(--s-motion-easing-emphasized, ${Theme.motionEasingEmphasized});
 }
-.icon::before{
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  left: 0;
-  top: 0;
-  transform: scale(0);
-  transition: transform .1s ease-out;
+:host([selected=true]) .icon{
   background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
 }
-:host([selected=true]) .icon::before{
-  transform: scale(1);
+::slotted(*){
+  flex-shrink: 0;
 }
-.badge{
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 24px;
-  display: flex;
-  justify-content: center;
-  transform: translateY(-20%);
-}
-::slotted(svg[slot=icon]){
+::slotted(svg){
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
+  fill: currentColor;
   width: 24px;
   height: 24px;
-  fill: currentColor;
 }
-::slotted([slot=icon]){
-  position: relative;
-}
-:host([selected=true]) ::slotted([slot=icon]){
+:host([selected=true]) ::slotted(:is(svg, s-icon)){
   color: currentColor;
 }
+::slotted([slot=badge]){
+  position: absolute;
+  right: 4px;
+  top: 0;
+}
 ::slotted([slot=text]){
-  position: relative;
-  pointer-events: none;
   margin-top: 4px;
 }
 `
 
 const itemTemplate = /*html*/`
-<div class="icon" part="icon">
+<s-ripple attached="true" class="icon" part="icon">
   <slot name="icon"></slot>
-  <div class="badge" part="badge">
-    <slot name="badge"></slot>
-  </div>
-</div>
+  <slot name="badge"></slot>
+</s-ripple>
 <slot name="text"></slot>
-<s-ripple attached="true" class="ripple" part="ripple"></s-ripple>
 `
 
-class SNavigationItem extends useElement({
+class NavigationItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
@@ -170,35 +161,35 @@ class SNavigationItem extends useElement({
   setup() {
     this.addEventListener('click', () => {
       if (this.selected) return
-      if (!(this.parentNode instanceof SNavigation)) return
+      if (!(this.parentNode instanceof Navigation)) return
       this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))
     })
     return {
       selected: () => {
-        if (!(this.parentNode instanceof SNavigation)) return
+        if (!(this.parentNode instanceof Navigation)) return
         this.dispatchEvent(new Event(`${name}:update`, { bubbles: true }))
       }
     }
   }
 }) { }
 
-SNavigation.define(name)
-SNavigationItem.define(itemName)
+Navigation.define(name)
+NavigationItem.define(itemName)
 
-export { SNavigation as Navigation, SNavigationItem as NavigationItem }
+export { Navigation, NavigationItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SNavigation
-    [itemName]: SNavigationItem
+    [name]: Navigation
+    [itemName]: NavigationItem
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<ItemProps>
       }
     }
   }
@@ -206,21 +197,50 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
-    [itemName]: typeof itemProps
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+    [itemName]: new () => {
+      $props: HTMLAttributes & Partial<ItemProps>
+    }
   }
 }
 
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+      //@ts-ignore
+      [itemName]: IntrinsicElements['div'] & Partial<ItemProps>
+    }
+  }
+}
 
 //@ts-ignore
 declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      //@ts-ignore
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<ItemProps>
     }
   }
 }

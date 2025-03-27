@@ -1,8 +1,10 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
+type Props = {}
+
 const name = 's-skeleton'
-const props = {
+const props: Props = {
 }
 
 const style = /*css*/`
@@ -26,21 +28,21 @@ const style = /*css*/`
 
 const template = ``
 
-class SSkeleton extends useElement({ style, template, props }) { }
+class Skeleton extends useElement({ style, template, props }) { }
 
-SSkeleton.define(name)
+Skeleton.define(name)
 
-export { SSkeleton as Skeleton }
+export { Skeleton }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SSkeleton
+    [name]: Skeleton
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -48,8 +50,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -58,7 +74,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

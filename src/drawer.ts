@@ -138,9 +138,9 @@ class Drawer extends useElement({
       const animateOptions = getAnimateOptions()
       element.classList.add(className)
       scrim.classList.add(className)
-      const keyframe = mediaQueryList.laptop.matches ? [{ transform: `translateX(${element.offsetWidth * offset}px)` }, { transform: `translateX(0)` }] : [{ width: 0 }, { width: element.offsetWidth + 'px' }]
-      scrim.animate([{ opacity: 0 }, { opacity: 1 }], animateOptions)
-      element.animate(keyframe, animateOptions)
+      const keyframes = mediaQueryList.laptop.matches ? { transform: [`translateX(${element.offsetWidth * offset}px)`, `translateX(0)`] } : { width: ['0', element.offsetWidth + 'px'] }
+      scrim.animate({ opacity: [0, 1] }, animateOptions)
+      element.animate(keyframes, animateOptions)
     }
     const close = (slot?: SlotName, folded?: boolean) => {
       const element = getElement(slot)
@@ -148,9 +148,9 @@ class Drawer extends useElement({
       if (!element.classList.contains(className)) return
       const offset = getOffset(slot)
       const animateOptions = getAnimateOptions()
-      const keyframe = mediaQueryList.laptop.matches ? [{ transform: `translateX(0)`, display: 'block' }, { transform: `translateX(${element.offsetWidth * offset}px)`, display: 'block' }] : [{ width: element.offsetWidth + 'px', display: 'block' }, { width: 0, display: 'block' }]
-      element.animate(keyframe, animateOptions)
-      scrim.animate([{ opacity: 1 }, { opacity: 0 }], animateOptions)
+      const keyframes = { display: ['block', 'block'], ...mediaQueryList.laptop.matches ? { transform: [`translateX(0)`, `translateX(${element.offsetWidth * offset}px)`], } : { width: [element.offsetWidth + 'px', '0'] } }
+      element.animate(keyframes, animateOptions)
+      scrim.animate({ opacity: [1, 0] }, animateOptions)
       element.classList.remove(className)
       scrim.classList.remove(className)
     }
@@ -181,7 +181,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -189,8 +189,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -199,7 +213,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

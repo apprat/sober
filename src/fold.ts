@@ -1,4 +1,5 @@
 import { useElement } from './core/element.js'
+import { Theme } from './core/theme.js'
 
 type Props = {
   folded: boolean
@@ -17,7 +18,7 @@ const style = /*css*/`
   grid-template-rows: 1fr;
   display: grid;
   overflow: hidden;
-  transition: grid-template-rows .3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  transition: grid-template-rows var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-emphasized, ${Theme.motionEasingEmphasized});
 }
 :host([folded=true]) .container{
   grid-template-rows: 0fr;
@@ -39,8 +40,7 @@ const template = /*html*/`
 class Fold extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
-    const trigger = shadowRoot.querySelector('slot[name=trigger]')!
-    trigger.addEventListener('click', () => this.folded = !this.folded)
+    shadowRoot.querySelector<HTMLDivElement>('slot[name=trigger]')!.onclick = () => this.folded = !this.folded
   }
 }) { }
 
@@ -64,8 +64,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: Props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -75,6 +89,16 @@ declare module 'solid-js' {
     interface IntrinsicElements {
       //@ts-ignore
       [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

@@ -1,6 +1,7 @@
 import { useElement } from './core/element.js'
 import { mediaQueryList } from './core/utils/mediaQuery.js'
 import { getStackingContext } from './core/utils/getStackingContext.js'
+import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 
 type Props = {
@@ -56,9 +57,14 @@ const template = /*html*/`
 class Tooltip extends useElement({
   style, template, props,
   setup(shadowRoot) {
-    const trigger = shadowRoot.querySelector('slot[name=trigger]') as HTMLSlotElement
-    const popup = shadowRoot.querySelector('.popup') as HTMLDivElement
-    const animateOptions = { duration: 200, fill: 'forwards' } as const
+    const trigger = shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!
+    const popup = shadowRoot.querySelector<HTMLDivElement>('.popup')!
+    const computedStyle = getComputedStyle(this)
+    const getAnimateOptions = () => {
+      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
+      const duration = computedStyle.getPropertyValue('--s-motion-duration-medium4') || Theme.motionDurationMedium4
+      return { easing: easing, duration: convertCSSDuration(duration) }
+    }
     const show = () => {
       if (!this.isConnected || this.disabled) return
       popup.style.display = 'block'
@@ -116,27 +122,27 @@ class Tooltip extends useElement({
       }
       popup.style.top = `${position.top}px`
       popup.style.left = `${position.left}px`
-      popup.animate([{ opacity: 0 }, { opacity: 1 }], animateOptions)
+      popup.animate({ opacity: [0, 1] }, getAnimateOptions())
     }
     const close = () => {
-      const animation = popup.animate([{ opacity: 1 }, { opacity: 0 }], animateOptions)
+      const animation = popup.animate({ opacity: [1, 0] }, getAnimateOptions())
       animation.finished.then(() => {
         popup.hidePopover && popup.hidePopover()
         popup.style.removeProperty('display')
       })
     }
     let timer = 0
-    trigger.addEventListener('touchstart', () => {
+    trigger.ontouchstart = () => {
       if (!mediaQueryList.anyPointerCoarse.matches) return
       clearTimeout(timer)
       timer = setTimeout(() => show(), 600)
-    }, { passive: false })
-    trigger.addEventListener('touchend', () => {
+    }
+    trigger.ontouchend = () => {
       clearTimeout(timer)
       close()
-    })
-    trigger.addEventListener('mouseenter', () => !mediaQueryList.anyPointerCoarse.matches && show())
-    trigger.addEventListener('mouseleave', () => !mediaQueryList.anyPointerCoarse.matches && close())
+    }
+    trigger.onmouseenter = () => !mediaQueryList.anyPointerCoarse.matches && show()
+    trigger.onmouseleave = () => !mediaQueryList.anyPointerCoarse.matches && close()
   }
 }) { }
 
@@ -160,8 +166,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: Props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -171,6 +191,16 @@ declare module 'solid-js' {
     interface IntrinsicElements {
       //@ts-ignore
       [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

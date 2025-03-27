@@ -1,8 +1,16 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
+type Props = {
+  readOnly: boolean
+  max: number
+  min: number
+  value: number
+  step: number
+}
+
 const name = 's-rate'
-const props = {
+const props: Props = {
   readOnly: false,
   max: 10,
   min: 0,
@@ -19,7 +27,6 @@ const style = /*css*/`
   font-size: 24px;
   width: calc(1em * 5);
   height: 1em;
-  flex-shrink: 0;
 }
 .track{
   width: 100%;
@@ -86,21 +93,21 @@ const template = /*html*/`
 />
 `
 
-class SRate extends useElement({
+class Rate extends useElement({
   style, template, props, syncProps: ['readOnly'],
   setup(shadowRoot) {
-    const indicator = shadowRoot.querySelector('.indicator') as HTMLDivElement
-    const input = shadowRoot.querySelector('input') as HTMLInputElement
+    const indicator = shadowRoot.querySelector<HTMLDivElement>('.indicator')!
+    const input = shadowRoot.querySelector<HTMLInputElement>('input')!
     const update = () => {
       const value = Number(input.value)
       const percentage = ((value - this.min) * 100) / this.max - this.min
       indicator.style.width = `${percentage}%`
     }
-    input.addEventListener('change', () => this.dispatchEvent(new Event('change')))
-    input.addEventListener('input', () => {
+    input.onchange = () => this.dispatchEvent(new Event('change'))
+    input.oninput = () => {
       this.value = Number(input.value)
       this.dispatchEvent(new Event('input'))
-    })
+    }
     return {
       max: (value) => {
         input.max = String(value)
@@ -122,19 +129,19 @@ class SRate extends useElement({
   }
 }) { }
 
-SRate.define(name)
+Rate.define(name)
 
-export { SRate as Rate }
+export { Rate }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SRate
+    [name]: Rate
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -142,8 +149,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -152,7 +173,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

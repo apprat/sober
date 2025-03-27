@@ -158,6 +158,7 @@ Td.define(tdName)
 
 export { Table, Thead, Tbody, Tr, Th, Td }
 
+
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Table
@@ -171,7 +172,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
         //@ts-ignore
         [theadName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof theadProps>
         //@ts-ignore
@@ -189,13 +190,45 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
-    [theadName]: typeof theadProps
-    [tbodyName]: typeof tbodyProps
-    [trName]: typeof trProps
-    [thName]: typeof thProps
-    [tdName]: typeof tdProps
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+    [theadName]: new () => {
+      $props: HTMLAttributes & Partial<typeof theadProps>
+    }
+    [tbodyName]: new () => {
+      $props: HTMLAttributes & Partial<typeof tbodyProps>
+    }
+    [trName]: new () => {
+      $props: HTMLAttributes & Partial<typeof trProps>
+    }
+    [thName]: new () => {
+      $props: HTMLAttributes & Partial<typeof thProps>
+    }
+    [tdName]: new () => {
+      $props: HTMLAttributes & Partial<typeof tdProps>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+      //@ts-ignore
+      [tbodyName]: HTMLAttributes & Partial<typeof tbodyProps>
+      //@ts-ignore
+      [trName]: HTMLAttributes & Partial<typeof trProps>
+      //@ts-ignore
+      [thName]: HTMLAttributes & Partial<typeof thProps>
+      //@ts-ignore
+      [tdName]: HTMLAttributes & Partial<typeof tdProps>
+    }
   }
 }
 
@@ -204,17 +237,37 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
       //@ts-ignore
-      [theadName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof theadProps>
+      [theadName]: JSX.HTMLAttributes & Partial<typeof theadProps>
       //@ts-ignore
-      [tbodyName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof tbodyProps>
+      [tbodyName]: JSX.HTMLAttributes & Partial<typeof tbodyProps>
       //@ts-ignore
-      [trName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof trProps>
+      [trName]: JSX.HTMLAttributes & Partial<typeof trProps>
       //@ts-ignore
-      [thName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof thProps>
+      [thName]: JSX.HTMLAttributes & Partial<typeof thProps>
       //@ts-ignore
-      [tdName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof tdProps>
+      [tdName]: JSX.HTMLAttributes & Partial<typeof tdProps>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      //@ts-ignore
+      [theadName]: JSXInternal.HTMLAttributes & Partial<typeof theadProps>
+      //@ts-ignore
+      [tbodyName]: JSXInternal.HTMLAttributes & Partial<typeof tbodyProps>
+      //@ts-ignore
+      [trName]: JSXInternal.HTMLAttributes & Partial<typeof trProps>
+      //@ts-ignore
+      [thName]: JSXInternal.HTMLAttributes & Partial<typeof thProps>
+      //@ts-ignore
+      [tdName]: JSXInternal.HTMLAttributes & Partial<typeof tdProps>
     }
   }
 }

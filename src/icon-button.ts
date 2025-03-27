@@ -40,8 +40,8 @@ const style = /*css*/`
 :host([type=filled][disabled=true]){
   background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
 }
-:host([type=filled]) ::slotted(s-badge[slot=badge]){
-  outline: solid 2px currentColor;
+:host([type=filled]) ::slotted([slot=badge]){
+  outline: solid 2px var(--s-color-surface, ${Theme.colorSurface});
 }
 :host([type=filled-tonal]){
   background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
@@ -59,16 +59,6 @@ const style = /*css*/`
 .ripple{
   border-radius: inherit;
 }
-.badge{
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 50%;
-  height: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 ::slotted(:not([slot=badge])){
   color: inherit;
 }
@@ -77,6 +67,12 @@ const style = /*css*/`
   height: 24px;
   fill: currentColor;
 }
+::slotted([slot=badge]){
+  position: absolute;
+  right: 4px;
+  top: 0;
+  flex-shrink: 0;
+}
 `
 
 const template = /*html*/`
@@ -84,9 +80,7 @@ const template = /*html*/`
 <slot></slot>
 <slot name="end"></slot>
 <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
-<div class="badge">
-  <slot name="badge"></slot>
-</div>
+<slot name="badge"></slot>
 `
 
 class IconButton extends useElement({ style, template, props, syncProps: true, }) { }
@@ -111,8 +105,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: Props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -122,6 +130,16 @@ declare module 'solid-js' {
     interface IntrinsicElements {
       //@ts-ignore
       [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

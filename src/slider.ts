@@ -2,8 +2,17 @@ import { useElement } from './core/element.js'
 import { mediaQueryList } from './core/utils/mediaQuery.js'
 import { Theme } from './core/theme.js'
 
+type Props = {
+  disabled: boolean
+  labeled: boolean
+  max: number
+  min: number
+  step: number
+  value: number
+}
+
 const name = 's-slider'
-const props = {
+const props: Props = {
   disabled: false,
   labeled: false,
   max: 100,
@@ -16,10 +25,9 @@ const style = /*css*/`
 :host{
   display: block;
   color: var(--s-color-primary, ${Theme.colorPrimary});
-  height: 16px;
+  height: 36px;
   cursor: pointer;
   position: relative;
-  flex-shrink: 0;
 }
 :host([disabled=true]){
   pointer-events: none;
@@ -77,7 +85,7 @@ const style = /*css*/`
   border-radius: 50%;
   background: color-mix(in srgb, currentColor 20%, transparent);
   transform: scale(0);
-  transition: transform .1s ease-out;
+  transition: transform var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
 }
 .active .thumb::before{
   transform: scale(1);
@@ -96,9 +104,9 @@ const style = /*css*/`
   font-size: .75rem;
   transform: scale(0);
   transform-origin: center bottom;
-  transition: transform .1s ease-out;
+  transition: transform var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
   opacity: .85;
-  z-index: var(--z-index, 1);
+  z-index: 1;
   display: none;
 }
 .active .label{
@@ -137,15 +145,15 @@ const template = /*html*/`
 />
 `
 
-class SSlider extends useElement({
+class Slider extends useElement({
   style, template, props, syncProps: ['disabled', 'labeled'],
   setup(shadowRoot) {
-    const container = shadowRoot.querySelector('.container') as HTMLDivElement
-    const indicator = shadowRoot.querySelector('.indicator') as HTMLDivElement
-    const track = shadowRoot.querySelector('.track') as HTMLDivElement
-    const handle = shadowRoot.querySelector('.handle') as HTMLDivElement
-    const label = shadowRoot.querySelector('.label') as HTMLDivElement
-    const input = shadowRoot.querySelector('input') as HTMLInputElement
+    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
+    const indicator = shadowRoot.querySelector<HTMLDivElement>('.indicator')!
+    const track = shadowRoot.querySelector<HTMLDivElement>('.track')!
+    const handle = shadowRoot.querySelector<HTMLDivElement>('.handle')!
+    const label = shadowRoot.querySelector<HTMLDivElement>('.label')!
+    const input = shadowRoot.querySelector<HTMLInputElement>('input')!
     const update = () => {
       const value = Number(input.value)
       const percentage = ((value - this.min) * 100) / (this.max - this.min)
@@ -154,16 +162,16 @@ class SSlider extends useElement({
       track.style.width = `calc(${100 - percentage}% - ${20 - (percentage * 0.16)}px)`
       label.textContent = String(value)
     }
-    input.addEventListener('change', () => this.dispatchEvent(new Event('change')))
-    input.addEventListener('input', () => {
+    input.onchange = () => this.dispatchEvent(new Event('change'))
+    input.oninput = () => {
       this.value = Number(input.value)
       this.dispatchEvent(new Event('input'))
-    })
-    input.addEventListener('mousedown', (event) => event.button === 0 && !mediaQueryList.anyPointerCoarse.matches && container.classList.add('active'))
-    input.addEventListener('mouseup', () => !mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active'))
-    input.addEventListener('touchstart', () => mediaQueryList.anyPointerCoarse.matches && container.classList.add('active'), { passive: true })
-    input.addEventListener('touchend', () => mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active'), { passive: true })
-    input.addEventListener('touchcancel', () => mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active'), { passive: true })
+    }
+    input.onmousedown = (event) => event.button === 0 && !mediaQueryList.anyPointerCoarse.matches && container.classList.add('active')
+    input.onmouseup = () => !mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active')
+    input.ontouchstart = () => mediaQueryList.anyPointerCoarse.matches && container.classList.add('active')
+    input.ontouchend = () => mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active')
+    input.ontouchcancel = () => mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active')
     return {
       max: (value) => {
         input.max = String(value)
@@ -185,19 +193,19 @@ class SSlider extends useElement({
   }
 }) { }
 
-SSlider.define(name)
+Slider.define(name)
 
-export { SSlider as Slider }
+export { Slider }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SSlider
+    [name]: Slider
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -205,8 +213,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -215,7 +237,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

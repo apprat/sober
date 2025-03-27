@@ -1,8 +1,15 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
+type Props = {
+  indeterminate: boolean
+  animated: boolean
+  max: number
+  value: number
+}
+
 const name = 's-linear-progress'
-const props = {
+const props: Props = {
   indeterminate: false,
   animated: false,
   max: 100,
@@ -19,7 +26,7 @@ const style = /*css*/`
   flex-shrink: 0;
 }
 :host([animated=true]) .known>.block{
-  transition: transform .2s ease-out;
+  transition: transform var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-emphasized, ${Theme.motionEasingEmphasized});
 }
 :host([indeterminate=true]) .known,
 .unknown{
@@ -95,7 +102,7 @@ const template = /*html*/`
 </div>
 `
 
-class SLinearProgress extends useElement({
+class LinearProgress extends useElement({
   style, template, props, syncProps: ['indeterminate', 'animated'],
   setup(shadowRoot) {
     const track = shadowRoot.querySelector('.known>.track') as HTMLDivElement
@@ -112,19 +119,19 @@ class SLinearProgress extends useElement({
   }
 }) { }
 
-SLinearProgress.define(name)
+LinearProgress.define(name)
 
-export { SLinearProgress as LinearProgress }
+export { LinearProgress }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SLinearProgress
+    [name]: LinearProgress
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -132,8 +139,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -142,7 +163,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

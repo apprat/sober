@@ -3,8 +3,10 @@ import { Theme } from './core/theme.js'
 import { Fold } from './fold.js'
 import './ripple.js'
 
+type Props = {}
+
 const name = 's-menu'
-const props = {
+const props: Props = {
 }
 
 const style = /*css*/`
@@ -13,7 +15,7 @@ const style = /*css*/`
   flex-direction: column;
   font-size: .875rem;
   padding: 4px 0;
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
 }
 :host(:nth-of-type(n+2)){
   border-top: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
@@ -36,14 +38,15 @@ const template = /*html*/`
 <slot></slot>
 `
 
-class SMenu extends useElement({
-  style, template, props,
-  setup() {
-  }
-}) { }
+class Menu extends useElement({ style, template, props }) { }
+
+type ItemProps = {
+  checked: boolean
+  folded: boolean
+}
 
 const itemName = 's-menu-item'
-const itemProps = {
+const itemProps: ItemProps = {
   checked: false,
   folded: true
 }
@@ -81,7 +84,7 @@ const itemStyle = /*css*/`
   margin-right: -8px;
   margin-left: 12px;
   transform: rotate(-90deg);
-  transition: transform .2s ease-out;
+  transition: transform var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
   fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
 .show-menu .toggle-icon{
@@ -123,7 +126,7 @@ const itemStyle = /*css*/`
   margin-left: 12px;
 }
 ::slotted([slot=menu]){
-  background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
+  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
 }
 `
 
@@ -144,44 +147,44 @@ const itemTemplate = /*html*/`
 </s-fold>
 `
 
-class SMenuItem extends useElement({
+class MenuItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
   syncProps: true,
   setup(shadowRoot) {
-    const container = shadowRoot.querySelector('.container')!
-    const fold = shadowRoot.querySelector('.fold') as Fold
-    const menu = shadowRoot.querySelector('slot[name=menu]') as HTMLSlotElement
-    fold.addEventListener('click', (event) => event.stopPropagation())
-    menu.addEventListener('slotchange', () => container.classList[menu.assignedElements().length > 0 ? 'add' : 'remove']('show-menu'))
-    container.addEventListener('click', () => {
+    const container = shadowRoot.querySelector<HTMLElement>('.container')!
+    const fold = shadowRoot.querySelector<Fold>('.fold')!
+    const menu = shadowRoot.querySelector<HTMLSlotElement>('slot[name=menu]')!
+    fold.onclick = (event) => event.stopPropagation()
+    menu.onslotchange = () => container.classList[menu.assignedElements().length > 0 ? 'add' : 'remove']('show-menu')
+    container.onclick = () => {
       if (!container.classList.contains('show-menu')) return
       this.folded = !this.folded
-    })
+    }
     return {
       folded: (value) => fold.folded = value
     }
   }
 }) { }
 
-SMenu.define(name)
-SMenuItem.define(itemName)
+Menu.define(name)
+MenuItem.define(itemName)
 
-export { SMenu as Menu, SMenuItem as MenuItem }
+export { Menu, MenuItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SMenu
-    [itemName]: SMenuItem
+    [name]: Menu
+    [itemName]: MenuItem
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<ItemProps>
       }
     }
   }
@@ -189,9 +192,27 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
-    [itemName]: typeof itemProps
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+    [itemName]: new () => {
+      $props: HTMLAttributes & Partial<ItemProps>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+      //@ts-ignore
+      [itemName]: IntrinsicElements['div'] & Partial<ItemProps>
+    }
   }
 }
 
@@ -200,8 +221,21 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      //@ts-ignore
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<ItemProps>
     }
   }
 }
 
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      //@ts-ignore
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+    }
+  }
+}

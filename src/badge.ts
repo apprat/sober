@@ -17,18 +17,21 @@ const style = /*css*/`
   border-radius: 8px;
   font-size: .625rem;
   vertical-align: middle;
+  box-sizing: border-box;
   background: var(--s-color-error, ${Theme.colorError});
   color: var(--s-color-on-error, ${Theme.colorOnError});
 }
 :host(:not(:empty)) .text{
-  padding: 2px 5px;
-  text-align: center;
-  display: block;
+  height: 16px;
+  padding: 0 5px;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
   background: inherit;
   color: inherit;
-  border: inherit;
-  border-radius: 24px;
-  box-sizing: border-box;
+  outline: inherit;
+  border-radius: 8px;
 }
 `
 const template = /*html*/`<slot class="text" part="text"></slot>`

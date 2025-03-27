@@ -1,8 +1,16 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
+type Props = {
+  placeholder: string
+  disabled: boolean
+  value: string
+  maxLength: number
+  readOnly: boolean
+}
+
 const name = 's-search'
-const props = {
+const props: Props = {
   placeholder: '',
   disabled: false,
   value: '',
@@ -12,26 +20,31 @@ const props = {
 
 const style = /*css*/`
 :host{
-  display: inline-flex;
+  display: inline-block;
   vertical-align: middle;
   width: 220px;
-  height: 40px;
-  border-radius: 24px;
+  min-height: 40px;
+  border-radius: 20px;
   font-size: .875rem;
-  position: relative;
-  border: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
-  background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
+}
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: inherit;
+  border-radius: inherit;
+  overflow: hidden;
+  background: inherit;
+  outline: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
 }
 .container{
   display: flex;
   align-items: center;
-  height: 100%;
+  min-height: inherit;
   position: relative;
-  flex-grow: 1;
-}
-:host(:focus-within) .container{
-  z-index: var(--z-index, 1);
+  order: -1;
 }
 input{
   border: none;
@@ -55,26 +68,19 @@ input::selection{
   background: var(--s-color-primary, ${Theme.colorPrimary});
   color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
 }
-.dropdown{
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  pointer-events: none;
-  background: inherit;
-  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
-  border-radius: 4px;
-  opacity: 0;
-  transition: opacity .2s ease-out;
-}
-:host(:focus-within) .dropdown{
-  opacity: 1;
-  pointer-events: auto;
-  z-index: var(--z-index, 1);
-}
 ::slotted([slot=dropdown]){
-  border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
-  margin-top: 40px;
+  position: fixed;
+  pointer-events: none;
+  top: 100%;
+  left: 0;
+  height: 0;
+  opacity: 0;
+  border-top: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
+}
+:host(:focus-within) ::slotted([slot=dropdown]){
+  pointer-events: auto;
+  position: relative;
+  opacity: 1;
 }
 ::slotted([slot]){
   flex-shrink: 0;
@@ -84,12 +90,10 @@ input::selection{
   width: 24px;
   fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
-::slotted(s-icon[slot=start]),
-::slotted(svg[slot=start]){
+::slotted(:is(s-icon[slot=start], svg[slot=start])){
   margin: 0 -8px 0 8px;
 }
-::slotted(s-icon[slot=end]),
-::slotted(svg[slot=end]){
+::slotted(:is(s-icon[slot=end], svg[slot=end])){
   margin: 0 8px 0 -8px;
 }
 ::slotted(s-icon-button[slot=start]){
@@ -101,23 +105,23 @@ input::selection{
 `
 
 const template = /*html*/`
-<div class="dropdown" part="dropdown">
+<div class="wrapper" part="wrapper">
   <slot name="dropdown"></slot>
-</div>
-<div class="container" part="container">
-  <slot name="start"></slot>
-  <input type="text">
-  <slot name="end"></slot>
+  <div class="container" part="container">
+    <slot name="start"></slot>
+    <input type="text">
+    <slot name="end"></slot>
+  </div>
 </div>
 `
 
-class SSearch extends useElement({
+class Search extends useElement({
   style, template, props, syncProps: ['disabled', 'readOnly'],
   setup(shadowRoot) {
-    const input = shadowRoot.querySelector('input') as HTMLInputElement
-    const dropdown = shadowRoot.querySelector('[name=dropdown]') as HTMLSlotElement
-    dropdown.addEventListener('mousedown', (e) => e.preventDefault())
-    input.addEventListener('change', () => this.dispatchEvent(new Event('change')))
+    const input = shadowRoot.querySelector<HTMLInputElement>('input')!
+    const dropdown = shadowRoot.querySelector<HTMLSlotElement>('[name=dropdown]')!
+    dropdown.onmousedown = (e) => e.preventDefault()
+    input.onchange = () => this.dispatchEvent(new Event('change'))
     return {
       expose: {
         get value() {
@@ -135,19 +139,19 @@ class SSearch extends useElement({
   }
 }) { }
 
-SSearch.define(name)
+Search.define(name)
 
-export { SSearch as Search }
+export { Search }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SSearch
+    [name]: Search
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -155,8 +159,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -165,7 +183,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

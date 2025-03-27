@@ -199,7 +199,7 @@ class BottomSheet extends useElement({
         if (!this.dispatchEvent(new CustomEvent('close', { cancelable: true, detail: { source: 'GESTURE' } }))) return
         this.showed = false
       } else {
-        container.animate([{ transform: container.style.transform }, { transform: 'translateY(0)' }], getAnimateOptions())
+        container.animate({ transform: [container.style.transform, 'translateY(0)'] }, getAnimateOptions())
         container.style.removeProperty('transform')
       }
       touchs = null
@@ -209,8 +209,8 @@ class BottomSheet extends useElement({
       dialog.showModal()
       dialog.classList.add('show')
       const animateOptions = getAnimateOptions()
-      scrim.animate([{ opacity: 0 }, { opacity: 1 }], animateOptions)
-      const animation = container.animate([{ transform: 'translateY(100%)', opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }], animateOptions)
+      scrim.animate({ opacity: [0, 1] }, animateOptions)
+      const animation = container.animate({ transform: ['translateY(100%)', 'translateY(0)'], opacity: [0, 1] }, animateOptions)
       animation.finished.then(() => this.dispatchEvent(new Event('showed')))
     }
     const close = () => {
@@ -218,8 +218,8 @@ class BottomSheet extends useElement({
       dialog.classList.remove('show')
       const animateOptions = getAnimateOptions()
       const oldTransform = container.style.transform
-      scrim.animate([{ opacity: 1 }, { opacity: 0 }], animateOptions)
-      const animation = container.animate([{ transform: oldTransform === '' ? 'translateY(0)' : oldTransform, opacity: 1 }, { transform: 'translateY(100%)', opacity: 0 }], animateOptions)
+      scrim.animate({ opacity: [1, 0] }, animateOptions)
+      const animation = container.animate({ transform: [oldTransform === '' ? 'translateY(0)' : oldTransform, 'translateY(100%)'], opacity: [1, 0] }, animateOptions)
       animation.finished.then(() => {
         dialog.close()
         if (oldTransform) container.style.removeProperty('transform')

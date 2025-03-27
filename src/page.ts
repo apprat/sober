@@ -1,9 +1,14 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
+import { convertCSSDuration } from './core/utils/CSSUtils.js'
+
+type Props = {
+  theme: 'auto' | 'light' | 'dark'
+}
 
 const name = 's-page'
-const props = {
-  theme: 'light' as 'auto' | 'light' | 'dark'
+const props: Props = {
+  theme: 'light'
 }
 
 const style = /*css*/`
@@ -168,10 +173,19 @@ const style = /*css*/`
 
 const template = /*html*/`<slot></slot>`
 
-class SPage extends useElement({
+const viewTransitionStyle = document.createElement('style')
+viewTransitionStyle.textContent = `::view-transition-old(root),::view-transition-new(root) { animation: none; mix-blend-mode: normal}`
+
+class Page extends useElement({
   style, template, props,
   setup() {
+    const computedStyle = getComputedStyle(this)
     const darker = matchMedia('(prefers-color-scheme: dark)')
+    const getAnimateOptions = () => {
+      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard-accelerate') || Theme.motionEasingStandardAccelerate
+      const duration = computedStyle.getPropertyValue('--s-motion-duration-long4') || Theme.motionDurationLong4
+      return { easing: easing, duration: convertCSSDuration(duration) }
+    }
     const isDark = () => {
       if (this.theme === 'auto') return darker.matches
       if (this.theme === 'dark') return true
@@ -188,22 +202,28 @@ class SPage extends useElement({
           this.theme = theme
           return resolve()
         }
-        const info = { x: innerWidth / 2, y: innerHeight / 2 }
+        const width = innerWidth
+        const height = innerHeight
+        const keyframes = { clipPath: [`circle(0px at 50% ${height / 2}px)`, `circle(${Math.sqrt(width ** 2 + height ** 2) / 2}px at 50% ${height / 2}px)`] }
         if (trigger && trigger.isConnected) {
-          const rect = trigger.getBoundingClientRect()
-          info.x = rect.x + rect.width / 2
-          info.y = rect.y + rect.height / 2
+          const { left, top } = trigger.getBoundingClientRect()
+          const x = left + trigger.offsetWidth / 2
+          const y = top + trigger.offsetHeight / 2
+          const twoW = (height - (height - y)) * 2
+          const twoH = (width - (width - x)) * 2
+          const size = Math.sqrt(twoW ** 2 + twoH ** 2)
+          keyframes.clipPath[0] = `circle(0px at ${x}px ${y}px)`
+          keyframes.clipPath[1] = `circle(${size / 2}px at ${x}px ${y}px)`
         }
-        document.styleSheets[0].insertRule(/*css*/`::view-transition-old(root),::view-transition-new(root) { animation: none;mix-blend-mode: normal}`, 0)
-        const transition = document.startViewTransition(() => this.theme = theme)
+        const transition = document.startViewTransition(() => {
+          this.theme = theme
+          document.head.appendChild(viewTransitionStyle)
+        })
         transition.ready.then(async () => {
-          const animation = document.documentElement.animate(
-            { clipPath: [`circle(0px at ${info.x}px ${info.y}px)`, `circle(${Math.hypot(Math.max(info.x, innerWidth - info.x), Math.max(info.y, innerHeight - info.y))}px at ${info.x}px ${info.y}px)`] },
-            { duration: 600, easing: 'ease-out', pseudoElement: '::view-transition-new(root)' }
-          )
+          const animation = document.documentElement.animate(keyframes, { ...getAnimateOptions(), pseudoElement: '::view-transition-new(root)' })
           resolve(animation)
           await transition.finished
-          document.styleSheets[0].deleteRule(0)
+          viewTransitionStyle.remove()
         })
       })
     }
@@ -228,19 +248,19 @@ class SPage extends useElement({
   }
 }) { }
 
-SPage.define(name)
+Page.define(name)
 
-export { SPage as Page }
+export { Page }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SPage
+    [name]: Page
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -248,8 +268,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: typeof props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+    }
   }
 }
 
@@ -258,7 +292,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
     }
   }
 }

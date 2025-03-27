@@ -173,7 +173,7 @@ const builder = (options: string | {
   }
 }) => {
   let root: Element = document.body
-  const snackbar = new SSnackbar()
+  const snackbar = new Snackbar()
   snackbar.style.display = 'block'
   const page = document.body.firstElementChild
   if (page && page.tagName === 'S-PAGE') {
@@ -220,11 +220,11 @@ const tasks = {
   bottom: [] as HTMLElement[],
 }
 
-class SSnackbar extends useElement({
+class Snackbar extends useElement({
   style, template, props, syncProps: ['type'],
   setup(shadowRoot) {
-    const popup = shadowRoot.querySelector('.popup') as HTMLDivElement
-    const container = shadowRoot.querySelector('.container') as HTMLDivElement
+    const popup = shadowRoot.querySelector<HTMLDivElement>('.popup')!
+    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const computedStyle = getComputedStyle(this)
     const getAnimateOptions = () => {
       const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
@@ -255,10 +255,7 @@ class SSnackbar extends useElement({
         item.style.transform = `translateY(${height * offset}px)`
         height += (item.firstElementChild as HTMLElement).offsetHeight + state.gap
       }
-      const animation = container.animate([
-        { opacity: 0, transform: `translateY(calc(${offset * -100}% + 16px))` },
-        { opacity: 1, pointerEvents: 'auto' }
-      ], { ...getAnimateOptions(), fill: 'forwards' })
+      const animation = container.animate({ opacity: [0, 1], transform: [`translateY(calc(${offset * -100}% + 16px))`, ''], pointerEvents: 'auto' }, { ...getAnimateOptions(), fill: 'forwards' })
       this.dispatchEvent(new Event('show'))
       this.duration > 0 && (state.timer = setTimeout(close, this.duration))
       popup.dataset.align = align
@@ -277,10 +274,7 @@ class SSnackbar extends useElement({
         const h = Math.abs(Number(item.style.transform.slice(11).slice(0, -3)))
         item.style.transform = `translateY(${(h - container.offsetHeight - state.gap) * offset}px)`
       }
-      const animation = container.animate([
-        { opacity: 1 },
-        { opacity: 0, transform: `translateY(calc(${offset * -100}% + 16px))` }
-      ], getAnimateOptions())
+      const animation = container.animate({ opacity: [1, 0], transform: `translateY(calc(${offset * -100}% + 16px))` }, getAnimateOptions())
       this.dispatchEvent(new Event('close'))
       animation.finished.then(() => {
         if (popup.hidePopover) popup.hidePopover()
@@ -290,10 +284,10 @@ class SSnackbar extends useElement({
       })
       task.splice(indexOf, 1)
     }
-    container.addEventListener('mouseenter', () => clearTimeout(state.timer))
-    container.addEventListener('mouseleave', () => popup.classList.contains('show') && this.duration > 0 && (state.timer = setTimeout(close, this.duration)))
-    shadowRoot.querySelector('slot[name=trigger]')!.addEventListener('click', show)
-    shadowRoot.querySelector('slot[name=action]')!.addEventListener('click', close)
+    container.onmouseenter = () => clearTimeout(state.timer)
+    container.onmouseleave = () => popup.classList.contains('show') && this.duration > 0 && (state.timer = setTimeout(close, this.duration))
+    shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!.onclick = show
+    shadowRoot.querySelector<HTMLSlotElement>('slot[name=action]')!.onclick = close
     return {
       expose: { show, close },
     }
@@ -302,36 +296,37 @@ class SSnackbar extends useElement({
   static readonly builder = builder
 }
 
-SSnackbar.define(name)
+Snackbar.define(name)
 
-export { SSnackbar as Snackbar }
+export { Snackbar }
 
-interface EventMap {
-  show: Event
-  showed: Event
-  closed: Event
+interface Events {
+  Show: Event
+  Showed: Event
+  Closed: Event
 }
 
-type ElementEventMap = EventMap & HTMLElementEventMap
 
-interface SSnackbar {
-  addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SSnackbar, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: SSnackbar, ev: ElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void
+type EventMaps = Events & HTMLElementEventMap
+
+interface Snackbar {
+  addEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Snackbar, ev: EventMaps[K]) => any, options?: boolean | AddEventListenerOptions): void
+  removeEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Snackbar, ev: EventMaps[K]) => any, options?: boolean | EventListenerOptions): void
 }
 
-type Events = {
-  [K in keyof EventMap as `on${K}`]?: (ev: EventMap[K]) => void
+type JSXEvents<L extends boolean = false> = {
+  [K in keyof EventMaps as `on${L extends false ? K : Lowercase<K>}`]?: (ev: EventMaps[K]) => void
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SSnackbar
+    [name]: Snackbar
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props> & Events
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props> & Events<true>
       }
     }
   }
@@ -339,8 +334,22 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: Props
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props> & JSXEvents
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props> & JSXEvents
+    }
   }
 }
 
@@ -349,7 +358,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props> & Events
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
     }
   }
 }

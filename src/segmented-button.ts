@@ -39,7 +39,7 @@ const template = /*html*/`<slot></slot>`
 class SegmentedButton extends useElement({
   style, template, props, syncProps: ['mode'],
   setup(shadowRoot) {
-    const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
+    const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
     const select = new Select({ context: this, class: SegmentedButtonItem, slot })
     const computedStyle = getComputedStyle(this)
     const getAnimateOptions = () => {
@@ -53,7 +53,7 @@ class SegmentedButton extends useElement({
     select.onUpdate = (old) => {
       if (!old || !select.select || !this.isConnected) return
       const oldRect = old.shadowRoot!.querySelector('.indicator')!.getBoundingClientRect()
-      const indicator = select.select.shadowRoot?.querySelector('.indicator') as HTMLDivElement
+      const indicator = select.select.shadowRoot!.querySelector<HTMLDivElement>('.indicator')!
       const rect = indicator.getBoundingClientRect()
       const offset = oldRect.left - rect.left
       indicator.style.transform = `translateX(${rect.left > oldRect.left ? offset : Math.abs(offset)}px)`
@@ -212,9 +212,27 @@ declare global {
 
 //@ts-ignore
 declare module 'vue' {
-  export interface GlobalComponents {
-    [name]: Props
-    [itemName]: ItemProps
+  //@ts-ignore
+  import { HTMLAttributes } from 'vue'
+  interface GlobalComponents {
+    [name]: new () => {
+      $props: HTMLAttributes & Partial<Props>
+    }
+    [itemName]: new () => {
+      $props: HTMLAttributes & Partial<ItemProps>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'vue/jsx-runtime' {
+  namespace JSX {
+    export interface IntrinsicElements {
+      //@ts-ignore
+      [name]: IntrinsicElements['div'] & Partial<Props>
+      //@ts-ignore
+      [itemName]: IntrinsicElements['div'] & Partial<ItemProps>
+    }
   }
 }
 
@@ -226,6 +244,18 @@ declare module 'solid-js' {
       [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
       //@ts-ignore
       [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+    }
+  }
+}
+
+//@ts-ignore
+declare module 'preact' {
+  namespace JSX {
+    interface IntrinsicElements {
+      //@ts-ignore
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      //@ts-ignore
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<ItemProps>
     }
   }
 }

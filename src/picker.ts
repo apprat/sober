@@ -136,9 +136,6 @@ class Picker extends useElement({
     select.onSelect = () => popup.close()
     return {
       expose: {
-        get value() {
-          return select.value
-        },
         get options() {
           return select.list
         },
@@ -156,7 +153,10 @@ class Picker extends useElement({
         }
       },
       label: (value) => label.textContent = value,
-      value: (value) => select.value = value,
+      value: {
+        get: () => select.value,
+        set: (value) => select.value = value
+      }
     }
   }
 }) { }

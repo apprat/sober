@@ -18,8 +18,8 @@ const style = /*css*/`
   display: inline-flex;
   vertical-align: middle;
   align-items: center;
-  cursor: pointer;
   position: relative;
+  cursor: pointer;
   color: var(--s-color-primary, ${Theme.colorPrimary});
   width: 52px;
   aspect-ratio: 1.625;

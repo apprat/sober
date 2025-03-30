@@ -225,9 +225,7 @@ const template = /*html*/`
 </div>
 `
 
-class Field extends useElement({
-  style, template, props, syncProps: true
-}) { }
+class Field extends useElement({ style, template, props, syncProps: true }) { }
 
 Field.define(name)
 

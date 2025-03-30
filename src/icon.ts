@@ -68,7 +68,7 @@ const template = /*html*/`<slot></slot>`
 class Icon extends useElement({
   style, template, props, syncProps: ['name'],
   setup(shadowRoot) {
-    const slot = shadowRoot.querySelector('slot') as HTMLSlotElement
+    const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
     const img = document.createElement('img')
     const getSVG = (d = svgData.none, transform = '') => `<svg viewBox="0 -960 960 960"><path d="${d}" transform="${transform}"></path></svg>`
     return {

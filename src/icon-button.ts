@@ -22,7 +22,6 @@ const style = /*css*/`
   cursor: pointer;
   border-radius: 50%;
   width: 40px;
-  flex-shrink: 0;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});

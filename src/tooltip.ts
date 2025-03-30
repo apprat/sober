@@ -23,6 +23,7 @@ const style = /*css*/`
 }
 .popup{
   position: fixed;
+  display: none;
   inset: 0;
   margin: 0;
   background: none;
@@ -30,7 +31,6 @@ const style = /*css*/`
   outline: none;
   max-width: none;
   max-height: none;
-  display: none;
   font-size: .875rem;
   font-weight: 400;
   padding: 6px 8px;

@@ -26,8 +26,7 @@ const style = /*css*/`
   color: var(--s-color-on-tertiary, ${Theme.colorOnTertiary});
   background: var(--s-color-tertiary, ${Theme.colorTertiary});
 }
-::slotted(svg),
-::slotted(s-icon){
+::slotted(:is(svg, s-icon)){
   color: currentColor;
   fill: currentColor;
   width: 24px;
@@ -45,8 +44,7 @@ img{
   height: 100%;
   border-radius: inherit;
   position: absolute;
-  left: 0;
-  top: 0;
+  inset: 0;
 }
 `
 const template = /*html*/`

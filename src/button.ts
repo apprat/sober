@@ -132,7 +132,7 @@ const template = /*html*/`
 <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 `
 
-class Button extends useElement({ style, template, props, syncProps: true, }) { }
+class Button extends useElement({ style, template, props, syncProps: true }) { }
 
 Button.define(name)
 

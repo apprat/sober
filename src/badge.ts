@@ -34,7 +34,9 @@ const style = /*css*/`
   border-radius: 8px;
 }
 `
-const template = /*html*/`<slot class="text" part="text"></slot>`
+const template = /*html*/`
+<slot class="text" part="text"></slot>
+`
 
 class Badge extends useElement({ style, template, props }) { }
 

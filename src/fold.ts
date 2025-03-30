@@ -15,8 +15,8 @@ const style = /*css*/`
   display: block;
 }
 .container{
-  grid-template-rows: 1fr;
   display: grid;
+  grid-template-rows: 1fr;
   overflow: hidden;
   transition: grid-template-rows var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-emphasized, ${Theme.motionEasingEmphasized});
 }

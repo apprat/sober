@@ -25,7 +25,7 @@ const style = /*css*/`
 :host{
   display: block;
   color: var(--s-color-primary, ${Theme.colorPrimary});
-  height: 36px;
+  height: 16px;
   cursor: pointer;
   position: relative;
 }

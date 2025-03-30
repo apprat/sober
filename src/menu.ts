@@ -55,7 +55,6 @@ const itemStyle = /*css*/`
 :host{
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
   margin: 4px 8px 4px 0;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
@@ -103,15 +102,13 @@ const itemStyle = /*css*/`
   display: block;
   padding-top: 8px;
 }
-::slotted(svg),
-::slotted(s-icon){
+::slotted(:is(svg, s-icon)){
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   fill: currentColor;
   height: 24px;
   width: 24px;
 }
-:host([checked=true]) ::slotted(svg),
-:host([checked=true]) ::slotted(s-icon){
+:host([checked=true]) ::slotted(:is(svg, s-icon)){
   color: currentColor;
 }
 ::slotted([slot]){

@@ -18,8 +18,8 @@ const props: Props = {
 const style = /*css*/`
 :host{
   display: inline-flex;
-  align-items: center;
   vertical-align: middle;
+  align-items: center;
   border-radius: 20px;
   height: 40px;
   padding: 3px;

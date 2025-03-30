@@ -22,10 +22,10 @@ const style = /*css*/`
   display: block;
 }
 .container{
+  box-sizing: border-box;
   padding: 4px 0;
   max-width: 224px;
   min-height: auto;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -108,10 +108,10 @@ const itemStyle = /*css*/`
   text-overflow: ellipsis;
 }
 ::slotted(:is(svg, s-icon)){
-  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   fill: currentColor;
   height: 24px;
   width: 24px;
+  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
 ::slotted([slot]){
   flex-shrink: 0;

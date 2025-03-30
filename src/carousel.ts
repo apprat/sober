@@ -76,7 +76,7 @@ class Carousel extends useElement({
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const track = shadowRoot.querySelector<HTMLDivElement>('.track')!
-    const slot = shadowRoot.querySelector('slot')!
+    const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
     const select = new Select({ context: this, class: CarouselItem, slot })
     let timer = -1
     select.onUpdate = () => {

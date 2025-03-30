@@ -64,9 +64,6 @@ class Navigation extends useElement({
     const select = new Select({ context: this, class: NavigationItem, slot })
     return {
       expose: {
-        get value() {
-          return select.value
-        },
         get options() {
           return select.list
         },
@@ -74,7 +71,10 @@ class Navigation extends useElement({
           return select.selectedIndex
         }
       },
-      value: (value) => select.value = value
+      value: {
+        get: () => select.value,
+        set: (value) => select.value = value
+      }
     }
   }
 }) { }

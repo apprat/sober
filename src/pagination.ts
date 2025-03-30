@@ -21,7 +21,7 @@ const style = /*css*/`
   align-items: center;
   height: 40px;
   width: 200px;
-  background: #eee;
+  background: #ddd;
 }
 `
 const template = /*html*/`<slot class="text" part="text"></slot>`

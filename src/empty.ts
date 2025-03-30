@@ -4,8 +4,7 @@ import { Theme } from './core/theme.js'
 type Props = {}
 
 const name = 's-empty'
-const props: Props = {
-}
+const props: Props = {}
 
 const style = /*css*/`
 :host{

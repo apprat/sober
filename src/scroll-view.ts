@@ -14,9 +14,9 @@ const style = /*css*/`
 }
 @media (any-pointer: fine){
   :host::-webkit-scrollbar{
+    background: transparent;
     width: 6px;
     height: 6px;
-    background: transparent;
   }
   :host::-webkit-scrollbar-thumb{
     background: var(--s-color-outline-variant, ${Theme.colorOutlineVariant});

@@ -89,9 +89,7 @@ const template = /*html*/`
 <slot name="end"></slot>
 `
 
-class Appbar extends useElement({
-  style, template, props
-}) { }
+class Appbar extends useElement({ style, template, props }) { }
 
 Appbar.define(name)
 

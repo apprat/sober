@@ -66,9 +66,6 @@ class SegmentedButton extends useElement({
     }
     return {
       expose: {
-        get value() {
-          return select.value
-        },
         get options() {
           return select.list
         },
@@ -76,7 +73,10 @@ class SegmentedButton extends useElement({
           return select.selectedIndex
         },
       },
-      value: (value) => select.value = value
+      value: {
+        get: () => select.value,
+        set: (value) => select.value = value
+      }
     }
   }
 }) { }

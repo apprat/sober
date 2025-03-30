@@ -139,7 +139,6 @@ declare module 'vue' {
     }
   }
 }
-
 //@ts-ignore
 declare module 'vue/jsx-runtime' {
   namespace JSX {

@@ -11,7 +11,6 @@ const style = /*css*/`
 :host{
   display: flex;
   align-items: center;
-  flex-shrink: 0;
   margin: 0 16px;
   gap: 8px;
   font-size: .75rem;

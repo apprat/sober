@@ -35,7 +35,7 @@ const style = /*css*/`
   opacity: 0;
   display: none;
   pointer-events: none;
-  background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 70%, transparent);
+  background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 76%, transparent);
 }
 .view{
   display: flex;
@@ -45,8 +45,7 @@ const style = /*css*/`
   height: 100%;
   position: relative;
 }
-::slotted([slot=start]),
-::slotted([slot=end]){
+::slotted(:is([slot=start], [slot=end])){
   width: 280px;
   border-width: 1px;
   height: 100%;
@@ -95,8 +94,7 @@ const style = /*css*/`
   .end.show-laptop{
     display: block;
   }
-  ::slotted([slot=start]),
-  ::slotted([slot=end]){
+  ::slotted(:is([slot=start], [slot=end])){
     border-left-style: none;
     border-right-style: none;
     box-shadow: var(--s-elevation-level-3, ${Theme.elevationLevel3});

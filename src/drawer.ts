@@ -114,10 +114,10 @@ type SlotName = 'start' | 'end'
 class Drawer extends useElement({
   style, template, props,
   setup(shadowRoot) {
-    const scrim = shadowRoot.querySelector('.scrim') as HTMLDivElement
+    const scrim = shadowRoot.querySelector<HTMLDivElement>('.scrim')!
     const slots = {
-      start: shadowRoot.querySelector('.start') as HTMLSlotElement,
-      end: shadowRoot.querySelector('.end') as HTMLSlotElement
+      start: shadowRoot.querySelector<HTMLSlotElement>('.start')!,
+      end: shadowRoot.querySelector<HTMLSlotElement>('.end')!
     }
     const containerStyle = getComputedStyle(this)
     const getAnimateOptions = () => {

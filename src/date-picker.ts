@@ -17,7 +17,8 @@ const style = /*css*/`
   align-items: center;
 }
 `
-const template = /*html*/`<slot class="text" part="text"></slot>`
+const template = /*html*/`
+<slot class="text" part="text"></slot>`
 
 class DatePicker extends useElement({ style, template, props }) { }
 

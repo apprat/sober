@@ -17,7 +17,6 @@ const style = /*css*/`
   font-size: .75rem;
   border-radius: 4px;
   box-sizing: border-box;
-  border: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
   color: var(--s-color-outline, ${Theme.colorOutline});
 }
 .shadow{

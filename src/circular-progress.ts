@@ -58,6 +58,9 @@ circle{
 .track{
   stroke: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
 }
+.unknown{
+  animation: rotate 1568ms linear infinite;
+}
 @keyframes stroke{
   0% { stroke-dashoffset: var(--dasharray) }
   50% { stroke-dashoffset: calc(var(--dasharray) / 4) }
@@ -78,9 +81,6 @@ circle{
 @keyframes rotate{
   0% { transform: rotate(0deg) }
   100% { transform: rotate(360deg) }
-}
-.unknown{
-  animation: rotate 1568ms linear infinite;
 }
 `
 

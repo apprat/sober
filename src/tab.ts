@@ -146,8 +146,8 @@ const itemStyle = /*css*/`
 }
 .indicator{
   position: absolute;
-  left: 0;
   bottom: 0;
+  left: 0;
   height: 3px;
   width: 100%;
   background: var(--s-color-primary, ${Theme.colorPrimary});

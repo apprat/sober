@@ -137,8 +137,7 @@ textarea,
   padding-left: var(--text-field-padding-left);
   padding-right: var(--text-field-padding-right);
 }
-:host([multiline=true]) textarea,
-:host([multiline=true]) .shadow,
+:host([multiline=true]) :is(textarea, .shadow),
 :host([countered=true]) .counter{
   display: block;
 }

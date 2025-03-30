@@ -19,7 +19,6 @@ const style = /*css*/`
 slot{
   display: table;
   border-collapse: collapse;
-  box-sizing: border-box;
   min-width: 100%;
 }
 @media (pointer: fine){

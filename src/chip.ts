@@ -4,6 +4,7 @@ import './ripple.js'
 
 type Props = {
   type: 'filled' | 'outlined'
+  value: string
   checked: boolean
   disabled: boolean
   clickable: boolean
@@ -12,6 +13,7 @@ type Props = {
 const name = 's-chip'
 const props: Props = {
   type: 'filled',
+  value: '',
   checked: false,
   disabled: false,
   clickable: false,
@@ -108,7 +110,7 @@ const template = /*html*/`
 `
 
 class Chip extends useElement({
-  style, template, props, syncProps: true,
+  style, template, props, syncProps: ['checked', 'clickable', 'disabled', 'type'],
   setup(shadowRoot) {
     const action = shadowRoot.querySelector<HTMLElement>('slot[name=action]')!
     action.onclick = (e) => e.stopPropagation()

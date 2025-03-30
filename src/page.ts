@@ -14,10 +14,10 @@ const props: Props = {
 const style = /*css*/`
 :host{
   display: flow-root;
+  height: 100%;
+  font-family: Roboto, system-ui;
   color: var(--s-color-on-background);
   background: var(--s-color-background);
-  font-family: Roboto, system-ui;
-  height: 100%;
   --s-color-scrim: ${Theme.colorScrim};
   --s-color-primary: ${Theme.colorPrimary};
   --s-color-on-primary: ${Theme.colorOnPrimary};

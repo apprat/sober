@@ -178,7 +178,6 @@ class BottomSheet extends useElement({
       this.showed = false
     }
     scrim.onclick = () => onClose('SCRIM')
-    //gesture
     let touchs: null | { y: number, x: number, disabled: boolean, top: number, h: number, now: number } = null
     container.ontouchmove = (event) => {
       const target = event.target as HTMLElement

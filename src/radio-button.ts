@@ -20,8 +20,8 @@ const props: Props = {
 const style = /*css*/`
 :host{
   display: inline-flex;
-  align-items: center;
   vertical-align: middle;
+  align-items: center;
   cursor: pointer;
   position: relative;
   height: 40px;

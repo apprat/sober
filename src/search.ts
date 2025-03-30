@@ -20,31 +20,36 @@ const props: Props = {
 
 const style = /*css*/`
 :host{
-  display: inline-block;
+  display: inline-flex;
   vertical-align: middle;
   width: 220px;
   min-height: 40px;
   border-radius: 20px;
   font-size: .875rem;
+  position: relative;
   background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 .wrapper{
-  display: flex;
+  display: grid;
   flex-direction: column;
   position: relative;
-  min-height: inherit;
   border-radius: inherit;
   overflow: hidden;
   background: inherit;
+  min-height: inherit;
+  flex-grow: 1;
+  width: 100%;
   outline: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
+}
+:host(:focus-within) .wrapper{
+  position: absolute;
 }
 .container{
   display: flex;
   align-items: center;
-  min-height: inherit;
   position: relative;
-  order: -1;
+  min-height: inherit;
 }
 input{
   border: none;
@@ -69,13 +74,13 @@ input::selection{
   color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
 }
 ::slotted([slot=dropdown]){
-  position: fixed;
+  position: absolute;
   pointer-events: none;
-  top: 100%;
   left: 0;
   height: 0;
   opacity: 0;
   border-top: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
+  height: auto;
 }
 :host(:focus-within) ::slotted([slot=dropdown]){
   pointer-events: auto;
@@ -106,12 +111,12 @@ input::selection{
 
 const template = /*html*/`
 <div class="wrapper" part="wrapper">
-  <slot name="dropdown"></slot>
   <div class="container" part="container">
     <slot name="start"></slot>
     <input type="text">
     <slot name="end"></slot>
   </div>
+  <slot name="dropdown"></slot>
 </div>
 `
 

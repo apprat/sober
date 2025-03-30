@@ -209,11 +209,11 @@ class Page extends useElement({
           const { left, top } = trigger.getBoundingClientRect()
           const x = left + trigger.offsetWidth / 2
           const y = top + trigger.offsetHeight / 2
-          const twoW = (height - (height - y)) * 2
-          const twoH = (width - (width - x)) * 2
+          const twoW = Math.max(width - x, x)
+          const twoH = Math.max(height - y, y)
           const size = Math.sqrt(twoW ** 2 + twoH ** 2)
           keyframes.clipPath[0] = `circle(0px at ${x}px ${y}px)`
-          keyframes.clipPath[1] = `circle(${size / 2}px at ${x}px ${y}px)`
+          keyframes.clipPath[1] = `circle(${size}px at ${x}px ${y}px)`
         }
         const transition = document.startViewTransition(() => {
           this.theme = theme

@@ -1,6 +1,7 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 import { Select } from './core/utils/select.js'
+import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import './ripple.js'
 
 type Props = {
@@ -43,12 +44,9 @@ class SegmentedButton extends useElement({
     const select = new Select({ context: this, class: SegmentedButtonItem, slot })
     const computedStyle = getComputedStyle(this)
     const getAnimateOptions = () => {
-      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard')
-      const duration = computedStyle.getPropertyValue('--s-motion-duration-medium4')
-      return {
-        easing: easing === '' ? Theme.motionEasingStandard : easing,
-        duration: Number((duration === '' ? Theme.motionDurationMedium4 : duration).slice(0, -2)),
-      }
+      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
+      const duration = computedStyle.getPropertyValue('--s-motion-duration-medium4') || Theme.motionDurationMedium4
+      return { easing: easing, duration: convertCSSDuration(duration) }
     }
     select.onUpdate = (old) => {
       if (!old || !select.select || !this.isConnected) return

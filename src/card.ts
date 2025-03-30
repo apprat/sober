@@ -21,7 +21,7 @@ const style = /*css*/`
   position: relative;
   font-size: .875rem;
   box-sizing: border-box;
-  width: 280px;
+  max-width: 280px;
   overflow: hidden;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});

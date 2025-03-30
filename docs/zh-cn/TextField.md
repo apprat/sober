@@ -15,7 +15,7 @@
 设置样式 `width: stretch` 来占满横向空间。
 
 ```html preview
-<s-text-field style="width: stretch" label="请输入名称"></s-text-field>
+<s-text-field style="width: stretch;color: red" label="请输入名称"></s-text-field>
 ```
 
 多行文本输入

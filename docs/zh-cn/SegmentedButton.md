@@ -3,7 +3,26 @@
 用于单选选项切换或分组选项。
 
 ```html preview
-<s-segmented-button>
+<s-segmented-button value="b">
+  <s-segmented-button-item value="a">
+    item1
+  </s-segmented-button-item>
+  <s-segmented-button-item value="b">
+    item2
+  </s-segmented-button-item>
+  <s-segmented-button-item value="c">
+    item3
+  </s-segmented-button-item>
+  <s-segmented-button-item value="d">
+    item4
+  </s-segmented-button-item>
+</s-segmented-button>
+```
+
+填充容器，子项目会均分宽度，通常适用于较少项单选。
+
+```html preview
+<s-segmented-button value="b" mode="fixed">
   <s-segmented-button-item value="a">
     item1
   </s-segmented-button-item>
@@ -44,9 +63,10 @@
 
 ## 属性
 
-| 名称  | 类型    | 默认值 | 同步 | 介绍                                |
-| ----- | ------ | ------ | --- | ----------------------------------- |
-| value | string |        | 否  | 选中的值，需 item 同时设置 value 属性 |
+| 名称  | 类型         | 默认值 | 同步 | 介绍                                |
+| ----- | ----------- | ------ | --- | ----------------------------------- |
+| value | string      |        | 否  | 选中的值，需 item 同时设置 value 属性 |
+| mode  | auto, fiexd | auto   | 否  | 选中的值，需 item 同时设置 value 属性 |
 
 ---
 

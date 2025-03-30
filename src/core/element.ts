@@ -78,7 +78,6 @@ export const useElement = <
     upperAttrs[value] = key
   }
   type ReturnType<T extends ((...args: any) => any) | undefined> = T extends (...args: any) => infer R ? R : T
-  let fragment: null | DocumentFragment = null
   const map: { [key: symbol]: ReturnType<typeof options.setup> } = {}
   class Prototype extends HTMLElement {
     #symbol = Symbol()
@@ -89,21 +88,16 @@ export const useElement = <
     constructor() {
       super()
       const shadowRoot = this.attachShadow({ mode: 'open' })
-      if (!fragment) {
-        const template = document.createElement('template')
-        template.innerHTML = options.template ?? ''
-        fragment = template.content
-      }
-      shadowRoot.appendChild(fragment.cloneNode(true))
+      shadowRoot.innerHTML = options.template ?? ''
       setStyle(shadowRoot, options.style)
       const props = { ...options.props }
+      const ahead: { [key: string]: unknown } = {}
       for (const key in options.props) {
         const k = key as keyof this
         if (this[k] !== undefined) {
-          props[key] == this[k]
-          continue
+          ahead[key] = this[k]
+          delete this[k]
         }
-        this[k] = props[key] as never
       }
       const setup = options.setup?.apply(this as any, [shadowRoot])
       for (const key in options.props) {
@@ -145,6 +139,9 @@ export const useElement = <
       }
       for (const key in setup?.expose) {
         Object.defineProperty(this, key, { get: () => setup?.expose?.[key] })
+      }
+      for (const key in ahead) {
+        this[key as keyof this] = ahead[key] as never
       }
       map[this.#symbol] = setup
     }

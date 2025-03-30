@@ -259,9 +259,6 @@ class TextField extends useElement({
       expose: {
         get native() {
           return getInput()
-        },
-        get value() {
-          return getInput().value
         }
       },
       label: (value) => label.textContent = value,
@@ -273,12 +270,15 @@ class TextField extends useElement({
         }
         if (getInput().value === '') field.fixed = false
       },
-      value: (value) => {
-        inputs.input.value = value
-        inputs.textarea.value = value
-        textAreaShadow.textContent = value
-        onCounter()
-        if (!this.error) field.fixed = value !== ''
+      value: {
+        get: () => getInput().value,
+        set: (value) => {
+          inputs.input.value = value
+          inputs.textarea.value = value
+          textAreaShadow.textContent = value
+          onCounter()
+          if (!this.error) field.fixed = value !== ''
+        }
       },
       placeholder: (value) => {
         inputs.input.placeholder = value

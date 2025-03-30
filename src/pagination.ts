@@ -19,6 +19,9 @@ const style = /*css*/`
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  height: 40px;
+  width: 200px;
+  background: #eee;
 }
 `
 const template = /*html*/`<slot class="text" part="text"></slot>`

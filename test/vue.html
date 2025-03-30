@@ -11,6 +11,12 @@
     <s-text-field label="label" v-model="textRef"></s-text-field>
     {{textRef}}
     <s-button @click="submit">submit</s-button>
+    <s-text-field label="请输入内容" value="My Name">
+      <s-icon slot="start" name="search"></s-icon>
+      <s-icon-button slot="end">
+        <s-icon name="close"></s-icon>
+      </s-icon-button>
+    </s-text-field>
   </main>
   <script src="https://unpkg.com/sober@1.0.6/dist/sober.min.js"></script>
   <script type="module">

@@ -275,7 +275,6 @@ class DateElement extends useElement({
       update()
     }
     yearPopop.addEventListener('show', () => {
-      console.log('打开')
       if (state.yearSelect) {
         years.scrollTo({ top: state.yearSelect.offsetTop - (years.offsetHeight / 2) + (state.yearSelect.offsetHeight / 2) })
       }

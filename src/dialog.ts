@@ -228,7 +228,7 @@ class Dialog extends useElement({
       })
     }
     return {
-      mounted: () => this.showed && !dialog.open && show(),
+      onMounted: () => this.showed && !dialog.open && show(),
       showed: (value) => value ? show() : close()
     }
   }

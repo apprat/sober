@@ -72,7 +72,6 @@ const style = /*css*/`
   ::slotted(s-search[slot=search]){
     width: auto;
     flex-grow: 1;
-    max-width: 220px;
   }
 }
 `

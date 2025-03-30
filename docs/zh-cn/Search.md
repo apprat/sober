@@ -1,6 +1,6 @@
 # Search
 
-搜索栏。
+小型搜索栏。
 
 ```html preview
 <s-search placeholder="搜索关键字">
@@ -11,15 +11,13 @@
 </s-search>
 ```
 
-使用 `dropdown` 插槽
+使用 `dropdown` 插槽，当搜索框获得焦点时，插槽会显示。
 
 ```html preview
 <s-search placeholder="搜索关键字">
   <s-icon name="search" slot="start"></s-icon>
   <s-icon name="close" slot="end"></s-icon>
-  <div slot="dropdown" style="height: 128px">
-    ...
-  </div>
+  <div slot="dropdown" style="height: 128px"></div>
 </s-search>
 ```
 

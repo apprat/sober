@@ -60,6 +60,7 @@ class Tooltip extends useElement({
     const trigger = shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!
     const popup = shadowRoot.querySelector<HTMLDivElement>('.popup')!
     const computedStyle = getComputedStyle(this)
+    let showed = false
     const getAnimateOptions = () => {
       const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
       const duration = computedStyle.getPropertyValue('--s-motion-duration-medium4') || Theme.motionDurationMedium4
@@ -68,6 +69,7 @@ class Tooltip extends useElement({
     const show = () => {
       if (!this.isConnected || this.disabled) return
       popup.style.display = 'block'
+      showed = true
       if (popup.showPopover) {
         popup.showPopover()
       } else {
@@ -124,14 +126,17 @@ class Tooltip extends useElement({
       popup.style.left = `${position.left}px`
       popup.animate({ opacity: [0, 1] }, getAnimateOptions())
     }
+    let timer = 0
     const close = () => {
+      clearTimeout(timer)
+      showed = false
       const animation = popup.animate({ opacity: [1, 0] }, getAnimateOptions())
       animation.finished.then(() => {
+        if (showed) return
         popup.hidePopover && popup.hidePopover()
         popup.style.removeProperty('display')
       })
     }
-    let timer = 0
     trigger.ontouchstart = () => {
       if (!mediaQueryList.anyPointerCoarse.matches) return
       clearTimeout(timer)

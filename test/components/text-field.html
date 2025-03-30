@@ -4,6 +4,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script>
+    const x = document.createElement('s-text-field')
+    x.value = '射手'
+    x.label = '请输入内容'
+    setTimeout(() => {
+      document.querySelector('s-page')?.appendChild(x)
+    }, 20)
+  </script>
   <script type="module" src="../../dist/main.js"></script>
   <link rel="stylesheet" href="../styles/default.css">
   <script type="module" src="../scripts/default.js"></script>

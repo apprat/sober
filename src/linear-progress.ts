@@ -23,7 +23,6 @@ const style = /*css*/`
   color: var(--s-color-primary, ${Theme.colorPrimary});
   border-radius: 2px;
   overflow: hidden;
-  flex-shrink: 0;
 }
 :host([animated=true]) .known>.block{
   transition: transform var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-emphasized, ${Theme.motionEasingEmphasized});
@@ -105,8 +104,8 @@ const template = /*html*/`
 class LinearProgress extends useElement({
   style, template, props, syncProps: ['indeterminate', 'animated'],
   setup(shadowRoot) {
-    const track = shadowRoot.querySelector('.known>.track') as HTMLDivElement
-    const indicator = shadowRoot.querySelector('.known>.indicator') as HTMLDivElement
+    const track = shadowRoot.querySelector<HTMLDivElement>('.known>.track')!
+    const indicator = shadowRoot.querySelector<HTMLDivElement>('.known>.indicator')!
     const render = () => {
       const percentage = Math.min(this.value, this.max) / this.max * 100
       track.style.transform = `translateX(calc(${percentage}% + ${percentage === 0 ? 0 : 4}px))`

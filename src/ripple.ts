@@ -37,8 +37,8 @@ const style = /*css*/`
 }
 .container::before{
   content: '';
-  background: var(--ripple-color, currentColor);
   opacity: 0;
+  background: var(--ripple-color, currentColor);
   transition: opacity var(--s-motion-duration-short4, ${Theme.motionDurationShort2}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
 }
 .container.hover::before{

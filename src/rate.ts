@@ -22,8 +22,8 @@ const style = /*css*/`
 :host{
   display: inline-flex;
   vertical-align: middle;
-  position: relative;
   overflow: hidden;
+  position: relative;
   font-size: 24px;
   width: calc(1em * 5);
   height: 1em;

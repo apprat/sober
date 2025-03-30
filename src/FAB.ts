@@ -16,9 +16,9 @@ const props: Props = {
 const style = /*css*/`
 :host{
   display: inline-flex;
+  vertical-align: middle;
   justify-content: center;
   align-items: center;
-  vertical-align: middle;
   position: relative;
   cursor: pointer;
   box-sizing: border-box;

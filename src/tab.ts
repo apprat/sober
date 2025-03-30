@@ -94,9 +94,6 @@ class Tab extends useElement({
     }
     return {
       expose: {
-        get value() {
-          return select.value
-        },
         get options() {
           return select.list
         },
@@ -104,7 +101,10 @@ class Tab extends useElement({
           return select.selectedIndex
         },
       },
-      value: (value) => select.value = value
+      value: {
+        get: () => select.value,
+        set: (value) => select.value = value
+      }
     }
   }
 }) { }

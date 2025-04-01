@@ -70,7 +70,9 @@ const template = /*html*/`
     <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"></path>
   </svg>
 </s-ripple>
-<div class="container"></div>
+<div class="container">
+  <s-ripple class="button checked">1</s-ripple>
+</div>
 <s-ripple class="next icon-button disabled" part="next">
   <svg viewBox="0 -960 960 960">
     <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"></path>
@@ -84,29 +86,54 @@ class Pagination extends useElement({
     const prev = shadowRoot.querySelector<Ripple>('.prev')!
     const next = shadowRoot.querySelector<Ripple>('.next')!
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
+    const change = () => this.dispatchEvent(new Event('change'))
+    const updateChecked = () => {
+      const page = Math.ceil(this.total / this.count)
+      let index = Math.min(page - 7, Math.max(0, this.value - 4))
+      container.childNodes.forEach((v) => {
+        index++
+        const item = v as Ripple
+        item.textContent = index.toString()
+        item.classList.toggle('checked', this.value === index)
+      })
+      prev.classList.toggle('disabled', this.value === 1)
+      next.classList.toggle('disabled', this.value === page)
+    }
     const update = () => {
       const page = Math.ceil(this.total / this.count)
       const min = Math.min(page, 7)
-      console.log(this.total, this.count)
       const fragment = document.createDocumentFragment()
       for (let i = 1; i <= min; i++) {
         const ripple = new Ripple()
         ripple.classList.add('button')
-        ripple.textContent = `${String(i)}`
         fragment.appendChild(ripple)
       }
       container.innerHTML = ''
       container.appendChild(fragment)
-      //first.classList.toggle('disabled', this.value === 0)
-      //last.classList.toggle('disabled', this.value === page)
-      //last.textContent = page.toString()
+      updateChecked()
     }
-    update()
-    prev.onclick = () => this.value = Math.max(this.value - 1, 0)
-    next.onclick = () => this.value = Math.min(this.value + 1, Math.ceil(this.total / this.count))
+    container.onclick = (event) => {
+      if (!(event.target instanceof Ripple)) return
+      const index = Number(event.target.textContent)
+      if (index === this.value) return
+      this.value = index
+      change()
+    }
+    prev.onclick = () => {
+      const value = Math.max(this.value - 1, 1)
+      if (value === this.value) return
+      this.value = value
+      change()
+    }
+    next.onclick = () => {
+      const value = Math.min(this.value + 1, Math.ceil(this.total / this.count))
+      if (value === this.value) return
+      this.value = value
+      change()
+    }
     return {
       total: update,
-      value: update
+      value: updateChecked
     }
   }
 }) { }

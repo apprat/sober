@@ -96,8 +96,8 @@ export const useElement = <
         const k = key as keyof this
         if (this[k] !== undefined) {
           ahead[key] = this[k]
-          delete this[k]
         }
+        this[k] = props[key] as never
       }
       const setup = options.setup?.apply(this as any, [shadowRoot])
       for (const key in options.props) {

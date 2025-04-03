@@ -6,13 +6,15 @@ type Props = {
   value: number
   total: number
   count: number
+  type: 'basic' | 'outlined'
 }
 
 const name = 's-pagination'
 const props: Props = {
   value: 1,
   total: 20,
-  count: 20
+  count: 20,
+  type: 'basic'
 }
 
 const style = /*css*/`
@@ -22,8 +24,13 @@ const style = /*css*/`
   align-items: center;
   font-size: .875rem;
   border-radius: 18px;
-  gap: 2px;
+  gap: 4px;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
+}
+:host([type=outlined]) :is(.icon-button, .button){
+  border-width: 1px;
+  border-color: var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
+  border-style: solid;
 }
 .container{
   display: flex;
@@ -35,6 +42,7 @@ const style = /*css*/`
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
 }
 .icon-button{
   border-radius: 50%;
@@ -51,6 +59,7 @@ const style = /*css*/`
 .checked{
   background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
   color: var(--s-color-on-secondary-container, ${Theme.colorOnSecondaryContainer});
+  border-color: var(--s-color-secondary, ${Theme.colorSecondary}) !important;
 }
 .disabled{
   pointer-events: none;
@@ -58,6 +67,7 @@ const style = /*css*/`
 }
 .text{
   pointer-events: none;
+  border: none !important;
 }
 svg{
   width: 24px;
@@ -84,7 +94,7 @@ const template = /*html*/`
 `
 
 class Pagination extends useElement({
-  style, template, props,
+  style, template, props, syncProps: ['type'],
   setup(shadowRoot) {
     const prev = shadowRoot.querySelector<Ripple>('.prev')!
     const next = shadowRoot.querySelector<Ripple>('.next')!

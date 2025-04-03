@@ -56,6 +56,9 @@ const style = /*css*/`
   pointer-events: none;
   opacity: .38;
 }
+.text{
+  pointer-events: none;
+}
 svg{
   width: 24px;
   height: 24px;
@@ -95,9 +98,24 @@ class Pagination extends useElement({
         const item = v as Ripple
         item.textContent = index.toString()
         item.classList.toggle('checked', this.value === index)
+        item.classList.remove('text')
       })
       prev.classList.toggle('disabled', this.value === 1)
       next.classList.toggle('disabled', this.value === page)
+      if (page > 7) {
+        if (this.value >= 5) {
+          container.childNodes.item(0).textContent = '1'
+          const text = container.childNodes.item(1) as Ripple
+          text.textContent = '...'
+          text.classList.add('text')
+        }
+        if (this.value <= page - 4) {
+          container.childNodes.item(container.childNodes.length - 1).textContent = page.toString()
+          const text = container.childNodes.item(container.childNodes.length - 2) as Ripple
+          text.textContent = '...'
+          text.classList.add('text')
+        }
+      }
     }
     const update = () => {
       const page = Math.ceil(this.total / this.count)

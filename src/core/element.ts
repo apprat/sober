@@ -77,10 +77,7 @@ export const useElement = <
     attrs.push(value)
     upperAttrs[value] = key
   }
-  type ReturnType<T extends ((...args: any) => any) | undefined> = T extends (...args: any) => infer R ? R : T
-  const map: { [key: symbol]: ReturnType<typeof options.setup> } = {}
   class Prototype extends HTMLElement {
-    #symbol = Symbol()
     static observedAttributes = attrs
     static define(name: string) {
       customElements.define(name, this)
@@ -143,16 +140,18 @@ export const useElement = <
       for (const key in ahead) {
         this[key as keyof this] = ahead[key] as never
       }
-      map[this.#symbol] = setup
+      this.connectedCallback = () => setup?.onMounted?.()
+      this.disconnectedCallback = () => setup?.onUnmounted?.()
+      this.adoptedCallback = () => setup?.onAdopted?.()
     }
     connectedCallback() {
-      map[this.#symbol]?.onMounted?.()
+      this.connectedCallback()
     }
     disconnectedCallback() {
-      map[this.#symbol]?.onUnmounted?.()
+      this.disconnectedCallback()
     }
     adoptedCallback() {
-      map[this.#symbol]?.onAdopted?.()
+      this.adoptedCallback()
     }
     attributeChangedCallback(key: string, _: unknown, value: string | null) {
       this[upperAttrs[key] as keyof this] = (value ?? undefined) as never

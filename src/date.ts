@@ -15,7 +15,7 @@ type Locale = {
 const i18n = new I18n<Locale>({})
 i18n.list = {
   zh: {
-    display: (date) => `${date.getMonth() + 1}月${date.getDate()}日 星期${i18n.list.zh.displayWeeks[date.getDay()]}`,
+    display: (date) => `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 星期${i18n.list.zh.displayWeeks[date.getDay()]}`,
     displayMonth: (date) => `${date.getFullYear()}年`,
     displayWeeks: ['日', '一', '二', '三', '四', '五', '六']
   },
@@ -71,11 +71,12 @@ const style = /*css*/`
 .button{
   border-radius: 18px;
   height: 36px;
-  padding: 0 16px;
+  padding: 0 12px;
 }
 svg{
   width: 24px;
   fill: currentColor;
+  box-sizing: border-box;
 }
 .header{
   padding: 24px 24px 16px 24px;
@@ -89,51 +90,35 @@ svg{
   position: relative;
 }
 .action{
-  order: -1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 8px 0 8px;
+  padding: 8px 12px 0 12px;
 }
-.action>.year-popop{
-  display: flex;
-  justify-content: center;
-  position: relative;
-}
-.action>.year-popop>.button{
-  padding: 0 12px;
-  border-radius: 4px;
-}
-.action>.year-popop[showed]>.button{
-  background: color-mix(in srgb, currentColor 12%, transparent);
-}
-.action>.year-popop>.button>svg{
-  margin-right: -10px;
-  padding: 2px;
-  box-sizing: border-box;
-}
-.action>.year-popop>.list{
-  counter-reset: year-counter 1899;
-  width: 100%;
-  height: 280px;
-  padding: 2px;
-  scrollbar-width: none;
-}
-.action>.year-popop>.list>.item{
-  margin: 2px;
-  padding: 0 12px;
-  border-radius: 4px;
-  counter-increment: year-counter;
-}
-.action>.year-popop>.list>.item::before{
-  content: counter(year-counter);
-}
-.action>.year-popop>.list>.checked{
-  background: var(--s-color-primary, ${Theme.colorPrimary});
-  color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
+.action>.year>svg{
+  margin: 0 -8px 0 2px;
+  padding: 1px;
 }
 .action>.toggle{
   display: flex;
+}
+.years{
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+  gap: 4px;
+  column-gap: 6px;
+  padding: 8px;
+  max-height: 280px;
+  counter-reset: year-counter 1899;
+  counter-increment: year-counter;
+}
+.years>.item{
+  counter-increment: year-counter;
+  flex-grow: 1;
+}
+.years>.item::before{
+  content: counter(year-counter);
 }
 .weeks{
   display: flex;
@@ -163,6 +148,10 @@ svg{
   background: var(--s-color-primary, ${Theme.colorPrimary});
   color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
 }
+.container:not(.show-years) .years,
+.show-years :is(.weeks, .days){
+  display: none;
+}
 `
 
 const templateList = {
@@ -180,12 +169,12 @@ for (let i = 0; i < 200; i++) {
 const template = /*html*/`
 <div class="header" part="header">
   <slot name="headline"></slot>
-  <span></span>
+  <span>2024年3月4日 星期二</span>
 </div>
 <div class="container" part="container">
   <div class="action">
-    <s-ripple class="button" slot="trigger">
-      <span></span>
+    <s-ripple class="button year" slot="trigger">
+      <span>2024</span>
       <svg viewBox="0 -960 960 960">
         <path d="M480-360 280-560h400L480-360Z"></path>
       </svg>
@@ -228,11 +217,8 @@ class DateElement extends useElement({
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const headline = shadowRoot.querySelector<HTMLDivElement>('.header>span')!
-    const yearPopop = shadowRoot.querySelector<Popup>('.year-popop')!
-    const toggleYearBtn = shadowRoot.querySelector<Ripple>('.year-popop>.button')!
-    const prevBtn = shadowRoot.querySelector<Ripple>('.prev')!
-    const nextBtn = shadowRoot.querySelector<Ripple>('.next')!
-    const years = shadowRoot.querySelector<ScrollView>('.year-popop>.list')!
+    const yearTogggle = shadowRoot.querySelector<Ripple>('.action>.year')!
+    const years = shadowRoot.querySelector<ScrollView>('.years')!
     const weeks = shadowRoot.querySelector<HTMLDivElement>('.weeks')!
     const days = shadowRoot.querySelector<HTMLDivElement>('.days')!
     const state = new DateState(this.value || new Date(), this.min, this.max)
@@ -255,65 +241,34 @@ class DateElement extends useElement({
       const displayHeadline = i18n.getItem(this.locale).display
       headline.textContent = displayHeadline(state.date)
       const displayMotnh = i18n.getItem(this.locale).displayMonth
-      //toggleYearBtn.children[0].textContent = displayMotnh({ year: state.date.getFullYear(), month: state.date.getMonth() })
+      yearTogggle.children[0].textContent = displayMotnh(state.date)
     }
     const setWeekText = () => {
       const displayWeeks = i18n.getItem(this.locale).displayWeeks
       weeks.childNodes.forEach((item, index) => item.textContent = displayWeeks[index])
     }
     const setYearCount = () => {
-      const count = state.dateMax.getFullYear() - state.dateMin.getFullYear()
-      years.innerHTML = ''
-      years.style.counterReset = `year-counter ${state.dateMin.getFullYear() - 1}`
-      const fragment = document.createDocumentFragment()
-      for (let i = 0; i <= count; i++) {
-        const ripple = new Ripple()
-        ripple.classList.add('button', 'item')
-        fragment.appendChild(ripple)
-      }
-      years.appendChild(fragment)
-      update()
+      // const count = state.dateMax.getFullYear() - state.dateMin.getFullYear()
+      // years.innerHTML = ''
+      // years.style.counterReset = `year-counter ${state.dateMin.getFullYear() - 1}`
+      // const fragment = document.createDocumentFragment()
+      // for (let i = 0; i <= count; i++) {
+      //   const ripple = new Ripple()
+      //   ripple.classList.add('button', 'item')
+      //   fragment.appendChild(ripple)
+      // }
+      // years.appendChild(fragment)
+      // update()
     }
-    yearPopop.addEventListener('show', () => {
-      if (state.yearSelect) {
-        years.scrollTo({ top: state.yearSelect.offsetTop - (years.offsetHeight / 2) + (state.yearSelect.offsetHeight / 2) })
-      }
-    })
-    toggleYearBtn.onclick = () => {
-      container.classList.toggle('show-year')
-      if (state.yearSelect) {
-        const top = state.yearSelect.offsetTop - (years.offsetHeight / 2) + (state.yearSelect.offsetHeight / 2)
-        years.scrollTo({ top })
-      }
+    yearTogggle.onclick = () => {
+      container.classList.toggle('show-years')
     }
-    prevBtn.onclick = () => {
-      state.date.setMonth(state.date.getMonth() - 1)
-      state.date.setDate(1)
-      update()
-    }
-    nextBtn.onclick = () => {
-      state.date.setMonth(state.date.getMonth() + 1)
-      state.date.setDate(1)
-      update()
-    }
-    years.onclick = (e) => {
-      if (!(e.target instanceof Ripple)) return
-      const index = Array.prototype.indexOf.call(years.children, e.target.parentElement)
-      state.date.setFullYear(state.dateMin.getFullYear() + index)
-      update()
-    }
-    days.onclick = (e) => {
-      if (!(e.target instanceof Ripple)) return
-      const index = Array.prototype.indexOf.call(days.children, e.target.parentElement) + 1
-      state.date.setDate(index)
-      update()
-    }
-    setWeekText()
-    update()
     const updateText = () => {
       setText()
       setWeekText()
     }
+    update()
+    setWeekText()
     return {
       onMounted: () => i18n.updates.set(this, updateText),
       onUnmounted: () => i18n.updates.delete(this),

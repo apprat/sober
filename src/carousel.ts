@@ -193,8 +193,8 @@ class Carousel extends useElement({
       onUnmounted: stopPlay,
       value: {
         get: () => select.value,
-        set: () => {
-          select.value = this.value
+        set: (value) => {
+          select.value = value
           play()
         }
       },

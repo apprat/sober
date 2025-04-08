@@ -129,14 +129,14 @@ class Search extends useElement({
     input.onchange = () => this.dispatchEvent(new Event('change'))
     return {
       expose: {
-        get value() {
-          return input.value
-        },
         get native() {
           return input
         }
       },
-      value: (value) => input.value = value,
+      value: {
+        get: () => input.value,
+        set: (value) => input.value = value
+      },
       placeholder: (placeholder) => input.placeholder = placeholder,
       maxLength: (maxLength) => input.maxLength = maxLength,
       readOnly: (readOnly) => input.readOnly = readOnly

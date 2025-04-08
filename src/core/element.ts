@@ -61,7 +61,7 @@ export const useElement = <
     onMounted?: () => void
     onUnmounted?: () => void
     onAdopted?: () => void
-    expose?: E & { [K in keyof P]: never }
+    expose?: E & { [K in keyof P]?: never }
   } & {
     [K in keyof P]?: ((v: P[K], old: P[K]) => void) | { get?: (old: P[K]) => P[K], set?: (v: P[K], old: P[K]) => void }
   } | void

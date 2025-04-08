@@ -2,7 +2,6 @@ import { useElement } from './core/element.js'
 import { dateFormat } from './core/utils/dateFormat.js'
 import { Theme } from './core/theme.js'
 import { Ripple } from './ripple.js'
-import { Popup } from './popup.js'
 import { ScrollView } from './scroll-view.js'
 import { I18n } from './core/i18n.js'
 
@@ -111,7 +110,6 @@ svg{
   padding: 8px;
   max-height: 280px;
   counter-reset: year-counter 1899;
-  counter-increment: year-counter;
 }
 .years>.item{
   counter-increment: year-counter;
@@ -144,7 +142,9 @@ svg{
 .days>.item>s-ripple{
   margin: 2px;
 }
-.days>.checked>s-ripple{
+.days>.checked>s-ripple,
+.years>.checked{
+  pointer-events: none;
   background: var(--s-color-primary, ${Theme.colorPrimary});
   color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
 }
@@ -203,12 +203,12 @@ class DateState {
   daySelect?: HTMLElement
   dayOverflow?: HTMLElement
   date: Date
-  dateMin: Date
-  dateMax: Date
+  min: Date
+  max: Date
   constructor(date: Date | string, min: string, max: string) {
     this.date = typeof date === 'string' ? new Date(date) : date
-    this.dateMin = new Date(min)
-    this.dateMax = new Date(max)
+    this.min = new Date(min)
+    this.max = new Date(max)
   }
 }
 
@@ -222,21 +222,6 @@ class DateElement extends useElement({
     const weeks = shadowRoot.querySelector<HTMLDivElement>('.weeks')!
     const days = shadowRoot.querySelector<HTMLDivElement>('.days')!
     const state = new DateState(this.value || new Date(), this.min, this.max)
-    const update = () => {
-      setText()
-      const weekDay = new Date(state.date.getFullYear(), state.date.getMonth(), 1).getDay()
-      days.children[0].setAttribute('style', `margin-left: calc((100% / 7) * ${weekDay})`)
-      const monthDay = new Date(state.date.getFullYear(), state.date.getMonth() + 1, 0).getDate()
-      state.dayOverflow?.classList.remove('overflow')
-      state.dayOverflow = days.children[monthDay - 1] as HTMLElement
-      state.dayOverflow.classList.add('overflow')
-      state.yearSelect?.classList.remove('checked')
-      state.yearSelect = years.children[state.date.getFullYear() - state.dateMin.getFullYear()] as HTMLElement
-      state.yearSelect.classList.add('checked')
-      state.daySelect?.classList.remove('checked')
-      state.daySelect = days.children[state.date.getDate() - 1] as HTMLElement
-      state.daySelect.classList.add('checked')
-    }
     const setText = () => {
       const displayHeadline = i18n.getItem(this.locale).display
       headline.textContent = displayHeadline(state.date)
@@ -247,21 +232,46 @@ class DateElement extends useElement({
       const displayWeeks = i18n.getItem(this.locale).displayWeeks
       weeks.childNodes.forEach((item, index) => item.textContent = displayWeeks[index])
     }
+    const update = () => {
+      //setText()
+      const weekDay = new Date(state.date.getFullYear(), state.date.getMonth(), 1).getDay()
+      days.children[0].setAttribute('style', `margin-left: calc((100% / 7) * ${weekDay})`)
+      const monthDay = new Date(state.date.getFullYear(), state.date.getMonth() + 1, 0).getDate()
+      state.dayOverflow?.classList.remove('overflow')
+      state.dayOverflow = days.children[monthDay - 1] as HTMLElement
+      state.dayOverflow.classList.add('overflow')
+      state.yearSelect?.classList.remove('checked')
+      state.yearSelect = years.children[state.date.getFullYear() - state.min.getFullYear()] as HTMLElement
+      state.yearSelect.classList.add('checked')
+      state.daySelect?.classList.remove('checked')
+      state.daySelect = days.children[state.date.getDate() - 1] as HTMLElement
+      state.daySelect.classList.add('checked')
+    }
     const setYearCount = () => {
-      // const count = state.dateMax.getFullYear() - state.dateMin.getFullYear()
-      // years.innerHTML = ''
-      // years.style.counterReset = `year-counter ${state.dateMin.getFullYear() - 1}`
-      // const fragment = document.createDocumentFragment()
-      // for (let i = 0; i <= count; i++) {
-      //   const ripple = new Ripple()
-      //   ripple.classList.add('button', 'item')
-      //   fragment.appendChild(ripple)
-      // }
-      // years.appendChild(fragment)
-      // update()
+      const count = state.max.getFullYear() - state.min.getFullYear()
+      years.innerHTML = ''
+      years.style.counterReset = `year-counter ${state.min.getFullYear() - 1}`
+      const fragment = document.createDocumentFragment()
+      for (let i = 0; i <= count; i++) {
+        const ripple = new Ripple()
+        ripple.classList.add('button', 'item')
+        fragment.appendChild(ripple)
+      }
+      years.appendChild(fragment)
+      update()
     }
     yearTogggle.onclick = () => {
       container.classList.toggle('show-years')
+      if (state.yearSelect) {
+        const top = state.yearSelect.offsetTop - (years.offsetHeight / 2) + (state.yearSelect.offsetHeight / 2)
+        years.scrollTo({ top })
+      }
+    }
+    days.onclick = (e) => {
+      if (!(e.target instanceof Ripple)) return
+      const index = Array.from(days.children).indexOf(e.target.parentElement!) + 1
+      this.value = dateFormat(new Date(state.date.getFullYear(), state.date.getMonth(), index))
+      this.dispatchEvent(new Event('change'))
     }
     const updateText = () => {
       setText()
@@ -274,21 +284,21 @@ class DateElement extends useElement({
       onUnmounted: () => i18n.updates.delete(this),
       min: (value) => {
         const min = new Date(value)
-        if (min.getTime() > state.date.getTime()) throw Error('invalid min date')
-        state.dateMin = min
+        if (isNaN(min.getTime()) || min.getTime() > state.date.getTime()) throw Error('invalid min date')
+        state.min = min
         setYearCount()
       },
       max: (value) => {
         const max = new Date(value)
-        if (max.getTime() < state.date.getTime()) throw Error('invalid max date')
-        state.dateMax = max
+        if (isNaN(max.getTime()) || max.getTime() < state.date.getTime()) throw Error('invalid max date')
+        state.max = max
         setYearCount()
       },
       value: {
         get: () => dateFormat(state.date),
         set: (value) => {
           const val = new Date(value)
-          if (val.getTime() < state.dateMin.getTime() || val.getTime() > state.dateMax.getTime()) throw Error('invalid date')
+          if (isNaN(val.getTime()) || val.getTime() < state.min.getTime() || val.getTime() > state.max.getTime()) throw Error('invalid date')
           state.date = val
           update()
           console.log('设置日期', value)

@@ -20,7 +20,13 @@ const style = /*css*/`
 const template = /*html*/`
 <slot class="text" part="text"></slot>`
 
-class DatePicker extends useElement({ style, template, props }) { }
+class DatePicker extends useElement({
+  style, template, props,
+  setup() {
+    return {
+    }
+  }
+}) { }
 
 DatePicker.define(name)
 

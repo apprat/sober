@@ -233,7 +233,6 @@ class DateElement extends useElement({
       weeks.childNodes.forEach((item, index) => item.textContent = displayWeeks[index])
     }
     const update = () => {
-      //setText()
       const weekDay = new Date(state.date.getFullYear(), state.date.getMonth(), 1).getDay()
       days.children[0].setAttribute('style', `margin-left: calc((100% / 7) * ${weekDay})`)
       const monthDay = new Date(state.date.getFullYear(), state.date.getMonth() + 1, 0).getDate()
@@ -266,6 +265,13 @@ class DateElement extends useElement({
         const top = state.yearSelect.offsetTop - (years.offsetHeight / 2) + (state.yearSelect.offsetHeight / 2)
         years.scrollTo({ top })
       }
+    }
+    years.onclick = (e) => {
+      if (!(e.target instanceof Ripple)) return
+      container.classList.remove('show-years')
+      const index = Array.from(years.children).indexOf(e.target) + state.min.getFullYear()
+      this.value = dateFormat(new Date(index, state.date.getMonth(), state.date.getDate()))
+      this.dispatchEvent(new Event('change'))
     }
     days.onclick = (e) => {
       if (!(e.target instanceof Ripple)) return
@@ -300,6 +306,7 @@ class DateElement extends useElement({
           const val = new Date(value)
           if (isNaN(val.getTime()) || val.getTime() < state.min.getTime() || val.getTime() > state.max.getTime()) throw Error('invalid date')
           state.date = val
+          setText()
           update()
           console.log('设置日期', value)
         }

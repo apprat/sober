@@ -149,7 +149,7 @@ svg{
   color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
 }
 .container:not(.show-years) .years,
-.show-years :is(.weeks, .days){
+.show-years :is(.weeks, .days, .action>.toggle){
   display: none;
 }
 `
@@ -169,12 +169,12 @@ for (let i = 0; i < 200; i++) {
 const template = /*html*/`
 <div class="header" part="header">
   <slot name="headline"></slot>
-  <span>2024年3月4日 星期二</span>
+  <span></span>
 </div>
 <div class="container" part="container">
   <div class="action">
     <s-ripple class="button year" slot="trigger">
-      <span>2024</span>
+      <span></span>
       <svg viewBox="0 -960 960 960">
         <path d="M480-360 280-560h400L480-360Z"></path>
       </svg>
@@ -212,12 +212,20 @@ class DateState {
   }
 }
 
+const getMonthMaxDate = (year: number, month: number) => {
+  const date = new Date(year, month + 1, 1)
+  date.setDate(date.getDate() - 1)
+  return date.getDate()
+}
+
 class DateElement extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const headline = shadowRoot.querySelector<HTMLDivElement>('.header>span')!
     const yearTogggle = shadowRoot.querySelector<Ripple>('.action>.year')!
+    const prev = shadowRoot.querySelector<Ripple>('.action>.toggle>.prev')!
+    const next = shadowRoot.querySelector<Ripple>('.action>.toggle>.next')!
     const years = shadowRoot.querySelector<ScrollView>('.years')!
     const weeks = shadowRoot.querySelector<HTMLDivElement>('.weeks')!
     const days = shadowRoot.querySelector<HTMLDivElement>('.days')!
@@ -259,32 +267,52 @@ class DateElement extends useElement({
       years.appendChild(fragment)
       update()
     }
+    const setValue = (y: number, m: number, d: number) => {
+      this.value = dateFormat(new Date(y, m, d))
+      this.dispatchEvent(new Event('change'))
+    }
     yearTogggle.onclick = () => {
       container.classList.toggle('show-years')
-      if (state.yearSelect) {
+      if (container.classList.contains('show-years') && state.yearSelect) {
         const top = state.yearSelect.offsetTop - (years.offsetHeight / 2) + (state.yearSelect.offsetHeight / 2)
         years.scrollTo({ top })
       }
+    }
+    prev.onclick = () => {
+      const prevMaxDate = getMonthMaxDate(state.date.getFullYear(), state.date.getMonth() - 1)
+      console.log(prevMaxDate)
+      //state.date = state.date.getDate() > maxDate ? new Date(state.date.getFullYear(), state.date.getMonth() - 1, maxDate) : new Date(state.date.getFullYear(), state.date.getMonth() - 1, state.date.getDate())
+      //setValue()
+    }
+    next.onclick = () => {
+      // const date = new Date(state.date.getFullYear(), state.date.getMonth() + 1, state.date.getDate())
+      // if (date.getDate() !== state.date.getDate()) {
+      //   date.setDate(1)
+      //   date.setMonth(date.getMonth() + 1)
+      // }
+      // state.date = date
+      // setValue()
     }
     years.onclick = (e) => {
       if (!(e.target instanceof Ripple)) return
       container.classList.remove('show-years')
       const index = Array.from(years.children).indexOf(e.target) + state.min.getFullYear()
-      this.value = dateFormat(new Date(index, state.date.getMonth(), state.date.getDate()))
-      this.dispatchEvent(new Event('change'))
+      state.date.setFullYear(index)
+      state.date.setDate(1)
+      //setValue()
     }
     days.onclick = (e) => {
       if (!(e.target instanceof Ripple)) return
       const index = Array.from(days.children).indexOf(e.target.parentElement!) + 1
-      this.value = dateFormat(new Date(state.date.getFullYear(), state.date.getMonth(), index))
-      this.dispatchEvent(new Event('change'))
+      state.date.setDate(index)
+      //setValue()
     }
     const updateText = () => {
       setText()
       setWeekText()
     }
     update()
-    setWeekText()
+    updateText()
     return {
       onMounted: () => i18n.updates.set(this, updateText),
       onUnmounted: () => i18n.updates.delete(this),
@@ -300,16 +328,13 @@ class DateElement extends useElement({
         state.max = max
         setYearCount()
       },
-      value: {
-        get: () => dateFormat(state.date),
-        set: (value) => {
-          const val = new Date(value)
-          if (isNaN(val.getTime()) || val.getTime() < state.min.getTime() || val.getTime() > state.max.getTime()) throw Error('invalid date')
-          state.date = val
-          setText()
-          update()
-          console.log('设置日期', value)
-        }
+      value: (value) => {
+        const val = new Date(value)
+        if (isNaN(val.getTime()) || val.getTime() < state.min.getTime() || val.getTime() > state.max.getTime()) throw Error('invalid date')
+        state.date = val
+        setText()
+        update()
+        console.log('设置日期', value)
       },
       locale: updateText,
     }

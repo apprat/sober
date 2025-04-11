@@ -87,8 +87,8 @@ const template = /*html*/`
       <svg viewBox="0 -960 960 960" slot="end">
         <path d="M480-360 280-560h400L480-360Z"></path>
       </svg>
+      <s-ripple slot="custom" class="ripple" attached="true"></s-ripple>
     </s-field>
-    <s-ripple class="ripple" attached="true"></s-ripple>
   </slot>
   <s-scroll-view class="container" part="container">
     <slot id="slot"></slot>

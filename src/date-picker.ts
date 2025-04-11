@@ -11,6 +11,7 @@ type Props = {
   label: string
   positiveText: string
   negativeText: string
+  format: string
 }
 
 const name = 's-date-picker'
@@ -18,7 +19,8 @@ const props: Props = {
   value: '',
   label: '',
   positiveText: '确定',
-  negativeText: '取消'
+  negativeText: '取消',
+  format: 'yyyy-MM-dd'
 }
 
 const style = /*css*/`
@@ -35,10 +37,6 @@ const style = /*css*/`
 s-dialog{
   display: block;
 }
-.container{
-  cursor: pointer;
-  position: relative;
-}
 .field{
   --field-border-radius: var(--date-picker-border-radius);
   --field-border-color: var(--date-picker-border-color);
@@ -46,6 +44,7 @@ s-dialog{
   --field-padding: var(--date-picker-padding);
   height: var(--date-picker-height);
   position: relative;
+  cursor: pointer;
 }
 .view{
   width: 100%;
@@ -78,16 +77,14 @@ svg{
 `
 const template = /*html*/`
 <s-dialog part="dialog">
-  <div class="container" slot="trigger">
-    <s-field class="field" fixed="false" part="field">
-      <div class="label" part="label" slot="label"></div>
-      <div class="view"></div>
-      <svg viewBox="0 -960 960 960" slot="end">
-        <path d="M320-400q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm160 0q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm160 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"></path>
-      </svg>
-    </s-field>
-    <s-ripple class="ripple" attached="true"></s-ripple>
-  </div>
+  <s-field slot="trigger" class="field" fixed="false" part="field">
+    <div class="label" part="label" slot="label"></div>
+    <div class="view"></div>
+    <svg viewBox="0 -960 960 960" slot="end">
+      <path d="M320-400q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm160 0q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm160 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"></path>
+    </svg>
+    <s-ripple slot="custom" class="ripple" attached="true"></s-ripple>
+  </s-field>
   <s-date class="date" part="date"></s-date>
   <s-ripple class="negative" slot="action" part="negative">${props.negativeText}</s-ripple>
   <s-ripple class="positive" slot="action" part="positive">${props.positiveText}</s-ripple>

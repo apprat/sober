@@ -123,7 +123,7 @@ class DatePicker extends useElement({
     }
     return {
       value: {
-        get: () => state.date,
+        get: () => dateFormat(state.date, this.format),
         set: (value) => {
           state.date = value
           if (value === '') {

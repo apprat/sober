@@ -3,5 +3,5 @@ export const dateFormat = (date: Date | string, format = 'yyyy-MM-dd') => {
   const Y = date.getFullYear()
   const m = date.getMonth() + 1
   const d = date.getDate()
-  return format.replace('yyyy', Y.toString()).replace('MM', m.toString().padStart(2, '0')).replace('DD', d.toString().padStart(2, '0'))
+  return format.replace('yyyy', Y.toString()).replace('MM', m.toString().padStart(2, '0')).replace('dd', d.toString().padStart(2, '0'))
 }

@@ -222,6 +222,7 @@ const template = /*html*/`
   <div class="end line" part="end">
     <slot name="end"></slot>
   </div>
+  <slot name="custom"></slot>
 </div>
 `
 

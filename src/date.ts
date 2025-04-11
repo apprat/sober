@@ -46,7 +46,7 @@ const style = /*css*/`
   vertical-align: middle;
   border-radius: 8px;
   font-size: .875rem;
-  max-width: 348px;
+  max-width: 360px;
   overflow: hidden;
   box-sizing: border-box;
   border: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
@@ -79,7 +79,7 @@ svg{
 }
 .header{
   padding: 24px 24px 16px 24px;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   border-bottom: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
   background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
 }
@@ -92,7 +92,7 @@ svg{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px 0 12px;
+  padding: 12px 16px;
 }
 .action>.year>svg{
   margin: 0 -8px 0 2px;
@@ -107,7 +107,8 @@ svg{
   overflow: auto;
   gap: 4px;
   column-gap: 6px;
-  padding: 8px;
+  padding: 0 16px 16px 16px;
+  margin-top: -12px;
   max-height: 280px;
   counter-reset: year-counter 1899;
 }
@@ -120,7 +121,7 @@ svg{
 }
 .weeks{
   display: flex;
-  padding: 12px 12px 0 12px;
+  padding: 0 16px;
   font-size: .8125rem;
   color: var(--s-color-outline, ${Theme.colorOutline});
 }
@@ -129,10 +130,9 @@ svg{
   width: calc(100% / 7);
   display: inline-flex;
   justify-content: center;
-  padding: 2px 0;
 }
 .days{
-  padding: 12px;
+  padding: 16px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -320,12 +320,15 @@ class DateElement extends useElement({
         state.max = max
         setYearCount()
       },
-      value: (value) => {
-        const val = new Date(value)
-        if (isNaN(val.getTime()) || val.getTime() < state.min.getTime() || val.getTime() > state.max.getTime()) throw Error('invalid date')
-        state.date = val
-        setText()
-        update()
+      value: {
+        get: () => dateFormat(state.date),
+        set: (value) => {
+          const val = new Date(value)
+          if (isNaN(val.getTime()) || val.getTime() < state.min.getTime() || val.getTime() > state.max.getTime()) throw Error('invalid date')
+          state.date = val
+          setText()
+          update()
+        }
       },
       locale: updateText,
     }

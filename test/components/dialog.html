@@ -57,8 +57,8 @@
     const create = document.querySelector('#create')
     create.onclick = () => {
       const dialog = new Dialog()
-      dialog.textContent = 'xxxx'
-      dialog.value = true
+      dialog.innerHTML = '<div>你好</div>'
+      dialog.showed = true
       document.body.appendChild(dialog)
     }
   </script>

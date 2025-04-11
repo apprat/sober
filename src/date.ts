@@ -280,32 +280,24 @@ class DateElement extends useElement({
     }
     prev.onclick = () => {
       const prevMaxDate = getMonthMaxDate(state.date.getFullYear(), state.date.getMonth() - 1)
-      console.log(prevMaxDate)
-      //state.date = state.date.getDate() > maxDate ? new Date(state.date.getFullYear(), state.date.getMonth() - 1, maxDate) : new Date(state.date.getFullYear(), state.date.getMonth() - 1, state.date.getDate())
-      //setValue()
+      const day = Math.min(state.date.getDate(), prevMaxDate)
+      setValue(state.date.getFullYear(), state.date.getMonth() - 1, day)
     }
     next.onclick = () => {
-      // const date = new Date(state.date.getFullYear(), state.date.getMonth() + 1, state.date.getDate())
-      // if (date.getDate() !== state.date.getDate()) {
-      //   date.setDate(1)
-      //   date.setMonth(date.getMonth() + 1)
-      // }
-      // state.date = date
-      // setValue()
+      const prevMaxDate = getMonthMaxDate(state.date.getFullYear(), state.date.getMonth() + 1)
+      const day = Math.min(state.date.getDate(), prevMaxDate)
+      setValue(state.date.getFullYear(), state.date.getMonth() + 1, day)
     }
     years.onclick = (e) => {
       if (!(e.target instanceof Ripple)) return
       container.classList.remove('show-years')
       const index = Array.from(years.children).indexOf(e.target) + state.min.getFullYear()
-      state.date.setFullYear(index)
-      state.date.setDate(1)
-      //setValue()
+      setValue(index, state.date.getMonth(), state.date.getDate())
     }
     days.onclick = (e) => {
       if (!(e.target instanceof Ripple)) return
       const index = Array.from(days.children).indexOf(e.target.parentElement!) + 1
-      state.date.setDate(index)
-      //setValue()
+      setValue(state.date.getFullYear(), state.date.getMonth(), index)
     }
     const updateText = () => {
       setText()
@@ -334,7 +326,6 @@ class DateElement extends useElement({
         state.date = val
         setText()
         update()
-        console.log('设置日期', value)
       },
       locale: updateText,
     }

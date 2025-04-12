@@ -12,6 +12,7 @@ type Props = {
   positiveText: string
   negativeText: string
   format: string
+  locale: string
 }
 
 const name = 's-date-picker'
@@ -20,7 +21,8 @@ const props: Props = {
   label: '',
   positiveText: '确定',
   negativeText: '取消',
-  format: 'yyyy-MM-dd'
+  format: 'yyyy-MM-dd',
+  locale: ''
 }
 
 const style = /*css*/`
@@ -112,26 +114,33 @@ class DatePicker extends useElement({
     })
     dialog.onclose = () => {
       field.focused = false
-      !state.date && (field.fixed = false)
+      if (!state.date) {
+        field.fixed = false
+      }
     }
     positive.onclick = () => {
       state.date = dateElement.value
       this.dispatchEvent(new Event('change'))
-      view.textContent = state.date
-      field.fixed = true
+      view.textContent = dateFormat(state.date, this.format)
       view.style.removeProperty('opacity')
     }
     return {
       value: {
-        get: () => dateFormat(state.date, this.format),
+        get: () => state.date,
         set: (value) => {
           state.date = value
           if (value === '') {
             dateElement.value = dateFormat(new Date())
+            field.fixed = false
+            view.textContent = ''
             return
           }
           dateElement.value = value
         }
+      },
+      locale: {
+        get: () => dateElement.locale,
+        set: (value) => dateElement.locale = value
       },
       label: (value) => label.textContent = value,
       positiveText: (value) => positive.textContent = value,

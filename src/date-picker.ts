@@ -8,6 +8,8 @@ import { Ripple } from './ripple.js'
 
 type Props = {
   value: string
+  min: string
+  max: string
   label: string
   positiveText: string
   negativeText: string
@@ -18,6 +20,8 @@ type Props = {
 const name = 's-date-picker'
 const props: Props = {
   value: '',
+  min: '',
+  max: '',
   label: '',
   positiveText: '确定',
   negativeText: '取消',
@@ -79,14 +83,16 @@ svg{
 `
 const template = /*html*/`
 <s-dialog part="dialog">
-  <s-field slot="trigger" class="field" fixed="false" part="field">
-    <div class="label" part="label" slot="label"></div>
-    <div class="view"></div>
-    <svg viewBox="0 -960 960 960" slot="end">
-      <path d="M320-400q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm160 0q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm160 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"></path>
-    </svg>
-    <s-ripple slot="custom" class="ripple" attached="true"></s-ripple>
-  </s-field>
+  <slot name="trigger" slot="trigger">
+    <s-field class="field" fixed="false" part="field">
+      <div class="label" part="label" slot="label"></div>
+      <div class="view"></div>
+      <svg viewBox="0 -960 960 960" slot="end">
+        <path d="M320-400q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm160 0q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm160 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"></path>
+      </svg>
+      <s-ripple slot="custom" class="ripple" attached="true"></s-ripple>
+    </s-field>
+  </slot>
   <s-date class="date" part="date"></s-date>
   <s-ripple class="negative" slot="action" part="negative">${props.negativeText}</s-ripple>
   <s-ripple class="positive" slot="action" part="positive">${props.positiveText}</s-ripple>
@@ -119,10 +125,9 @@ class DatePicker extends useElement({
       }
     }
     positive.onclick = () => {
-      state.date = dateElement.value
-      this.dispatchEvent(new Event('change'))
-      view.textContent = dateFormat(state.date, this.format)
+      this.value = dateElement.value
       view.style.removeProperty('opacity')
+      this.dispatchEvent(new Event('change'))
     }
     return {
       value: {
@@ -135,12 +140,22 @@ class DatePicker extends useElement({
             view.textContent = ''
             return
           }
+          field.fixed = true
+          view.textContent = dateFormat(value, this.format)
           dateElement.value = value
         }
       },
       locale: {
         get: () => dateElement.locale,
         set: (value) => dateElement.locale = value
+      },
+      min: {
+        get: () => dateElement.min,
+        set: (value) => dateElement.min = value
+      },
+      max: {
+        get: () => dateElement.max,
+        set: (value) => dateElement.max = value
       },
       label: (value) => label.textContent = value,
       positiveText: (value) => positive.textContent = value,

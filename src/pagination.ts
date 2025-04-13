@@ -102,7 +102,7 @@ class Pagination extends useElement({
     const change = () => this.dispatchEvent(new Event('change'))
     const updateChecked = () => {
       const page = Math.ceil(this.total / this.count)
-      let index = Math.min(page - 7, Math.max(0, this.value - 4))
+      let index = Math.max(Math.min(page - 7, Math.max(0, this.value - 4)), 0)
       container.childNodes.forEach((v) => {
         index++
         const item = v as Ripple

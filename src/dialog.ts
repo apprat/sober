@@ -94,7 +94,7 @@ dialog.show .scrim{
   margin: 16px 24px;
   line-height: 1.6;
 }
-::slotted(:is(:not([slot]), [slot=text])){
+:host(:not([size=full])) ::slotted(:is(:not([slot]), [slot=text])){
   width: ${mediaQueries.mobileL}px;
 }
 .action{

@@ -253,6 +253,7 @@ class DateElement extends useElement({
       state.daySelect?.classList.remove('checked')
       state.daySelect = days.children[state.date.getDate() - 1] as HTMLElement
       state.daySelect.classList.add('checked')
+      container.style.removeProperty('height')
     }
     const setYearCount = () => {
       const count = state.max.getFullYear() - state.min.getFullYear()
@@ -272,10 +273,12 @@ class DateElement extends useElement({
       this.dispatchEvent(new Event('change'))
     }
     yearTogggle.onclick = () => {
+      const h = container.offsetHeight
       container.classList.toggle('show-years')
       if (container.classList.contains('show-years')) {
-
+        container.style.height = `${h}px`
         state.yearSelect && years.scrollTo({ top: state.yearSelect.offsetTop - (years.offsetHeight / 2) + (state.yearSelect.offsetHeight / 2) })
+        return
       }
     }
     prev.onclick = () => {

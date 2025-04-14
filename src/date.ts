@@ -273,9 +273,9 @@ class DateElement extends useElement({
     }
     yearTogggle.onclick = () => {
       container.classList.toggle('show-years')
-      if (container.classList.contains('show-years') && state.yearSelect) {
-        const top = state.yearSelect.offsetTop - (years.offsetHeight / 2) + (state.yearSelect.offsetHeight / 2)
-        years.scrollTo({ top })
+      if (container.classList.contains('show-years')) {
+
+        state.yearSelect && years.scrollTo({ top: state.yearSelect.offsetTop - (years.offsetHeight / 2) + (state.yearSelect.offsetHeight / 2) })
       }
     }
     prev.onclick = () => {

@@ -137,11 +137,11 @@ class Tooltip extends useElement({
         popup.style.removeProperty('display')
       })
     }
-    trigger.ontouchstart = () => {
+    trigger.addEventListener('touchstart', () => {
       if (!mediaQueryList.anyPointerCoarse.matches) return
       clearTimeout(timer)
       timer = setTimeout(() => show(), 600)
-    }
+    }, { passive: true })
     trigger.ontouchend = () => {
       clearTimeout(timer)
       close()

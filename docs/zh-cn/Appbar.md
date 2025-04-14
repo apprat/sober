@@ -47,23 +47,3 @@
 | headline   | 标题                   |
 | search     | 搜索框 默认支持 search  |
 | action     | 操作按钮               |
-
----
-
-## CSS 变量
-
-| 名称                        | 介绍          |
-| --------------------------- | ------------ |
-| --s-color-surface-container | 背景颜色      |
-| --s-color-primary           | Logo 颜色     |
-| --s-color-on-surface        | 标题颜色      |
-| --s-color-surface           | 搜索框背景颜色 |
-
----
-
-## 原型
-
-```ts
-export class Appbar extends HTMLElement implements Props {
-} 
-```

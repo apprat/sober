@@ -6,11 +6,6 @@
 <s-fab>
   <s-icon name="add"></s-icon>
 </s-fab>
-```
-
-扩展浮动按钮
-
-```html preview
 <s-fab>
   <s-icon name="add" slot="start"></s-icon>
   Button
@@ -51,17 +46,6 @@
 | ------ | ------------------------------- |
 | start  | 开始位置插槽，默认支持 svg、icon  |
 | end    | 开始位置插槽，默认支持同 start    |
-
----
-
-## CSS 变量
-
-| 名称                           | 介绍               |
-| ------------------------------ | ----------------- |
-| --s-color-primary-container    | 背景颜色           |
-| --s-color-on-primary-container | 前景颜色           |
-| --s-elevation-level2           | 阴影               |
-| --s-elevation-level3           | hover/pressed 阴影 |
 
 ---
 

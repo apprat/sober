@@ -162,7 +162,7 @@ class Popup extends useElement({
       animation.finished.then(() => this.dispatchEvent(new Event('showed')))
     }
     const close = () => {
-      if (!this.isConnected || !dialog.open) return
+      if (!this.isConnected || !dialog.open || container.getAnimations().length > 0) return
       if (!this.dispatchEvent(new Event('close', { cancelable: true }))) return
       const animation = container.animate({ transform: ['scale(1)', 'scale(.9)'], opacity: [1, 0] }, getAnimateOptions())
       this.removeAttribute('showed')

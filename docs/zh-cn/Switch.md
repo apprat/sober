@@ -28,9 +28,20 @@
   <s-switch v-model.lazy="checked" type="checkbox"></s-switch>
 </template>
 <script setup>
-import { ref } from 'vue'
-const checked = ref(false)
+  import { ref } from 'vue'
+  const checked = ref(false)
 </script>
+```
+
+> [!WARNING]
+> 请注意，使用 v-model 时，你必须定义 `type` 属性值为 `checkbox`。
+
+使用插槽添加图标
+
+```html preview
+<s-switch checked="true">
+  <s-icon slot="icon" name="star"></s-icon>
+</s-switch>
 ```
 
 ---
@@ -53,16 +64,11 @@ const checked = ref(false)
 
 ---
 
-## CSS 变量
+## 插槽
 
-| 名称                                | 介绍                    |
-| ----------------------------------- | ---------------------- |
-| --s-color-primary                   | 选中轨道颜色            |
-| --s-color-outline                   | 边框颜色/thumb 背景颜色 |
-| --s-color-on-surface                | 禁用选中背景/边框颜色    |
-| --s-color-on-primary                | 选中thumb颜色           |
-| --s-color-surface                   | 禁用thumb颜色           |
-| --s-elevation-level1                | thumb 阴影             |
+| 名称 | 介绍  |
+| ---- | ---- |
+| icon | 图标 |
 
 ---
 

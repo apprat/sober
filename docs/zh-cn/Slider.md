@@ -31,8 +31,8 @@
   <s-slider v-model="slider"></s-slider>
 </template>
 <script setup>
-import { ref } from 'vue'
-const slider = ref(2.5)
+  import { ref } from 'vue'
+  const slider = ref(2.5)
 </script>
 ```
 
@@ -58,16 +58,3 @@ const slider = ref(2.5)
 | ------ |------ |------|------ |---------------- |
 | input  | Event | 否   | 否     | 值变化后触发     |
 | change | Event | 否   | 否     | 值变化完毕后触发 |
-
----
-
-## CSS 变量
-
-| 名称                          | 介绍               |
-| ----------------------------- | ----------------- |
-| --s-color-primary             | 指示器颜色         |
-| --s-color-secondary-container | 轨道颜色           |
-| --s-color-inverse-surface     | 标签背景色         |
-| --s-color-inverse-on-surface  | 标签前景色         |
-| --s-color-on-surface          | 指示器/轨道禁用颜色 |
-| --s-elevation-level1          | thumb 阴影         |

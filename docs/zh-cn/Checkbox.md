@@ -4,33 +4,39 @@
 <s-checkbox>已阅读用户协议</s-checkbox>
 <s-checkbox checked="true"></s-checkbox>
 <s-checkbox indeterminate="true"></s-checkbox>
-```
 
-设置 `disabled` 来禁用复选框。
-
-```html preview
 <s-checkbox disabled="true"></s-checkbox>
 <s-checkbox disabled="true" checked="true"></s-checkbox>
 <s-checkbox disabled="true" indeterminate="true"></s-checkbox>
 ```
 
-在 Vue 中使用 `v-model.lazy` 双向绑定。
+在 Vue 中可以使用 `v-model.lazy` 来绑定。
 
 ```html
 <template>
   <s-checkbox v-model.lazy="checked" type="checkbox"></s-checkbox>
 </template>
 <script setup>
-import { ref } from 'vue'
-const checked = ref(false)
+  import { ref } from 'vue'
+  const checked = ref(false)
 </script>
 ```
 
-自定义颜色
+> [!WARNING]
+> 请注意，使用 v-model 时，你必须定义 `type` 属性值为 `checkbox`。
+
+
+自定义图标和样式
 
 ```html preview
-<s-checkbox style="color: #009688"></s-checkbox>
-<s-checkbox style="color: #b54e4e" checked="true"></s-checkbox>
+<s-checkbox>
+  <s-icon name="star" slot="unchecked"></s-icon>
+  <svg viewBox="0 -960 960 960" slot="checked">
+    <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"></path>
+  </svg>
+</s-checkbox>
+<s-checkbox style="color: #009688" checked="true"></s-checkbox>
+<s-checkbox style="color:rgb(212, 162, 35); height: 56px" checked="true"></s-checkbox>
 ```
 
 如果你需要设置选中的颜色，可以考虑使用 CSS 选择器，
@@ -61,13 +67,13 @@ s-checkbox[checked=true] {
 
 ---
 
-## CSS 变量
+## 插槽
 
-| 名称                         | 介绍             |
-| ---------------------------- | ---------------- |
-| --s-color-on-surface-variant | 图标/文本颜色     |
-| --s-color-primary            | 选中图标/文本颜色 |
-| --s-color-on-surface         | 禁用前景背景颜色  |
+| 名称          | 介绍     |
+| ------------- | ------- |
+| unckecked     | 未选中   |
+| checked       | 已选中   |
+| indeterminate | 未知状态 |
 
 ---
 

@@ -28,8 +28,8 @@
   <s-rate v-model="rate"></s-rate>
 </template>
 <script setup>
-import { ref } from 'vue'
-const rate = ref(2.5)
+  import { ref } from 'vue'
+  const rate = ref(2.5)
 </script>
 ```
 
@@ -62,12 +62,3 @@ const rate = ref(2.5)
 | --------- | ------ |
 | track     | 轨道   |
 | indicator | 指示器 |
-
----
-
-## CSS 变量
-
-| 名称                          | 介绍      |
-| ----------------------------- | --------- |
-| --s-color-secondary-container | 轨道颜色   |
-| --s-color-primary             | 指示器颜色 |

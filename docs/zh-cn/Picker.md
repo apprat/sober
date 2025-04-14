@@ -44,16 +44,15 @@
     <s-picker-item value="c">上海</s-picker-item>
   </s-picker>
 </template>
-
 <script setup>
-import { ref } from 'vue'
-const select = ref('b')
+  import { ref } from 'vue'
+  const select = ref('b')
 </script>
 ```
 
 ---
 
-## 属性
+## 属性 Props
 
 | 名称     | 类型     | 默认值 | 同步 | 介绍                               |
 | -------- | ------- | ------ | --- | ---------------------------------- |
@@ -82,32 +81,13 @@ const select = ref('b')
 ## 原型
 
 ```ts
-class Picker extends Popup {
+class Picker extends Popup implements Props {
   //子项目
   readonly options: PickerButtonItem[] = []
   //当前选中下标 
   readonly selectedIndex: number = -1
-  //标签文本
-  label: string = ''
-  //选中的值
-  value: string = ''
-  //是否禁用
-  disabled: boolean = false
 }
 ```
-
----
-
-## CSS 变量
-
-| 名称                         | 介绍            |
-| ---------------------------- | -------------- |
-| --picker-border-radius       | `私有` 边框圆角 |
-| --picker-border-color        | `私有` 边框颜色 |
-| --picker-border-width        | `私有` 边框宽度 |
-| --picker-padding             | `私有` 内边距   |
-| --picker-height              | `私有` 高度     |
-| --s-color-on-surface-variant | 图标颜色        |
 
 ---
 
@@ -132,16 +112,6 @@ class Picker extends Popup {
 | ------ | ------------------------------- |
 | start  |  开始位置插槽，默认支持 svg、icon |
 | end    |  开始位置插槽，默认支持同 start   |
-
----
-
-## 子 CSS 变量
-
-| 名称                             | 介绍       |
-| -------------------------------- | --------- |
-| --s-color-secondary-container    | 选中背景色 |
-| --s-color-on-secondary-container | 选中前景色 |
-| --s-color-on-surface-variant     | svg 颜色   |
 
 ---
 

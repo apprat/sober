@@ -12,10 +12,10 @@
 </s-text-field>
 ```
 
-设置样式 `width: stretch` 来占满横向空间。
+设置样式 `display: grid` 来 和 `width: auto` 占满横向空间。
 
 ```html preview
-<s-text-field style="width: stretch;color: red" label="请输入名称"></s-text-field>
+<s-text-field style="display: grid; width: auto" label="请输入名称"></s-text-field>
 ```
 
 多行文本输入
@@ -27,7 +27,9 @@
 错误状态
 
 ```html preview
-<s-text-field error="true" label="请输入内容"></s-text-field>
+<s-text-field error="true" label="请输入内容">
+  <div slot="text">输入格式错误</div>
+</s-text-field>
 ```
 
 计数器（需要同时设置 `maxLength` 属性）
@@ -45,14 +47,14 @@
   <s-text-field label="请输入内容" v-model="input"></s-text-field>
 </template>
 <script setup>
-import { ref } from 'vue'
-const input = ref('')
+  import { ref } from 'vue'
+  const input = ref('')
 </script>
 ```
 
 ---
 
-## 属性
+## 属性 Props
 
 | 名称        | 类型                    | 默认值 | 同步 | 介绍                   |
 | ----------- | ---------------------- | ------ | --- | ---------------------- |
@@ -93,50 +95,11 @@ const input = ref('')
 ## 原型
 
 ```ts
-class TextField extends HTMLElement {
+class TextField extends HTMLElement implements Props {
   //原生编辑框对象
   readonly native: HTMLInputElement | HTMLTextAreaElement
-  //标签
-  label: string = ''
-  //占位文本
-  placeholder: string = ''
-  //是否禁用
-  disabled: boolean = false
-  //是否只读
-  readOnly: boolean = false
-  //是否多行文本
-  multiLine: boolean = false
-  //是否启用字数统计
-  countered: boolean = false
-  //是否启用错误状态
-  error: boolean = false
-  //输入类型
-  type: 'text' | 'number' | 'password' = 'text'
-  //最大长度
-  maxLength: number = -1
-  //值
-  value: string = ''
 }
 ```
-
----
-
-## CSS 变量
-
-| 名称                         | 介绍                          |
-| ---------------------------- | ---------------------------- |
-| --text-field-border-radius   | `私有` 边框圆角大小            |
-| --text-field-border-color    | `私有` 边框/label文本颜色      |
-| --text-field-padding         | `私有` 内边距                  |
-| --text-field-padding-top     | `私有` 顶部内边距              |
-| --text-field-padding-bottom  | `私有` 底部内边距              |
-| --text-field-padding-left    | `私有` 左内边距                |
-| --text-field-padding-right   | `私有` 右内边距                |
-| --s-color-on-surface         | 文本颜色                       |
-| --s-color-primary            | 获得焦点时的边框/label文本颜色  |
-| --s-color-on-primary         | 选择文本颜色背景颜色            |
-| --s-color-error              | 错误颜色                       |
-| --s-color-on-surface-variant | 插槽SVG 颜色                   |
 
 ---
 

@@ -38,7 +38,7 @@
 </s-segmented-button>
 ```
  
-> 你可以设置 **value** 来默认选中，也可以设置 item 的 **selected** 属性来默认选中。
+> 在子项目上设置了 `value` 属性后，你可以在组件上设置 `value` 属性来选中某项，也可以通过子项目的 `selected` 属性来选中某项。
 
 禁用状态
 
@@ -53,20 +53,36 @@
   <s-segmented-button-item>
     item3
   </s-segmented-button-item>
-  <s-segmented-button-item disabled="true">
+  <s-segmented-button-item>
     item4
   </s-segmented-button-item>
 </s-segmented-button>
 ```
 
+在 Vue 中使用 `v-model.lazy` 双向绑定。
+
+```html
+<template>
+  <s-segmented-button v-model.lazy="select">
+    <s-segmented-button-item value="a">A</s-segmented-button-item>
+    <s-segmented-button-item value="b">B</s-segmented-button-item>
+    <s-segmented-button-item value="c">C</s-segmented-button-item>
+  </s-segmented-button>
+</template>
+<script setup>
+  import { ref } from 'vue'
+  const select = ref('b')
+</script>
+```
+
 ---
 
-## 属性
+## 属性 Props
 
 | 名称  | 类型         | 默认值 | 同步 | 介绍                                |
 | ----- | ----------- | ------ | --- | ----------------------------------- |
 | value | string      |        | 否  | 选中的值，需 item 同时设置 value 属性 |
-| mode  | auto, fiexd | auto   | 否  | 选中的值，需 item 同时设置 value 属性 |
+| mode  | auto, fiexd | auto   | 否  | 模式                                |
 
 ---
 
@@ -81,21 +97,13 @@
 ## 原型
 
 ```ts
-class SegmentedButton extends HTMLElement {
+class SegmentedButton extends HTMLElement implements Props {
   //子项目
   readonly options: SegmentedButtonItem[] = []
   //当前选中下标
   readonly selectedIndex: number = -1
 }
 ```
-
----
-
-## CSS 变量
-
-| 名称              | 介绍     |
-| ----------------- | ------- |
-| --s-color-outline | 边框颜色 |
 
 ---
 
@@ -122,18 +130,6 @@ class SegmentedButton extends HTMLElement {
 | ------ | ------------------------------- |
 | start  |  开始位置插槽，默认支持 svg、icon |
 | end    |  开始位置插槽，默认支持同 start   |
-
----
-
-## 子 CSS 变量
-
-| 名称                             | 介绍       |
-| -------------------------------- | --------- |
-| --s-color-on-surface             | 前景色     |
-| --s-color-outline                | 边框颜色   |
-| --s-color-secondary-container    | 选中背景色 |
-| --s-color-on-secondary-container | 选中前景色 |
-| --s-color-on-surface             | 禁用前景色 |
 
 ---
 

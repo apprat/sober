@@ -20,13 +20,13 @@
 <s-button type="text" disabled="true"> button </s-button>
 ```
 
-设置样式 `width: stretch` 来占满横向空间。
+设置样式 `display: flex` 来占满横向空间。
 
 ```html preview
-<s-button style="width: stretch"> button </s-button>
+<s-button style="display: flex"> button </s-button>
 ```
 
-使用 `start` 和 `end` 插槽放置其他组件。
+使用插槽放置其他组件。
 
 ```html preview
 <s-button>
@@ -62,22 +62,6 @@
 | ------ | ------------------------------------------------- |
 | start  | 开始位置插槽，默认支持 svg、icon、circular-progress |
 | end    | 开始位置插槽，默认支持同 start                      |
-
----
-
-## CSS 变量
-
-| 名称                             | 介绍                                     |
-| -------------------------------- | --------------------------------------- |
-| --s-color-primary                | filled 背景颜色，elevated/text 前景颜色   |
-| --s-color-on-primary             | filled 前景颜色                          |
-| --s-color-surface-container-high | elevated 背景颜色                        |
-| --s-color-secondary-container    | filled-tonal 背景颜色                    |
-| --s-color-on-secondary-container | filled-tonal 前景颜色                    |
-| --s-color-outline                | outlined 边框颜色                        |
-| --s-color-on-surface             | 禁用背景前景颜色，outlined 禁用边框颜色    |
-| --s-elevation-level1             | filled hover/pressed 阴影，elevated 阴影 |
-| --s-elevation-level2             | elevated hover/pressed 阴影             |
 
 ---
 

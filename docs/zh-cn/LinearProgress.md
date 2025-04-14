@@ -29,12 +29,3 @@
 | animated      | boolean | false  | 是  | 是否启用变更时过渡动画 |
 | max           | number  | 100    | 否  | 最大值                |
 | value         | number  | 0      | 否  | 当前值                |
-
----
-
-## CSS 变量
-
-| 名称                          | 介绍               |
-| ----------------------------- | ----------------- |
-| --s-color-primary             | 指示器颜色         |
-| --s-color-secondary-container | 轨道颜色           |

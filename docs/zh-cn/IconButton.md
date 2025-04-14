@@ -64,7 +64,7 @@
 </s-icon-button>
 ```
 
-> 如果你需要高度的自定义按钮样式，使用 [Ripple](/component/ripple) 组件更加方便。
+> 如果你需要高度的自定义按钮样式，使用 [Ripple](/component/ripple) 组件也许更加方便，因为它没有默认样式。
 
 ---
 
@@ -82,20 +82,6 @@
 | 名称   | 介绍  |
 | ------ | ---- |
 | badge  |  徽章 |
-
----
-
-## CSS 变量
-
-| 名称                             | 介绍                                   |
-| -------------------------------- | ------------------------------------- |
-| --s-color-on-surface-variant     | text 前景颜色                          |
-| --s-color-primary                | filled 背景颜色                        |
-| --s-color-on-primary             | filled 前景颜色                        |
-| --s-color-secondary-container    | filled-tonal 背景颜色                  |
-| --s-color-on-secondary-container | filled-tonal 前景颜色                  |
-| --s-color-outline                | outlined 边框颜色                      |
-| --s-color-on-surface             | 禁用背景前景颜色，outlined 禁用边框颜色  |
 
 ---
 

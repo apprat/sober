@@ -21,7 +21,7 @@
 | value | number             | 1        | 否  | 当前页数 |
 | total | number             | 20       | 否  | 数据总数 |
 | count | number             | 20       | 否  | 每页数量 |
-| type  | standard, outlined | standard | 否  | 样式类型 |
+| type  | standard, outlined | standard | 是  | 样式类型 |
 
 ---
 

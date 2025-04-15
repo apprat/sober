@@ -1,14 +1,31 @@
 # 更新日志
 
-#### 1.1.0 (2025-??-??)
+#### 1.1.0 (2025-04-15)
 
 - 更新：新增对 Preact 的 JSX 类型支持，完善了 Vue 的模版和 JSX 类型支持，所有组件的动画速度和运动曲线进行了优化，设备在同时支持鼠标和触屏时进行了优化。
 - 新增：Alert、Avatar、Date、DatePicker，Pagination 组件。
 - 新增：Switch 新增 icon 插槽，默认图标被移除。
-- 更新：SegmentedButton 组件 UI 更新，新增属性 `mode`。
 - 新增：BottomSheet 组件新增手势滑动，新增属性 `disabledGesture` 属性。
 - 新增：Checkbox 新增 **unckecked**、**checked**、**indeterminate** 插槽，用于自定义切换图标。
 - 更新：Chip 外观更新，新增属性 `checked`，`disabled`，type 属性值 elevated, filled-tonal 已弃用。
+- 新增组件：DatePicier 日期选择器。
+- 新增组件：Date 日期选择面板。
+- 更新：Dialog 样式更新，对话框宽度改为由插槽 `max-width` 决定。
+- 更新：Drawer 组件是否启用折叠模式改为由组件自身宽度来决定，而非窗口宽度。
+- 新增组件：Empty 空面板。
+- 更新：FAB 组件高度在没有使用插槽时显示较小的高度。
+- 更新：Icon 组件加载 svg 图标时，改为使用后缀名判断。
+- 修复：Page 组件 `toggle()` 方法找不到样式表错误问题。
+- 新增组件：Pagination 分页选择器。
+- 更新：Picker 组件弹出层宽度抖动问题，新增 `show()`、`close()`、`toggle()` 方法，参数同 Popup 组件。
+- 更新：PopupMenu 组件新增 `show()`、`close()`、`toggle()` 方法，参数同 Popup 组件。
+- 新增：RadioButton 新增 **unckecked**、**checked** 插槽，用于自定义切换图标。
+- 更新：Search 组件样式更新。
+- 更新：SegmentedButton 组件 UI 更新，新增属性 `mode`。
+- 修复：Slider 组件设置 `min` 属性时指示器错位问题。
+- 更新：Snackbar 组件 `type` 属性新增值 `info`、`warning`、`error`、`success`。
+- 更新：Switch 默认图标被移除，新增 **icon** 插槽来添加自定义图标。
+- 更新：Tooltip，新增 `show()`、`close()` 方法。
 
 #### 1.0.6 (2025-01-20)
 

@@ -6,7 +6,7 @@ type Props = {
   value: number
   total: number
   count: number
-  type: 'basic' | 'outlined'
+  type: 'standard' | 'outlined'
 }
 
 const name = 's-pagination'
@@ -14,7 +14,7 @@ const props: Props = {
   value: 1,
   total: 20,
   count: 20,
-  type: 'basic'
+  type: 'standard'
 }
 
 const style = /*css*/`

@@ -35,7 +35,7 @@
     <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"></path>
   </svg>
 </s-radio-button>
-<s-radio-button name="group2" style="color: #009688" checked="true"></s-radio-button>
+<s-radio-button name="group2" style="color: #009688"></s-radio-button>
 <s-radio-button name="group2" style="color:rgb(212, 162, 35); height: 56px" checked="true"></s-radio-button>
 ```
 

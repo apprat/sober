@@ -12,8 +12,24 @@
 大多数情况下，你不需要关心弹出框出现的位置，但你还是可以使用 `align` 属性设置默认位置。
 
 ```html preview
+<s-popup align="bottom">
+  <s-button slot="trigger"> bottom (默认值) </s-button>
+  <div style="min-height: 280px; width: 128px"></div>
+</s-popup>
+
+<s-popup align="top">
+  <s-button slot="trigger"> top </s-button>
+  <div style="min-height: 280px; width: 128px"></div>
+</s-popup>
+
+
+<s-popup align="left">
+  <s-button slot="trigger"> left </s-button>
+  <div style="min-height: 280px; width: 128px"></div>
+</s-popup>
+
 <s-popup align="right">
-  <s-button slot="trigger"> popup </s-button>
+  <s-button slot="trigger"> right </s-button>
   <div style="min-height: 280px; width: 128px"></div>
 </s-popup>
 ```
@@ -29,7 +45,7 @@
 
 ---
 
-## 属性
+## 属性 Props
 
 | 名称   | 类型                      | 默认值 | 同步 | 介绍    |
 | ------ | ------------------------ | ------ | --- | ------- |
@@ -59,25 +75,18 @@
 ## 原型
 
 ```ts
-type Position = { x: number; y: number; origin?: string }
+interface Position { 
+  x: number //x坐标
+  y: number //y坐标
+  origin?: string //方向，如：left top
+}
 
-class Popup extends HTMLElement {
+class Popup extends HTMLElement implements Props {
   //显示弹出框
   readonly show(option?: HTMLElement | Position): void
   //切换弹出框
   readonly toggle(option?: HTMLElement | Position): void
   //关闭弹出框
   readonly close(): void
-  //位置
-  align: 'top' | 'bottom' | 'left' | 'right' = 'bottom'
 } 
 ```
-
----
-
-## CSS 变量
-
-| 名称                             | 介绍           |
-| -------------------------------- | ------------- |
-| --s-color-surface-container-high | 弹出框背景颜色 |
-| --s-elevation-level2             | 弹出框阴影     |

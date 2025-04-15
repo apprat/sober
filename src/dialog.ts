@@ -66,7 +66,6 @@ dialog.show .scrim{
   flex-direction: column;
   overflow: hidden;
   transition-timing-function: ease-out;
-  --width: ${mediaQueries.mobileL}px;
   box-shadow: var(--s-elevation-level5, ${Theme.elevationLevel5});
   background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
 }
@@ -95,7 +94,7 @@ dialog.show .scrim{
   line-height: 1.6;
 }
 :host(:not([size=full])) ::slotted(:is(:not([slot]), [slot=text])){
-  width: ${mediaQueries.mobileL}px;
+  max-width: ${mediaQueries.mobileL}px;
 }
 .action{
   display: flex;

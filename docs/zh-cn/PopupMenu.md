@@ -72,9 +72,9 @@
 ## 原型
 
 ```ts
-class PopupMenu extends Popup {
-  group: 'start' | 'end' | '' = ''
-} 
+import { Popup } from 'sober'
+
+class PopupMenu extends Popup implements Props {} 
 ```
 
 ---
@@ -87,18 +87,9 @@ class PopupMenu extends Popup {
 
 ---
 
-## CSS 变量
-
-| 名称                      | 介绍       |
-| ------------------------- | --------- |
-| --s-color-on-surface      | 文本颜色   |
-| --s-color-outline-variant | 分割线颜色 |
-
----
-
 # Popup Menu Item
 
-该组件仅作为 Popup Menu 的子组件，不可单独使用。
+该组件仅作为 Popup Menu 的子组件，单独使用时没有效果。
 
 ---
 
@@ -108,14 +99,6 @@ class PopupMenu extends Popup {
 | ------ | ------------------------------- |
 | start  |  开始位置插槽，默认支持 svg、icon |
 | end    |  开始位置插槽，默认支持同 start   |
-
----
-
-## 子 CSS 变量
-
-| 名称                         | 介绍       |
-| ---------------------------- | --------- |
-| --s-color-on-surface-variant | svg 颜色   |
 
 ---
 

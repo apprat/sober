@@ -10,11 +10,11 @@ const props: Props = {}
 const style = /*css*/`
 :host{
   display: flex;
-  height: 64px;
   align-items: center;
   position: relative;
   padding: 0 8px;
-  flex-shrink: 0;
+  container-name: host;
+  container-type: inline-size;
   background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
 }
 ::slotted([slot=navigation]){
@@ -45,6 +45,8 @@ const style = /*css*/`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  height: 64px;
+  max-height: 100%;
 }
 ::slotted([slot=action]){
   margin: 0 4px;
@@ -65,8 +67,8 @@ const style = /*css*/`
   margin: 0 auto;
   padding: 0;
 }
-@media (max-width: ${mediaQueries.laptop}px) {
-  :host{
+@container host (max-width: ${mediaQueries.laptop}px){
+  .view{
     height: 56px;
   }
   ::slotted(s-search[slot=search]){
@@ -74,6 +76,7 @@ const style = /*css*/`
     flex-grow: 1;
   }
 }
+
 `
 
 const template = /*html*/`

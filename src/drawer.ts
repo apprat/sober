@@ -15,6 +15,8 @@ const style = /*css*/`
   height: 100%;
   overflow: hidden;
   position: relative;
+  container-name: host;
+  container-type: inline-size;
 }
 .start,
 .end{
@@ -64,13 +66,14 @@ const style = /*css*/`
 ::slotted(s-scroll-view:not([slot])){
   flex-grow: 1;
 }
-@media not (max-width: ${mediaQueries.laptop}px){
+@container host not (max-width: ${mediaQueries.laptop}px){
   .start.show,
   .end.show{
     display: block;
   }
 }
-@media (max-width: ${mediaQueries.laptop}px){
+
+@container host (max-width: ${mediaQueries.laptop}px){
   .scrim{
     display: block;
     z-index: 1;
@@ -126,7 +129,7 @@ class Drawer extends useElement({
       return { easing: easing, duration: convertCSSDuration(duration) }
     }
     const getElement = (name: SlotName = 'start') => slots[name]
-    const getClassName = (folded?: boolean) => folded ?? mediaQueryList.laptop.matches ? 'show-laptop' : 'show'
+    const getClassName = (folded?: boolean) => folded ?? this.offsetWidth <= mediaQueries.laptop ? 'show-laptop' : 'show'
     const getOffset = (name: SlotName = 'start') => ({ start: -1, end: 1 }[name])
     const show = (slot?: SlotName, folded?: boolean) => {
       const element = getElement(slot)
@@ -136,7 +139,7 @@ class Drawer extends useElement({
       const animateOptions = getAnimateOptions()
       element.classList.add(className)
       scrim.classList.add(className)
-      const keyframes = mediaQueryList.laptop.matches ? { transform: [`translateX(${element.offsetWidth * offset}px)`, `translateX(0)`] } : { width: ['0', element.offsetWidth + 'px'] }
+      const keyframes = this.offsetWidth <= mediaQueries.laptop ? { transform: [`translateX(${element.offsetWidth * offset}px)`, `translateX(0)`] } : { width: ['0', element.offsetWidth + 'px'] }
       scrim.animate({ opacity: [0, 1] }, animateOptions)
       element.animate(keyframes, animateOptions)
     }
@@ -146,7 +149,7 @@ class Drawer extends useElement({
       if (!element.classList.contains(className)) return
       const offset = getOffset(slot)
       const animateOptions = getAnimateOptions()
-      const keyframes = { display: ['block', 'block'], ...mediaQueryList.laptop.matches ? { transform: [`translateX(0)`, `translateX(${element.offsetWidth * offset}px)`], } : { width: [element.offsetWidth + 'px', '0'] } }
+      const keyframes = { display: ['block', 'block'], ...this.offsetWidth <= mediaQueries.laptop ? { transform: [`translateX(0)`, `translateX(${element.offsetWidth * offset}px)`], } : { width: [element.offsetWidth + 'px', '0'] } }
       element.animate(keyframes, animateOptions)
       scrim.animate({ opacity: [1, 0] }, animateOptions)
       element.classList.remove(className)

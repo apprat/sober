@@ -136,12 +136,14 @@ const template = /*html*/`
 </dialog>
 `
 
+type BuildActions = { text: string, click?: (event: MouseEvent) => unknown }
+
 const builder = (options: string | {
   root?: Element
   headline?: string
   text?: string
   view?: HTMLElement | ((dialog: Dialog) => void)
-  actions?: { text: string, click?: (event: MouseEvent) => unknown }[],
+  actions?: BuildActions | BuildActions[],
 }) => {
   let root: Element = document.body
   const dialog = new Dialog()
@@ -169,7 +171,8 @@ const builder = (options: string | {
     if (options.view) {
       typeof options.view === 'function' ? options.view(dialog) : dialog.appendChild(options.view)
     }
-    for (const item of options.actions ?? []) {
+    const actions = options.actions ?? []
+    for (const item of Array.isArray(actions) ? actions : [actions]) {
       const action = document.createElement('s-button')
       action.slot = 'action'
       action.type = 'text'

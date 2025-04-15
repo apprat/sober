@@ -1,6 +1,6 @@
 # Menu
 
-菜单是一个列表。
+菜单是一个列表，大多数情况下，你可能更需要的是 [弹出式菜单](./popup-menu)。
 
 ```html preview
 <s-menu style="max-width: 280px">
@@ -49,19 +49,9 @@
 
 ---
 
-## CSS 变量
-
-| 名称                         | 介绍         |
-| ---------------------------- | ----------- |
-| --s-color-on-surface         | 文本颜色     |
-| --s-color-surface-variant    | 分割线颜色   |
-| --s-color-on-surface-variant | 标签文本颜色 |
-
----
-
 ## Menu Item
 
-该组件仅作为 Menu 的子组件，不可单独使用。
+该组件仅作为 Menu 的子组件，单独使用时没有效果。
 
 ## 子属性
 
@@ -79,17 +69,6 @@
 | start  | 开始位置插槽，默认支持 svg、icon |
 | end    | 开始位置插槽，默认支持同 start   |
 | menu   | 子菜单                         |
-
----
-
-## 子 CSS 变量
-
-| 名称                             | 介绍                       |
-| -------------------------------- | ------------------------- |
-| --s-color-secondary-container    | 选中背景色                 |
-| --s-color-on-secondary-container | 选中前景色                 |
-| --s-color-on-surface-variant     | 子菜单切换图标颜色/svg 颜色 |
-| --s-color-surface-container-high | 子菜单背景颜色             |
 
 ---
 

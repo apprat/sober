@@ -21,6 +21,8 @@
 </s-navigation>
 ```
 
+> 在子项目上设置了 `value` 属性后，你可以在组件上设置 `value` 属性来选中某项，也可以通过子项目的 `selected` 属性来选中某项。
+
 设置 `mode` 为导轨模式.
 
 ```html preview
@@ -59,7 +61,7 @@ const select = ref('b')
 
 ---
 
-## 属性
+## 属性 Props
 
 | 名称  | 类型          | 默认值 | 同步 | 介绍                                |
 | ----- | ------------ | ------ | --- | ----------------------------------- |
@@ -79,7 +81,7 @@ const select = ref('b')
 ## 原型
 
 ```ts
-class Navigation extends HTMLElement {
+class Navigation extends HTMLElement implements Props {
   //子项目
   readonly options: NavigationItem[] = []
   //当前选中下标
@@ -89,19 +91,9 @@ class Navigation extends HTMLElement {
 
 ---
 
-## CSS 变量
-
-| 名称                         | 介绍     |
-| ---------------------------- | ------- |
-| --s-color-surface            | 背景颜色 |
-| --s-color-on-surface-variant | 文本颜色 |
-| --s-elevation-level2         | 默认阴影 |
-
----
-
 # Navigation Item
 
-该组件仅作为 Navigation 的子组件，不可单独使用。
+该组件仅作为 Navigation 的子组件，单独使用时没有效果。
 
 ---
 
@@ -121,15 +113,6 @@ class Navigation extends HTMLElement {
 | text  | 文本                     |
 | icon  | 图标，默认支持 svg、icon  |
 | badge | 徽章                     |
-
----
-
-## 子 CSS 变量
-
-| 名称                          | 介绍            |
-| ----------------------------- | -------------- |
-| --s-color-primary             | 选中文本图标颜色 |
-| --s-color-secondary-container | 图标容器背景颜色 |
 
 ---
 

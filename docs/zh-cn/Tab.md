@@ -16,7 +16,7 @@
 </s-tab>
 ```
 
-> 你可以设置 **value** 来默认选中，也可以设置 item 的 **selected** 属性来默认选中。
+> 在子项目上设置了 `value` 属性后，你可以在组件上设置 `value` 属性来选中某项，也可以通过子项目的 `selected` 属性来选中某项。
 
 使用插槽。
 
@@ -91,7 +91,7 @@ const select = ref('b')
 
 ---
 
-## 属性
+## 属性 Props
 
 | 名称  | 类型               | 默认值     | 同步 | 介绍                                |
 | ----- | ----------------- | ---------- | --- | ----------------------------------- |
@@ -111,7 +111,7 @@ const select = ref('b')
 ## 原型
 
 ```ts
-class Tab extends HTMLElement {
+class Tab extends HTMLElement implements Props {
   //子项目
   readonly options: TabItem[] = []
   //当前选中下标
@@ -121,19 +121,9 @@ class Tab extends HTMLElement {
 
 ---
 
-## CSS 变量
-
-| 名称                         | 介绍     |
-| ---------------------------- | ------- |
-| --s-color-surface            | 背景颜色 |
-| --s-color-on-surface-variant | 文本颜色 |
-| --s-color-surface-variant    | 边框颜色 |
-
----
-
 # Tab Item
 
-该组件仅作为 Tab 的子组件，不可单独使用。
+该组件仅作为 Tab 的子组件，单独使用时没有效果。
 
 ---
 
@@ -153,14 +143,6 @@ class Tab extends HTMLElement {
 | text  | 文本                     |
 | icon  | 图标，默认支持 svg、icon  |
 | badge | 徽章                     |
-
----
-
-## 子 CSS 变量
-
-| 名称              | 介绍                  |
-| ----------------- | -------------------- |
-| --s-color-primary | 选中文本图标指示器颜色 |
 
 ---
 

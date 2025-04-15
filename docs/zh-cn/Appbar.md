@@ -1,6 +1,6 @@
 # Appbar
 
-应用栏。
+应用栏，该组件在自身宽度小于 `1024px` 时使用更窄的高度。
 
 ```html preview
 <s-appbar>
@@ -10,29 +10,12 @@
   </s-icon-button>
   <!--标题-->
   <div slot="headline"> Title </div>
+  <!--搜索框-->
+  <s-search slot="search" placeholder="搜索关键字..."></s-search>
   <!--右侧操作按钮-->
   <s-icon-button slot="action">
     <s-icon name="search"></s-icon>
   </s-icon-button>
-</s-appbar>
-```
-
-你可以嵌套该组件，内部的 appbar 会居中并且设置一个最大宽度。
-
-```html preview
-<s-appbar>
-  <s-appbar>
-    <!--左侧菜单按钮-->
-    <s-icon-button slot="navigation">
-      <s-icon name="menu"></s-icon>
-    </s-icon-button>
-    <!--标题-->
-    <div slot="headline"> Title </div>
-    <!--右侧操作按钮-->
-    <s-icon-button slot="action">
-      <s-icon name="search"></s-icon>
-    </s-icon-button>
-  </s-appbar>
 </s-appbar>
 ```
 

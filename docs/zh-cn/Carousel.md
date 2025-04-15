@@ -61,22 +61,8 @@ class Carousel extends HTMLElement {
   readonly togglePrevious(): void
   //切换下一个
   readonly toggleNext(): void
-  //选中的值
-  value: string = ''
-  //切换间隔
-  duration: number = 4000
-  //是否自动播放
-  autoplay: boolean = false
 }
 ```
-
----
-
-## CSS 变量
-
-| 名称                 | 介绍       |
-| -------------------- | --------- |
-| --s-elevation-level1 | 指示器阴影 |
 
 ---
 

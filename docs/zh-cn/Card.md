@@ -68,22 +68,6 @@
 
 ---
 
-## CSS 变量
-
-| 名称                                | 介绍                     |
-| ----------------------------------- | ----------------------- |
-| --s-color-surface-container-low     | elevated 背景颜色        |
-| --s-color-on-surface                | elevated 文本颜色        |
-| --s-color-surface-container-highest | filled 背景颜色          |
-| --s-color-surface                   | outlined 背景颜色        |
-| --s-color-outline-variant           | outlined 边框颜色        |
-| --s-color-surface-container-high    | image 插槽背景颜色        |
-| --s-color-on-surface-variant        | text 插槽文本颜色         |
-| --s-elevation-level1                | elevated 阴影/hover 阴影 |
-| --s-elevation-level2                | elevated hover 阴影      |
-
----
-
 ## 依赖
 
 该组件被导入时会自动导入以下组件：

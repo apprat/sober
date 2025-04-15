@@ -179,7 +179,7 @@ class BottomSheet extends useElement({
     }
     scrim.onclick = () => onClose('SCRIM')
     let touchs: null | { y: number, x: number, disabled: boolean, top: number, h: number, now: number } = null
-    container.ontouchmove = (event) => {
+    container.addEventListener('touchmove', (event) => {
       const target = event.target as HTMLElement
       if (this.disabledGesture) return
       const touch = event.touches[0]
@@ -190,7 +190,7 @@ class BottomSheet extends useElement({
       touchs.top = Math.min(touchs.h, Math.max(0, top))
       if ((target !== indicator && scrollView && scrollView.scrollTop > 0) || Math.abs(top) < Math.abs(left)) return touchs.disabled = true
       container.style.transform = `translateY(${touchs.top}px)`
-    }
+    }, { passive: false })
     container.ontouchend = () => {
       if (!touchs || touchs.disabled) return touchs = null
       const threshold = (Date.now() - touchs.now) > 300 ? (touchs.h / 3) : 20

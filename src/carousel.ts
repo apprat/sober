@@ -34,7 +34,6 @@ const style = /*css*/`
   height: 100%;
   min-width: 100%;
   transition: transform var(--s-motion-duration-long4, ${Theme.motionDurationLong4}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
-  transform: translateX(100%);
 }
 .track{
   position: absolute;

@@ -1,6 +1,6 @@
 # Page
 
-建议作为页面根容器的组件，它拥有全局的 CSS 变量，用于控制所有后代组件的样式。
+建议作为页面根容器的组件，它拥有全局的 [CSS 变量](/style/css-var) ，用于控制所有后代组件的样式。
 
 ```html
 <s-page></s-page>
@@ -11,27 +11,9 @@
 <s-page theme="dark"></s-page>
 ```
 
-根据主题模式修改状态栏颜色（如果浏览器支持）
-
-```html
-<s-page theme="auto" onchange="themeChange()"></s-page>
-<script>
-  //<s-page>
-  const page = document.querySelector('s-page')
-  //<meta name="theme-color" />
-  const themeColor = document.createElement('meta')
-  themeColor.name = 'theme-color'
-  document.head.appendChild(themeColor)
-  //onChange
-  function themeChange() {
-    themeColor.content = getComputedStyle(page).getPropertyValue(`--s-color${page.isDark?'-dark':''}-surface-container`)
-  }
-</script>
-```
-
 ---
 
-## 属性
+## 属性 Props
 
 | 名称  | 类型               | 默认值 | 同步 | 介绍 |
 | ----- | ----------------- | ------ | --- | ---- |
@@ -50,7 +32,7 @@
 ## 原型
 
 ```ts
-class Page extends HTMLElement {
+class Page extends HTMLElement implements Props {
   //是否处于暗色模式
   readonly isDark: boolean
   //切换主题(带动画过渡) trigger=触发中心元素
@@ -63,9 +45,3 @@ class Page extends HTMLElement {
 | 名称 | 介绍            |
 | ---- | -------------- |
 | dark | 暗色模式时被设置 |
-
----
-
-# CSS 变量
-
-你可以在[CSS 变量](/style/css-var)中查阅样式值。

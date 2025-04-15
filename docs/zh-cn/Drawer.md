@@ -45,15 +45,3 @@ class Drawer extends HTMLElement {
   readonly toggle(slot?: SlotName, folded?: boolean)): void
 }
 ```
-
----
-
-## CSS 变量
-
-| 名称                             | 介绍              |
-| -------------------------------- | ---------------- |
-| --s-color-background             | 背景颜色          |
-| --s-color-scrim                  | 背景蒙版颜色       |
-| --s-color-surface-container-low  | 抽屉背景颜色       |
-| --s-color-surface-container-high | 抽屉边框颜色       |
-| --s-elevation-level3             | 折叠模式下抽屉阴影 |

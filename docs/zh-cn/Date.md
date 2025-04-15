@@ -34,14 +34,14 @@ SDate.setLocale('ko')
 
 ---
 
-## 属性
+## 属性 Props
 
 | 名称   | 类型    | 默认值     | 同步 | 介绍                                                                                     |
 | ------ | ------ | ---------- | --- | ---------------------------------------------------------------------------------------- |
 | value  | string | 当前日期    | 否  | 日期，一个可以供 new Date() 解析的日期字符串                                                |
 | max    | string | 2099-12-31 | 否  | 最大日期，一个可以供 new Date() 解析的日期字符串                                             |
 | min    | string | 1900-01-01 | 否  | 最小日期，一个可以供 new Date() 解析的日期字符串                                             |
-| locale | string |            | 否  | 语言，为空的情况下为跟随系统语言，有效的语言代码示例包括“en”、“en-US”、“fr”、“fr-FR”、“es-ES”等 |
+| locale | string |            | 否  | 地区语言，为空的情况下为跟随系统，有效的语言代码示例包括“en”、“en-US”、“fr”、“fr-FR”、“es-ES”等 |
 
 ---
 
@@ -58,3 +58,29 @@ SDate.setLocale('ko')
 | 名称     | 介绍  |
 | -------- | ---- |
 | headline | 头部 |
+
+---
+
+## 原型
+
+```ts
+type Locale = {
+  display: (date: Date) => string
+  displayMonth: (date: Date) => string
+  displayWeeks: string[]
+}
+
+class Date extends HTMLElement implements Props {
+  //添加地区语言
+  static addLocale(name: string, locale: Locale): void
+  //设置地区语言，name 为空时跟随系统（默认值）
+  static setLocale(name?: string): void
+} 
+```
+
+## 依赖
+
+该组件被导入时会自动导入以下组件：
+
+- [Ripple](./ripple)
+- [ScrollView](./scroll-view)

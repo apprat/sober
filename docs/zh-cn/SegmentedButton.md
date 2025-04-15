@@ -109,7 +109,7 @@ class SegmentedButton extends HTMLElement implements Props {
 
 # Segmented Button Item
 
-该组件仅作为 Segmented Button 的子组件，不可单独使用。
+该组件仅作为 Segmented Button 的子组件，单独使用时没有效果。
 
 ---
 

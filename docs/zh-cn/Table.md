@@ -1,6 +1,6 @@
 # Table
 
-表格，组件支持滚动，你只需要添加 CSS `overflow` 属性。
+表格，组件支持滚动，你只需要添加 CSS 样式 `overflow: auto`。
 
 ```html preview
 <s-table style="overflow: auto; display: block">
@@ -38,15 +38,3 @@
   </s-tbody>
 </s-table>
 ```
-
----
-
-## CSS 变量
-
-| 名称                                | 介绍           |
-| ----------------------------------- | ------------- |
-| --s-color-outline-variant           | 边框颜色       |
-| --s-color-surface-container-high    | 背景颜色       |
-| --s-color-on-surface-varian         | thead 文本颜色 |
-| --s-color-on-surface                | tbody 文本颜色 |
-| --s-color-surface-container-highest | 偶数行背景颜色 |

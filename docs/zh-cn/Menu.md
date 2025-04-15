@@ -3,7 +3,7 @@
 菜单是一个列表，大多数情况下，你可能更需要的是 [弹出式菜单](./popup-menu)。
 
 ```html preview
-<s-menu style="max-width: 280px">
+<s-menu style="max-width: 280px; margin: 0">
   <div slot="label">控制台</div>
   <s-menu-item checked="true">
     <s-icon slot="start" name="home"></s-icon>
@@ -31,7 +31,7 @@
     选项5
   </s-menu-item>
 </s-menu>
-<s-menu style="max-width: 280px">
+<s-menu style="max-width: 280px; margin: 0">
   <div slot="label">其他</div>
   <s-menu-item> 选项6 </s-menu-item>
   <s-menu-item> 选项7 </s-menu-item>

@@ -6,29 +6,20 @@
 <s-snackbar>
   <s-button slot="trigger"> 提示 </s-button>
   Message
+  <s-button slot="action" type="text"> 关闭 </s-button>
 </s-snackbar>
 ```
 
+---
+
 #### 动态调用
 
-大多数时候，你更应该使用动态调用的方式来触发提示框。
+大多数情况下你可能需要更简洁的函数式调用而非使用布局。
 
 ```ts
 import { Snackbar } from 'sober'
 
 Snackbar.builder('hello world')
-```
-
-
-使用插槽。
-
-```html preview
-<s-snackbar>
-  <s-button slot="trigger"> 提示 </s-button>
-  <s-icon name="light_mode" slot="icon"></s-icon>
-  Message
-  <s-button type="text" slot="action"> 关闭 </s-button>
-</s-snackbar>
 ```
 
 使用 `type` 设置提示框类型。
@@ -55,14 +46,13 @@ Snackbar.builder('hello world')
 
 ---
 
-## 属性
+## 属性 Props
 
-
-| 名称     | 类型               | 默认值 | 同步 | 介绍    |
-| -------- | ----------------- | ------ | --- | ------- |
-| type     | basic, error      | basic  | 是  | 样式    |
-| duration | number            | 4000   | 否  | 持续时间 |
-| align    | auto, top, bottom | auto   | 是  | 位置    |
+| 名称     | 类型                                 | 默认值 | 同步 | 介绍    |
+| -------- | ----------------------------------- | ------ | --- | ------- |
+| type     | none, info, success, warning, error | none   | 是  | 样式    |
+| duration | number                              | 4000   | 否  | 持续时间 |
+| align    | auto, top, bottom                   | auto   | 是  | 位置     |
 
 ---
 
@@ -94,7 +84,7 @@ interface Options {
   root?: Element //插入的目标元素，默认为 document.body 下第一个 s-page
   icon?: string | Element //图标，支持元素和 HTML 字符串
   text?: string //文本
-  type?: 'basic' | 'error' //提示框类型
+  type?: 'none' | 'info' | 'success' | 'warning' | 'error' //提示框类型
   duration?: number //持续时间
   //操作按钮
   action?: string | {
@@ -103,31 +93,12 @@ interface Options {
   }
 }
 
-class Snackbar extends HTMLElement {
+class Snackbar extends HTMLElement implements Props {
   //动态创建提示框
   static readonly builder(options: string | Options): Dialog
   //显示提示框
   readonly show(): void
   //隐藏提示框
   readonly close(): void
-  //样式
-  type: string = 'basic'
-  //持续时间
-  duration: number = 4000
-  //位置
-  align: string = 'auto'
 } 
 ```
-
----
-
-## CSS 变量
-
-| 名称                         | 介绍                  |
-| ---------------------------- | --------------------- |
-| --s-color-inverse-surface    | 提示框背景颜色         |
-| --s-color-inverse-on-surface | 提示框文本颜色         |
-| --s-color-inverse-primary    | 提示框按钮颜色         |
-| --s-color-error              | 错误提示框背景颜色      |
-| --s-color-on-error           | 错误提示框文本/按钮颜色 |
-| --s-elevation-level3         | 提示框阴影             |

@@ -7,20 +7,8 @@
 <s-badge>26</s-badge>
 ```
 
----
+Badge 的大小固定为 `8px`，如果你需要自适应尺寸，可以通过样式来设置：
 
-## CSS 变量
-
-| 名称                | 介绍     |
-| ------------------- | ------- |
-| --s-color-error     | 背景颜色 |
-| ---s-color-on-error | 文本颜色 |
-
----
-
-## 原型
-
-```ts
-export class Badge extends HTMLElement implements Props {
-} 
+```html preview
+<s-badge style="width: auto">9999</s-badge>
 ```

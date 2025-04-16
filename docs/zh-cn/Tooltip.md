@@ -14,8 +14,26 @@
 </s-tooltip>
 ```
 
-> [!WARNING]
-> 工具提示支持自定义布局，例如放置图片，但请注意，内部布局无法触发鼠标事件。
+设置默认方向
+
+```html preview
+<s-tooltip align="top">
+  <s-button slot="trigger"> top (默认值) </s-button>
+  提示信息
+</s-tooltip>
+<s-tooltip align="bottom">
+  <s-button slot="trigger"> bottom </s-button>
+  提示信息
+</s-tooltip>
+<s-tooltip align="left">
+  <s-button slot="trigger"> left </s-button>
+  提示信息
+</s-tooltip>
+<s-tooltip align="right">
+  <s-button slot="trigger"> right </s-button>
+  提示信息
+</s-tooltip>
+```
 
 ---
 

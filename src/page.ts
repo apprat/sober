@@ -104,7 +104,7 @@ const style = /*css*/`
   --s-elevation-level3: ${Theme.elevationLevel3};
   --s-elevation-level4: ${Theme.elevationLevel4};
   --s-elevation-level5: ${Theme.elevationLevel5};
-  --s-motion-Duration-Short1: ${Theme.motionDurationShort1};
+  --s-motion-duration-Short1: ${Theme.motionDurationShort1};
   --s-motion-duration-short2: ${Theme.motionDurationShort2};
   --s-motion-duration-short3: ${Theme.motionDurationShort3};
   --s-motion-duration-short4: ${Theme.motionDurationShort4};

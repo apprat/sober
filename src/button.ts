@@ -74,8 +74,8 @@ const style = /*css*/`
 ::slotted(:is(svg, s-icon, s-circular-progress)){
   fill: currentColor;
   color: currentColor;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 ::slotted(:is(svg[slot=start], s-icon[slot=start])){
   margin-right: 4px;

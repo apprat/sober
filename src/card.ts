@@ -55,8 +55,9 @@ const style = /*css*/`
 }
 ::slotted([slot=image]){
   display: block;
-  height: 128px;
+  max-height: 160px;
   width: 100%;
+  object-fit: cover;
   background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
 }
 ::slotted([slot=headline]){

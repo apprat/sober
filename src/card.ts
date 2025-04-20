@@ -47,6 +47,7 @@ const style = /*css*/`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+  padding: 0 16px;
 }
 .ripple{
   display: none;
@@ -55,28 +56,28 @@ const style = /*css*/`
 ::slotted([slot=image]){
   display: block;
   height: 128px;
+  width: 100%;
   background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
 }
 ::slotted([slot=headline]){
-  font-size: 1.5rem;
+  font-size: 1.375rem;
   line-height: 1.6;
-  margin: 16px 16px 0 16px;
+  margin: 12px 16px;
 }
 ::slotted([slot=subhead]){
   font-size: 1rem;
-  line-height: 1.6;
-  margin: 4px 16px;
+  margin: -8px 16px 12px 16px;
 }
 ::slotted([slot=text]){
   line-height: 1.6;
-  margin: 8px 16px;
+  margin: 12px 16px;
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
 ::slotted(s-button[slot=action]){
-  margin: 16px 0;
+  margin-bottom: 16px;
 }
-::slotted(s-button[slot=action]:last-of-type){
-  margin-right: 16px;
+::slotted([slot=headline]+[slot=subhead]){
+  background: red;
 }
 @media (any-pointer: fine){
   :host([clickable=true][type=filled]:hover),

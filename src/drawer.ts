@@ -15,7 +15,7 @@ const style = /*css*/`
   height: 100%;
   overflow: hidden;
   position: relative;
-  container-name: host;
+  container-name: s-drawer;
   container-type: inline-size;
 }
 .start,
@@ -66,14 +66,14 @@ const style = /*css*/`
 ::slotted(s-scroll-view:not([slot])){
   flex-grow: 1;
 }
-@container host not (max-width: ${mediaQueries.laptop}px){
+@container s-drawer not (max-width: ${mediaQueries.laptop}px){
   .start.show,
   .end.show{
     display: block;
   }
 }
 
-@container host (max-width: ${mediaQueries.laptop}px){
+@container s-drawer (max-width: ${mediaQueries.laptop}px){
   .scrim{
     display: block;
     z-index: 1;

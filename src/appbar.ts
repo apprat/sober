@@ -44,9 +44,9 @@ const style = /*css*/`
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   height: 64px;
   max-height: 100%;
+  justify-content: flex-end;
 }
 ::slotted([slot=action]){
   margin: 0 4px;
@@ -57,7 +57,7 @@ const style = /*css*/`
   height: 40px;
   border-radius: 20px;
   max-width: 100%;
-  margin: 0 4px 0 12px;
+  margin: 0 4px 0 8px;
 }
 ::slotted(s-appbar){
   height: 100%;
@@ -73,9 +73,6 @@ const style = /*css*/`
   }
 }
 @container s-appbar (max-width: ${mediaQueries.tablet}px){
-  ::slotted(:is([slot=auto-logo], [slot=auto-headline])){
-    display: none;
-  }
   ::slotted(s-search[slot=search]){
     width: auto;
     flex-grow: 1;
@@ -97,12 +94,7 @@ const template = /*html*/`
 `
 
 class Appbar extends useElement({
-  style, template, props,
-  setup() {
-    this.addEventListener('blur', () => {
-      console.log('??')
-    })
-  }
+  style, template, props
 }) { }
 
 Appbar.define(name)

@@ -21,21 +21,21 @@ const style = /*css*/`
   margin-left: 4px;
   flex-shrink: 0;
 }
-::slotted([slot=logo]){
+::slotted(:is([slot=logo])){
   margin-left: 12px;
   height: 32px;
   color: var(--s-color-primary, ${Theme.colorPrimary});
   fill: currentColor;
   flex-shrink: 0;
 }
-::slotted([slot=headline]){
+::slotted(:is([slot=headline])){
   font-size: 1.375rem;
   font-weight: 400;
   overflow: hidden;
   text-transform: capitalize;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin: 0 12px;
+  margin-left: 12px;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
 .view{
@@ -57,7 +57,7 @@ const style = /*css*/`
   height: 40px;
   border-radius: 20px;
   max-width: 100%;
-  margin: 0 4px 0 8px;
+  margin: 0 4px 0 12px;
 }
 ::slotted(s-appbar){
   height: 100%;
@@ -71,12 +71,16 @@ const style = /*css*/`
   .view{
     height: 56px;
   }
+}
+@container host (max-width: ${mediaQueries.tablet}px){
+  ::slotted(:is([slot=auto-logo], [slot=auto-headline])){
+    display: none;
+  }
   ::slotted(s-search[slot=search]){
     width: auto;
     flex-grow: 1;
   }
 }
-
 `
 
 const template = /*html*/`

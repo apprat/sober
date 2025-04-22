@@ -56,6 +56,7 @@ const style = /*css*/`
 ::slotted([slot=image]){
   display: block;
   max-height: 160px;
+  min-height: 96px;
   width: 100%;
   object-fit: cover;
   background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});

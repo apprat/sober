@@ -1,18 +1,5 @@
 # 介绍
 
-
-## 通用
-
-```html preview
-<s-button> Button </s-button>
-
-<s-icon name="home"></s-icon>
-
-```
-
-
-
-
 Sober 是基于 [Web Components](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_components) 的 UI 组件库，因此它有一些限制，例如元素名称必须使用 `-` 连接符，且不支持自闭合标签写法。
 ```html
 <s-button> 按钮 </s-button> <!--正确写法-->

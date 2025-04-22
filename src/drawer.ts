@@ -78,13 +78,13 @@ const style = /*css*/`
     z-index: 1;
   }
   .scrim.show-laptop{
-    opacity: 1;
+    opacity: 2;
     pointer-events: auto;
   }
   .start,
   .end{
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     max-width: 75%;
     display: none;
   }

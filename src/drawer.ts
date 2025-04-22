@@ -72,7 +72,6 @@ const style = /*css*/`
     display: block;
   }
 }
-
 @container s-drawer (max-width: ${mediaQueries.laptop}px){
   .scrim{
     display: block;

@@ -13,7 +13,7 @@ const style = /*css*/`
   align-items: center;
   position: relative;
   padding: 0 8px;
-  container-name: host;
+  container-name: s-appbar;
   container-type: inline-size;
   background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
 }
@@ -22,7 +22,7 @@ const style = /*css*/`
   flex-shrink: 0;
 }
 ::slotted(:is([slot=logo])){
-  margin-left: 12px;
+  margin-left: 8px;
   height: 32px;
   color: var(--s-color-primary, ${Theme.colorPrimary});
   fill: currentColor;
@@ -67,12 +67,12 @@ const style = /*css*/`
   margin: 0 auto;
   padding: 0;
 }
-@container host (max-width: ${mediaQueries.laptop}px){
+@container s-appbar (max-width: ${mediaQueries.laptop}px){
   .view{
     height: 56px;
   }
 }
-@container host (max-width: ${mediaQueries.tablet}px){
+@container s-appbar (max-width: ${mediaQueries.tablet}px){
   ::slotted(:is([slot=auto-logo], [slot=auto-headline])){
     display: none;
   }
@@ -96,7 +96,14 @@ const template = /*html*/`
 <slot name="end"></slot>
 `
 
-class Appbar extends useElement({ style, template, props }) { }
+class Appbar extends useElement({
+  style, template, props,
+  setup() {
+    this.addEventListener('blur', () => {
+      console.log('??')
+    })
+  }
+}) { }
 
 Appbar.define(name)
 

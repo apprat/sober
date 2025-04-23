@@ -22,7 +22,7 @@ const style = /*css*/`
   flex-shrink: 0;
 }
 ::slotted(:is([slot=logo])){
-  margin-left: 8px;
+  margin-left: 12px;
   height: 32px;
   color: var(--s-color-primary, ${Theme.colorPrimary});
   fill: currentColor;

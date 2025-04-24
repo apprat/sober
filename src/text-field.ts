@@ -6,7 +6,7 @@ type Props = {
   label: string
   placeholder: string
   disabled: boolean
-  type: 'text' | 'number' | 'password'
+  type: 'text' | 'number' | 'password' | 'multiline'
   error: boolean
   value: string
   maxLength: number
@@ -34,7 +34,6 @@ const style = /*css*/`
   display: inline-grid;
   vertical-align: middle;
   font-size: .875rem;
-  flex-shrink: 0;
   min-height: 48px;
   width: 280px;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
@@ -50,8 +49,8 @@ const style = /*css*/`
   pointer-events: none;
   opacity: .38;
 }
-:host([multiline=true]){
-  line-height: 1.6;
+:host([type=multiline]){
+  line-height: 24px;
   --text-field-padding-top: 12px;
   --text-field-padding-bottom: 12px;
 }
@@ -72,9 +71,8 @@ const style = /*css*/`
   --field-border-color: var(--s-color-error, ${Theme.colorError});
   --field-border-width: 2px;
 }
-:host([multiline=true]) .label{
+:host([type=multiline]) .label{
   height: fit-content;
-  box-sizing: border-box;
   padding-top: var(--text-field-padding-top);
   padding-bottom: var(--text-field-padding-bottom);
 }
@@ -121,7 +119,7 @@ textarea::selection{
   background: var(--s-color-primary, ${Theme.colorPrimary});
   color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
 }
-:host([multiline=true]) input,
+:host([type=multiline]) input,
 .text>.counter{
   display: none;
 }
@@ -137,7 +135,7 @@ textarea,
   padding-left: var(--text-field-padding-left);
   padding-right: var(--text-field-padding-right);
 }
-:host([multiline=true]) :is(textarea, .shadow),
+:host([type=multiline]) :is(textarea, .shadow),
 :host([countered=true]) .counter{
   display: block;
 }
@@ -145,8 +143,7 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button{
   -webkit-appearance: none;
 }
-input::-ms-clear,
-input::-ms-reveal{
+input:is(::-ms-clear, ::-ms-reveal){
   display: none;
 }
 .shadow{
@@ -178,10 +175,45 @@ input::-ms-reveal{
 ::slotted([slot=text]){
   margin-top: 8px;
 }
+.toggle{
+  flex-direction: column;
+}
+.toggle,
+.toggle>s-ripple{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.toggle>s-ripple{
+  display: none;
+}
+.toggle>.up,
+.toggle>.down{
+  height: 16px;
+  width: 24px;
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-left: -4px;
+}
+.toggle>.visibility{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 0 4px 0 -4px;
+}
+.toggle>.visibility>svg{
+  display: none;
+}
+:host([type=number]) .toggle>:is(.up, .down),
+:host([type=password]) :is(.toggle>.visibility, .toggle:not(.show-password)>.visibility>.on, .toggle.show-password>.visibility>.off){
+  display: flex;
+}
+svg,
 ::slotted(svg){
   fill: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   height: 24px;
   width: 24px;
+  flex-shrink: 0;
 }
 ::slotted(s-icon-button[slot=start]){
   margin-left: 4px;
@@ -210,7 +242,28 @@ const template = /*html*/`
     <textarea part="textarea"></textarea>
   </div>
   <slot slot="start" name="start"></slot>
-  <slot slot="end" name="end"></slot>
+  <slot slot="end" name="end">
+    <div class="toggle" part="toggle">
+      <s-ripple class="up">
+        <svg viewBox="0 -960 960 960">
+          <path d="m280-400 200-200 200 200H280Z"></path>
+        </svg>
+      </s-ripple>
+      <s-ripple class="down">
+        <svg viewBox="0 -960 960 960">
+          <path d="M480-360 280-560h400L480-360Z"></path>
+        </svg>
+      </s-ripple>
+      <s-ripple class="visibility">
+        <svg viewBox="0 -960 960 960" class="on">
+          <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"></path>
+        </svg>
+        <svg viewBox="0 -960 960 960" class="off">
+          <path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"></path>
+        </svg>
+      </s-ripple>
+    </div>
+  </slot>
 </s-field>
 <div class="text" part="text">
   <slot name="text"></slot>
@@ -219,17 +272,18 @@ const template = /*html*/`
 `
 
 class TextField extends useElement({
-  style, template, props, syncProps: ['disabled', 'error', 'multiLine', 'countered'],
+  style, template, props, syncProps: ['type', 'disabled', 'error', 'multiLine', 'countered'],
   setup(shadowRoot) {
     const field = shadowRoot.querySelector<Field>('.field')!
     const label = shadowRoot.querySelector<HTMLDivElement>('.label')!
     const textAreaShadow = shadowRoot.querySelector<HTMLDivElement>('.shadow')!
     const counter = shadowRoot.querySelector<HTMLDivElement>('.counter')!
+    const toggle = shadowRoot.querySelector<HTMLDivElement>('.toggle')!
     const inputs = {
       input: shadowRoot.querySelector('input')!,
       textarea: shadowRoot.querySelector('textarea')!
     }
-    const getInput = () => this.multiLine ? inputs.textarea : inputs.input
+    const getInput = () => this.type === 'multiline' ? inputs.textarea : inputs.input
     const onCounter = () => {
       if (!this.countered) return
       counter.textContent = `${getInput().value.length}/${this.maxLength}`
@@ -254,6 +308,17 @@ class TextField extends useElement({
       textAreaShadow.textContent = inputs.textarea.value
       onCounter()
     }
+    const setNumber = (num: number) => {
+      this.value = `${parseInt(this.value || '0') + num}`
+      this.dispatchEvent(new Event('input'))
+      this.dispatchEvent(new Event('change'))
+    }
+    shadowRoot.querySelector<HTMLDivElement>('.up')!.onclick = () => setNumber(1)
+    shadowRoot.querySelector<HTMLDivElement>('.down')!.onclick = () => setNumber(-1)
+    shadowRoot.querySelector<HTMLDivElement>('.visibility')!.onclick = () => {
+      inputs.input.type = toggle.classList.contains('show-password') ? 'password' : 'text'
+      toggle.classList.toggle('show-password')
+    }
     return {
       expose: {
         get native() {
@@ -261,12 +326,9 @@ class TextField extends useElement({
         }
       },
       label: (value) => label.textContent = value,
-      type: (value) => inputs.input.type = value,
+      type: (value) => inputs.input.type = value === 'password' ? (toggle.classList.contains('show-password') ? 'text' : 'password') : value,
       error: (value) => {
-        if (value) {
-          field.fixed = true
-          return
-        }
+        if (value) return field.fixed = true
         if (getInput().value === '') field.fixed = false
       },
       value: {
@@ -293,12 +355,13 @@ class TextField extends useElement({
         onCounter()
       },
       multiLine: (value) => {
-        if (value) {
-          inputs.textarea.value = inputs.input.value
-          textAreaShadow.textContent = inputs.input.value
-          return
-        }
-        inputs.input.value = inputs.textarea.value
+        this.type = value ? 'multiline' : 'text'
+        // if (value) {
+        //   inputs.textarea.value = inputs.input.value
+        //   textAreaShadow.textContent = inputs.input.value
+        //   return
+        // }
+        // inputs.input.value = inputs.textarea.value
       },
       countered: onCounter
     }

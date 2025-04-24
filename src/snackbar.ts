@@ -49,7 +49,7 @@ const style = /*css*/`
   display: flex;
   align-items: center;
   min-height: 48px;
-  line-height: 1.6;
+  line-height: 22px;
   border-radius: 4px;
   padding: 6px 16px;
   font-size: .875rem;

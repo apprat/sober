@@ -15,7 +15,7 @@ const style = /*css*/`
   display: inline-flex;
   padding: 8px 16px;
   align-items: center;
-  line-height: 1.6;
+  line-height: 22px;
   font-size: .875rem;
   font-weight: 500;
   min-height: 48px;

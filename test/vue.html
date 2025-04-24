@@ -8,10 +8,10 @@
 
 <body>
   <main id="app">
-    <s-text-field label="label" v-model="textRef"></s-text-field>
+    <s-text-field label="label" v-model="textRef" type="lines"></s-text-field>
     {{textRef}}
     <s-button @click="submit">submit</s-button>
-    <s-text-field label="请输入内容" value="My Namexx">
+    <s-text-field label="请输入内容" value="My Namexx" type="line">
       <s-icon slot="start" name="search"></s-icon>
       <s-icon-button slot="end">
         <s-icon name="close"></s-icon>

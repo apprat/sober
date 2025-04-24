@@ -79,7 +79,7 @@ dialog.show .scrim{
 ::slotted([slot=headline]){
   padding: 24px 24px 0 24px;
   font-size: 1.5rem;
-  line-height: 1.6;
+  line-height: 22px;
   font-weight: 600;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
   flex-shrink: 0;
@@ -91,7 +91,7 @@ dialog.show .scrim{
 }
 ::slotted([slot=text]){
   margin: 16px 24px;
-  line-height: 1.6;
+  line-height: 22px;
 }
 :host(:not([size=full])) ::slotted(:is(:not([slot]), [slot=text])){
   max-width: ${mediaQueries.mobileL}px;

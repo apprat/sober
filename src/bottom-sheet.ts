@@ -83,7 +83,7 @@ dialog.show .scrim{
 }
 ::slotted([slot=text]){
   padding: 24px;
-  line-height: 1.6;
+  line-height: 22px;
 }
 ::slotted(:not([slot])){
   overscroll-behavior: none;

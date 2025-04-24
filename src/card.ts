@@ -63,7 +63,7 @@ const style = /*css*/`
 }
 ::slotted([slot=headline]){
   font-size: 1.375rem;
-  line-height: 1.6;
+  line-height: 22px;
   margin: 12px 16px;
 }
 ::slotted([slot=subhead]){
@@ -71,7 +71,7 @@ const style = /*css*/`
   margin: -8px 16px 12px 16px;
 }
 ::slotted([slot=text]){
-  line-height: 1.6;
+  line-height: 22px;
   margin: 12px 16px;
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }

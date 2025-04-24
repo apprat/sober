@@ -20,6 +20,7 @@
 
 <body>
   <s-page class="gap">
+
     <s-text-field label="请输入内容"></s-text-field>
     <s-text-field label="请输入内容" value="My Name">
       <s-icon slot="start" name="search"></s-icon>
@@ -28,9 +29,13 @@
       </s-icon-button>
     </s-text-field>
     <hr>
+    <s-text-field label="数字输入框" type="number" oninput="console.log('input')"
+      onchange="console.log('change')"></s-text-field>
+    <s-text-field label="密码输入框" type="password"></s-text-field>
+    <hr>
     <s-text-field style="display: grid; width: auto" label="请输入名称"></s-text-field>
     <hr>
-    <s-text-field label="请输入名称" multiLine="true"></s-text-field>
+    <s-text-field label="多行文本输入" type="multiline"></s-text-field>
     <hr>
     <s-text-field error="true" label="请输入内容"></s-text-field>
     <hr>

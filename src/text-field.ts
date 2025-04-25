@@ -326,7 +326,14 @@ class TextField extends useElement({
         }
       },
       label: (value) => label.textContent = value,
-      type: (value) => inputs.input.type = value === 'password' ? (toggle.classList.contains('show-password') ? 'text' : 'password') : value,
+      type: (value, old) => {
+        inputs.input.type = value === 'password' ? (toggle.classList.contains('show-password') ? 'text' : 'password') : value
+        if (value === 'multiline') {
+          inputs.textarea.value = inputs.input.value
+          textAreaShadow.textContent = inputs.input.value
+        }
+        if (old === 'multiline') inputs.input.value = inputs.textarea.value
+      },
       error: (value) => {
         if (value) return field.fixed = true
         if (getInput().value === '') field.fixed = false
@@ -354,15 +361,7 @@ class TextField extends useElement({
         inputs.textarea.maxLength = value
         onCounter()
       },
-      multiLine: (value) => {
-        this.type = value ? 'multiline' : 'text'
-        // if (value) {
-        //   inputs.textarea.value = inputs.input.value
-        //   textAreaShadow.textContent = inputs.input.value
-        //   return
-        // }
-        // inputs.input.value = inputs.textarea.value
-      },
+      multiLine: (value) => this.type = value ? 'multiline' : 'text',
       countered: onCounter
     }
   }

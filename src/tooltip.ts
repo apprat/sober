@@ -12,7 +12,7 @@ type Props = {
 const name = 's-tooltip'
 const props: Props = {
   align: 'top',
-  disabled: false,
+  disabled: false
 }
 
 const style = /*css*/`
@@ -26,6 +26,8 @@ const style = /*css*/`
   display: none;
   inset: 0;
   margin: 0;
+  width: fit-content;
+  height: fit-content;
   background: none;
   border: none;
   outline: none;
@@ -36,7 +38,8 @@ const style = /*css*/`
   padding: 6px 8px;
   border-radius: 4px;
   white-space: nowrap;
-  background: color-mix(in srgb, var(--s-color-inverse-surface, ${Theme.colorInverseSurface}) 88%, transparent);
+  filter: opacity(.88);
+  background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
   color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
 }
 ::slotted(img){

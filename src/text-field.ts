@@ -348,6 +348,10 @@ class TextField extends useElement({
           if (!this.error) field.fixed = value !== ''
         }
       },
+      disabled: (value) => {
+        inputs.input.disabled = value
+        inputs.textarea.disabled = value
+      },
       placeholder: (value) => {
         inputs.input.placeholder = value
         inputs.textarea.placeholder = value

@@ -45,12 +45,13 @@ dialog::backdrop{
   pointer-events: none;
 }
 .scrim{
-  background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 76%, transparent);
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   opacity: 0;
+  filter: opacity(.76);
+  background: var(--s-color-scrim, ${Theme.colorScrim});
 }
 dialog.show .scrim{
   opacity: 1;

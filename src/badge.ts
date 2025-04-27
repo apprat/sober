@@ -30,7 +30,7 @@ const style = /*css*/`
   align-items: center;
   background: inherit;
   color: inherit;
-  outline: inherit;
+  box-shadow: inherit;
   border-radius: 8px;
 }
 `

@@ -35,7 +35,7 @@ const style = /*css*/`
   position: absolute;
   right: 0;
   bottom: 0;
-  outline: solid 2px var(--s-color-surface, ${Theme.colorSurface});
+  box-shadow: 0 0 0 2px var(--s-color-surface, ${Theme.colorSurface});
   color: var(--s-color-on-success, ${Theme.colorOnSuccess});
   background: var(--s-color-success, ${Theme.colorSuccess});
 }

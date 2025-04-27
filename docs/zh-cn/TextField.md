@@ -3,7 +3,15 @@
 文本编辑框，推荐使用 label 来替代 placeholder。
 
 ```html preview
-<s-text-field label="请输入内容"></s-text-field>
+<s-text-field label="请输入文本"></s-text-field>
+<s-text-field label="请输入数字" type="number"></s-text-field>
+<s-text-field label="请输入密码" type="password"></s-text-field>
+<s-text-field label="请输入多行文本" type="multiLine" style="min-height: 96px"></s-text-field>
+```
+
+使用 `start` 和 `end` 插槽来添加图标或者图标按钮。
+
+```html preview
 <s-text-field label="请输入内容" value="My Name">
   <s-icon slot="start" name="search"></s-icon>
   <s-icon-button slot="end">
@@ -12,16 +20,14 @@
 </s-text-field>
 ```
 
+> [!WARNING]
+> 注意，`end` 插槽会覆盖默认图标（如 type=password 的密码显示切换按钮）。
+
+
 设置样式 `display: grid` 来 和 `width: auto` 占满横向空间。
 
 ```html preview
 <s-text-field style="display: grid; width: auto" label="请输入名称"></s-text-field>
-```
-
-多行文本输入
-
-```html preview
-<s-text-field label="请输入名称" multiLine="true" style="min-height: 96px"></s-text-field>
 ```
 
 错误状态
@@ -56,18 +62,17 @@
 
 ## 属性 Props
 
-| 名称        | 类型                    | 默认值 | 同步 | 介绍                   |
-| ----------- | ---------------------- | ------ | --- | ---------------------- |
-| label       | string                 |        | 否  | 标签                   |
-| placeholder | string                 |        | 否  | 占位内容(不推荐)        |
-| disabled    | boolean                | false  | 是  | 是否禁用                |
-| type        | text, number, password | text   | 否  | 输入类型(仅单行文本有效) |
-| error       | boolean                | false  | 是  | 是否启用错误状态         |
-| value       | string                 |        | 否  | 值                     |
-| maxLength   | number                 | -1     | 否  | 最大长度                |
-| readOnly    | boolean                | false  | 是  | 是否只读                |
-| multiLine   | boolean                | false  | 是  | 是否多行文本            |
-| countered   | boolean                | false  | 是  | 是否显示字数统计         |
+| 名称        | 类型                               | 默认值 | 同步 | 介绍                            |
+| ----------- | --------------------------------- | ------ | --- | ------------------------------- |
+| label       | string                            |        | 否  | 标签                            |
+| placeholder | string                            |        | 否  | 占位内容(不推荐)                 |
+| disabled    | boolean                           | false  | 是  | 是否禁用                         |
+| type        | text, number, password, multiline | text   | 否  | 类型：文本、数字，密码，多行输入框 |
+| error       | boolean                           | false  | 是  | 是否启用错误状态                  |
+| value       | string                            |        | 否  | 值                              |
+| maxLength   | number                            | -1     | 否  | 最大长度                         |
+| readOnly    | boolean                           | false  | 是  | 是否只读                         |
+| countered   | boolean                           | false  | 是  | 是否显示字数统计                  |
 
 ---
 

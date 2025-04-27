@@ -107,6 +107,20 @@ svg{
 :host([checked=true][disabled=true]) .icon{
   color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent);
 }
+@supports not (color: color-mix(in srgb, black, white)){
+  :host([disabled=true]) .track{
+    border-color: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest}) !important;
+  }
+  :host([disabled=true][checked=true]) .track{
+    background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest}) !important;
+  }
+  :host([disabled=true]) .thumb{
+    background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest}) !important;
+  }
+  :host([disabled=true][checked=true]) .thumb{
+    background: var(--s-color-surface, ${Theme.colorSurface}) !important;
+  }
+}
 `
 
 const template = /*html*/`

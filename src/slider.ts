@@ -125,6 +125,17 @@ input{
   top: 0;
   left: 0;
 }
+@supports not (color: color-mix(in srgb, black, white)){
+  :host([disabled=true]){
+    color: var(--s-color-on-surface, ${Theme.colorOnSurface}) !important;
+  }
+  :host([disabled=true]) .track{
+    background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh}) !important;
+  }
+  :host([disabled=true]) .thumb{
+    opacity: .38;
+  }
+}
 `
 
 const template = /*html*/`

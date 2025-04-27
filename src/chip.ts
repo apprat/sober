@@ -97,6 +97,13 @@ const style = /*css*/`
 :host(:not([clickable=true])) .ripple{
   display: none;
 }
+@supports not (color: color-mix()){
+  :host([disabled=true]){
+    background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh}) !important;
+    color: var(--s-color-outline, ${Theme.colorOutline}) !important;
+    border-color: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest}) !important;
+  }
+}
 `
 
 const template = /*html*/`

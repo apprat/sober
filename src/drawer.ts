@@ -1,5 +1,5 @@
-import { useElement } from './core/element.js'
-import { mediaQueries, mediaQueryList } from './core/utils/mediaQuery.js'
+import { useElement, supports } from './core/element.js'
+import { mediaQueries } from './core/utils/mediaQuery.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 
@@ -37,7 +37,8 @@ const style = /*css*/`
   opacity: 0;
   display: none;
   pointer-events: none;
-  background: color-mix(in srgb, var(--s-color-scrim, ${Theme.colorScrim}) 76%, transparent);
+  filter: opacity(.76);
+  background: var(--s-color-scrim, ${Theme.colorScrim});
 }
 .view{
   display: flex;
@@ -66,11 +67,41 @@ const style = /*css*/`
 ::slotted(s-scroll-view:not([slot])){
   flex-grow: 1;
 }
-@container s-drawer not (max-width: ${mediaQueries.laptop}px){
-  .start.show,
-  .end.show{
-    display: block;
-  }
+.start.show,
+.end.show{
+  display: block;
+}
+.scrim.s-laptop{
+  display: block;
+  z-index: 1;
+}
+.scrim.s-laptop.show-laptop{
+  opacity: 1;
+  pointer-events: auto;
+}
+.start.s-laptop,
+.end.s-laptop{
+  position: absolute;
+  z-index: 2;
+  max-width: 75%;
+  display: none;
+}
+.end.s-laptop{
+  left: auto;
+  right: 0;
+}
+.start.s-laptop.show,
+.end.s-laptop.show{
+  display: none;
+}
+.start.s-laptop.show-laptop,
+.end.s-laptop.show-laptop{
+  display: block;
+}
+.s-laptop ::slotted(:is([slot=start], [slot=end])){
+  border-left-style: none;
+  border-right-style: none;
+  box-shadow: var(--s-elevation-level-3, ${Theme.elevationLevel3});
 }
 @container s-drawer (max-width: ${mediaQueries.laptop}px){
   .scrim{
@@ -78,7 +109,7 @@ const style = /*css*/`
     z-index: 1;
   }
   .scrim.show-laptop{
-    opacity: 2;
+    opacity: 1;
     pointer-events: auto;
   }
   .start,
@@ -91,6 +122,10 @@ const style = /*css*/`
   .end{
     left: auto;
     right: 0;
+  }
+  .start.show,
+  .end.show{
+    display: none;
   }
   .start.show-laptop,
   .end.show-laptop{
@@ -148,8 +183,9 @@ class Drawer extends useElement({
       if (!element.classList.contains(className)) return
       const offset = getOffset(slot)
       const animateOptions = getAnimateOptions()
-      const keyframes = { display: ['block', 'block'], ...this.offsetWidth <= mediaQueries.laptop ? { transform: [`translateX(0)`, `translateX(${element.offsetWidth * offset}px)`], } : { width: [element.offsetWidth + 'px', '0'] } }
-      element.animate(keyframes, animateOptions)
+      const keyframes = { ...this.offsetWidth <= mediaQueries.laptop ? { transform: [`translateX(0)`, `translateX(${element.offsetWidth * offset}px)`] } : { width: [element.offsetWidth + 'px', '0px'] } }
+      element.style.display = 'block'
+      element.animate(keyframes, animateOptions).finished.then(() => element.style.removeProperty('display'))
       scrim.animate({ opacity: [1, 0] }, animateOptions)
       element.classList.remove(className)
       scrim.classList.remove(className)
@@ -163,6 +199,13 @@ class Drawer extends useElement({
       close('start', true)
       close('end', true)
     })
+    if (!supports.CSSContainer) {
+      new ResizeObserver(() => {
+        scrim.classList.toggle('s-laptop', this.offsetWidth <= mediaQueries.laptop)
+        slots.start.classList.toggle('s-laptop', this.offsetWidth <= mediaQueries.laptop)
+        slots.end.classList.toggle('s-laptop', this.offsetWidth <= mediaQueries.laptop)
+      }).observe(this)
+    }
     return {
       expose: { show, close, toggle }
     }

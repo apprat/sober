@@ -1,4 +1,4 @@
-const supports = { CSSStyleSheet: true }
+export const supports = { CSSStyleSheet: true, CSSContainer: CSS.supports('container-type', 'size') }
 
 try {
   new CSSStyleSheet()
@@ -28,25 +28,19 @@ const baseStyle = /*css*/`
 `
 
 const setStyle = (shadowRoot: ShadowRoot, css?: string) => {
-  if (supports.CSSStyleSheet) {
-    const baseStyleEl = new CSSStyleSheet()
-    baseStyleEl.replaceSync(baseStyle)
-    shadowRoot.adoptedStyleSheets.push(baseStyleEl)
-    if (css) {
-      const styleEl = new CSSStyleSheet()
-      styleEl.replaceSync(css)
-      shadowRoot.adoptedStyleSheets.push(styleEl)
+  const all = [baseStyle, css]
+  for (const css of all) {
+    if (!css) continue
+    if (!supports.CSSStyleSheet) {
+      const el = document.createElement('style')
+      el.textContent = css
+      shadowRoot.insertBefore(el, shadowRoot.firstChild)
+      continue
     }
-    return
+    const sheet = new CSSStyleSheet()
+    sheet.replaceSync(css)
+    shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, sheet]
   }
-  if (css) {
-    const styleEl = document.createElement('style')
-    styleEl.textContent = css
-    shadowRoot.insertBefore(styleEl, shadowRoot.firstChild)
-  }
-  const baseStyleEl = document.createElement('style')
-  baseStyleEl.textContent = baseStyle
-  shadowRoot.insertBefore(baseStyleEl, shadowRoot.firstChild)
 }
 
 export const useElement = <

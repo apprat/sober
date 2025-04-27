@@ -40,7 +40,7 @@ const style = /*css*/`
   min-height: inherit;
   flex-grow: 1;
   width: 100%;
-  outline: solid 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
+  box-shadow: 0 0 0 1px var(--s-color-surface-variant, ${Theme.colorSurfaceVariant});
 }
 :host(:focus-within) .wrapper{
   position: absolute;

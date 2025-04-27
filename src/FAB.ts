@@ -38,6 +38,7 @@ const style = /*css*/`
 }
 :host([disabled=true]){
   pointer-events: none;
+  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
   color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent) !important;
 }
@@ -71,6 +72,12 @@ const style = /*css*/`
 @media (any-pointer: fine){
   :host(:hover){
     box-shadow: var(--s-elevation-level4, ${Theme.elevationLevel4});
+  }
+}
+@supports not (color: color-mix()){
+  :host([disabled=true]){
+    background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh}) !important;
+    color: var(--s-color-outline, ${Theme.colorOutline}) !important;
   }
 }
 `

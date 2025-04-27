@@ -1,12 +1,12 @@
 # Sober
 
 [![npm version](https://badge.fury.io/js/sober.svg)](https://badge.fury.io/js/sober)
-![Static Badge](https://img.shields.io/badge/complete%20build-110kb-blue)
-![Static Badge](https://img.shields.io/badge/gzip-23kb-wheat)
+![Static Badge](https://img.shields.io/badge/complete%20build-130kb-blue)
+![Static Badge](https://img.shields.io/badge/gzip-30kb-wheat)
 
-Sober 是参考 Google Material You 设计规范的 Web Component UI 组件库。   
+Sober 是参考 Google Material You 设计规范的超级轻量级 Web Component UI 组件库。   
 
-Sober is a Web Component UI component library that references Google's Material You design specifications. 
+Sober is an ultra-lightweight Web Component UI library designed with reference to Google's Material You guidelines.
 
 Sober 支持所有前端框架，如 Vue、React、Svelte 等，并且专门为 Vue 框架做了适配支持模版和 JSX 的补全以及使用 `v-model` 等语法。   
 
@@ -53,3 +53,11 @@ document.body.appendChild(button)
 在 [soberjs.com](https://soberjs.com) 上查看 **Sober** 的完整文档。   
 
 See Sober's full documentation on [soberjs.com](https://soberjs.com)
+
+# 兼容性 Browser compatibility
+
+| 浏览器 Browser     | 支持 Support |
+| ----------------- | ------------ |
+| Chromium (Chrome) | 88+          |
+| Gecko (Firefox)   | 78+          |
+| Webkit (Safari)   | 14+          |

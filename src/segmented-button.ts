@@ -155,6 +155,12 @@ const itemStyle = /*css*/`
   min-width: 0;
   position: relative;
 }
+@supports not (color: color-mix(in srgb, black, white)){
+  :host([disabled=true]){
+    opacity: .38;
+    color: var(--s-color-on-surface, ${Theme.colorOnSurface});
+  }
+}
 `
 
 const itemTemplate =/*html*/`

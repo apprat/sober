@@ -36,27 +36,19 @@ const style = /*css*/`
   background: var(--s-color-primary, ${Theme.colorPrimary});
   color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
 }
-:host([type=filled][disabled=true]){
-  background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
-}
 :host([type=filled]) ::slotted([slot=badge]){
-  outline: solid 2px var(--s-color-surface, ${Theme.colorSurface});
+  box-shadow: 0 0 0 2px var(--s-color-surface, ${Theme.colorSurface});
 }
 :host([type=filled-tonal]){
   background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
   color: var(--s-color-on-secondary-container, ${Theme.colorOnSecondaryContainer});
 }
-:host([type=filled-tonal][disabled=true]){
-  background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
-}
 :host([type=outlined]){
   border: solid 1px var(--s-color-outline, ${Theme.colorOutline})
 }
 :host([type=outlined][disabled=true]){
-  border-color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface})) !important;
-}
-.ripple{
-  border-radius: inherit;
+  background: none !important;
+  border-color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
 }
 ::slotted(:not([slot=badge])){
   color: inherit;
@@ -71,6 +63,15 @@ const style = /*css*/`
   right: 4px;
   top: 0;
   flex-shrink: 0;
+}
+@supports not (color: color-mix(in srgb, black, white)){
+  :host([disabled=true]){
+    background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh}) !important;
+    color: var(--s-color-outline, ${Theme.colorOutline}) !important;
+  }
+  :host([type=outlined][disabled=true]){
+    border-color: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest}) !important;
+  }
 }
 `
 

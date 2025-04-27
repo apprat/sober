@@ -45,7 +45,7 @@ const style = /*css*/`
 }
 .container{
   align-self: flex-end;
-  width: stretch;
+  width: fit-content;
   display: flex;
   align-items: center;
   min-height: 48px;
@@ -246,7 +246,7 @@ class Snackbar extends useElement({
         popup.style.zIndex = '2'
       }
       const align = getAlign()
-      container.style.alignSelf = { top: 'start', bottom: 'end' }[align]
+      container.style.alignSelf = { top: 'flex-start', bottom: 'flex-end' }[align]
       const task = tasks[align]
       const offset = { top: 1, bottom: -1 }[align]
       let height = container.offsetHeight + state.gap

@@ -45,11 +45,14 @@ const style = /*css*/`
   opacity: var(--ripple-hover-opacity, .12);
 }
 .ripple {
-  color: color-mix(in srgb, var(--ripple-color, currentColor) calc(100% * var(--ripple-opacity, .18)), transparent);
-  background: currentColor;
+  width: 0;
+  height: 0;
   border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  filter: blur(8px);
+  background: currentColor;
+  opacity: 0;
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+  filter: opacity(var(--ripple-opacity, .18));
 }
 `
 
@@ -104,8 +107,14 @@ class Ripple extends useElement({
       const parent = (state.parentNode ?? this)
       const animateOptions = getAnimateOptions()
       parent.setAttribute('pressed', '')
-      const keyframes = { transform: 'translate(-50%, -50%) scale(1)', boxShadow: '0 0 0 16px currentColor', opacity: 1, width: `${size}px`, height: `${size}px`, left: `${coordinate.x}`, top: `${coordinate.y}` }
-      const animation = newRipple.animate([{ ...keyframes, transform: 'translate(-50%, -50%) scale(0)' }, keyframes], { duration: animateOptions.duration, fill: 'forwards', easing: animateOptions.easing })
+      const boxShadow = `0 0 0 ${size / 2}px currentColor`
+      const animation = newRipple.animate({
+        opacity: [1, 1],
+        boxShadow: [boxShadow, boxShadow],
+        clipPath: [`circle(0)`, `circle(${size / 2}px)`],
+        left: [coordinate.x, coordinate.x],
+        top: [coordinate.y, coordinate.y],
+      }, { duration: animateOptions.duration, fill: 'forwards', easing: animateOptions.easing })
       const remove = () => {
         parent.removeAttribute('pressed')
         const time = Number(animation.currentTime)

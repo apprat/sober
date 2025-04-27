@@ -212,11 +212,12 @@ class TabItem extends useElement({
   syncProps: ['selected'],
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
-    shadowRoot.querySelector<HTMLSlotElement>('[name=icon]')!.onslotchange = (event) => {
+    shadowRoot.querySelector<HTMLSlotElement>('[name=icon]')!.addEventListener('slotchange', (event) => {
       const slot = event.target as HTMLSlotElement
       const length = slot.assignedElements().length
       container.classList[length > 0 ? 'add' : 'remove']('icon')
-    }
+      console.log('插入', length)
+    })
     this.addEventListener('click', () => {
       if (!(this.parentNode instanceof Tab) || this.selected) return
       this.dispatchEvent(new Event(`${name}:select`, { bubbles: true }))

@@ -121,6 +121,15 @@ const style = /*css*/`
     box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   }
 }
+@supports not (color: color-mix(in srgb, black, white)){
+  :host([disabled=true]){
+    background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh}) !important;
+    color: var(--s-color-outline, ${Theme.colorOutline}) !important;
+  }
+  :host([type=outlined][disabled=true]){
+    border-color: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest}) !important;
+  }
+}
 `
 
 const template = /*html*/`

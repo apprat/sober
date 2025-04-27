@@ -1,4 +1,4 @@
-import { useElement } from './core/element.js'
+import { useElement, supports } from './core/element.js'
 import { mediaQueries } from './core/utils/mediaQuery.js'
 import { Theme } from './core/theme.js'
 
@@ -21,14 +21,14 @@ const style = /*css*/`
   margin-left: 4px;
   flex-shrink: 0;
 }
-::slotted(:is([slot=logo])){
+::slotted([slot=logo]){
   margin-left: 12px;
   height: 32px;
   color: var(--s-color-primary, ${Theme.colorPrimary});
   fill: currentColor;
   flex-shrink: 0;
 }
-::slotted(:is([slot=headline])){
+::slotted([slot=headline]){
   font-size: 1.375rem;
   font-weight: 400;
   overflow: hidden;
@@ -48,15 +48,19 @@ const style = /*css*/`
   max-height: 100%;
   justify-content: flex-end;
 }
+.view.s-laptop{
+  height: 56px;
+}
+.view.s-tablet ::slotted(s-search[slot=search]){
+  width: auto;
+  flex-grow: 1;
+}
 ::slotted([slot=action]){
   margin: 0 4px;
   flex-shrink: 0;
 }
 ::slotted(s-search[slot=search]){
   flex-shrink: 0;
-  height: 40px;
-  border-radius: 20px;
-  max-width: 100%;
   margin: 0 4px 0 8px;
 }
 ::slotted(s-appbar){
@@ -94,7 +98,16 @@ const template = /*html*/`
 `
 
 class Appbar extends useElement({
-  style, template, props
+  style, template, props,
+  setup(shadowRoot) {
+    if (!supports.CSSContainer) {
+      const view = shadowRoot.querySelector<HTMLDivElement>('.view')!
+      new ResizeObserver(() => {
+        view.classList.toggle('s-laptop', this.offsetWidth <= mediaQueries.laptop)
+        view.classList.toggle('s-tablet', this.offsetWidth <= mediaQueries.tablet)
+      }).observe(this)
+    }
+  }
 }) { }
 
 Appbar.define(name)

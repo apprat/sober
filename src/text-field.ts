@@ -348,10 +348,6 @@ class TextField extends useElement({
           if (!this.error) field.fixed = value !== ''
         }
       },
-      disabled: (value) => {
-        inputs.input.disabled = value
-        inputs.textarea.disabled = value
-      },
       placeholder: (value) => {
         inputs.input.placeholder = value
         inputs.textarea.placeholder = value
@@ -359,6 +355,10 @@ class TextField extends useElement({
       readOnly: (value) => {
         inputs.input.readOnly = value
         inputs.textarea.readOnly = value
+      },
+      disabled: (value) => {
+        inputs.input.disabled = value
+        inputs.textarea.disabled = value
       },
       maxLength: (value) => {
         inputs.input.maxLength = value

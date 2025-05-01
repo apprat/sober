@@ -24,6 +24,7 @@ const style = /*css*/`
 :host([attached=true]),
 .container,
 .container::before,
+.container-inner,
 .ripple{
   position: absolute;
   inset: 0;
@@ -34,6 +35,9 @@ const style = /*css*/`
 }
 .container{
   overflow: hidden;
+}
+.container-inner{
+  filter: blur(8px);
 }
 .container::before{
   content: '';
@@ -59,7 +63,7 @@ const style = /*css*/`
 const template = /*html*/`
 <slot></slot>
 <div class="container" part="container">
-  <div class="ripple"></div>
+<div class="container-inner"><div class="ripple"></div></div>
 </div>
 `
 
@@ -67,6 +71,7 @@ class Ripple extends useElement({
   style, template, props, syncProps: true,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
+    const innerContainer = shadowRoot.querySelector<HTMLDivElement>('.container-inner')!
     const ripple = shadowRoot.querySelector<HTMLDivElement>('.ripple')!
     const computedStyle = getComputedStyle(this)
     const getAnimateOptions = () => {
@@ -98,7 +103,7 @@ class Ripple extends useElement({
       let callback = () => { }
       if (state.pressed) {
         newRipple = ripple.cloneNode() as HTMLDivElement
-        container.appendChild(newRipple)
+        innerContainer.appendChild(newRipple)
         callback = () => newRipple.remove()
       } else {
         state.pressed = true
@@ -107,11 +112,11 @@ class Ripple extends useElement({
       const parent = (state.parentNode ?? this)
       const animateOptions = getAnimateOptions()
       parent.setAttribute('pressed', '')
-      const boxShadow = `0 0 0 ${size / 2}px currentColor`
+      const boxShadow = `0 0 0 ${size / 2 + 16}px currentColor`
       const animation = newRipple.animate({
         opacity: [1, 1],
         boxShadow: [boxShadow, boxShadow],
-        clipPath: [`circle(0)`, `circle(${size / 2}px)`],
+        clipPath: [`circle(0)`, `circle(${size / 2 + 16}px)`],
         left: [coordinate.x, coordinate.x],
         top: [coordinate.y, coordinate.y],
       }, { duration: animateOptions.duration, fill: 'forwards', easing: animateOptions.easing })

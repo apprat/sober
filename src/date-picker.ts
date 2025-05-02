@@ -73,7 +73,7 @@ svg{
 }
 .date{
   border: none;
-  max-width: 360px;
+  width: 360px;
   border-radius: 0;
 }
 .positive,

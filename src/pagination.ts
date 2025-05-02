@@ -24,6 +24,7 @@ const style = /*css*/`
   align-items: center;
   font-size: .875rem;
   border-radius: 18px;
+  height: 36px;
   gap: 4px;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
@@ -35,6 +36,8 @@ const style = /*css*/`
 .container{
   display: flex;
   gap: inherit;
+  height: 100%;
+  border-radius: inherit;
 }
 .icon-button,
 .button{
@@ -46,14 +49,16 @@ const style = /*css*/`
 }
 .icon-button{
   border-radius: 50%;
-  height: 32px;
-  width: 32px;
+  height: 100%;
+  aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
 }
 .button{
-  height: 32px;
+  height: 100%;
+  aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
   padding: 0 8px;
-  min-width: 32px;
-  border-radius: 16px;
+  border-radius: inherit;
   box-sizing: border-box;
 }
 .checked{

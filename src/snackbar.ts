@@ -243,7 +243,7 @@ class Snackbar extends useElement({
         popup.style.height = `${innerHeight}px`
         popup.style.marginLeft = `${-rect.left}px`
         popup.style.marginTop = `${-rect.top}px`
-        popup.style.zIndex = '2'
+        popup.style.zIndex = '3'
       }
       const align = getAlign()
       container.style.alignSelf = { top: 'flex-start', bottom: 'flex-end' }[align]

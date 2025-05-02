@@ -24,7 +24,8 @@ const style = /*css*/`
 :host([attached=true]),
 .container,
 .container::before,
-.ripple{
+.ripple,
+.ripple::before{
   position: absolute;
   inset: 0;
   width: 100%;
@@ -45,9 +46,10 @@ const style = /*css*/`
   opacity: var(--ripple-hover-opacity, .12);
 }
 .ripple {
-  width: 0;
-  height: 0;
-  border-radius: 50%;
+  filter: blur(6px);
+}
+.ripple::before{
+  content: '';
   background: currentColor;
   opacity: 0;
   overflow: hidden;
@@ -114,12 +116,12 @@ class Ripple extends useElement({
         clipPath: [`circle(0)`, `circle(${size / 2}px)`],
         left: [coordinate.x, coordinate.x],
         top: [coordinate.y, coordinate.y],
-      }, { duration: animateOptions.duration, fill: 'forwards', easing: animateOptions.easing })
+      }, { duration: animateOptions.duration, fill: 'forwards', easing: animateOptions.easing, pseudoElement: '::before' })
       const remove = () => {
         parent.removeAttribute('pressed')
         const time = Number(animation.currentTime)
         const diff = animateOptions.duration - animateOptions.shortDuration
-        newRipple.animate({ opacity: [1, 0] }, { duration: time > diff ? animateOptions.shortDuration : animateOptions.duration - time, easing: animateOptions.easing, fill: 'forwards' }).finished.then(callback)
+        newRipple.animate({ opacity: [1, 0] }, { duration: time > diff ? animateOptions.shortDuration : animateOptions.duration - time, easing: animateOptions.easing, fill: 'forwards', pseudoElement: '::before' }).finished.then(callback)
       }
       return remove
     }

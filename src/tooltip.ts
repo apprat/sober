@@ -79,7 +79,7 @@ class Tooltip extends useElement({
         const rect = getStackingContext(shadowRoot)
         popup.style.marginLeft = `${-rect.left}px`
         popup.style.marginTop = `${-rect.top}px`
-        popup.style.zIndex = '2'
+        popup.style.zIndex = '3'
       }
       const rect = this.getBoundingClientRect()
       const gap = 4

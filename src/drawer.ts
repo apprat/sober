@@ -38,6 +38,7 @@ const style = /*css*/`
   display: none;
   pointer-events: none;
   filter: opacity(.76);
+  backdrop-filter: blur(6px);
   background: var(--s-color-scrim, ${Theme.colorScrim});
 }
 .view{
@@ -73,7 +74,7 @@ const style = /*css*/`
 }
 .scrim.s-laptop{
   display: block;
-  z-index: 1;
+  z-index: 3;
 }
 .scrim.s-laptop.show-laptop{
   opacity: 1;
@@ -82,7 +83,7 @@ const style = /*css*/`
 .start.s-laptop,
 .end.s-laptop{
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   max-width: 75%;
   display: none;
 }
@@ -106,7 +107,7 @@ const style = /*css*/`
 @container s-drawer (max-width: ${mediaQueries.laptop}px){
   .scrim{
     display: block;
-    z-index: 1;
+    z-index: 3;
   }
   .scrim.show-laptop{
     opacity: 1;
@@ -115,7 +116,7 @@ const style = /*css*/`
   .start,
   .end{
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     max-width: 75%;
     display: none;
   }

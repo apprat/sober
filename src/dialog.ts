@@ -51,6 +51,7 @@ dialog::backdrop{
   height: 100%;
   opacity: 0;
   filter: opacity(.76);
+  backdrop-filter: blur(6px);
   background: var(--s-color-scrim, ${Theme.colorScrim});
 }
 dialog.show .scrim{
@@ -77,6 +78,10 @@ dialog.show .scrim{
   max-width: none;
   max-height: none;
 }
+:host([size=full]) ::slotted(:is([slot=text],:not([slot]))){
+  max-width: 100%;
+  width: auto;
+}
 ::slotted([slot=headline]){
   padding: 24px 24px 0 24px;
   font-size: 1.5rem;
@@ -92,10 +97,14 @@ dialog.show .scrim{
 }
 ::slotted([slot=text]){
   margin: 16px 24px;
+  max-width: calc(100% - 48px);
   line-height: 22px;
 }
-:host(:not([size=full])) ::slotted(:is(:not([slot]), [slot=text])){
-  max-width: ${mediaQueries.mobileL}px;
+::slotted(:is(:not([slot]), [slot=text])){
+  width: ${mediaQueries.mobileL}px;
+}
+::slotted(:not([slot])){
+  max-width: 100%;
 }
 .action{
   display: flex;

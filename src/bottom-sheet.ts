@@ -48,6 +48,7 @@ dialog[open]{
   height: 100%;
   opacity: 0;
   filter: opacity(.76);
+  backdrop-filter: blur(6px);
   background: var(--s-color-scrim, ${Theme.colorScrim});
 }
 dialog.show .scrim{

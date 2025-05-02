@@ -277,13 +277,12 @@ declare module 'vue' {
   interface GlobalComponents {
     [name]: new () => {
       $props: HTMLAttributes & Partial<Props>
-    }
+    } & Carousel
     [itemName]: new () => {
       $props: HTMLAttributes & Partial<ItemProps>
-    }
+    } & CarouselItem
   }
 }
-
 //@ts-ignore
 declare module 'vue/jsx-runtime' {
   namespace JSX {

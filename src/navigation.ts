@@ -201,11 +201,17 @@ declare module 'vue' {
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
     [name]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<Props>
-    }
+    } & Navigation
     [itemName]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<ItemProps>
-    }
+    } & NavigationItem
   }
 }
 

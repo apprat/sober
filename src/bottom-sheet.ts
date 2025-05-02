@@ -277,11 +277,13 @@ declare module 'vue' {
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
     [name]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<Props> & JSXEvents
-    }
+    } & BottomSheet
   }
 }
-
 //@ts-ignore
 declare module 'vue/jsx-runtime' {
   namespace JSX {

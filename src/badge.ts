@@ -64,11 +64,13 @@ declare module 'vue' {
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
     [name]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<Props>
-    }
+    } & Badge
   }
 }
-
 //@ts-ignore
 declare module 'vue/jsx-runtime' {
   namespace JSX {

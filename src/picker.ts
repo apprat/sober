@@ -274,11 +274,17 @@ declare module 'vue' {
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
     [name]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<Props>
-    }
+    } & Picker
     [itemName]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<ItemProps>
-    }
+    } & PickerItem
   }
 }
 

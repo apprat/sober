@@ -32,9 +32,7 @@ const style = /*css*/`
 
 const template = /*html*/`<slot></slot>`
 
-class ScrollView extends useElement({
-  style, template, props
-}) { }
+class ScrollView extends useElement({ style, template, props }) { }
 
 ScrollView.define(name)
 
@@ -60,8 +58,11 @@ declare module 'vue' {
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
     [name]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<Props>
-    }
+    } & ScrollView
   }
 }
 

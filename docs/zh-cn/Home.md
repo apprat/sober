@@ -1,92 +1,108 @@
 # 介绍
 
-Sober 是基于 [Web Components](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_components) 的 UI 组件库，因此它有一些限制，例如元素名称必须使用 `-` 连接符，且不支持自闭合标签写法。
+Sober 是基于 [Web Components](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_components) 的 UI 组件库，因此你需要掌握一些 Web Components 的相关知识，以便于更快的上手，如果你对 Web Components 完全不了解，这篇文档会帮你快速入门。
+
+---
+
+# 使用
+
+你可以使用三种方式来创建组件。
+
+1. 使用标签：
 ```html
-<s-button> 按钮 </s-button> <!--正确写法-->
-<s-button /> <!--错误写法-->
+<s-buttton> hello </s-buttton>
 ```
+> [!WARNING]
+> 注意：你必须始终编写闭合标签，不支持自闭合标签写法，例如：&lt;s-button /&gt;
 
-除此之外你还可以动态创建组件，例如：
-
+2. 使用 document.createElement 方法：
 ```js
-const button = document.createElement('s-button')
+const button = document.createElement('s-button') //创建组件
+button.textContent = 'hello' //设置文本
+document.body.appendChild(button) //插入到页面
+```
+3. 实例化类：
+```js
+import { Button } from 'sober'
+
+const button = new Button()
+button.textContent = 'hello'
 document.body.appendChild(button)
-```
-
-自定义组件样式是非常简单的，你可以使用 CSS 选择器，或是内联样式：
-
-```css
-s-button {
-  backgrouund: #009688;
-  color: #fff;
-}
-```
-
-一些组件在内部创建了 DOM 元素，要为这些元素设置样式，你可以使用 CSS [::part()](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part) 选择器：
-
-```css
-s-dialog::part(container) {
-  color: #fff;
-}
 ```
 
 ---
 
 # 属性
 
-大多数组件都拥有一些额外属性，属性支持三种基本类型：`string`、`number`、`boolean`，你可以通过 HTML 来设置属性，也可以使用 JavaScript 来设置（注意如果属性类型不匹配组件会尝试转换其类型）。
+所有组件都继承自 [HTMLElement](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement)，因此所有组件都支持大多数 HTML 属性，例如 `id`、`class`、`style`、`title` 等或者监听组件的事件。   
+
+```html preview
+<s-button title="button" style="background: #336699; border-radius: 4px" onclick="alert('hello world')"> hello </s-button>
+```
+
+> 除了 HTML 属性外，大多数组件还支持一些额外的属性或事件，你可以在每个组件的文档中查看。
+
+#### 同步属性
+
+一些组件的额外属性是同步的，当你使用 JavaScript 修改组件的属性时，组件的 HTML 属性也会立即更新。
 
 ```html
-<s-button type="outline"> 按钮 </s-button>
+<s-button> hello </s-button>
 <script>
   const button = document.querySelector('s-button')
-  button.type = 'text'
+  button.type = 'outline'
+  //组件的 HTML 属性也会立即更新为：<s-button type="outline"> hello </s-button>
 </script>
 ```
 
-在文档中，某些组件被标注为 `同步`，表示该属性被赋值时在 DOM 节点上同步更新，因此你可以使用属性选择器来选中：
+因为这个特性，你可以使用 CSS 选择器来修改组件设置一些属性后的样式。
 
 ```css
-s-button[type=text] {
-  color: #009688;
+s-button[type="outline"] {
+  color: #ddd;
 }
 ```
 
-> [!WARNING]
-> 属性名称是区分大小写的，但是 HTML 并不区分大小写。
-
 ---
 
-# 原型
+# 样式
 
-所有组件均继承于 `HTMLElement` ，因此组件支持 `HTMLElement` 的所有属性和事件，例如 `id` 属性和 `click`、`mousedown` 等事件。
-
-```js
-const button = document.createElement('s-button') // HTMLElement
-button.id = 'btn'
-button.addEventListener('click',() => console.log('click'))
-```
-
----
-
-# 标注
-
-某些组件的事件会标注为 `扩展` ，表示该事件为自定义事件，该事件无法通过 onEventName 的方式绑定，必须通过 `addEventListener` 来绑定。
+大多数情况下你通过 `style` 属性或者 CSS 选择器来定义样式：
 
 ```html
-<!--错误，该事件无法通过 HTML 属性绑定-->
-<s-dialog onshow="func()"></s-dialog>
+<s-button class="my-button"> hello </s-button>
+<style>
+  .my-button {
+    color: #ddd;
+  }
+</style>
 ```
 
-某些 CSS 变量被标记为 `私有`，表示该 CSS 变量仅支持在组件对象上绑定，无法通过祖先元素继承。
+但是有一些例外，比如大多数组件内部都存在 [ShadowRoot](https://developer.mozilla.org/zh-CN/docs/Web/API/ShadowRoot)，下面是一个对话框组件的例子。   
+你无法通过 `<s-dialog>` 来修改对话框的内部样式，例如遮罩层(scrim)，因为对话框内部使用了 Shadow DOM。
 
-```html
-<!--错误：私有变量必须设置在指定元素上-->
-<div style="--picker-padding: 20px">
-  <s-picker></s-picker>
-</div>
-<!--正确写法-->
-<div>
-  <s-picker style="--picker-padding: 20px"></s-picker>
-</div>
+```html preview
+<s-dialog style="background: #ddd">
+  <s-button slot="trigger"> 对话框 </s-button>
+  <div slot="headline"> dialog </div>
+  <div slot="text"> Shadow DOM is a web standard that allows developers to encapsulate the internal structure of a web component, making it hidden from the main document's JavaScript and CSS. This encapsulation ensures that the component's internal implementation is protected from accidental interference by the surrounding page's code. </div>
+</s-dialog>
+```
+
+这个时候你可以使用 CSS [::part](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part) 选择器来修改组件内部样式：
+
+```css
+s-dialog::part(scrim) {
+  background: rgba(255, 255, 255, 0.5);
+}
+```
+
+这样有一个弊端，就是你必须去定义 CSS 样式，并不支持内联的样式，下面有一个折中的方法，你可以通过修改内部使用的 CSS 变量值来达到修改样式的目的，
+
+```html preview
+<s-dialog style="--s-color-scrim: rgba(255, 255, 255);">
+  <s-button slot="trigger"> 对话框 </s-button>
+  <div slot="headline"> dialog </div>
+  <div slot="text"> Shadow DOM is a web standard that allows developers to encapsulate the internal structure of a web component, making it hidden from the main document's JavaScript and CSS. This encapsulation ensures that the component's internal implementation is protected from accidental interference by the surrounding page's code. </div>
+</s-dialog>
 ```

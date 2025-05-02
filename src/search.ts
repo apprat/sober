@@ -32,7 +32,6 @@ const style = /*css*/`
 }
 .wrapper{
   display: grid;
-  flex-direction: column;
   position: relative;
   border-radius: inherit;
   overflow: hidden;

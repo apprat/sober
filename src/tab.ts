@@ -259,11 +259,17 @@ declare module 'vue' {
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
     [name]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<Props>
-    }
+    } & Tab
     [itemName]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<ItemProps>
-    }
+    } & TabItem
   }
 }
 

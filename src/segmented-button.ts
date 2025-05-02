@@ -220,11 +220,17 @@ declare module 'vue' {
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
     [name]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<Props>
-    }
+    } & SegmentedButton
     [itemName]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<ItemProps>
-    }
+    } & SegmentedButtonItem
   }
 }
 

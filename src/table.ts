@@ -193,23 +193,41 @@ declare module 'vue' {
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
     [name]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<Props>
-    }
+    } & Table
     [theadName]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<typeof theadProps>
-    }
+    } & Thead
     [tbodyName]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<typeof tbodyProps>
-    }
+    } & Tbody
     [trName]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<typeof trProps>
-    }
+    } & Tr
     [thName]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<typeof thProps>
-    }
+    } & Th
     [tdName]: new () => {
+      /**
+      * @deprecated
+      **/
       $props: HTMLAttributes & Partial<typeof tdProps>
-    }
+    } & Td
   }
 }
 

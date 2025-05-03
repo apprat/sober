@@ -24,8 +24,7 @@ const style = /*css*/`
 :host([attached=true]),
 .container,
 .container::before,
-.ripple,
-.ripple::before{
+.ripple{
   position: absolute;
   inset: 0;
   width: 100%;
@@ -45,16 +44,11 @@ const style = /*css*/`
 .container.hover::before{
   opacity: var(--ripple-hover-opacity, .12);
 }
-.ripple {
-  filter: blur(6px);
-}
-.ripple::before{
-  content: '';
-  background: currentColor;
+.ripple{
   opacity: 0;
-  overflow: hidden;
-  transform: translate(-50%, -50%);
-  filter: opacity(var(--ripple-opacity, .18));
+  border-radius: 50%;
+  background: currentColor;
+  filter: blur(12px) opacity(var(--ripple-opacity, .18));
 }
 `
 
@@ -109,19 +103,20 @@ class Ripple extends useElement({
       const parent = (state.parentNode ?? this)
       const animateOptions = getAnimateOptions()
       parent.setAttribute('pressed', '')
-      const boxShadow = `0 0 0 ${size / 2}px currentColor`
       const animation = newRipple.animate({
         opacity: [1, 1],
-        boxShadow: [boxShadow, boxShadow],
-        clipPath: [`circle(0)`, `circle(${size / 2}px)`],
+        width: [`${size}px`, `${size}px`],
+        height: [`${size}px`, `${size}px`],
+        transform: ['translate(-50%, -50%) scale(0)', 'translate(-50%, -50%) scale(1)'],
         left: [coordinate.x, coordinate.x],
         top: [coordinate.y, coordinate.y],
-      }, { duration: animateOptions.duration, fill: 'forwards', easing: animateOptions.easing, pseudoElement: '::before' })
+      }, { ...animateOptions, fill: 'forwards' })
       const remove = () => {
         parent.removeAttribute('pressed')
         const time = Number(animation.currentTime)
         const diff = animateOptions.duration - animateOptions.shortDuration
-        newRipple.animate({ opacity: [1, 0] }, { duration: time > diff ? animateOptions.shortDuration : animateOptions.duration - time, easing: animateOptions.easing, fill: 'forwards', pseudoElement: '::before' }).finished.then(callback)
+        const duration = time > diff ? animateOptions.shortDuration : animateOptions.duration - time
+        newRipple.animate({ opacity: [1, 0] }, { duration, easing: animateOptions.easing, fill: 'forwards' }).finished.then(callback)
       }
       return remove
     }

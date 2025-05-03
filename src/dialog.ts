@@ -50,8 +50,14 @@ dialog::backdrop{
   width: 100%;
   height: 100%;
   opacity: 0;
-  filter: opacity(.76);
-  backdrop-filter: blur(6px);
+  backdrop-filter: saturate(180%) blur(2px);
+}
+.scrim::before{
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: .75;
   background: var(--s-color-scrim, ${Theme.colorScrim});
 }
 dialog.show .scrim{

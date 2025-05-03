@@ -30,15 +30,19 @@ const style = /*css*/`
 }
 .scrim{
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   opacity: 0;
-  display: none;
+  backdrop-filter: saturate(180%) blur(2px);
   pointer-events: none;
-  filter: opacity(.76);
-  backdrop-filter: blur(6px);
+}
+.scrim::before{
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: .75;
   background: var(--s-color-scrim, ${Theme.colorScrim});
 }
 .view{
@@ -175,7 +179,7 @@ class Drawer extends useElement({
       element.classList.add(className)
       scrim.classList.add(className)
       const keyframes = this.offsetWidth <= mediaQueries.laptop ? { transform: [`translateX(${element.offsetWidth * offset}px)`, `translateX(0)`] } : { width: ['0', element.offsetWidth + 'px'] }
-      scrim.animate({ opacity: [0, 1] }, animateOptions)
+      this.offsetWidth <= mediaQueries.laptop && scrim.animate({ opacity: [0, 1] }, animateOptions)
       element.animate(keyframes, animateOptions)
     }
     const close = (slot?: SlotName, folded?: boolean) => {
@@ -187,7 +191,7 @@ class Drawer extends useElement({
       const keyframes = { ...this.offsetWidth <= mediaQueries.laptop ? { transform: [`translateX(0)`, `translateX(${element.offsetWidth * offset}px)`] } : { width: [element.offsetWidth + 'px', '0px'] } }
       element.style.display = 'block'
       element.animate(keyframes, animateOptions).finished.then(() => element.style.removeProperty('display'))
-      scrim.animate({ opacity: [1, 0] }, animateOptions)
+      this.offsetWidth <= mediaQueries.laptop && scrim.animate({ opacity: [1, 0] }, animateOptions)
       element.classList.remove(className)
       scrim.classList.remove(className)
     }

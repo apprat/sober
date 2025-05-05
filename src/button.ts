@@ -113,7 +113,7 @@ const style = /*css*/`
   white-space: nowrap;
   min-width: 0;
 }
-@media (any-pointer: fine){
+@media (pointer: fine){
   :host(:not([type]):hover){
     box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
   }

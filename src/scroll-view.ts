@@ -12,7 +12,7 @@ const style = /*css*/`
   display: block;
   overflow: auto;
 }
-@media (any-pointer: fine){
+@media (pointer: fine){
   :host::-webkit-scrollbar{
     background: transparent;
     width: 6px;

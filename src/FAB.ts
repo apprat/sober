@@ -69,7 +69,7 @@ const style = /*css*/`
 :host([pressed]){
   box-shadow: var(--s-elevation-level4, ${Theme.elevationLevel4});
 }
-@media (any-pointer: fine){
+@media (pointer: fine){
   :host(:hover){
     box-shadow: var(--s-elevation-level4, ${Theme.elevationLevel4});
   }

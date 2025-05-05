@@ -81,7 +81,7 @@ const style = /*css*/`
 ::slotted([slot=headline]+[slot=subhead]){
   background: red;
 }
-@media (any-pointer: fine){
+@media (pointer: fine){
   :host([clickable=true][type=filled]:hover),
   :host([clickable=true][type=outlined]:hover){
     box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});

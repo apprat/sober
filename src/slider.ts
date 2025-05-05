@@ -178,11 +178,11 @@ class Slider extends useElement({
       this.value = Number(input.value)
       this.dispatchEvent(new Event('input'))
     }
-    input.onmousedown = (event) => event.button === 0 && !mediaQueryList.anyPointerCoarse.matches && container.classList.add('active')
-    input.onmouseup = () => !mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active')
-    input.ontouchstart = () => mediaQueryList.anyPointerCoarse.matches && container.classList.add('active')
-    input.ontouchend = () => mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active')
-    input.ontouchcancel = () => mediaQueryList.anyPointerCoarse.matches && container.classList.remove('active')
+    input.onmousedown = (event) => event.button === 0 && mediaQueryList.pointerFine.matches && container.classList.add('active')
+    input.onmouseup = () => mediaQueryList.pointerFine.matches && container.classList.remove('active')
+    input.ontouchstart = () => mediaQueryList.pointerCoarse.matches && container.classList.add('active')
+    input.ontouchend = () => mediaQueryList.pointerCoarse.matches && container.classList.remove('active')
+    input.ontouchcancel = () => mediaQueryList.pointerCoarse.matches && container.classList.remove('active')
     return {
       max: (value) => {
         input.max = String(value)

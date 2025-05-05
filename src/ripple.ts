@@ -71,8 +71,8 @@ class Ripple extends useElement({
       const shortDuration = computedStyle.getPropertyValue('--s-motion-duration-short4') || Theme.motionDurationShort4
       return { easing: easing, duration: convertCSSDuration(duration), shortDuration: convertCSSDuration(shortDuration) }
     }
-    const hover = () => !mediaQueryList.anyPointerCoarse.matches && container.classList.add('hover')
-    const unHover = () => !mediaQueryList.anyPointerCoarse.matches && container.classList.remove('hover')
+    const hover = () => mediaQueryList.pointerFine.matches && container.classList.add('hover')
+    const unHover = () => mediaQueryList.pointerFine.matches && container.classList.remove('hover')
     const state = { parentNode: null as null | HTMLElement, pressed: false }
     const run = (event: PointerEvent) => {
       const { offsetWidth, offsetHeight } = this

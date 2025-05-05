@@ -70,6 +70,7 @@ class Tooltip extends useElement({
       return { easing: easing, duration: convertCSSDuration(duration) }
     }
     const show = () => {
+      console.log('show')
       if (!this.isConnected || this.disabled) return
       popup.style.display = 'block'
       showed = true
@@ -141,7 +142,7 @@ class Tooltip extends useElement({
       })
     }
     trigger.addEventListener('touchstart', () => {
-      if (!mediaQueryList.anyPointerCoarse.matches) return
+      if (mediaQueryList.pointerFine.matches) return
       clearTimeout(timer)
       timer = setTimeout(() => show(), 600)
     }, { passive: true })
@@ -149,8 +150,8 @@ class Tooltip extends useElement({
       clearTimeout(timer)
       close()
     }
-    trigger.onmouseenter = () => !mediaQueryList.anyPointerCoarse.matches && show()
-    trigger.onmouseleave = () => !mediaQueryList.anyPointerCoarse.matches && close()
+    trigger.onmouseenter = () => mediaQueryList.pointerFine.matches && show()
+    trigger.onmouseleave = () => mediaQueryList.pointerFine.matches && close()
   }
 }) { }
 

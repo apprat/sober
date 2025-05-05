@@ -163,8 +163,8 @@ class Carousel extends useElement({
         play()
       }
       const eventName = {
-        move: mediaQueryList.anyPointerCoarse.matches ? 'touchmove' : 'pointermove',
-        up: mediaQueryList.anyPointerCoarse.matches ? 'touchend' : 'pointerup'
+        move: mediaQueryList.pointerCoarse.matches ? 'touchmove' : 'pointermove',
+        up: mediaQueryList.pointerCoarse.matches ? 'touchend' : 'pointerup'
       } as const
       document.addEventListener(eventName.move, move, { passive: false })
       document.addEventListener(eventName.up, up)

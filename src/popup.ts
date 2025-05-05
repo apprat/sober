@@ -154,6 +154,7 @@ class Popup extends useElement({
           position.origin[1] = 'bottom'
         }
       }
+      console.log(position)
       container.style.transformOrigin = position.origin.join(' ')
       container.style.top = `${Math.max(position.top, 0)}px`
       container.style.left = `${Math.max(position.left, 0)}px`

@@ -107,7 +107,7 @@ dialog.show .scrim{
   line-height: 22px;
 }
 ::slotted(:is(:not([slot]), [slot=text])){
-  width: ${mediaQueries.mobileL}px;
+  width: ${mediaQueries.mobileM}px;
 }
 ::slotted(:not([slot])){
   max-width: 100%;

@@ -231,7 +231,7 @@ class Snackbar extends useElement({
       return { easing: easing, duration: convertCSSDuration(duration) }
     }
     const state = { timer: 0, gap: 8 }
-    const getAlign = () => this.align === 'auto' ? (mediaQueryList.anyPointerCoarse.matches ? 'top' : 'bottom') : this.align
+    const getAlign = () => this.align === 'auto' ? (mediaQueryList.pointerCoarse.matches ? 'top' : 'bottom') : this.align
     const show = () => {
       if (!this.isConnected || popup.classList.contains('show')) return
       popup.classList.add('show')

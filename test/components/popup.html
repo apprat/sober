@@ -20,13 +20,27 @@
   <s-page>
     <s-popup>
       <s-button slot="trigger"> bottom </s-button>
-      <div style="min-height: 280px; width: 128px"></div>
+      <div style="width: 128px;overflow: auto;">
+        123
+        <hr>
+        <div style="height: 600px;"></div>
+        <hr>
+        456
+      </div>
     </s-popup>
 
-    <s-popup align="top" style="margin-top: 400px;">
-      <s-button slot="trigger"> top </s-button>
-      <div style="min-height: 280px; width: 128px"></div>
+    <s-popup style="margin-top: 600px;margin-left: 400px;">
+      <s-button slot="trigger"> bottom2 </s-button>
+      <div style="width: 128px;height: 150px;">
+        123
+        <hr>
+        <hr>
+        456
+      </div>
     </s-popup>
+
+    <hr>
+
 
     <s-popup align="left">
       <s-button slot="trigger"> left </s-button>

@@ -184,6 +184,9 @@ input:is(::-ms-clear, ::-ms-reveal){
   justify-content: center;
   align-items: center;
 }
+.toggle svg{
+  pointer-events: none;
+}
 .toggle>s-ripple{
   display: none;
 }

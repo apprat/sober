@@ -3,12 +3,12 @@ import { Theme } from './core/theme.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 
 type Props = {
-  align: 'top' | 'bottom' | 'left' | 'right'
+  align: 'center' | 'left' | 'right'
 }
 
 const name = 's-popup'
 const props: Props = {
-  align: 'bottom'
+  align: 'center'
 }
 
 const style = /*css*/`
@@ -36,22 +36,23 @@ dialog::backdrop{
 }
 .scrim{
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
 }
 .container{
-  position: relative;
-  width: fit-content;
+  display: block;
+  position: absolute;
   max-width: 100%;
   max-height: 100%;
+  width: fit-content;
+  height: fit-content;
 }
 ::slotted(:not([slot])){
+  outline: none;
   border-radius: 4px;
-  max-width: 100%;
-  max-height: 100%;
-  white-space: nowrap;
+  max-width: inherit;
+  max-height: inherit;
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
   background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
 }
@@ -61,11 +62,58 @@ const template = /*html*/`
 <slot name="trigger"></slot>
 <dialog class="popup" part="popup">
   <div class="scrim" part="scrim"></div>
-  <div class="container" part="container">
-    <slot></slot>
-  </div>
+  <slot class="container" part="container"></slot>
 </dialog>
 `
+
+const getPosition = (rect: DOMRect, cw: number, ch: number, align: Props['align']) => {
+  const position = { top: 0, left: 0, origin: [] as string[] }
+  //垂直
+  const centered = align === 'center'
+  const top = centered ? rect.top + rect.height : rect.top
+  const bottom = centered ? rect.top - ch : rect.top - ch + rect.height
+  if (top + ch <= innerHeight) {
+    position.top = top
+    position.origin[1] = 'top'
+  } else if (bottom >= 0) {
+    position.top = bottom
+    position.origin[1] = 'bottom'
+  } else {
+    const y = (innerHeight - ch) / 2
+    position.top = y
+    position.origin[1] = `${rect.top + (rect.height / 2) - y}px`
+  }
+  //水平
+  if (centered) {
+    position.left = rect.left - (cw - rect.width) / 2
+    position.origin[0] = 'center'
+    if (position.left < 0) {
+      position.left = rect.left
+      position.origin[0] = `${rect.width / 2}px`
+    } else if (position.left + cw > innerWidth) {
+      position.left = rect.left + rect.width - cw
+      position.origin[0] = `${(cw - rect.width) + (rect.width / 2)}px`
+    }
+  } else {
+    const left = (call?: Function) => {
+      position.left = rect.left - cw
+      position.origin[0] = 'right'
+      if (position.left < 0 && call) call()
+    }
+    const right = (call?: Function) => {
+      position.left = rect.left + rect.width
+      position.origin[0] = 'left'
+      if (position.left + cw > innerWidth && call) call()
+    }
+    const center = () => {
+      const x = (innerWidth - cw) / 2
+      position.left = x
+      position.origin[0] = `${(rect.left + (rect.width / 2)) - x}px`
+    }
+    align === 'left' ? left(() => right(center)) : right(() => left(center))
+  }
+  return position
+}
 
 type ShowOptions = { x: number, y: number, origin?: string }
 
@@ -73,7 +121,7 @@ class Popup extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const dialog = shadowRoot.querySelector<HTMLDialogElement>('dialog')!
-    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
+    const container = shadowRoot.querySelector<HTMLSlotElement>('.container')!
     const computedStyle = getComputedStyle(this)
     const getAnimateOptions = () => {
       const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
@@ -85,79 +133,33 @@ class Popup extends useElement({
       const position = { top: 0, left: 0, origin: [] as string[] }
       dialog.showModal()
       if (!this.dispatchEvent(new Event('show', { cancelable: true }))) return dialog.close()
-      const cWidth = container.offsetWidth
-      const cHeight = container.offsetHeight
+      container.style.maxHeight = `${innerHeight}px`
+      container.style.maxWidth = `${innerWidth}px`
+      const cw = container.offsetWidth
+      const ch = container.offsetHeight
       if (!option || option instanceof HTMLElement) {
         const el = option ?? this
-        if (!el) return
         const rect = el.getBoundingClientRect()
-        const calls = {
-          middle(align: 'top' | 'bottom') {
-            position.origin[0] = 'center'
-            position.left = rect.left - ((cWidth - rect.width) / 2)
-            const bottom = () => {
-              position.top = rect.top + rect.height
-              position.origin[1] = 'top'
-              return position.top + cHeight > innerHeight
-            }
-            const top = () => {
-              position.top = rect.top - cHeight
-              position.origin[1] = 'bottom'
-              return position.top < 0
-            }
-            if (position.left < 0) {
-              position.left = rect.left
-              position.origin[0] = 'left'
-            }
-            if (position.left + cWidth > innerWidth) {
-              position.left = rect.left + rect.width - cWidth
-              position.origin[0] = 'right'
-            }
-            if (align === 'top') top() && bottom()
-            if (align === 'bottom') bottom() && top()
-          },
-          left() {
-            position.origin = ['right', 'top']
-            position.left = rect.left - cWidth
-            position.top = rect.top
-            return position.left < 0
-          },
-          right() {
-            position.origin = ['left', 'top']
-            position.left = rect.left + rect.width
-            position.top = rect.top
-            return position.left + cWidth > innerWidth
-          }
-        }
-        switch (this.align) {
-          case 'bottom':
-          case 'top':
-            calls.middle(this.align)
-            break
-          case 'left':
-            calls.left() && calls.right()
-            break
-          case 'right':
-            calls.right() && calls.left()
-            break
-        }
+        const info = getPosition(rect, cw, ch, this.align)
+        position.top = info.top
+        position.left = info.left
+        position.origin = info.origin
       } else {
         position.top = option.y
         position.left = option.x
         position.origin = option.origin?.split(' ') ?? ['left', 'top']
-        if (option.x + cWidth > innerWidth) {
-          position.left = option.x - cWidth
+        if (option.x + cw > innerWidth) {
+          position.left = option.x - cw
           position.origin[0] = 'right'
         }
-        if (option.y + cHeight > innerHeight) {
-          position.top = option.y - cHeight
+        if (option.y + ch > innerHeight) {
+          position.top = option.y - ch
           position.origin[1] = 'bottom'
         }
       }
-      console.log('显示', position)
       container.style.transformOrigin = position.origin.join(' ')
-      container.style.top = `${Math.max(position.top, 0)}px`
-      container.style.left = `${Math.max(position.left, 0)}px`
+      container.style.top = `${position.top}px`
+      container.style.left = `${position.left}px`
       const animation = container.animate({ transform: ['scale(.9)', 'scale(1)'], opacity: [0, 1] }, getAnimateOptions())
       this.setAttribute('showed', '')
       animation.finished.then(() => this.dispatchEvent(new Event('showed')))

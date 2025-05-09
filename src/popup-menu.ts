@@ -56,17 +56,26 @@ class PopupMenu extends useElement({
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector<Popup>('.popup')!
     const trigger = shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!
-    trigger.onclick = (e) => {
-      e.stopPropagation()
+    trigger.onclick = (event) => {
+      event.stopPropagation()
       popup.show()
     }
     this.addEventListener(`${name}:click`, (event) => {
       event.stopPropagation()
       popup.close()
     })
+    popup.onclose = (event) => {
+      const target = event.target as Popup
+      if (target.parentNode instanceof ShadowRoot) {
+        const parent = target.parentNode.host
+        if (parent.parentNode instanceof PopupMenu) {
+          parent.parentNode.close()
+        }
+      }
+    }
     return {
       onMounted: () => {
-        if (this.parentNode instanceof PopupMenu) popup.setAttribute('align', 'right')
+        this.parentNode instanceof PopupMenu && popup.setAttribute('align', 'right')
       },
       expose: {
         get show() {

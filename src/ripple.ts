@@ -125,22 +125,21 @@ class Ripple extends useElement({
       const data: { timer?: number, upper?: boolean } = {}
       if (event.pointerType === 'mouse') {
         document.addEventListener('pointerup', run(event), { once: true })
+        return
       }
-      if (event.pointerType === 'touch') {
-        let remove: Function
-        //优先响应触屏滚动
-        data.timer = setTimeout(() => {
-          remove = run(event)
-          document.removeEventListener('touchmove', move)
-          if (data.upper) remove()
-        }, 40)
-        document.addEventListener('touchend', () => {
-          if (!remove) return data.upper = true
-          remove()
-        }, { once: true })
-        const move = () => clearTimeout(data.timer)
-        document.addEventListener('touchmove', move, { once: true })
-      }
+      let remove: Function
+      //优先响应触屏滚动
+      data.timer = setTimeout(() => {
+        remove = run(event)
+        document.removeEventListener('touchmove', move)
+        if (data.upper) remove()
+      }, 50)
+      document.addEventListener('touchend', () => {
+        if (!remove) return data.upper = true
+        remove()
+      }, { once: true })
+      const move = () => clearTimeout(data.timer)
+      document.addEventListener('touchmove', move, { once: true })
     }
     const add = (target: HTMLElement) => {
       target.addEventListener('mouseenter', hover)

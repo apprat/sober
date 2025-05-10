@@ -70,7 +70,6 @@ class Tooltip extends useElement({
       return { easing: easing, duration: convertCSSDuration(duration) }
     }
     const show = () => {
-      console.log('show')
       if (!this.isConnected || this.disabled) return
       popup.style.display = 'block'
       showed = true

@@ -48,7 +48,7 @@ const style = /*css*/`
   box-sizing: border-box;
 }
 .icon-button{
-  border-radius: 50%;
+  border-radius: inherit;
   height: 100%;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;

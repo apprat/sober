@@ -12,16 +12,10 @@
 大多数情况下，你不需要关心弹出框出现的位置，但你还是可以使用 `align` 属性设置默认位置。
 
 ```html preview
-<s-popup align="bottom">
-  <s-button slot="trigger"> bottom (默认值) </s-button>
+<s-popup align="center">
+  <s-button slot="trigger"> center (默认值) </s-button>
   <div style="min-height: 280px; width: 128px"></div>
 </s-popup>
-
-<s-popup align="top">
-  <s-button slot="trigger"> top </s-button>
-  <div style="min-height: 280px; width: 128px"></div>
-</s-popup>
-
 
 <s-popup align="left">
   <s-button slot="trigger"> left </s-button>
@@ -47,9 +41,9 @@
 
 ## 属性 Props
 
-| 名称   | 类型                      | 默认值 | 同步 | 介绍    |
-| ------ | ------------------------ | ------ | --- | ------- |
-| align  | bottom, top, left, right | bottom | 否  | 位置    |
+| 名称   | 类型                 | 默认值 | 同步 | 介绍    |
+| ------ | ------------------- | ------ | --- | ------- |
+| align  | center, left, right | center | 否  | 位置    |
 
 ---
 

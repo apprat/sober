@@ -74,6 +74,10 @@ class Icon extends useElement({
     return {
       name: () => {
         const data = svgData[this.name]
+        if (!data) {
+          console.warn(`Icon "${this.name}" not found. Using fallback icon.`)
+          return slot.innerHTML = getSVG(svgData.none)
+        }
         if (typeof data === 'string') return slot.innerHTML = getSVG(data)
         const n = data.name as keyof typeof svgData
         if (typeof svgData[n] === 'string') slot.innerHTML = getSVG(svgData[n], `rotate(${data.angle} 480 -480)`)

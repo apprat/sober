@@ -3,10 +3,15 @@ import { mediaQueries } from './core/utils/mediaQuery.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 
-type Props = {}
+type Props = {
+  hiddenStart: boolean,
+  hiddenEnd:boolean,
+}
 
 const name = 's-drawer'
 const props: Props = {
+  hiddenStart:true,
+  hiddenEnd:true
 }
 
 const style = /*css*/`
@@ -69,11 +74,16 @@ const style = /*css*/`
 ::slotted([slot=end]){
   border-left-style: solid;
 }
+
 ::slotted(s-scroll-view:not([slot])){
   flex-grow: 1;
 }
-.start.show,
-.end.show{
+  
+:host([hiddenstart="false"]) .start.show{
+  display: block;
+}
+
+:host([hiddenend="false"]) .end.show{
   display: block;
 }
 .scrim.s-laptop{
@@ -173,7 +183,23 @@ class Drawer extends useElement({
     const show = (slot?: SlotName, folded?: boolean) => {
       const element = getElement(slot)
       const className = getClassName(folded)
+      const isElementStart = element === getElement("start");
+      if (isElementStart && this.getAttribute("hiddenstart") === "true"){
+        this.setAttribute("hiddenstart","false")
+        startAnimation(element,className,slot)
+        return
+      }
+      const isElementEnd = element === getElement("end");
+      if (isElementEnd && this.getAttribute("hiddenend") === "true"){
+        this.setAttribute("hiddenend","false")
+        startAnimation(element,className,slot)
+        return
+      }
       if (element.classList.contains(className)) return
+      startAnimation(element,className,slot)
+    }
+
+    const startAnimation = (element:HTMLSlotElement,className:string, slot?: SlotName) => {
       const offset = getOffset(slot)
       const animateOptions = getAnimateOptions()
       element.classList.add(className)
@@ -182,6 +208,7 @@ class Drawer extends useElement({
       this.offsetWidth <= mediaQueries.laptop && scrim.animate({ opacity: [0, 1] }, animateOptions)
       element.animate(keyframes, animateOptions)
     }
+
     const close = (slot?: SlotName, folded?: boolean) => {
       const element = getElement(slot)
       const className = getClassName(folded)
@@ -198,6 +225,13 @@ class Drawer extends useElement({
     const toggle = (slot?: SlotName, folded?: boolean) => {
       const element = getElement(slot)
       const className = getClassName(folded)
+      const isElementStart = element === getElement("start");
+      const isElementEnd = element === getElement("end");
+      if ((isElementStart && this.getAttribute("hiddenstart") === "true") ||
+      isElementEnd && this.getAttribute("hiddenend") === "true"){
+        show(slot, folded)
+        return
+      }
       element.classList.contains(className) ? close(slot, folded) : show(slot, folded)
     }
     scrim.addEventListener('click', () => {
@@ -212,7 +246,7 @@ class Drawer extends useElement({
       }).observe(this)
     }
     return {
-      expose: { show, close, toggle }
+      expose: { show, close, toggle}
     }
   }
 }) { }

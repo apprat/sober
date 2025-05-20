@@ -216,7 +216,6 @@ class TabItem extends useElement({
       const slot = event.target as HTMLSlotElement
       const length = slot.assignedElements().length
       container.classList[length > 0 ? 'add' : 'remove']('icon')
-      console.log('插入', length)
     })
     this.addEventListener('click', () => {
       if (!(this.parentNode instanceof Tab) || this.selected) return

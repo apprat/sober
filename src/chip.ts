@@ -1,23 +1,15 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
-type Props = {
-  type: 'filled' | 'outlined'
-  value: string
-  checked: boolean
-  disabled: boolean
-  clickable: boolean
-}
-
 const name = 's-chip'
-const props: Props = {
-  type: 'filled',
-  value: '',
+const props = useProps({
+  type: ['filled', 'outlined'],
+  $value: '',
   checked: false,
   disabled: false,
   clickable: false,
-}
+})
 
 const style = /*css*/`
 :host{
@@ -116,8 +108,8 @@ const template = /*html*/`
 <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 `
 
-class Chip extends useElement({
-  style, template, props, syncProps: ['checked', 'clickable', 'disabled', 'type'],
+export class Chip extends useElement({
+  style, template, props,
   setup(shadowRoot) {
     const action = shadowRoot.querySelector<HTMLElement>('slot[name=action]')!
     action.onclick = (e) => e.stopPropagation()
@@ -132,8 +124,6 @@ class Chip extends useElement({
 
 Chip.define(name)
 
-export { Chip }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Chip
@@ -142,7 +132,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -157,7 +147,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Chip
   }
 }
@@ -167,7 +157,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -177,7 +167,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -187,7 +177,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

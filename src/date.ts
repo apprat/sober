@@ -1,4 +1,4 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { dateFormat } from './core/utils/dateFormat.js'
 import { Theme } from './core/theme.js'
 import { Ripple } from './ripple.js'
@@ -25,20 +25,13 @@ i18n.list = {
   }
 }
 
-type Props = {
-  value: string
-  locale: string
-  max: string,
-  min: string
-}
-
 const name = 's-date'
-const props: Props = {
-  value: '',
-  locale: '',
-  max: '2099-12-31',
-  min: '1900-01-01',
-}
+const props = useProps({
+  $value: '',
+  $locale: '',
+  $max: '2099-12-31',
+  $min: '1900-01-01',
+})
 
 const style = /*css*/`
 :host{
@@ -218,8 +211,15 @@ const getMonthMaxDate = (year: number, month: number) => {
   return date.getDate()
 }
 
+const addLocale = (name: string, locale: Locale) => {
+  i18n.addItem(name, locale)
+}
+const setLocale = (name?: string) => {
+  i18n.setLocale(name)
+}
+
 class DateElement extends useElement({
-  style, template, props,
+  style, template, props, methods: { addLocale, setLocale },
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const headline = shadowRoot.querySelector<HTMLDivElement>('.header>span')!
@@ -336,14 +336,7 @@ class DateElement extends useElement({
       locale: updateText,
     }
   }
-}) {
-  static addLocale(name: string, locale: Locale) {
-    i18n.addItem(name, locale)
-  }
-  static setLocale(name?: string) {
-    i18n.setLocale(name)
-  }
-}
+}) { }
 
 DateElement.define(name)
 
@@ -357,7 +350,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -372,7 +365,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & DateElement
   }
 }
@@ -382,7 +375,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -392,7 +385,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -402,7 +395,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

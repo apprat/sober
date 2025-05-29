@@ -1,17 +1,12 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
-type Props = {
-  disabled: boolean
-  type: 'filled' | 'elevated' | 'filled-tonal' | 'outlined' | 'text'
-}
-
 const name = 's-button'
-const props: Props = {
+const props = useProps({
   disabled: false,
-  type: 'filled'
-}
+  type: ['filled', 'elevated', 'filled-tonal', 'outlined', 'text']
+})
 
 const style = /*css*/`
 :host{
@@ -28,7 +23,8 @@ const style = /*css*/`
   cursor: pointer;
   font-size: .875rem;
   font-weight: 500;
-  max-width: 100%;
+  max-width: -moz-available;
+  max-width: -webkit-fill-available;
   background: var(--s-color-primary, ${Theme.colorPrimary});
   color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
   transition: box-shadow var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
@@ -141,12 +137,9 @@ const template = /*html*/`
 <s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
 `
 
-class Button extends useElement({ style, template, props, syncProps: true }) { }
+export class Button extends useElement({ style, template, props }) { }
 
 Button.define(name)
-
-export { Button }
-
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -156,7 +149,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -171,7 +164,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Button
   }
 }
@@ -180,7 +173,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }

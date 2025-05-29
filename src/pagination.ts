@@ -1,21 +1,14 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 import { Ripple } from './ripple.js'
 
-type Props = {
-  value: number
-  total: number
-  count: number
-  type: 'standard' | 'outlined'
-}
-
 const name = 's-pagination'
-const props: Props = {
-  value: 1,
-  total: 20,
-  count: 20,
-  type: 'standard'
-}
+const props = useProps({
+  $value: 1,
+  $total: 20,
+  $count: 20,
+  type: ['standard', 'outlined']
+})
 
 const style = /*css*/`
 :host{
@@ -24,7 +17,6 @@ const style = /*css*/`
   align-items: center;
   font-size: .875rem;
   border-radius: 18px;
-  height: 36px;
   gap: 4px;
   color: var(--s-color-on-surface, ${Theme.colorOnSurface});
 }
@@ -35,9 +27,11 @@ const style = /*css*/`
 }
 .container{
   display: flex;
+  flex-wrap: wrap;
   gap: inherit;
   height: 100%;
   border-radius: inherit;
+  justify-content: space-evenly;
 }
 .icon-button,
 .button{
@@ -46,15 +40,14 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+  height: 36px;
 }
 .icon-button{
   border-radius: inherit;
-  height: 100%;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
 }
 .button{
-  height: 100%;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   padding: 0 8px;
@@ -98,8 +91,8 @@ const template = /*html*/`
 </s-ripple>
 `
 
-class Pagination extends useElement({
-  style, template, props, syncProps: ['type'],
+export class Pagination extends useElement({
+  style, template, props,
   setup(shadowRoot) {
     const prev = shadowRoot.querySelector<Ripple>('.prev')!
     const next = shadowRoot.querySelector<Ripple>('.next')!
@@ -173,8 +166,6 @@ class Pagination extends useElement({
 
 Pagination.define(name)
 
-export { Pagination }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Pagination
@@ -183,7 +174,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -198,7 +189,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Pagination
   }
 }
@@ -208,7 +199,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -218,7 +209,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -228,7 +219,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

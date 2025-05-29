@@ -3,45 +3,132 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
   <script type="module" src="../../dist/main.js"></script>
   <link rel="stylesheet" href="../styles/default.css">
-  <script type="module" src="../scripts/default.js"></script>
+  <!-- <script type="module" src="../scripts/default.js"></script> -->
+  <style>
+    header {
+      background: var(--s-color-surface-container);
+    }
+
+    header>s-appbar {
+      max-width: 1440px;
+    }
+  </style>
 </head>
 
 <body>
-  <s-page>
-    <s-appbar>
+  <s-page style="max-width: none;">
+    <header>
+      <s-appbar>
+        <!-- <s-icon-button slot="navigation">
+          <s-icon name="menu"></s-icon>
+        </s-icon-button> -->
+        <svg viewBox="0 0 1024 1024" slot="logo">
+          <path data-v-a8f97fcf=""
+            d="M913.4 757.4c-105-16-113-31.4-113-31.4 21.6-129.8-45.4-294.2-154.8-383.2-145.6-118.4-367-32.4-539.4-212.4-40.2-42-16.8 471 199 665.4 157.8 142 343.6 98.4 394.6 75.2 46.2-21.2 78.6-59.8 78.6-59.8 84.2 26 125.8 24.4 125.8 24.4C933.8 839.2 948.8 762.8 913.4 757.4zM721.2 766.2c-276.4-81.8-484.2-369-484.2-369s182.4 215.4 504 320.4C741.4 733.8 731.8 757 721.2 766.2z">
+          </path>
+        </svg>
+        <div slot="headline"> Sober </div>
+        <s-button slot="menu" type="text" style="color: var(--s-color-primary);">
+          <s-icon name="home" slot="start"></s-icon>
+          首页
+        </s-button>
+        <s-button slot="menu" type="text">
+          <s-icon name="search" slot="start"></s-icon>
+          指南
+        </s-button>
+        <s-button slot="menu" type="text">
+          <s-icon name="dark_mode" slot="start"></s-icon>
+          设计规范
+        </s-button>
+        <s-button slot="menu" type="text">
+          <svg viewBox="0 -960 960 960" slot="start">
+            <path d="m136-240-56-56 296-298 160 160 208-206H640v-80h240v240h-80v-104L536-320 376-480 136-240Z"></path>
+          </svg>
+          更新日志
+        </s-button>
+        <s-icon-button slot="menu-trigger">
+          <s-icon name="chevron_down"></s-icon>
+        </s-icon-button>
+        <s-search slot="search" placeholder="搜索关键字..."></s-search>
+        <!--语言选择-->
+        <s-picker slot="action" :value="state.langCode" @change.lazy="langChange">
+          <s-tooltip slot="trigger">
+            <s-icon-button slot="trigger">
+              <svg viewBox="0 -960 960 960">
+                <path
+                  d="m476-80 182-480h84L924-80h-84l-43-122H603L560-80h-84ZM160-200l-56-56 202-202q-35-35-63.5-80T190-640h84q20 39 40 68t48 58q33-33 68.5-92.5T484-720H40v-80h280v-80h80v80h280v80H564q-21 72-63 148t-83 116l96 98-30 82-122-125-202 201Zm468-72h144l-72-204-72 204Z">
+                </path>
+              </svg>
+            </s-icon-button>
+            多语言
+          </s-tooltip>
+          <s-picker-item v-for="lang in state.langs" :value="lang.value">{{ lang.name }}</s-picker-item>
+        </s-picker>
+        <s-tooltip slot="action">
+          <s-icon-button slot="trigger">
+            <s-icon name="light_mode"></s-icon>
+          </s-icon-button>
+          模式切换
+        </s-tooltip>
+        <!--GITHUB地址-->
+        <s-tooltip slot="action">
+          <s-icon-button slot="trigger" @click="window.open('https://github.com/apprat/sober')">
+            <svg viewBox="0 0 1024 1024">
+              <path
+                d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9 23.5 23.2 38.1 55.4 38.1 91v112.5c0.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z">
+              </path>
+            </svg>
+          </s-icon-button>
+          Github
+        </s-tooltip>
+      </s-appbar>
+    </header>
+    <div style="height: 200px;"></div>
+    <!-- <s-appbar>
       <s-icon-button slot="navigation">
         <s-icon name="menu"></s-icon>
       </s-icon-button>
-      <svg slot="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-        <path
-          d="M342-160h276l40-160H302l40 160Zm0 80q-28 0-49-17t-28-44l-45-179h520l-45 179q-7 27-28 44t-49 17H342ZM200-400h560v-80H200v80Zm280-240q0-100 70-170t170-70q0 90-57 156t-143 80v84h320v160q0 33-23.5 56.5T760-320H200q-33 0-56.5-23.5T120-400v-160h320v-84q-86-14-143-80t-57-156q100 0 170 70t70 170Z">
+      <svg viewBox="0 0 1024 1024" slot="logo">
+        <path data-v-a8f97fcf=""
+          d="M913.4 757.4c-105-16-113-31.4-113-31.4 21.6-129.8-45.4-294.2-154.8-383.2-145.6-118.4-367-32.4-539.4-212.4-40.2-42-16.8 471 199 665.4 157.8 142 343.6 98.4 394.6 75.2 46.2-21.2 78.6-59.8 78.6-59.8 84.2 26 125.8 24.4 125.8 24.4C933.8 839.2 948.8 762.8 913.4 757.4zM721.2 766.2c-276.4-81.8-484.2-369-484.2-369s182.4 215.4 504 320.4C741.4 733.8 731.8 757 721.2 766.2z">
         </path>
       </svg>
-      <div slot="headline"> Title </div>
-      <s-search slot="search" placeholder="搜索关键字">
-        <s-icon name="search" slot="start"></s-icon>
-        <s-icon-button slot="end">
-          <s-icon name="close"></s-icon>
+      <div slot="headline"> Sober </div>
+      <s-search slot="search" placeholder="搜索关键字..."></s-search>
+      <s-picker slot="action" :value="state.langCode" @change.lazy="langChange">
+        <s-tooltip slot="trigger">
+          <s-icon-button slot="trigger">
+            <svg viewBox="0 -960 960 960">
+              <path
+                d="m476-80 182-480h84L924-80h-84l-43-122H603L560-80h-84ZM160-200l-56-56 202-202q-35-35-63.5-80T190-640h84q20 39 40 68t48 58q33-33 68.5-92.5T484-720H40v-80h280v-80h80v80h280v80H564q-21 72-63 148t-83 116l96 98-30 82-122-125-202 201Zm468-72h144l-72-204-72 204Z">
+              </path>
+            </svg>
+          </s-icon-button>
+          多语言
+        </s-tooltip>
+        <s-picker-item v-for="lang in state.langs" :value="lang.value">{{ lang.name }}</s-picker-item>
+      </s-picker>
+      <s-tooltip slot="action">
+        <s-icon-button slot="trigger">
+          <s-icon name="light_mode"></s-icon>
         </s-icon-button>
-      </s-search>
-      <s-search slot="search" placeholder="搜索关键字">
-        <s-icon name="search" slot="start"></s-icon>
-        <s-icon-button slot="end">
-          <s-icon name="close"></s-icon>
+        模式切换
+      </s-tooltip>
+      <s-tooltip slot="action">
+        <s-icon-button slot="trigger" @click="window.open('https://github.com/apprat/sober')">
+          <svg viewBox="0 0 1024 1024">
+            <path
+              d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9 23.5 23.2 38.1 55.4 38.1 91v112.5c0.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z">
+            </path>
+          </svg>
         </s-icon-button>
-        <div slot="dropdown" style="height: 128px">
-
-        </div>
-      </s-search>
-      <s-icon-button slot="action">
-        <s-icon name="search"></s-icon>
-      </s-icon-button>
-    </s-appbar>
-    <hr>
-    xxx
+        Github
+      </s-tooltip>
+    </s-appbar> -->
 </body>
 
 </html>

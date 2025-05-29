@@ -1,25 +1,16 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { mediaQueryList } from './core/utils/mediaQuery.js'
 import { Theme } from './core/theme.js'
 
-type Props = {
-  disabled: boolean
-  labeled: boolean
-  max: number
-  min: number
-  step: number
-  value: number
-}
-
 const name = 's-slider'
-const props: Props = {
+const props = useProps({
   disabled: false,
-  labeled: false,
-  max: 100,
-  min: 0,
-  step: 1,
-  value: 0
-}
+  $labeled: false,
+  $max: 100,
+  $min: 0,
+  $step: 1,
+  $value: 0
+})
 
 const style = /*css*/`
 :host{
@@ -156,8 +147,8 @@ const template = /*html*/`
 />
 `
 
-class Slider extends useElement({
-  style, template, props, syncProps: ['disabled', 'labeled'],
+export class Slider extends useElement({
+  style, template, props,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const indicator = shadowRoot.querySelector<HTMLDivElement>('.indicator')!
@@ -206,8 +197,6 @@ class Slider extends useElement({
 
 Slider.define(name)
 
-export { Slider }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Slider
@@ -216,7 +205,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -231,7 +220,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Slider
   }
 }
@@ -241,7 +230,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -251,7 +240,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -261,7 +250,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

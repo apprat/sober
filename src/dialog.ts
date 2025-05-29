@@ -1,19 +1,25 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps, useEvents } from './core/element.js'
 import { mediaQueries } from './core/utils/mediaQuery.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 import './scroll-view.js'
 
-type Props = {
-  showed: boolean
-  size: 'standard' | 'full'
-}
+type EventShowSource = 'TRIGGER'
+type EventCloseSource = 'SCRIM' | 'ACTION'
 
 const name = 's-dialog'
-const props: Props = {
+const props = useProps({
   showed: false,
-  size: 'standard'
-}
+  size: ['standard', 'full']
+})
+
+const events = useEvents({
+  show: CustomEvent<{ source: EventShowSource }>,
+  showed: Event,
+  close: CustomEvent<{ source: EventCloseSource }>,
+  closed: Event
+})
+
 
 const style = /*css*/`
 :host{
@@ -71,6 +77,7 @@ dialog.show .scrim{
   position: relative;
   border-radius: 28px;
   display: flex;
+  outline: none;
   flex-direction: column;
   overflow: hidden;
   transition-timing-function: ease-out;
@@ -202,11 +209,8 @@ const builder = (options: string | {
   return dialog
 }
 
-type EventShowSource = 'TRIGGER'
-type EventCloseSource = 'SCRIM' | 'ACTION'
-
-class Dialog extends useElement({
-  style, template, props, syncProps: true,
+export class Dialog extends useElement({
+  style, template, props, events, methods: { builder },
   setup(shadowRoot) {
     const dialog = shadowRoot.querySelector<HTMLDialogElement>('dialog')!
     const scrim = shadowRoot.querySelector<HTMLDivElement>('.scrim')!
@@ -218,7 +222,7 @@ class Dialog extends useElement({
       return { easing: easing, duration: convertCSSDuration(duration) }
     }
     shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!.onclick = () => {
-      if (this.showed || !this.dispatchEvent(new CustomEvent('show', { cancelable: true, detail: { source: 'TRIGGER' } }))) return
+      if (this.showed || !this.dispatchEvent(new CustomEvent('show', { cancelable: true, detail: { source: 'TRIGGER' } }))) return console.log('拒绝')
       this.showed = true
     }
     const onClose = (source: EventCloseSource) => {
@@ -252,30 +256,12 @@ class Dialog extends useElement({
       showed: (value) => value ? show() : close()
     }
   }
-}) {
-  static readonly builder = builder
-}
+}) { }
 
 Dialog.define(name)
 
-export { Dialog }
-
-interface Events {
-  Show: CustomEvent<{ source: EventShowSource }>
-  Showed: Event
-  Close: CustomEvent<{ source: EventCloseSource }>
-  Closed: Event
-}
-
-type EventMaps = Events & HTMLElementEventMap
-
-interface Dialog {
-  addEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Dialog, ev: EventMaps[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Dialog, ev: EventMaps[K]) => any, options?: boolean | EventListenerOptions): void
-}
-
-type JSXEvents<L extends boolean = false> = {
-  [K in keyof EventMaps as `on${L extends false ? K : Lowercase<K>}`]?: (ev: EventMaps[K]) => void
+type JSXEvents<UP extends boolean = false> = {
+  [K in keyof typeof events as `on${UP extends false ? K : K extends `${infer F}${infer L}` ? `${Uppercase<F>}${L}` : never}`]?: (ev: typeof events[K]) => void
 }
 
 declare global {
@@ -286,7 +272,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props> & Events<true>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props> & Events
       }
     }
   }
@@ -301,7 +287,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props> & JSXEvents
+      $props: HTMLAttributes & Partial<typeof props> & JSXEvents<true>
     } & Dialog
   }
 }
@@ -311,7 +297,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props> & JSXEvents
+      [name]: IntrinsicElements['div'] & Partial<typeof props> & JSXEvents<true>
     }
   }
 }
@@ -321,7 +307,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props> & Events
     }
   }
 }
@@ -331,7 +317,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props> & Events
     }
   }
 }

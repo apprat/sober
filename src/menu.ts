@@ -1,13 +1,9 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 import { Fold } from './fold.js'
 import './ripple.js'
 
-type Props = {}
-
 const name = 's-menu'
-const props: Props = {
-}
 
 const style = /*css*/`
 :host{
@@ -38,18 +34,13 @@ const template = /*html*/`
 <slot></slot>
 `
 
-class Menu extends useElement({ style, template, props }) { }
-
-type ItemProps = {
-  checked: boolean
-  folded: boolean
-}
+export class Menu extends useElement({ style, template }) { }
 
 const itemName = 's-menu-item'
-const itemProps: ItemProps = {
+const itemProps = useProps({
   checked: false,
   folded: true
-}
+})
 
 const itemStyle = /*css*/`
 :host{
@@ -144,11 +135,10 @@ const itemTemplate = /*html*/`
 </s-fold>
 `
 
-class MenuItem extends useElement({
+export class MenuItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
-  syncProps: true,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLElement>('.container')!
     const fold = shadowRoot.querySelector<Fold>('.fold')!
@@ -168,8 +158,6 @@ class MenuItem extends useElement({
 Menu.define(name)
 MenuItem.define(itemName)
 
-export { Menu, MenuItem }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Menu
@@ -179,9 +167,9 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<ItemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
       }
     }
   }
@@ -196,13 +184,13 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes
     } & Menu
     [itemName]: new () => {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<ItemProps>
+      $props: HTMLAttributes & Partial<typeof itemProps>
     } & MenuItem
   }
 }
@@ -212,9 +200,9 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div']
       //@ts-ignore
-      [itemName]: IntrinsicElements['div'] & Partial<ItemProps>
+      [itemName]: IntrinsicElements['div'] & Partial<typeof itemProps>
     }
   }
 }
@@ -224,9 +212,9 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }
@@ -236,9 +224,9 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement>
       //@ts-ignore
-      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }

@@ -1,14 +1,10 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 
-type Props = {
-  src: string
-}
-
 const name = 's-avatar'
-const props: Props = {
-  src: ''
-}
+const props = useProps({
+  $src: ''
+})
 
 const style = /*css*/`
 :host{
@@ -84,7 +80,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -99,7 +95,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Avatar
   }
 }
@@ -108,7 +104,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -118,7 +114,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -128,7 +124,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

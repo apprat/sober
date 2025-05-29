@@ -1,14 +1,10 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 
-type Props = {
-  folded: boolean
-}
-
 const name = 's-fold'
-const props: Props = {
+const props = useProps({
   folded: false
-}
+})
 
 const style = /*css*/`
 :host{
@@ -37,16 +33,14 @@ const template = /*html*/`
 </div>
 `
 
-class Fold extends useElement({
-  style, template, props, syncProps: true,
+export class Fold extends useElement({
+  style, template, props,
   setup(shadowRoot) {
     shadowRoot.querySelector<HTMLDivElement>('slot[name=trigger]')!.onclick = () => this.folded = !this.folded
   }
 }) { }
 
 Fold.define(name)
-
-export { Fold }
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -56,7 +50,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -71,7 +65,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Fold
   }
 }
@@ -81,7 +75,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -91,7 +85,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -101,7 +95,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

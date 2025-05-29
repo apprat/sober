@@ -1,19 +1,14 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 import { Select } from './core/utils/select.js'
 import './ripple.js'
 
-type Props = {
-  mode: 'scrollable' | 'fixed',
-  value: string
-}
-
 const name = 's-tab'
-const props: Props = {
-  mode: 'scrollable',
-  value: ''
-}
+const props = useProps({
+  mode: ['scrollable', 'fixed'],
+  $value: ''
+})
 
 const style = /*css*/`
 :host{
@@ -62,8 +57,8 @@ const template = /*html*/`
 </div>
 `
 
-class Tab extends useElement({
-  style, template, props, syncProps: ['mode'],
+export class Tab extends useElement({
+  style, template, props,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
@@ -109,16 +104,11 @@ class Tab extends useElement({
   }
 }) { }
 
-type ItemProps = {
-  selected: boolean,
-  value: string
-}
-
 const itemName = 's-tab-item'
-const itemProps: ItemProps = {
+const itemProps = useProps({
   selected: false,
-  value: ''
-}
+  $value: ''
+})
 
 const itemStyle = /*css*/`
 :host{
@@ -205,11 +195,10 @@ const itemTemplate = /*html*/`
 <s-ripple attached="true" part="ripple"></s-ripple>
 `
 
-class TabItem extends useElement({
+export class TabItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
-  syncProps: ['selected'],
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     shadowRoot.querySelector<HTMLSlotElement>('[name=icon]')!.addEventListener('slotchange', (event) => {
@@ -234,8 +223,6 @@ class TabItem extends useElement({
 Tab.define(name)
 TabItem.define(itemName)
 
-export { Tab, TabItem }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Tab
@@ -245,9 +232,9 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<ItemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
       }
     }
   }
@@ -262,13 +249,13 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Tab
     [itemName]: new () => {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<ItemProps>
+      $props: HTMLAttributes & Partial<typeof itemProps>
     } & TabItem
   }
 }
@@ -278,9 +265,9 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
       //@ts-ignore
-      [itemName]: IntrinsicElements['div'] & Partial<ItemProps>
+      [itemName]: IntrinsicElements['div'] & Partial<typeof itemProps>
     }
   }
 }
@@ -290,9 +277,9 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }
@@ -302,9 +289,9 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }

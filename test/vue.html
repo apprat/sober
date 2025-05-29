@@ -8,7 +8,7 @@
 
 <body>
   <main id="app">
-    <s-text-field label="label" v-model="textRef" type="lines"></s-text-field>
+    <s-text-field label="label" v-model="textRef" type="multiline"></s-text-field>
     {{textRef}}
     <s-button @click="submit">submit</s-button>
     <s-text-field label="请输入内容" value="My Namexx" type="line">
@@ -18,13 +18,13 @@
       </s-icon-button>
     </s-text-field>
   </main>
-  <script src="https://unpkg.com/sober@1.0.6/dist/sober.min.js"></script>
+  <script src="../dist/sober.min.js"></script>
   <script type="module">
     import { createApp, ref } from 'https://unpkg.com/vue@3.5.13/dist/vue.esm-browser.prod.js'
 
     const app = createApp({
       setup() {
-        const textRef = ref('')
+        const textRef = ref('aa')
         const submit = () => {
           console.log(textRef.value)
         }

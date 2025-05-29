@@ -1,16 +1,13 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 import { Popup } from './popup.js'
 import './ripple.js'
 import './scroll-view.js'
 
-type Props = {
-  group: 'start' | 'end' | ''
-}
 const name = 's-popup-menu'
-const props: Props = {
-  group: ''
-}
+const props = useProps({
+  group: ['', 'start', 'end']
+})
 
 const style = /*css*/`
 :host{
@@ -51,8 +48,8 @@ const template = /*html*/`
 </s-popup>
 `
 
-class PopupMenu extends useElement({
-  style, template, props, syncProps: true,
+export class PopupMenu extends useElement({
+  style, template, props,
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector<Popup>('.popup')!
     const trigger = shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!
@@ -92,11 +89,7 @@ class PopupMenu extends useElement({
   }
 }) { }
 
-type ItemProps = {}
-
 const itemName = 's-popup-menu-item'
-const itemProps: ItemProps = {
-}
 
 const itemStyle = /*css*/`
 :host{
@@ -144,10 +137,9 @@ const itemTemplate = /*html*/`
 <s-ripple attached="true"></s-ripple>
 `
 
-class PopupMenuItem extends useElement({
+export class PopupMenuItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
-  props: itemProps,
   setup() {
     this.addEventListener('click', () => this.dispatchEvent(new Event(`${name}:click`, { bubbles: true })))
   }
@@ -155,8 +147,6 @@ class PopupMenuItem extends useElement({
 
 PopupMenu.define(name)
 PopupMenuItem.define(itemName)
-
-export { PopupMenu, PopupMenuItem }
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -167,9 +157,9 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<ItemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
       }
     }
   }
@@ -184,13 +174,13 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & PopupMenu
     [itemName]: new () => {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<ItemProps>
+      $props: HTMLAttributes
     } & PopupMenuItem
   }
 }
@@ -200,9 +190,9 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
       //@ts-ignore
-      [itemName]: IntrinsicElements['div'] & Partial<ItemProps>
+      [itemName]: IntrinsicElements['div']
     }
   }
 }
@@ -212,9 +202,9 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+      [itemName]: JSX.HTMLAttributes<HTMLElement>
     }
   }
 }
@@ -224,9 +214,9 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement>
     }
   }
 }

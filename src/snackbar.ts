@@ -1,21 +1,20 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps, useEvents } from './core/element.js'
 import { getStackingContext } from './core/utils/getStackingContext.js'
 import { mediaQueries, mediaQueryList } from './core/utils/mediaQuery.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 
-type Props = {
-  type: 'none' | 'info' | 'success' | 'warning' | 'error'
-  align: 'auto' | 'top' | 'bottom'
-  duration: number
-}
-
 const name = 's-snackbar'
-const props: Props = {
-  type: 'none',
-  align: 'auto',
-  duration: 4000
-}
+const props = useProps({
+  type: ['none', 'info', 'success', 'warning', 'error'],
+  align: ['auto', 'top', 'bottom'],
+  $duration: 4000
+})
+const events = useEvents({
+  show: Event,
+  showed: Event,
+  closed: Event
+})
 
 const style = /*css*/`
 :host{
@@ -44,6 +43,7 @@ const style = /*css*/`
   display: flex;
 }
 .container{
+  outline: none;
   align-self: flex-end;
   width: fit-content;
   display: flex;
@@ -163,8 +163,8 @@ const builder = (options: string | {
   root?: Element
   icon?: string | Element
   text: string
-  type?: Props['type']
-  align?: Props['align']
+  type?: typeof props['type']
+  align?: typeof props['align']
   duration?: number
   action?: string | {
     text: string
@@ -219,8 +219,8 @@ const tasks = {
   bottom: [] as HTMLElement[],
 }
 
-class Snackbar extends useElement({
-  style, template, props, syncProps: ['type'],
+export class Snackbar extends useElement({
+  style, template, props, events, methods: { builder },
   setup(shadowRoot) {
     const popup = shadowRoot.querySelector<HTMLDivElement>('.popup')!
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
@@ -291,31 +291,24 @@ class Snackbar extends useElement({
       expose: { show, close },
     }
   }
-}) {
-  static readonly builder = builder
-}
+}) { }
 
 Snackbar.define(name)
 
-export { Snackbar }
-
-interface Events {
-  Show: Event
-  Showed: Event
-  Closed: Event
+type JSXEvents<UP extends boolean = false> = {
+  [K in keyof typeof events as `on${UP extends false ? K : K extends `${infer F}${infer L}` ? `${Uppercase<F>}${L}` : never}`]?: (ev: typeof events[K]) => void
 }
 
+// type EventMaps = Events & HTMLElementEventMap
 
-type EventMaps = Events & HTMLElementEventMap
+// interface Snackbar {
+//   addEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Snackbar, ev: EventMaps[K]) => any, options?: boolean | AddEventListenerOptions): void
+//   removeEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Snackbar, ev: EventMaps[K]) => any, options?: boolean | EventListenerOptions): void
+// }
 
-interface Snackbar {
-  addEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Snackbar, ev: EventMaps[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Snackbar, ev: EventMaps[K]) => any, options?: boolean | EventListenerOptions): void
-}
-
-type JSXEvents<L extends boolean = false> = {
-  [K in keyof EventMaps as `on${L extends false ? K : Lowercase<K>}`]?: (ev: EventMaps[K]) => void
-}
+// type JSXEvents<L extends boolean = false> = {
+//   [K in keyof EventMaps as `on${L extends false ? K : Lowercase<K>}`]?: (ev: EventMaps[K]) => void
+// }
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -325,7 +318,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props> & Events<true>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props> & JSXEvents
       }
     }
   }
@@ -340,7 +333,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props> & JSXEvents
+      $props: HTMLAttributes & Partial<typeof props> & JSXEvents<true>
     } & Snackbar
   }
 }
@@ -350,7 +343,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props> & JSXEvents
+      [name]: IntrinsicElements['div'] & Partial<typeof props> & JSXEvents<true>
     }
   }
 }
@@ -360,7 +353,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props> & JSXEvents
     }
   }
 }
@@ -370,7 +363,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props> & JSXEvents
     }
   }
 }

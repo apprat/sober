@@ -1,17 +1,12 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
-type Props = {
-  disabled: boolean
-  checked: boolean
-}
-
 const name = 's-switch'
-const props: Props = {
+const props = useProps({
   disabled: false,
   checked: false
-}
+})
 
 const style = /*css*/`
 :host{
@@ -132,8 +127,8 @@ const template = /*html*/`
 </s-ripple>
 `
 
-class Switch extends useElement({
-  style, template, props, syncProps: true,
+export class Switch extends useElement({
+  style, template, props,
   setup() {
     this.addEventListener('click', () => {
       this.checked = !this.checked
@@ -144,8 +139,6 @@ class Switch extends useElement({
 
 Switch.define(name)
 
-export { Switch }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Switch
@@ -154,7 +147,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -169,7 +162,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Switch
   }
 }
@@ -179,7 +172,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -189,7 +182,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -199,7 +192,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

@@ -1,11 +1,7 @@
 import { useElement } from './core/element.js'
 import { Theme } from './core/theme.js'
 
-type Props = {}
-
 const name = 's-table'
-const props: Props = {
-}
 
 const style = /*css*/`
 :host{
@@ -43,16 +39,16 @@ const template = /*html*/`
 <slot></slot>
 `
 
-class Table extends useElement({ style, template, props }) { }
+export class Table extends useElement({ style, template }) { }
 
 const theadName = 's-thead'
-const theadProps: Props = {
-}
 
 const theadStyle = /*css*/`
 :host{
   display: table-header-group;
   font-weight: 600;
+  position: sticky;
+  top: 0;
   border-bottom: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
   background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
@@ -61,15 +57,12 @@ const theadStyle = /*css*/`
 
 const theadTemplate =/*html*/`<slot></slot>`
 
-class Thead extends useElement({
+export class Thead extends useElement({
   style: theadStyle,
-  template: theadTemplate,
-  props: theadProps
+  template: theadTemplate
 }) { }
 
 const tbodyName = 's-tbody'
-const tbodyProps: Props = {
-}
 
 const tbodyStyle = /*css*/`
 :host{
@@ -83,16 +76,13 @@ const tbodyStyle = /*css*/`
 
 const tbodyTemplate =/*html*/`<slot></slot>`
 
-class Tbody extends useElement({
+export class Tbody extends useElement({
   style: tbodyStyle,
-  template: tbodyTemplate,
-  props: tbodyProps
+  template: tbodyTemplate
 }) { }
 
 
 const trName = 's-tr'
-const trProps: Props = {
-}
 
 const trStyle = /*css*/`
 :host{
@@ -102,15 +92,12 @@ const trStyle = /*css*/`
 
 const trTemplate =/*html*/`<slot></slot>`
 
-class Tr extends useElement({
+export class Tr extends useElement({
   style: trStyle,
   template: trTemplate,
-  props: trProps
 }) { }
 
 const thName = 's-th'
-const thProps: Props = {
-}
 
 const thStyle = /*css*/`
 :host{
@@ -122,15 +109,12 @@ const thStyle = /*css*/`
 
 const thTemplate =/*html*/`<slot></slot>`
 
-class Th extends useElement({
+export class Th extends useElement({
   style: thStyle,
-  template: thTemplate,
-  props: thProps
+  template: thTemplate
 }) { }
 
 const tdName = 's-td'
-const tdProps: Props = {
-}
 
 const tdStyle = /*css*/`
 :host{
@@ -142,10 +126,9 @@ const tdStyle = /*css*/`
 
 const tdTemplate = /*html*/`<slot></slot>`
 
-class Td extends useElement({
+export class Td extends useElement({
   style: tdStyle,
-  template: tdTemplate,
-  props: tdProps
+  template: tdTemplate
 }) { }
 
 Table.define(name)
@@ -154,9 +137,6 @@ Tbody.define(tbodyName)
 Tr.define(trName)
 Th.define(thName)
 Td.define(tdName)
-
-export { Table, Thead, Tbody, Tr, Th, Td }
-
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -171,17 +151,17 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
         //@ts-ignore
-        [theadName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof theadProps>
+        [theadName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
         //@ts-ignore
-        [tbodyName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof tbodyProps>
+        [tbodyName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
         //@ts-ignore
-        [trName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof trProps>
+        [trName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
         //@ts-ignore
-        [thName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof thProps>
+        [thName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
         //@ts-ignore
-        [tdName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof tdProps>
+        [tdName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
       }
     }
   }
@@ -196,37 +176,37 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes
     } & Table
     [theadName]: new () => {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof theadProps>
+      $props: HTMLAttributes
     } & Thead
     [tbodyName]: new () => {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof tbodyProps>
+      $props: HTMLAttributes
     } & Tbody
     [trName]: new () => {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof trProps>
+      $props: HTMLAttributes
     } & Tr
     [thName]: new () => {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof thProps>
+      $props: HTMLAttributes
     } & Th
     [tdName]: new () => {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof tdProps>
+      $props: HTMLAttributes
     } & Td
   }
 }
@@ -236,15 +216,15 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div']
       //@ts-ignore
-      [tbodyName]: HTMLAttributes & Partial<typeof tbodyProps>
+      [tbodyName]: HTMLAttributes
       //@ts-ignore
-      [trName]: HTMLAttributes & Partial<typeof trProps>
+      [trName]: HTMLAttributes
       //@ts-ignore
-      [thName]: HTMLAttributes & Partial<typeof thProps>
+      [thName]: HTMLAttributes
       //@ts-ignore
-      [tdName]: HTMLAttributes & Partial<typeof tdProps>
+      [tdName]: HTMLAttributes
     }
   }
 }
@@ -254,17 +234,17 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement>
       //@ts-ignore
-      [theadName]: JSX.HTMLAttributes & Partial<typeof theadProps>
+      [theadName]: JSX.HTMLAttributes
       //@ts-ignore
-      [tbodyName]: JSX.HTMLAttributes & Partial<typeof tbodyProps>
+      [tbodyName]: JSX.HTMLAttributes
       //@ts-ignore
-      [trName]: JSX.HTMLAttributes & Partial<typeof trProps>
+      [trName]: JSX.HTMLAttributes
       //@ts-ignore
-      [thName]: JSX.HTMLAttributes & Partial<typeof thProps>
+      [thName]: JSX.HTMLAttributes
       //@ts-ignore
-      [tdName]: JSX.HTMLAttributes & Partial<typeof tdProps>
+      [tdName]: JSX.HTMLAttributes
     }
   }
 }
@@ -274,17 +254,17 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement>
       //@ts-ignore
-      [theadName]: JSXInternal.HTMLAttributes & Partial<typeof theadProps>
+      [theadName]: JSXInternal.HTMLAttributes
       //@ts-ignore
-      [tbodyName]: JSXInternal.HTMLAttributes & Partial<typeof tbodyProps>
+      [tbodyName]: JSXInternal.HTMLAttributes
       //@ts-ignore
-      [trName]: JSXInternal.HTMLAttributes & Partial<typeof trProps>
+      [trName]: JSXInternal.HTMLAttributes
       //@ts-ignore
-      [thName]: JSXInternal.HTMLAttributes & Partial<typeof thProps>
+      [thName]: JSXInternal.HTMLAttributes
       //@ts-ignore
-      [tdName]: JSXInternal.HTMLAttributes & Partial<typeof tdProps>
+      [tdName]: JSXInternal.HTMLAttributes
     }
   }
 }

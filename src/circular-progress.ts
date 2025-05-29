@@ -1,20 +1,13 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 
-type Props = {
-  indeterminate: boolean
-  animated: boolean
-  max: number
-  value: number
-}
-
 const name = 's-circular-progress'
-const props: Props = {
+const props = useProps({
   indeterminate: false,
   animated: false,
-  max: 100,
-  value: 0
-}
+  $max: 100,
+  $value: 0
+})
 
 const style = /*css*/`
 :host{
@@ -102,8 +95,8 @@ const template = /*html*/`
 </div>
 `
 
-class CircularProgress extends useElement({
-  style, template, props, syncProps: ['indeterminate', 'animated'],
+export class CircularProgress extends useElement({
+  style, template, props,
   setup(shadowRoot) {
     const track = shadowRoot.querySelector<SVGCircleElement>('.known .track')!
     const indicator = shadowRoot.querySelector<SVGCircleElement>('.known .indicator')!
@@ -115,16 +108,11 @@ class CircularProgress extends useElement({
       track.setAttribute('transform', `rotate(${deg + 20}, ${size / 2}, ${size / 2})`)
       indicator.style.strokeDashoffset = `${value}px`
     }
-    return {
-      max: update,
-      value: update
-    }
+    return { max: update, value: update }
   }
 }) { }
 
 CircularProgress.define(name)
-
-export { CircularProgress }
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -134,7 +122,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -149,7 +137,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & CircularProgress
   }
 }
@@ -159,7 +147,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -169,7 +157,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -179,7 +167,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

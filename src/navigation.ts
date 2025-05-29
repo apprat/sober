@@ -1,18 +1,13 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Select } from './core/utils/select.js'
 import { Theme } from './core/theme.js'
 import './ripple.js'
 
-type Props = {
-  mode: 'bottom' | 'rail',
-  value: string
-}
-
 const name = 's-navigation'
-const props: Props = {
-  mode: 'bottom',
-  value: ''
-}
+const props = useProps({
+  mode: ['bottom', 'rail'],
+  $value: ''
+})
 
 const style = /*css*/`
 :host{
@@ -57,8 +52,8 @@ const template = /*html*/`
 <slot name="end"></slot>
 `
 
-class Navigation extends useElement({
-  style, template, props, syncProps: true,
+export class Navigation extends useElement({
+  style, template, props,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('#slot')!
     const select = new Select({ context: this, class: NavigationItem, slot })
@@ -79,16 +74,12 @@ class Navigation extends useElement({
   }
 }) { }
 
-type ItemProps = {
-  selected: boolean,
-  value: string
-}
 
 const itemName = 's-navigation-item'
-const itemProps: ItemProps = {
+const itemProps = useProps({
   selected: false,
-  value: ''
-}
+  $value: ''
+})
 
 const itemStyle = /*css*/`
 :host{
@@ -153,11 +144,10 @@ const itemTemplate = /*html*/`
 <slot name="text"></slot>
 `
 
-class NavigationItem extends useElement({
+export class NavigationItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
-  syncProps: ['selected'],
   setup() {
     this.addEventListener('click', () => {
       if (this.selected) return
@@ -176,8 +166,6 @@ class NavigationItem extends useElement({
 Navigation.define(name)
 NavigationItem.define(itemName)
 
-export { Navigation, NavigationItem }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Navigation
@@ -187,9 +175,9 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<ItemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
       }
     }
   }
@@ -204,13 +192,13 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Navigation
     [itemName]: new () => {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<ItemProps>
+      $props: HTMLAttributes & Partial<typeof itemProps>
     } & NavigationItem
   }
 }
@@ -220,9 +208,9 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
       //@ts-ignore
-      [itemName]: IntrinsicElements['div'] & Partial<ItemProps>
+      [itemName]: IntrinsicElements['div'] & Partial<typeof itemProps>
     }
   }
 }
@@ -232,9 +220,9 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }
@@ -244,9 +232,9 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }

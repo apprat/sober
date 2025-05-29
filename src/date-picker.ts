@@ -1,4 +1,4 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { dateFormat } from './core/utils/dateFormat.js'
 import { Theme } from './core/theme.js'
 import { Field } from './field.js'
@@ -6,28 +6,17 @@ import { Dialog } from './dialog.js'
 import { Date as DateElement } from './date.js'
 import { Ripple } from './ripple.js'
 
-type Props = {
-  value: string
-  min: string
-  max: string
-  label: string
-  positiveText: string
-  negativeText: string
-  format: string
-  locale: string
-}
-
 const name = 's-date-picker'
-const props: Props = {
-  value: '',
-  min: '',
-  max: '',
-  label: '',
-  positiveText: '确定',
-  negativeText: '取消',
-  format: 'yyyy-MM-dd',
-  locale: ''
-}
+const props = useProps({
+  $value: '',
+  $min: '',
+  $max: '',
+  $label: '',
+  $positiveText: '确定',
+  $negativeText: '取消',
+  $format: 'yyyy-MM-dd',
+  $locale: ''
+})
 
 const style = /*css*/`
 :host{
@@ -99,7 +88,7 @@ const template = /*html*/`
 </s-dialog>
 `
 
-class DatePicker extends useElement({
+export class DatePicker extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const dialog = shadowRoot.querySelector<Dialog>('s-dialog')!
@@ -166,8 +155,6 @@ class DatePicker extends useElement({
 
 DatePicker.define(name)
 
-export { DatePicker }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: DatePicker
@@ -176,7 +163,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -191,7 +178,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & DatePicker
   }
 }
@@ -201,7 +188,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -211,7 +198,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -221,7 +208,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

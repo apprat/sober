@@ -1,15 +1,16 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps, useEvents } from './core/element.js'
 import { Theme } from './core/theme.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 
-type Props = {
-  align: 'center' | 'left' | 'right'
-}
-
 const name = 's-popup'
-const props: Props = {
-  align: 'center'
-}
+const props = useProps({
+  align: ['center', 'left', 'right']
+})
+const events = useEvents({
+  show: Event,
+  showed: Event,
+  closed: Event
+})
 
 const style = /*css*/`
 :host{
@@ -26,10 +27,10 @@ dialog{
   padding: 0;
   max-width: none;
   max-height: none;
-  outline: none;
   position: relative;
   overflow: hidden;
   color: inherit;
+  outline: none;
 }
 dialog::backdrop{
   background: none;
@@ -47,9 +48,9 @@ dialog::backdrop{
   max-height: 100%;
   width: fit-content;
   height: fit-content;
+  outline: none;
 }
 ::slotted(:not([slot])){
-  outline: none;
   border-radius: 4px;
   max-width: inherit;
   max-height: inherit;
@@ -66,7 +67,7 @@ const template = /*html*/`
 </dialog>
 `
 
-const getPosition = (rect: DOMRect, cw: number, ch: number, align: Props['align']) => {
+const getPosition = (rect: DOMRect, cw: number, ch: number, align: typeof props['align']) => {
   const position = { top: 0, left: 0, origin: [] as string[] }
   //垂直
   const centered = align === 'center'
@@ -117,8 +118,8 @@ const getPosition = (rect: DOMRect, cw: number, ch: number, align: Props['align'
 
 type ShowOptions = { x: number, y: number, origin?: string }
 
-class Popup extends useElement({
-  style, template, props,
+export class Popup extends useElement({
+  style, template, props, events,
   setup(shadowRoot) {
     const dialog = shadowRoot.querySelector<HTMLDialogElement>('dialog')!
     const container = shadowRoot.querySelector<HTMLSlotElement>('.container')!
@@ -187,23 +188,8 @@ class Popup extends useElement({
 
 Popup.define(name)
 
-export { Popup }
-
-interface Events {
-  Show: Event
-  Showed: Event
-  Closed: Event
-}
-
-type EventMaps = Events & HTMLElementEventMap
-
-interface Popup {
-  addEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Popup, ev: EventMaps[K]) => any, options?: boolean | AddEventListenerOptions): void
-  removeEventListener<K extends keyof EventMaps>(type: Lowercase<K>, listener: (this: Popup, ev: EventMaps[K]) => any, options?: boolean | EventListenerOptions): void
-}
-
-type JSXEvents<L extends boolean = false> = {
-  [K in keyof EventMaps as `on${L extends false ? K : Lowercase<K>}`]?: (ev: EventMaps[K]) => void
+type JSXEvents<UP extends boolean = false> = {
+  [K in keyof typeof events as `on${UP extends false ? K : K extends `${infer F}${infer L}` ? `${Uppercase<F>}${L}` : never}`]?: (ev: typeof events[K]) => void
 }
 
 declare global {
@@ -214,7 +200,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props> & Events<true>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props> & JSXEvents
       }
     }
   }
@@ -229,7 +215,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props> & JSXEvents
+      $props: HTMLAttributes & Partial<typeof props> & JSXEvents<true>
     } & Popup
   }
 }
@@ -239,7 +225,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props> & JSXEvents
+      [name]: IntrinsicElements['div'] & Partial<typeof props> & JSXEvents<true>
     }
   }
 }
@@ -249,7 +235,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props> & JSXEvents
     }
   }
 }
@@ -259,7 +245,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props> & Events<true>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props> & JSXEvents
     }
   }
 }

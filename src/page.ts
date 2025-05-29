@@ -1,15 +1,11 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 
-type Props = {
-  theme: 'auto' | 'light' | 'dark'
-}
-
 const name = 's-page'
-const props: Props = {
-  theme: 'light'
-}
+const props = useProps({
+  theme: ['light', 'auto', 'dark']
+})
 
 const style = /*css*/`
 :host{
@@ -176,7 +172,7 @@ const template = /*html*/`<slot></slot>`
 const viewTransitionStyle = document.createElement('style')
 viewTransitionStyle.textContent = `::view-transition-old(root),::view-transition-new(root) { animation: none; mix-blend-mode: normal}`
 
-class Page extends useElement({
+export class Page extends useElement({
   style, template, props,
   setup() {
     const computedStyle = getComputedStyle(this)
@@ -250,8 +246,6 @@ class Page extends useElement({
 
 Page.define(name)
 
-export { Page }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Page
@@ -260,7 +254,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -275,7 +269,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Page
   }
 }
@@ -285,7 +279,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -295,7 +289,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -305,7 +299,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

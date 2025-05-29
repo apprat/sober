@@ -23,10 +23,10 @@
 
 ## 插槽
 
-| 名称       | 介绍                   |
-| ---------- | --------------------- |
-| navigation | 导航按钮               |
-| logo       | Logo 默认支持 svg      |
-| headline   | 标题                   |
-| search     | 搜索框 默认支持 search  |
-| action     | 操作按钮               |
+| 名称         | 介绍                   |
+| ------------ | --------------------- |
+| navigation   | 导航按钮               |
+| logo         | Logo 默认支持 svg      |
+| headline     | 标题                   |
+| search       | 搜索框 默认支持 search  |
+| action       | 操作按钮               |

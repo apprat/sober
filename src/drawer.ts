@@ -3,11 +3,7 @@ import { mediaQueries } from './core/utils/mediaQuery.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 
-type Props = {}
-
 const name = 's-drawer'
-const props: Props = {
-}
 
 const style = /*css*/`
 :host{
@@ -153,8 +149,8 @@ const template = /*html*/`
 
 type SlotName = 'start' | 'end'
 
-class Drawer extends useElement({
-  style, template, props,
+export class Drawer extends useElement({
+  style, template,
   setup(shadowRoot) {
     const scrim = shadowRoot.querySelector<HTMLDivElement>('.scrim')!
     const slots = {
@@ -219,8 +215,6 @@ class Drawer extends useElement({
 
 Drawer.define(name)
 
-export { Drawer }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Drawer
@@ -229,7 +223,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
       }
     }
   }
@@ -244,7 +238,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes
     } & Drawer
   }
 }
@@ -254,7 +248,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div']
     }
   }
 }
@@ -264,7 +258,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement>
     }
   }
 }
@@ -274,7 +268,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement>
     }
   }
 }

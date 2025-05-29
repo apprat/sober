@@ -1,14 +1,10 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 
-type Props = {
-  type: 'info' | 'success' | 'warning' | 'error'
-}
-
 const name = 's-alert'
-const props: Props = {
-  type: 'info'
-}
+const props = useProps({
+  type: ['info', 'success', 'warning', 'error']
+})
 
 const style = /*css*/`
 :host{
@@ -108,7 +104,7 @@ const template = /*html*/`
 <slot name="end"></slot>
 `
 
-class Alert extends useElement({ style, template, props, syncProps: true }) { }
+class Alert extends useElement({ style, template, props }) { }
 
 Alert.define(name)
 
@@ -122,7 +118,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -137,7 +133,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Alert
   }
 }
@@ -146,7 +142,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -156,7 +152,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

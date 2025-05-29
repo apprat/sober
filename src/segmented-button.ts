@@ -1,19 +1,14 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 import { Select } from './core/utils/select.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import './ripple.js'
 
-type Props = {
-  value: string
-  mode: 'auto' | 'fiexd'
-}
-
 const name = 's-segmented-button'
-const props: Props = {
-  value: '',
-  mode: 'auto'
-}
+const props = useProps({
+  $value: '',
+  mode: ['auto', 'fixed']
+})
 
 const style = /*css*/`
 :host{
@@ -37,8 +32,8 @@ const style = /*css*/`
 `
 const template = /*html*/`<slot></slot>`
 
-class SegmentedButton extends useElement({
-  style, template, props, syncProps: ['mode'],
+export class SegmentedButton extends useElement({
+  style, template, props,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
     const select = new Select({ context: this, class: SegmentedButtonItem, slot })
@@ -81,20 +76,13 @@ class SegmentedButton extends useElement({
   }
 }) { }
 
-type ItemProps = {
-  selected: boolean
-  disabled: boolean
-  selectable: boolean
-  value: string
-}
-
 const itemName = 's-segmented-button-item'
-const itemProps: ItemProps = {
+const itemProps = useProps({
   selected: false,
   disabled: false,
   selectable: true,
-  value: ''
-}
+  $value: ''
+})
 
 const itemStyle = /*css*/`
 :host{
@@ -173,11 +161,10 @@ const itemTemplate =/*html*/`
 <s-ripple attached="true" part="ripple"></s-ripple>
 `
 
-class SegmentedButtonItem extends useElement({
+export class SegmentedButtonItem extends useElement({
   style: itemStyle,
   template: itemTemplate,
   props: itemProps,
-  syncProps: ['selected', 'disabled'],
   setup() {
     this.addEventListener('click', () => {
       if (!(this.parentNode instanceof SegmentedButton) || this.selected) return
@@ -195,8 +182,6 @@ class SegmentedButtonItem extends useElement({
 SegmentedButton.define(name)
 SegmentedButtonItem.define(itemName)
 
-export { SegmentedButton, SegmentedButtonItem }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: SegmentedButton
@@ -206,9 +191,9 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<ItemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
       }
     }
   }
@@ -223,13 +208,13 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & SegmentedButton
     [itemName]: new () => {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<ItemProps>
+      $props: HTMLAttributes & Partial<typeof itemProps>
     } & SegmentedButtonItem
   }
 }
@@ -239,9 +224,9 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
       //@ts-ignore
-      [itemName]: IntrinsicElements['div'] & Partial<ItemProps>
+      [itemName]: IntrinsicElements['div'] & Partial<typeof itemProps>
     }
   }
 }
@@ -251,9 +236,9 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }
@@ -263,9 +248,9 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<ItemProps>
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }

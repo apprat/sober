@@ -1,18 +1,13 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { mediaQueryList } from './core/utils/mediaQuery.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 
-type Props = {
-  centered: boolean
-  attached: boolean
-}
-
 const name = 's-ripple'
-const props: Props = {
+const props = useProps({
   centered: false,
   attached: false
-}
+})
 
 const style = /*css*/`
 :host{
@@ -59,8 +54,8 @@ const template = /*html*/`
 </div>
 `
 
-class Ripple extends useElement({
-  style, template, props, syncProps: true,
+export class Ripple extends useElement({
+  style, template, props,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const ripple = shadowRoot.querySelector<HTMLDivElement>('.ripple')!
@@ -176,8 +171,6 @@ class Ripple extends useElement({
 
 Ripple.define(name)
 
-export { Ripple }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Ripple
@@ -186,7 +179,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -201,7 +194,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Ripple
   }
 }
@@ -211,7 +204,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -221,7 +214,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -231,7 +224,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

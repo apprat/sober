@@ -1,19 +1,14 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { mediaQueryList } from './core/utils/mediaQuery.js'
 import { getStackingContext } from './core/utils/getStackingContext.js'
 import { convertCSSDuration } from './core/utils/CSSUtils.js'
 import { Theme } from './core/theme.js'
 
-type Props = {
-  align: 'top' | 'bottom' | 'left' | 'right'
-  disabled: boolean
-}
-
 const name = 's-tooltip'
-const props: Props = {
-  align: 'top',
+const props = useProps({
+  align: ['top', 'bottom', 'left', 'right'],
   disabled: false
-}
+})
 
 const style = /*css*/`
 :host{
@@ -57,7 +52,7 @@ const template = /*html*/`
 </div>
 `
 
-class Tooltip extends useElement({
+export class Tooltip extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!
@@ -156,8 +151,6 @@ class Tooltip extends useElement({
 
 Tooltip.define(name)
 
-export { Tooltip }
-
 declare global {
   interface HTMLElementTagNameMap {
     [name]: Tooltip
@@ -166,7 +159,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -181,7 +174,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & Tooltip
   }
 }
@@ -191,7 +184,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -201,7 +194,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -211,7 +204,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

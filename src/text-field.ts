@@ -1,33 +1,20 @@
-import { useElement } from './core/element.js'
+import { useElement, useProps } from './core/element.js'
 import { Theme } from './core/theme.js'
 import { Field } from './field.js'
 
-type Props = {
-  label: string
-  placeholder: string
-  disabled: boolean
-  type: 'text' | 'number' | 'password' | 'multiline'
-  error: boolean
-  value: string
-  maxLength: number
-  readOnly: boolean
-  multiLine: boolean
-  countered: boolean
-}
-
 const name = 's-text-field'
-const props: Props = {
-  label: '',
-  placeholder: '',
+const props = useProps({
+  $label: '',
+  $placeholder: '',
   disabled: false,
-  type: 'text',
+  type: ['text', 'number', 'password', 'multiline'],
   error: false,
-  value: '',
-  maxLength: -1,
+  $value: '',
+  $maxLength: -1,
   readOnly: false,
   multiLine: false,
   countered: false
-}
+})
 
 const style = /*css*/`
 :host{
@@ -274,8 +261,8 @@ const template = /*html*/`
 </div>
 `
 
-class TextField extends useElement({
-  style, template, props, syncProps: ['type', 'disabled', 'error', 'multiLine', 'countered'],
+export class TextField extends useElement({
+  style, template, props,
   setup(shadowRoot) {
     const field = shadowRoot.querySelector<Field>('.field')!
     const label = shadowRoot.querySelector<HTMLDivElement>('.label')!
@@ -376,7 +363,6 @@ class TextField extends useElement({
 
 TextField.define(name)
 
-export { TextField }
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -386,7 +372,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -401,7 +387,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<Props>
+      $props: HTMLAttributes & Partial<typeof props>
     } & TextField
   }
 }
@@ -411,7 +397,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<Props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -421,7 +407,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -431,7 +417,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<Props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

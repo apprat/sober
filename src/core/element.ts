@@ -143,7 +143,7 @@ export const useElement = <
   }
   type ReturnType<T extends ((...args: any) => any) | undefined> = T extends (...args: any) => infer R ? R : T
   const map = new Map<HTMLElement, ReturnType<typeof options.setup>>()
-  return class Component extends HTMLElement {
+  class Component extends HTMLElement {
     static observedAttributes = state.observedAttributes
     static define(name: string) {
       customElements.define(name, this)
@@ -226,5 +226,9 @@ export const useElement = <
       if (state.events.includes(key)) return this[key as keyof this] = (value ? new Function('event', value) : null) as never
       this[state.upperPropKeys[key] as keyof this] = (value ?? undefined) as never
     }
-  } as never
+  }
+  for (const key in options.methods) {
+    Component[key as keyof typeof Component] = options.methods[key]
+  }
+  return Component as any
 }

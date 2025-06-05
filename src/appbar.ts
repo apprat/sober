@@ -10,7 +10,6 @@ const style = /*css*/`
   align-items: center;
   position: relative;
   padding: 0 8px;
-  margin: 0 auto;
   box-sizing: border-box;
   container-name: s-appbar;
   container-type: inline-size;

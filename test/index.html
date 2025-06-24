@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Test</title>
+  <meta name="viewport"
+    content="width=device-width,viewport-fit=cover,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../dist/main.js"></script>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 56px;
+      font-size: 24px;
+      color: #fff;
+      font-weight: 600;
+      background: #0b4d6e;
+    }
+
+    hr {
+      border: none;
+      margin: 0;
+      border-bottom: solid 1px #ccc;
+    }
+
+    main {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 24px;
+      gap: 16px;
+      margin: 0 auto;
+      max-width: 760px;
+      justify-content: center;
+    }
+
+    main>h2 {
+      width: 100%;
+      margin: 0;
+      text-align: center;
+    }
+
+    main>a {
+      display: block;
+      border: solid 1px rgb(175, 175, 175);
+      border-radius: 18px;
+      padding: 8px 16px;
+      text-decoration: none;
+      text-transform: capitalize;
+      color: rgb(57, 67, 77);
+    }
+
+    main>a:hover {
+      background-color: rgb(230, 223, 223);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    Sober v2
+  </header>
+  <main id="list"></main>
+  <hr>
+  <main>
+    <a href="./vue.html">vue</a>
+    <a href="./test.html">test</a>
+    <a href="./theme.html">theme builder</a>
+  </main>
+  <script>
+    const components = [
+      {
+        name: '基础',
+        list: [
+          'button',
+          'icon-button',
+          'icon',
+          'floating-action-button',
+          'checkbox',
+          'radio',
+          'progress',
+          'loading',
+          'slider',
+          'switch',
+          'field',
+          'text-field',
+          'rating',
+          'picker',
+          'divider',
+          'avatar',
+          'date-picker',
+          'time-picker',
+          'color-picker'
+        ]
+      },
+      {
+        name: '容器',
+        list: [
+          'button-group',
+          'split-button',
+          'card',
+          'scroll-view',
+          'drawer',
+          'ripple',
+          'collapse',
+          'alert',
+          'skeleton',
+          'chip',
+          'empty'
+        ]
+      },
+      {
+        name: '导航',
+        list: [
+          'appbar',
+          'navigation-bar',
+          'navigation-rail',
+          'tab'
+        ]
+      },
+      {
+        name: '部件',
+        list: [
+          'search',
+          'dialog',
+          'snackbar',
+          'popup',
+          'badge',
+          'pagination',
+          'tooltip',
+        ]
+      },
+      {
+        name: '底层',
+        list: [
+          'base-slider',
+          'base-date',
+          'base-time',
+          'base-color',
+        ]
+      },
+      {
+        name: '数据',
+        list: [
+          'menu',
+          'floating-action-button-menu',
+          'carousel',
+          'list',
+          'grid-list',
+          'table',
+          'time-line',
+          'stepper'
+        ]
+      }
+    ]
+    const list = document.querySelector('#list')
+    for (const item of components) {
+      const title = document.createElement('h2')
+      title.textContent = `${item.name} ${item.list.length}`
+      list.append(title)
+      for (const name of item.list) {
+        const a = document.createElement('a')
+        a.href = `./preview.html?name=${name}`
+        a.textContent = name
+        list.appendChild(a)
+      }
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+.vscode/
+src/
+node_modules/
+.gitattributes
+pnpm-lock.yaml
+tsconfig.json
+dev/
+test/
+docs/

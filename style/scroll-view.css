@@ -1,0 +1,18 @@
+@media (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--s-color-outline-variant, #c0c8cc);
+    border-radius: 3px;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    * {
+      scrollbar-color: var(--s-color-outline-variant, #c0c8cc) transparent;
+    }
+  }
+}

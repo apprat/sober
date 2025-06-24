@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Test</title>
+</head>
+
+<body>
+  <main id="app">
+    <s-text-field label="label" v-model="textRef" type="lines"></s-text-field>
+    {{textRef}}
+    <s-button @click="submit">submit</s-button>
+    <s-text-field label="请输入内容" value="My Namexx" type="line">
+      <s-icon slot="start" name="search"></s-icon>
+      <s-icon-button slot="end">
+        <s-icon name="close"></s-icon>
+      </s-icon-button>
+    </s-text-field>
+  </main>
+  <script src="https://unpkg.com/sober@1.0.6/dist/sober.min.js"></script>
+  <script type="module">
+    import { createApp, ref } from 'https://unpkg.com/vue@3.5.13/dist/vue.esm-browser.prod.js'
+
+    const app = createApp({
+      setup() {
+        const textRef = ref('')
+        const submit = () => {
+          console.log(textRef.value)
+        }
+        return { textRef, submit }
+      }
+    })
+    app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('s-')
+    app.mount('#app')
+  </script>
+</body>
+
+</html>

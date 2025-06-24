@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../../dist/main.js"></script>
+  <link rel="stylesheet" href="../styles/default.css">
+  <script type="module" src="../scripts/default.js"></script>
+</head>
+
+<body>
+  <s-page class="gap">
+    <s-fab>
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="secondary">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tertiary">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tonal-primary">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tonal-secondary">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tonal-tertiary">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <h1>Disabled</h1>
+    <s-fab disabled>
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="secondary" disabled>
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tertiary" disabled>
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tonal-primary" disabled>
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tonal-secondary" disabled>
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tonal-tertiary" disabled>
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <h1>Size</h1>
+    <s-fab size="small">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab size="medium">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab size="large">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <hr>
+    <s-fab>
+      <s-icon name="add" slot="start"></s-icon>
+      提交信息
+      <s-icon name="close" slot="end"></s-icon>
+    </s-fab>
+
+    <hr>
+    <s-fab size="small" variant="tonal-secondary">
+      提交信息
+    </s-fab>
+    <s-fab variant="tertiary">
+      提交信息
+    </s-fab>
+    <s-fab size="large" variant="tonal-tertiary">
+      提交信息
+    </s-fab>
+  </s-page>
+</body>
+
+</html>

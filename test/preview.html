@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width,viewport-fit=cover,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="../dist/main.js"></script>
+  <title>Preview Markdown</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .page {
+      margin: 0 auto;
+      max-width: 1024px;
+      min-height: 100vh;
+      padding: 24px;
+      gap: 16px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+      margin: 0;
+      text-transform: capitalize;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background: #eee;
+      padding: 8px 12px;
+      margin: 0;
+      border-radius: 4px;
+    }
+
+    .preview>.view>* {
+      margin: 6px;
+    }
+
+    .preview>details {
+      margin-top: 16px;
+    }
+
+    .preview>details>pre {
+      border-top: solid 1px #ddd;
+    }
+
+    details>summary {
+      cursor: pointer;
+      background: #eee;
+      padding: 8px 12px;
+      border-radius: 4px;
+    }
+
+    blockquote {
+      border-left: 4px solid #ddd;
+      padding-left: 12px;
+      margin: 0;
+      color: #555;
+      font-style: italic;
+      font-size: 14px;
+    }
+
+    hr {
+      border: none;
+      border-top: solid 1px #ddd;
+      width: -webkit-fill-available;
+    }
+  </style>
+</head>
+
+<body>
+  <s-page class="page"></s-page>
+  <script type="module">
+    const page = document.querySelector('.page')
+    const p = new URLSearchParams(location.search)
+    const name = p.get('name')
+    const f = await fetch(`/docs/zh-cn/${name}.md`)
+    const text = await f.text()
+    page.innerHTML = text
+  </script>
+</body>
+
+</html>

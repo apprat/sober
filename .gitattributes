@@ -1,0 +1,4 @@
+test/* linguist-vendored
+dev/* linguist-vendored
+dist/* linguist-vendored
+docs/* linguist-vendored

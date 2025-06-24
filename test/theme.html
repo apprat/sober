@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ZH-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Theme builder</title>
+  <script type="module" src="../dist/main.js"></script>
+</head>
+
+<body>
+  <s-page>
+    <input type="color" id="inputColor">
+    <hr>
+    <s-button>btn</s-button>
+  </s-page>
+  <script src="https://unpkg.com/sober-theme/dist/sober-theme.min.js"></script>
+  <script>
+    const inputColor = document.querySelector('#inputColor')
+    inputColor.onchange = () => {
+      const color = inputColor.value
+      sober.theme.createScheme(color, { page: document.querySelector('s-page') })
+    }
+  </script>
+</body>
+
+</html>

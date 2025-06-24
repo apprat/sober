@@ -1,0 +1,35 @@
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+}
+
+s-page {
+  max-width: 1440px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+s-page.gap {
+  padding: 16px;
+}
+
+s-page.gap>* {
+  margin: 8px;
+}
+
+s-page hr {
+  margin: 0;
+  border-color: var(--s-color-outline-variant);
+  border-style: solid;
+  border-bottom: none;
+}
+
+:not(:defined) {
+  display: none;
+}

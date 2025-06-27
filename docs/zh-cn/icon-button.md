@@ -142,6 +142,25 @@
 
 ---
 
+使用 `badge` 组件来设置图标按钮的角标。
+
+```html preview
+<s-icon-button variant="filled">
+  <s-icon name="star"></s-icon>
+  <s-badge></s-badge>
+</s-icon-button>
+<s-icon-button variant="tonal"> 
+  <s-icon name="home"></s-icon>
+  <s-badge>6</s-badge>
+</s-icon-button>
+<s-icon-button variant="outlined">
+  <s-icon name="favorite"></s-icon>
+  <s-badge>99</s-badge>
+</s-icon-button>
+```
+
+---
+
 ## 属性
 
 | 名称      | 类型                                           | 默认值   | 同步 | 说明     |

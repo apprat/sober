@@ -54,12 +54,20 @@ await esbuild.build({
 })
 console.log('start bundle')
 await esbuild.build({
-  entryPoints: ['./dev/pro-bundle-mian.js'],
+  entryPoints: ['./dev/pro-bundle-main.js'],
   bundle: true,
   outfile: 'dist/sober.min.js',
   platform: 'browser',
   allowOverwrite: true,
   minify: true,
-  sourcemap: true,
+})
+console.log('start bundle theme')
+await esbuild.build({
+  entryPoints: ['./dev/pro-bundle-theme-main.js'],
+  bundle: true,
+  outfile: 'dist/sober.theme.min.js',
+  platform: 'browser',
+  allowOverwrite: true,
+  minify: true,
 })
 console.log('Build completed.')

@@ -1,5 +1,5 @@
-import { useProps, useElement } from './core/element.js'
-import { Theme } from './core/theme.js'
+import { useProps, useElement } from '../core/element.js'
+import { Theme } from '../core/theme.js'
 
 const name = 's-alert'
 const props = useProps({

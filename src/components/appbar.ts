@@ -1,5 +1,5 @@
-import { supports, useProps, useEvents, useElement } from './core/element.js'
-import { Theme } from './core/theme.js'
+import { supports, useProps, useEvents, useElement } from '../core/element.js'
+import { Theme } from '../core/theme.js'
 
 const name = 's-appbar'
 const props = useProps({})

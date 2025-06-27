@@ -1,6 +1,6 @@
-import { useElement, useProps } from './core/element.js'
-import { Theme } from './core/theme.js'
-import { convertCSSDuration } from './core/utils/CSS.js'
+import { useElement, useProps } from '../core/element.js'
+import { Theme } from '../core/theme.js'
+import { convertCSSDuration } from '../core/utils/CSS.js'
 
 const name = 's-page'
 const props = useProps({

@@ -1,6 +1,6 @@
-import { useElement, useProps } from './core/element.js'
-import { Theme } from './core/theme.js'
-import { buttonStyle, buttonVariant } from './core/style/button.js'
+import { useElement, useProps } from '../core/element.js'
+import { Theme } from '../core/theme.js'
+import { buttonStyle, buttonVariant } from '../core/style/button.js'
 import './ripple.js'
 
 const name = 's-button'
@@ -82,7 +82,7 @@ const style = /*css*/`
   height: 48px;
   gap: 8px;
   font-size: 1rem;
-  padding: 0 20px;
+  padding: 0 22px;
   border-radius: 24px;
   ::slotted(:is(svg, s-icon)){
     width: 24px;
@@ -92,7 +92,7 @@ const style = /*css*/`
   height: 56px;
   gap: 8px;
   font-size: 1.125rem;
-  padding: 0 24px;
+  padding: 0 28px;
   border-radius: 28px;
   ::slotted(:is(svg, s-icon)){
     width: 28px;
@@ -109,10 +109,10 @@ const style = /*css*/`
   width: 20px;
 }
 ::slotted(:is(svg, s-icon)[slot=start]){
-  margin-left: -2px;
+  margin-left: -4px;
 }
 ::slotted(:is(svg, s-icon)[slot=end]){
-  margin-right: -2px;
+  margin-right: -4px;
 }
 :host([variant=elevated][pressed]){
   box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});

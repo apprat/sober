@@ -1,7 +1,7 @@
-import { useElement, useProps } from './core/element.js'
-import { Theme } from './core/theme.js'
+import { useElement, useProps } from '../core/element.js'
+import { Theme } from '../core/theme.js'
+import { buttonStyle, buttonVariant } from '../core/style/button.js'
 import './ripple.js'
-import { buttonStyle, buttonVariant } from './core/style/button.js'
 
 const name = 's-icon-button'
 const props = useProps({
@@ -109,6 +109,11 @@ const style = /*css*/`
 }
 ::slotted(:is(svg, s-icon)){
   flex-shrink: 1;
+}
+::slotted(s-badge){
+  position: absolute;
+  right: 2px;
+  top: 2px; 
 }
 `
 

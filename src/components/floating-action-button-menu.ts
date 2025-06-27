@@ -1,6 +1,6 @@
-import { useProps, useEvents, useElement } from './core/element.js'
-import { buttonStyle } from './core/style/button.js'
-import { Theme } from './core/theme.js'
+import { useProps, useEvents, useElement } from '../core/element.js'
+import { buttonStyle } from '../core/style/button.js'
+import { Theme } from '../core/theme.js'
 import './ripple.js'
 
 const name = 's-fab-menu'

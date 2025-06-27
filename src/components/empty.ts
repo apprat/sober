@@ -1,5 +1,5 @@
-import { useElement } from './core/element.js'
-import { Theme } from './core/theme.js'
+import { useElement } from '../core/element.js'
+import { Theme } from '../core/theme.js'
 
 const name = 's-empty'
 

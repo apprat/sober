@@ -24,8 +24,9 @@
   ],
   "exports": {
     ".": "./dist/main.js",
+    "./theme": "./dist/theme.js",
     "./style/*": "./style/*",
-    "./*": "./dist/*.js"
+    "./*": "./dist/components/*.js"
   },
   "author": "apprat",
   "repository": "apprat/sober",
@@ -36,10 +37,12 @@
     "cssnano": "^7.0.7",
     "esbuild": "^0.25.5",
     "html-minifier": "^4.0.0",
+    "markdown-it": "^14.1.0",
     "postcss": "^8.5.6",
     "postcss-nested": "^7.0.2",
-    "typescript": "^5.8.3",
-    "markdown-it": "^14.1.0"
+    "typescript": "^5.8.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@material/material-color-utilities": "^0.3.0"
+  }
 }

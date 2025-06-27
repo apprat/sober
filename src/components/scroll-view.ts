@@ -1,37 +1,25 @@
-import { useElement } from './core/element.js'
-import { Theme } from './core/theme.js'
+import { useElement, useProps } from '../core/element.js'
+import { scrollbarStyle } from '../core/style/scrollbar.js'
 
-const name = 's-divider'
+const name = 's-scroll-view'
 
 const style = /*css*/`
 :host{
-  display: flex;
-  align-items: center;
-  margin: 0 16px;
-  gap: 8px;
-  font-size: .75rem;
-  color: var(--s-color-outline, ${Theme.colorOutline});
- }
-:host::before,
-:host::after{
-  content: '';
-  flex-grow: 1;
-  border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
-}
-:host(:empty){
-  gap: 0;
+  display: block;
 }
 `
 
 const template = /*html*/`<slot></slot>`
 
-export class Divider extends useElement({ style, template }) { }
+export class ScrollView extends useElement({
+  template, style: [scrollbarStyle, style]
+}) { }
 
-Divider.define(name)
+ScrollView.define(name)
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Divider
+    [name]: ScrollView
   }
   namespace React {
     namespace JSX {
@@ -53,7 +41,7 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes
-    } & Divider
+    } & ScrollView
   }
 }
 //@ts-ignore

@@ -50,6 +50,7 @@
 <style>
   .player-slider{
     height: 6px;
+    color: rgb(35, 163, 15);
     --base-slider-thumb-size: 0px;
   }
   .player-slider:is(:hover, [thumb-end-pressed]){
@@ -57,15 +58,27 @@
   }
   .player-slider::part(track-fill){
     border-radius: 4px 0 0 4px;
-    background-color: rgb(35, 163, 15);
   }
   .player-slider::part(track-end){
     border-radius: 0 4px 4px 0;
     background-color: rgb(35, 163, 15, .2);
   }
-  .player-slider::part(thumb-end){
-    background-color: rgb(35, 163, 15);
-  }
 </style>
 <s-base-slider class="player-slider" mode="single" max="360"></s-base-slider>
 ```
+
+---
+
+## 属性
+
+| 名称        | 类型                           | 默认值     | 同步 | 说明   |
+| ----------- | ------------------------------ | ---------- | ---- | ------ |
+| mode        | range, single, single-reversed | range      | ✔️ | 模式   |
+| variant     | standard, segmented            | standard   | ✔️ | 变体   |
+| orientation | horizontal, vertical           | horizontal | ✔️ | 方向   |
+| disabled    | boolean                        | false      | ✔️ | 禁用的 |
+| step        | number                         | 1          | ✖️ | 间隔   |
+| min         | number                         | 0          | ✖️ | 最小值 |
+| max         | number                         | 100        | ✖️ | 最大值 |
+| start       | number                         | 0          | ✖️ | 开始值 |
+| end         | number                         | 50         | ✖️ | 结束值 |

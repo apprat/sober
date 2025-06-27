@@ -1,44 +1,39 @@
-import { useElement } from './core/element.js'
-import { Theme } from './core/theme.js'
+import { useElement } from '../core/element.js'
+import { Theme } from '../core/theme.js'
 
-const name = 's-badge'
+const name = 's-skeleton'
 
 const style = /*css*/`
 :host{
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 8px;
-  height: 8px;
-  border-radius: 8px;
-  font-size: .625rem;
-  vertical-align: middle;
-  box-sizing: border-box;
-  background: var(--s-color-error, ${Theme.colorError});
-  color: var(--s-color-on-error, ${Theme.colorOnError});
-}
-:host(:not(:empty)) .text{
+  display: block;
   height: 16px;
-  padding: 0 5px;
-  display: flex;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  background: inherit;
-  color: inherit;
-  box-shadow: inherit;
   border-radius: 8px;
+  animation-name: skeleton;
+  animation-iteration-count: infinite;
+  animation-duration: calc(var(--s-motion-duration-extra-long4, ${Theme.motionDurationExtraLong4}) * 2);
+  animation-timing-function: var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
+  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
+}
+@keyframes skeleton{
+  0%{
+    opacity: .5;
+  }
+  50%{
+    opacity: 1;
+  }
+  100%{
+    opacity: .5;
+  }
 }
 `
-const template = /*html*/`<slot class="text" part="text"></slot>`
 
-export class Badge extends useElement({ style, template }) { }
+export class Skeleton extends useElement({ style }) { }
 
-Badge.define(name)
+Skeleton.define(name)
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Badge
+    [name]: Skeleton
   }
   namespace React {
     namespace JSX {
@@ -60,9 +55,10 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes
-    } & Badge
+    } & Skeleton
   }
 }
+
 //@ts-ignore
 declare module 'vue/jsx-runtime' {
   namespace JSX {

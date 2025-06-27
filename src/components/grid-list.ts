@@ -1,59 +1,70 @@
-import { useProps, useEvents, useElement } from './core/element.js'
-import { Select } from './core/utils/select.js'
-import { Theme } from './core/theme.js'
+import { useProps, useEvents, useElement } from '../core/element.js'
+import { Theme } from '../core/theme.js'
 
-const name = 's-tab'
-const itemName = 's-tab-item'
+const name = 's-grid-list'
 const props = useProps({
-  value: ''
-})
-const itemProps = useProps({
-  value: '',
-  selected: false
+  mode: ['standard', 'masonry']
 })
 
 const style = /*css*/`
 :host{
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  background: #eee;
+  position: relative;
+  --grid-list-column-count: 4;
+  --grid-list-column-gap: 8px;
+}
+::slotted(s-grid-list-item){
+  width: calc(100% / var(--grid-list-column-count));
+  position: absolute;
 }
 `
 
-const itemStyle = /*css*/` 
-`
+const template = /*html*/`<slot></slot>`
 
-const template = /*html*/`
-<div class="layout">
-  <slot></slot>
-</div>
-`
-
-const itemTemplate = /*html*/`
-<div class="item">
-  <slot></slot>
-</div>
-`
-
-export class Tab extends useElement({
+export class GridList extends useElement({
   style, props, template,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
-    const select = new Select(this, slot, TabItem)
+    slot.addEventListener('slotchange', () => {
+      const items = slot.assignedElements() as (GridListItem | HTMLElement)[]
+      console.log('slotchange', items)
+    })
   }
 }) { }
 
-export class TabItem extends useElement({
+
+const itemName = 's-grid-list-item'
+const itemProps = useProps({
+
+})
+const itemStyle = /*css*/`
+:host{
+  display: flex;
+}
+`
+const itemTemplate = /*html*/`
+<slot>
+  Grid List Item
+</slot>
+`
+
+export class GridListItem extends useElement({
   style: itemStyle, props: itemProps, template: itemTemplate,
   setup(shadowRoot) {
+    this.style.height = `${Math.floor(Math.random() * (300 - 80 + 1)) + 80}px`
+    this.style.backgroundColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')
   }
 }) { }
 
-Tab.define(name)
-TabItem.define(itemName)
+GridList.define(name)
+GridListItem.define(itemName)
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Tab
-    [itemName]: TabItem
+    [name]: GridList
+    [itemName]: GridListItem
   }
   namespace React {
     namespace JSX {
@@ -77,13 +88,10 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props>
-    } & Tab
+    } & GridList
     [itemName]: new () => {
-      /**
-      * @deprecated
-      **/
       $props: HTMLAttributes & Partial<typeof itemProps>
-    } & TabItem
+    } & GridListItem
   }
 }
 //@ts-ignore

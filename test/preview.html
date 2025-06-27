@@ -12,7 +12,7 @@
       margin: 0;
     }
 
-    .page {
+    .markdown {
       margin: 0 auto;
       max-width: 1024px;
       min-height: 100vh;
@@ -104,17 +104,40 @@
       border-top: solid 1px var(--s-color-surface-variant);
     }
   </style>
+  <style>
+    .toggle-theme {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+    }
+  </style>
 </head>
 
 <body>
-  <s-page class="page"></s-page>
+  <s-page class="page">
+    <div class="markdown"></div>
+    <s-tooltip class="toggle-theme" onclick="toggleTheme(this)">
+      <s-fab slot="trigger">
+        <s-icon name="dark_mode"></s-icon>
+      </s-fab>
+      切换主题
+    </s-tooltip>
+  </s-page>
   <script type="module">
+    const markdown = document.querySelector('.markdown')
     const page = document.querySelector('.page')
-    const p = new URLSearchParams(location.search)
-    const name = p.get('name')
-    const f = await fetch(`/docs/zh-cn/${name}.md`)
-    const text = await f.text()
-    page.innerHTML = text
+    const init = async () => {
+      const p = new URLSearchParams(location.search)
+      const name = p.get('name')
+      const f = await fetch(`/docs/zh-cn/${name}.md`)
+      const text = await f.text()
+      markdown.innerHTML = text
+    }
+    window.toggleTheme = (el) => {
+      const theme = page.theme
+      page.toggle(theme === 'dark' ? 'light' : 'dark', el)
+    }
+    init()
   </script>
 </body>
 

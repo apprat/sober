@@ -1,5 +1,5 @@
-import { useElement, useProps } from './core/element.js'
-import { Theme } from './core/theme.js'
+import { useElement, useProps } from '../core/element.js'
+import { Theme } from '../core/theme.js'
 import './ripple.js'
 
 const name = 's-checkbox'

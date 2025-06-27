@@ -1,5 +1,5 @@
-import { useProps, useEvents, useElement, useThrottle, useThrottleDelay } from './core/element.js'
-import { Theme } from './core/theme.js'
+import { useProps, useEvents, useElement, useThrottle, useThrottleDelay } from '../core/element.js'
+import { Theme } from '../core/theme.js'
 
 const name = 's-list'
 const props = useProps({

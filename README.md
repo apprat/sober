@@ -6,62 +6,74 @@
 
 Sober 是参考 Google M3 Expressive 设计规范的超级轻量级 Web Component UI 组件库。  
 
-Sober is an ultra-lightweight Web Component UI library designed with reference to Google's M3 Expressive guidelines.
+Sober 支持所有前端框架，如 Vue、React、Svelte 等，并且专门为 Vue 框架做了适配支持模版和 JSX 的补全以及使用 `v-model` 等语法。
 
-Sober 支持所有前端框架，如 Vue、React、Svelte 等，并且专门为 Vue 框架做了适配支持模版和 JSX 的补全以及使用 `v-model` 等语法。  
+(Sober is an ultra-lightweight Web Component UI library designed with reference to Google's M3 Expressive guidelines.)
 
-Sober supports all front-end frameworks such as Vue, React, Svelte, and more. It is specifically tailored for the Vue framework, providing support for template and JSX completion, as well as the use of syntax like `v-model`.
+(Sober supports all front-end frameworks such as Vue, React, Svelte, and more. It is specifically tailored for the Vue framework, providing support for template and JSX completion, as well as the use of syntax like `v-model`.)
 
-## NPM Installation
+## 安装 (Installation)
+
+如果你使用构建工具，如 view、webpack、rollup 等，强烈建议你使用 npm/pnpm 等包管理器安装。
+
+(If you are using build tools such as Vite, Webpack, Rollup, etc., it is highly recommended to install them using package managers like npm/pnpm.)
 
 ```shell
 npm install sober
 ```
 
-```js
-import * as sober from 'sober'
-```
+如果直接在浏览器浏览器中使用，建议使用 CDN 引入压缩构建版本。
 
-## CDN
+(If using it directly in the browser, it is recommended to load the minified build version via a CDN.)
 
 ```html
 <script src="https://unpkg.com/sober/dist/sober.min.js"></script>
 <script>
-  console.log(sober)
+  console.log(sober) // {Button, Icon, IconButton, ... }
 </script>
 ```
 
-## Usage
+## 使用 (Usage)
 
 ```html
 <s-button> Hello Sober </s-button>
 ```
 
-动态创建组件  
-
-Dynamic creation of components
-
-```js
-const button = document.createElement('s-button')
-
-button.textContent = 'hello'
-button.type = 'outlined'
-document.body.appendChild(button)
+```jsx
+const App = () => {
+  return <s-button> Hello Sober </s-button>
+}
 ```
 
-## 文档 Documentation
+## 文档 (Documentation)
 
 在 [soberjs.com](https://soberjs.com) 上查看 **Sober** 的完整文档。  
 
-See Sober's full documentation on [soberjs.com](https://soberjs.com)
+(See Sober's full documentation on [soberjs.com](https://soberjs.com))
 
-## 兼容性 Browser compatibility
+## 主题生成器 (Theme Generator)
+
+如果你需要主题生成器，请使用以下方式加载，出于体积考虑，该模块没有捆绑到 Sober 中。
+
+(If you need the theme generator, please load it using the following method. Due to size considerations, this module is not bundled with Sober.)
+
+```js
+import theme from 'sober/theme'
+```
+
+```html
+<script src="https://unpkg.com/sober/dist/sober.theme.min.js"></script>
+```
+
+## 兼容性 (Browser compatibility)
 
 | 浏览器 Browser     | 支持 Support |
 | ----------------- | ------------ |
 | Chromium (Chrome) | 88+          |
 | Gecko (Firefox)   | 78+          |
 | Webkit (Safari)   | 14+          |
+
+---
 
 ## v2.0-alpha
 
@@ -94,7 +106,7 @@ See Sober's full documentation on [soberjs.com](https://soberjs.com)
 
 ### 运行时属性值约束
 
-在旧版本中，例如属性值约束为：`filled | outlined | text` ，但该约束仅是 TypeScript 的类型约束，在运行时是无效的，在新版本中该约束在运行时也会校验。
+在旧版本中，例如属性值约束为：`filled | outlined | text` ，但该约束仅是 TypeScript 的类型约束，在运行时是无效的（即你可以赋值一个非法的值），在新版本中该约束在运行时也会校验，当值不合法时转为默认值。
 
 ```html
 <s-button></s-button>
@@ -107,12 +119,16 @@ See Sober's full documentation on [soberjs.com](https://soberjs.com)
 </script>
 ```
 
+### 组件多选支持
+
+大多数组件，如 `picker`、`navigation-bar`、`navigation-rail`、等，现在都支持多选。
+
 ### 支持键盘操作
 
 1. 使用 Tab 来切换焦点。
-2. 使用 Enter 来触发组件的点击事件。
+2. 使用 空格/Enter 来触发组件的点击事件。
 3. 使用⬆️⬇️⬅️➡️方向键来切换选中或调整值，如导航栏，拖动条，单选按钮等。
 
-### 其他组件更新
+### 其他组件功能更新
 
 大多数组件得到更新，例如 `slider` 拖动条已支持范围选择、竖向、反向等。

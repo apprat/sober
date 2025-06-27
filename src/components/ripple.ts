@@ -1,7 +1,7 @@
-import { useElement, useProps } from './core/element.js'
-import { device } from './core/device.js'
-import { convertCSSDuration } from './core/utils/CSS.js'
-import { Theme } from './core/theme.js'
+import { useElement, useProps } from '../core/element.js'
+import { device } from '../core/device.js'
+import { convertCSSDuration } from '../core/utils/CSS.js'
+import { Theme } from '../core/theme.js'
 
 const name = 's-ripple'
 const props = useProps({

@@ -1,4 +1,4 @@
-import { useProps, useEvents, useElement } from './core/element.js'
+import { useProps, useEvents, useElement } from '../core/element.js'
 import { BaseSlider } from './base-slider.js'
 
 const name = 's-slider'

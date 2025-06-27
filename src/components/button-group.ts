@@ -1,5 +1,5 @@
-import { useProps, useEvents, useElement } from './core/element.js'
-import { Theme } from './core/theme.js'
+import { useProps, useEvents, useElement } from '../core/element.js'
+import { Theme } from '../core/theme.js'
 import './button.js'
 
 const name = 's-button-group'

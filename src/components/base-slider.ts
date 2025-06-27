@@ -1,6 +1,6 @@
-import { useElement, useProps, useThrottle } from './core/element.js'
-import { Theme } from './core/theme.js'
-import { device } from './core/device.js'
+import { useElement, useProps, useThrottle } from '../core/element.js'
+import { Theme } from '../core/theme.js'
+import { device } from '../core/device.js'
 import './ripple.js'
 
 const name = 's-base-slider'

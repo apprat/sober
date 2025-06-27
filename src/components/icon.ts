@@ -1,4 +1,4 @@
-import { useElement, useProps } from './core/element.js'
+import { useElement, useProps } from '../core/element.js'
 
 interface SVGData {
   [key: string]: string | { name: string, angle: number }

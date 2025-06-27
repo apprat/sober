@@ -4,7 +4,9 @@ import './button.js'
 
 const name = 's-button-group'
 const props = useProps({
-
+  mode: ['standard', 'connected'],
+  size: ['medium', 'small', 'extra-small', 'large', 'extra-large'],
+  value: '',
 })
 
 const style = /*css*/`

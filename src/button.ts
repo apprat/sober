@@ -53,6 +53,10 @@ const style = /*css*/`
   background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
   color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
 }
+:host([variant=text][checkable=true][checked=true]){
+  background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
+  color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
+}
 /*Size*/
 :host([size=extra-small]){
   height: 32px;

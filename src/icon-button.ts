@@ -7,7 +7,7 @@ const name = 's-icon-button'
 const props = useProps({
   variant: ['standard', 'filled', 'tonal', 'outlined'],
   size: ['medium', 'small', 'extra-small', 'large', 'extra-large'],
-  width: ['default', 'narrow', 'wide'],
+  width: ['default', 'wide', 'narrow'],
   disabled: false,
   checkable: false,
   checked: false,
@@ -15,10 +15,9 @@ const props = useProps({
 
 const style = /*css*/`
 :host{
-  border-radius: 50%;
+  border-radius: 20px;
   width: 40px;
-  aspect-ratio: 1;
-  -webkit-aspect-ratio: 1;
+  height: 40px;
   transition-property: all;
   color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
   --icon-button-icon-transform: none;
@@ -34,7 +33,8 @@ const style = /*css*/`
   border-radius: 12px;
 }
 :host(:not([variant])[checkable=true][checked=true]){
-  color: var(--s-color-primary,${Theme.colorPrimary});
+  background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
+  color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
 }
 :host([variant=filled][checkable=true]:not([checked=true])){
   background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
@@ -52,25 +52,63 @@ const style = /*css*/`
 /*Size*/
 :host([size=extra-small]){
   width: 32px;
+  height: 32px;
+  border-radius: 16px;
   ::slotted(:is(svg, s-icon)){
     width: 18px;
   }
 }
 :host([size=small]){
   width: 36px;
+  height: 36px;
+  border-radius: 18px;
   ::slotted(:is(svg, s-icon)){
     width: 20px;
   }
 }
 :host([size=large]){
   width: 48px;
+  height: 48px;
+  border-radius: 24px;
 }
 :host([size=extra-large]){
   width: 56px;
+  height: 56px;
+  border-radius: 28px;
+}
+/*Width*/
+:host([width=wide]){
+  width: 52px;
+}
+:host([width=wide][size=extra-small]){
+  width: 40px;
+}
+:host([width=wide][size=small]){
+  width: 44px;
+}
+:host([width=wide][size=large]){
+  width: 64px;
+}
+:host([width=wide][size=extra-large]){
+  width: 72px;
+}
+:host([width=narrow]){
+  width: 32px;
+}
+:host([width=narrow][size=extra-small]){
+  width: 28px;
+}
+:host([width=narrow][size=small]){
+  width: 30px;
+}
+:host([width=narrow][size=large]){
+  width: 40px;
+}
+:host([width=narrow][size=extra-large]){
+  width: 48px;
 }
 ::slotted(:is(svg, s-icon)){
   flex-shrink: 1;
-  width: 24px;
 }
 `
 

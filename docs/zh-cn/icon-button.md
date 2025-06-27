@@ -1,19 +1,26 @@
 # icon-button
 
-基础按钮，你可以设置 `variant` 来设置不同的变体：`filled、tonal、outlined`。
+基础图标按钮。
 
 ```html preview
 <s-icon-button> 
-  <s-icon name="home"></s-icon>
+  <s-icon name="star"></s-icon>
 </s-icon-button>
+```
+
+---
+
+设置 `variant` 来设置不同的变体：`filled、tonal、outlined`。
+
+```html preview
 <s-icon-button variant="filled">
-  <s-icon name="home"></s-icon>
+  <s-icon name="star"></s-icon>
 </s-icon-button>
 <s-icon-button variant="tonal"> 
   <s-icon name="home"></s-icon>
 </s-icon-button>
 <s-icon-button variant="outlined">
-  <s-icon name="home"></s-icon>
+  <s-icon name="favorite"></s-icon>
 </s-icon-button>
 ```
 
@@ -76,3 +83,72 @@
   <s-icon name="home"></s-icon>
 </s-icon-button>
 ```
+
+---
+
+设置 `width` 属性来设置更宽或者更窄的按钮。
+
+```html preview
+<s-icon-button variant="filled" width="wide" size="extra-small">
+  <s-icon name="star"></s-icon>
+</s-icon-button>
+<s-icon-button variant="tonal" size="extra-small"> 
+  <s-icon name="star"></s-icon>
+</s-icon-button>
+<s-icon-button variant="outlined" width="narrow" size="extra-small">
+  <s-icon name="star"></s-icon>
+</s-icon-button><br>
+
+<s-icon-button variant="filled" width="wide" size="small">
+  <s-icon name="star"></s-icon>
+</s-icon-button>
+<s-icon-button variant="tonal" size="small"> 
+  <s-icon name="star"></s-icon>
+</s-icon-button>
+<s-icon-button variant="outlined" width="narrow" size="small">
+  <s-icon name="star"></s-icon>
+</s-icon-button><br>
+
+<s-icon-button variant="filled" width="wide">
+  <s-icon name="star"></s-icon>
+</s-icon-button>
+<s-icon-button variant="tonal"> 
+  <s-icon name="star"></s-icon>
+</s-icon-button>
+<s-icon-button variant="outlined" width="narrow">
+  <s-icon name="star"></s-icon>
+</s-icon-button><br>
+
+<s-icon-button variant="filled" width="wide" size="large">
+  <s-icon name="star"></s-icon>
+</s-icon-button>
+<s-icon-button variant="tonal" size="large"> 
+  <s-icon name="star"></s-icon>
+</s-icon-button>
+<s-icon-button variant="outlined" width="narrow" size="large">
+  <s-icon name="star"></s-icon>
+</s-icon-button><br>
+
+<s-icon-button variant="filled" width="wide" size="extra-large">
+  <s-icon name="star"></s-icon>
+</s-icon-button>
+<s-icon-button variant="tonal" size="extra-large"> 
+  <s-icon name="star"></s-icon>
+</s-icon-button>
+<s-icon-button variant="outlined" width="narrow" size="extra-large">
+  <s-icon name="star"></s-icon>
+</s-icon-button>
+```
+
+---
+
+## 属性
+
+| 名称      | 类型                                           | 默认值   | 同步 | 说明     |
+| --------- | ---------------------------------------------- | -------- | ---- | -------- |
+| variant   | standard, filled, tonal, outlined            | standard | ✔️ | 变体     |
+| size      | extra-small, small, medium, large, extra-large | medium   | ✔️ | 尺寸     |
+| width     | default, narrow, wide                          | default  | ✔️ | 宽度     |
+| disabled  | boolean                                        | false    | ✔️ | 禁用的   |
+| checkable | boolean                                        | false    | ✔️ | 启用选中 |
+| checked   | boolean                                        | false    | ✖️ | 选中的   |

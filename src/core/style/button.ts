@@ -26,7 +26,7 @@ export const buttonStyle = /*css*/`
   fill: currentColor;
   color: currentColor;
   flex-shrink: 0;
-  width: 20px;
+  width: 24px;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
 }

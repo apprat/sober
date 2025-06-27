@@ -21,6 +21,7 @@
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
+      box-shadow: var(--s-elevation-level1);
     }
 
     h1,
@@ -28,22 +29,71 @@
     h3,
     h4,
     h5,
-    h6,
-    p {
+    h6 {
       margin: 0;
       text-transform: capitalize;
     }
 
+    p {
+      margin: 0;
+      line-height: 2;
+    }
+
     pre {
       white-space: pre-wrap;
-      background: #eee;
+      background: var(--s-color-surface-container-high);
       padding: 8px 12px;
       margin: 0;
       border-radius: 4px;
     }
 
+    details>summary {
+      cursor: pointer;
+      background: var(--s-color-surface-container-high);
+      padding: 8px 12px;
+      border-radius: 4px;
+    }
+
+    blockquote {
+      border-left: 4px solid var(--s-color-on-surface-variant);
+      padding-left: 12px;
+      margin: 0;
+      color: var(--s-color-on-surface-variant);
+      font-style: italic;
+      font-size: 14px;
+    }
+
+    hr {
+      border: none;
+      border-top: solid 1px var(--s-color-surface-variant);
+      width: -webkit-fill-available;
+    }
+
+    code {
+      background: rgba(0, 0, 0, 0.08);
+      padding: 3px 5px;
+      border-radius: 4px;
+    }
+
+    table,
+    td,
+    th {
+      border: solid 1px var(--s-color-surface-variant);
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    td,
+    th {
+      padding: 8px 12px;
+    }
+
+    .preview>.view {
+      text-align: center;
+    }
+
     .preview>.view>* {
-      margin: 6px;
+      margin: 4px;
     }
 
     .preview>details {
@@ -51,29 +101,7 @@
     }
 
     .preview>details>pre {
-      border-top: solid 1px #ddd;
-    }
-
-    details>summary {
-      cursor: pointer;
-      background: #eee;
-      padding: 8px 12px;
-      border-radius: 4px;
-    }
-
-    blockquote {
-      border-left: 4px solid #ddd;
-      padding-left: 12px;
-      margin: 0;
-      color: #555;
-      font-style: italic;
-      font-size: 14px;
-    }
-
-    hr {
-      border: none;
-      border-top: solid 1px #ddd;
-      width: -webkit-fill-available;
+      border-top: solid 1px var(--s-color-surface-variant);
     }
   </style>
 </head>

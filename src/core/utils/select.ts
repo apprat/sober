@@ -1,5 +1,6 @@
 interface Base extends HTMLElement {
   value: string
+  multiple: boolean
 }
 
 interface BaseItem extends HTMLElement {

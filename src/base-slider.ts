@@ -21,13 +21,14 @@ const style = /*css*/`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 24px;
+  height: 8px;
   cursor: pointer;
   position: relative;
   color: var(--s-color-primary, ${Theme.colorPrimary});
   --base-slider-gap: 3px;
-  --base-slider-thumb-width: 24px;
-  --base-slider-thumb-height: 24px;
+  --base-slider-thumb-size: 16px;
+  --base-slider-thumb-width: var(--base-slider-thumb-size);
+  --base-slider-thumb-height: var(--base-slider-thumb-size);
 }
 :host([disabled=true]){
   pointer-events: none !important;
@@ -35,18 +36,18 @@ const style = /*css*/`
 slot:is([name=track-start], [name=track-fill], [name=track-end]){
   display: flex;
   background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
-  border-radius: 8px;
-  height: 50%;
+  border-radius: 4px;
+  height: 100%;
   position: absolute;
   left: 0;
-  --base-slider-thumb-size: var(--base-slider-thumb-width);
-  --base-slider-sum: calc(var(--base-slider-value) * 1% + var(--base-slider-thumb-size) / 2 - var(--base-slider-thumb-size) / 100 * var(--base-slider-value));
-  width: var(--base-slider-sum);
+  --s-private-thumb-size: var(--base-slider-thumb-width);
+  --s-private-sum: calc(var(--s-private-value) * 1% + var(--s-private-thumb-size) / 2 - var(--s-private-thumb-size) / 100 * var(--s-private-value));
+  width: var(--s-private-sum);
 }
 slot[name=track-fill]{
-  --base-slider-size: calc(var(--base-slider-value-size) * 1% - (var(--base-slider-thumb-size) / 100 * var(--base-slider-value-size)));
-  width: var(--base-slider-size);
-  left: var(--base-slider-sum);
+  --s-private-size: calc(var(--s-private-value-size) * 1% - (var(--s-private-thumb-size) / 100 * var(--s-private-value-size)));
+  width: var(--s-private-size);
+  left: var(--s-private-sum);
   background: currentColor;
 }
 slot[name=track-end]{
@@ -61,21 +62,40 @@ slot:is([name=thumb-start], [name=thumb-end]){
   height: var(--base-slider-thumb-height);
   flex-shrink: 0;
   position: absolute;
-  left: calc(var(--base-slider-value) * 1%);
-  transform: translateX(calc(var(--base-slider-value) * -1%));
+  left: calc(var(--s-private-value) * 1%);
+  transform: translateX(calc(var(--s-private-value) * -1%));
+  &::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    opacity: 0;
+    background: currentColor;
+    transform: scale(1);
+    transition-property: transform, opacity;
+    transition-timing-function: var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
+    transition-duration: var(--s-motion-duration-short4, ${Theme.motionDurationShort4});
+  }
+}
+
+:host(:is([thumb-start-hovered], [thumb-start-pressed])) slot[name=thumb-start]::before,
+:host(:is([thumb-end-hovered], [thumb-end-pressed])) slot[name=thumb-end]::before{
+  transform: scale(2);
+  opacity: .2;
 }
 :host([variant=segmented]){
   slot:is([name=track-start], [name=track-end]){
-    --base-slider-sum: calc(var(--base-slider-value) * 1% - (var(--base-slider-thumb-size) / 100 * var(--base-slider-value)) - var(--base-slider-gap));
+    --s-private-sum: calc(var(--s-private-value) * 1% - (var(--s-private-thumb-size) / 100 * var(--s-private-value)) - var(--base-slider-gap));
   }
   slot[name=track-fill]{
-    --base-slider-size: calc(var(--base-slider-value-size) * 1% - (var(--base-slider-thumb-size) / 100 * var(--base-slider-value-size)) - var(--base-slider-gap) * 2 - var(--base-slider-thumb-size));
-    --base-slider-sum: calc(var(--base-slider-value) * 1% + (var(--base-slider-thumb-size) - (var(--base-slider-thumb-size) / 100 * var(--base-slider-value))) + var(--base-slider-gap));
+    --s-private-size: calc(var(--s-private-value-size) * 1% - (var(--s-private-thumb-size) / 100 * var(--s-private-value-size)) - var(--base-slider-gap) * 2 - var(--s-private-thumb-size));
+    --s-private-sum: calc(var(--s-private-value) * 1% + (var(--s-private-thumb-size) - (var(--s-private-thumb-size) / 100 * var(--s-private-value))) + var(--base-slider-gap));
   }
 }
 :host([variant=segmented]:is([mode=single], [mode=single-reversed])){
   slot[name=track-fill]{
-    --base-slider-size: calc(var(--base-slider-value-size) * 1% - (var(--base-slider-thumb-size) / 100 * var(--base-slider-value-size)) - var(--base-slider-gap));
+    --s-private-size: calc(var(--s-private-value-size) * 1% - (var(--s-private-thumb-size) / 100 * var(--s-private-value-size)) - var(--base-slider-gap));
   }
 }
 :host(:is([mode=single], [mode=single-reversed])){
@@ -83,14 +103,14 @@ slot:is([name=thumb-start], [name=thumb-end]){
     display: none;
   }
   slot[name=track-fill]{
-    --base-slider-size: calc(var(--base-slider-value-size) * 1% + var(--base-slider-thumb-size) / 2 - var(--base-slider-thumb-size) / 100 * var(--base-slider-value-size));
-    --base-slider-sum: 0;
+    --s-private-size: calc(var(--s-private-value-size) * 1% + var(--s-private-thumb-size) / 2 - var(--s-private-thumb-size) / 100 * var(--s-private-value-size));
+    --s-private-sum: 0;
   }
 }
 :host([mode=single-reversed]){
   slot[name=track-fill]{
     left: auto;
-    right: var(--base-slider-sum);
+    right: var(--s-private-sum);
   }
   slot[name=track-end]{
     left: 0;
@@ -98,25 +118,25 @@ slot:is([name=thumb-start], [name=thumb-end]){
   }
   slot[name=thumb-end]{
     left: auto;
-    right: calc(var(--base-slider-value) * 1%);
-    transform: translateX(calc(var(--base-slider-value) * 1%));
+    right: calc(var(--s-private-value) * 1%);
+    transform: translateX(calc(var(--s-private-value) * 1%));
   }
 }
 :host([orientation=vertical]){
-  width: 16px;
+  width: 8px;
   height: 300px;
   display: inline-flex;
   vertical-align: middle;
   slot:is([name=track-start], [name=track-fill], [name=track-end]){
-    width: 50%;
+    width: 100%;
     left: auto;
     bottom: 0;
-    height: var(--base-slider-sum);
-    --base-slider-thumb-size: var(--base-slider-thumb-height);
+    height: var(--s-private-sum);
+    --s-private-thumb-size: var(--base-slider-thumb-height);
   }
   slot[name=track-fill]{
-    bottom: var(--base-slider-sum);
-    height: var(--base-slider-size);
+    bottom: var(--s-private-sum);
+    height: var(--s-private-size);
   }
   slot[name=track-end]{
     inset: auto;
@@ -124,19 +144,19 @@ slot:is([name=thumb-start], [name=thumb-end]){
   }
   slot:is([name=thumb-start], [name=thumb-end]){
     left: auto;
-    bottom: calc(var(--base-slider-value) * 1%);
-    transform: translateY(calc(var(--base-slider-value) * 1%));
+    bottom: calc(var(--s-private-value) * 1%);
+    transform: translateY(calc(var(--s-private-value) * 1%));
   }
 }
 :host([orientation=vertical][mode=single-reversed]){
   slot:is([name=thumb-start], [name=thumb-end]){
     right: auto;
-    top: calc(var(--base-slider-value) * 1%);
-    transform: translateY(calc(var(--base-slider-value) * -1%));
+    top: calc(var(--s-private-value) * 1%);
+    transform: translateY(calc(var(--s-private-value) * -1%));
   }
   slot[name=track-fill]{
     right: auto;
-    top: var(--base-slider-sum);
+    top: var(--s-private-sum);
   }
   slot[name=track-end]{
     inset: auto;
@@ -190,7 +210,7 @@ export class BaseSlider extends useElement({
       const start = findClosestStep(getPercent(this.start), this.step / this.max * 100, 100)
       const end = findClosestStep(getPercent(this.end), this.step / this.max * 100, 100)
       const [first, last] = start < end ? [start, end] : [end, start]
-      const name = '--base-slider-value'
+      const name = '--s-private-value'
       trackStartSlot.style.setProperty(name, `${first}`)
       trackEndSlot.style.setProperty(name, `${100 - last}`)
       trackFillSlot.style.setProperty(`${name}-size`, `${last - first}`)

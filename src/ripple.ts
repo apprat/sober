@@ -118,7 +118,7 @@ export class Ripple extends useElement({
     const down = async (event: PointerEvent) => {
       if (event.button !== 0) return
       const data: { timer?: number, upper?: boolean } = {}
-      if (event.pointerType === 'mouse') {
+      if (event.pointerType !== 'touch') {
         document.addEventListener('pointerup', run(event), { once: true })
         return
       }

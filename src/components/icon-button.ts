@@ -3,7 +3,6 @@ import { Theme } from '../core/theme.js'
 import { buttonStyle, buttonVariant } from '../core/style/button.js'
 import './ripple.js'
 
-const name = 's-icon-button'
 const props = useProps({
   variant: ['standard', 'filled', 'tonal', 'outlined'],
   size: ['medium', 'small', 'extra-small', 'large', 'extra-large'],
@@ -123,7 +122,10 @@ const template = /*html*/`
 `
 
 export class IconButton extends useElement({
-  props, template, focused: true, style: [buttonStyle, buttonVariant, style],
+  name: 's-icon-button',
+  style: [buttonStyle, buttonVariant, style],
+  focused: true,
+  props, template,
   setup() {
     this.addEventListener('click', () => {
       if (!this.checkable || !this.dispatchEvent(new Event('change', { cancelable: true, bubbles: true }))) return
@@ -132,17 +134,15 @@ export class IconButton extends useElement({
   }
 }) { }
 
-IconButton.define(name)
-
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: IconButton
+    [IconButton.tagName]: IconButton
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [IconButton.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -153,7 +153,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [IconButton.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -166,7 +166,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [IconButton.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -176,7 +176,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [IconButton.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -186,7 +186,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [IconButton.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

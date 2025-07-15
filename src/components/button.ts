@@ -1,9 +1,7 @@
 import { useElement, useProps } from '../core/element.js'
 import { Theme } from '../core/theme.js'
 import { buttonStyle, buttonVariant } from '../core/style/button.js'
-import './ripple.js'
 
-const name = 's-button'
 const props = useProps({
   variant: ['filled', 'elevated', 'tonal', 'outlined', 'text'],
   size: ['medium', 'small', 'extra-small', 'large', 'extra-large'],
@@ -32,6 +30,9 @@ const style = /*css*/`
   color: var(--s-color-primary, ${Theme.colorPrimary});
   box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
 }
+:host([variant=elevated][pressed]){
+  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
+}
 :host([variant=text]){
   color: var(--s-color-primary, ${Theme.colorPrimary});
 }
@@ -56,6 +57,10 @@ const style = /*css*/`
 :host([variant=text][checkable=true][checked=true]){
   background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
   color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
+}
+:host([checkable=true][checked=true]:not([pressed])),
+:host([checkable=true][pressed]:not([checked=true])){
+  border-radius: 12px;
 }
 /*Size*/
 :host([size=extra-small]){
@@ -114,10 +119,6 @@ const style = /*css*/`
 ::slotted(:is(svg, s-icon)[slot=end]){
   margin-right: -4px;
 }
-:host([variant=elevated][pressed]){
-  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
-}
-
 `
 
 const template = /*html*/`
@@ -128,7 +129,10 @@ const template = /*html*/`
 `
 
 export class Button extends useElement({
-  props, template, focused: true, style: [buttonStyle, buttonVariant, style],
+  name: 's-button',
+  style: [buttonStyle, buttonVariant, style],
+  focused: true,
+  props, template,
   setup() {
     this.addEventListener('click', () => {
       if (!this.checkable || !this.dispatchEvent(new Event('change', { cancelable: true, bubbles: true }))) return
@@ -137,17 +141,15 @@ export class Button extends useElement({
   }
 }) { }
 
-Button.define(name)
-
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Button
+    [Button.tagName]: Button
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [Button.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -158,7 +160,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Button.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -171,7 +173,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [Button.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -181,7 +183,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Button.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -191,7 +193,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Button.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

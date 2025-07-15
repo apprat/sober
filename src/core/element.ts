@@ -26,7 +26,7 @@ const setStyle = (shadowRoot: ShadowRoot, cssStr: string[]) => {
 }
 
 //注册Props
-type PropsMeta = { [key: string]: { to: (v: any) => Prop, def: Prop, sync: boolean } }
+type PropsMeta = { [key: string]: { to: (v: any) => Prop, capitalize: string, def: Prop, sync: boolean } }
 export const useProps = <const T extends { [key: string]: Prop | string[] } = {}>(options: T): {
   -readonly [K in keyof T as K extends `$${infer NK}` ? NK : K]
   : T[K] extends string[] ? T[K][number]
@@ -52,6 +52,7 @@ export const useProps = <const T extends { [key: string]: Prop | string[] } = {}
     meta[state.key] = {
       sync: state.sync,
       def: value,
+      capitalize: state.key.charAt(0).toUpperCase() + state.key.slice(1),
       to: (v) => {
         switch (typeof value) {
           case 'string':
@@ -77,27 +78,34 @@ export const useEvents = <T extends { [key: string]: typeof Event | typeof Custo
   return options as never
 }
 
+type Capitalize<S extends string> = S extends `${infer First}${infer Rest}` ? `${Uppercase<First>}${Rest}` : S
+type Merge<A, B, C> = A & B & { [K in keyof C]: C[K] }
+
 //组件参数
 type ComponentOptions<
+  N extends string,
   Props extends { [key: string]: Prop } = {},
   Expose extends { [key: string]: any } = {},
   Events extends { [key: string]: Event | CustomEvent } = {},
   Methods extends { [key: string]: any } = {}
 > = {
+  name: N
   style?: string | string[]
   props?: Props
   events?: Events
   methods?: Methods
   template?: string
   focused?: boolean
-  setup?: (this: Props & Methods & HTMLElement, shadowRoot: ShadowRoot, props: Props) => {
+  setup?: (this: Props & Methods & HTMLElement, shadowRoot: ShadowRoot & { host: Props & Methods & HTMLElement }, props: Props) => Merge<{
     onMounted?: () => void
     onUnmounted?: () => void
+    onAttributeChanged?: (key: keyof Props, value: Props[keyof Props]) => void
     onAdopted?: () => void
     expose?: Expose & { [K in keyof Props]?: never }
-  } & {
-    [K in keyof Props]?: ((v: Props[K], old: Props[K]) => void) | { get?: () => Props[K], set?: (v: Props[K], old: Props[K]) => void }
-  } | void
+  },
+    { [K in keyof Props as K extends string ? `get${Capitalize<K>}` : never]?: () => Props[K] },
+    { [K in keyof Props as K extends string ? `set${Capitalize<K>}` : never]?: (v: Props[K], old: Props[K]) => void }
+  > | void
 }
 
 //组件实例化返回值
@@ -114,20 +122,21 @@ const baseStyle = /*css*/`
   outline: none;
 }
 :host(:focus-visible){
-  outline: solid 3px var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
+  outline: auto 1px var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
 }
 `
 
 //注册组件
 export const useElement = <
+  N extends string,
   Props extends { [key: string]: Prop } = {},
   Expose extends { [key: string]: any } = {},
   Events extends { [key: string]: Event | CustomEvent } = {},
   Methods extends { [key: string]: any } = {}
->(options: ComponentOptions<Props, Expose, Events, Methods>): {
+>(options: ComponentOptions<N, Props, Expose, Events, Methods>): {
   new(): ComponentReturn<Props, Expose, Events, { [K in keyof Events as K extends string ? `on${K}` : never]: ((event: Events[K]) => void) | null }>
-  readonly define: (name: string) => void
   prototype: HTMLElement
+  tagName: N
 } & Methods => {
   const state = {
     observedAttributes: [] as string[],
@@ -148,11 +157,9 @@ export const useElement = <
   }
   type ReturnType<T extends ((...args: any) => any) | undefined> = T extends (...args: any) => infer R ? R : T
   const map = new Map<HTMLElement, ReturnType<typeof options.setup>>()
-  return class Component extends HTMLElement {
+  class Component extends HTMLElement {
     static observedAttributes = state.observedAttributes
-    static define(name: string) {
-      customElements.define(name, this)
-    }
+    static tagName = options.name
     constructor() {
       super()
       const shadowRoot = this.attachShadow({ mode: 'open' })
@@ -161,17 +168,20 @@ export const useElement = <
       const props = { ...options.props }
       let setup: ReturnType<typeof options.setup>
       let tabIndex = this.tabIndex
+      if (options.focused) {
+        if (this.tabIndex === -1) this.tabIndex = 0
+        this.addEventListener('keydown', (e) => {
+          if (!['Enter', ' '].includes(e.key)) return
+          this.click()
+        })
+      }
       const ahead: { [key: string]: unknown } = {}
       for (const key in props) {
         const initValue = this[key as keyof this] as any
         if (initValue !== undefined) ahead[key] = initValue
         Object.defineProperty(this, key, {
           configurable: true,
-          get: () => {
-            const call = setup?.[key]
-            if (!call || typeof call === 'function' || !call.get) return props[key]
-            return call.get?.()
-          },
+          get: () => setup?.[`get${state.metaProps[key].capitalize}`]?.() ?? props[key],
           set: (v) => {
             if (v === undefined) return
             const meta = state.metaProps[key]
@@ -185,23 +195,14 @@ export const useElement = <
             }
             if (value === this[key as keyof this]) return
             if (options.focused && key === 'disabled') {
-              if (value) {
-                tabIndex = this.tabIndex
-                this.removeAttribute('tabindex')
-              } else {
-                this.tabIndex === -1 && (this.tabIndex = tabIndex)
-              }
+              tabIndex = this.tabIndex
+              this.tabIndex = value ? -1 : tabIndex
             }
             const old = props[key]
             props[key] = value
-            const call = setup?.[key]
-            if (!call) return
-            try {
-              typeof call === 'function' ? call(value as never, old as never) : call.set?.(value as never, old as never)
-            } catch (error) {
-              props[key] = old
-              throw error
-            }
+            const call = setup?.[`set${state.metaProps[key].capitalize}`] as any
+            call?.(value as never, old as never)
+            setup?.onAttributeChanged?.(key, value as never)
           }
         })
       }
@@ -209,9 +210,7 @@ export const useElement = <
       const customEvents: { [key: string]: ((e: Event) => void) } = {}
       for (const key of state.events) {
         const k = key as keyof this
-        if (typeof this[k] === 'function') {
-          customEvents[key] = this[k] as any
-        }
+        if (typeof this[k] === 'function') customEvents[key] = this[k] as any
         Object.defineProperty(this, key, {
           configurable: true,
           get: () => customEvents[key] ?? null,
@@ -219,20 +218,9 @@ export const useElement = <
         })
         this.addEventListener(key.slice(2), (event) => customEvents[key] && customEvents[key].bind(this)(event))
       }
-      if (options.focused) {
-        if (this.tabIndex === -1) this.tabIndex = 0
-        this.addEventListener('keydown', (e) => {
-          if (!['Enter', ' '].includes(e.key)) return
-          this.click()
-        })
-      }
-      setup = options.setup?.call(this as any, shadowRoot, props as never)
-      // //导出expose
+      setup = options.setup?.call(this as any, shadowRoot as never, props as never)
       for (const key in setup?.expose ?? {}) Object.defineProperty(this, key, { get: () => setup?.expose?.[key] })
-      //重新赋值
       for (const key in ahead) this[key as keyof this] = ahead[key] as never
-      //@ts-ignore 清除生命周期
-      this.connectedCallback = this.disconnectedCallback = this.adoptedCallback = this.attributeChangedCallback = undefined
       map.set(this, setup)
     }
     connectedCallback() {
@@ -248,7 +236,9 @@ export const useElement = <
       if (state.events.includes(key)) return this[key as keyof this] = (value ? new Function('event', value) : null) as never
       this[state.upperPropKeys[key] as keyof this] = value as never
     }
-  } as never
+  }
+  !customElements.get(options.name) && customElements.define(options.name, Component)
+  return Component as never
 }
 
 const throttleMap: Function[] = []

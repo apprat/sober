@@ -1,8 +1,6 @@
 import { useElement } from '../core/element.js'
 import { Theme } from '../core/theme.js'
 
-const name = 's-divider'
-
 const style = /*css*/`
 :host{
   display: flex;
@@ -25,19 +23,20 @@ const style = /*css*/`
 
 const template = /*html*/`<slot></slot>`
 
-export class Divider extends useElement({ style, template }) { }
-
-Divider.define(name)
+export class Divider extends useElement({
+  name: 's-divider',
+  style, template
+}) { }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Divider
+    [Divider.tagName]: Divider
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
+        [Divider.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
       }
     }
   }
@@ -48,7 +47,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Divider.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -61,7 +60,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div']
+      [Divider.tagName]: IntrinsicElements['div']
     }
   }
 }
@@ -71,7 +70,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement>
+      [Divider.tagName]: JSX.HTMLAttributes<HTMLElement>
     }
   }
 }
@@ -81,7 +80,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement>
+      [Divider.tagName]: JSXInternal.HTMLAttributes<HTMLElement>
     }
   }
 }

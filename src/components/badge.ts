@@ -1,8 +1,6 @@
 import { useElement } from '../core/element.js'
 import { Theme } from '../core/theme.js'
 
-const name = 's-badge'
-
 const style = /*css*/`
 :host{
   display: inline-flex;
@@ -32,19 +30,20 @@ const style = /*css*/`
 `
 const template = /*html*/`<slot class="text" part="text"></slot>`
 
-export class Badge extends useElement({ style, template }) { }
-
-Badge.define(name)
+export class Badge extends useElement({
+  name: 's-badge',
+  style, template
+}) { }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Badge
+    [Badge.tagName]: Badge
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
+        [Badge.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
       }
     }
   }
@@ -55,7 +54,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Badge.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -68,7 +67,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div']
+      [Badge.tagName]: IntrinsicElements['div']
     }
   }
 }
@@ -78,7 +77,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement>
+      [Badge.tagName]: JSX.HTMLAttributes<HTMLElement>
     }
   }
 }
@@ -88,7 +87,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement>
+      [Badge.tagName]: JSXInternal.HTMLAttributes<HTMLElement>
     }
   }
 }

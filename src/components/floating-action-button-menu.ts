@@ -3,7 +3,6 @@ import { buttonStyle } from '../core/style/button.js'
 import { Theme } from '../core/theme.js'
 import './ripple.js'
 
-const name = 's-fab-menu'
 const props = useProps({
   disabled: false,
   align: ['right bottom', 'right top', 'left bottom', 'left top']
@@ -57,6 +56,7 @@ const template = /*html*/`
 `
 
 export class FloatingActionButtonMenu extends useElement({
+  name: 's-fab-menu',
   props, template, events, style,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
@@ -71,10 +71,10 @@ export class FloatingActionButtonMenu extends useElement({
   }
 }) { }
 
-const itemName = 's-fab-menu-item'
 const itemProps = useProps({
   disabled: false
 })
+
 const itemStyle = /*css*/`
 :host{
   height: 40px;
@@ -112,26 +112,24 @@ const itemTemplate = /*html*/`
 `
 
 export class FloatingActionButtonMenuItem extends useElement({
+  name: 's-fab-menu-item',
   props: itemProps,
   template: itemTemplate,
   style: [buttonStyle, itemStyle]
 }) { }
 
-FloatingActionButtonMenu.define(name)
-FloatingActionButtonMenuItem.define(itemName)
-
 export { FloatingActionButtonMenu as FABMenu, FloatingActionButtonMenuItem as FABMenuItem }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: FloatingActionButtonMenu
-    [itemName]: FloatingActionButtonMenuItem
+    [FloatingActionButtonMenu.tagName]: FloatingActionButtonMenu
+    [FloatingActionButtonMenuItem.tagName]: FloatingActionButtonMenuItem
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [FloatingActionButtonMenu.name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -142,7 +140,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [FloatingActionButtonMenu.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -155,7 +153,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [FloatingActionButtonMenu.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -165,7 +163,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [FloatingActionButtonMenu.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -175,7 +173,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [FloatingActionButtonMenu.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

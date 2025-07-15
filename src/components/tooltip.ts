@@ -4,7 +4,6 @@ import { getStackingContext } from '../core/utils/getStackingContext.js'
 import { convertCSSDuration } from '../core/utils/CSS.js'
 import { Theme } from '../core/theme.js'
 
-const name = 's-tooltip'
 const props = useProps({
   align: ['top', 'bottom', 'left', 'right']
 })
@@ -52,6 +51,7 @@ const template = /*html*/`
 `
 
 export class Tooltip extends useElement({
+  name: 's-tooltip',
   style, template, props,
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!
@@ -147,17 +147,15 @@ export class Tooltip extends useElement({
   }
 }) { }
 
-Tooltip.define(name)
-
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Tooltip
+    [Tooltip.tagName]: Tooltip
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [Tooltip.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -168,7 +166,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Tooltip.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -182,7 +180,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [Tooltip.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -192,7 +190,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Tooltip.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -202,7 +200,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Tooltip.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

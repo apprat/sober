@@ -1,7 +1,6 @@
 import { useProps, useElement } from '../core/element.js'
 import { Theme } from '../core/theme.js'
 
-const name = 's-split-button'
 const props = useProps({
   variant: ['filled', 'elevated', 'tonal', 'outlined'],
   size: ['medium', 'small', 'extra-small', 'large', 'extra-large'],
@@ -37,20 +36,19 @@ const template = /*html*/`
 `
 
 export class SplitButton extends useElement({
+  name: 's-split-button',
   props, template, style,
 }) { }
 
-SplitButton.define(name)
-
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: SplitButton
+    [SplitButton.tagName]: SplitButton
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [SplitButton.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -61,7 +59,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [SplitButton.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -74,7 +72,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [SplitButton.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -84,7 +82,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [SplitButton.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -94,7 +92,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [SplitButton.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

@@ -1,7 +1,6 @@
 import { supports, useProps, useEvents, useElement } from '../core/element.js'
 import { Theme } from '../core/theme.js'
 
-const name = 's-appbar'
 const props = useProps({})
 
 const style = /*css*/`
@@ -85,6 +84,7 @@ const template = /*html*/`
 `
 
 export class Appbar extends useElement({
+  name: 's-appbar',
   style, template,
   setup(shadowRoot) {
     const view = shadowRoot.querySelector<HTMLDivElement>('.view')!
@@ -97,17 +97,15 @@ export class Appbar extends useElement({
   }
 }) { }
 
-Appbar.define(name)
-
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Appbar
+    [Appbar.tagName]: Appbar
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [Appbar.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -118,7 +116,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Appbar.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -131,7 +129,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [Appbar.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -141,7 +139,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Appbar.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -151,7 +149,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Appbar.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

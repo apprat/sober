@@ -4,31 +4,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="../dist/main.js"></script>
   <title>CSS Linear Interpolation</title>
   <style>
-    div::marker {
-      width: 20px;
-      height: 20px;
-      background-color: red;
-      unicode-bidi: isolate;
-      font-variant-numeric: tabular-nums;
-      text-transform: none;
-      text-indent: 0px !important;
-      text-align: start !important;
-      text-align-last: auto !important;
+    .test {
+      display: flex;
+      width: 600px;
+      height: 400px;
+      overflow: scroll;
+    }
+
+    .item {
+      background: currentColor;
+      width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+      color: #fff;
     }
   </style>
 </head>
 
 <body>
-  <select size="4" multiple="multiple">
-    <option value="windowxp" selected>windowxp</option>
-    <option value="window7">window7</option>
-    <option value="window10">window10</option>
-    <option value="mac os">mac os</option>
-  </select>
-
-  <div>x</div>
+  <div class="test">
+    <div class="item" style="background: rgb(12, 31, 95); overflow: auto;">
+      <div style="width: 1000px;height: 20px;"></div>
+    </div>
+    <div class="item" style="background: rgb(34, 106, 16);"></div>
+    <div class="item" style="background: rgb(97, 21, 60);"></div>
+    <div class="item" style="background: rgb(106, 76, 17);"></div>
+    <div class="item" style="background: rgb(80, 37, 18);"></div>
+    <div class="item" style="background: rgb(13, 15, 70);"></div>
+    <div class="item" style="background: rgb(62, 139, 36);"></div>
+    <div class="item" style="background: rgb(87, 10, 106);"></div>
+    <div class="item" style="background: rgb(85, 73, 10);"></div>
+  </div>
+  <script>
+    const test = document.querySelector('.test')
+    let is = false
+    test.addEventListener('s-scrollstart', function (e) {
+      console.log('start')
+    })
+    // test.addEventListener('touchmove', function (e) {
+    //   console.log('move')
+    // }, { passive: true })
+  </script>
 </body>
 
 </html>

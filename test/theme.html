@@ -5,16 +5,84 @@
   <meta charset="UTF-8" />
   <title>Theme builder</title>
   <script type="module" src="../dist/main.js"></script>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    s-page {
+      max-width: 1280px;
+      margin: 0 auto;
+      box-shadow: var(--s-elevation-level1);
+      padding: 24px;
+    }
+
+    s-page>* {
+      margin: 8px;
+    }
+
+    hr {
+      border: none;
+      border-top: solid 1px var(--s-color-surface-variant);
+      margin: 12px 0;
+    }
+  </style>
 </head>
 
 <body>
   <s-page>
     <input type="color" id="inputColor">
     <hr>
-    <s-button>btn</s-button>
+    <s-button>
+      <s-icon name="star" slot="start"></s-icon>
+      Button
+    </s-button>
+    <s-button variant="elevated">
+      <s-icon name="star" slot="start"></s-icon>
+      Button
+    </s-button>
+    <s-button variant="tonal">
+      <s-icon name="star" slot="start"></s-icon>
+      Button
+    </s-button>
+    <s-button variant="outlined">
+      <s-icon name="star" slot="start"></s-icon>
+      Button
+    </s-button>
+    <s-button variant="text">
+      <s-icon name="star" slot="start"></s-icon>
+      Button
+    </s-button>
+    <hr>
+    <s-checkbox>Yes</s-checkbox>
+    <s-radio name="no">No.1</s-radio>
+    <s-radio name="no">No.2</s-radio>
+    <hr>
+    <s-fab>
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="secondary">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tertiary">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tonal-primary">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tonal-secondary">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <s-fab variant="tonal-tertiary">
+      <s-icon name="add"></s-icon>
+    </s-fab>
+    <hr>
+    <s-base-slider></s-base-slider>
   </s-page>
-  <script src="https://unpkg.com/sober-theme/dist/sober-theme.min.js"></script>
-  <script>
+  <script src="../dist/sober.theme.min.js"></script>
+  <script type="module">
     const inputColor = document.querySelector('#inputColor')
     inputColor.onchange = () => {
       const color = inputColor.value

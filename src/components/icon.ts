@@ -32,7 +32,6 @@ const svgData = {
   favorite: 'm480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z',
 } satisfies SVGData
 
-const name = 's-icon'
 const props = useProps({
   name: Object.keys(svgData) as Array<keyof typeof svgData>,
   $src: ''
@@ -62,20 +61,21 @@ img,
 const template = /*html*/`<slot></slot>`
 
 export class Icon extends useElement({
+  name: 's-icon',
   style, template, props,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
     const img = document.createElement('img')
     const getSVG = (d = svgData.none, transform = '') => `<svg viewBox="0 -960 960 960"><path d="${d}" transform="${transform}"></path></svg>`
     return {
-      name: (value) => {
+      setName: (value) => {
         const data = svgData[value as keyof typeof svgData]
         if (typeof data === 'string') return slot.innerHTML = getSVG(data)
         const name = data.name as keyof typeof svgData
         if (typeof svgData[name] !== 'string') return
         slot.innerHTML = getSVG(svgData[name], `rotate(${data.angle} 480 -480)`)
       },
-      src: async () => {
+      setSrc: async () => {
         try {
           const url = new URL(this.src, location.href)
           if (url.pathname.endsWith('.svg')) {
@@ -105,17 +105,15 @@ export class Icon extends useElement({
   }
 }) { }
 
-Icon.define(name)
-
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Icon
+    [Icon.tagName]: Icon
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [Icon.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -126,7 +124,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Icon.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -140,7 +138,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [Icon.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -150,7 +148,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Icon.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -160,7 +158,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Icon.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

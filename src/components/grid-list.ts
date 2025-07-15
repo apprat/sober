@@ -1,7 +1,6 @@
 import { useProps, useEvents, useElement } from '../core/element.js'
 import { Theme } from '../core/theme.js'
 
-const name = 's-grid-list'
 const props = useProps({
   mode: ['standard', 'masonry']
 })
@@ -24,6 +23,7 @@ const style = /*css*/`
 const template = /*html*/`<slot></slot>`
 
 export class GridList extends useElement({
+  name: 's-grid-list',
   style, props, template,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
@@ -34,8 +34,6 @@ export class GridList extends useElement({
   }
 }) { }
 
-
-const itemName = 's-grid-list-item'
 const itemProps = useProps({
 
 })
@@ -51,28 +49,28 @@ const itemTemplate = /*html*/`
 `
 
 export class GridListItem extends useElement({
-  style: itemStyle, props: itemProps, template: itemTemplate,
+  name: 's-grid-list-item',
+  style: itemStyle,
+  props: itemProps,
+  template: itemTemplate,
   setup(shadowRoot) {
     this.style.height = `${Math.floor(Math.random() * (300 - 80 + 1)) + 80}px`
     this.style.backgroundColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')
   }
 }) { }
 
-GridList.define(name)
-GridListItem.define(itemName)
-
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: GridList
-    [itemName]: GridListItem
+    [GridList.tagName]: GridList
+    [GridListItem.tagName]: GridListItem
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [GridList.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+        [GridListItem.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
       }
     }
   }
@@ -83,13 +81,13 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [GridList.tagName]: new () => {
       /**
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props>
     } & GridList
-    [itemName]: new () => {
+    [GridListItem.tagName]: new () => {
       $props: HTMLAttributes & Partial<typeof itemProps>
     } & GridListItem
   }
@@ -99,9 +97,9 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [GridList.tagName]: IntrinsicElements['div'] & Partial<typeof props>
       //@ts-ignore
-      [itemName]: IntrinsicElements['div'] & Partial<typeof itemProps>
+      [GridListItem.tagName]: IntrinsicElements['div'] & Partial<typeof itemProps>
     }
   }
 }
@@ -111,9 +109,9 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [GridList.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [GridListItem.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }
@@ -123,9 +121,9 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [GridList.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [GridListItem.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }

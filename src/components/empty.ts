@@ -1,8 +1,6 @@
 import { useElement } from '../core/element.js'
 import { Theme } from '../core/theme.js'
 
-const name = 's-empty'
-
 const style = /*css*/`
 :host{
   display: flex;
@@ -45,19 +43,20 @@ const template = /*html*/`
 </slot>
 <slot></slot>`
 
-export class Empty extends useElement({ style, template }) { }
-
-Empty.define(name)
+export class Empty extends useElement({
+  name: 's-empty',
+  style, template
+}) { }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Empty
+    [Empty.tagName]: Empty
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
+        [Empty.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
       }
     }
   }
@@ -68,7 +67,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Empty.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -81,7 +80,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div']
+      [Empty.tagName]: IntrinsicElements['div']
     }
   }
 }
@@ -91,7 +90,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement>
+      [Empty.tagName]: JSX.HTMLAttributes<HTMLElement>
     }
   }
 }
@@ -101,7 +100,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement>
+      [Empty.tagName]: JSXInternal.HTMLAttributes<HTMLElement>
     }
   }
 }

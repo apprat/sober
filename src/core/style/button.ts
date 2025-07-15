@@ -17,8 +17,8 @@ export const buttonStyle = /*css*/`
   transition-timing-function: var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
   transition-duration: var(--s-motion-duration-short4, ${Theme.motionDurationShort4});
 }
-:host([disabled=true]){
-  pointer-events: none !important;
+:host([disabled]){
+  pointer-events: none;
   background: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 12%, transparent) !important;
   color: color-mix(in srgb, var(--s-color-on-surface, ${Theme.colorOnSurface}) 38%, transparent) !important;
 }
@@ -31,7 +31,7 @@ export const buttonStyle = /*css*/`
   -webkit-aspect-ratio: 1;
 }
 @supports not (color: color-mix(in srgb, black, white)){
-  :host([disabled=true]){
+  :host([disabled]){
     background: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh}) !important;
     color: var(--s-color-outline, ${Theme.colorOutline}) !important;
     box-shadow: 0 0 0 1px var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest}) !important;

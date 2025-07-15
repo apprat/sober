@@ -3,7 +3,6 @@ import { buttonStyle } from '../core/style/button.js'
 import { Theme } from '../core/theme.js'
 import './ripple.js'
 
-const name = 's-fab'
 const props = useProps({
   variant: ['primary', 'secondary', 'tertiary', 'tonal-primary', 'tonal-secondary', 'tonal-tertiary'],
   size: ['medium', 'small', 'large'],
@@ -52,7 +51,7 @@ const style = /*css*/`
   color: var(--s-color-on-tertiary-container, ${Theme.colorOnTertiaryContainer});
 }
 :host([disabled=true]){
-  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1}) !important;
+  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2}) !important;
 }
 /*Size*/
 :host([size=small]){
@@ -95,22 +94,23 @@ const template = /*html*/`
 `
 
 export class FloatingActionButton extends useElement({
-  props, template, events, style: [buttonStyle, style]
+  name: 's-fab',
+  style: [buttonStyle, style],
+  focused: true,
+  props, template, events,
 }) { }
-
-FloatingActionButton.define(name)
 
 export { FloatingActionButton as FAB }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: FloatingActionButton
+    [FloatingActionButton.tagName]: FloatingActionButton
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [FloatingActionButton.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -121,7 +121,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [FloatingActionButton.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -134,7 +134,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [FloatingActionButton.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -144,7 +144,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [FloatingActionButton.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -154,7 +154,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [FloatingActionButton.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

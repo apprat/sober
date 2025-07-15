@@ -1,8 +1,6 @@
 import { useElement, useProps } from '../core/element.js'
 import { scrollbarStyle } from '../core/style/scrollbar.js'
 
-const name = 's-scroll-view'
-
 const style = /*css*/`
 :host{
   display: block;
@@ -12,20 +10,26 @@ const style = /*css*/`
 const template = /*html*/`<slot></slot>`
 
 export class ScrollView extends useElement({
-  template, style: [scrollbarStyle, style]
+  name: 's-scroll-view',
+  style: [scrollbarStyle, style],
+  template,
+  setup() {
+    this.addEventListener('touchstart', () => {
+      if (this.scrollHeight === this.offsetHeight && this.scrollWidth === this.offsetWidth) return
+      this.dispatchEvent(new Event(`${this.tagName.toLocaleLowerCase()}-start`, { bubbles: true }))
+    }, { passive: true })
+  }
 }) { }
-
-ScrollView.define(name)
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: ScrollView
+    [ScrollView.tagName]: ScrollView
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
+        [ScrollView.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
       }
     }
   }
@@ -36,7 +40,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [ScrollView.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -49,7 +53,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div']
+      [ScrollView.tagName]: IntrinsicElements['div']
     }
   }
 }
@@ -59,7 +63,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement>
+      [ScrollView.tagName]: JSX.HTMLAttributes<HTMLElement>
     }
   }
 }
@@ -69,7 +73,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement>
+      [ScrollView.tagName]: JSXInternal.HTMLAttributes<HTMLElement>
     }
   }
 }

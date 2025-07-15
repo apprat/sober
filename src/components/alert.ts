@@ -1,7 +1,6 @@
 import { useProps, useElement } from '../core/element.js'
 import { Theme } from '../core/theme.js'
 
-const name = 's-alert'
 const props = useProps({
   variant: ['info', 'success', 'warning', 'error']
 })
@@ -97,20 +96,19 @@ const template = /*html*/`
 `
 
 export class Alert extends useElement({
+  name: 's-alert',
   style, props, template
 }) { }
 
-Alert.define(name)
-
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Alert
+    [Alert.tagName]: Alert
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [Alert.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -121,7 +119,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Alert.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -134,7 +132,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [Alert.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -144,7 +142,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Alert.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -154,7 +152,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Alert.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

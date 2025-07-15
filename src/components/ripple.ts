@@ -3,7 +3,6 @@ import { device } from '../core/device.js'
 import { convertCSSDuration } from '../core/utils/CSS.js'
 import { Theme } from '../core/theme.js'
 
-const name = 's-ripple'
 const props = useProps({
   attached: false,
   centered: false
@@ -30,21 +29,21 @@ const style = /*css*/`
 }
 .container{
   overflow: hidden;
-}
-.container::before{
-  content: '';
-  opacity: 0;
-  background: var(--ripple-color, currentColor);
-  transition: opacity var(--s-motion-duration-short4, ${Theme.motionDurationShort2}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
-}
-.container.hover::before{
-  opacity: var(--ripple-hover-opacity, .12);
+  &::before{
+    content: '';
+    opacity: 0;
+    background: var(--ripple-color, currentColor);
+    transition: opacity var(--s-motion-duration-short4, ${Theme.motionDurationShort2}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
+  }
+  &.hovered::before{
+    opacity: var(--ripple-hover-opacity, .08);
+  }
 }
 .ripple{
   opacity: 0;
   border-radius: 50%;
   background: currentColor;
-  filter: blur(12px) opacity(var(--ripple-opacity, .18));
+  filter: opacity(var(--ripple-opacity, .18));
 }
 `
 
@@ -55,7 +54,8 @@ const template = /*html*/`
 </div>
 `
 
-const Ripple = useElement({
+export class Ripple extends useElement({
+  name: 's-ripple',
   style, template, props,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
@@ -67,8 +67,8 @@ const Ripple = useElement({
       const shortDuration = computedStyle.getPropertyValue('--s-motion-duration-short4') || Theme.motionDurationShort4
       return { easing: easing, duration: convertCSSDuration(duration), shortDuration: convertCSSDuration(shortDuration) }
     }
-    const hover = () => !device.touchEnabled && container.classList.add('hover')
-    const unHover = () => !device.touchEnabled && container.classList.remove('hover')
+    const hover = () => !device.touchEnabled && container.classList.add('hovered')
+    const unHover = () => !device.touchEnabled && container.classList.remove('hovered')
     const state = { parentNode: null as null | HTMLElement, pressed: false }
     const run = (event: PointerEvent) => {
       const { offsetWidth, offsetHeight } = this
@@ -119,7 +119,7 @@ const Ripple = useElement({
     const down = async (event: PointerEvent) => {
       if (event.button !== 0) return
       const data: { timer?: number, upper?: boolean } = {}
-      if (event.pointerType === 'mouse') {
+      if (event.pointerType !== 'touch') {
         document.addEventListener('pointerup', run(event), { once: true })
         return
       }
@@ -160,7 +160,7 @@ const Ripple = useElement({
         }
       },
       onUnmounted: () => this.attached && remove(),
-      attached: (value) => {
+      setAttached: (value) => {
         if (!this.isConnected) return
         if (!value) return remove()
         const target = (this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode) as HTMLElement
@@ -168,19 +168,17 @@ const Ripple = useElement({
       }
     }
   }
-})
-
-Ripple.define(name)
+}) { }
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: typeof Ripple
+    [Ripple.tagName]: typeof Ripple
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [Ripple.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }
@@ -191,7 +189,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Ripple.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -204,7 +202,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [Ripple.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -214,7 +212,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Ripple.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -224,7 +222,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Ripple.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

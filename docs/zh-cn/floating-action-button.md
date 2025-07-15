@@ -80,3 +80,13 @@
   提交信息
 </s-fab>
 ```
+
+---
+
+## 属性
+
+| 名称     | 类型                                                                         | 默认值  | 同步 | 说明   |
+| -------- | ---------------------------------------------------------------------------- | ------- | ---- | ------ |
+| variant  | primary, secondary, tertiary, tonal-primary, tonal-secondary, tonal-tertiary | primary | ✔️ | 变体   |
+| size     | small, medium, large                                                         | medium  | ✔️ | 尺寸   |
+| disabled | boolean                                                                      | false   | ✔️ | 禁用的 |

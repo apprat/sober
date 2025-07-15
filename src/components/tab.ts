@@ -2,8 +2,6 @@ import { useProps, useEvents, useElement } from '../core/element.js'
 import { Select } from '../core/utils/select.js'
 import { Theme } from '../core/theme.js'
 
-const name = 's-tab'
-const itemName = 's-tab-item'
 const props = useProps({
   value: '',
   multiple: false
@@ -35,6 +33,7 @@ const itemTemplate = /*html*/`
 `
 
 export class Tab extends useElement({
+  name: 's-tab',
   style, props, template,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
@@ -43,26 +42,26 @@ export class Tab extends useElement({
 }) { }
 
 export class TabItem extends useElement({
-  style: itemStyle, props: itemProps, template: itemTemplate,
+  name: 's-tab-item',
+  style: itemStyle,
+  props: itemProps,
+  template: itemTemplate,
   setup(shadowRoot) {
   }
 }) { }
 
-Tab.define(name)
-TabItem.define(itemName)
-
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Tab
-    [itemName]: TabItem
+    [Tab.tagName]: Tab
+    [TabItem.tagName]: TabItem
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [Tab.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+        [TabItem.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
       }
     }
   }
@@ -73,13 +72,13 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Tab.tagName]: new () => {
       /**
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props>
     } & Tab
-    [itemName]: new () => {
+    [TabItem.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -92,9 +91,9 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [Tab.tagName]: IntrinsicElements['div'] & Partial<typeof props>
       //@ts-ignore
-      [itemName]: IntrinsicElements['div'] & Partial<typeof itemProps>
+      [TabItem.tagName]: IntrinsicElements['div'] & Partial<typeof itemProps>
     }
   }
 }
@@ -104,9 +103,9 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Tab.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [TabItem.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }
@@ -116,9 +115,9 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Tab.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [TabItem.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }

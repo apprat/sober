@@ -86,58 +86,18 @@
 
 ---
 
-设置 `width` 属性来设置更宽或者更窄的按钮。
+设置 `width` 属性来设置更宽或者更窄的按钮，适用于一些较宽或较窄的图标。
 
 ```html preview
-<s-icon-button variant="filled" width="wide" size="extra-small">
-  <s-icon name="star"></s-icon>
-</s-icon-button>
-<s-icon-button variant="tonal" size="extra-small"> 
-  <s-icon name="star"></s-icon>
-</s-icon-button>
-<s-icon-button variant="outlined" width="narrow" size="extra-small">
-  <s-icon name="star"></s-icon>
-</s-icon-button><br>
-
-<s-icon-button variant="filled" width="wide" size="small">
-  <s-icon name="star"></s-icon>
-</s-icon-button>
-<s-icon-button variant="tonal" size="small"> 
-  <s-icon name="star"></s-icon>
-</s-icon-button>
-<s-icon-button variant="outlined" width="narrow" size="small">
-  <s-icon name="star"></s-icon>
-</s-icon-button><br>
-
 <s-icon-button variant="filled" width="wide">
-  <s-icon name="star"></s-icon>
+  <s-icon name="more_horiz"></s-icon>
 </s-icon-button>
 <s-icon-button variant="tonal"> 
   <s-icon name="star"></s-icon>
 </s-icon-button>
 <s-icon-button variant="outlined" width="narrow">
-  <s-icon name="star"></s-icon>
+  <s-icon name="more_vert"></s-icon>
 </s-icon-button><br>
-
-<s-icon-button variant="filled" width="wide" size="large">
-  <s-icon name="star"></s-icon>
-</s-icon-button>
-<s-icon-button variant="tonal" size="large"> 
-  <s-icon name="star"></s-icon>
-</s-icon-button>
-<s-icon-button variant="outlined" width="narrow" size="large">
-  <s-icon name="star"></s-icon>
-</s-icon-button><br>
-
-<s-icon-button variant="filled" width="wide" size="extra-large">
-  <s-icon name="star"></s-icon>
-</s-icon-button>
-<s-icon-button variant="tonal" size="extra-large"> 
-  <s-icon name="star"></s-icon>
-</s-icon-button>
-<s-icon-button variant="outlined" width="narrow" size="extra-large">
-  <s-icon name="star"></s-icon>
-</s-icon-button>
 ```
 
 ---
@@ -165,9 +125,25 @@
 
 | 名称      | 类型                                           | 默认值   | 同步 | 说明     |
 | --------- | ---------------------------------------------- | -------- | ---- | -------- |
-| variant   | standard, filled, tonal, outlined            | standard | ✔️ | 变体     |
+| variant   | standard, filled, tonal, outlined              | standard | ✔️ | 变体     |
 | size      | extra-small, small, medium, large, extra-large | medium   | ✔️ | 尺寸     |
 | width     | default, narrow, wide                          | default  | ✔️ | 宽度     |
 | disabled  | boolean                                        | false    | ✔️ | 禁用的   |
 | checkable | boolean                                        | false    | ✔️ | 启用选中 |
-| checked   | boolean                                        | false    | ✖️ | 选中的   |
+| checked   | boolean                                        | false    | ✔️ | 选中的   |
+
+---
+
+## 事件
+
+| 名称   | 参数  | 冒泡 | 可取消 | 说明                                        |
+| ------ | ----- | ---- | ------ | ------------------------------------------- |
+| change | Event | ✖️ | ✖️   | 在设置了 `checkable` 属性后，选中变更时触发 |
+
+---
+
+## 插槽
+
+| 名称 | 说明 |
+| ---- | ---- |
+|      | 图标 |

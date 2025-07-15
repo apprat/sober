@@ -1,59 +1,111 @@
 import { useProps, useEvents, useElement } from '../core/element.js'
 import { BaseSlider } from './base-slider.js'
 
-const name = 's-slider'
 const props = useProps({
-  disabled: false,
-  labeled: false,
   $value: 0,
   $start: 0,
   $end: 0,
   $step: 1,
   $min: 0,
   $max: 100,
+  disabled: false,
+  labeled: false,
+  stoped: false,
   mode: ['single', 'single-reversed', 'range'],
   orientation: ['horizontal', 'vertical'],
-})
-const events = useEvents({
-
+  size: ['medium', 'small', 'extra-small', 'large', 'extra-large']
 })
 
 const style = /*css*/`
 :host{
-  display: block;
+  display: flex;
+  align-items: center;
+  height: 24px;
+}
+.base-slider{
+  height: 100%;
+  flex-grow: 1;
+  --base-slider-gap: 6px;
+  --base-slider-thumb-width: 4px;
+  --base-slider-thumb-height: 28px;
+}
+.base-slider{
+  &::part(track-start),
+  &::part(track-fill),
+  &::part(track-end){
+    border-radius: 4px;
+    height: 12px;
+    overflow: hidden;
+  }
+  &::part(track-end){
+    border-radius: 2px 6px 6px 2px;
+  }
+  &::part(track-fill){
+    border-radius: 6px 2px 2px 6px;
+  }
+  &::part(track-start)::before,
+  &::part(track-end)::before{
+    content: '';
+    position: absolute;
+    right: 4px;
+    width: 4px;
+    height: 4px;
+    background: currentColor;
+    border-radius: 50%;
+  }
+  &::part(track-start)::before{
+    left: 4px;
+  }
+  &::part(thumb-start),
+  &::part(thumb-end){
+    border-radius: 4px;
+  }
+  &::part(thumb-start)::before,
+  &::part(thumb-end)::before{
+    display: none;
+  }
+}
+.base-slider[moving]{
+  transition-property: none;
+}
+.base-slider[end-pressed]{
+  &::part(thumb-end){
+  }
 }
 `
 
 const template = /*html*/`
-<div>alert</div>
+<s-base-slider variant="segmented" mode="${props.mode}" class="base-slider" part="base-slider">
+</s-base-slider>
 `
 
-const bulder = () => { }
-
 export class Slider extends useElement({
-  style, props, template, events, methods: { bulder },
+  name: 's-slider',
+  style, props, template,
   setup(shadowRoot) {
-    this.addEventListener('click', (e) => {
-      this.dispatchEvent(new Event('show'))
-    })
+    const baseSlider = shadowRoot.querySelector<BaseSlider>('.base-slider')!
     return {
-      expose: {
-      }
+      setValue: (value) => this.mode !== 'range' && (baseSlider.end = value),
+      setStart: () => { },
+      setEnd: () => { },
+      setStep: (value) => baseSlider.step = value,
+      setMax: (value) => baseSlider.max = value,
+      setMin: (value) => baseSlider.min = value,
+      setOrientation: (value) => baseSlider.orientation = value,
+      setMode: (value) => baseSlider.mode = value,
     }
   }
 }) { }
 
-Slider.define(name)
-
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Slider
+    [Slider.tagName]: Slider
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [Slider.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -64,7 +116,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Slider.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -77,7 +129,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [Slider.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -87,7 +139,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Slider.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -97,7 +149,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Slider.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

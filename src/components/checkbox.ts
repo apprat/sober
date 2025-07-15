@@ -2,7 +2,6 @@ import { useElement, useProps } from '../core/element.js'
 import { Theme } from '../core/theme.js'
 import './ripple.js'
 
-const name = 's-checkbox'
 const props = useProps({
   disabled: false,
   checked: false,
@@ -24,8 +23,12 @@ const style = /*css*/`
 }
 :host([disabled=true]){
   pointer-events: none;
+  .layout{
+    color: var(--s-color-on-surface, ${Theme.colorOnSurface}) !important;
+    opacity: .38 !important;
+  }
 }
-.container{
+.layout{
   position: relative;
   height: 100%;
   aspect-ratio: 1;
@@ -33,10 +36,6 @@ const style = /*css*/`
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
-}
-:host([disabled=true]) .container{
-  color: var(--s-color-on-surface, ${Theme.colorOnSurface}) !important;
-  opacity: .38 !important;
 }
 .unchecked,
 .checked,
@@ -83,7 +82,7 @@ svg,
 `
 
 const template = /*html*/`
-<div class="container" part="container">
+<div class="layout" part="layout">
   <slot class="unchecked" name="unchecked">
     <svg viewBox="0 -960 960 960">
       <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Z"></path>
@@ -105,6 +104,8 @@ const template = /*html*/`
 `
 
 export class Checkbox extends useElement({
+  name: 's-checkbox',
+  focused: true,
   style, template, props,
   setup() {
     this.addEventListener('click', () => {
@@ -115,17 +116,15 @@ export class Checkbox extends useElement({
   }
 }) { }
 
-Checkbox.define(name)
-
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Checkbox
+    [Checkbox.tagName]: Checkbox
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [Checkbox.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -136,7 +135,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [name]: new () => {
+    [Checkbox.tagName]: new () => {
       /**
       * @deprecated
       **/
@@ -150,7 +149,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [Checkbox.tagName]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -160,7 +159,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Checkbox.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -170,7 +169,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [Checkbox.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

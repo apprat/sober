@@ -168,9 +168,11 @@ export class Popup extends useElement({
     const close = () => {
       if (!this.isConnected || !dialog.open || container.getAnimations().length > 0) return
       if (!this.dispatchEvent(new Event('close', { cancelable: true }))) return
+      container.style.pointerEvents = 'none'
       const animation = container.animate({ transform: ['scale(1)', 'scale(.9)'], opacity: [1, 0] }, getAnimateOptions())
       this.removeAttribute('showed')
       animation.finished.then(() => {
+        container.style.removeProperty('pointer-events')
         dialog.close()
         this.dispatchEvent(new Event('closed'))
       })

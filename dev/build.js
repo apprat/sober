@@ -1,6 +1,6 @@
 import esbuild from 'esbuild'
 import childProcess from 'child_process'
-import { minify } from 'html-minifier'
+import { minify } from 'html-minifier-terser'
 import fs from 'fs'
 
 const replacePlugin = {

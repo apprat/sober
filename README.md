@@ -60,7 +60,9 @@ const App = () => {
 ```js
 import theme from 'sober/theme'
 
-theme.createScheme('#009688', { page: document.querySelector('s-page') })
+const page = document.querySelector('s-page')
+const scheme = await theme.createScheme('#009688')
+scheme.apply(page)
 ```
 
 ```html
@@ -107,6 +109,11 @@ theme.createScheme('#009688', { page: document.querySelector('s-page') })
 
 在组件初始化后，属性会自动补全为 `disabled="true"`。
 
+> 布尔值的转换逻辑如下：  
+> 当没有设置该属性，值为默认值。  
+> 当设置了该属性，但没有设置值，值为 true。  
+> 当设置了该属性，且设置了值，只有值等于 "false" 时为 false，反之任意值都为 true。
+
 ### 运行时属性值约束
 
 在旧版本中，例如属性值约束为：`filled | outlined | text` ，但该约束仅是 TypeScript 的类型约束，在运行时是无效的（即你可以赋值一个非法的值），在新版本中该约束在运行时也会校验，当值不合法时转为默认值。
@@ -118,7 +125,7 @@ theme.createScheme('#009688', { page: document.querySelector('s-page') })
   //设置一个非法值
   button.variant = 'abc'
   //此时会被转换为默认值
-  console.log(button.type) // filled
+  console.log(button.variant) // filled
 </script>
 ```
 

@@ -40,7 +40,8 @@
     "markdown-it": "^14.1.0",
     "postcss": "^8.5.6",
     "postcss-nested": "^7.0.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "shiki": "^3.9.1"
   },
   "dependencies": {
     "@material/material-color-utilities": "^0.3.0"

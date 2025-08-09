@@ -1,7 +1,10 @@
-import { supports, useProps, useEvents, useElement } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import { useProps, useElement } from '../core/element.js'
+import * as scheme from '../core/scheme.js'
 
-const props = useProps({})
+const props = useProps({
+  breakpointCompact: 1024,
+  centerTitle: false
+})
 
 const style = /*css*/`
 :host{
@@ -9,93 +12,89 @@ const style = /*css*/`
   align-items: center;
   position: relative;
   gap: 12px;
+  height: 64px;
+  padding: 0 16px;
   box-sizing: border-box;
-  container-name: s-appbar;
-  container-type: inline-size;
-  background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
+  background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
+}
+:host([compacted]){
+  padding: 0 16px;
+  height: 56px;
+}
+.headline{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  gap: 2px;
+  overflow: hidden;
+}
+::slotted(*){
+  flex-shrink: 0;
 }
 ::slotted([slot=nav]){
-  flex-shrink: 0;
+  --margin-left: -8px;
 }
 ::slotted([slot=logo]){
   height: 32px;
-  color: var(--s-color-primary, ${Theme.colorPrimary});
+  color: var(--s-color-primary, ${scheme.color.primary});
   fill: currentColor;
-  flex-shrink: 0;
 }
-::slotted([slot=headline]){
-  font-size: 1.5rem;
-  font-weight: bold;
+::slotted(:is([slot=title], [slot=subtitle])){
   overflow: hidden;
-  text-transform: capitalize;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--s-color-primary, ${Theme.colorPrimary});
+  max-width: 100%;
+}
+::slotted([slot=title]){
+  font-size: 1.375rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--s-color-primary, ${scheme.color.primary});
+}
+::slotted([slot=subtitle]){
+  font-size: .75rem;
+  font-weight: 400;
+  letter-spacing: .5px;
+  color: var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
+}
+::slotted([slot=action]:last-child){
+  margin-right: -8px;
 }
 .view{
   flex-grow: 1;
-  min-width: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  height: 64px;
-  max-height: 100%;
-  justify-content: flex-end;
-}
-.view.s-laptop{
-  height: 56px;
-}
-.view.s-tablet ::slotted(s-search[slot=search]){
-  width: auto;
-  flex-grow: 1;
-}
-::slotted([slot=action]){
-  margin: 0 4px;
-  flex-shrink: 0;
-}
-::slotted(s-search[slot=search]){
-  flex-shrink: 0;
-  margin: 0 4px 0 8px;
-}
-@container s-appbar (max-width: 1024px){
-  .view{
-    height: 56px;
-  }
-}
-@container s-appbar (max-width: 768px){
-  ::slotted(s-search[slot=search]){
-    width: auto;
-    flex-grow: 1;
-  }
 }
 `
 
 const template = /*html*/`
-<slot name="start"></slot>
+<slot name="leading"></slot>
 <slot name="nav"></slot>
 <slot name="logo"></slot>
-<slot name="headline"></slot>
+<div class="headline" part="headline">
+  <slot name="title"></slot>
+  <slot name="subtitle"></slot>
+</div>
 <div class="view" part="view">
   <slot></slot>
-  <slot name="search"></slot>
 </div>
 <slot name="action"></slot>
-<slot name="end"></slot>
+<slot name="trailing"></slot>
 `
 
 export class Appbar extends useElement({
   name: 's-appbar',
   style, template,
   setup(shadowRoot) {
-    const view = shadowRoot.querySelector<HTMLDivElement>('.view')!
-    if (!supports.CSSContainer) {
-      new ResizeObserver(() => {
-        view.classList.toggle('s-laptop', this.offsetWidth <= 1024)
-        view.classList.toggle('s-tablet', this.offsetWidth <= 768)
-      }).observe(this)
-    }
+    //const view = shadowRoot.querySelector<HTMLDivElement>('.view')!
+    new ResizeObserver(() => {
+      //view.classList.toggle('s-laptop', this.offsetWidth <= 1024)
+      //view.classList.toggle('s-tablet', this.offsetWidth <= 768)
+    }).observe(this)
   }
 }) { }
+
+Appbar.define()
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -1,8 +1,8 @@
 import { useElement, useProps } from '../core/element.js'
 import { device } from '../core/device.js'
 import { getStackingContext } from '../core/utils/getStackingContext.js'
-import { convertCSSDuration } from '../core/utils/CSS.js'
-import { Theme } from '../core/theme.js'
+import { useComputedStyle } from '../core/utils/CSS.js'
+import * as scheme from '../core/scheme.js'
 
 const props = useProps({
   align: ['top', 'bottom', 'left', 'right']
@@ -10,7 +10,7 @@ const props = useProps({
 
 const style = /*css*/`
 :host{
-  display: inline-flex;
+  display: inline-block;
   vertical-align: middle;
   text-align: left;
 }
@@ -31,9 +31,11 @@ const style = /*css*/`
   padding: 6px 8px;
   border-radius: 4px;
   white-space: nowrap;
-  filter: opacity(.88);
-  background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
-  color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
+  filter: opacity(.85);
+  background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
+  color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
+  animation-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
+  animation-duration: var(--s-motion-duration-medium4, ${scheme.motion.duration.medium4});
 }
 ::slotted(img){
   display: block;
@@ -56,12 +58,12 @@ export class Tooltip extends useElement({
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!
     const popup = shadowRoot.querySelector<HTMLDivElement>('.popup')!
-    const computedStyle = getComputedStyle(this)
+    const computedStyle = useComputedStyle(popup)
     let showed = false
     const getAnimateOptions = () => {
-      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
-      const duration = computedStyle.getPropertyValue('--s-motion-duration-medium4') || Theme.motionDurationMedium4
-      return { easing: easing, duration: convertCSSDuration(duration) }
+      const easing = computedStyle.getValue('animation-timing-function')
+      const duration = computedStyle.getDuration('animation-duration')
+      return { easing, duration }
     }
     const show = () => {
       if (!this.isConnected) return
@@ -146,6 +148,8 @@ export class Tooltip extends useElement({
     trigger.onmouseleave = () => !device.touchEnabled && close()
   }
 }) { }
+
+Tooltip.define()
 
 declare global {
   interface HTMLElementTagNameMap {

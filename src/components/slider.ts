@@ -1,4 +1,4 @@
-import { useProps, useEvents, useElement } from '../core/element.js'
+import { useProps, useElement } from '../core/element.js'
 import { BaseSlider } from './base-slider.js'
 
 const props = useProps({
@@ -96,6 +96,8 @@ export class Slider extends useElement({
     }
   }
 }) { }
+
+Slider.define()
 
 declare global {
   interface HTMLElementTagNameMap {

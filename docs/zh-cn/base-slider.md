@@ -18,7 +18,6 @@
 
 ```html preview
 <s-base-slider mode="single" end="80"></s-base-slider>
-<br>
 <s-base-slider mode="single-reversed" end="80"></s-base-slider>
 ```
 
@@ -30,9 +29,7 @@
 
 ```html preview
 <s-base-slider variant="segmented"></s-base-slider>
-<br>
 <s-base-slider variant="segmented" mode="single"></s-base-slider>
-<br>
 <s-base-slider variant="segmented" mode="single-reversed"></s-base-slider>
 ```
 
@@ -42,11 +39,11 @@
 
 ```html preview
 <s-base-slider orientation="vertical"></s-base-slider>
-<s-base-slider orientation="vertical" mode="single" style="margin-left: 40px"></s-base-slider>
-<s-base-slider orientation="vertical" mode="single-reversed" style="margin-left: 40px"></s-base-slider>
-<s-base-slider orientation="vertical" variant="segmented"style="margin-left: 40px"></s-base-slider>
-<s-base-slider orientation="vertical" variant="segmented" mode="single" style="margin-left: 40px"></s-base-slider>
-<s-base-slider orientation="vertical" variant="segmented" mode="single-reversed" style="margin-left: 40px"></s-base-slider>
+<s-base-slider orientation="vertical" mode="single" style="margin-left: 32px"></s-base-slider>
+<s-base-slider orientation="vertical" mode="single-reversed" style="margin-left: 32px"></s-base-slider>
+<s-base-slider orientation="vertical" variant="segmented"style="margin-left: 32px"></s-base-slider>
+<s-base-slider orientation="vertical" variant="segmented" mode="single" style="margin-left: 32px"></s-base-slider>
+<s-base-slider orientation="vertical" variant="segmented" mode="single-reversed" style="margin-left: 32px"></s-base-slider>
 ```
 
 ---
@@ -110,6 +107,9 @@
 <style>
   .slider{
     --base-slider-thumb-size: 24px;
+  }
+  .slider::part(track-fill){
+    background: linear-gradient(to right, blue, pink);
   }
   .slider::part(thumb-start),
   .slider::part(thumb-end){

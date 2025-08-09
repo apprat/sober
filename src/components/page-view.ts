@@ -1,6 +1,6 @@
-import { useProps, useElement, useEvents } from '../core/element.js'
-import { Theme } from '../core/theme.js'
-import { convertCSSDuration } from '../core/utils/CSS.js'
+import { useProps, useElement } from '../core/element.js'
+import * as scheme from '../core/scheme.js'
+import { useComputedStyle } from '../core/utils/CSS.js'
 
 const props = useProps({
   currentIndex: 0,
@@ -8,10 +8,10 @@ const props = useProps({
   orientation: ['horizontal', 'vertical'],
 })
 
-const events = useEvents({
+const events = {
   change: Event,
   scrollchange: CustomEvent<{ targetIndex: number, positionOffset: number }>,
-})
+}
 
 const style = /*css*/`
 :host{
@@ -26,8 +26,8 @@ const style = /*css*/`
   height: 100%;
   position: relative;
   transition-property: none;
-  transition-timing-function: var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
-  transition-duration: var(--s-motion-duration-short4, ${Theme.motionDurationShort4});
+  transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
+  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
 }
 ::slotted(*){
   width: 100%;
@@ -47,11 +47,11 @@ export class PageView extends useElement({
   setup(shadowRoot) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
-    const computedStyle = getComputedStyle(this)
+    const computedStyle = useComputedStyle(this)
     const getAnimateOptions = () => {
-      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
-      const duration = computedStyle.getPropertyValue('--s-motion-duration-long4') || Theme.motionDurationLong4
-      return { easing: easing, duration: convertCSSDuration(duration) }
+      const easing = computedStyle.getValue('--s-motion-easing-standard') || scheme.motion.easing.standard
+      const duration = computedStyle.getDuration('--s-motion-duration-long4') || scheme.motion.duration.long4
+      return { easing, duration }
     }
     let slots: HTMLElement[] = []
     slot.addEventListener('slotchange', () => slots = slot.assignedElements() as HTMLElement[])
@@ -88,6 +88,8 @@ export class PageView extends useElement({
     })
   }
 }) { }
+
+PageView.define()
 
 declare global {
   interface HTMLElementTagNameMap {

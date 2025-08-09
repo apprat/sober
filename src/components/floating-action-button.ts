@@ -1,6 +1,6 @@
-import { useProps, useEvents, useElement } from '../core/element.js'
+import { useProps, useElement } from '../core/element.js'
 import { buttonStyle } from '../core/style/button.js'
-import { Theme } from '../core/theme.js'
+import * as scheme from '../core/scheme.js'
 import './ripple.js'
 
 const props = useProps({
@@ -8,10 +8,10 @@ const props = useProps({
   size: ['medium', 'small', 'large'],
   disabled: false,
 })
-const events = useEvents({
+const events = {
   show: Event,
   change: CustomEvent
-})
+}
 
 const style = /*css*/`
 :host{
@@ -22,36 +22,36 @@ const style = /*css*/`
   gap: 6px;
   font-size: 1rem;
   transition-property: border-radius, color, background-color, box-shadow;
-  box-shadow: var(--s-elevation-level3, ${Theme.elevationLevel3});
+  box-shadow: var(--s-elevation-level3, ${scheme.elevation.level3});
   --fab-icon-transform: none;
   --fab-icon-transition: none;
 }
 :host(:not([variant])){
-  background: var(--s-color-primary, ${Theme.colorPrimary});
-  color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
+  background: var(--s-color-primary, ${scheme.color.primary});
+  color: var(--s-color-on-primary, ${scheme.color.onPrimary});
 }
 :host([variant=secondary]){
-  background: var(--s-color-secondary, ${Theme.colorSecondary});
-  color: var(--s-color-on-secondary, ${Theme.colorOnSecondary});
+  background: var(--s-color-secondary, ${scheme.color.secondary});
+  color: var(--s-color-on-secondary, ${scheme.color.onSecondary});
 }
 :host([variant=tertiary]){
-  background: var(--s-color-tertiary, ${Theme.colorTertiary});
-  color: var(--s-color-on-tertiary, ${Theme.colorOnTertiary});
+  background: var(--s-color-tertiary, ${scheme.color.tertiary});
+  color: var(--s-color-on-tertiary, ${scheme.color.onTertiary});
 }
 :host([variant=tonal-primary]){
-  background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
-  color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
+  background: var(--s-color-primary-container, ${scheme.color.primaryContainer});
+  color: var(--s-color-on-primary-container, ${scheme.color.onPrimaryContainer});
 }
 :host([variant=tonal-secondary]){
-  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
-  color: var(--s-color-on-secondary-container, ${Theme.colorOnSecondaryContainer});
+  background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
+  color: var(--s-color-on-secondary-container, ${scheme.color.onSecondaryContainer});
 }
 :host([variant=tonal-tertiary]){
-  background: var(--s-color-tertiary-container, ${Theme.colorTertiaryContainer});
-  color: var(--s-color-on-tertiary-container, ${Theme.colorOnTertiaryContainer});
+  background: var(--s-color-tertiary-container, ${scheme.color.tertiaryContainer});
+  color: var(--s-color-on-tertiary-container, ${scheme.color.onTertiaryContainer});
 }
 :host([disabled=true]){
-  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2}) !important;
+  box-shadow: var(--s-elevation-level2, ${scheme.elevation.level2}) !important;
 }
 /*Size*/
 :host([size=small]){
@@ -82,7 +82,7 @@ const style = /*css*/`
   margin-right: -2px;
 }
 :host([pressed]){
-  box-shadow: var(--s-elevation-level4, ${Theme.elevationLevel4});
+  box-shadow: var(--s-elevation-level4, ${scheme.elevation.level4});
 }
 `
 
@@ -101,6 +101,8 @@ export class FloatingActionButton extends useElement({
 }) { }
 
 export { FloatingActionButton as FAB }
+
+FloatingActionButton.define()
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -8,7 +8,7 @@ for (const key of x) {
   const name = key.slice(0, -3)
   const docs = path.resolve('docs/zh-cn', `${name}.md`)
   if (!fs.existsSync(docs)) {
-    fs.writeFileSync(docs, `# ${name}`)
+    fs.writeFileSync(docs, `# ${name}\n`)
     console.log(`${docs} created`)
   }
 }

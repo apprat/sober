@@ -1,5 +1,5 @@
-import { useProps, useEvents, useElement } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import { useProps, useElement } from '../core/element.js'
+import * as scheme from '../core/scheme.js'
 import './button.js'
 
 const props = useProps({
@@ -21,9 +21,11 @@ const template = /*html*/`
 export class ButtonGroup extends useElement({
   name: 's-button-group',
   style, props, template,
-  setup(shadowRoot) {
+  setup() {
   }
 }) { }
+
+ButtonGroup.define()
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -1,5 +1,5 @@
 import { useElement } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import * as scheme from '../core/scheme.js'
 
 const style = /*css*/`
 :host{
@@ -8,13 +8,13 @@ const style = /*css*/`
   margin: 0 16px;
   gap: 8px;
   font-size: .75rem;
-  color: var(--s-color-outline, ${Theme.colorOutline});
+  color: var(--s-color-outline, ${scheme.color.outline});
  }
 :host::before,
 :host::after{
   content: '';
   flex-grow: 1;
-  border-top: solid 1px var(--s-color-outline-variant, ${Theme.colorOutlineVariant});
+  border-top: solid 1px var(--s-color-outline-variant, ${scheme.color.outlineVariant});
 }
 :host(:empty){
   gap: 0;
@@ -27,6 +27,8 @@ export class Divider extends useElement({
   name: 's-divider',
   style, template
 }) { }
+
+Divider.define()
 
 declare global {
   interface HTMLElementTagNameMap {

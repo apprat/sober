@@ -1,5 +1,4 @@
-import { useProps, useEvents, useElement, useThrottle, useThrottleDelay } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import { useProps, useElement } from '../core/element.js'
 
 const props = useProps({
   mode: ['standard', 'masonry']
@@ -71,6 +70,9 @@ export class ListItem extends useElement({
     //this.style.backgroundColor = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')
   }
 }) { }
+
+List.define()
+ListItem.define()
 
 declare global {
   interface HTMLElementTagNameMap {

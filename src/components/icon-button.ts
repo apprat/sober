@@ -1,5 +1,5 @@
 import { useElement, useProps } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import * as scheme from '../core/scheme.js'
 import { buttonStyle, buttonVariant } from '../core/style/button.js'
 import './ripple.js'
 
@@ -18,13 +18,12 @@ const style = /*css*/`
   width: 40px;
   height: 40px;
   transition-property: all;
-  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
-  --icon-button-icon-transform: none;
-  --icon-button-icon-transition: none;
+  color: var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
+  --icon-button-transform: none;
 }
 :host([variant=filled]){
-  background: var(--s-color-primary, ${Theme.colorPrimary});
-  color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
+  background: var(--s-color-primary, ${scheme.color.primary});
+  color: var(--s-color-on-primary, ${scheme.color.onPrimary});
 }
 /**Checkable**/
 :host([checkable=true][checked=true]:not([pressed])),
@@ -32,21 +31,21 @@ const style = /*css*/`
   border-radius: 12px;
 }
 :host(:not([variant])[checkable=true][checked=true]){
-  background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
-  color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
+  background: var(--s-color-primary-container, ${scheme.color.primaryContainer});
+  color: var(--s-color-on-primary-container, ${scheme.color.onPrimaryContainer});
 }
 :host([variant=filled][checkable=true]:not([checked=true])){
-  background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
-  color: var(--s-color-on-surface-variant,${Theme.colorOnSurfaceVariant});
+  background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
+  color: var(--s-color-on-surface-variant,${scheme.color.onSurfaceVariant});
 }
 :host([variant=tonal][checkable=true][checked=true]){
-  background: var(--s-color-secondary, ${Theme.colorSecondary});
-  color: var(--s-color-on-secondary, ${Theme.colorOnSecondary});
+  background: var(--s-color-secondary, ${scheme.color.secondary});
+  color: var(--s-color-on-secondary, ${scheme.color.onSecondary});
 }
 :host([variant=outlined][checkable=true][checked=true]){
   box-shadow: none;
-  background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
-  color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
+  background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
+  color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
 }
 /*Size*/
 :host([size=extra-small]){
@@ -133,6 +132,8 @@ export class IconButton extends useElement({
     })
   }
 }) { }
+
+IconButton.define()
 
 declare global {
   interface HTMLElementTagNameMap {

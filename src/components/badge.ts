@@ -1,5 +1,5 @@
 import { useElement } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import * as scheme from '../core/scheme.js'
 
 const style = /*css*/`
 :host{
@@ -12,8 +12,8 @@ const style = /*css*/`
   font-size: .625rem;
   vertical-align: middle;
   box-sizing: border-box;
-  background: var(--s-color-error, ${Theme.colorError});
-  color: var(--s-color-on-error, ${Theme.colorOnError});
+  background: var(--s-color-error, ${scheme.color.error});
+  color: var(--s-color-on-error, ${scheme.color.onError});
 }
 :host(:not(:empty)) .text{
   height: 16px;
@@ -34,6 +34,8 @@ export class Badge extends useElement({
   name: 's-badge',
   style, template
 }) { }
+
+Badge.define()
 
 declare global {
   interface HTMLElementTagNameMap {

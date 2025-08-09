@@ -1,5 +1,5 @@
 import { useElement, useProps } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import * as scheme from '../core/scheme.js'
 import './ripple.js'
 
 const props = useProps({
@@ -16,15 +16,15 @@ const style = /*css*/`
   cursor: pointer;
   position: relative;
   height: 40px;
-  color: var(--s-color-on-surface-variant, ${Theme.colorOnSurfaceVariant});
+  color: var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
 }
 :host([checked=true]){
-  color: var(--s-color-primary, ${Theme.colorPrimary});
+  color: var(--s-color-primary, ${scheme.color.primary});
 }
 :host([disabled=true]){
   pointer-events: none;
   .layout{
-    color: var(--s-color-on-surface, ${Theme.colorOnSurface}) !important;
+    color: var(--s-color-on-surface, ${scheme.color.onSurface}) !important;
     opacity: .38 !important;
   }
 }
@@ -53,8 +53,8 @@ const style = /*css*/`
   transform: scale(.5);
   opacity: 0;
   transition-property: transform, opacity;
-  transition-timing-function: var(--s-motion-easing-emphasized, ${Theme.motionEasingEmphasized});
-  transition-duration: var(--s-motion-duration-short4, ${Theme.motionDurationShort4});
+  transition-timing-function: var(--s-motion-easing-emphasized, ${scheme.motion.easing.emphasized});
+  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
 }
 :host([checked=true]:not([indeterminate=true])) .checked{
   opacity: 1;
@@ -118,6 +118,8 @@ export class Radio extends useElement({
     })
   }
 }) { }
+
+Radio.define()
 
 declare global {
   interface HTMLElementTagNameMap {

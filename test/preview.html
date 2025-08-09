@@ -6,6 +6,7 @@
   <meta name="viewport"
     content="width=device-width,viewport-fit=cover,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
   <script type="module" src="../dist/main.js"></script>
+  <link rel="stylesheet" href="../style/scroll-view.css">
   <title>Preview Markdown</title>
   <style>
     body {
@@ -46,13 +47,24 @@
       padding: 8px 12px;
       margin: 0;
       border-radius: 4px;
+      overflow: auto;
+      white-space: revert;
+      line-height: 1.6;
+      font-family: monospace;
+
+      code {
+        background: none;
+        padding: 0;
+      }
     }
 
-    details>summary {
-      cursor: pointer;
-      background: var(--s-color-surface-container-high);
-      padding: 8px 12px;
-      border-radius: 4px;
+    details {
+      summary {
+        cursor: pointer;
+        background: var(--s-color-surface-container-high);
+        padding: 8px 12px;
+        border-radius: 4px;
+      }
     }
 
     blockquote {
@@ -89,20 +101,26 @@
       padding: 8px 12px;
     }
 
-    .preview>.view {
-      text-align: center;
-    }
+    .preview {
+      .view {
+        text-align: center;
 
-    .preview>.view>* {
-      margin: 4px;
-    }
+        &>:is(s-button, s-icon, s-icon-button, s-radio, s-checkbox, s-fab, s-base-slider[orientation]) {
+          margin: 4px;
+        }
 
-    .preview>details {
-      margin-top: 16px;
-    }
+        &>*+:is(s-alert, s-tab, s-base-slider:not([orientation])) {
+          margin-top: 16px;
+        }
+      }
 
-    .preview>details>pre {
-      border-top: solid 1px var(--s-color-surface-variant);
+      details {
+        margin-top: 16px;
+
+        pre {
+          border-top: solid 1px var(--s-color-surface-variant);
+        }
+      }
     }
   </style>
   <style>

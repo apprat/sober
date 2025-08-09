@@ -26,8 +26,10 @@
 
 <body>
   <div class="test">
-    <div class="item" style="background: rgb(12, 31, 95); overflow: auto;">
-      <div style="width: 1000px;height: 20px;"></div>
+    <div class="item" style="background: rgb(12, 31, 95);">
+      <div style="width: 100%;height: 100%; overflow: auto;">
+        <h1 style="width: 1000px;height: 20px;">xxx</h1>
+      </div>
     </div>
     <div class="item" style="background: rgb(34, 106, 16);"></div>
     <div class="item" style="background: rgb(97, 21, 60);"></div>
@@ -40,9 +42,12 @@
   </div>
   <script>
     const test = document.querySelector('.test')
-    let is = false
-    test.addEventListener('s-scrollstart', function (e) {
-      console.log('start')
+    test.addEventListener('touchstart', function (e) {
+      let target = e.target
+      while (target !== test) {
+        console.log('target', target)
+        target = target.parentElement
+      }
     })
     // test.addEventListener('touchmove', function (e) {
     //   console.log('move')

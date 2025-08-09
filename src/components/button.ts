@@ -1,5 +1,5 @@
 import { useElement, useProps } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import * as scheme from '../core/scheme.js'
 import { buttonStyle, buttonVariant } from '../core/style/button.js'
 
 const props = useProps({
@@ -22,41 +22,41 @@ const style = /*css*/`
 :host(:not([variant])),
 :host([checkable=true][checked=true]:not([variant])),
 :host([variant=elevated][checkable=true][checked=true]){
-  background: var(--s-color-primary, ${Theme.colorPrimary});
-  color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
+  background: var(--s-color-primary, ${scheme.color.primary});
+  color: var(--s-color-on-primary, ${scheme.color.onPrimary});
 }
 :host([variant=elevated]){
-  background: var(--s-color-surface-container-low, ${Theme.colorSurfaceContainerLow});
-  color: var(--s-color-primary, ${Theme.colorPrimary});
-  box-shadow: var(--s-elevation-level1, ${Theme.elevationLevel1});
+  background: var(--s-color-surface-container-low, ${scheme.color.surfaceContainerLow});
+  color: var(--s-color-primary, ${scheme.color.primary});
+  box-shadow: var(--s-elevation-level1, ${scheme.elevation.level1});
 }
 :host([variant=elevated][pressed]){
-  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
+  box-shadow: var(--s-elevation-level2, ${scheme.elevation.level2});
 }
 :host([variant=text]){
-  color: var(--s-color-primary, ${Theme.colorPrimary});
+  color: var(--s-color-primary, ${scheme.color.primary});
 }
 /**Checkable**/
 :host(:not([variant])[checkable=true]){
-  background: var(--s-color-surface-container, ${Theme.colorSurfaceContainer});
-  color: var(--s-color-on-surface-variant,${Theme.colorOnSurfaceVariant});
+  background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
+  color: var(--s-color-on-surface-variant,${scheme.color.onSurfaceVariant});
 }
 :host([checkable=true][checked=true]:not([pressed])),
 :host([checkable=true][pressed]:not([checked=true])){
   border-radius: 12px;
 }
 :host([variant=tonal][checkable=true][checked=true]){
-  background: var(--s-color-secondary, ${Theme.colorSecondary});
-  color: var(--s-color-on-secondary, ${Theme.colorOnSecondary});
+  background: var(--s-color-secondary, ${scheme.color.secondary});
+  color: var(--s-color-on-secondary, ${scheme.color.onSecondary});
 }
 :host([variant=outlined][checkable=true][checked=true]){
   box-shadow: none;
-  background: var(--s-color-inverse-surface, ${Theme.colorInverseSurface});
-  color: var(--s-color-inverse-on-surface, ${Theme.colorInverseOnSurface});
+  background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
+  color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
 }
 :host([variant=text][checkable=true][checked=true]){
-  background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
-  color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
+  background: var(--s-color-primary-container, ${scheme.color.primaryContainer});
+  color: var(--s-color-on-primary-container, ${scheme.color.onPrimaryContainer});
 }
 :host([checkable=true][checked=true]:not([pressed])),
 :host([checkable=true][pressed]:not([checked=true])){
@@ -140,6 +140,8 @@ export class Button extends useElement({
     })
   }
 }) { }
+
+Button.define()
 
 declare global {
   interface HTMLElementTagNameMap {

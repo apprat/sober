@@ -1,16 +1,16 @@
-import { useProps, useEvents, useElement } from '../core/element.js'
+import { useProps, useElement } from '../core/element.js'
 import { buttonStyle } from '../core/style/button.js'
-import { Theme } from '../core/theme.js'
+import * as scheme from '../core/scheme.js'
 import './ripple.js'
 
 const props = useProps({
   disabled: false,
   align: ['right bottom', 'right top', 'left bottom', 'left top']
 })
-const events = useEvents({
+const events = {
   show: Event,
   change: Event
-})
+}
 
 const style = /*css*/`
 :host{
@@ -31,8 +31,8 @@ const style = /*css*/`
   background: rgba(0, 0, 0, 0.05);
   transform: scale(.5);
   transform-origin: center bottom;
-  transition-timing-function: var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
-  transition-duration: var(--s-motion-duration-short4, ${Theme.motionDurationShort4});
+  transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
+  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
   transition-property: transform, opacity;
 }
 :host([open]) .container{
@@ -40,7 +40,7 @@ const style = /*css*/`
   transform: scale(1);
 }
 ::slotted(s-fab[slot=trigger]){
-  --fab-icon-transition: transform var(--s-motion-duration-short4, ${Theme.motionDurationShort4}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
+  --fab-icon-transition: transform var(--s-motion-duration-short4, ${scheme.motion.duration.short4}) var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
 }
 :host([opened]) ::slotted(s-fab[slot=trigger]){
   border-radius: 50%;
@@ -82,9 +82,9 @@ const itemStyle = /*css*/`
   padding: 0 20px;
   border-radius: 20px;
   min-width: 72px;
-  background: var(--s-color-primary-container, ${Theme.colorPrimaryContainer});
-  color: var(--s-color-on-primary-container, ${Theme.colorOnPrimaryContainer});
-  box-shadow: var(--s-elevation-level2, ${Theme.elevationLevel2});
+  background: var(--s-color-primary-container, ${scheme.color.primaryContainer});
+  color: var(--s-color-on-primary-container, ${scheme.color.onPrimaryContainer});
+  box-shadow: var(--s-elevation-level2, ${scheme.elevation.level2});
 }
 .text{
   display: block;
@@ -119,6 +119,9 @@ export class FloatingActionButtonMenuItem extends useElement({
 }) { }
 
 export { FloatingActionButtonMenu as FABMenu, FloatingActionButtonMenuItem as FABMenuItem }
+
+FloatingActionButtonMenu.define()
+FloatingActionButtonMenuItem.define()
 
 declare global {
   interface HTMLElementTagNameMap {

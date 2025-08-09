@@ -30,15 +30,19 @@
 <s-radio name="group2" style="color:rgb(212, 162, 35); height: 56px" checked="true"></s-radio>
 ```
 
-如果你需要单独设置选中的颜色，可以使用 CSS 选择器；
+如果你需要单独设置选中前后的颜色，可以使用 CSS 选择器；
 
 ```html preview
 <style>
+  .radio{
+    color: #336699;
+  }
   .radio[checked=true]{
     color: #009688;
   }
 </style>
-<s-radio class="radio">其他</s-radio>
+<s-radio class="radio" name="other">其他 A</s-radio>
+<s-radio class="radio" name="other">其他 B</s-radio>
 ```
 
 ---

@@ -1,5 +1,5 @@
 import { useElement } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import * as scheme from '../core/scheme.js'
 
 const style = /*css*/`
 :host{
@@ -8,9 +8,9 @@ const style = /*css*/`
   border-radius: 8px;
   animation-name: skeleton;
   animation-iteration-count: infinite;
-  animation-duration: calc(var(--s-motion-duration-extra-long4, ${Theme.motionDurationExtraLong4}) * 2);
-  animation-timing-function: var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
-  background: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
+  animation-duration: calc(var(--s-motion-duration-extra-long4, ${scheme.motion.duration.extraLong4}) * 2);
+  animation-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
+  background: var(--s-color-surface-container-highest, ${scheme.color.surfaceContainerHighest});
 }
 @keyframes skeleton{
   0%{
@@ -29,6 +29,8 @@ export class Skeleton extends useElement({
   name: 's-skeleton',
   style
 }) { }
+
+Skeleton.define()
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -105,6 +105,8 @@ export class Icon extends useElement({
   }
 }) { }
 
+Icon.define()
+
 declare global {
   interface HTMLElementTagNameMap {
     [Icon.tagName]: Icon

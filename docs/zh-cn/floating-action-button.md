@@ -1,5 +1,7 @@
 # floating-action-button
 
+浮动操作按钮，该组件默认并没有浮动效果，大多数情况下，你都需要设置 CSS `position` 来设置浮动。
+
 ```html preview
 <s-fab>
   <s-icon name="add"></s-icon>

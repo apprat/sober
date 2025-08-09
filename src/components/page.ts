@@ -1,6 +1,6 @@
 import { useElement, useProps } from '../core/element.js'
-import { Theme } from '../core/theme.js'
-import { convertCSSDuration } from '../core/utils/CSS.js'
+import * as scheme from '../core/scheme.js'
+import { useComputedStyle } from '../core/utils/CSS.js'
 
 const props = useProps({
   theme: ['light', 'dark', 'auto']
@@ -14,114 +14,123 @@ const style = /*css*/`
   font-family: Roboto, system-ui;
   color: var(--s-color-on-background);
   background: var(--s-color-background);
-  --s-color-scrim: ${Theme.colorScrim};
-  --s-color-primary: ${Theme.colorPrimary};
-  --s-color-on-primary: ${Theme.colorOnPrimary};
-  --s-color-primary-container: ${Theme.colorPrimaryContainer};
-  --s-color-on-primary-container: ${Theme.colorOnPrimaryContainer};
-  --s-color-secondary: ${Theme.colorSecondary};
-  --s-color-on-secondary: ${Theme.colorOnSecondary};
-  --s-color-secondary-container: ${Theme.colorSecondaryContainer};
-  --s-color-on-secondary-container: ${Theme.colorOnSecondaryContainer};
-  --s-color-tertiary: ${Theme.colorTertiary};
-  --s-color-on-tertiary: ${Theme.colorOnTertiary};
-  --s-color-tertiary-container: ${Theme.colorTertiaryContainer};
-  --s-color-on-tertiary-container: ${Theme.colorOnTertiaryContainer};
-  --s-color-error: ${Theme.colorError};
-  --s-color-on-error: ${Theme.colorOnError};
-  --s-color-error-container: ${Theme.colorErrorContainer};
-  --s-color-on-error-container: ${Theme.colorOnErrorContainer};
-  --s-color-background: ${Theme.colorBackground};
-  --s-color-on-background: ${Theme.colorOnBackground};
-  --s-color-outline: ${Theme.colorOutline};
-  --s-color-outline-variant: ${Theme.colorOutlineVariant};
-  --s-color-surface: ${Theme.colorSurface};
-  --s-color-on-surface: ${Theme.colorOnSurface};
-  --s-color-surface-variant: ${Theme.colorSurfaceVariant};
-  --s-color-on-surface-variant: ${Theme.colorOnSurfaceVariant};
-  --s-color-inverse-surface: ${Theme.colorInverseSurface};
-  --s-color-inverse-on-surface: ${Theme.colorInverseOnSurface};
-  --s-color-inverse-primary: ${Theme.colorInversePrimary};
-  --s-color-surface-container: ${Theme.colorSurfaceContainer};
-  --s-color-surface-container-high: ${Theme.colorSurfaceContainerHigh};
-  --s-color-surface-container-highest: ${Theme.colorSurfaceContainerHighest};
-  --s-color-surface-container-low: ${Theme.colorSurfaceContainerLow};
-  --s-color-surface-container-lowest: ${Theme.colorSurfaceContainerLowest};
-  --s-color-success: ${Theme.colorSuccess};
-  --s-color-on-success: ${Theme.colorOnSuccess};
-  --s-color-success-container: ${Theme.colorSuccessContainer};
-  --s-color-on-success-container: ${Theme.colorOnSuccessContainer};
-  --s-color-warning: ${Theme.colorWarning};
-  --s-color-on-warning: ${Theme.colorOnWarning};
-  --s-color-warning-container: ${Theme.colorWarningContainer};
-  --s-color-on-warning-container: ${Theme.colorOnWarningContainer};
-  --s-color-dark-primary: ${Theme.colorDarkPrimary};
-  --s-color-dark-on-primary: ${Theme.colorDarkOnPrimary};
-  --s-color-dark-primary-container: ${Theme.colorDarkPrimaryContainer};
-  --s-color-dark-on-primary-container: ${Theme.colorDarkOnPrimaryContainer};
-  --s-color-dark-secondary: ${Theme.colorDarkSecondary};
-  --s-color-dark-on-secondary: ${Theme.colorDarkOnSecondary};
-  --s-color-dark-secondary-container: ${Theme.colorDarkSecondaryContainer};
-  --s-color-dark-on-secondary-container: ${Theme.colorDarkOnSecondaryContainer};
-  --s-color-dark-tertiary: ${Theme.colorDarkTertiary};
-  --s-color-dark-on-tertiary: ${Theme.colorDarkOnTertiary};
-  --s-color-dark-tertiary-container: ${Theme.colorDarkTertiaryContainer};
-  --s-color-dark-on-tertiary-container: ${Theme.colorDarkOnTertiaryContainer};
-  --s-color-dark-error: ${Theme.colorDarkError};
-  --s-color-dark-on-error: ${Theme.colorDarkOnError};
-  --s-color-dark-error-container: ${Theme.colorDarkErrorContainer};
-  --s-color-dark-on-error-container: ${Theme.colorDarkOnErrorContainer};
-  --s-color-dark-background: ${Theme.colorDarkBackground};
-  --s-color-dark-on-background: ${Theme.colorDarkOnBackground};
-  --s-color-dark-outline: ${Theme.colorDarkOutline};
-  --s-color-dark-outline-variant: ${Theme.colorDarkOutlineVariant};
-  --s-color-dark-surface: ${Theme.colorDarkSurface};
-  --s-color-dark-on-surface: ${Theme.colorDarkOnSurface};
-  --s-color-dark-surface-variant: ${Theme.colorDarkSurfaceVariant};
-  --s-color-dark-on-surface-variant: ${Theme.colorDarkOnSurfaceVariant};
-  --s-color-dark-inverse-surface: ${Theme.colorDarkInverseSurface};
-  --s-color-dark-inverse-on-surface: ${Theme.colorDarkInverseOnSurface};
-  --s-color-dark-inverse-primary: ${Theme.colorDarkInversePrimary};
-  --s-color-dark-surface-container: ${Theme.colorDarkSurfaceContainer};
-  --s-color-dark-surface-container-high: ${Theme.colorDarkSurfaceContainerHigh};
-  --s-color-dark-surface-container-highest: ${Theme.colorDarkSurfaceContainerHighest};
-  --s-color-dark-surface-container-low: ${Theme.colorDarkSurfaceContainerLow};
-  --s-color-dark-surface-container-lowest: ${Theme.colorDarkSurfaceContainerLowest};
-  --s-color-dark-success: ${Theme.colorDarkSuccess};
-  --s-color-dark-on-success: ${Theme.colorDarkOnSuccess};
-  --s-color-dark-success-container: ${Theme.colorDarkSuccessContainer};
-  --s-color-dark-on-success-container: ${Theme.colorDarkOnSuccessContainer};
-  --s-color-dark-warning: ${Theme.colorDarkWarning};
-  --s-color-dark-on-warning: ${Theme.colorDarkOnWarning};
-  --s-color-dark-warning-container: ${Theme.colorDarkWarningContainer};
-  --s-color-dark-on-warning-container: ${Theme.colorDarkOnWarningContainer};
-  --s-elevation-level1: ${Theme.elevationLevel1};
-  --s-elevation-level2: ${Theme.elevationLevel2};
-  --s-elevation-level3: ${Theme.elevationLevel3};
-  --s-elevation-level4: ${Theme.elevationLevel4};
-  --s-elevation-level5: ${Theme.elevationLevel5};
-  --s-motion-duration-Short1: ${Theme.motionDurationShort1};
-  --s-motion-duration-short2: ${Theme.motionDurationShort2};
-  --s-motion-duration-short3: ${Theme.motionDurationShort3};
-  --s-motion-duration-short4: ${Theme.motionDurationShort4};
-  --s-motion-duration-medium1: ${Theme.motionDurationMedium1};
-  --s-motion-duration-medium2: ${Theme.motionDurationMedium2};
-  --s-motion-duration-medium3: ${Theme.motionDurationMedium3};
-  --s-motion-duration-medium4: ${Theme.motionDurationMedium4};
-  --s-motion-duration-long1: ${Theme.motionDurationLong1};
-  --s-motion-duration-long2: ${Theme.motionDurationLong2};
-  --s-motion-duration-long3: ${Theme.motionDurationLong3};
-  --s-motion-duration-long4: ${Theme.motionDurationLong4};
-  --s-motion-duration-extra-long1: ${Theme.motionDurationExtraLong1};
-  --s-motion-duration-extra-long2: ${Theme.motionDurationExtraLong2};
-  --s-motion-duration-extra-long3: ${Theme.motionDurationExtraLong3};
-  --s-motion-duration-extra-long4: ${Theme.motionDurationExtraLong4};
-  --s-motion-easing-emphasized: ${Theme.motionEasingEmphasized};
-  --s-motion-easing-emphasized-decelerate: ${Theme.motionEasingEmphasizedDecelerate};
-  --s-motion-easing-emphasized-accelerate: ${Theme.motionEasingEmphasizedAccelerate};
-  --s-motion-easing-standard: ${Theme.motionEasingStandard};
-  --s-motion-easing-standard-decelerate: ${Theme.motionEasingStandardDecelerate};
-  --s-motion-easing-standard-accelerate: ${Theme.motionEasingStandardAccelerate};
+  --s-color-scrim: ${scheme.color.scrim};
+  --s-color-primary: ${scheme.color.primary};
+  --s-color-on-primary: ${scheme.color.onPrimary};
+  --s-color-primary-container: ${scheme.color.primaryContainer};
+  --s-color-on-primary-container: ${scheme.color.onPrimaryContainer};
+  --s-color-secondary: ${scheme.color.secondary};
+  --s-color-on-secondary: ${scheme.color.onSecondary};
+  --s-color-secondary-container: ${scheme.color.secondaryContainer};
+  --s-color-on-secondary-container: ${scheme.color.onSecondaryContainer};
+  --s-color-tertiary: ${scheme.color.tertiary};
+  --s-color-on-tertiary: ${scheme.color.onTertiary};
+  --s-color-tertiary-container: ${scheme.color.tertiaryContainer};
+  --s-color-on-tertiary-container: ${scheme.color.onTertiaryContainer};
+  --s-color-error: ${scheme.color.error};
+  --s-color-on-error: ${scheme.color.onError};
+  --s-color-error-container: ${scheme.color.errorContainer};
+  --s-color-on-error-container: ${scheme.color.onErrorContainer};
+  --s-color-background: ${scheme.color.background};
+  --s-color-on-background: ${scheme.color.onBackground};
+  --s-color-outline: ${scheme.color.outline};
+  --s-color-outline-variant: ${scheme.color.outlineVariant};
+  --s-color-surface: ${scheme.color.surface};
+  --s-color-on-surface: ${scheme.color.onSurface};
+  --s-color-surface-variant: ${scheme.color.surfaceVariant};
+  --s-color-on-surface-variant: ${scheme.color.onSurfaceVariant};
+  --s-color-inverse-surface: ${scheme.color.inverseSurface};
+  --s-color-inverse-on-surface: ${scheme.color.inverseOnSurface};
+  --s-color-inverse-primary: ${scheme.color.inversePrimary};
+  --s-color-surface-container: ${scheme.color.surfaceContainer};
+  --s-color-surface-container-high: ${scheme.color.surfaceContainerHigh};
+  --s-color-surface-container-highest: ${scheme.color.surfaceContainerHighest};
+  --s-color-surface-container-low: ${scheme.color.surfaceContainerLow};
+  --s-color-surface-container-lowest: ${scheme.color.surfaceContainerLowest};
+  --s-color-success: ${scheme.color.success};
+  --s-color-on-success: ${scheme.color.onSuccess};
+  --s-color-success-container: ${scheme.color.successContainer};
+  --s-color-on-success-container: ${scheme.color.onSuccessContainer};
+  --s-color-warning: ${scheme.color.warning};
+  --s-color-on-warning: ${scheme.color.onWarning};
+  --s-color-warning-container: ${scheme.color.warningContainer};
+  --s-color-on-warning-container: ${scheme.color.onWarningContainer};
+  --s-color-dark-primary: ${scheme.color.darkPrimary};
+  --s-color-dark-on-primary: ${scheme.color.darkOnPrimary};
+  --s-color-dark-primary-container: ${scheme.color.darkPrimaryContainer};
+  --s-color-dark-on-primary-container: ${scheme.color.darkOnPrimaryContainer};
+  --s-color-dark-secondary: ${scheme.color.darkSecondary};
+  --s-color-dark-on-secondary: ${scheme.color.darkOnSecondary};
+  --s-color-dark-secondary-container: ${scheme.color.darkSecondaryContainer};
+  --s-color-dark-on-secondary-container: ${scheme.color.darkOnSecondaryContainer};
+  --s-color-dark-tertiary: ${scheme.color.darkTertiary};
+  --s-color-dark-on-tertiary: ${scheme.color.darkOnTertiary};
+  --s-color-dark-tertiary-container: ${scheme.color.darkTertiaryContainer};
+  --s-color-dark-on-tertiary-container: ${scheme.color.darkOnTertiaryContainer};
+  --s-color-dark-error: ${scheme.color.darkError};
+  --s-color-dark-on-error: ${scheme.color.darkOnError};
+  --s-color-dark-error-container: ${scheme.color.darkErrorContainer};
+  --s-color-dark-on-error-container: ${scheme.color.darkOnErrorContainer};
+  --s-color-dark-background: ${scheme.color.darkBackground};
+  --s-color-dark-on-background: ${scheme.color.darkOnBackground};
+  --s-color-dark-outline: ${scheme.color.darkOutline};
+  --s-color-dark-outline-variant: ${scheme.color.darkOutlineVariant};
+  --s-color-dark-surface: ${scheme.color.darkSurface};
+  --s-color-dark-on-surface: ${scheme.color.darkOnSurface};
+  --s-color-dark-surface-variant: ${scheme.color.darkSurfaceVariant};
+  --s-color-dark-on-surface-variant: ${scheme.color.darkOnSurfaceVariant};
+  --s-color-dark-inverse-surface: ${scheme.color.darkInverseSurface};
+  --s-color-dark-inverse-on-surface: ${scheme.color.darkInverseOnSurface};
+  --s-color-dark-inverse-primary: ${scheme.color.darkInversePrimary};
+  --s-color-dark-surface-container: ${scheme.color.darkSurfaceContainer};
+  --s-color-dark-surface-container-high: ${scheme.color.darkSurfaceContainerHigh};
+  --s-color-dark-surface-container-highest: ${scheme.color.darkSurfaceContainerHighest};
+  --s-color-dark-surface-container-low: ${scheme.color.darkSurfaceContainerLow};
+  --s-color-dark-surface-container-lowest: ${scheme.color.darkSurfaceContainerLowest};
+  --s-color-dark-success: ${scheme.color.darkSuccess};
+  --s-color-dark-on-success: ${scheme.color.darkOnSuccess};
+  --s-color-dark-success-container: ${scheme.color.darkSuccessContainer};
+  --s-color-dark-on-success-container: ${scheme.color.darkOnSuccessContainer};
+  --s-color-dark-warning: ${scheme.color.darkWarning};
+  --s-color-dark-on-warning: ${scheme.color.darkOnWarning};
+  --s-color-dark-warning-container: ${scheme.color.darkWarningContainer};
+  --s-color-dark-on-warning-container: ${scheme.color.darkOnWarningContainer};
+  --s-elevation-level1: ${scheme.elevation.level1};
+  --s-elevation-level2: ${scheme.elevation.level2};
+  --s-elevation-level3: ${scheme.elevation.level3};
+  --s-elevation-level4: ${scheme.elevation.level4};
+  --s-elevation-level5: ${scheme.elevation.level5};
+  --s-motion-duration-Short1: ${scheme.motion.duration.short1}ms;
+  --s-motion-duration-short2: ${scheme.motion.duration.short2}ms;
+  --s-motion-duration-short3: ${scheme.motion.duration.short3}ms;
+  --s-motion-duration-short4: ${scheme.motion.duration.short4}ms;
+  --s-motion-duration-medium1: ${scheme.motion.duration.medium1}ms;
+  --s-motion-duration-medium2: ${scheme.motion.duration.medium2}ms;
+  --s-motion-duration-medium3: ${scheme.motion.duration.medium3}ms;
+  --s-motion-duration-medium4: ${scheme.motion.duration.medium4}ms;
+  --s-motion-duration-long1: ${scheme.motion.duration.long1}ms;
+  --s-motion-duration-long2: ${scheme.motion.duration.long2}ms;
+  --s-motion-duration-long3: ${scheme.motion.duration.long3}ms;
+  --s-motion-duration-long4: ${scheme.motion.duration.long4}ms;
+  --s-motion-duration-extra-long1: ${scheme.motion.duration.extraLong1}ms;
+  --s-motion-duration-extra-long2: ${scheme.motion.duration.extraLong2}ms;
+  --s-motion-duration-extra-long3: ${scheme.motion.duration.extraLong3}ms;
+  --s-motion-duration-extra-long4: ${scheme.motion.duration.extraLong4}ms;
+  --s-motion-easing-emphasized: ${scheme.motion.easing.emphasized};
+  --s-motion-easing-emphasized-decelerate: ${scheme.motion.easing.emphasizedDecelerate};
+  --s-motion-easing-emphasized-accelerate: ${scheme.motion.easing.emphasizedAccelerate};
+  --s-motion-easing-standard: ${scheme.motion.easing.standard};
+  --s-motion-easing-standard-decelerate: ${scheme.motion.easing.standardDecelerate};
+  --s-motion-easing-standard-accelerate: ${scheme.motion.easing.standardAccelerate};
+  --s-shape-corner-full: ${scheme.shape.corner.full};
+  --s-shape-corner-extra-small: ${scheme.shape.corner.extraSmall};
+  --s-shape-corner-small: ${scheme.shape.corner.small};
+  --s-shape-corner-medium: ${scheme.shape.corner.medium};
+  --s-shape-corner-large: ${scheme.shape.corner.large};
+  --s-shape-corner-large-increased: ${scheme.shape.corner.largeIncreased};
+  --s-shape-corner-extra-large: ${scheme.shape.corner.extraLarge};
+  --s-shape-corner-extra-large-increased: ${scheme.shape.corner.extraLargeIncreased};
+  --s-shape-corner-extra-extra-large: ${scheme.shape.corner.extraExtraLarge};
 }
 :host([dark]){
   --s-color-primary: var(--s-color-dark-primary) !important;
@@ -176,46 +185,46 @@ export const Page = useElement({
   name: 's-page',
   props, template, style,
   setup() {
-    const computedStyle = getComputedStyle(this)
+    const computedStyle = useComputedStyle(this)
     const darker = matchMedia('(prefers-color-scheme: dark)')
     const getAnimateOptions = () => {
-      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard-accelerate') || Theme.motionEasingStandardAccelerate
-      const duration = computedStyle.getPropertyValue('--s-motion-duration-long4') || Theme.motionDurationLong4
-      return { easing: easing, duration: convertCSSDuration(duration) }
+      const easing = computedStyle.getValue('--s-motion-easing-standard-accelerate') ?? scheme.motion.easing.standardAccelerate
+      const duration = computedStyle.getDuration('--s-motion-duration-long4') ?? scheme.motion.duration.long4
+      return { easing, duration }
     }
     const isDark = () => {
       if (this.theme === 'auto') return darker.matches
       if (this.theme === 'dark') return true
       return false
     }
-    const toggle = (theme: typeof props['theme'], trigger?: HTMLElement) => {
-      return new Promise<Animation | void>((resolve) => {
-        if (this.theme === theme) return
-        const isDark = darker.matches
-        const getTheme = (theme: typeof props['theme']) => theme === 'auto' ? (isDark ? 'dark' : 'light') : theme
-        const oldTheme = getTheme(this.theme)
-        const newTheme = getTheme(theme)
-        if (oldTheme === newTheme || !document.startViewTransition) {
-          this.theme = theme
-          return resolve()
-        }
-        const width = innerWidth
-        const height = innerHeight
-        const keyframes = { clipPath: [`circle(0px at 50% ${height / 2}px)`, `circle(${Math.sqrt(width ** 2 + height ** 2) / 2}px at 50% ${height / 2}px)`] }
-        if (trigger && trigger.isConnected) {
-          const { left, top } = trigger.getBoundingClientRect()
-          const x = left + trigger.offsetWidth / 2
-          const y = top + trigger.offsetHeight / 2
-          const twoW = Math.max(width - x, x)
-          const twoH = Math.max(height - y, y)
-          const size = Math.sqrt(twoW ** 2 + twoH ** 2)
-          keyframes.clipPath[0] = `circle(0px at ${x}px ${y}px)`
-          keyframes.clipPath[1] = `circle(${size}px at ${x}px ${y}px)`
-        }
-        const transition = document.startViewTransition(() => {
-          this.theme = theme
-          document.head.appendChild(viewTransitionStyle)
-        })
+    const toggle = async (theme: typeof props['theme'], trigger?: HTMLElement) => {
+      if (this.theme === theme) return
+      const isDark = darker.matches
+      const getTheme = (theme: typeof props['theme']) => theme === 'auto' ? (isDark ? 'dark' : 'light') : theme
+      const oldTheme = getTheme(this.theme)
+      const newTheme = getTheme(theme)
+      if (oldTheme === newTheme || !document.startViewTransition) {
+        this.theme = theme
+        return
+      }
+      const width = innerWidth
+      const height = innerHeight
+      const keyframes = { clipPath: [`circle(0px at 50% ${height / 2}px)`, `circle(${Math.sqrt(width ** 2 + height ** 2) / 2}px at 50% ${height / 2}px)`] }
+      if (trigger && trigger.isConnected) {
+        const { left, top } = trigger.getBoundingClientRect()
+        const x = left + trigger.offsetWidth / 2
+        const y = top + trigger.offsetHeight / 2
+        const twoW = Math.max(width - x, x)
+        const twoH = Math.max(height - y, y)
+        const size = Math.sqrt(twoW ** 2 + twoH ** 2)
+        keyframes.clipPath[0] = `circle(0px at ${x}px ${y}px)`
+        keyframes.clipPath[1] = `circle(${size}px at ${x}px ${y}px)`
+      }
+      const transition = document.startViewTransition(() => {
+        this.theme = theme
+        document.head.appendChild(viewTransitionStyle)
+      })
+      return await new Promise<Animation | void>((resolve) => {
         transition.ready.then(async () => {
           const animation = document.documentElement.animate(keyframes, { ...getAnimateOptions(), pseudoElement: '::view-transition-new(root)' })
           resolve(animation)
@@ -245,6 +254,8 @@ export const Page = useElement({
   }
 })
 
+Page.define()
+
 declare global {
   interface HTMLElementTagNameMap {
     [Page.tagName]: typeof Page
@@ -253,7 +264,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [Page.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [Page.tagName]: React.detailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
       }
     }
   }

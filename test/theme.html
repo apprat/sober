@@ -80,13 +80,20 @@
     </s-fab>
     <hr>
     <s-base-slider></s-base-slider>
+    <s-base-slider mode="single" style="margin-top: 24px;"></s-base-slider>
+    <s-alert style="margin-top: 24px;">
+      <s-icon name="star" slot="icon"></s-icon>
+      This is a content.
+      <s-button slot="action">close</s-button>
+    </s-alert>
   </s-page>
   <script src="../dist/sober.theme.min.js"></script>
   <script type="module">
     const inputColor = document.querySelector('#inputColor')
-    inputColor.onchange = () => {
+    inputColor.onchange = async () => {
       const color = inputColor.value
-      sober.theme.createScheme(color, { page: document.querySelector('s-page') })
+      const scheme = await sober.theme.createScheme(color)
+      scheme.apply(document.querySelector('s-page'))
     }
   </script>
 </body>

@@ -1,10 +1,15 @@
 import http from 'http'
-import fs, { readSync } from 'fs'
+import fs from 'fs'
 import path from 'path'
 import markdownIt from 'markdown-it'
 import url from 'url'
+import * as shiki from 'shiki'
 
 const __dirname = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), '../')
+const highlighter = await shiki.createHighlighter({
+  themes: ['github-dark'],
+  langs: ['shell', 'json', 'js', 'javascript', 'jsx', 'ts', 'typescript', 'tsx', 'css', 'xml', 'html']
+})
 
 const mineTypeMap = {
   html: 'text/html;charset=utf-8',
@@ -24,21 +29,20 @@ const mineTypeMap = {
   woff2: 'font/woff2',
 }
 
-function escapeHtml(unsafe) {
-  return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;")
+function highlight(v, lang = 'html') {
+  return highlighter.codeToHtml(v.trim(), { lang, theme: 'github-dark' })
 }
 
 const md = markdownIt({ html: true })
 
 md.renderer.rules.fence = (tokens, idx) => {
   const token = tokens[idx]
-  const html = escapeHtml(token.content)
-  if (token.info !== 'html preview') return `<pre>${html}</pre>`
+  if (token.info !== 'html preview') return highlight(token.content, token.info)
   return `<div class="preview">
     <div class="view">${token.content}</div>
-    <details>
+    <details open>
       <summary>查看代码</summary>
-      <pre>${html}</pre>
+      ${highlight(token.content)}
     </details>
   </div>`
 }

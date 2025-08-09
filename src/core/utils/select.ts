@@ -9,67 +9,108 @@ interface BaseItem extends HTMLElement {
 }
 
 export class Select<Root extends Base, Item extends BaseItem> {
-  items: Item[] = []
-  selectedItem?: Item
+  list: Item[] = []
+  selectedList: Item[] = []
   private flag = false
-  private value = ''
-  constructor(public root: Root, public slot: HTMLSlotElement, itemClass: { new(): Item }) {
-    //slot change
-    slot.addEventListener('slotchange', () => {
-      const oldSelectedItem = this.selectedItem
-      this.flagCallback(() => {
-        delete this.selectedItem
-        this.items = slot.assignedElements().filter((item) => {
-          if (!(item instanceof itemClass)) return
-          if (this.value === '') {
-            if (item.selected) {
-              if (this.selectedItem) this.selectedItem.selected = false
-              this.selectedItem = item
-            }
-            return true
-          }
-          if (item.value !== this.value && item.selected) item.selected = false
-          item.selected = true
-          this.selectedItem = item
-          return true
-        }) as Item[]
-      })
+  private value: string[] = []
+  constructor(private root: Root, private slot: HTMLSlotElement, private itemClass: { new(): Item }) {
+    this.slot.addEventListener('slotchange', () => {
+      const elements = slot.assignedElements()
+      this.list = []
+      elements.forEach((item) => item instanceof itemClass && this.list.push(item))
+      this.allSelected()
       this.onSlotChange?.()
-      this.onRender?.(oldSelectedItem)
+      this.onRender?.()
     })
-    //item change
-    root.addEventListener(`${root.tagName.toLocaleLowerCase()}:change`, (event) => {
-      event.stopPropagation()
-      if (this.flag) return
-      console.log('change')
+    this.root.addEventListener(`${root.tagName.toLocaleLowerCase()}:render`, (event) => {
+      if (this.flag || this.list.length === 0) return
+      const target = event.target as Item
+      if (this.root.multiple) {
+        this.selectedList = []
+        this.list.forEach((item) => item.selected && this.selectedList.push(item))
+        return this.onRender?.()
+      }
+      const old = this.selectedList[0]
+      this.selectedList = []
+      if (target.selected) {
+        this.selectedList = [target]
+        if (old) {
+          this.flag = true
+          old.selected = false
+          this.flag = false
+        }
+      }
+      this.onRender?.()
+    })
+    this.root.addEventListener(`${this.root.tagName.toLocaleLowerCase()}:select`, (event) => {
+      if (!(event.target instanceof this.itemClass)) return
+      let old: Item | undefined
+      let item: Item | undefined
+      if (this.root.multiple) {
+        const val = event.target.selected
+        if (!val) item = event.target
+        event.target.selected = !val
+      } else {
+        event.target.selected = true
+        old = this.selectedList[0]
+        item = event.target
+      }
+      this.root.dispatchEvent(new Event('change'))
+      this.onChange?.(item, old)
     })
   }
-  flagCallback(fn: Function) {
-    this.flag == true
-    fn()
+  private allSelected() {
+    this.selectedList = []
+    this.flag = true
+    for (const item of this.list) {
+      //not value
+      if (this.value.length === 0) {
+        if (this.root.multiple) {
+          item.selected && this.selectedList.push(item)
+          continue
+        }
+        if (this.selectedList.length > 0) {
+          item.selected = false
+          continue
+        }
+        this.selectedList = [item]
+        continue
+      }
+      item.selected && (item.selected = false)
+      if (item.value === '') continue
+      if (this.root.multiple ? this.value.includes(item.value) : item.value === this.value[0]) {
+        !item.selected && (item.selected = true)
+        this.selectedList.push(item)
+      }
+    }
     this.flag = false
   }
+  setMultiple() {
+    if (this.root.multiple) return
+    if (this.selectedList.length <= 1) return
+    this.flag = true
+    this.selectedList.forEach(item => item.selected = false)
+    this.flag = false
+    this.selectedList = []
+    this.onRender?.()
+    this.root.dispatchEvent(new Event('change'))
+  }
   getValue() {
-    return this.selectedItem?.value ?? ''
+    return this.root.multiple ? this.selectedList.map((item) => item.value).join() : (this.selectedList[0]?.value ?? '')
   }
   setValue(value: string) {
-    const oldSelectedItem = this.selectedItem
-    delete this.selectedItem
-    this.flagCallback(() => {
-      if (value === '') return this.items.forEach((item) => item.selected = false)
-      this.items.forEach((item) => {
-        if (item.value === value) {
-          item.selected = true
-          this.selectedItem = item
-          return
-        }
-        item.selected = false
-      })
-    })
-    if (oldSelectedItem) this.onChange?.(oldSelectedItem)
-    this.onRender?.(oldSelectedItem)
+    this.value = value.split(',')
+    if (this.list.length === 0) return
+    this.allSelected()
+    this.onRender?.()
   }
-  declare onRender?: (old?: Item) => void
-  declare onChange?: (old?: Item) => void
+  selectedIndex() {
+    return this.root.multiple ? -1 : this.list.indexOf(this.selectedList[0])
+  }
+  selectedIndexAll() {
+    return this.root.multiple ? this.selectedList.map((item) => this.list.indexOf(item)) : []
+  }
+  declare onRender?: () => void
+  declare onChange?: (item?: Item, old?: Item) => void
   declare onSlotChange?: () => void
 }

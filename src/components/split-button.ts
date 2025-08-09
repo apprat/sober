@@ -1,5 +1,5 @@
 import { useProps, useElement } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import * as scheme from '../core/scheme.js'
 
 const props = useProps({
   variant: ['filled', 'elevated', 'tonal', 'outlined'],
@@ -25,8 +25,8 @@ const style = /*css*/`
   border-radius: 50%;
 }
 ::slotted(:is(s-button, s-icon-button)){
-  background: var(--s-color-primary, ${Theme.colorPrimary});
-  color: var(--s-color-on-primary, ${Theme.colorOnPrimary});
+  background: var(--s-color-primary, ${scheme.color.primary});
+  color: var(--s-color-on-primary, ${scheme.color.onPrimary});
 }
 `
 
@@ -39,6 +39,8 @@ export class SplitButton extends useElement({
   name: 's-split-button',
   props, template, style,
 }) { }
+
+SplitButton.define()
 
 declare global {
   interface HTMLElementTagNameMap {

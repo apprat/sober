@@ -1,5 +1,5 @@
 import { useElement } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import * as scheme from '../core/scheme.js'
 
 const style = /*css*/`
 :host{
@@ -12,16 +12,16 @@ const style = /*css*/`
   font-size: .75rem;
   border-radius: 4px;
   box-sizing: border-box;
-  color: var(--s-color-outline, ${Theme.colorOutline});
+  color: var(--s-color-outline, ${scheme.color.outline});
 }
 .shadow{
-  fill: var(--s-color-surface-container-high, ${Theme.colorSurfaceContainerHigh});
+  fill: var(--s-color-surface-container-high, ${scheme.color.surfaceContainerHigh});
 }
 .box{
-  fill: var(--s-color-surface-container-highest, ${Theme.colorSurfaceContainerHighest});
+  fill: var(--s-color-surface-container-highest, ${scheme.color.surfaceContainerHighest});
 }
 .border{
-  stroke: var(--s-color-outline, ${Theme.colorOutline});
+  stroke: var(--s-color-outline, ${scheme.color.outline});
 }
 ::slotted(:is(svg, s-icon)){
   color: currentColor;
@@ -47,6 +47,8 @@ export class Empty extends useElement({
   name: 's-empty',
   style, template
 }) { }
+
+Empty.define()
 
 declare global {
   interface HTMLElementTagNameMap {

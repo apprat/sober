@@ -1,7 +1,7 @@
 import { useElement, useProps } from '../core/element.js'
 import { device } from '../core/device.js'
-import { convertCSSDuration } from '../core/utils/CSS.js'
-import { Theme } from '../core/theme.js'
+import { useComputedStyle } from '../core/utils/CSS.js'
+import * as scheme from '../core/scheme.js'
 
 const props = useProps({
   attached: false,
@@ -33,7 +33,7 @@ const style = /*css*/`
     content: '';
     opacity: 0;
     background: var(--ripple-color, currentColor);
-    transition: opacity var(--s-motion-duration-short4, ${Theme.motionDurationShort2}) var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
+    transition: opacity var(--s-motion-duration-short4, ${scheme.motion.duration.short4}) var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
   }
   &.hovered::before{
     opacity: var(--ripple-hover-opacity, .08);
@@ -44,6 +44,8 @@ const style = /*css*/`
   border-radius: 50%;
   background: currentColor;
   filter: opacity(var(--ripple-opacity, .18));
+  animation-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
+  animation-duration: var(--s-motion-duration-long4, ${scheme.motion.duration.long4});
 }
 `
 
@@ -60,12 +62,11 @@ export class Ripple extends useElement({
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const ripple = shadowRoot.querySelector<HTMLDivElement>('.ripple')!
-    const computedStyle = getComputedStyle(this)
+    const computedStyle = useComputedStyle(ripple)
     const getAnimateOptions = () => {
-      const easing = computedStyle.getPropertyValue('--s-motion-easing-standard') || Theme.motionEasingStandard
-      const duration = computedStyle.getPropertyValue('--s-motion-duration-long4') || Theme.motionDurationLong4
-      const shortDuration = computedStyle.getPropertyValue('--s-motion-duration-short4') || Theme.motionDurationShort4
-      return { easing: easing, duration: convertCSSDuration(duration), shortDuration: convertCSSDuration(shortDuration) }
+      const easing = computedStyle.getValue('animation-timing-function')
+      const duration = computedStyle.getDuration('animation-duration')
+      return { easing, duration }
     }
     const hover = () => !device.touchEnabled && container.classList.add('hovered')
     const unHover = () => !device.touchEnabled && container.classList.remove('hovered')
@@ -107,35 +108,31 @@ export class Ripple extends useElement({
         left: [coordinate.x, coordinate.x],
         top: [coordinate.y, coordinate.y],
       }, { ...animateOptions, fill: 'forwards' })
-      const remove = () => {
+      return () => {
         parent.removeAttribute('pressed')
         const time = Number(animation.currentTime)
-        const diff = animateOptions.duration - animateOptions.shortDuration
-        const duration = time > diff ? animateOptions.shortDuration : animateOptions.duration - time
+        const short = animateOptions.duration / 2
+        const diff = animateOptions.duration - short
+        const duration = time > diff ? short : animateOptions.duration - time
         newRipple.animate({ opacity: [1, 0] }, { duration, easing: animateOptions.easing, fill: 'forwards' }).finished.then(callback)
       }
-      return remove
     }
     const down = async (event: PointerEvent) => {
       if (event.button !== 0) return
-      const data: { timer?: number, upper?: boolean } = {}
-      if (event.pointerType !== 'touch') {
-        document.addEventListener('pointerup', run(event), { once: true })
-        return
+      if (event.pointerType !== 'touch') return document.addEventListener('pointerup', run(event), { once: true })
+      let stop: Function
+      const timer = setTimeout(() => stop = run(event), 40)
+      const move = () => {
+        if (stop) return document.removeEventListener('touchmove', move)
+        clearTimeout(timer)
       }
-      let remove: Function
-      //优先响应触屏滚动
-      data.timer = setTimeout(() => {
-        remove = run(event)
+      const remove = () => {
+        stop?.()
         document.removeEventListener('touchmove', move)
-        if (data.upper) remove()
-      }, 50)
-      document.addEventListener('touchend', () => {
-        if (!remove) return data.upper = true
-        remove()
-      }, { once: true })
-      const move = () => clearTimeout(data.timer)
-      document.addEventListener('touchmove', move, { once: true })
+        document.removeEventListener('touchend', remove)
+      }
+      document.addEventListener('touchmove', move, { passive: true })
+      document.addEventListener('touchend', remove, { passive: true })
     }
     const add = (target: HTMLElement) => {
       target.addEventListener('mouseenter', hover)
@@ -169,6 +166,8 @@ export class Ripple extends useElement({
     }
   }
 }) { }
+
+Ripple.define()
 
 declare global {
   interface HTMLElementTagNameMap {

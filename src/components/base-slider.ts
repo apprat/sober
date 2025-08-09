@@ -1,5 +1,5 @@
 import { useElement, useProps, useThrottle } from '../core/element.js'
-import { Theme } from '../core/theme.js'
+import * as scheme from '../core/scheme.js'
 import { device } from '../core/device.js'
 import './ripple.js'
 
@@ -23,12 +23,12 @@ const style = /*css*/`
   height: 8px;
   cursor: pointer;
   position: relative;
-  color: var(--s-color-primary, ${Theme.colorPrimary});
+  color: var(--s-color-primary, ${scheme.color.primary});
   transition-property: none;
-  transition-timing-function: var(--s-motion-easing-standard, ${Theme.motionEasingStandard});
-  transition-duration: var(--s-motion-duration-short4, ${Theme.motionDurationShort4});
-  --base-slider-gap: 3px;
-  --base-slider-thumb-size: 16px;
+  transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
+  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
+  --base-slider-gap: 4px;
+  --base-slider-thumb-size: 18px;
   --base-slider-thumb-width: var(--base-slider-thumb-size);
   --base-slider-thumb-height: var(--base-slider-thumb-size);
   --base-slider-thumb-start-width: var(--base-slider-thumb-width);
@@ -40,22 +40,18 @@ const style = /*css*/`
   pointer-events: none !important;
 }
 .layuot{
-  all: inherit;
   display: contents;
 }
 slot:is([name=track-start], [name=track-fill], [name=track-end], [name=thumb-start], [name=thumb-end]){
   display: flex;
   justify-content: center;
   align-items: center;
-  transition-property: inherit;
-  transition-timing-function: inherit;
-  transition-duration: inherit;
   box-sizing: border-box;
   flex-shrink: 0;
   position: absolute;
 }
 slot:is([name=track-start], [name=track-fill], [name=track-end]){
-  background: var(--s-color-secondary-container, ${Theme.colorSecondaryContainer});
+  background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
   border-radius: 4px;
   height: 100%;
   left: 0;
@@ -94,8 +90,6 @@ slot:is([name=thumb-start], [name=thumb-end]){
     background: currentColor;
     transform: scale(1);
     transition-property: transform, opacity;
-    transition-timing-function: inherit;
-    transition-duration: inherit;
   }
 }
 slot[name=thumb-start]{
@@ -231,7 +225,7 @@ const findClosestStep = (num: number, step: number, max: number) => {
   const res = Math.max(0, Math.min(max / step, Math.round(num / step)))
   return res * step
 }
-const getOrientation = (orientation: 'horizontal' | 'vertical') => {
+const getOrientation = (orientation: typeof props.orientation) => {
   const data = {
     horizontal: { offset: 'offsetWidth', rect: 'left', client: 'clientX' },
     vertical: { offset: 'offsetHeight', rect: 'top', client: 'clientY' }
@@ -375,6 +369,7 @@ export class BaseSlider extends useElement({
   }
 }) { }
 
+BaseSlider.define()
 
 declare global {
   interface HTMLElementTagNameMap {

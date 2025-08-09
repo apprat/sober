@@ -1,5 +1,10 @@
 # 更新日志
 
+# Unpublished changes since 1.1.6
+
+- 修复：关闭下拉菜单动画期间快速点击其他选项会更改选中项的问题。
+- 构建：移除 `html-minifier`，改为 `html-minifier-terser`。
+
 #### 1.1.6 (2025-05-29)
 
 - 更新核心：所有组件支持通过HTML属性绑定自定义事件，如：`<s-dialog onshow="console.log('showed')"></s-dialog>`。

@@ -26,21 +26,20 @@ const style = /*css*/`
 `
 
 export class Skeleton extends useElement({
-  name: 's-skeleton',
   style
 }) { }
 
-Skeleton.define()
+const name = Skeleton.define('s-skeleton')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [Skeleton.tagName]: Skeleton
+    [name]: Skeleton
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [Skeleton.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
       }
     }
   }
@@ -51,7 +50,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [Skeleton.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -65,7 +64,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [Skeleton.tagName]: IntrinsicElements['div']
+      [name]: IntrinsicElements['div']
     }
   }
 }
@@ -75,7 +74,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Skeleton.tagName]: JSX.HTMLAttributes<HTMLElement>
+      [name]: JSX.HTMLAttributes<HTMLElement>
     }
   }
 }
@@ -85,7 +84,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Skeleton.tagName]: JSXInternal.HTMLAttributes<HTMLElement>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement>
     }
   }
 }

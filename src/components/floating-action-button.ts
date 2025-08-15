@@ -94,7 +94,6 @@ const template = /*html*/`
 `
 
 export class FloatingActionButton extends useElement({
-  name: 's-fab',
   style: [buttonStyle, style],
   focused: true,
   props, template, events,
@@ -102,17 +101,17 @@ export class FloatingActionButton extends useElement({
 
 export { FloatingActionButton as FAB }
 
-FloatingActionButton.define()
+const name = FloatingActionButton.define('s-fab')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [FloatingActionButton.tagName]: FloatingActionButton
+    [name]: FloatingActionButton
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [FloatingActionButton.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -123,7 +122,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [FloatingActionButton.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -136,7 +135,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [FloatingActionButton.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -146,7 +145,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [FloatingActionButton.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -156,7 +155,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [FloatingActionButton.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

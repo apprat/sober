@@ -51,9 +51,10 @@ export class Select<Root extends Base, Item extends BaseItem> {
         if (!val) item = event.target
         event.target.selected = !val
       } else {
-        event.target.selected = true
+        if (this.selectedList[0] === event.target) return
         old = this.selectedList[0]
         item = event.target
+        event.target.selected = true
       }
       this.root.dispatchEvent(new Event('change'))
       this.onChange?.(item, old)
@@ -73,7 +74,7 @@ export class Select<Root extends Base, Item extends BaseItem> {
           item.selected = false
           continue
         }
-        this.selectedList = [item]
+        if (item.selected) this.selectedList = [item]
         continue
       }
       item.selected && (item.selected = false)

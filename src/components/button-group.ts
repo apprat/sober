@@ -19,23 +19,22 @@ const template = /*html*/`
 `
 
 export class ButtonGroup extends useElement({
-  name: 's-button-group',
   style, props, template,
   setup() {
   }
 }) { }
 
-ButtonGroup.define()
+const name = ButtonGroup.define('s-button-group')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [ButtonGroup.tagName]: ButtonGroup
+    [name]: ButtonGroup
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [ButtonGroup.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -46,7 +45,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [ButtonGroup.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -59,7 +58,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [ButtonGroup.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -69,7 +68,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [ButtonGroup.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -79,7 +78,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [ButtonGroup.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

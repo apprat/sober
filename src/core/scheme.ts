@@ -120,10 +120,10 @@ export namespace motion {
     long2 = 500,
     long3 = 550,
     long4 = 600,
-    extraLong1 = '700ms',
-    extraLong2 = '800ms',
-    extraLong3 = '900ms',
-    extraLong4 = '1000ms',
+    extraLong1 = '700',
+    extraLong2 = '800',
+    extraLong3 = '900',
+    extraLong4 = '1000',
   }
   export const enum easing {
     emphasized = 'cubic-bezier(0.2, 0, 0, 1.0)',

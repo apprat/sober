@@ -40,7 +40,7 @@ md.renderer.rules.fence = (tokens, idx) => {
   if (token.info !== 'html preview') return highlight(token.content, token.info)
   return `<div class="preview">
     <div class="view">${token.content}</div>
-    <details open>
+    <details>
       <summary>查看代码</summary>
       ${highlight(token.content)}
     </details>

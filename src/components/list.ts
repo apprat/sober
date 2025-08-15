@@ -3,11 +3,22 @@ import { useProps, useElement } from '../core/element.js'
 const props = useProps({
   mode: ['standard', 'masonry']
 })
+const itemProps = useProps({
 
+})
 const style = /*css*/`
 :host{
   display: block;
   background: #eee;
+}
+`
+const itemStyle = /*css*/`
+:host{
+  display: flex;
+  background: #336699;
+  border-top: solid 1px #999;
+  color: #fff;
+  padding: 8px 16px;
 }
 `
 
@@ -17,8 +28,13 @@ const template = /*html*/`
 <div class="after"></div>
 `
 
+const itemTemplate = /*html*/`
+<slot>
+  Grid List Item
+</slot>
+`
+
 export class List extends useElement({
-  name: 's-list',
   style, props, template,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
@@ -42,26 +58,7 @@ export class List extends useElement({
   }
 }) { }
 
-const itemProps = useProps({
-
-})
-const itemStyle = /*css*/`
-:host{
-  display: flex;
-  background: #336699;
-  border-top: solid 1px #999;
-  color: #fff;
-  padding: 8px 16px;
-}
-`
-const itemTemplate = /*html*/`
-<slot>
-  Grid List Item
-</slot>
-`
-
 export class ListItem extends useElement({
-  name: 's-list-item',
   style: itemStyle,
   props: itemProps,
   template: itemTemplate,
@@ -71,21 +68,21 @@ export class ListItem extends useElement({
   }
 }) { }
 
-List.define()
-ListItem.define()
+const name = List.define('s-list')
+const itemName = ListItem.define('s-list-item')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [List.tagName]: List
-    [ListItem.tagName]: ListItem
+    [name]: List
+    [itemName]: ListItem
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [List.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
         //@ts-ignore
-        [ListItem.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
       }
     }
   }
@@ -96,13 +93,13 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [List.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props>
     } & List
-    [ListItem.tagName]: new () => {
+    [itemName]: new () => {
       $props: HTMLAttributes & Partial<typeof itemProps>
     } & ListItem
   }
@@ -112,9 +109,9 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [List.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
       //@ts-ignore
-      [ListItem.tagName]: IntrinsicElements['div'] & Partial<typeof itemProps>
+      [itemName]: IntrinsicElements['div'] & Partial<typeof itemProps>
     }
   }
 }
@@ -124,9 +121,9 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [List.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [ListItem.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }
@@ -136,9 +133,9 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [List.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
       //@ts-ignore
-      [ListItem.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
     }
   }
 }

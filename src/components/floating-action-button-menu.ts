@@ -7,6 +7,9 @@ const props = useProps({
   disabled: false,
   align: ['right bottom', 'right top', 'left bottom', 'left top']
 })
+const itemProps = useProps({
+  disabled: false
+})
 const events = {
   show: Event,
   change: Event
@@ -48,33 +51,6 @@ const style = /*css*/`
 }
 `
 
-const template = /*html*/`
-<slot name="trigger"></slot>
-<div class="container opened">
-  <slot></slot>
-</div>
-`
-
-export class FloatingActionButtonMenu extends useElement({
-  name: 's-fab-menu',
-  props, template, events, style,
-  setup(shadowRoot) {
-    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
-    const trigger = shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!
-    const toggle = (force?: boolean) => this.toggleAttribute('open', force ?? !this.hasAttribute('open'))
-    const open = () => { }
-    const close = () => { }
-    trigger.onclick = () => toggle()
-    return {
-      expose: { open, close, toggle }
-    }
-  }
-}) { }
-
-const itemProps = useProps({
-  disabled: false
-})
-
 const itemStyle = /*css*/`
 :host{
   height: 40px;
@@ -104,6 +80,13 @@ const itemStyle = /*css*/`
 }
 `
 
+const template = /*html*/`
+<slot name="trigger"></slot>
+<div class="container opened">
+  <slot></slot>
+</div>
+`
+
 const itemTemplate = /*html*/`
 <slot name="start"></slot>
 <slot class="text" part="text"></slot>
@@ -111,8 +94,22 @@ const itemTemplate = /*html*/`
 <s-ripple attached="true" part="ripple"></s-ripple>
 `
 
+export class FloatingActionButtonMenu extends useElement({
+  props, template, events, style,
+  setup(shadowRoot) {
+    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
+    const trigger = shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!
+    const toggle = (force?: boolean) => this.toggleAttribute('open', force ?? !this.hasAttribute('open'))
+    const open = () => { }
+    const close = () => { }
+    trigger.onclick = () => toggle()
+    return {
+      expose: { open, close, toggle }
+    }
+  }
+}) { }
+
 export class FloatingActionButtonMenuItem extends useElement({
-  name: 's-fab-menu-item',
   props: itemProps,
   template: itemTemplate,
   style: [buttonStyle, itemStyle]
@@ -120,13 +117,13 @@ export class FloatingActionButtonMenuItem extends useElement({
 
 export { FloatingActionButtonMenu as FABMenu, FloatingActionButtonMenuItem as FABMenuItem }
 
-FloatingActionButtonMenu.define()
-FloatingActionButtonMenuItem.define()
+const name = FloatingActionButtonMenu.define('s-fab-menu')
+const itemName = FloatingActionButtonMenuItem.define('s-fab-menu-item')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [FloatingActionButtonMenu.tagName]: FloatingActionButtonMenu
-    [FloatingActionButtonMenuItem.tagName]: FloatingActionButtonMenuItem
+    [name]: FloatingActionButtonMenu
+    [itemName]: FloatingActionButtonMenuItem
   }
   namespace React {
     namespace JSX {
@@ -143,7 +140,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [FloatingActionButtonMenu.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -156,7 +153,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [FloatingActionButtonMenu.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -166,7 +163,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [FloatingActionButtonMenu.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -176,7 +173,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [FloatingActionButtonMenu.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

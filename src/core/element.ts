@@ -43,6 +43,9 @@ const baseStyle = /*css*/`
   animation-timing-function: inherit;
   animation-duration: inherit;
 }
+:host, *{
+  box-sizing: border-box;
+}
 @media (pointer: fine) {
   ::-webkit-scrollbar{
     background: var(--s-scrollbar-color, transparent);
@@ -63,7 +66,38 @@ const baseStyle = /*css*/`
 }
 `
 
-type PropsMeta = { [key: string]: { to: (v: any) => Prop, capitalize: string, def: Prop, sync: boolean } }
+class PropMeta {
+  value: Prop
+  types: string[] = []
+  capitalize: string
+  synced: boolean
+  constructor(key: string, value: Prop | string[]) {
+    const synced = !key.startsWith('$')
+    key = synced ? key : key.slice(1)
+    this.capitalize = key.charAt(0).toUpperCase() + key.slice(1)
+    this.synced = synced
+    if (Array.isArray(value)) {
+      this.types = value
+      this.value = value[0]
+      return
+    }
+    this.value = value
+  }
+  to(v: any): Prop {
+    switch (typeof this.value) {
+      case 'string':
+        if (this.types.length > 0) return this.value.includes(v) ? v : this.value
+        return String(v)
+      case 'number':
+        const num = v === null ? this.value : Number(v)
+        return isNaN(num) ? this.value : num
+      case 'boolean':
+        if (typeof v === 'boolean') return v
+        return v === null ? this.value : v !== 'false'
+    }
+  }
+}
+
 export const useProps = <const T extends { [key: string]: Prop | string[] } = {}>(options: T): {
   -readonly [K in keyof T as K extends `$${infer NK}` ? NK : K]
   : T[K] extends string[] ? T[K][number]
@@ -73,38 +107,11 @@ export const useProps = <const T extends { [key: string]: Prop | string[] } = {}
   : never
 } => {
   const props: { [key: string]: Prop } = {}
-  const meta: PropsMeta = {}
+  const meta: { [key: string]: PropMeta } = {}
   for (const key in options) {
-    let value = options[key] as Prop
-    const state = { key: key as string, sync: true, types: [] as string[] }
-    if (key.startsWith('$')) {
-      state.key = key.slice(1)
-      state.sync = false
-    }
-    if (Array.isArray(value)) {
-      state.types = value
-      value = state.types[0]
-    }
-    props[state.key] = value
-    meta[state.key] = {
-      sync: state.sync,
-      def: value,
-      capitalize: state.key.charAt(0).toUpperCase() + state.key.slice(1),
-      to: (v) => {
-        switch (typeof value) {
-          case 'string':
-            if (!v) return value
-            const val = String(v)
-            return state.types.length > 0 ? (state.types.includes(val) ? val : state.types[0]) : val
-          case 'number':
-            const num = v === null ? value : Number(v)
-            return isNaN(num) ? value : num
-          case 'boolean':
-            if (typeof v === 'boolean') return v
-            return v === null ? value : v !== 'false'
-        }
-      }
-    }
+    const propMeta = new PropMeta(key, options[key])
+    props[key] = propMeta.value
+    meta[key] = propMeta
   }
   Object.defineProperty(props, '$meta', { value: meta })
   return props as never
@@ -121,12 +128,10 @@ type El<Props, Expose, Events extends { [key: string]: any }> = Props & Expose &
 }
 
 export const useElement = <
-  N extends string,
   Props extends { [key: string]: Prop } = {},
   Expose extends { [key: string]: any } = {},
   Events extends { [key: string]: any } = {},
 >(options: {
-  name: N
   style?: string | string[]
   props?: Props
   events?: Events
@@ -145,33 +150,31 @@ export const useElement = <
 }): {
   new(): El<Props, Expose, Events>
   prototype: HTMLElement
-  tagName: N
-  define(name?: string): void
+  define<T extends string>(name: T): T
 } => {
+  const observedAttributes: string[] = []
   const state = {
-    observedAttributes: [] as string[],
-    upperPropKeys: {} as { [key: string]: string },
-    metaProps: options.props?.$meta as unknown as PropsMeta ?? {},
+    lowerKeys: {} as { [key: string]: string },
+    metaProps: options.props?.$meta as unknown as { [key: string]: PropMeta } ?? {},
     events: [] as string[]
   }
   for (const key in state.metaProps ?? {}) {
-    const value = key.toLowerCase()
-    state.observedAttributes.push(value)
-    state.upperPropKeys[value] = key
+    state.lowerKeys[key] = key.toLowerCase()
+    observedAttributes.push(state.lowerKeys[key])
   }
   for (const key in options.events) {
     const k = `on${key}`
-    state.observedAttributes.push(k)
+    observedAttributes.push(k)
     if (k in HTMLElement.prototype) continue
     state.events.push(k)
   }
   type ReturnType<T extends ((...args: any) => any) | undefined> = T extends (...args: any) => infer R ? R : T
   const map = new Map<HTMLElement, ReturnType<typeof options.setup>>()
   class Component extends HTMLElement {
-    static observedAttributes = state.observedAttributes
-    static tagName = options.name
-    static define(name?: string) {
-      !customElements.get(name ?? options.name) && customElements.define(name ?? options.name, this)
+    static observedAttributes = observedAttributes
+    static define(name: string) {
+      !customElements.get(name) && customElements.define(name, this)
+      return name
     }
     constructor() {
       super()
@@ -197,12 +200,12 @@ export const useElement = <
             if (v === undefined) return
             const meta = state.metaProps[key]
             const value = meta.to(v)
-            if (meta.sync) {
+            if (meta.synced) {
               const lowerKey = key.toLowerCase()
               const attrValue = this.getAttribute(lowerKey)
               const valueStr = String(value)
-              if (value === meta.def && attrValue !== null) return this.removeAttribute(lowerKey)
-              if (value !== meta.def && attrValue !== valueStr) return this.setAttribute(lowerKey, valueStr)
+              if (value === meta.value && attrValue !== null) return this.removeAttribute(lowerKey)
+              if (value !== meta.value && attrValue !== valueStr) return this.setAttribute(lowerKey, valueStr)
             }
             if (value === this[key as keyof this]) return
             if (options.focused && key === 'disabled') {
@@ -248,7 +251,7 @@ export const useElement = <
     }
     attributeChangedCallback(key: string, _: unknown, value: string | null) {
       if (state.events.includes(key)) return this[key as keyof this] = (value ? new Function('event', value) : null) as never
-      this[state.upperPropKeys[key] as keyof this] = value as never
+      this[state.lowerKeys[key] as keyof this] = value as never
     }
   }
   return Component as never

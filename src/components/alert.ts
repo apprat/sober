@@ -17,7 +17,6 @@ const style = /*css*/`
   font-size: .875rem;
   font-weight: 500;
   min-height: 48px;
-  box-sizing: border-box;
   border-radius: 4px;
   word-break: break-all;
   color: var(--s-color-on-secondary-container, ${scheme.color.onSecondaryContainer});
@@ -42,7 +41,6 @@ svg{
   width: 24px;
   height: 24px;
   fill: currentColor;
-  box-sizing: border-box;
   flex-shrink: 0;
 }
 .icon,
@@ -166,7 +164,6 @@ const template = /*html*/`
 `
 
 export class Alert extends useElement({
-  name: 's-alert',
   style, props, template,
   setup(shadowRoot) {
     const toggleSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=toggle]')!
@@ -205,17 +202,17 @@ export class Alert extends useElement({
   }
 }) { }
 
-Alert.define()
+const name = Alert.define('s-alert')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [Alert.tagName]: Alert
+    [name]: Alert
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [Alert.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -226,7 +223,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [Alert.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -239,7 +236,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [Alert.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -249,7 +246,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Alert.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -259,7 +256,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Alert.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

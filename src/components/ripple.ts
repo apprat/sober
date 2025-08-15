@@ -57,7 +57,6 @@ const template = /*html*/`
 `
 
 export class Ripple extends useElement({
-  name: 's-ripple',
   style, template, props,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
@@ -167,17 +166,17 @@ export class Ripple extends useElement({
   }
 }) { }
 
-Ripple.define()
+const name = Ripple.define('s-ripple')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [Ripple.tagName]: typeof Ripple
+    [name]: Ripple
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [Ripple.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -188,12 +187,12 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [Ripple.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props>
-    } & typeof Ripple
+    } & Ripple
   }
 }
 //@ts-ignore
@@ -201,7 +200,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [Ripple.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -211,7 +210,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Ripple.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -221,7 +220,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Ripple.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

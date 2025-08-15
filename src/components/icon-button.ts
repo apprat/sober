@@ -121,7 +121,6 @@ const template = /*html*/`
 `
 
 export class IconButton extends useElement({
-  name: 's-icon-button',
   style: [buttonStyle, buttonVariant, style],
   focused: true,
   props, template,
@@ -133,17 +132,17 @@ export class IconButton extends useElement({
   }
 }) { }
 
-IconButton.define()
+const name = IconButton.define('s-icon-button')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [IconButton.tagName]: IconButton
+    [name]: IconButton
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [IconButton.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -154,7 +153,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [IconButton.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -167,7 +166,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [IconButton.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -177,7 +176,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [IconButton.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -187,7 +186,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [IconButton.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

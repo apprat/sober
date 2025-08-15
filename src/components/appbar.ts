@@ -14,7 +14,6 @@ const style = /*css*/`
   gap: 12px;
   height: 64px;
   padding: 0 16px;
-  box-sizing: border-box;
   background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
 }
 :host([compacted]){
@@ -83,7 +82,6 @@ const template = /*html*/`
 `
 
 export class Appbar extends useElement({
-  name: 's-appbar',
   style, template,
   setup(shadowRoot) {
     //const view = shadowRoot.querySelector<HTMLDivElement>('.view')!
@@ -94,17 +92,17 @@ export class Appbar extends useElement({
   }
 }) { }
 
-Appbar.define()
+const name = Appbar.define('s-appbar')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [Appbar.tagName]: Appbar
+    [name]: Appbar
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [Appbar.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -115,7 +113,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [Appbar.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -128,7 +126,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [Appbar.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -138,7 +136,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Appbar.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -148,7 +146,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Appbar.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

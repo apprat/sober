@@ -46,7 +46,6 @@ slot:is([name=track-start], [name=track-fill], [name=track-end], [name=thumb-sta
   display: flex;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
   flex-shrink: 0;
   position: absolute;
 }
@@ -225,16 +224,13 @@ const findClosestStep = (num: number, step: number, max: number) => {
   const res = Math.max(0, Math.min(max / step, Math.round(num / step)))
   return res * step
 }
-const getOrientation = (orientation: typeof props.orientation) => {
-  const data = {
-    horizontal: { offset: 'offsetWidth', rect: 'left', client: 'clientX' },
-    vertical: { offset: 'offsetHeight', rect: 'top', client: 'clientY' }
-  } as const
-  return data[orientation]
-}
+const orientationOptions = {
+  horizontal: { offsetWidth: 'offsetWidth', left: 'left', clientX: 'clientX' },
+  vertical: { offsetWidth: 'offsetHeight', left: 'top', clientX: 'clientY' }
+} as const
+const getOrientation = (orientation: typeof props.orientation) => orientationOptions[orientation]
 
 export class BaseSlider extends useElement({
-  name: 's-base-slider',
   props, template, style, focused: true,
   setup(shadowRoot, props) {
     const layuot = shadowRoot.querySelector<HTMLDivElement>('.layuot')!
@@ -257,7 +253,7 @@ export class BaseSlider extends useElement({
       const orientation = getOrientation(this.orientation)
       const state = {
         rect: this.getBoundingClientRect(),
-        size: this[orientation.offset],
+        size: this[orientation.offsetWidth],
         isVertical: this.orientation === 'vertical',
         reversed: this.mode === 'single-reversed',
         key: 'end' as 'start' | 'end',
@@ -269,7 +265,7 @@ export class BaseSlider extends useElement({
         if ((state.reversed && !state.isVertical) || (state.isVertical && !state.reversed)) return state.size - v
         return v
       }
-      const firstPosition = getPosition(event[orientation.client] - state.rect[orientation.rect])
+      const firstPosition = getPosition(event[orientation.clientX] - state.rect[orientation.left])
       if (!state.singled) {
         const closer = whichIsCloser((firstPosition / state.size * 100), getPercent(this.start), getPercent(this.end))
         state.key = (['end', 'start', 'end'] as const)[closer]
@@ -277,7 +273,7 @@ export class BaseSlider extends useElement({
       this.setAttribute('pressed', '')
       this.setAttribute(`${state.key}-pressed`, '')
       const change = (xy: number, call?: (v: number) => void) => {
-        const indicatorSize = { start: thumbStartSlot, end: thumbEndSlot }[state.key][orientation.offset] / state.size * 100
+        const indicatorSize = { start: thumbStartSlot, end: thumbEndSlot }[state.key][orientation.offsetWidth] / state.size * 100
         const offset = Math.min(Math.max(0 + indicatorSize / 2, (xy / state.size * 100)), 100 - indicatorSize / 2)
         const percent = ((offset - indicatorSize / 2) / (100 - indicatorSize)) * 100
         const newValue = findClosestStep(this.min + (percent / 100) * (this.max - this.min), this.step, this.max)
@@ -293,7 +289,7 @@ export class BaseSlider extends useElement({
       const move = (event: PointerEvent | TouchEvent) => {
         const e = event instanceof TouchEvent ? event.touches[0] : event
         event.cancelable && event.preventDefault()
-        const xy = getPosition(e[orientation.client] - state.rect[orientation.rect])
+        const xy = getPosition(e[orientation.clientX] - state.rect[orientation.left])
         this.setAttribute('moving', '')
         change(xy, (v) => {
           if (state.singled) return
@@ -369,17 +365,17 @@ export class BaseSlider extends useElement({
   }
 }) { }
 
-BaseSlider.define()
+const name = BaseSlider.define('s-base-slider')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [BaseSlider.tagName]: BaseSlider
+    [name]: BaseSlider
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [BaseSlider.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -390,7 +386,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [BaseSlider.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -403,7 +399,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [BaseSlider.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -413,7 +409,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [BaseSlider.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -423,7 +419,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [BaseSlider.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

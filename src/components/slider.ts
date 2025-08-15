@@ -80,7 +80,6 @@ const template = /*html*/`
 `
 
 export class Slider extends useElement({
-  name: 's-slider',
   style, props, template,
   setup(shadowRoot) {
     const baseSlider = shadowRoot.querySelector<BaseSlider>('.base-slider')!
@@ -97,17 +96,17 @@ export class Slider extends useElement({
   }
 }) { }
 
-Slider.define()
+const name = Slider.define('s-slider')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [Slider.tagName]: Slider
+    [name]: Slider
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [Slider.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -118,7 +117,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [Slider.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -131,7 +130,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [Slider.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -141,7 +140,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Slider.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -151,7 +150,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Slider.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

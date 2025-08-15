@@ -18,7 +18,6 @@ const style = /*css*/`
   font-size: .875rem;
   font-weight: 500;
   min-height: 48px;
-  box-sizing: border-box;
   border-radius: 4px;
   word-break: break-all;
   color: var(--s-color-on-secondary-container, ${scheme.color.onSecondaryContainer});
@@ -33,7 +32,6 @@ const template = /*html*/`
 `
 
 export class Progress extends useElement({
-  name: 's-progress',
   style, props, template,
   setup(shadowRoot) {
     return {
@@ -41,11 +39,11 @@ export class Progress extends useElement({
   }
 }) { }
 
-Progress.define()
+const name = Progress.define('s-progress')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [Progress.tagName]: Progress
+    [name]: Progress
   }
   namespace React {
     namespace JSX {
@@ -62,7 +60,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [Progress.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -75,7 +73,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [Progress.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -85,7 +83,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Progress.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -95,7 +93,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Progress.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

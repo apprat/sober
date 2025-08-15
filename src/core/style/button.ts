@@ -5,7 +5,6 @@ export const buttonStyle = /*css*/`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
   vertical-align: middle;
   text-transform: capitalize;
   position: relative;

@@ -11,7 +11,6 @@ const style = /*css*/`
   gap: 12px;
   font-size: .75rem;
   border-radius: 4px;
-  box-sizing: border-box;
   color: var(--s-color-outline, ${scheme.color.outline});
 }
 .shadow{
@@ -44,21 +43,20 @@ const template = /*html*/`
 <slot></slot>`
 
 export class Empty extends useElement({
-  name: 's-empty',
   style, template
 }) { }
 
-Empty.define()
+const name = Empty.define('s-empty')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [Empty.tagName]: Empty
+    [name]: Empty
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [Empty.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
       }
     }
   }
@@ -69,7 +67,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [Empty.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -82,7 +80,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [Empty.tagName]: IntrinsicElements['div']
+      [name]: IntrinsicElements['div']
     }
   }
 }
@@ -92,7 +90,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Empty.tagName]: JSX.HTMLAttributes<HTMLElement>
+      [name]: JSX.HTMLAttributes<HTMLElement>
     }
   }
 }
@@ -102,7 +100,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Empty.tagName]: JSXInternal.HTMLAttributes<HTMLElement>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement>
     }
   }
 }

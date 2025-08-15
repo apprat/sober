@@ -53,7 +53,6 @@ const template = /*html*/`
 `
 
 export class Tooltip extends useElement({
-  name: 's-tooltip',
   style, template, props,
   setup(shadowRoot) {
     const trigger = shadowRoot.querySelector<HTMLSlotElement>('slot[name=trigger]')!
@@ -149,17 +148,17 @@ export class Tooltip extends useElement({
   }
 }) { }
 
-Tooltip.define()
+const name = Tooltip.define('s-tooltip')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [Tooltip.tagName]: Tooltip
+    [name]: Tooltip
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [Tooltip.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
       }
     }
   }
@@ -170,7 +169,7 @@ declare module 'vue' {
   //@ts-ignore
   import { HTMLAttributes } from 'vue'
   interface GlobalComponents {
-    [Tooltip.tagName]: new () => {
+    [name]: new () => {
       /**
       * @deprecated
       **/
@@ -184,7 +183,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [Tooltip.tagName]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props>
     }
   }
 }
@@ -194,7 +193,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Tooltip.tagName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }
@@ -204,7 +203,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [Tooltip.tagName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
     }
   }
 }

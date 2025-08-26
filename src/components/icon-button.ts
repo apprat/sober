@@ -26,8 +26,8 @@ const style = /*css*/`
   color: var(--s-color-on-primary, ${scheme.color.onPrimary});
 }
 /**Checkable**/
-:host([checkable=true][checked=true]:not([pressed])),
-:host([checkable=true][pressed]:not([checked=true])){
+:host([checkable=true][checked=true]:not([ripple-pressed])),
+:host([checkable=true][ripple-pressed]:not([checked=true])){
   border-radius: 12px;
 }
 :host(:not([variant])[checkable=true][checked=true]){
@@ -117,7 +117,7 @@ const style = /*css*/`
 
 const template = /*html*/`
 <slot></slot>
-<s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
+<s-ripple class="ripple" part="ripple"></s-ripple>
 `
 
 export class IconButton extends useElement({

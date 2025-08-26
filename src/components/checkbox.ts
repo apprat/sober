@@ -18,10 +18,10 @@ const style = /*css*/`
   height: 40px;
   color: var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
 }
-:host([checked=true]){
+:host([checked]){
   color: var(--s-color-primary, ${scheme.color.primary});
 }
-:host([disabled=true]){
+:host([disabled]){
   pointer-events: none;
   .layout{
     color: var(--s-color-on-surface, ${scheme.color.onSurface}) !important;
@@ -57,11 +57,11 @@ const style = /*css*/`
   transition-timing-function: var(--s-motion-easing-emphasized, ${scheme.motion.easing.emphasized});
   transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
 }
-:host([indeterminate=true]) .unchecked{
+:host([indeterminate]) .unchecked{
   opacity: 0;
 }
-:host([checked=true]:not([indeterminate=true])) .checked,
-:host([indeterminate=true]) .indeterminate{
+:host([checked]:not([indeterminate])) .checked,
+:host([indeterminate]) .indeterminate{
   opacity: 1;
   transform: scale(1);
 }
@@ -100,7 +100,7 @@ const template = /*html*/`
   </slot>
 </div>
 <slot></slot>
-<s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
+<s-ripple class="ripple" part="ripple"></s-ripple>
 `
 
 export class Checkbox extends useElement({

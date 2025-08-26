@@ -91,7 +91,7 @@ const itemTemplate = /*html*/`
 <slot name="start"></slot>
 <slot class="text" part="text"></slot>
 <slot name="end"></slot>
-<s-ripple attached="true" part="ripple"></s-ripple>
+<s-ripple part="ripple"></s-ripple>
 `
 
 export class FloatingActionButtonMenu extends useElement({

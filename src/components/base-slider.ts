@@ -36,7 +36,7 @@ const style = /*css*/`
   --base-slider-thumb-end-width: var(--base-slider-thumb-width);
   --base-slider-thumb-end-height: var(--base-slider-thumb-height);
 }
-:host([disabled=true]){
+:host([disabled]){
   pointer-events: none !important;
 }
 .layuot{
@@ -232,7 +232,7 @@ const getOrientation = (orientation: typeof props.orientation) => orientationOpt
 
 export class BaseSlider extends useElement({
   props, template, style, focused: true,
-  setup(shadowRoot, props) {
+  setup(shadowRoot, states) {
     const layuot = shadowRoot.querySelector<HTMLDivElement>('.layuot')!
     const thumbStartSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=thumb-start]')!
     const thumbEndSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=thumb-end]')!
@@ -294,8 +294,8 @@ export class BaseSlider extends useElement({
         change(xy, (v) => {
           if (state.singled) return
           const is = {
-            start: { before: v <= props.end, after: v > props.end },
-            end: { before: v < props.start, after: v >= props.start },
+            start: { before: v <= states.props.end, after: v > states.props.end },
+            end: { before: v < states.props.start, after: v >= states.props.start },
           }[state.key]
           this.toggleAttribute('start-pressed', is.before)
           this.toggleAttribute('end-pressed', is.after)
@@ -308,11 +308,11 @@ export class BaseSlider extends useElement({
         this.removeAttribute('end-pressed')
         this.removeAttribute('moving')
         this.removeAttribute('pressed')
-        if (props.start > props.end) {
-          const start = props.start
-          const end = props.end
-          props.start = end
-          props.end = start
+        if (states.props.start > states.props.end) {
+          const start = states.props.start
+          const end = states.props.end
+          states.props.start = end
+          states.props.end = start
         }
         if (state.oldStart !== this.start || state.oldEnd !== this.end) this.dispatchEvent(new Event('change'))
         document.removeEventListener(eventNames.move, move)
@@ -352,14 +352,14 @@ export class BaseSlider extends useElement({
       onAttributeChanged: (name) => ['start', 'end', 'max', 'min', 'step'].includes(name) && useThrottle(render),
       getStart: () => {
         if (getSingle()) return 0
-        return Math.max(Math.min(props.start, props.max), props.min)
+        return Math.max(Math.min(states.props.start, states.props.max), states.props.min)
       },
-      getEnd: () => Math.min(Math.max(props.end, props.min), props.max),
-      getStep: () => props.max % props.step === 0 ? props.step : 1,
-      getMax: () => props.max <= 1 ? 1 : props.max,
+      getEnd: () => Math.min(Math.max(states.props.end, states.props.min), states.props.max),
+      getStep: () => states.props.max % states.props.step === 0 ? states.props.step : 1,
+      getMax: () => states.props.max <= 1 ? 1 : states.props.max,
       getMin: () => {
-        if (props.min > props.max) return 0
-        return props.min % props.step === 0 ? props.min : 0
+        if (states.props.min > states.props.max) return 0
+        return states.props.min % states.props.step === 0 ? states.props.min : 0
       }
     }
   }

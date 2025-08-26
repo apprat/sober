@@ -165,7 +165,7 @@ const template = /*html*/`
 
 export class Alert extends useElement({
   style, props, template,
-  setup(shadowRoot) {
+  setup(shadowRoot, states) {
     const toggleSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=toggle]')!
     const toggleEl = shadowRoot.querySelector<HTMLSlotElement>('.toggle')!
     const content = shadowRoot.querySelector<HTMLSlotElement>('.content')!
@@ -175,20 +175,8 @@ export class Alert extends useElement({
       const duration = computedStyle.getDuration('animation-duration')
       return { easing, duration }
     }
-    const open = () => {
-      if (!this.isConnected || this.opened) return
-      this.opened = true
-      const animation = content.animate({ height: ['0', `${content.offsetHeight}px`] }, getAnimateOptions())
-      animation.finished.then(() => content.style.removeProperty('display'))
-    }
-    const close = () => {
-      if (!this.isConnected || !this.opened) return
-      content.animate({ height: [`${content.offsetHeight}px`, '0'], display: ['block', 'block'] }, getAnimateOptions())
-      this.opened = false
-    }
-    const toggle = (force?: boolean) => (force ?? !this.opened) ? open() : close()
     toggleSlot.onclick = () => {
-      toggle()
+      this.opened = !this.opened
       this.dispatchEvent(new Event('toggle'))
     }
     toggleEl.onkeydown = (e) => {
@@ -197,7 +185,19 @@ export class Alert extends useElement({
       toggleSlot.click()
     }
     return {
-      expose: { open, close, toggle }
+      setOpened: (v) => {
+        if (!this.isConnected || !states.initialized) return
+        const [old] = content.getAnimations()
+        if (old) return old.reverse()
+        const keyframe = { height: ['0', `${content.offsetHeight}px`], display: ['block', 'block'] }
+        if (!v) {
+          content.style.display = 'block'
+          keyframe.height[1] = `${content.offsetHeight}px`
+          keyframe.height.reverse()
+          content.style.removeProperty('display')
+        }
+        content.animate(keyframe, getAnimateOptions())
+      }
     }
   }
 }) { }

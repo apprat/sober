@@ -50,7 +50,6 @@ const style = /*css*/`
   --s-private-layout-padding: 4px 16px;
   --s-private-layout-position: static;
   .layout{
-    gap: 3px;
     padding: 3px;
     border-radius: inherit;
   }
@@ -59,7 +58,7 @@ const style = /*css*/`
     min-height: 34px;
     border-radius: var(--s-shape-corner-full, ${scheme.shape.corner.full});
   }
-  ::slotted(s-tab-item[selected=true]){
+  ::slotted(s-tab-item[selected]){
     color: var(--s-color-on-primary, ${scheme.color.onPrimary});
     --s-private-indicator-background: var(--s-color-primary, ${scheme.color.primary});
   }
@@ -73,6 +72,9 @@ const style = /*css*/`
 :host([variant=segmented][orientation=vertical]){
   border-radius: var(--s-shape-corner-small, ${scheme.shape.corner.small});
   --s-private-indicator-border-radius: var(--s-shape-corner-small, ${scheme.shape.corner.small});
+  .layout{
+    gap: 3px;
+  }
   ::slotted(s-tab-item){
     border-radius: 8px;
   }
@@ -96,6 +98,7 @@ const style = /*css*/`
   ::slotted(s-tab-item){
     padding: 12px 16px;
     height: 48px;
+    justify-content: flex-start;
   }
 }
 `
@@ -115,7 +118,7 @@ const itemStyle = /*css*/`
   transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
   transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
 }
-:host([selected=true]){
+:host([selected]){
   color: var(--s-color-primary, ${scheme.color.primary});
   .indicator{
     opacity: 1;
@@ -178,7 +181,7 @@ const itemTemplate = /*html*/`
   <slot class="text" part="text"></slot>
   <slot name="badge"></slot>
 </div>
-<s-ripple attached="true"></s-ripple>
+<s-ripple></s-ripple>
 `
 
 const orientationOptions = {
@@ -189,7 +192,7 @@ const getOrientation = (orientation: typeof props.orientation) => orientationOpt
 
 export class Tab extends useElement({
   style, props, template,
-  setup(shadowRoot) {
+  setup(shadowRoot, states) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const select = new Select(this, slot, TabItem)
@@ -199,18 +202,22 @@ export class Tab extends useElement({
       const duration = computedStyle.getDuration('animation-duration')
       return { easing, duration }
     }
-    const center = (item?: TabItem) => {
-      if (this.mode === 'fixed' || (this.multiple && !item)) return
-      const target = item ?? select.selectedList[0]
-      if (!target) return
+    const center = (behavior: 'auto' | 'smooth' = 'auto') => {
+      if (this.mode === 'fixed' || !this.isConnected || !states.initialized) return
       const orientation = getOrientation(this.orientation)
+      const index = this.multiple ? select.selectedList.length - 1 : 0
+      const item = select.selectedList[index]
       if (layout[orientation.scrollWidth] === layout[orientation.offsetWidth]) return
-      const left = (target[orientation.offsetLeft] - layout[orientation.offsetLeft]) - (layout[orientation.offsetWidth] / 2 - target[orientation.offsetWidth] / 2)
-      layout.scrollTo({ [orientation.left]: left, behavior: 'smooth' })
+      const left = (item[orientation.offsetLeft] - layout[orientation.offsetLeft]) - (layout[orientation.offsetWidth] / 2 - item[orientation.offsetWidth] / 2)
+      layout.scrollTo({ [orientation.left]: left, behavior })
     }
     select.onSlotChange = () => useThrottle(center)
-    select.onChange = (item, old) => {
-      useThrottle(center, item)
+    select.onRender = (olds) => {
+      if (select.selectedList.length === 0) return
+      useThrottle(center, states.initialized ? 'smooth' : 'auto')
+      if (this.multiple || !this.isConnected || !states.initialized) return
+      const item = select.selectedList[0]
+      const old = olds[0]
       if (!item || !old) return
       const orientation = getOrientation(this.orientation)
       const oldRect = old.shadowRoot!.querySelector('.indicator')!.getBoundingClientRect()
@@ -229,6 +236,9 @@ export class Tab extends useElement({
         get options() {
           return select.list
         },
+        get selectedOptions() {
+          return select.selectedList
+        },
         get selectedIndex() {
           return select.selectedIndex()
         },
@@ -238,7 +248,9 @@ export class Tab extends useElement({
       },
       onMounted: () => useThrottle(center),
       getValue: () => select.getValue(),
-      setValue: (v) => select.setValue(v),
+      setValue: (v) => {
+        select.setValue(v)
+      },
       setMultiple: () => select.setMultiple(),
     }
   }

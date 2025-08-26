@@ -34,9 +34,7 @@ const baseStyle = /*css*/`
 :host(:focus-visible){
   outline: auto 1px var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
 }
-*,
-::before,
-::after{
+*{
   transition-property: none;
   transition-timing-function: inherit;
   transition-duration: inherit;
@@ -67,14 +65,15 @@ const baseStyle = /*css*/`
 `
 
 class PropMeta {
+  key: string
   value: Prop
   types: string[] = []
   capitalize: string
   synced: boolean
   constructor(key: string, value: Prop | string[]) {
     const synced = !key.startsWith('$')
-    key = synced ? key : key.slice(1)
-    this.capitalize = key.charAt(0).toUpperCase() + key.slice(1)
+    this.key = synced ? key : key.slice(1)
+    this.capitalize = this.key.charAt(0).toUpperCase() + this.key.slice(1)
     this.synced = synced
     if (Array.isArray(value)) {
       this.types = value
@@ -86,14 +85,14 @@ class PropMeta {
   to(v: any): Prop {
     switch (typeof this.value) {
       case 'string':
-        if (this.types.length > 0) return this.value.includes(v) ? v : this.value
+        if (this.types.length > 0 && this.types.includes(v)) return v
         return String(v)
       case 'number':
         const num = v === null ? this.value : Number(v)
         return isNaN(num) ? this.value : num
       case 'boolean':
         if (typeof v === 'boolean') return v
-        return v === null ? this.value : v !== 'false'
+        return v === '' ? true : v !== 'false'
     }
   }
 }
@@ -110,8 +109,8 @@ export const useProps = <const T extends { [key: string]: Prop | string[] } = {}
   const meta: { [key: string]: PropMeta } = {}
   for (const key in options) {
     const propMeta = new PropMeta(key, options[key])
-    props[key] = propMeta.value
-    meta[key] = propMeta
+    props[propMeta.key] = propMeta.value
+    meta[propMeta.key] = propMeta
   }
   Object.defineProperty(props, '$meta', { value: meta })
   return props as never
@@ -127,6 +126,8 @@ type El<Props, Expose, Events extends { [key: string]: any }> = Props & Expose &
   [K in keyof Events as K extends string ? `on${K}` : never]: ((this: El<Props, Expose, Events>, e: InstanceType<Events[K]>) => any) | null
 }
 
+type States<T> = { props: T, initialized: boolean }
+
 export const useElement = <
   Props extends { [key: string]: Prop } = {},
   Expose extends { [key: string]: any } = {},
@@ -137,9 +138,8 @@ export const useElement = <
   events?: Events
   template?: string
   focused?: boolean
-  setup?: (this: Props & HTMLElement, shadowRoot: ShadowRoot, props: Props) => Merge<{
-    onMounted?: () => void
-    onUnmounted?: () => void
+  setup?: (this: Props & HTMLElement, shadowRoot: ShadowRoot, states: States<Props>) => Merge<{
+    onMounted?: (parent: ParentNode) => void | (() => void)
     onAttributeChanged?: (key: keyof Props, value: Props[keyof Props]) => void
     onAdopted?: () => void
     expose?: Expose & { [K in keyof Props]?: never }
@@ -159,8 +159,9 @@ export const useElement = <
     events: [] as string[]
   }
   for (const key in state.metaProps ?? {}) {
-    state.lowerKeys[key] = key.toLowerCase()
-    observedAttributes.push(state.lowerKeys[key])
+    const lower = key.toLowerCase()
+    state.lowerKeys[lower] = key
+    observedAttributes.push(lower)
   }
   for (const key in options.events) {
     const k = `on${key}`
@@ -169,7 +170,7 @@ export const useElement = <
     state.events.push(k)
   }
   type ReturnType<T extends ((...args: any) => any) | undefined> = T extends (...args: any) => infer R ? R : T
-  const map = new Map<HTMLElement, ReturnType<typeof options.setup>>()
+  const map = new Map<HTMLElement, { setup: ReturnType<typeof options.setup>, states: States<Props>, lifetimes: { onUnmounted?: () => void } }>()
   class Component extends HTMLElement {
     static observedAttributes = observedAttributes
     static define(name: string) {
@@ -182,8 +183,9 @@ export const useElement = <
       shadowRoot.innerHTML = options.template ?? ''
       setStyle(shadowRoot, [baseStyle, ...options.style ? (Array.isArray(options.style) ? options.style : [options.style]) : []])
       const props = { ...options.props }
-      let setup: ReturnType<typeof options.setup>
-      let tabIndex = this.tabIndex
+      const states = { initialized: false, props, } as States<Props>
+      let tabIndex = this.tabIndex > 0 ? this.tabIndex : (options.focused ? 0 : -1)
+      const mapItem = { setup: null as any, states, lifetimes: {} }
       options.focused && this.addEventListener('keydown', (e) => {
         if (!['Enter', ' '].includes(e.key)) return
         e.preventDefault()
@@ -195,31 +197,32 @@ export const useElement = <
         if (initValue !== undefined) ahead[key] = initValue
         Object.defineProperty(this, key, {
           configurable: true,
-          get: () => setup?.[`get${state.metaProps[key].capitalize}`]?.() ?? props[key],
+          get: () => mapItem.setup?.[`get${state.metaProps[key].capitalize}`]?.() ?? props[key],
           set: (v) => {
-            if (v === undefined) return
             const meta = state.metaProps[key]
-            const value = meta.to(v)
+            const value = v === null ? meta.value : meta.to(v)
             if (meta.synced) {
               const lowerKey = key.toLowerCase()
               const attrValue = this.getAttribute(lowerKey)
-              const valueStr = String(value)
-              if (value === meta.value && attrValue !== null) return this.removeAttribute(lowerKey)
+              const valueStr = value === true ? '' : String(value)
+              const hasAttr = this.hasAttribute(lowerKey)
+              if (value === meta.value && hasAttr) return this.removeAttribute(lowerKey)
               if (value !== meta.value && attrValue !== valueStr) return this.setAttribute(lowerKey, valueStr)
             }
             if (value === this[key as keyof this]) return
             if (options.focused && key === 'disabled') {
               if (value) {
                 tabIndex = this.tabIndex
-                this.tabIndex = -1
+                this.removeAttribute('tabindex')
+              } else {
+                this.tabIndex === -1 && (this.tabIndex = tabIndex)
               }
-              this.tabIndex = value ? -1 : tabIndex
             }
             const old = props[key]
             props[key] = value
-            const call = setup?.[`set${state.metaProps[key].capitalize}`] as any
+            const call = mapItem.setup?.[`set${state.metaProps[key].capitalize}`] as any
             call?.(value as never, old as never)
-            setup?.onAttributeChanged?.(key, value as never)
+            mapItem.setup?.onAttributeChanged?.(key, value as never)
           }
         })
       }
@@ -234,20 +237,30 @@ export const useElement = <
         })
         this.addEventListener(key.slice(2), (event) => customEvents[key] && customEvents[key].bind(this)(event))
       }
-      setup = options.setup?.call(this as any, shadowRoot, props as never)
-      for (const key in setup?.expose ?? {}) Object.defineProperty(this, key, { get: () => setup?.expose?.[key] })
+      mapItem.setup = options.setup?.call(this as any, shadowRoot as any, states)
+      for (const key in mapItem.setup?.expose ?? {}) Object.defineProperty(this, key, { get: () => mapItem.setup?.expose?.[key] })
       for (const key in ahead) this[key as keyof this] = ahead[key] as never
-      map.set(this, setup)
+      map.set(this, mapItem)
+      useThrottle(() => states.initialized = true)
     }
     connectedCallback() {
-      if (options.focused && this.tabIndex === -1) this.tabIndex = 0
-      map.get(this)?.onMounted?.()
+      const mapItem = map.get(this)
+      if (!mapItem) return
+      if (options.focused && this.tabIndex < 0) this.tabIndex = 0
+      if (mapItem.setup?.onMounted) {
+        const parentNode = this.parentNode!
+        const stop = mapItem.setup.onMounted(parentNode)
+        mapItem.lifetimes.onUnmounted = stop!
+      }
     }
     disconnectedCallback() {
-      map.get(this)?.onUnmounted?.()
+      const mapItem = map.get(this)
+      if (!mapItem) return
+      mapItem.lifetimes.onUnmounted?.()
+      delete mapItem.lifetimes.onUnmounted
     }
     adoptedCallback() {
-      map.get(this)?.onAdopted?.()
+      map.get(this)?.setup?.onAdopted?.()
     }
     attributeChangedCallback(key: string, _: unknown, value: string | null) {
       if (state.events.includes(key)) return this[key as keyof this] = (value ? new Function('event', value) : null) as never

@@ -50,6 +50,17 @@
 
 ---
 
+设置 `hidden` 属性隐藏
+
+```html preview
+<s-fab>
+  <s-icon name="add"></s-icon>
+</s-fab>
+<s-button onclick="this.previousElementSibling.hidden=!this.previousElementSibling.hidden">切换</s-button>
+```
+
+---
+
 设置 `size` 属性改变按钮大小。
 
 ```html preview
@@ -92,3 +103,4 @@
 | variant  | primary, secondary, tertiary, tonal-primary, tonal-secondary, tonal-tertiary | primary | ✔️ | 变体   |
 | size     | small, medium, large                                                         | medium  | ✔️ | 尺寸   |
 | disabled | boolean                                                                      | false   | ✔️ | 禁用的 |
+| hidden   | boolean                                                                      | false   | ✔️ | 隐藏的 |

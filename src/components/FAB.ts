@@ -7,6 +7,7 @@ const props = useProps({
   variant: ['primary', 'secondary', 'tertiary', 'tonal-primary', 'tonal-secondary', 'tonal-tertiary'],
   size: ['medium', 'small', 'large'],
   disabled: false,
+  hidden: false
 })
 const events = {
   show: Event,
@@ -18,13 +19,11 @@ const style = /*css*/`
   min-height: 56px;
   min-width: 56px;
   padding: 0 20px;
-  border-radius: 16px;
   gap: 6px;
   font-size: 1rem;
-  transition-property: border-radius, color, background-color, box-shadow;
+  transition-property: border-radius, color, background-color, box-shadow, transform;
   box-shadow: var(--s-elevation-level3, ${scheme.elevation.level3});
-  --fab-icon-transform: none;
-  --fab-icon-transition: none;
+  border-radius: var(--s-shape-corner-large, ${scheme.shape.corner.large});
 }
 :host(:not([variant])){
   background: var(--s-color-primary, ${scheme.color.primary});
@@ -50,8 +49,12 @@ const style = /*css*/`
   background: var(--s-color-tertiary-container, ${scheme.color.tertiaryContainer});
   color: var(--s-color-on-tertiary-container, ${scheme.color.onTertiaryContainer});
 }
-:host([disabled=true]){
+:host([disabled]){
   box-shadow: var(--s-elevation-level2, ${scheme.elevation.level2}) !important;
+}
+:host([hidden]){
+  transform: scale(0);
+  pointer-events: none;
 }
 /*Size*/
 :host([size=small]){
@@ -68,10 +71,6 @@ const style = /*css*/`
   font-size: 1.125rem;
   padding: 0 24px;
 }
-::slotted(:is(svg, s-icon)){
-  transform: var(--fab-icon-transform);
-  transition: var(--fab-icon-transition);
-}
 ::slotted(:is(svg, s-icon):not([slot])){
   margin: 0 -24px;
 }
@@ -81,7 +80,7 @@ const style = /*css*/`
 ::slotted(:is(svg, s-icon)[slot=end]){
   margin-right: -2px;
 }
-:host([pressed]){
+:host([ripple-pressed]){
   box-shadow: var(--s-elevation-level4, ${scheme.elevation.level4});
 }
 `
@@ -90,22 +89,22 @@ const template = /*html*/`
 <slot name="start"></slot>
 <slot></slot>
 <slot name="end"></slot>
-<s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
+<s-ripple class="ripple" part="ripple"></s-ripple>
 `
 
-export class FloatingActionButton extends useElement({
+export class FAB extends useElement({
   style: [buttonStyle, style],
   focused: true,
   props, template, events,
 }) { }
 
-export { FloatingActionButton as FAB }
+export { FAB as FloatingActionButton }
 
-const name = FloatingActionButton.define('s-fab')
+const name = FAB.define('s-fab')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: FloatingActionButton
+    [name]: FAB
   }
   namespace React {
     namespace JSX {
@@ -127,7 +126,7 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props>
-    } & FloatingActionButton
+    } & FAB
   }
 }
 //@ts-ignore

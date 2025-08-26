@@ -20,8 +20,8 @@ const style = /*css*/`
   transition-property: border-radius, color, background-color, box-shadow;
 }
 :host(:not([variant])),
-:host([checkable=true][checked=true]:not([variant])),
-:host([variant=elevated][checkable=true][checked=true]){
+:host([checkable][checked]:not([variant])),
+:host([variant=elevated][checkable][checked]){
   background: var(--s-color-primary, ${scheme.color.primary});
   color: var(--s-color-on-primary, ${scheme.color.onPrimary});
 }
@@ -30,36 +30,36 @@ const style = /*css*/`
   color: var(--s-color-primary, ${scheme.color.primary});
   box-shadow: var(--s-elevation-level1, ${scheme.elevation.level1});
 }
-:host([variant=elevated][pressed]){
+:host([variant=elevated][ripple-pressed]){
   box-shadow: var(--s-elevation-level2, ${scheme.elevation.level2});
 }
 :host([variant=text]){
   color: var(--s-color-primary, ${scheme.color.primary});
 }
 /**Checkable**/
-:host(:not([variant])[checkable=true]){
+:host(:not([variant])[checkable]){
   background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
   color: var(--s-color-on-surface-variant,${scheme.color.onSurfaceVariant});
 }
-:host([checkable=true][checked=true]:not([pressed])),
-:host([checkable=true][pressed]:not([checked=true])){
+:host([checkable][checked]:not([ripple-pressed])),
+:host([checkable][ripple-pressed]:not([checked])){
   border-radius: 12px;
 }
-:host([variant=tonal][checkable=true][checked=true]){
+:host([variant=tonal][checkable][checked]){
   background: var(--s-color-secondary, ${scheme.color.secondary});
   color: var(--s-color-on-secondary, ${scheme.color.onSecondary});
 }
-:host([variant=outlined][checkable=true][checked=true]){
+:host([variant=outlined][checkable][checked]){
   box-shadow: none;
   background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
   color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
 }
-:host([variant=text][checkable=true][checked=true]){
+:host([variant=text][checkable][checked]){
   background: var(--s-color-primary-container, ${scheme.color.primaryContainer});
   color: var(--s-color-on-primary-container, ${scheme.color.onPrimaryContainer});
 }
-:host([checkable=true][checked=true]:not([pressed])),
-:host([checkable=true][pressed]:not([checked=true])){
+:host([checkable][checked]:not([ripple-pressed])),
+:host([checkable][ripple-pressed]:not([checked])){
   border-radius: 12px;
 }
 /*Size*/
@@ -125,7 +125,7 @@ const template = /*html*/`
 <slot name="start"></slot>
 <slot class="text" part="text"></slot>
 <slot name="end"></slot>
-<s-ripple attached="true" part="ripple"></s-ripple>
+<s-ripple part="ripple"></s-ripple>
 `
 
 export class Button extends useElement({

@@ -9,59 +9,56 @@ interface BaseItem extends HTMLElement {
 }
 
 export class Select<Root extends Base, Item extends BaseItem> {
-  list: Item[] = []
-  selectedList: Item[] = []
+  readonly list: Item[] = []
+  readonly selectedList: Item[] = []
   private flag = false
   private value: string[] = []
   constructor(private root: Root, private slot: HTMLSlotElement, private itemClass: { new(): Item }) {
     this.slot.addEventListener('slotchange', () => {
       const elements = slot.assignedElements()
-      this.list = []
+      this.list.splice(0, this.list.length)
       elements.forEach((item) => item instanceof itemClass && this.list.push(item))
       this.allSelected()
       this.onSlotChange?.()
-      this.onRender?.()
+      this.onRender?.([])
     })
     this.root.addEventListener(`${root.tagName.toLocaleLowerCase()}:render`, (event) => {
       if (this.flag || this.list.length === 0) return
       const target = event.target as Item
+      const old = [...this.selectedList]
+      this.selectedList.splice(0, this.selectedList.length)
       if (this.root.multiple) {
-        this.selectedList = []
-        this.list.forEach((item) => item.selected && this.selectedList.push(item))
-        return this.onRender?.()
+        this.list.forEach((value) => {
+          if (!value.selected) return
+          this.selectedList.push(value)
+        })
+        return this.onRender?.(old)
       }
-      const old = this.selectedList[0]
-      this.selectedList = []
       if (target.selected) {
-        this.selectedList = [target]
-        if (old) {
+        this.selectedList.push(target)
+        if (old[0]) {
           this.flag = true
-          old.selected = false
+          old[0].selected = false
           this.flag = false
         }
       }
-      this.onRender?.()
+      this.onRender?.(old)
     })
     this.root.addEventListener(`${this.root.tagName.toLocaleLowerCase()}:select`, (event) => {
       if (!(event.target instanceof this.itemClass)) return
-      let old: Item | undefined
-      let item: Item | undefined
+      const old = this.selectedList
       if (this.root.multiple) {
-        const val = event.target.selected
-        if (!val) item = event.target
-        event.target.selected = !val
+        event.target.selected = !event.target.selected
       } else {
         if (this.selectedList[0] === event.target) return
-        old = this.selectedList[0]
-        item = event.target
         event.target.selected = true
       }
       this.root.dispatchEvent(new Event('change'))
-      this.onChange?.(item, old)
+      this.onChange?.(old)
     })
   }
   private allSelected() {
-    this.selectedList = []
+    this.selectedList.splice(0, this.selectedList.length)
     this.flag = true
     for (const item of this.list) {
       //not value
@@ -74,7 +71,7 @@ export class Select<Root extends Base, Item extends BaseItem> {
           item.selected = false
           continue
         }
-        if (item.selected) this.selectedList = [item]
+        if (item.selected) this.selectedList.push(item)
         continue
       }
       item.selected && (item.selected = false)
@@ -92,8 +89,9 @@ export class Select<Root extends Base, Item extends BaseItem> {
     this.flag = true
     this.selectedList.forEach(item => item.selected = false)
     this.flag = false
-    this.selectedList = []
-    this.onRender?.()
+    const old = [...this.selectedList]
+    this.selectedList.splice(0, this.selectedList.length)
+    this.onRender?.(old)
     this.root.dispatchEvent(new Event('change'))
   }
   getValue() {
@@ -102,8 +100,9 @@ export class Select<Root extends Base, Item extends BaseItem> {
   setValue(value: string) {
     this.value = value.split(',')
     if (this.list.length === 0) return
+    const old = [...this.selectedList]
     this.allSelected()
-    this.onRender?.()
+    this.onRender?.(old)
   }
   selectedIndex() {
     return this.root.multiple ? -1 : this.list.indexOf(this.selectedList[0])
@@ -111,7 +110,7 @@ export class Select<Root extends Base, Item extends BaseItem> {
   selectedIndexAll() {
     return this.root.multiple ? this.selectedList.map((item) => this.list.indexOf(item)) : []
   }
-  declare onRender?: () => void
-  declare onChange?: (item?: Item, old?: Item) => void
+  declare onRender?: (olds: Item[]) => void
+  declare onChange?: (olds: Item[]) => void
   declare onSlotChange?: () => void
-}
+} 

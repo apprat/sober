@@ -18,12 +18,15 @@
 <s-tab>
   <s-tab-item>
     <s-icon slot="icon" name="home"></s-icon>
+    <s-tooltip>主页</s-tooltip>
   </s-tab-item>
   <s-tab-item selected>
     <s-icon slot="icon" name="star"></s-icon>
+    <s-tooltip>收藏</s-tooltip>
   </s-tab-item>
   <s-tab-item>
     <s-icon slot="icon" name="favorite"></s-icon>
+    <s-tooltip>喜欢</s-tooltip>
   </s-tab-item>
 </s-tab>
 ```
@@ -178,13 +181,17 @@
 
 ## 属性
 
-| 名称        | 类型                 | 默认值     | 同步 | 说明                                  |
-| ----------- | -------------------- | ---------- | ---- | ------------------------------------- |
-| value       | string               |            | ✖️ | 选中的值（多选时使用 `,` 分割多个值） |
-| multiple    | boolean              | false      | ✔️ | 多选的                                |
-| mode        | scrollable, fixed    | scrollable | ✔️ | 模式，scrollable=滚动，fixed=固定     |
-| variant     | standard, segmented  | standard   | ✔️ | 变体，standard=标准，segmented=分割的 |
-| orientation | horizontal, vertical | horizontal | ✔️ | 方向，horizontal=横向，vertical=竖向  |
+| 名称                    | 类型                 | 默认值     | 同步 | 说明                                  |
+| ----------------------- | -------------------- | ---------- | ---- | ------------------------------------- |
+| value                   | string               |            | ✖️ | 选中的值（多选时使用 `,` 分割多个值） |
+| multiple                | boolean              | false      | ✔️ | 多选的                                |
+| mode                    | scrollable, fixed    | scrollable | ✔️ | 模式，scrollable=滚动，fixed=固定     |
+| variant                 | standard, segmented  | standard   | ✔️ | 变体，standard=标准，segmented=分割的 |
+| orientation             | horizontal, vertical | horizontal | ✔️ | 方向，horizontal=横向，vertical=竖向  |
+| selectedIndex `只读`    | number               | -1         |      | 当前选中下标                          |
+| selectedIndexAll `只读` | number[]             | []         |      | 当前多选下标数组(多选时)              |
+| selectedOptions `只读`  | TabItem[]            | []         |      | 选中的子项目                          |
+| options `只读`          | TabItem[]            | []         |      | 子项目                                |
 
 ## 事件
 

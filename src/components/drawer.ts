@@ -25,6 +25,12 @@ const style = /*css*/`
 .end{
   display: block;
 }
+.start,
+.end{
+  overflow: hidden;
+  transition: width 2s;
+  width: 280px;
+}
 .start{
   order: -1;
 }
@@ -41,6 +47,11 @@ const style = /*css*/`
   background: var(--s-color-surface-container-low, ${scheme.color.surfaceContainerLow});
   border-color: var(--s-color-surface-variant, #DCE4E8);
 }
+:host([startOpened=false]){
+  .start{
+    display: none;
+  }
+}
 `
 const template = /*html*/`
 <slot class="view" part="view"></slot>
@@ -49,10 +60,24 @@ const template = /*html*/`
 `
 
 export class Drawer extends useElement({
-  style, template,
-  props,
-  setup() {
+  style, template, props,
+  setup(shadowRoot, states) {
+    const start = shadowRoot.querySelector<HTMLSlotElement>('.start')!
+    const end = shadowRoot.querySelector<HTMLSlotElement>('.end')!
     new ResizeObserver(() => this.toggleAttribute('floating', this.offsetWidth <= this.breakpointFloating)).observe(this)
+    return {
+      setStartOpened: (v) => {
+        if (!this.isConnected || !states.initialized) return
+        start.style.display = 'block'
+        start.animate({ width: [`${start.offsetWidth}px`, '0'] }, { duration: 2000 })
+      },
+      setEndOpened: (v) => {
+      },
+      setStartFloatingOpened: (v) => {
+      },
+      setEndFloatingOpened: (v) => {
+      },
+    }
   }
 }) { }
 

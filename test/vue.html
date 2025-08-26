@@ -7,28 +7,45 @@
 </head>
 
 <body>
-  <main id="app">
-    <s-text-field label="label" v-model="textRef" type="lines"></s-text-field>
-    {{textRef}}
-    <s-button @click="submit">submit</s-button>
-    <s-text-field label="请输入内容" value="My Namexx" type="line">
-      <s-icon slot="start" name="search"></s-icon>
-      <s-icon-button slot="end">
-        <s-icon name="close"></s-icon>
-      </s-icon-button>
-    </s-text-field>
-  </main>
-  <script src="https://unpkg.com/sober@1.0.6/dist/sober.min.js"></script>
-  <script type="module">
-    import { createApp, ref } from 'https://unpkg.com/vue@3.5.13/dist/vue.esm-browser.prod.js'
+  <template id="template">
+    <h1>{{state.tab}}</h1>
 
+    <s-button @click="state.multiple=!state.multiple">设置多选 {{state.multiple}}</s-button>
+    <s-tab v-model.lazy="state.tab" :multiple="state.multiple">
+      <s-tab-item value="tab1">tab1</s-tab-item>
+      <s-tab-item value="tab2">tab2</s-tab-item>
+      <s-tab-item value="tab3">tab3</s-tab-item>
+      <s-tab-item value="tab4">tab4</s-tab-item>
+    </s-tab>
+
+    <s-tab v-model.lazy="state.tab" variant="segmented" :multiple="state.multiple" style="margin: 48px;">
+      <s-tab-item value="tab1">tab1</s-tab-item>
+      <s-tab-item value="tab2">tab2</s-tab-item>
+      <s-tab-item value="tab3">tab3</s-tab-item>
+      <s-tab-item value="tab4">tab4</s-tab-item>
+    </s-tab>
+
+    <select v-model="state.tab" :multiple="state.multiple">
+      <option value="tab1">tab1</option>
+      <option value="tab2">tab2</option>
+      <option value="tab3">tab3</option>
+      <option value="tab4">tab4</option>
+    </select>
+
+  </template>
+  <main id="app"></main>
+  <script type="module" src="../dist/main.js"></script>
+  <script type="module">
+    import { createApp, reactive } from 'https://unpkg.com/vue@3.5.13/dist/vue.esm-browser.prod.js'
+    const template = document.querySelector('template').innerHTML
     const app = createApp({
+      template,
       setup() {
-        const textRef = ref('')
-        const submit = () => {
-          console.log(textRef.value)
-        }
-        return { textRef, submit }
+        const state = reactive({
+          tab: 'tab4',
+          multiple: false
+        })
+        return { state }
       }
     })
     app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('s-')

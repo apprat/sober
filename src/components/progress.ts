@@ -12,17 +12,11 @@ const props = useProps({
 const style = /*css*/`
 :host{
   display: flex;
-  padding: 12px 16px;
-  align-items: center;
-  line-height: 24px;
-  font-size: .875rem;
-  font-weight: 500;
-  min-height: 48px;
+  height: 4px;
   border-radius: 4px;
-  word-break: break-all;
   color: var(--s-color-on-secondary-container, ${scheme.color.onSecondaryContainer});
   background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
-  transition-property: color, background-color;
+  transition-property: none;
   transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
   transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
 }

@@ -30,7 +30,7 @@ export const buttonStyle = /*css*/`
   -webkit-aspect-ratio: 1;
 }
 @supports not (color: color-mix(in srgb, black, white)){
-  :host([disabled=true]){
+  :host([disabled]){
     background: var(--s-color-surface-container-high, ${scheme.color.surfaceContainerHigh}) !important;
     color: var(--s-color-outline, ${scheme.color.outline}) !important;
     box-shadow: 0 0 0 1px var(--s-color-surface-container-highest, ${scheme.color.surfaceContainerHighest}) !important;

@@ -13,7 +13,7 @@
 设置默认展开，你可以控制两种状态下的默认展开或关闭。
 
 ```html preview
-<s-drawer style="height: 500px" start-open="true">
+<s-drawer style="height: 500px" startOpened="false">
   <div slot="start"> start </div>
   hello world
   <div slot="end"> end </div>

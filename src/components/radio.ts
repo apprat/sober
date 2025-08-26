@@ -18,10 +18,10 @@ const style = /*css*/`
   height: 40px;
   color: var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
 }
-:host([checked=true]){
+:host([checked]){
   color: var(--s-color-primary, ${scheme.color.primary});
 }
-:host([disabled=true]){
+:host([disabled]){
   pointer-events: none;
   .layout{
     color: var(--s-color-on-surface, ${scheme.color.onSurface}) !important;
@@ -56,7 +56,7 @@ const style = /*css*/`
   transition-timing-function: var(--s-motion-easing-emphasized, ${scheme.motion.easing.emphasized});
   transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
 }
-:host([checked=true]:not([indeterminate=true])) .checked{
+:host([checked]:not([indeterminate])) .checked{
   opacity: 1;
   transform: scale(1);
 }
@@ -81,9 +81,6 @@ svg,
   width: 60%;
   height: 60%;
 }
-::slotted(::first-line){
-  background: red;
-}
 `
 
 const template = /*html*/`
@@ -98,7 +95,7 @@ const template = /*html*/`
   </slot>
 </div>
 <slot></slot>
-<s-ripple class="ripple" attached="true" part="ripple"></s-ripple>
+<s-ripple class="ripple" part="ripple"></s-ripple>
 `
 
 export class Radio extends useElement({

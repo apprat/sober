@@ -7,10 +7,19 @@
     content="width=device-width,viewport-fit=cover,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
   <script type="module" src="../dist/main.js"></script>
   <link rel="stylesheet" href="../style/scroll-view.css">
+  <link rel="stylesheet" href="../style/table.css">
   <title>Preview Markdown</title>
   <style>
+    html,
     body {
       margin: 0;
+      height: 100%;
+    }
+
+    .page {
+      height: 100%;
+      overflow: auto;
+      touch-action: pan-y pan-x;
     }
 
     .markdown {
@@ -87,20 +96,7 @@
       background: rgba(0, 0, 0, 0.08);
       padding: 3px 5px;
       border-radius: 4px;
-      font-family: cursive;
-    }
-
-    table,
-    td,
-    th {
-      border: solid 1px var(--s-color-surface-variant);
-      border-collapse: collapse;
-      text-align: left;
-    }
-
-    td,
-    th {
-      padding: 12px 16px;
+      font-family: monospace;
     }
 
     ol,
@@ -137,6 +133,12 @@
     }
   </style>
   <style>
+    .toggle-style {
+      position: fixed;
+      right: 24px;
+      bottom: 96px;
+    }
+
     .toggle-theme {
       position: fixed;
       right: 24px;
@@ -146,11 +148,15 @@
 </head>
 
 <body>
-  <s-page class="page">
+  <s-page class="page" theme="auto">
     <div class="markdown"></div>
+    <s-fab class="toggle-style" onclick="toggleStyle()">
+      <s-icon name="add"></s-icon>
+      <s-tooltip placement="left">切换风格</s-tooltip>
+    </s-fab>
     <s-fab class="toggle-theme" onclick="toggleTheme(this)">
       <s-icon name="dark_mode"></s-icon>
-      <s-tooltip>切换主题</s-tooltip>
+      <s-tooltip placement="left">切换主题</s-tooltip>
     </s-fab>
   </s-page>
   <script type="module">
@@ -164,8 +170,13 @@
       markdown.innerHTML = text
     }
     window.toggleTheme = (el) => {
-      const theme = page.theme
-      page.toggle(theme === 'dark' ? 'light' : 'dark', el)
+      page.toggle(page.isDark ? 'light' : 'dark', el)
+    }
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = '../style/liquid-glass.css'
+    window.toggleStyle = () => {
+      link.isConnected ? link.remove() : document.head.appendChild(link)
     }
     init()
   </script>

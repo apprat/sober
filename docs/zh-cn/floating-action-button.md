@@ -1,6 +1,6 @@
 # floating-action-button
 
-浮动操作按钮，该组件默认并没有浮动效果，大多数情况下，你都需要设置 CSS `position` 来设置浮动。
+浮动操作按钮（FAB）帮助用户采取主要操作。
 
 ```html preview
 <s-fab>
@@ -104,3 +104,25 @@
 | size     | small, medium, large                                                         | medium  | ✔️ | 尺寸   |
 | disabled | boolean                                                                      | false   | ✔️ | 禁用的 |
 | hidden   | boolean                                                                      | false   | ✔️ | 隐藏的 |
+
+---
+
+## 插槽
+
+| 名称  | 说明                     |
+| ----- | ------------------------ |
+| 匿名  | 按钮文本                 |
+| start | 开始，默认支持 svg, icon |
+| end   | 结束，默认支持 svg, icon |
+
+---
+
+## 键盘快捷键
+
+使用 `Tab` 键切换焦点，使用 `Space` 或者 `Enter` 键触发点击事件。
+
+---
+
+## 依赖
+
+- [Ripple](./ripple.md)

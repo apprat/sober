@@ -1,6 +1,6 @@
 # radio
 
-单选按钮需要设置一个唯一的 `name` 作为分组才能执行单选，在 `Vue` 中使用 `v-model` 语法糖时 `name` 属性可以省略。
+单选按钮允许用户从一组选项中选择一个选项。需要设置一个唯一的 `name` 作为分组才能执行单选。
 
 ```html preview
 <s-radio name="group">男</s-radio>
@@ -13,6 +13,14 @@
 ```html preview
 <s-radio disabled></s-radio>
 <s-radio disabled checked="true"></s-radio>
+```
+
+在 **Vue** 框架中使用 `v-model` 语法时，可以省略 `name` 属性。
+
+```html
+<s-radio v-model.lazy="group">男</s-radio>
+<s-radio v-model.lazy="group">女</s-radio>
+<s-radio v-model.lazy="group">未知</s-radio>
 ```
 
 ---
@@ -37,7 +45,7 @@
   .radio{
     color: #336699;
   }
-  .radio[checked=true]{
+  .radio[checked]{
     color: #009688;
   }
 </style>
@@ -54,3 +62,31 @@
 | disabled      | boolean | false  | ✔️ | 禁用的 |
 | checked       | boolean | false  | ✔️ | 选中的 |
 | indeterminate | boolean | false  | ✔️ | 未知的 |
+
+---
+
+## 事件
+
+| 名称   | 参数  | 冒泡 | 可取消 | 说明           |
+| ------ | ----- | ---- | ------ | -------------- |
+| change | Event | ✖️ | ✖️   | 选中变更时触发 |
+
+---
+
+## 插槽
+
+| 名称 | 说明 |
+| ---- | ---- |
+| 匿名 | 文本 |
+
+---
+
+## 键盘快捷键
+
+使用 `Tab` 键切换焦点，使用 `Space` 或者 `Enter` 键触发点击事件。
+
+---
+
+## 依赖
+
+- [Ripple](./ripple.md)

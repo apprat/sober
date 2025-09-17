@@ -84,20 +84,6 @@ export const enum color {
   darkOnWarningContainer = ' #ffe169',
 }
 
-export namespace shape {
-  export const enum corner {
-    full = '3.40282e+38px',
-    extraSmall = '4px',
-    small = '8px',
-    medium = '12px',
-    large = '16px',
-    largeIncreased = '20px',
-    extraLarge = '28px',
-    extraLargeIncreased = '32px',
-    extraExtraLarge = '48px',
-  }
-}
-
 export const enum elevation {
   level1 = `0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12)`,
   level2 = `0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12)`,

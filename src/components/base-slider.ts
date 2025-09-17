@@ -89,6 +89,8 @@ slot:is([name=thumb-start], [name=thumb-end]){
     background: currentColor;
     transform: scale(1);
     transition-property: transform, opacity;
+    transition-duration: inherit;
+    transition-timing-function: inherit;
   }
 }
 slot[name=thumb-start]{

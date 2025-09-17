@@ -170,11 +170,6 @@ export class Alert extends useElement({
     const toggleEl = shadowRoot.querySelector<HTMLSlotElement>('.toggle')!
     const content = shadowRoot.querySelector<HTMLSlotElement>('.content')!
     const computedStyle = useComputedStyle(content)
-    const getAnimateOptions = () => {
-      const easing = computedStyle.getValue('animation-timing-function')
-      const duration = computedStyle.getDuration('animation-duration')
-      return { easing, duration }
-    }
     toggleSlot.onclick = () => {
       this.opened = !this.opened
       this.dispatchEvent(new Event('toggle'))
@@ -196,7 +191,10 @@ export class Alert extends useElement({
           keyframe.height.reverse()
           content.style.removeProperty('display')
         }
-        content.animate(keyframe, getAnimateOptions())
+        content.animate(keyframe, {
+          easing: computedStyle.getValue('animation-timing-function'),
+          duration: computedStyle.getDuration('animation-duration')
+        })
       }
     }
   }

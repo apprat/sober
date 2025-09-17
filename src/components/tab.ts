@@ -46,9 +46,11 @@ const style = /*css*/`
   --s-private-indicator-width: 100%;
   --s-private-indicator-height: 100%;
   --s-private-indicator-inset: 0;
-  --s-private-indicator-border-radius: var(--s-shape-corner-full, ${scheme.shape.corner.full});
+  --s-private-indicator-border-radius: 0px;
   --s-private-layout-padding: 4px 16px;
   --s-private-layout-position: static;
+  --s-private-icon-width: 20px;
+  --s-private-icon-height: 20px;
   .layout{
     padding: 3px;
     border-radius: inherit;
@@ -56,7 +58,7 @@ const style = /*css*/`
   ::slotted(s-tab-item){
     padding: 0;
     min-height: 34px;
-    border-radius: var(--s-shape-corner-full, ${scheme.shape.corner.full});
+    border-radius: 0;
   }
   ::slotted(s-tab-item[selected]){
     color: var(--s-color-on-primary, ${scheme.color.onPrimary});
@@ -65,13 +67,13 @@ const style = /*css*/`
 }
 :host([variant=segmented]:not([orientation=vertical])){
   display: inline-block;
-  border-radius: var(--s-shape-corner-full, ${scheme.shape.corner.full});
+  border-radius: 0px;
   max-width: -moz-available;
   max-width: -webkit-fill-available;
 }
 :host([variant=segmented][orientation=vertical]){
-  border-radius: var(--s-shape-corner-small, ${scheme.shape.corner.small});
-  --s-private-indicator-border-radius: var(--s-shape-corner-small, ${scheme.shape.corner.small});
+  border-radius: 0px;
+  --s-private-indicator-border-radius: 0px;
   .layout{
     gap: 3px;
   }
@@ -150,8 +152,8 @@ const itemStyle = /*css*/`
   position: relative;
 }
 ::slotted(:is(svg, s-icon)){
-  width: 24px;
-  height: 24px;
+  width: var(--s-private-icon-width, 24px);
+  height: var(--s-private-icon-height, 24px);
   color: inherit;
   position: relative;
 }

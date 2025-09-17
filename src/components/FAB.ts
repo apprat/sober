@@ -23,7 +23,7 @@ const style = /*css*/`
   font-size: 1rem;
   transition-property: border-radius, color, background-color, box-shadow, transform;
   box-shadow: var(--s-elevation-level3, ${scheme.elevation.level3});
-  border-radius: var(--s-shape-corner-large, ${scheme.shape.corner.large});
+  border-radius: 16px;
 }
 :host(:not([variant])){
   background: var(--s-color-primary, ${scheme.color.primary});

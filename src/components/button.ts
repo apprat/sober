@@ -12,12 +12,12 @@ const props = useProps({
 
 const style = /*css*/`
 :host{
-  border-radius: 20px;
   padding: 0 18px;
   height: 40px;
   gap: 6px;
   min-width: 56px;
   transition-property: border-radius, color, background-color, box-shadow;
+  border-radius: 20px;
 }
 :host(:not([variant])),
 :host([checkable][checked]:not([variant])),

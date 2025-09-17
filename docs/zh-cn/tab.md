@@ -137,10 +137,7 @@
 ```html preview
 <!--默认-->
 <s-tab variant="segmented">
-  <s-tab-item>
-    <s-icon name="star"></s-icon>
-    Tab 1
-  </s-tab-item>
+  <s-tab-item>Tab 1</s-tab-item>
   <s-tab-item selected>Tab 2</s-tab-item>
   <s-tab-item>Tab 3</s-tab-item>
   <s-tab-item>Tab 4</s-tab-item>
@@ -149,11 +146,17 @@
 <!--固定的-->
 <s-tab variant="segmented" mode="fixed">
   <s-tab-item>
-    <s-icon name="star"></s-icon>
+    <s-icon name="light_mode"></s-icon>
     Tab 1
   </s-tab-item>
-  <s-tab-item selected>Tab 2</s-tab-item>
-  <s-tab-item>Tab 3</s-tab-item>
+  <s-tab-item selected>
+    <s-icon name="dark_mode"></s-icon>
+    Tab 2
+  </s-tab-item>
+  <s-tab-item>
+    <s-icon name="favorite"></s-icon>
+    Tab 3
+  </s-tab-item>
 </s-tab>
 ```
 
@@ -167,13 +170,22 @@
 ```html preview
 <s-tab orientation="vertical">
   <s-tab-item>Tab 1</s-tab-item>
-  <s-tab-item selected>Tab 1</s-tab-item>
-  <s-tab-item>Tab 1</s-tab-item>
+  <s-tab-item selected>Tab 2</s-tab-item>
+  <s-tab-item>Tab 3</s-tab-item>
 </s-tab>
 <s-tab orientation="vertical" variant="segmented" style="margin-left: 24px;">
-  <s-tab-item>Tab 1</s-tab-item>
-  <s-tab-item selected>Tab 1</s-tab-item>
-  <s-tab-item>Tab 1</s-tab-item>
+  <s-tab-item>
+    <s-icon name="light_mode"></s-icon>
+    Tab 1
+  </s-tab-item>
+  <s-tab-item selected>
+    <s-icon name="dark_mode"></s-icon>
+    Tab 2
+  </s-tab-item>
+  <s-tab-item>
+    <s-icon name="favorite"></s-icon>
+    Tab 3
+  </s-tab-item>
 </s-tab>
 ```
 

@@ -1,6 +1,6 @@
 # checkbox
 
-复选框。
+复选框允许用户从列表中选择一个或多个项目，或者打开或关闭项目。
 
 ```html preview
 <s-checkbox>已阅读用户协议</s-checkbox>
@@ -35,7 +35,7 @@
 
 ```html preview
 <style>
-  .checkbox[checked=true]{
+  .checkbox[checked]{
     color: #009688;
   }
 </style>
@@ -51,3 +51,31 @@
 | disabled      | boolean | false  | ✔️ | 禁用的 |
 | checked       | boolean | false  | ✔️ | 选中的 |
 | indeterminate | boolean | false  | ✔️ | 未知的 |
+
+---
+
+## 事件
+
+| 名称   | 参数  | 冒泡 | 可取消 | 说明           |
+| ------ | ----- | ---- | ------ | -------------- |
+| change | Event | ✖️ | ✖️   | 选中变更时触发 |
+
+---
+
+## 插槽
+
+| 名称 | 说明 |
+| ---- | ---- |
+| 匿名 | 文本 |
+
+---
+
+## 键盘快捷键
+
+使用 `Tab` 键切换焦点，使用 `Space` 或者 `Enter` 键触发点击事件。
+
+---
+
+## 依赖
+
+- [Ripple](./ripple.md)

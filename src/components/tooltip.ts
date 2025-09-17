@@ -5,7 +5,8 @@ import { useComputedStyle } from '../core/utils/CSS.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
-  placement: ['bottom', 'top', 'left', 'right']
+  placement: ['bottom', 'top', 'left', 'right'],
+  disabled: false
 })
 const events = {
   opened: Event,
@@ -145,17 +146,16 @@ export class Tooltip extends useElement({
       })
     }
     return {
+      expose: { show, close },
       onMounted: (parent) => {
         const parentElement = parent instanceof ShadowRoot ? parent.host : parent
         if (!(parentElement instanceof HTMLElement)) return
-        const hover = () => !device.touchEnabled && show(parentElement)
-        const unHover = () => !device.touchEnabled && close(parentElement)
+        const hover = () => !this.disabled && !device.touchEnabled && show(parentElement)
+        const unHover = () => !this.disabled && !device.touchEnabled && close(parentElement)
         let timer: number
-        const touchstart = () => {
-          console.log('touchstart')
-          timer = setTimeout(() => show(parentElement), 500)
-        }
+        const touchstart = () => !this.disabled && (timer = setTimeout(() => show(parentElement), 500))
         const touchend = () => {
+          if (this.disabled) return
           clearTimeout(timer)
           close(parentElement)
         }
@@ -163,12 +163,14 @@ export class Tooltip extends useElement({
         parentElement.addEventListener('mouseleave', unHover)
         parentElement.addEventListener('wheel', unHover)
         parentElement.addEventListener('touchstart', touchstart, { passive: true })
+        parentElement.addEventListener('touchmove', touchend)
         parentElement.addEventListener('touchend', touchend)
         return () => {
           parentElement.removeEventListener('mouseenter', hover)
           parentElement.removeEventListener('mouseleave', unHover)
           parentElement.removeEventListener('wheel', unHover)
           parentElement.removeEventListener('touchstart', touchstart)
+          parentElement.removeEventListener('touchmove', touchend)
           parentElement.removeEventListener('touchend', touchend)
         }
       }

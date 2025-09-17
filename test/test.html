@@ -1,58 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script type="module" src="../dist/main.js"></script>
-  <title>CSS Linear Interpolation</title>
+  <title></title>
   <style>
     .test {
-      display: flex;
-      width: 600px;
-      height: 400px;
-      overflow: scroll;
+      width: 80px;
+      height: 80px;
+      background: rgb(17, 89, 104);
+      outline: solid 1px #eee;
+      animation: test 8s linear infinite;
     }
 
-    .item {
-      background: currentColor;
-      width: 100%;
-      height: 100%;
-      flex-shrink: 0;
-      color: #fff;
+    @keyframes test {
+      0% {
+        --clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      }
+
+      50% {
+        --clip-path: polygon(0% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="test">
-    <div class="item" style="background: rgb(12, 31, 95);">
-      <div style="width: 100%;height: 100%; overflow: auto;">
-        <h1 style="width: 1000px;height: 20px;">xxx</h1>
-      </div>
-    </div>
-    <div class="item" style="background: rgb(34, 106, 16);"></div>
-    <div class="item" style="background: rgb(97, 21, 60);"></div>
-    <div class="item" style="background: rgb(106, 76, 17);"></div>
-    <div class="item" style="background: rgb(80, 37, 18);"></div>
-    <div class="item" style="background: rgb(13, 15, 70);"></div>
-    <div class="item" style="background: rgb(62, 139, 36);"></div>
-    <div class="item" style="background: rgb(87, 10, 106);"></div>
-    <div class="item" style="background: rgb(85, 73, 10);"></div>
-  </div>
-  <script>
-    const test = document.querySelector('.test')
-    test.addEventListener('touchstart', function (e) {
-      let target = e.target
-      while (target !== test) {
-        console.log('target', target)
-        target = target.parentElement
-      }
-    })
-    // test.addEventListener('touchmove', function (e) {
-    //   console.log('move')
-    // }, { passive: true })
-  </script>
+  <svg width="200" height="200" viewBox="0 0 200 200">
+    <!-- 组合动画元素 -->
+    <path id="combo" fill="green">
+      <!-- 路径动画：三角形→圆形 -->
+      <animate
+        attributeName="d"
+        dur="4s"
+        values="
+            M50,100 L100,50 L150,100 Z;
+            M100,100 m-50,0 a50,50 0 1,0 100,0 a50,50 0 1,0 -100,0;
+            M50,100 L100,50 L150,100 Z"
+        keyTimes="0; 0.5; 1"
+        repeatCount="indefinite" />
+      <!-- 旋转动画 -->
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        dur="2s"
+        values="0 100 100; 360 100 100"
+        keySplines="0.4, 0, 0.2, 1"
+        repeatCount="indefinite" />
+    </path>
+  </svg>
 </body>
 
 </html>

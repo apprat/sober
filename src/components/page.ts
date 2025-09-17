@@ -3,7 +3,7 @@ import * as scheme from '../core/scheme.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
 
 const props = useProps({
-  theme: ['light', 'dark', 'auto']
+  $theme: ['light', 'dark', 'auto']
 })
 
 const style = /*css*/`
@@ -11,9 +11,11 @@ const style = /*css*/`
   display: flow-root;
   height: -moz-available;
   height: -webkit-fill-available;
-  font-family: Roboto, system-ui;
+  font-family: system-ui;
   color: var(--s-color-on-background);
   background: var(--s-color-background);
+  animation-timing-function: var(--s-motion-easing-standard-accelerate);
+  animation-duration: var(--s-motion-duration-long4);
   --s-color-scrim: ${scheme.color.scrim};
   --s-color-primary: ${scheme.color.primary};
   --s-color-on-primary: ${scheme.color.onPrimary};
@@ -100,7 +102,7 @@ const style = /*css*/`
   --s-elevation-level3: ${scheme.elevation.level3};
   --s-elevation-level4: ${scheme.elevation.level4};
   --s-elevation-level5: ${scheme.elevation.level5};
-  --s-motion-duration-Short1: ${scheme.motion.duration.short1};
+  --s-motion-duration-short1: ${scheme.motion.duration.short1};
   --s-motion-duration-short2: ${scheme.motion.duration.short2};
   --s-motion-duration-short3: ${scheme.motion.duration.short3};
   --s-motion-duration-short4: ${scheme.motion.duration.short4};
@@ -122,15 +124,6 @@ const style = /*css*/`
   --s-motion-easing-standard: ${scheme.motion.easing.standard};
   --s-motion-easing-standard-decelerate: ${scheme.motion.easing.standardDecelerate};
   --s-motion-easing-standard-accelerate: ${scheme.motion.easing.standardAccelerate};
-  --s-shape-corner-full: ${scheme.shape.corner.full};
-  --s-shape-corner-extra-small: ${scheme.shape.corner.extraSmall};
-  --s-shape-corner-small: ${scheme.shape.corner.small};
-  --s-shape-corner-medium: ${scheme.shape.corner.medium};
-  --s-shape-corner-large: ${scheme.shape.corner.large};
-  --s-shape-corner-large-increased: ${scheme.shape.corner.largeIncreased};
-  --s-shape-corner-extra-large: ${scheme.shape.corner.extraLarge};
-  --s-shape-corner-extra-large-increased: ${scheme.shape.corner.extraLargeIncreased};
-  --s-shape-corner-extra-extra-large: ${scheme.shape.corner.extraExtraLarge};
 }
 :host([dark]){
   --s-color-primary: var(--s-color-dark-primary) !important;
@@ -186,11 +179,6 @@ export const Page = useElement({
   setup() {
     const computedStyle = useComputedStyle(this)
     const darker = matchMedia('(prefers-color-scheme: dark)')
-    const getAnimateOptions = () => {
-      const easing = computedStyle.getValue('--s-motion-easing-standard-accelerate') ?? scheme.motion.easing.standardAccelerate
-      const duration = computedStyle.getDuration('--s-motion-duration-long4') ?? scheme.motion.duration.long4
-      return { easing, duration }
-    }
     const isDark = () => {
       if (this.theme === 'auto') return darker.matches
       if (this.theme === 'dark') return true
@@ -206,16 +194,12 @@ export const Page = useElement({
         this.theme = theme
         return
       }
-      const width = innerWidth
-      const height = innerHeight
-      const keyframes = { clipPath: [`circle(0px at 50% ${height / 2}px)`, `circle(${Math.sqrt(width ** 2 + height ** 2) / 2}px at 50% ${height / 2}px)`] }
+      const keyframes = { clipPath: [`circle(0px at 50% ${innerHeight / 2}px)`, `circle(${Math.sqrt(innerWidth ** 2 + innerHeight ** 2) / 2}px at 50% ${innerHeight / 2}px)`] }
       if (trigger && trigger.isConnected) {
         const { left, top } = trigger.getBoundingClientRect()
         const x = left + trigger.offsetWidth / 2
         const y = top + trigger.offsetHeight / 2
-        const twoW = Math.max(width - x, x)
-        const twoH = Math.max(height - y, y)
-        const size = Math.sqrt(twoW ** 2 + twoH ** 2)
+        const size = Math.sqrt(Math.max(innerWidth - x, x) ** 2 + Math.max(innerHeight - y, y) ** 2)
         keyframes.clipPath[0] = `circle(0px at ${x}px ${y}px)`
         keyframes.clipPath[1] = `circle(${size}px at ${x}px ${y}px)`
       }
@@ -223,13 +207,12 @@ export const Page = useElement({
         this.theme = theme
         document.head.appendChild(viewTransitionStyle)
       })
-      return await new Promise<Animation | void>((resolve) => {
-        transition.ready.then(async () => {
-          const animation = document.documentElement.animate(keyframes, { ...getAnimateOptions(), pseudoElement: '::view-transition-new(root)' })
-          resolve(animation)
-          await transition.finished
-          viewTransitionStyle.remove()
-        })
+      await transition.ready
+      transition.finished.then(() => viewTransitionStyle.remove())
+      return document.documentElement.animate(keyframes, {
+        easing: computedStyle.getValue('animation-timing-function'),
+        duration: computedStyle.getDuration('animation-duration'),
+        pseudoElement: '::view-transition-new(root)'
       })
     }
     return {

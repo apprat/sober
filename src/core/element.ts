@@ -26,10 +26,10 @@ const setStyle = (shadowRoot: ShadowRoot, cssStr: string[]) => {
 
 const baseStyle = /*css*/`
 :host{
+  outline: none;
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
-  outline: none;
 }
 :host(:focus-visible){
   outline: auto 1px var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
@@ -43,6 +43,7 @@ const baseStyle = /*css*/`
 }
 :host, *{
   box-sizing: border-box;
+  touch-action: pan-y pan-x;
 }
 @media (pointer: fine) {
   ::-webkit-scrollbar{
@@ -184,7 +185,6 @@ export const useElement = <
       setStyle(shadowRoot, [baseStyle, ...options.style ? (Array.isArray(options.style) ? options.style : [options.style]) : []])
       const props = { ...options.props }
       const states = { initialized: false, props, } as States<Props>
-      let tabIndex = this.tabIndex > 0 ? this.tabIndex : (options.focused ? 0 : -1)
       const mapItem = { setup: null as any, states, lifetimes: {} }
       options.focused && this.addEventListener('keydown', (e) => {
         if (!['Enter', ' '].includes(e.key)) return
@@ -210,14 +210,7 @@ export const useElement = <
               if (value !== meta.value && attrValue !== valueStr) return this.setAttribute(lowerKey, valueStr)
             }
             if (value === this[key as keyof this]) return
-            if (options.focused && key === 'disabled') {
-              if (value) {
-                tabIndex = this.tabIndex
-                this.removeAttribute('tabindex')
-              } else {
-                this.tabIndex === -1 && (this.tabIndex = tabIndex)
-              }
-            }
+            if (options.focused && key === 'disabled') value ? this.removeAttribute('tabindex') : this.setAttribute('tabindex', String(0))
             const old = props[key]
             props[key] = value
             const call = mapItem.setup?.[`set${state.metaProps[key].capitalize}`] as any
@@ -241,12 +234,13 @@ export const useElement = <
       for (const key in mapItem.setup?.expose ?? {}) Object.defineProperty(this, key, { get: () => mapItem.setup?.expose?.[key] })
       for (const key in ahead) this[key as keyof this] = ahead[key] as never
       map.set(this, mapItem)
-      useThrottle(() => states.initialized = true)
+      Promise.resolve().then(() => states.initialized = true)
     }
     connectedCallback() {
       const mapItem = map.get(this)
       if (!mapItem) return
-      if (options.focused && this.tabIndex < 0) this.tabIndex = 0
+      //@ts-ignore
+      if (options.focused && !this.disabled && this.tabIndex < 0) this.tabIndex = 0
       if (mapItem.setup?.onMounted) {
         const parentNode = this.parentNode!
         const stop = mapItem.setup.onMounted(parentNode)

@@ -1,54 +1,52 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ZH-cn">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title>
+  <title>Test Page</title>
+  <link rel="stylesheet" href="../dist/style.css">
   <style>
-    .test {
-      width: 80px;
-      height: 80px;
-      background: rgb(17, 89, 104);
-      outline: solid 1px #eee;
-      animation: test 8s linear infinite;
-    }
-
-    @keyframes test {
-      0% {
-        --clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-      }
-
-      50% {
-        --clip-path: polygon(0% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-      }
+    path {
+      stroke-linecap: round;
     }
   </style>
 </head>
 
 <body>
-  <svg width="200" height="200" viewBox="0 0 200 200">
-    <!-- 组合动画元素 -->
-    <path id="combo" fill="green">
-      <!-- 路径动画：三角形→圆形 -->
-      <animate
-        attributeName="d"
-        dur="4s"
-        values="
-            M50,100 L100,50 L150,100 Z;
-            M100,100 m-50,0 a50,50 0 1,0 100,0 a50,50 0 1,0 -100,0;
-            M50,100 L100,50 L150,100 Z"
-        keyTimes="0; 0.5; 1"
-        repeatCount="indefinite" />
-      <!-- 旋转动画 -->
-      <animateTransform
-        attributeName="transform"
-        type="rotate"
-        dur="2s"
-        values="0 100 100; 360 100 100"
-        keySplines="0.4, 0, 0.2, 1"
-        repeatCount="indefinite" />
-    </path>
+  <div id="svg-container" style="width:200px%;height:100px">
+    <svg width='100%' height='100%' viewBox="0 0 100 100" preserveAspectRatio="none"
+      style='background-color: whitesmoke'>
+      <rect x='40%' y='40%' width='25%' height='25%' />
+
+      <polygon points="0,0 0,100 30,20 30,0" />
+      <polygon points="30,0 30,20 60,0 60,0" />
+      <polygon points="60,0 60,0 100,30 100,0" />
+    </svg>
+  </div>
+
+  <svg xmlns="http://www.w3.org/2000/svg" width="200" height="10" style="background: #eee;">
+    <defs>
+      <pattern id="My" width="40" height="10" patternUnits="userSpaceOnUse" viewBox="-0.1 0.4 4.2 1.2">
+        <path d="M0 1Q1 2 2 1 3 0 4 1" stroke="#009688" stroke-width="0.2" fill="none" />
+      </pattern>
+    </defs>
+    <rect width="100%" height="20" fill="url(#My)" />
+  </svg>
+
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.1 0.4 4.2 1.2">
+    <path d="M0 1Q1 2 2 1 3 0 4 1" stroke="#FF0000" stroke-width="0.1" fill="none" />
+  </svg>
+
+  <hr>
+
+  <svg width="120" height="120" viewBox="0 0 120 120">
+    <defs>
+      <pattern id="Triangle" width="10" height="10" patternUnits="userSpaceOnUse">
+        <polygon points="5,0 10,10 0,10" />
+      </pattern>
+    </defs>
+    <circle cx="60" cy="60" r="50" fill="url(#Triangle)" />
   </svg>
 </body>
 

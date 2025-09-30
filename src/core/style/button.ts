@@ -9,7 +9,7 @@ export const buttonStyle = /*css*/`
   text-transform: capitalize;
   position: relative;
   cursor: pointer;
-  font-size: .875rem;
+  font-size: calc(var(--s-font-size) * 14px);
   font-weight: 500;
   max-width: -moz-available;
   max-width: -webkit-fill-available;

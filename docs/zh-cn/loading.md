@@ -11,3 +11,11 @@
 ```html preview
 <s-loading variant="contained"></s-loading>
 ```
+
+---
+
+## 属性
+
+| 名称    | 类型               | 默认值 | 同步 | 说明 |
+| ------- | ------------------ | ------ | ---- | ---- |
+| variant | default, contained | default | ✔️ | 变体 |

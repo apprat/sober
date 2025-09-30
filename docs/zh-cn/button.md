@@ -17,14 +17,17 @@
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+
 <s-button variant="tonal">
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+
 <s-button variant="outlined">
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+
 <s-button variant="text">
   <s-icon name="star" slot="start"></s-icon>
   Button
@@ -40,18 +43,22 @@
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+
 <s-button disabled variant="elevated">
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+
 <s-button disabled variant="tonal"> 
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+
 <s-button disabled variant="outlined">
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+
 <s-button disabled variant="text">
   <s-icon name="star" slot="start"></s-icon>
   Button
@@ -67,22 +74,39 @@
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+
 <s-button checkable checked variant="elevated">
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+
 <s-button checkable checked variant="tonal">
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+
 <s-button checkable checked variant="outlined">
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+
 <s-button checkable checked variant="text">
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
+```
+
+如果在 **Vue** 框架中使用 `v-model` 语法，你需要同时设置 `type=checkbox`。
+
+```vue
+<template>
+  <s-button checkable value="male" v-model.lazy="sex" type="checkbox"> 男 </s-button>
+  <s-button checkable value="female" v-model.lazy="sex" type="checkbox"> 女 </s-button>
+  当前选中：{{ group }}
+</template>
+<script setup>
+  const sex = ref(['male'])
+</script>
 ```
 
 ---
@@ -94,18 +118,22 @@
   <s-icon name="star" slot="start"></s-icon>
   button
 </s-button>
+
 <s-button size="small"> 
   <s-icon name="star" slot="start"></s-icon>
   button
 </s-button>
+
 <s-button size="medium"> 
   <s-icon name="star" slot="start"></s-icon>
   button
 </s-button>
+
 <s-button size="large"> 
   <s-icon name="star" slot="start"></s-icon>
   button
 </s-button>
+
 <s-button size="extra-large"> 
   <s-icon name="star" slot="start"></s-icon>
   button
@@ -137,6 +165,7 @@
 | disabled  | boolean                                        | false  | ✔️ | 禁用的   |
 | checkable | boolean                                        | false  | ✔️ | 启用选中 |
 | checked   | boolean                                        | false  | ✔️ | 选中的   |
+| value     | string                                         |        | ✖️ | 值       |
 
 ---
 

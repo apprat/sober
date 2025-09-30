@@ -5,6 +5,7 @@ import './ripple.js'
 const props = useProps({
   disabled: false,
   checked: false,
+  $value: '',
   name: ''
 })
 

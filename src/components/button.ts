@@ -8,6 +8,7 @@ const props = useProps({
   disabled: false,
   checkable: false,
   checked: false,
+  $value: ''
 })
 
 const style = /*css*/`
@@ -66,7 +67,7 @@ const style = /*css*/`
 :host([size=extra-small]){
   height: 32px;
   gap: 4px;
-  font-size: .6875rem;
+  font-size: calc(var(--s-font-size) * 11px);
   padding: 0 12px;
   border-radius: 16px;
   ::slotted(:is(svg, s-icon)){
@@ -76,7 +77,7 @@ const style = /*css*/`
 :host([size=small]){
   height: 36px;
   gap: 4px;
-  font-size: .75rem;
+  font-size: calc(var(--s-font-size) * 12px);
   padding: 0 16px;
   border-radius: 18px;
   ::slotted(:is(svg, s-icon)){
@@ -86,7 +87,7 @@ const style = /*css*/`
 :host([size=large]){
   height: 48px;
   gap: 8px;
-  font-size: 1rem;
+  font-size: calc(var(--s-font-size) * 16px);
   padding: 0 22px;
   border-radius: 24px;
   ::slotted(:is(svg, s-icon)){
@@ -96,7 +97,7 @@ const style = /*css*/`
 :host([size=extra-large]){
   height: 56px;
   gap: 8px;
-  font-size: 1.125rem;
+  font-size: calc(var(--s-font-size) * 18px);
   padding: 0 28px;
   border-radius: 28px;
   ::slotted(:is(svg, s-icon)){
@@ -134,8 +135,9 @@ export class Button extends useElement({
   props, template,
   setup() {
     this.addEventListener('click', () => {
-      if (!this.checkable || !this.dispatchEvent(new Event('change', { cancelable: true, bubbles: true }))) return
+      if (!this.checkable) return
       this.checked = !this.checked
+      this.dispatchEvent(new Event('change'))
     })
   }
 }) { }

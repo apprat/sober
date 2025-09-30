@@ -14,7 +14,7 @@ const style = /*css*/`
   padding: 12px 16px;
   align-items: center;
   line-height: 24px;
-  font-size: .875rem;
+  font-size: calc(var(--s-font-size, 1) * 14px);
   font-weight: 500;
   min-height: 48px;
   border-radius: 4px;
@@ -106,7 +106,7 @@ svg{
 }
 ::slotted([slot=title]){
   font-weight: 600;
-  font-size: 1rem;
+  font-size: calc(var(--s-font-size, 1) * 16px);
 }
 ::slotted(:is(svg, s-icon)){
   fill: currentColor;
@@ -123,7 +123,7 @@ svg{
   min-width: 0;
   padding: 0 8px;
   border-radius: 4px;
-  font-size: .8125rem;
+  font-size: calc(var(--s-font-size, 1) * 13px);
   background: none;
 }
 ::slotted(s-icon-button[slot=action]){

@@ -5,7 +5,8 @@ import './ripple.js'
 const props = useProps({
   disabled: false,
   checked: false,
-  indeterminate: false
+  indeterminate: false,
+  $value: ''
 })
 
 const style = /*css*/`

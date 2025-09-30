@@ -6,6 +6,7 @@
 <s-icon-button> 
   <s-icon name="star"></s-icon>
 </s-icon-button>
+
 <s-icon-button>
   <svg viewBox="0 -960 960 960">
     <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"></path>
@@ -21,9 +22,11 @@
 <s-icon-button variant="filled">
   <s-icon name="star"></s-icon>
 </s-icon-button>
+
 <s-icon-button variant="tonal"> 
   <s-icon name="home"></s-icon>
 </s-icon-button>
+
 <s-icon-button variant="outlined">
   <s-icon name="favorite"></s-icon>
 </s-icon-button>
@@ -37,12 +40,15 @@
 <s-icon-button disabled> 
   <s-icon name="home"></s-icon>
 </s-icon-button>
+
 <s-icon-button disabled variant="filled">
   <s-icon name="home"></s-icon>
 </s-icon-button>
+
 <s-icon-button disabled variant="tonal"> 
   <s-icon name="home"></s-icon>
 </s-icon-button>
+
 <s-icon-button disabled variant="outlined">
   <s-icon name="home"></s-icon>
 </s-icon-button>
@@ -56,15 +62,35 @@
 <s-icon-button checkable checked>
   <s-icon name="home"></s-icon>
 </s-icon-button>
+
 <s-icon-button checkable checked variant="filled">
   <s-icon name="home"></s-icon>
 </s-icon-button>
+
 <s-icon-button checkable checked variant="tonal">
   <s-icon name="home"></s-icon>
 </s-icon-button>
+
 <s-icon-button checkable checked variant="outlined">
   <s-icon name="home"></s-icon>
 </s-icon-button>
+```
+
+如果在 **Vue** 框架中使用 `v-model` 语法，你需要同时设置 `type=checkbox`。
+
+```vue
+<template>
+  <s-icon-button type="checkbox" checkable value="male" v-model.lazy="sex">
+    <s-icon name="home"></s-icon>
+  </s-icon-button>
+  <s-icon-button type="checkbox" checkable value="female" v-model.lazy="sex">
+    <s-icon name="home"></s-icon>
+  </s-icon-button>
+  当前选中：{{ group }}
+</template>
+<script setup>
+  const sex = ref('male')
+</script>
 ```
 
 ---
@@ -75,15 +101,19 @@
 <s-icon-button size="extra-small" variant="filled">
   <s-icon name="home"></s-icon>
 </s-icon-button>
+
 <s-icon-button size="small" variant="filled">
   <s-icon name="home"></s-icon>
 </s-icon-button>
+
 <s-icon-button size="medium" variant="filled">
   <s-icon name="home"></s-icon>
 </s-icon-button>
+
 <s-icon-button size="large" variant="filled">
   <s-icon name="home"></s-icon>
 </s-icon-button>
+
 <s-icon-button size="extra-large" variant="filled">
   <s-icon name="home"></s-icon>
 </s-icon-button>
@@ -97,9 +127,11 @@
 <s-icon-button variant="filled" width="wide">
   <s-icon name="more_horiz"></s-icon>
 </s-icon-button>
+
 <s-icon-button variant="tonal"> 
   <s-icon name="star"></s-icon>
 </s-icon-button>
+
 <s-icon-button variant="outlined" width="narrow">
   <s-icon name="more_vert"></s-icon>
 </s-icon-button><br>
@@ -114,10 +146,12 @@
   <s-icon name="star"></s-icon>
   <s-badge></s-badge>
 </s-icon-button>
+
 <s-icon-button variant="tonal"> 
   <s-icon name="home"></s-icon>
   <s-badge>6</s-badge>
 </s-icon-button>
+
 <s-icon-button variant="outlined">
   <s-icon name="favorite"></s-icon>
   <s-badge>99</s-badge>
@@ -136,6 +170,7 @@
 | disabled  | boolean                                        | false    | ✔️ | 禁用的   |
 | checkable | boolean                                        | false    | ✔️ | 启用选中 |
 | checked   | boolean                                        | false    | ✔️ | 选中的   |
+| value     | string                                         |          | ✖️ | 值       |
 
 ---
 

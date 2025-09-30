@@ -8,7 +8,7 @@ import * as shiki from 'shiki'
 const __dirname = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), '../')
 const highlighter = await shiki.createHighlighter({
   themes: ['github-dark'],
-  langs: ['shell', 'json', 'js', 'javascript', 'jsx', 'ts', 'typescript', 'tsx', 'css', 'xml', 'html']
+  langs: ['shell', 'json', 'js', 'javascript', 'jsx', 'ts', 'typescript', 'tsx', 'css', 'xml', 'html', 'vue']
 })
 
 const mineTypeMap = {

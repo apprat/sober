@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    .layout {
+      background: #eee;
+      display: inline-block;
+      position: relative;
+    }
+
+    .layout::before,
+    .layout::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(29, 133, 24, 0.291);
+      border-radius: 50%;
+    }
+
+    .layout::after {
+      width: 70%;
+      height: 70%;
+      left: 15%;
+      top: 15%;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .test,
+    .test2 {
+      width: 500px;
+      height: 500px;
+      background: rgb(17, 89, 104);
+    }
+
+    .test2 {
+      background: rgb(121, 119, 58, .5);
+      position: absolute;
+      inset: 0;
+      transition: transform .8s;
+    }
+
+    input {
+      height: 34px;
+      margin: 4px;
+      width: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <div class="test"></div>
+    <div class="test2"></div>
+  </div>
+  <button onclick="rotate()">旋转</button>
+  <button onclick="resetRotate()">重置</button>
+  <hr>
+  <label>
+    <input type="range" value="15" max="50" min="0" step="1">
+    <input type="range" value="50" max="50" min="0" step="1">
+  </label>
+  <hr>
+  <label>
+    <input type="range" value="3" max="50" min="0" step="1">
+    <input type="range" value="34" max="50" min="0" step="1">
+  </label>
+  <hr>
+  <label>
+    <input type="range" value="21" max="50" min="0" step="1">
+    <input type="range" value="30" max="50" min="0" step="1">
+  </label>
+  <hr>
+  <label>
+    <input type="range" value="19" max="50" min="0" step="1">
+    <input type="range" value="11" max="50" min="0" step="1">
+  </label>
+  <hr>
+  <label>
+    <input type="range" value="38" max="50" min="0" step="1">
+    <input type="range" value="17" max="50" min="0" step="1">
+  </label>
+  <hr>
+  <label>
+    <input type="range" value="50" max="50" min="0" step="1">
+    <input type="range" value="0" max="50" min="0" step="1">
+  </label>
+  <script>
+    const test = document.querySelector('.test')
+    const test2 = document.querySelector('.test2')
+    const labels = document.querySelectorAll('label')
+    for (const item of labels) {
+      item.oninput = change
+    }
+    function change() {
+      const values = []
+      for (const item of labels) {
+        const [x, y] = item.children
+        values.push([Number(x.value), Number(y.value)])
+      }
+      const rewards = []
+      for (const item of values) {
+        rewards.push(`${item[0]}% ${item[1]}%`)
+      }
+      for (const item of values) {
+        rewards.push(`${100 - item[0]}% ${item[1]}%`)
+      }
+      for (const item of values) {
+        rewards.push(`${100 - item[0]}% ${100 - item[1]}%`)
+      }
+      for (const item of values) {
+        rewards.push(`${item[0]}% ${100 - item[1]}%`)
+      }
+      const str = `polygon(${rewards.join()})`
+      test.style.clipPath = str
+      test2.style.clipPath = str
+    }
+    function rotate() {
+      test2.style.transform = `rotate(${45}deg)`
+    }
+    function resetRotate() {
+      test2.style.transform = `rotate(0deg)`
+    }
+    change()
+  </script>
+</body>
+
+</html>

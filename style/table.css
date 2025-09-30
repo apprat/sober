@@ -5,7 +5,7 @@ table {
   max-width: -webkit-fill-available;
   overflow: auto;
   border-radius: var(--s-shape-corner-small, 8px);
-  font-size: .875rem;
+  font-size: calc(var(--s-font-size, 1) * 14px);
   white-space: nowrap;
   position: relative;
 }

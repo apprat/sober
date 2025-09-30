@@ -15,12 +15,20 @@
 <s-radio disabled checked="true"></s-radio>
 ```
 
+---
+
 在 **Vue** 框架中使用 `v-model` 语法时，可以省略 `name` 属性。
 
-```html
-<s-radio v-model.lazy="group">男</s-radio>
-<s-radio v-model.lazy="group">女</s-radio>
-<s-radio v-model.lazy="group">未知</s-radio>
+```vue
+<template>
+  <s-radio value="male" v-model.lazy="group" type="radio">男</s-radio>
+  <s-radio value="female" v-model.lazy="group" type="radio">女</s-radio>
+  <s-radio value="unknown" v-model.lazy="group" type="radio">未知</s-radio>
+  当前选中：{{ group }}
+</template>
+<script setup>
+  const group = ref('male')
+</script>
 ```
 
 ---
@@ -62,6 +70,7 @@
 | disabled      | boolean | false  | ✔️ | 禁用的 |
 | checked       | boolean | false  | ✔️ | 选中的 |
 | indeterminate | boolean | false  | ✔️ | 未知的 |
+| value         | string  |        | ✖️ | 值     |
 
 ---
 

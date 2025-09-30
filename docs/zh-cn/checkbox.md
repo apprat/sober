@@ -18,6 +18,22 @@
 
 ---
 
+在 **Vue** 框架中使用 `v-model` 语法时，可以省略 `name` 属性。
+
+```vue
+<template>
+  <s-checkbox value="male" v-model.lazy="group" type="checkbox">男</s-checkbox>
+  <s-checkbox value="female" v-model.lazy="group" type="checkbox">女</s-checkbox>
+  <s-checkbox value="unknown" v-model.lazy="group" type="checkbox">未知</s-checkbox>
+  当前选中：{{ group }}
+</template>
+<script setup>
+  const group = ref(['male'])
+</script>
+```
+
+---
+
 自定义图标和样式
 
 ```html preview
@@ -27,6 +43,7 @@
     <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"></path>
   </svg>
 </s-checkbox>
+
 <s-checkbox style="color: #009688" checked></s-checkbox>
 <s-checkbox style="color:rgb(212, 162, 35); height: 56px" checked></s-checkbox>
 ```
@@ -51,6 +68,7 @@
 | disabled      | boolean | false  | ✔️ | 禁用的 |
 | checked       | boolean | false  | ✔️ | 选中的 |
 | indeterminate | boolean | false  | ✔️ | 未知的 |
+| value         | string  |        | ✖️ | 值     |
 
 ---
 

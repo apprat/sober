@@ -120,3 +120,9 @@ Sober 2.0.0 正式发布，本次带来了很大功能性更新和增强，请�
 ### Progress (新增)
 
 该组件提供了两种变体，`linear` 和 `circular`，同时旧的组件 **CircularProgress** 组件和 **LinearProgress** 组件被弃用，请查看[详细文档](https://soberjs.com/components/progress.md)以获取更多信息。
+
+### Switch
+
+新增拖动手势，现在可以通过按住拖动来切换选中。
+
+- 新增属性 `value` 用于绑定自定义值。

@@ -20,7 +20,7 @@ const style = /*css*/`
   min-width: 56px;
   padding: 0 20px;
   gap: 6px;
-  font-size: 1rem;
+  font-size: calc(var(--s-font-size, 1) * 16px);
   transition-property: border-radius, color, background-color, box-shadow, transform;
   box-shadow: var(--s-elevation-level3, ${scheme.elevation.level3});
   border-radius: 16px;
@@ -61,14 +61,14 @@ const style = /*css*/`
   min-height: 48px;
   min-width: 48px;
   border-radius: 14px;
-  font-size: .875rem;
+  font-size: calc(var(--s-font-size, 1) * 14px);
   padding: 0 18px;
 }
 :host([size=large]){
   min-height: 64px;
   min-width: 64px;
   border-radius: 18px;
-  font-size: 1.125rem;
+  font-size: calc(var(--s-font-size, 1) * 18px);
   padding: 0 24px;
 }
 ::slotted(:is(svg, s-icon):not([slot])){

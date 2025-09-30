@@ -20,13 +20,13 @@ const style = /*css*/`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 8px;
   cursor: pointer;
   position: relative;
   color: var(--s-color-primary, ${scheme.color.primary});
   transition-property: none;
   transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
   transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
+  height: 16px;
   --base-slider-gap: 4px;
   --base-slider-thumb-size: 18px;
   --base-slider-thumb-width: var(--base-slider-thumb-size);
@@ -52,7 +52,7 @@ slot:is([name=track-start], [name=track-fill], [name=track-end], [name=thumb-sta
 slot:is([name=track-start], [name=track-fill], [name=track-end]){
   background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
   border-radius: 4px;
-  height: 100%;
+  height: 50%;
   left: 0;
   --s-private-thumb-start-size: var(--base-slider-thumb-start-width);
   --s-private-thumb-end-size: var(--base-slider-thumb-end-width);
@@ -156,12 +156,12 @@ slot[name=thumb-end]{
   }
 }
 :host([orientation=vertical]){
-  width: 8px;
+  width: 18px;
   height: 300px;
   display: inline-flex;
   vertical-align: middle;
   slot:is([name=track-start], [name=track-fill], [name=track-end]){
-    width: 100%;
+    width: 50%;
     left: auto;
     bottom: 0;
     height: var(--s-private-size);
@@ -250,8 +250,15 @@ export class BaseSlider extends useElement({
       layuot.style.setProperty(`${name}-start`, `${start}`)
       layuot.style.setProperty(`${name}-end`, `${end}`)
     }
-    this.addEventListener('pointerdown', (event) => {
+    let touched = false
+    this.addEventListener('click', (event) => {
+      console.log(event.pageX)
+      if (touched) return
+      this.dispatchEvent(new Event('change'))
+    })
+    const onPoinderDown = (event: PointerEvent) => {
       if (event.button !== 0) return
+      touched = false
       const orientation = getOrientation(this.orientation)
       const state = {
         rect: this.getBoundingClientRect(),
@@ -287,8 +294,10 @@ export class BaseSlider extends useElement({
           this.dispatchEvent(new Event('input'))
         }
       }
-      change(firstPosition)
+      //change(firstPosition)
       const move = (event: PointerEvent | TouchEvent) => {
+        console.log('移动')
+        touched = true
         const e = event instanceof TouchEvent ? event.touches[0] : event
         event.cancelable && event.preventDefault()
         const xy = getPosition(e[orientation.clientX] - state.rect[orientation.left])
@@ -319,7 +328,9 @@ export class BaseSlider extends useElement({
         if (state.oldStart !== this.start || state.oldEnd !== this.end) this.dispatchEvent(new Event('change'))
         document.removeEventListener(eventNames.move, move)
       }, { once: true })
-    })
+    }
+    thumbStartSlot.addEventListener('pointerdown', onPoinderDown)
+    thumbEndSlot.addEventListener('pointerdown', onPoinderDown)
     this.addEventListener('keydown', (event) => {
       const map = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'] as const
       let key = event.key as typeof map[number]

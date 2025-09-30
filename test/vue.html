@@ -31,6 +31,25 @@
       <option value="tab3">tab3</option>
       <option value="tab4">tab4</option>
     </select>
+    <hr>
+
+    <input type="checkbox" value="0" v-model="state.sex">
+    <input type="checkbox" value="1" v-model="state.sex">
+    <input type="checkbox" value="2" v-model="state.sex">
+
+    <s-checkbox type="checkbox" value="3" v-model.lazy="state.sex"></s-checkbox>
+    <s-checkbox type="checkbox" value="4" v-model.lazy="state.sex"></s-checkbox>
+
+    <s-button type="checkbox" checkable value="5" v-model.lazy="state.sex"
+      onchange="console.log('change')">选择</s-button>
+    <s-button type="checkbox" checkable value="6" v-model.lazy="state.sex" variant="elevated">选择</s-button>
+    当前：{{state.sex}}
+    <hr>
+    <input type="radio" value="Male" v-model="state.gender"> Male
+    <input type="radio" value="Female" v-model="state.gender"> Female
+    <s-radio type="radio" value="Unkonw" v-model.lazy="state.gender"></s-radio> Unkonw
+    <s-radio type="radio" value="Lady" v-model.lazy="state.gender"></s-radio> Lady
+    当前：{{state.gender}}
 
   </template>
   <main id="app"></main>
@@ -43,7 +62,9 @@
       setup() {
         const state = reactive({
           tab: 'tab4',
-          multiple: false
+          multiple: false,
+          sex: ['3', '4'],
+          gender: 'Male'
         })
         return { state }
       }

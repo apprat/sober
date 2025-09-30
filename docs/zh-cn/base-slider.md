@@ -57,13 +57,11 @@
 ```html preview
 <style>
   .player-slider{
-    height: 6px;
     transition-property: height;
     --base-slider-thumb-size: 12px;
   }
   /**移动时设置滑块大小**/
   .player-slider[moving]{
-    height: 10px;
     --base-slider-thumb-size: 18px;
   }
   /**轨道填充**/
@@ -78,7 +76,7 @@
   /**缓存进度条**/
   .player-slider>.buffer{
     background-color: var(--s-color-secondary-container);
-    height: 100%;
+    height: 50%;
     width: 50%;
     position: absolute;
     border-radius: 6px;
@@ -155,7 +153,7 @@
 
 | 名称        | 说明       |
 | ----------- | ---------- |
-|             | 自定义内容 |
+| 匿名        | 自定义内容 |
 | track-start | 轨道开始   |
 | track-end   | 轨道结束   |
 | track-fill  | 轨道填充   |
@@ -166,18 +164,19 @@
 
 ## 样式变量
 
-| 名称                             | 说明                                                          |
-| -------------------------------- | ------------------------------------------------------------- |
-| --base-slider-gap                | 间距（仅变体为 `segmented` 时有效）                           |
-| --base-slider-thumb-size         | 指示器大小                                                    |
-| --base-slider-thumb-width        | 指示器宽度，默认使用 `--base-slider-thumb-size`               |
-| --base-slider-thumb-height       | 指示器高度，默认使用 `--base-slider-thumb-size`               |
-| --base-slider-thumb-start-width  | thumb-start 指示器宽度，默认使用 `--base-slider-thumb-width`  |
-| --base-slider-thumb-start-height | thumb-start 指示器高度，默认使用 `--base-slider-thumb-height` |
-| --base-slider-thumb-end-width    | thumb-end 指示器宽度，默认使用 `--base-slider-thumb-width`    |
-| --base-slider-thumb-end-height   | thumb-end 指示器高度，默认使用 `--base-slider-thumb-height`   |
+| 名称                             | 默认值                          | 说明                                |
+| -------------------------------- | ------------------------------- | ----------------------------------- |
+| --base-slider-gap                | 4px                             | 间距（仅变体为 `segmented` 时有效） |
+| --base-slider-track-size         | 50%                             | 轨道大小，默认为组件的50%           |
+| --base-slider-thumb-size         | 18px                            | 指示器大小                          |
+| --base-slider-thumb-width        | --base-slider-thumb-size=18px   | 指示器宽度                          |
+| --base-slider-thumb-height       | --base-slider-thumb-size=18px   | 指示器高度                          |
+| --base-slider-thumb-start-width  | --base-slider-thumb-width=18px  | thumb-start 指示器宽度              |
+| --base-slider-thumb-start-height | --base-slider-thumb-height=18px | thumb-start 指示器高度              |
+| --base-slider-thumb-end-width    | --base-slider-thumb-width=18px  | thumb-end 指示器宽度                |
+| --base-slider-thumb-end-height   | --base-slider-thumb-height=18px | thumb-end 指示器高度                |
 
-> 注意：CSS 变量参与了尺寸的计算，你应该优先使用 CSS 变量来调整组件样式，如果直接使用 ::part() 选择器去调整，除非你知道你在做什么。
+> 注意：CSS 变量参与了尺寸的计算，你应该优先使用 CSS 变量来调整组件样式，如果直接使用 ::part() 选择器去调整尺寸，除非你明确知道你在做什么，否则可能会尺寸计算异常。
 
 ---
 

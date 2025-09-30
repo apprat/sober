@@ -16,6 +16,8 @@ const style = /*css*/`
   background: var(--s-color-background);
   animation-timing-function: var(--s-motion-easing-standard-accelerate);
   animation-duration: var(--s-motion-duration-long4);
+  font-size: calc(var(--s-font-size) * 15px);
+  --s-font-size: calc(1rem / 16px);
   --s-color-scrim: ${scheme.color.scrim};
   --s-color-primary: ${scheme.color.primary};
   --s-color-on-primary: ${scheme.color.onPrimary};

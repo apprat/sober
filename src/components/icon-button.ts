@@ -10,6 +10,7 @@ const props = useProps({
   disabled: false,
   checkable: false,
   checked: false,
+  $value: ''
 })
 
 const style = /*css*/`
@@ -26,23 +27,23 @@ const style = /*css*/`
   color: var(--s-color-on-primary, ${scheme.color.onPrimary});
 }
 /**Checkable**/
-:host([checkable=true][checked=true]:not([ripple-pressed])),
-:host([checkable=true][ripple-pressed]:not([checked=true])){
+:host([checkable][checked]:not([ripple-pressed])),
+:host([checkable][ripple-pressed]:not([checked])){
   border-radius: 12px;
 }
-:host(:not([variant])[checkable=true][checked=true]){
+:host(:not([variant])[checkable][checked]){
   background: var(--s-color-primary-container, ${scheme.color.primaryContainer});
   color: var(--s-color-on-primary-container, ${scheme.color.onPrimaryContainer});
 }
-:host([variant=filled][checkable=true]:not([checked=true])){
+:host([variant=filled][checkable]:not([checked])){
   background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
   color: var(--s-color-on-surface-variant,${scheme.color.onSurfaceVariant});
 }
-:host([variant=tonal][checkable=true][checked=true]){
+:host([variant=tonal][checkable][checked]){
   background: var(--s-color-secondary, ${scheme.color.secondary});
   color: var(--s-color-on-secondary, ${scheme.color.onSecondary});
 }
-:host([variant=outlined][checkable=true][checked=true]){
+:host([variant=outlined][checkable][checked]){
   box-shadow: none;
   background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
   color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
@@ -126,8 +127,9 @@ export class IconButton extends useElement({
   props, template,
   setup() {
     this.addEventListener('click', () => {
-      if (!this.checkable || !this.dispatchEvent(new Event('change', { cancelable: true, bubbles: true }))) return
+      if (!this.checkable) return
       this.checked = !this.checked
+      this.dispatchEvent(new Event('change'))
     })
   }
 }) { }

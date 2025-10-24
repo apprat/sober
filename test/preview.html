@@ -115,11 +115,11 @@
       .view {
         text-align: center;
 
-        &>:is(s-button, s-icon, s-icon-button, s-radio, s-checkbox, s-fab, s-base-slider[orientation]) {
+        &>:is(s-button, s-icon, s-icon-button, s-radio, s-checkbox, s-fab) {
           margin: 4px;
         }
 
-        &>*+:is(s-alert, s-tab, s-base-slider:not([orientation])) {
+        &>*+:is(s-alert, s-tab) {
           margin-top: 16px;
         }
       }
@@ -149,7 +149,7 @@
 </head>
 
 <body>
-  <s-page class="page" theme="auto">
+  <s-page class="page">
     <div class="markdown"></div>
     <s-fab class="toggle-style" onclick="toggleStyle()">
       <s-icon name="add"></s-icon>

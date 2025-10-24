@@ -9,10 +9,6 @@ const props = useProps({
   disabled: false,
   hidden: false
 })
-const events = {
-  show: Event,
-  change: CustomEvent
-}
 
 const style = /*css*/`
 :host{
@@ -80,7 +76,7 @@ const style = /*css*/`
 ::slotted(:is(svg, s-icon)[slot=end]){
   margin-right: -2px;
 }
-:host([ripple-pressed]){
+:host([pressed]){
   box-shadow: var(--s-elevation-level4, ${scheme.elevation.level4});
 }
 `
@@ -95,7 +91,7 @@ const template = /*html*/`
 export class FAB extends useElement({
   style: [buttonStyle, style],
   focused: true,
-  props, template, events,
+  props, template,
 }) { }
 
 export { FAB as FloatingActionButton }

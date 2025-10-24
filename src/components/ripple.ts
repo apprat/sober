@@ -48,6 +48,53 @@ const template = /*html*/`
 <div class="ripple" part="ripple"></div>
 `
 
+const startRipple = (options: {
+  root: Ripple,
+  parent: HTMLElement,
+  ripple: HTMLElement,
+  shadowRoot: ShadowRoot,
+  event: PointerEvent,
+  animateOptions: { duration: number, easing: string }
+}) => {
+  let size = Math.sqrt(options.root.offsetWidth ** 2 + options.root.offsetHeight ** 2)
+  const coordinate = { x: '50%', y: '50%' }
+  if (!options.root.centered) {
+    const rect = options.root.getBoundingClientRect()
+    const x = Math.max(rect.left, Math.min(options.event.clientX, rect.left + rect.width))
+    const y = Math.max(rect.top, Math.min(options.event.clientY, rect.top + rect.height))
+    const state = { x: x - rect.left, y: y - rect.top, h: rect.height / 2, w: rect.width / 2 }
+    const edgeW = (Math.abs(state.h - state.y) + state.h) * 2
+    const edgeH = (Math.abs(state.w - state.x) + state.w) * 2
+    size = Math.sqrt(edgeW ** 2 + edgeH ** 2)
+    coordinate.x = `${state.x}px`
+    coordinate.y = `${state.y}px`
+  }
+  let newRipple = options.ripple
+  if (newRipple.getAnimations().length > 0) {
+    newRipple = options.ripple.cloneNode() as HTMLDivElement
+    options.shadowRoot.appendChild(newRipple)
+  }
+  options.parent.setAttribute('pressed', '')
+  const animation = newRipple.animate({
+    opacity: [1, 1],
+    width: [`${size}px`, `${size}px`],
+    height: [`${size}px`, `${size}px`],
+    transform: ['translate(-50%, -50%) scale(0)', 'translate(-50%, -50%) scale(1)'],
+    left: [coordinate.x, coordinate.x],
+    top: [coordinate.y, coordinate.y],
+  }, { ...options.animateOptions, fill: 'forwards' })
+  return () => {
+    if (!options.parent.hasAttribute('pressed')) return
+    options.parent.removeAttribute('pressed')
+    const time = Number(animation.currentTime)
+    const short = options.animateOptions.duration / 2
+    const diff = options.animateOptions.duration - short
+    const duration = time > diff ? short : options.animateOptions.duration - time
+    const animate = newRipple.animate({ opacity: [1, 0] }, { ...options.animateOptions, duration, easing: options.animateOptions.easing, fill: 'forwards' })
+    animate.finished.then(() => newRipple !== options.ripple && newRipple.isConnected && options.shadowRoot.removeChild(newRipple))
+  }
+}
+
 export class Ripple extends useElement({
   style, template, props,
   setup(shadowRoot) {
@@ -60,60 +107,10 @@ export class Ripple extends useElement({
       return { easing, duration }
     }
     const state = { parent: undefined as HTMLElement | undefined }
-    const run = (event: PointerEvent) => {
-      if (!state.parent) throw new Error('No parent element')
-      let size = Math.sqrt(this.offsetWidth ** 2 + this.offsetHeight ** 2)
-      const coordinate = { x: '50%', y: '50%' }
-      if (!this.centered) {
-        const rect = this.getBoundingClientRect()
-        const x = Math.max(rect.left, Math.min(event.clientX, rect.left + rect.width))
-        const y = Math.max(rect.top, Math.min(event.clientY, rect.top + rect.height))
-        const state = { x: x - rect.left, y: y - rect.top, h: rect.height / 2, w: rect.width / 2 }
-        const edgeW = (Math.abs(state.h - state.y) + state.h) * 2
-        const edgeH = (Math.abs(state.w - state.x) + state.w) * 2
-        size = Math.sqrt(edgeW ** 2 + edgeH ** 2)
-        coordinate.x = `${state.x}px`
-        coordinate.y = `${state.y}px`
-      }
-      let newRipple = ripple
-      if (newRipple.getAnimations().length > 0) {
-        newRipple = ripple.cloneNode() as HTMLDivElement
-        shadowRoot.appendChild(newRipple)
-      }
-      const animateOptions = getAnimateOptions()
-      state.parent.setAttribute('ripple-pressed', '')
-      const animation = newRipple.animate({
-        opacity: [1, 1],
-        width: [`${size}px`, `${size}px`],
-        height: [`${size}px`, `${size}px`],
-        transform: ['translate(-50%, -50%) scale(0)', 'translate(-50%, -50%) scale(1)'],
-        left: [coordinate.x, coordinate.x],
-        top: [coordinate.y, coordinate.y],
-      }, { ...animateOptions, fill: 'forwards' })
-      const parentRect = state.parent.getBoundingClientRect()
-      const touchmove = () => {
-        if (!state.parent) return
-        const rect = state.parent.getBoundingClientRect()
-        if (rect.top === parentRect.top && rect.left === parentRect.left) return
-        remove()
-      }
-      state.parent.addEventListener('touchmove', touchmove)
-      const remove = () => {
-        if (!state.parent?.hasAttribute('ripple-pressed')) return
-        state.parent.removeAttribute('ripple-pressed')
-        state.parent.removeEventListener('touchmove', touchmove)
-        const time = Number(animation.currentTime)
-        const short = animateOptions.duration / 2
-        const diff = animateOptions.duration - short
-        const duration = time > diff ? short : animateOptions.duration - time
-        const animate = newRipple.animate({ opacity: [1, 0] }, { ...animateOptions, duration, easing: animateOptions.easing, fill: 'forwards' })
-        animate.finished.then(() => newRipple !== ripple && newRipple.isConnected && shadowRoot.removeChild(newRipple))
-      }
-      return remove
-    }
+    const run = (event: PointerEvent) => startRipple({ root: this, parent: state.parent!, ripple, shadowRoot, event, animateOptions: getAnimateOptions() })
     const down = (event: PointerEvent) => {
-      if (event.button !== 0) return
-      if (event.pointerType !== 'touch') return document.addEventListener('pointerup', run(event), { once: true })
+      if (this.disabled || event.button !== 0) return
+      if (event.pointerType === 'mouse') return document.addEventListener('pointerup', run(event), { once: true })
       const data: { timer?: number, upper?: boolean } = {}
       let remove: Function
       data.timer = setTimeout(() => {
@@ -129,8 +126,8 @@ export class Ripple extends useElement({
       document.addEventListener('touchmove', move, { once: true })
     }
     const hovering = (force = true) => {
-      if (device.touchEnabled || this.disabled) return
-      state.parent?.toggleAttribute('ripple-hovered', force)
+      if (!device.mouseEnabled || this.disabled) return
+      state.parent?.toggleAttribute('hovered', force)
       hover.classList.toggle('hovered', force)
     }
     return {

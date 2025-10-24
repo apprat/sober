@@ -20,33 +20,47 @@ const style = /*css*/`
   height: 40px;
   transition-property: all;
   color: var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
-  --icon-button-transform: none;
+  ::slotted(:is(svg, s-icon)){
+    flex-shrink: 1;
+  }
+  ::slotted(s-badge){
+    position: absolute;
+    right: 2px;
+    top: 2px; 
+  }
 }
 :host([variant=filled]){
   background: var(--s-color-primary, ${scheme.color.primary});
   color: var(--s-color-on-primary, ${scheme.color.onPrimary});
 }
 /**Checkable**/
-:host([checkable][checked]:not([ripple-pressed])),
-:host([checkable][ripple-pressed]:not([checked])){
-  border-radius: 12px;
-}
-:host(:not([variant])[checkable][checked]){
-  background: var(--s-color-primary-container, ${scheme.color.primaryContainer});
-  color: var(--s-color-on-primary-container, ${scheme.color.onPrimaryContainer});
-}
-:host([variant=filled][checkable]:not([checked])){
-  background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
-  color: var(--s-color-on-surface-variant,${scheme.color.onSurfaceVariant});
-}
-:host([variant=tonal][checkable][checked]){
-  background: var(--s-color-secondary, ${scheme.color.secondary});
-  color: var(--s-color-on-secondary, ${scheme.color.onSecondary});
-}
-:host([variant=outlined][checkable][checked]){
-  box-shadow: none;
-  background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
-  color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
+:host([checkable]){
+  &:host(:is([checked]:not([pressed]), [pressed]:not([checked]))){
+    border-radius: 12px;
+  }
+  &:host(:is(:not([variant]), [variant=filled])){
+    background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
+    color: var(--s-color-on-surface-variant,${scheme.color.onSurfaceVariant});
+  }
+  &:host([checked]){
+    &:host(:not([variant])){
+      background: var(--s-color-primary-container, ${scheme.color.primaryContainer});
+      color: var(--s-color-on-primary-container, ${scheme.color.onPrimaryContainer});
+    }
+    &:host([variant=filled]){
+      background: var(--s-color-primary, ${scheme.color.primary});
+      color: var(--s-color-on-primary,${scheme.color.onPrimary});
+    }
+    &:host([variant=tonal]){
+      background: var(--s-color-secondary, ${scheme.color.secondary});
+      color: var(--s-color-on-secondary, ${scheme.color.onSecondary});
+    }
+    &:host([variant=outlined]){
+      box-shadow: none;
+      background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
+      color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
+    }
+  }
 }
 /*Size*/
 :host([size=extra-small]){
@@ -78,41 +92,33 @@ const style = /*css*/`
 /*Width*/
 :host([width=wide]){
   width: 52px;
-}
-:host([width=wide][size=extra-small]){
-  width: 40px;
-}
-:host([width=wide][size=small]){
-  width: 44px;
-}
-:host([width=wide][size=large]){
-  width: 64px;
-}
-:host([width=wide][size=extra-large]){
-  width: 72px;
+  &:host([size=extra-small]){
+    width: 40px;
+  }
+  &:host([size=small]){
+    width: 44px;
+  }
+  &:host([size=large]){
+    width: 64px;
+  }
+  &:host([size=extra-large]){
+    width: 72px;
+  }
 }
 :host([width=narrow]){
   width: 32px;
-}
-:host([width=narrow][size=extra-small]){
-  width: 28px;
-}
-:host([width=narrow][size=small]){
-  width: 30px;
-}
-:host([width=narrow][size=large]){
-  width: 40px;
-}
-:host([width=narrow][size=extra-large]){
-  width: 48px;
-}
-::slotted(:is(svg, s-icon)){
-  flex-shrink: 1;
-}
-::slotted(s-badge){
-  position: absolute;
-  right: 2px;
-  top: 2px; 
+  &:host([size=extra-small]){
+    width: 28px;
+  }
+  &:host([size=small]){
+    width: 30px;
+  }
+  &:host([size=large]){
+    width: 40px;
+  }
+  &:host([size=extra-large]){
+    width: 48px;
+  }
 }
 `
 

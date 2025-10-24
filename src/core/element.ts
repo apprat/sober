@@ -1,4 +1,5 @@
 import * as scheme from './scheme.js'
+import { device } from './device.js'
 
 type Prop = string | number | boolean
 
@@ -33,6 +34,7 @@ const baseStyle = /*css*/`
 }
 :host(:focus-visible){
   outline: auto 1px var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
+  outline-offset: 2px;
 }
 *{
   transition-property: none;
@@ -139,6 +141,8 @@ export const useElement = <
   events?: Events
   template?: string
   focused?: boolean
+  pressed?: boolean
+  hovered?: boolean
   setup?: (this: Props & HTMLElement, shadowRoot: ShadowRoot, states: States<Props>) => Merge<{
     onMounted?: (parent: ParentNode) => void | (() => void)
     onAttributeChanged?: (key: keyof Props, value: Props[keyof Props]) => void
@@ -191,6 +195,21 @@ export const useElement = <
         e.preventDefault()
         this.click()
       })
+      if (options.pressed) {
+        const name = 'pressed'
+        this.addEventListener('pointerdown', (e) => {
+          this.setAttribute(name, '')
+          document.addEventListener(e.pointerType === 'mouse' ? 'mouseup' : 'touchend', () => this.removeAttribute(name), { once: true })
+        })
+      }
+      if (options.hovered) {
+        const name = 'hovered'
+        this.addEventListener('pointerenter', () => {
+          if (!device.mouseEnabled) return
+          this.setAttribute(name, '')
+          this.addEventListener('pointerleave', () => this.removeAttribute(name), { once: true })
+        })
+      }
       const ahead: { [key: string]: unknown } = {}
       for (const key in props) {
         const initValue = this[key as keyof this] as any

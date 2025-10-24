@@ -3,7 +3,7 @@
 如果你需要自定义滑块，这是你的不二选择，该组件提供了极强大的自定义样式能力，可以帮助你完成大多数自定义样式需求。
 
 ```html preview
-<s-base-slider></s-base-slider>
+<s-base-slider onchange="console.log(this.start, this.end)"></s-base-slider>
 ```
 
 设置 `step` 属性来设置滑块的间隔。
@@ -39,11 +39,29 @@
 
 ```html preview
 <s-base-slider orientation="vertical"></s-base-slider>
-<s-base-slider orientation="vertical" mode="single" style="margin-left: 32px"></s-base-slider>
-<s-base-slider orientation="vertical" mode="single-reversed" style="margin-left: 32px"></s-base-slider>
-<s-base-slider orientation="vertical" variant="segmented"style="margin-left: 32px"></s-base-slider>
-<s-base-slider orientation="vertical" variant="segmented" mode="single" style="margin-left: 32px"></s-base-slider>
-<s-base-slider orientation="vertical" variant="segmented" mode="single-reversed" style="margin-left: 32px"></s-base-slider>
+<s-base-slider orientation="vertical" mode="single"></s-base-slider>
+<s-base-slider orientation="vertical" mode="single-reversed"></s-base-slider>
+```
+
+---
+
+## 滑动模式
+
+滑动模式，设置 `slidingMode` 属性决定滑块的滑动方式：
+
+1. `thumb` (默认值) 仅拖动指示器滑动。
+2. `all` 所有滑动。
+3. `all-cumulative` 所有滑动且累计值（从当前值开始累加而非触屏位置，适用于播放器进度）。
+
+```html preview
+all
+<s-base-slider slidingMode="all"></s-base-slider>
+all-cumulative
+<s-base-slider slidingMode="all-cumulative"></s-base-slider>
+单滑块 all
+<s-base-slider mode="single" slidingMode="all"></s-base-slider>
+单滑块 all-cumulative
+<s-base-slider mode="single" slidingMode="all-cumulative"></s-base-slider>
 ```
 
 ---
@@ -57,27 +75,17 @@
 ```html preview
 <style>
   .player-slider{
-    transition-property: height;
-    --base-slider-thumb-size: 12px;
-  }
-  /**移动时设置滑块大小**/
-  .player-slider[moving]{
-    --base-slider-thumb-size: 18px;
-  }
-  /**轨道填充**/
-  .player-slider::part(track-fill){
-    border-radius: 6px 0 0 6px;
+    --base-slider-thumb-size: 14px;
   }
   /**轨道结束**/
   .player-slider::part(track-end){
-    border-radius: 0 6px 6px 0;
     background-color: var(--s-color-surface-container-high);
   }
   /**缓存进度条**/
   .player-slider>.buffer{
     background-color: var(--s-color-secondary-container);
-    height: 50%;
-    width: 50%;
+    height: calc(100% / 3);
+    width: calc(100% / 3);
     position: absolute;
     border-radius: 6px;
     left: 0;
@@ -93,7 +101,7 @@
     transform: translateX(calc(var(--left) * -1));
   }
 </style>
-<s-base-slider class="player-slider" mode="single" max="360">
+<s-base-slider class="player-slider" mode="single" slidingMode="all-cumulative" max="360">
   <div class="buffer"></div>
   <div class="marker" style="--left: 30%"></div>
 </s-base-slider>
@@ -126,17 +134,18 @@
 
 ## 属性
 
-| 名称        | 类型                           | 默认值     | 同步 | 说明                                           |
-| ----------- | ------------------------------ | ---------- | ---- | ---------------------------------------------- |
-| mode        | range, single, single-reversed | range      | ✔️ | 模式                                           |
-| variant     | standard, segmented            | standard   | ✔️ | 变体                                           |
-| orientation | horizontal, vertical           | horizontal | ✔️ | 方向                                           |
-| disabled    | boolean                        | false      | ✔️ | 禁用的                                         |
-| step        | number                         | 1          | ✖️ | 间隔                                           |
-| min         | number                         | 0          | ✖️ | 最小值                                         |
-| max         | number                         | 100        | ✖️ | 最大值                                         |
-| start       | number                         | 0          | ✖️ | 开始值                                         |
-| end         | number                         | 50         | ✖️ | 结束值（当设置为单滑块模式，该值用于设置进度） |
+| 名称         | 类型                           | 默认值     | 同步 | 说明                                                                        |
+| ------------ | ------------------------------ | ---------- | ---- | --------------------------------------------------------------------------- |
+| mode         | range, single, single-reversed | range      | ✔️ | 模式，range=范围选择，single=单选选择，single-reversed=反向单选择           |
+| slidingMode  | thumb, all, all-cumulative     | thumb      | ✔️ | 滑动模式，thumb=仅指示器滑动，all=所有滑动，all-cumulative=所有滑动且累计值 |
+| variant      | standard, segmented            | standard   | ✔️ | 变体                                                                        |
+| orientation  | horizontal, vertical           | horizontal | ✔️ | 方向                                                                        |
+| clickChanged | boolean                        | true       | ✔️ | 可单击切换的                                                                |
+| step         | number                         | 1          | ✖️ | 间隔                                                                        |
+| min          | number                         | 0          | ✖️ | 最小值                                                                      |
+| max          | number                         | 100        | ✖️ | 最大值                                                                      |
+| start        | number                         | 0          | ✖️ | 开始值                                                                      |
+| end          | number                         | 50         | ✖️ | 结束值（当设置为单滑块模式，该值用于设置进度）                              |
 
 ---
 
@@ -167,7 +176,6 @@
 | 名称                             | 默认值                          | 说明                                |
 | -------------------------------- | ------------------------------- | ----------------------------------- |
 | --base-slider-gap                | 4px                             | 间距（仅变体为 `segmented` 时有效） |
-| --base-slider-track-size         | 50%                             | 轨道大小，默认为组件的50%           |
 | --base-slider-thumb-size         | 18px                            | 指示器大小                          |
 | --base-slider-thumb-width        | --base-slider-thumb-size=18px   | 指示器宽度                          |
 | --base-slider-thumb-height       | --base-slider-thumb-size=18px   | 指示器高度                          |
@@ -182,13 +190,14 @@
 
 ## 标记属性
 
-| 名称          | 说明                                                  |
-| ------------- | ----------------------------------------------------- |
-| pressed       | 按下时设置（与 `:active` 类似，但触屏设备上略有不同） |
-| start-pressed | start-thumb 按下时设置                                |
-| end-pressed   | end-thumb 按下时设置                                  |
-| start-hovered | start-thumb 鼠标移入时设置                            |
-| end-hovered   | end-thumb  鼠标移入时设置                             |
-| moving        | 开始移动时设置                                        |
+| 名称          | 说明                       |
+| ------------- | -------------------------- |
+| pressed       | 按下时设置                 |
+| hovered       | 鼠标移入时设置             |
+| sliding       | 滑动时设置                 |
+| start-pressed | start-thumb 按下时设置     |
+| end-pressed   | end-thumb 按下时设置       |
+| start-hovered | start-thumb 鼠标移入时设置 |
+| end-hovered   | end-thumb  鼠标移入时设置  |
 
 > 标记属性在一些情况下被设置到 HTML 属性上，以便于外部定义样式。

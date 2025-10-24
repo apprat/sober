@@ -7,47 +7,29 @@
   <title>Test Page</title>
   <link rel="stylesheet" href="../dist/style.css">
   <style>
-    path {
-      stroke-linecap: round;
+    div {
+      background: red;
+      height: 200px;
     }
   </style>
 </head>
 
 <body>
-  <div id="svg-container" style="width:200px%;height:100px">
-    <svg width='100%' height='100%' viewBox="0 0 100 100" preserveAspectRatio="none"
-      style='background-color: whitesmoke'>
-      <rect x='40%' y='40%' width='25%' height='25%' />
-
-      <polygon points="0,0 0,100 30,20 30,0" />
-      <polygon points="30,0 30,20 60,0 60,0" />
-      <polygon points="60,0 60,0 100,30 100,0" />
-    </svg>
-  </div>
-
-  <svg xmlns="http://www.w3.org/2000/svg" width="200" height="10" style="background: #eee;">
-    <defs>
-      <pattern id="My" width="40" height="10" patternUnits="userSpaceOnUse" viewBox="-0.1 0.4 4.2 1.2">
-        <path d="M0 1Q1 2 2 1 3 0 4 1" stroke="#009688" stroke-width="0.2" fill="none" />
-      </pattern>
-    </defs>
-    <rect width="100%" height="20" fill="url(#My)" />
-  </svg>
-
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.1 0.4 4.2 1.2">
-    <path d="M0 1Q1 2 2 1 3 0 4 1" stroke="#FF0000" stroke-width="0.1" fill="none" />
-  </svg>
-
-  <hr>
-
-  <svg width="120" height="120" viewBox="0 0 120 120">
-    <defs>
-      <pattern id="Triangle" width="10" height="10" patternUnits="userSpaceOnUse">
-        <polygon points="5,0 10,10 0,10" />
-      </pattern>
-    </defs>
-    <circle cx="60" cy="60" r="50" fill="url(#Triangle)" />
-  </svg>
+  <div>00</div>
+  <script>
+    const div = document.querySelector('div')
+    let is = false
+    div.onpointerdown = () => {
+      document.onpointermove = () => {
+        console.log('move')
+      }
+      document.onpointerup = () => {
+        console.log('up')
+        document.onpointermove = null
+        document.onpointerup = null
+      }
+    }
+  </script>
 </body>
 
 </html>

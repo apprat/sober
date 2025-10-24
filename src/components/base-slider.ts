@@ -9,8 +9,9 @@ const props = useProps({
   $step: 1,
   $min: 0,
   $max: 100,
-  disabled: false,
+  clickChanged: true,
   mode: ['range', 'single', 'single-reversed'],
+  slidingMode: ['thumb', 'all', 'all-cumulative'],
   variant: ['standard', 'segmented'],
   orientation: ['horizontal', 'vertical'],
 })
@@ -20,13 +21,13 @@ const style = /*css*/`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   position: relative;
   color: var(--s-color-primary, ${scheme.color.primary});
   transition-property: none;
   transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
   transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
-  height: 16px;
+  height: 24px;
+  cursor: pointer;
   --base-slider-gap: 4px;
   --base-slider-thumb-size: 18px;
   --base-slider-thumb-width: var(--base-slider-thumb-size);
@@ -35,9 +36,6 @@ const style = /*css*/`
   --base-slider-thumb-start-height: var(--base-slider-thumb-height);
   --base-slider-thumb-end-width: var(--base-slider-thumb-width);
   --base-slider-thumb-end-height: var(--base-slider-thumb-height);
-}
-:host([disabled]){
-  pointer-events: none !important;
 }
 .layuot{
   display: contents;
@@ -52,7 +50,7 @@ slot:is([name=track-start], [name=track-fill], [name=track-end], [name=thumb-sta
 slot:is([name=track-start], [name=track-fill], [name=track-end]){
   background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
   border-radius: 4px;
-  height: 50%;
+  height: calc(100% / 3);
   left: 0;
   --s-private-thumb-start-size: var(--base-slider-thumb-start-width);
   --s-private-thumb-end-size: var(--base-slider-thumb-end-width);
@@ -79,16 +77,16 @@ slot[name=track-end]{
 slot:is([name=thumb-start], [name=thumb-end]){
   background: currentColor;
   border-radius: 50%;
+  cursor: grab;
   &::before{
     content: '';
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 200%;
+    height: 200%;
     border-radius: inherit;
     opacity: 0;
     background: currentColor;
-    transform: scale(1);
-    transition-property: transform, opacity;
+    transition-property: opacity;
     transition-duration: inherit;
     transition-timing-function: inherit;
   }
@@ -105,9 +103,12 @@ slot[name=thumb-end]{
   left: calc(var(--s-private-end) * 1%);
   transform: translateX(calc(var(--s-private-end) * -1%));
 }
+:host([start-pressed]) slot[name=thumb-start],
+:host([end-pressed]) slot[name=thumb-end]{
+  cursor: grabbing;
+}
 :host(:is([start-hovered], [start-pressed])) slot[name=thumb-start]::before,
 :host(:is([end-hovered], [end-pressed])) slot[name=thumb-end]::before{
-  transform: scale(2);
   opacity: .2;
 }
 :host([variant=segmented]){
@@ -125,10 +126,10 @@ slot[name=thumb-end]{
   slot[name=track-end]{
     --s-private-size: calc((100 - var(--s-private-end)) * 1% - var(--s-private-end-offset) - var(--s-private-thumb-end-size) / 2 - var(--base-slider-gap));
   }
-}
-:host([variant=segmented]:is([mode=single], [mode=single-reversed])){
-  slot[name=track-fill]{
-    --s-private-size: calc(var(--s-private-diff) * 1% + var(--s-private-end-offset) - var(--s-private-thumb-end-size) / 2 - var(--base-slider-gap));
+  &:host(:is([mode=single], [mode=single-reversed])){
+    slot[name=track-fill]{
+      --s-private-size: calc(var(--s-private-diff) * 1% + var(--s-private-end-offset) - var(--s-private-thumb-end-size) / 2 - var(--base-slider-gap));
+    }
   }
 }
 :host(:is([mode=single], [mode=single-reversed])){
@@ -156,12 +157,12 @@ slot[name=thumb-end]{
   }
 }
 :host([orientation=vertical]){
-  width: 18px;
+  width: 24px;
   height: 300px;
   display: inline-flex;
   vertical-align: middle;
   slot:is([name=track-start], [name=track-fill], [name=track-end]){
-    width: 50%;
+    width: calc(100% / 3);
     left: auto;
     bottom: 0;
     height: var(--s-private-size);
@@ -188,20 +189,20 @@ slot[name=thumb-end]{
     bottom: calc(var(--s-private-end) * 1%);
     transform: translateY(calc(var(--s-private-end) * 1%));
   }
-}
-:host([orientation=vertical][mode=single-reversed]){
-  slot:is([name=thumb-start], [name=thumb-end]){
-    right: auto;
-    top: calc(var(--s-private-end) * 1%);
-    transform: translateY(calc(var(--s-private-end) * -1%));
-  }
-  slot[name=track-fill]{
-    right: auto;
-    top: var(--s-private-position);
-  }
-  slot[name=track-end]{
-    inset: auto;
-    bottom: 0;
+  &:host([mode=single-reversed]){
+    slot:is([name=thumb-start], [name=thumb-end]){
+      right: auto;
+      top: calc(var(--s-private-end) * 1%);
+      transform: translateY(calc(var(--s-private-end) * -1%));
+    }
+    slot[name=track-fill]{
+      right: auto;
+      top: var(--s-private-position);
+    }
+    slot[name=track-end]{
+      inset: auto;
+      bottom: 0;
+    }
   }
 }
 `
@@ -222,24 +223,27 @@ const whichIsCloser = (v: number, start: number, end: number) => {
   const toEnd = Math.abs(v - end)
   return toSatart < toEnd ? 1 : toEnd < toSatart ? 2 : 0
 }
-const findClosestStep = (num: number, step: number, max: number) => {
-  const res = Math.max(0, Math.min(max / step, Math.round(num / step)))
-  return res * step
-}
-const orientationOptions = {
-  horizontal: { offsetWidth: 'offsetWidth', left: 'left', clientX: 'clientX' },
-  vertical: { offsetWidth: 'offsetHeight', left: 'top', clientX: 'clientY' }
+const findClosestStep = (num: number, step: number, max: number) => Math.max(0, Math.min(max / step, Math.round(num / step))) * step
+const orientation = {
+  horizontal: { offsetWidth: 'offsetWidth', clientX: 'clientX', clientY: 'clientY', left: 'left' },
+  vertical: { offsetWidth: 'offsetHeight', clientX: 'clientY', clientY: 'clientX', left: 'top' }
 } as const
-const getOrientation = (orientation: typeof props.orientation) => orientationOptions[orientation]
+const getEventNames = (type: string) => {
+  const mouse = { move: 'mousemove', up: 'mouseup' } as const
+  const touch = { move: 'touchmove', up: 'touchend' } as const
+  return type === 'mouse' ? mouse : touch
+}
 
 export class BaseSlider extends useElement({
-  props, template, style, focused: true,
+  props, template, style,
+  focused: true,
+  pressed: true,
+  hovered: true,
   setup(shadowRoot, states) {
     const layuot = shadowRoot.querySelector<HTMLDivElement>('.layuot')!
     const thumbStartSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=thumb-start]')!
     const thumbEndSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=thumb-end]')!
     const getPercent = (v: number) => ((v - this.min) / (this.max - this.min)) * 100
-    const getSingle = () => ['single', 'single-reversed'].includes(this.mode)
     const render = () => {
       const [start, end] = [
         findClosestStep(getPercent(this.start), this.step / this.max * 100, 100),
@@ -251,120 +255,136 @@ export class BaseSlider extends useElement({
       layuot.style.setProperty(`${name}-end`, `${end}`)
     }
     let touched = false
+    const getCloser = (x: number) => {
+      const startRect = thumbStartSlot.getBoundingClientRect()
+      const start = startRect[orientation[this.orientation].left]
+      const endRect = thumbEndSlot.getBoundingClientRect()
+      const end = endRect[orientation[this.orientation].left]
+      const closer = whichIsCloser(x, start, end)
+      if (closer === 0) return x > start ? 'end' : 'start'
+      return ([null, 'start', 'end'] as const)[closer]
+    }
+    const getValue = (left: number, thumbSize: number, size: number) => {
+      if ((this.orientation === 'horizontal' && this.mode === 'single-reversed') || (this.orientation === 'vertical' && this.mode !== 'single-reversed')) left = size - left
+      const offset = Math.min(Math.max(0 + thumbSize / 2, (left / size * 100)), 100 - thumbSize / 2)
+      const percent = ((offset - thumbSize / 2) / (100 - thumbSize)) * 100
+      const newValue = findClosestStep(this.min + (percent / 100) * (this.max - this.min), this.step, this.max)
+      return newValue
+    }
     this.addEventListener('click', (event) => {
-      console.log(event.pageX)
-      if (touched) return
-      this.dispatchEvent(new Event('change'))
+      if (!this.clickChanged || touched) return
+      const ori = orientation[this.orientation]
+      const x = event[ori.clientX]
+      const name = this.mode === 'range' ? getCloser(x) : 'end'
+      const rect = this.getBoundingClientRect()
+      const size = this[ori.offsetWidth]
+      const thumbSize = { start: thumbStartSlot, end: thumbEndSlot }[name][ori.offsetWidth] / size * 100
+      let left = x - rect[ori.left]
+      const newValue = getValue(left, thumbSize, size)
+      if (newValue !== this[name]) {
+        this[name] = newValue
+        this.dispatchEvent(new Event('change'))
+      }
     })
-    const onPoinderDown = (event: PointerEvent) => {
+    const down = (event: PointerEvent, name?: 'start' | 'end') => {
       if (event.button !== 0) return
-      touched = false
-      const orientation = getOrientation(this.orientation)
-      const state = {
-        rect: this.getBoundingClientRect(),
-        size: this[orientation.offsetWidth],
-        isVertical: this.orientation === 'vertical',
-        reversed: this.mode === 'single-reversed',
-        key: 'end' as 'start' | 'end',
-        oldStart: this.start,
-        oldEnd: this.end,
-        singled: getSingle()
-      }
-      const getPosition = (v: number) => {
-        if ((state.reversed && !state.isVertical) || (state.isVertical && !state.reversed)) return state.size - v
-        return v
-      }
-      const firstPosition = getPosition(event[orientation.clientX] - state.rect[orientation.left])
-      if (!state.singled) {
-        const closer = whichIsCloser((firstPosition / state.size * 100), getPercent(this.start), getPercent(this.end))
-        state.key = (['end', 'start', 'end'] as const)[closer]
-      }
-      this.setAttribute('pressed', '')
-      this.setAttribute(`${state.key}-pressed`, '')
-      const change = (xy: number, call?: (v: number) => void) => {
-        const indicatorSize = { start: thumbStartSlot, end: thumbEndSlot }[state.key][orientation.offsetWidth] / state.size * 100
-        const offset = Math.min(Math.max(0 + indicatorSize / 2, (xy / state.size * 100)), 100 - indicatorSize / 2)
-        const percent = ((offset - indicatorSize / 2) / (100 - indicatorSize)) * 100
-        const newValue = findClosestStep(this.min + (percent / 100) * (this.max - this.min), this.step, this.max)
-        const old = this[state.key]
-        if (old !== newValue) {
-          call?.(newValue)
-          this[state.key] = newValue
-          render()
+      const ori = orientation[this.orientation]
+      const rect = this.getBoundingClientRect()
+      const size = this[ori.offsetWidth]
+      const notThumb = !name
+      if (!name) name = this.mode === 'range' ? getCloser(event[ori.clientX]) : 'end'
+      const thumbSize = { start: thumbStartSlot, end: thumbEndSlot }[name][ori.offsetWidth] / size * 100
+      const startValue = this.start
+      const endValue = this.end
+      const thumbRect = { start: thumbStartSlot.getBoundingClientRect(), end: thumbEndSlot.getBoundingClientRect() }[name]
+      const offsetClientX = this.slidingMode === 'all-cumulative' ? thumbRect[ori.left] - event[ori.clientX] : 0
+      const state = { x: event[ori.clientX], y: event[ori.clientY], allowed: false }
+      const move = (ev: MouseEvent | TouchEvent) => {
+        touched = true
+        const e = ev instanceof TouchEvent ? ev.touches[0] : ev
+        if (notThumb && !state.allowed && Math.abs(state.x - e[ori.clientX]) < Math.abs(state.y - e[ori.clientY])) return up()
+        if (!state.allowed) state.allowed = true
+        event.preventDefault()
+        event.stopPropagation()
+        let left = (e[ori.clientX] - rect[ori.left]) + offsetClientX
+        let newValue = getValue(left, thumbSize, size)
+        const v = { start: Math.min(newValue, endValue), end: Math.max(newValue, startValue) }[name]
+        if (v !== this[name]) {
+          this[name] = v
           this.dispatchEvent(new Event('input'))
         }
+        !this.hasAttribute('sliding') && this.setAttribute('sliding', '')
+        !this.hasAttribute(`${name}-pressed`) && this.setAttribute(`${name}-pressed`, '')
       }
-      //change(firstPosition)
-      const move = (event: PointerEvent | TouchEvent) => {
-        console.log('移动')
-        touched = true
-        const e = event instanceof TouchEvent ? event.touches[0] : event
-        event.cancelable && event.preventDefault()
-        const xy = getPosition(e[orientation.clientX] - state.rect[orientation.left])
-        this.setAttribute('moving', '')
-        change(xy, (v) => {
-          if (state.singled) return
-          const is = {
-            start: { before: v <= states.props.end, after: v > states.props.end },
-            end: { before: v < states.props.start, after: v >= states.props.start },
-          }[state.key]
-          this.toggleAttribute('start-pressed', is.before)
-          this.toggleAttribute('end-pressed', is.after)
-        })
-      }
-      const eventNames = device.touchEnabled ? { move: 'touchmove', up: 'touchend' } as const : { move: 'pointermove', up: 'pointerup' } as const
-      document.addEventListener(eventNames.move, move, { passive: false })
-      document.addEventListener(eventNames.up, () => {
+      const up = () => {
+        allowed = true
+        document.removeEventListener(eventNames.move, move)
+        document.removeEventListener(eventNames.up, up)
         this.removeAttribute('start-pressed')
         this.removeAttribute('end-pressed')
-        this.removeAttribute('moving')
-        this.removeAttribute('pressed')
-        if (states.props.start > states.props.end) {
-          const start = states.props.start
-          const end = states.props.end
-          states.props.start = end
-          states.props.end = start
-        }
-        if (state.oldStart !== this.start || state.oldEnd !== this.end) this.dispatchEvent(new Event('change'))
-        document.removeEventListener(eventNames.move, move)
-      }, { once: true })
+        this.removeAttribute('sliding')
+        if (startValue !== this.start || endValue !== this.end) this.dispatchEvent(new Event('change'))
+      }
+      const eventNames = getEventNames(event.pointerType)
+      document.addEventListener(eventNames.move, move, { passive: false })
+      document.addEventListener(eventNames.up, up)
     }
-    thumbStartSlot.addEventListener('pointerdown', onPoinderDown)
-    thumbEndSlot.addEventListener('pointerdown', onPoinderDown)
+    let allowed = true
+    this.addEventListener('pointerdown', (event) => {
+      touched = false
+      if (!allowed || this.slidingMode === 'thumb') return
+      down(event)
+    })
+    const thumbDown = (event: PointerEvent, name: 'start' | 'end') => {
+      allowed = false
+      this.setAttribute(`${name}-pressed`, '')
+      down(event, name)
+    }
+    thumbStartSlot.addEventListener('pointerdown', (event) => thumbDown(event, 'start'))
+    thumbEndSlot.addEventListener('pointerdown', (event) => thumbDown(event, 'end'))
+    thumbStartSlot.onmouseenter = () => device.mouseEnabled && this.setAttribute('start-hovered', '')
+    thumbStartSlot.onmouseleave = () => device.mouseEnabled && this.removeAttribute('start-hovered')
+    thumbEndSlot.onmouseenter = () => device.mouseEnabled && this.setAttribute('end-hovered', '')
+    thumbEndSlot.onmouseleave = () => device.mouseEnabled && this.removeAttribute('end-hovered')
     this.addEventListener('keydown', (event) => {
-      const map = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'] as const
-      let key = event.key as typeof map[number]
-      if (!map.includes(key)) return
+      const subEnd = () => this.end = Math.max(this.end - this.step, this.start)
+      const addEnd = () => this.end = Math.max(this.end + this.step, this.start)
+      const subStart = () => this.start = Math.min(this.start - this.step, this.end)
+      const addStart = () => this.start = Math.min(this.start + this.step, this.end)
+      let calls = { ArrowLeft: subEnd, ArrowRight: addEnd, ArrowUp: subStart, ArrowDown: addStart }
+      let key = event.key as keyof typeof calls
+      if (!(key in calls)) return
       event.preventDefault()
-      const reversed = () => {
+      const startValue = this.start
+      const endValue = this.end
+      if (this.orientation === 'horizontal') {
+        if (this.mode === 'single') {
+          calls.ArrowUp = subEnd
+          calls.ArrowDown = addEnd
+        }
         if (this.mode === 'single-reversed') {
-          const map = { ArrowLeft: 'ArrowRight', ArrowRight: 'ArrowLeft' } as const
-          key = map[key as keyof typeof map] ?? key
+          calls.ArrowUp = calls.ArrowLeft = addEnd
+          calls.ArrowDown = calls.ArrowRight = subEnd
+        }
+      } else {
+        calls = { ArrowLeft: addStart, ArrowRight: subStart, ArrowUp: addEnd, ArrowDown: subEnd }
+        if (this.mode === 'single') {
+          calls.ArrowLeft = addEnd
+          calls.ArrowRight = subEnd
+        }
+        if (this.mode === 'single-reversed') {
+          calls.ArrowLeft = calls.ArrowUp = subEnd
+          calls.ArrowRight = calls.ArrowDown = addEnd
         }
       }
-      reversed()
-      if (this.orientation === 'vertical') {
-        const map = { ArrowLeft: 'ArrowUp', ArrowRight: 'ArrowDown', ArrowUp: 'ArrowRight', ArrowDown: 'ArrowLeft' } as const
-        key = map[key]
-        reversed()
-      }
-      const call = {
-        ArrowLeft: () => this.end = this.end - this.step,
-        ArrowRight: () => this.end = this.end + this.step,
-        ArrowUp: () => this.start = this.start - this.step,
-        ArrowDown: () => this.start = this.start + this.step
-      }
-      call[key]()
+      calls[key]()
+      if (startValue !== this.start || endValue !== this.end) this.dispatchEvent(new Event('change'))
     })
-    thumbStartSlot.onmouseenter = () => !device.touchEnabled && this.setAttribute('start-hovered', '')
-    thumbStartSlot.onmouseleave = () => !device.touchEnabled && this.removeAttribute('start-hovered')
-    thumbEndSlot.onmouseenter = () => !device.touchEnabled && this.setAttribute('end-hovered', '')
-    thumbEndSlot.onmouseleave = () => !device.touchEnabled && this.removeAttribute('end-hovered')
     useThrottle(render)
     return {
-      onAttributeChanged: (name) => ['start', 'end', 'max', 'min', 'step'].includes(name) && useThrottle(render),
+      onAttributeChanged: (name) => ['start', 'end', 'max', 'min', 'step', 'mode'].includes(name) && useThrottle(render),
       getStart: () => {
-        if (getSingle()) return 0
+        if (this.mode !== 'range') return 0
         return Math.max(Math.min(states.props.start, states.props.max), states.props.min)
       },
       getEnd: () => Math.min(Math.max(states.props.end, states.props.min), states.props.max),

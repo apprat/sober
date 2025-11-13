@@ -2,6 +2,7 @@ import { useProps, useElement } from '../core/element.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
+  variant: ['surface', 'dark'],
   breakpointCompact: 1024,
   centerTitle: false
 })

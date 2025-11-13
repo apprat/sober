@@ -29,6 +29,7 @@ const style = /*css*/`
   display: flex;
   align-items: center;
   position: relative;
+  background: var(--s-color-surface-container-highest, ${scheme.color.surfaceContainerHighest});
   box-shadow: 0 0 0 2px var(--s-color-outline, ${scheme.color.outline}) inset;
   border-radius: inherit;
   transition-property: background;
@@ -37,7 +38,7 @@ const style = /*css*/`
     position: absolute;
     inset: 0;
     background: currentColor;
-    opacity: var(--opacity, 0);
+    opacity: 0;
     border-radius: inherit;
   }
 }
@@ -70,7 +71,7 @@ const style = /*css*/`
       inset: 0;
       border-radius: 50%;
       background: var(--s-color-on-primary, ${scheme.color.onPrimary});
-      opacity: var(--opacity, 0);
+      opacity: 0;
     }
   }
   .ripple{
@@ -86,14 +87,14 @@ const style = /*css*/`
       opacity: 0;
       transition-property: transform, opacity;
       transition-duration: inherit;
-      transform: scale(0);
+      transform: scale(1);
     }
     &::before{
-      opacity: calc(1 - var(--opacity, 0));
+      opacity: 0;
     }
     &::after{
       background: currentColor;
-      opacity: var(--opacity, 0);
+      opacity: 0;
     }
   }
 }
@@ -101,9 +102,6 @@ const style = /*css*/`
   .handle>.ripple::before{
     transform: scale(1);
     opacity: .12;
-  }
-  &:host([checked]){
-    height: 80px;
   }
 }
 .selected,
@@ -114,36 +112,39 @@ const style = /*css*/`
 }
 .unselected{
   color: var(--s-color-surface-variant, ${scheme.color.surfaceVariant});
-  opacity: calc(1 - var(--opacity, 0));
+  opacity: 1;
 }
 .selected{
   color: currentColor;
   position: absolute;
   inset: 0;
-  opacity: var(--opacity, 0);
+  opacity: 0;
 }
 :host([checked]){
   .track::before{
-    opacity: var(--opacity, 1);
+    opacity: 1;
   }
   .handle{
     transform: translateX(50%);
     .thumb{
       min-width: 60%;
       &::before{
-        opacity: var(--opacity, 1);
+        opacity: 1;
       }
     }
   }
   .unselected{
-    opacity: calc(1 - var(--opacity, 1));
+    opacity: 0;
   }
   .selected{
-    opacity: var(--opacity, 1);
+    opacity: 1;
   }
 }
-:host([pressed]) .handle>.thumb{
-  min-width: 70%;
+:host([pressed]) {
+  cursor: grabbing;
+  .handle>.thumb{
+    min-width: 70%;
+  }
 }
 ::slotted(:is(svg, s-icon)){
   color: currentColor;
@@ -164,6 +165,12 @@ const template = /*html*/`
   </div>
 </div>
 `
+
+const getEventNames = (type: string) => {
+  const mouse = { move: 'mousemove', up: 'mouseup' } as const
+  const touch = { move: 'touchmove', up: 'touchend' } as const
+  return type === 'mouse' ? mouse : touch
+}
 
 export class Switch extends useElement({
   style, template, props,
@@ -201,15 +208,15 @@ export class Switch extends useElement({
         //this.dispatchEvent(new Event('change'))
         //}
       }
-      const eventNames = device.touchEnabled ? { move: 'touchmove', up: 'touchend' } as const : { move: 'pointermove', up: 'pointerup' } as const
+      const eventNames = getEventNames(event.pointerType)
       const remove = () => {
         handle.style.removeProperty('transition')
         handle.style.removeProperty('transform')
         track.style.removeProperty('--opacity')
-        document.removeEventListener(eventNames.move, move)
+        //document.removeEventListener(eventNames.move, move)
       }
-      document.addEventListener(eventNames.move, move, { passive: false })
-      document.addEventListener(eventNames.up, remove, { once: true })
+      //document.addEventListener(eventNames.move, move, { passive: false })
+      //document.addEventListener(eventNames.up, remove, { once: true })
     })
   }
 }) { }

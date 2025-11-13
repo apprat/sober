@@ -5,31 +5,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Test Page</title>
-  <link rel="stylesheet" href="../dist/style.css">
   <style>
-    div {
-      background: red;
-      height: 200px;
+    body {
+      margin: 0;
+      padding: 24px;
+    }
+
+    .test {
+      background: repeating-radial-gradient(closest-side, transparent, #ebf8e1, #f69d3c);
+      background-size: 10%;
+      height: 44px;
     }
   </style>
 </head>
 
 <body>
-  <div>00</div>
-  <script>
-    const div = document.querySelector('div')
-    let is = false
-    div.onpointerdown = () => {
-      document.onpointermove = () => {
-        console.log('move')
-      }
-      document.onpointerup = () => {
-        console.log('up')
-        document.onpointermove = null
-        document.onpointerup = null
-      }
-    }
-  </script>
+  <div class="test">
+
+  </div>
 </body>
 
 </html>

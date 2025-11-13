@@ -1,4 +1,4 @@
-@media (pointer: fine) {
+@media (any-pointer: fine) {
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;

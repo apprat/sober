@@ -5,7 +5,7 @@ import { useComputedStyle } from '../core/utils/CSS.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
-  placement: ['bottom', 'top', 'left', 'right'],
+  gravity: ['bottom', 'top', 'left', 'right'],
   disabled: false
 })
 const events = {
@@ -15,35 +15,38 @@ const events = {
 
 const style = /*css*/`
 :host{
+  display: contents;
+  font-size: .875rem;
+  font-weight: 400;
   position: absolute;
+  border-radius: 4px;
+  padding: 6px 8px;
   animation-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
   animation-duration: var(--s-motion-duration-medium4, ${scheme.motion.duration.medium4});
-  --tooltip-placement: none;
-  .popover{
-    pointer-events: none;
-    position: fixed;
-    display: none;
-    inset: 0;
-    margin: 0;
-    width: fit-content;
-    height: fit-content;
-    background: none;
-    border: none;
-    overflow: hidden;
-    outline: none;
-    max-width: 100%;
-    max-height: 100%;
-    font-size: .875rem;
-    font-weight: 400;
-    padding: 6px 8px;
-    border-radius: 4px;
-    filter: opacity(.95);
-    background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
-    color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
-  }
-  .opened{
-    display: block;
-  }
+  background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
+  color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
+}
+.popover{
+  pointer-events: none;
+  position: fixed;
+  display: none;
+  inset: 0;
+  margin: 0;
+  width: fit-content;
+  height: fit-content;
+  border: none;
+  overflow: hidden;
+  outline: none;
+  max-width: 100%;
+  max-height: 100%;
+  padding: inherit;
+  border-radius: inherit;
+  filter: opacity(.8);
+  background: inherit;
+  color: inherit;
+}
+.opened{
+  display: block;
 }
 `
 
@@ -62,7 +65,13 @@ export class Tooltip extends useElement({
       return { easing, duration }
     }
     const display = ['block', 'block']
-    const show = (parent: HTMLElement) => {
+    const gravitys = {
+      top: ['bottom', 'left', 'right'],
+      bottom: ['top', 'left', 'right'],
+      left: ['right', 'top', 'bottom'],
+      right: ['left', 'top', 'bottom']
+    }
+    const open = (parent: HTMLElement) => {
       if (!this.isConnected || popover.classList.contains('opened')) return
       if (!this.dispatchEvent(new Event('open', { cancelable: true }))) return
       popover.style.display = 'block'
@@ -98,15 +107,9 @@ export class Tooltip extends useElement({
         position.top = (innerHeight - offsetHeight) / 2
         position.left = (innerWidth - offsetWidth) / 2
       } else {
-        const aligns = {
-          top: ['bottom', 'left', 'right'],
-          bottom: ['top', 'left', 'right'],
-          left: ['right', 'top', 'bottom'],
-          right: ['left', 'top', 'bottom']
-        }
-        const value = computedStyle.getValue('--tooltip-placement')
-        const placement = (value in aligns ? value : this.placement) as keyof typeof aligns
-        for (const key of [placement, ...aligns[placement]]) {
+        const cssGravity = computedStyle.getValue('--s-tooltip-gravity')
+        const gravity = cssGravity in gravitys ? cssGravity as keyof typeof gravitys : this.gravity
+        for (const key of [gravity, ...gravitys[gravity]]) {
           const name = key as keyof typeof options
           const option = options[name]
           if (!option.overflowed) {
@@ -146,29 +149,36 @@ export class Tooltip extends useElement({
       })
     }
     return {
-      expose: { show, close },
+      expose: { open },
       onMounted: (parent) => {
         const parentElement = parent instanceof ShadowRoot ? parent.host : parent
         if (!(parentElement instanceof HTMLElement)) return
-        const hover = () => !this.disabled && !device.touchEnabled && show(parentElement)
-        const unHover = () => !this.disabled && !device.touchEnabled && close(parentElement)
-        let timer: number
-        const touchstart = () => !this.disabled && (timer = setTimeout(() => show(parentElement), 500))
-        const touchend = () => {
-          if (this.disabled) return
-          clearTimeout(timer)
-          close(parentElement)
+        const show = () => {
+          const cssDisabled = computedStyle.getValue('--s-tooltip-disabled')
+          const disabled = ['', 'none'].includes(cssDisabled) ? this.disabled : Boolean(cssDisabled)
+          !disabled && open(parentElement)
         }
-        parentElement.addEventListener('mouseenter', hover)
+        const close2 = () => close(parentElement)
+        const hover = () => !device.touchEnabled && show()
+        const unHover = () => !device.touchEnabled && close2()
+        let timer: number
+        const touchstart = () => timer = setTimeout(show, 500)
+        const touchend = () => {
+          clearTimeout(timer)
+          close2()
+        }
+        parentElement.addEventListener('mouseover', hover)
         parentElement.addEventListener('mouseleave', unHover)
         parentElement.addEventListener('wheel', unHover)
         parentElement.addEventListener('touchstart', touchstart, { passive: true })
         parentElement.addEventListener('touchmove', touchend)
         parentElement.addEventListener('touchend', touchend)
+        window.addEventListener('resize', close2)
         return () => {
-          parentElement.removeEventListener('mouseenter', hover)
+          parentElement.removeEventListener('mouseover', hover)
           parentElement.removeEventListener('mouseleave', unHover)
           parentElement.removeEventListener('wheel', unHover)
+          window.removeEventListener('resize', close2)
           parentElement.removeEventListener('touchstart', touchstart)
           parentElement.removeEventListener('touchmove', touchend)
           parentElement.removeEventListener('touchend', touchend)

@@ -18,17 +18,17 @@
 
 ---
 
-在 **Vue** 框架中使用 `v-model` 语法时，可以省略 `name` 属性。
+在 **Vue** 框架中使用 `v-model.lazy` 语法时，可以省略 `name` 属性，同时你需要设置属性 `type=checkbox` 告诉 **Vue** 编译器该组件是一个复选框。
 
 ```vue
 <template>
-  <s-checkbox value="male" v-model.lazy="group" type="checkbox">男</s-checkbox>
-  <s-checkbox value="female" v-model.lazy="group" type="checkbox">女</s-checkbox>
-  <s-checkbox value="unknown" v-model.lazy="group" type="checkbox">未知</s-checkbox>
-  当前选中：{{ group }}
+  <s-checkbox value="male" v-model.lazy="sex" type="checkbox">男</s-checkbox>
+  <s-checkbox value="female" v-model.lazy="sex" type="checkbox">女</s-checkbox>
+  <s-checkbox value="unknown" v-model.lazy="sex" type="checkbox">未知</s-checkbox>
+  当前选中：{{ sex }}
 </template>
 <script setup>
-  const group = ref(['male'])
+  const sex = ref(['male'])
 </script>
 ```
 
@@ -85,6 +85,17 @@
 | 名称 | 说明 |
 | ---- | ---- |
 | 匿名 | 文本 |
+
+---
+
+## HTML 标记属性
+
+| 名称          | 说明                       |
+| ------------- | -------------------------- |
+| pressed       | 按下时设置                 |
+| hovered       | 鼠标移入时设置             |
+
+> 标记属性在一些情况下被设置到 HTML 属性上，以便于外部定义样式。
 
 ---
 

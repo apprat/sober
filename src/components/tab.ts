@@ -194,7 +194,7 @@ const getOrientation = (orientation: typeof props.orientation) => orientationOpt
 
 export class Tab extends useElement({
   style, props, template,
-  setup(shadowRoot, states) {
+  setup(shadowRoot, info) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const select = new Select(this, slot, TabItem)
@@ -205,7 +205,7 @@ export class Tab extends useElement({
       return { easing, duration }
     }
     const center = (behavior: 'auto' | 'smooth' = 'auto') => {
-      if (this.mode === 'fixed' || !this.isConnected || !states.initialized) return
+      if (this.mode === 'fixed' || !info.isConnected) return
       const orientation = getOrientation(this.orientation)
       const index = this.multiple ? select.selectedList.length - 1 : 0
       const item = select.selectedList[index]
@@ -216,8 +216,8 @@ export class Tab extends useElement({
     select.onSlotChange = () => useThrottle(center)
     select.onRender = (olds) => {
       if (select.selectedList.length === 0) return
-      useThrottle(center, states.initialized ? 'smooth' : 'auto')
-      if (this.multiple || !this.isConnected || !states.initialized) return
+      useThrottle(center, info.isConnected && olds.length > 0 ? 'smooth' : 'auto')
+      if (this.multiple || !info.isConnected) return
       const item = select.selectedList[0]
       const old = olds[0]
       if (!item || !old) return

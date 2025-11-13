@@ -4,10 +4,42 @@
 <head>
   <meta charset="UTF-8" />
   <title>Test</title>
+  <script>
+    class MyApp extends HTMLElement {
+      static get observedAttributes() {
+        return ['variant']
+      }
+      constructor() {
+        super()
+        this.attachShadow({ mode: 'open' }).innerHTML = `
+                    <style>
+                      :host {
+                        display: block;
+                        width: 200px;
+                        height: 200px;
+                        background: lightgray;
+                      }
+                    </style>
+                    <div>My App Component</div>
+                  `
+        console.log('初始化[MyApp]', this.getAttribute('variant'))
+      }
+      attributeChangedCallback(name, oldValue, newValue) {
+        console.log(`[MyApp change]: ${newValue}`)
+      }
+      connectedCallback() {
+        console.log('连接[MyApp]')
+      }
+
+    }
+    customElements.define('my-app', MyApp)
+  </script>
 </head>
 
 <body>
+  <my-app variant="zz"></my-app>
   <template id="template">
+    <my-app variant="zz"></my-app>
     <h1>{{state.tab}}</h1>
 
     <s-button @click="state.multiple=!state.multiple">设置多选 {{state.multiple}}</s-button>
@@ -57,6 +89,7 @@
   <script type="module">
     import { createApp, reactive } from 'https://unpkg.com/vue@3.5.13/dist/vue.esm-browser.prod.js'
     const template = document.querySelector('template').innerHTML
+    console.log('-----------初始化[vue]')
     const app = createApp({
       template,
       setup() {

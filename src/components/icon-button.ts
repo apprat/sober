@@ -120,6 +120,11 @@ const style = /*css*/`
     width: 48px;
   }
 }
+::slotted(:is(svg, s-icon)){
+  transition-duration: inherit;
+  transition-timing-function: inherit;
+  transform: var(--s-icon-button-transform, none);
+}
 `
 
 const template = /*html*/`
@@ -130,6 +135,8 @@ const template = /*html*/`
 export class IconButton extends useElement({
   style: [buttonStyle, buttonVariant, style],
   focused: true,
+  pressed: true,
+  hovered: true,
   props, template,
   setup() {
     this.addEventListener('click', () => {

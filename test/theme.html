@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>Theme builder</title>
+  <meta name="viewport"
+    content="width=device-width,viewport-fit=cover,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
   <script type="module" src="../dist/main.js"></script>
   <style>
     html,
@@ -32,7 +34,7 @@
 </head>
 
 <body>
-  <s-page>
+  <s-page theme="auto">
     <input type="color" id="inputColor">
     <hr>
     <s-button>
@@ -56,9 +58,20 @@
       Button
     </s-button>
     <hr>
+    <s-icon-button variant="filled" width="wide">
+      <s-icon name="more_horiz"></s-icon>
+    </s-icon-button>
+    <s-icon-button variant="tonal">
+      <s-icon name="star"></s-icon>
+    </s-icon-button>
+    <s-icon-button variant="outlined" width="narrow">
+      <s-icon name="more_vert"></s-icon>
+    </s-icon-button>
+    <hr>
     <s-checkbox>Yes</s-checkbox>
+    <s-checkbox checked>No</s-checkbox>
     <s-radio name="no">No.1</s-radio>
-    <s-radio name="no">No.2</s-radio>
+    <s-radio name="no" checked>No.2</s-radio>
     <hr>
     <s-fab>
       <s-icon name="add"></s-icon>
@@ -80,12 +93,92 @@
     </s-fab>
     <hr>
     <s-base-slider></s-base-slider>
-    <s-base-slider mode="single" style="margin-top: 24px;"></s-base-slider>
-    <s-alert style="margin-top: 24px;">
-      <s-icon name="star" slot="icon"></s-icon>
-      This is a content.
-      <s-button slot="action">close</s-button>
+    <s-base-slider mode="range" style="margin-top: 24px;"></s-base-slider>
+    <s-alert collapsed>
+      <div slot="title"> 子夜吴歌·冬歌 </div>
+      明朝驿使发，一夜絮征袍。<br>
+      素手抽针冷，那堪把剪刀。<br>
+      裁缝寄远道，几日到临洮。
     </s-alert>
+    <s-loading></s-loading>
+    <s-loading variant="contained"></s-loading>
+    <s-circular-progress indeterminate></s-circular-progress>
+    <s-progress value="50"></s-progress>
+    <hr>
+    <s-slider></s-slider>
+    <hr>
+    <s-rating></s-rating>
+    <s-rating>
+      <span slot="track">ABCDE</span>
+      <span slot="fill">ABCDE</span>
+    </s-rating>
+    <hr>
+    <s-button>
+      Top Dialog
+      <s-tooltip>show top dialog</s-tooltip>
+      <s-dialog gravity="top">
+        <div slot="title">摸鱼儿</div>
+        <div slot="text">
+          问人生、头白京国，算来何事消得。不如罨画清溪上，蓑笠扁舟一只。人不识，且笑煮、鲈鱼趁著莼丝碧。无端酸鼻，向岐路消魂，征轮驿骑，断雁西风急。
+          英雄辈，事业东西南北。临风因甚泣。酬知有愿频挥手，零雨凄其此日。休太息，须信道、诸公衮衮皆虚掷。年来踪迹。有多少雄心，几翻恶梦，泪点霜华织。
+        </div>
+        <s-button slot="action" variant="text">取消</s-button>
+        <s-button slot="action" variant="text">确定</s-button>
+      </s-dialog>
+    </s-button>
+    <s-button>
+      Bottom Dialog
+      <s-tooltip>show bottom dialog</s-tooltip>
+      <s-dialog gravity="bottom">
+        <div slot="title">摸鱼儿</div>
+        <div slot="text">
+          问人生、头白京国，算来何事消得。不如罨画清溪上，蓑笠扁舟一只。人不识，且笑煮、鲈鱼趁著莼丝碧。无端酸鼻，向岐路消魂，征轮驿骑，断雁西风急。
+          英雄辈，事业东西南北。临风因甚泣。酬知有愿频挥手，零雨凄其此日。休太息，须信道、诸公衮衮皆虚掷。年来踪迹。有多少雄心，几翻恶梦，泪点霜华织。
+        </div>
+        <s-button slot="action" variant="text">取消</s-button>
+        <s-button slot="action" variant="text">确定</s-button>
+      </s-dialog>
+    </s-button>
+    <s-button>
+      Dialog
+      <s-tooltip>show dialog</s-tooltip>
+      <s-dialog>
+        <div slot="title">摸鱼儿</div>
+        <div slot="text">
+          问人生、头白京国，算来何事消得。不如罨画清溪上，蓑笠扁舟一只。人不识，且笑煮、鲈鱼趁著莼丝碧。无端酸鼻，向岐路消魂，征轮驿骑，断雁西风急。
+          英雄辈，事业东西南北。临风因甚泣。酬知有愿频挥手，零雨凄其此日。休太息，须信道、诸公衮衮皆虚掷。年来踪迹。有多少雄心，几翻恶梦，泪点霜华织。
+        </div>
+        <s-button slot="action" variant="text">取消</s-button>
+        <s-button slot="action" variant="text">确定</s-button>
+      </s-dialog>
+    </s-button>
+    <hr>
+    <s-tab>
+      <s-tab-item>
+        <s-icon slot="icon" name="home"></s-icon>
+        Home
+      </s-tab-item>
+      <s-tab-item selected>
+        <s-icon slot="icon" name="star"></s-icon>
+        Search
+        <s-badge slot="badge"></s-badge>
+      </s-tab-item>
+      <s-tab-item>
+        <s-icon slot="icon" name="home"></s-icon>
+        Users
+        <s-badge slot="badge">99</s-badge>
+      </s-tab-item>
+    </s-tab>
+    <hr>
+    <s-appbar>
+      <svg viewBox="0 0 1024 1024" slot="logo">
+        <path
+          d="M913.4 757.4c-105-16-113-31.4-113-31.4 21.6-129.8-45.4-294.2-154.8-383.2-145.6-118.4-367-32.4-539.4-212.4-40.2-42-16.8 471 199 665.4 157.8 142 343.6 98.4 394.6 75.2 46.2-21.2 78.6-59.8 78.6-59.8 84.2 26 125.8 24.4 125.8 24.4C933.8 839.2 948.8 762.8 913.4 757.4zM721.2 766.2c-276.4-81.8-484.2-369-484.2-369s182.4 215.4 504 320.4C741.4 733.8 731.8 757 721.2 766.2z">
+        </path>
+      </svg>
+      <span slot="title">Material 3</span>
+      <span slot="subtitle">Google M3 Expressive</span>
+    </s-appbar>
   </s-page>
   <script src="../dist/sober.theme.min.js"></script>
   <script type="module">

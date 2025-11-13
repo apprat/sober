@@ -8,6 +8,7 @@
   <span slot="title">Material 3</span>
   <s-icon-button slot="action">
     <s-icon name="search"></s-icon>
+    <s-tooltip>搜索</s-tooltip>
   </s-icon-button>
 </s-appbar>
 ```

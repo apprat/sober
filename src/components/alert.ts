@@ -1,6 +1,7 @@
 import { useProps, useElement } from '../core/element.js'
 import * as scheme from '../core/scheme.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
+import './ripple.js'
 
 const props = useProps({
   variant: ['info', 'success', 'warning', 'error'],
@@ -12,16 +13,15 @@ const style = /*css*/`
 :host{
   display: flex;
   padding: 12px 16px;
-  align-items: center;
-  line-height: 24px;
-  font-size: calc(var(--s-font-size, 1) * 14px);
+  line-height: 1.6;
   font-weight: 500;
   min-height: 48px;
   border-radius: 4px;
   word-break: break-all;
+  transition-property: color, background-color;
+  font-size: calc(var(--s-font-size, 1) * 14px);
   color: var(--s-color-on-secondary-container, ${scheme.color.onSecondaryContainer});
   background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
-  transition-property: color, background-color;
   transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
   transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
 }
@@ -37,19 +37,15 @@ const style = /*css*/`
   color: var(--s-color-on-error-container, ${scheme.color.onErrorContainer});
   background: var(--s-color-error-container, ${scheme.color.errorContainer});
 }
+.icon{
+  display: none;
+  margin-right: 14px;
+}
 svg{
   width: 24px;
   height: 24px;
   fill: currentColor;
   flex-shrink: 0;
-}
-.icon,
-.toggle{
-  display: none;
-}
-.icon,
-::slotted([slot=icon]){
-  margin-right: 14px;
 }
 :host(:not([variant])) .info,
 :host([variant=success]) .success,
@@ -65,48 +61,49 @@ svg{
   text-align: left;
   user-select: text;
   -webkit-user-select: text;
-}
-.actions{
-  display: flex;
-  align-items: center;
-  margin-right: -8px;
-  min-width: 8px;
-  margin-top: -8px;
-  margin-bottom: -8px;
-  flex-shrink: 0;
+  .content{
+    display: block;
+    overflow: hidden;
+  }
 }
 .toggle{
+  display: none;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   width: 36px;
   height: 36px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  flex-shrink: 0;
+  margin: -6px -8px -6px 4px;
+  color: var(--s-color-primary, ${scheme.color.primary});
+  svg{
+    transition-property: transform;
+    transition-duration: inherit;
+    transition-timing-function: inherit;
+  }
 }
-:host([collapsed=true]) .toggle{
-  display: flex;
-}
-.toggle>svg{
-  transition-property: transform;
-}
-:host([collapsed=true][opened=true]) .toggle>svg{
-  transform: rotate(-180deg);
-}
-.content{
-  display: block;
-  overflow: hidden;
-  animation-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  animation-duration: var(--s-motion-duration-medium4, ${scheme.motion.duration.medium4});
-}
-:host([collapsed=true]:not([opened=true])) .content{
-  display: none;
+:host([collapsed]){
+  &:host(:not([opened])){
+    .text>.content{
+      display: none;
+    }
+  }
+  &:host([opened]){
+    .toggle>svg{
+      transform: rotate(-180deg);
+    }
+    slot[name=toggle]{
+      --s-icon-button-transform: rotate(-180deg);
+    }
+  }
+  .toggle{
+    display: flex;
+  }
 }
 ::slotted(*){
   flex-shrink: 0;
-}
-::slotted([slot=title]){
-  font-weight: 600;
-  font-size: calc(var(--s-font-size, 1) * 16px);
 }
 ::slotted(:is(svg, s-icon)){
   fill: currentColor;
@@ -114,22 +111,23 @@ svg{
   width: 24px;
   height: 24px;
 }
-.toggle,
-::slotted(:is([slot=toggle], [slot=action])){
-  color: var(--s-color-primary, ${scheme.color.primary});
+::slotted(:is(svg, s-icon)[slot=icon]){
+  margin-right: 14px;
+}
+::slotted([slot=title]){
+  font-weight: 500;
+  line-height: 1.5;
+  font-size: calc(var(--s-font-size, 1) * 15px);
 }
 ::slotted(s-button[slot=action]){
-  height: 32px;
   min-width: 0;
   padding: 0 8px;
   border-radius: 4px;
-  font-size: calc(var(--s-font-size, 1) * 13px);
-  background: none;
+  margin: -4px -6px -4px 6px;
 }
-::slotted(s-icon-button[slot=action]){
-  width: 36px;
-  height: 36px;
-  padding: 8px;
+::slotted(s-icon-button:is([slot=action], [slot=toggle])){
+  margin: -6px -8px -6px 4px;
+  color: var(--s-color-primary, ${scheme.color.primary});
 }
 `
 const template = /*html*/`
@@ -151,25 +149,24 @@ const template = /*html*/`
   <slot name="title"></slot>
   <slot class="content" part="content"></slot>
 </div>
-<div class="actions" part="actions">
-  <slot name="toggle">
-    <s-ripple class="toggle" part="toggle" tabindex="0">
-      <svg viewBox="0 -960 960 960">
-        <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"></path>
-      </svg>
-    </s-ripple>
-  </slot>
-  <slot name="action"></slot>
-</div>
+<slot name="toggle">
+  <div class="toggle" part="toggle" tabindex="0">
+    <svg viewBox="0 -960 960 960">
+      <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"></path>
+    </svg>
+    <s-ripple></s-ripple>
+  </div>
+</slot>
+<slot name="action"></slot>
 `
 
 export class Alert extends useElement({
   style, props, template,
-  setup(shadowRoot, states) {
+  setup(shadowRoot, info) {
     const toggleSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=toggle]')!
     const toggleEl = shadowRoot.querySelector<HTMLSlotElement>('.toggle')!
     const content = shadowRoot.querySelector<HTMLSlotElement>('.content')!
-    const computedStyle = useComputedStyle(content)
+    const computedStyle = useComputedStyle(this)
     toggleSlot.onclick = () => {
       this.opened = !this.opened
       this.dispatchEvent(new Event('toggle'))
@@ -181,7 +178,7 @@ export class Alert extends useElement({
     }
     return {
       setOpened: (v) => {
-        if (!this.isConnected || !states.initialized) return
+        if (!info.isConnected) return
         const [old] = content.getAnimations()
         if (old) return old.reverse()
         const keyframe = { height: ['0', `${content.offsetHeight}px`], display: ['block', 'block'] }
@@ -192,8 +189,8 @@ export class Alert extends useElement({
           content.style.removeProperty('display')
         }
         content.animate(keyframe, {
-          easing: computedStyle.getValue('animation-timing-function'),
-          duration: computedStyle.getDuration('animation-duration')
+          easing: computedStyle.getValue('transition-timing-function'),
+          duration: computedStyle.getDuration('transition-duration')
         })
       }
     }

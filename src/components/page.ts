@@ -11,6 +11,7 @@ const style = /*css*/`
   display: flow-root;
   height: -moz-available;
   height: -webkit-fill-available;
+  overflow: auto;
   font-family: system-ui;
   color: var(--s-color-on-background);
   background: var(--s-color-background);

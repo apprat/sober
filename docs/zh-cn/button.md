@@ -96,13 +96,13 @@
 </s-button>
 ```
 
-如果在 **Vue** 框架中使用 `v-model` 语法，你需要同时设置 `type=checkbox`。
+如果在 **Vue** 框架中使用 `v-model.lazy` 语法，你需要同时设置 `type=checkbox` 告诉 **Vue** 编译器该组件是一个复选框。
 
 ```vue
 <template>
   <s-button checkable value="male" v-model.lazy="sex" type="checkbox"> 男 </s-button>
   <s-button checkable value="female" v-model.lazy="sex" type="checkbox"> 女 </s-button>
-  当前选中：{{ group }}
+  当前选中：{{ sex }}
 </template>
 <script setup>
   const sex = ref(['male'])
@@ -187,12 +187,15 @@
 
 ---
 
-## HTML 属性
+## HTML 标记属性
 
-| 名称    | 说明             |
-| ------- | ---------------- |
-| pressed | 在按下时设置     |
-| hovered | 在鼠标移入时设置 |
+| 名称          | 说明           |
+| ------------- | -------------- |
+| pressed       | 按下时设置     |
+| hovered       | 鼠标移入时设置 |
+| ripple-showed | 波纹触发时设置 |
+
+> 标记属性在一些情况下被设置到 HTML 属性上，以便于外部定义样式。
 
 ---
 

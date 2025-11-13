@@ -3,35 +3,60 @@
 你可以将该组件添加到任意元素内来添加波纹效果，但请注意，你必须为父元素或祖先元素设置 CSS `position` 不为 `static`，因为它依赖 `position` 进行定位。
 
 ```html preview
-<button style="position: relative; padding: 8px 16px; border-radius: 8px">
-  Ripple Button
+<div style="position: relative; height: 100px;border: solid 1px #ddd">
   <s-ripple></s-ripple>
-</button>
+</div>
 ```
 
-你可以通过停止 `pointerdown` 事件冒泡来禁用波纹效果。
+## 延迟播放
+
+使用 `delay` 属性，你可以定义延迟时间，以毫秒为单位（仅触屏设备生效），在延迟时间内如果触屏滑动，动画将被取消。
 
 ```html preview
-<button style="position: relative; padding: 8px 16px;  border-radius: 8px">
-  ripple
-  <span style="background: red" onpointerdown="event.stopPropagation()">点我</span>
-  <s-ripple></s-ripple>
-</button>
+<div style="position: relative; height: 100px;border: solid 1px #ddd">
+  <s-ripple delay="200"></s-ripple>
+</div>
 ```
+
+用户的触屏很可能是要滚动页面，而不是触发点击事件，这使得触屏时播放波纹动画可能会显得很突兀，因此你可以在可滚动的元素上定义 `--s-ripple-delay` 来设置所有波纹延迟时间。  
+
+```html
+<div style="overflow: auto; --s-ripple-delay: 50;">
+  <s-ripple></s-ripple>
+  <s-ripple></s-ripple>
+  <s-ripple></s-ripple>
+</div>
+```
+
+> 所有依赖该组件的其他组件，都可以使用该方式来设置延迟，例如 `s-button` 组件。
 
 ---
 
 ## 属性
 
-| 名称     | 类型    | 默认值 | 同步 | 说明       |
-| -------- | ------- | ------ | ---- | ---------- |
-| centered | boolean | false  | ✔️ | 波纹居中的 |
+| 名称          | 类型    | 默认值 | 同步 | 说明                 |
+| ------------- | ------- | ------ | ---- | -------------------- |
+| disabled      | boolean | false  | ✔️ | 禁用波纹的           |
+| hoverDisabled | boolean | false  | ✔️ | 禁用悬停的           |
+| delay         | number  | 0      | ✔️ | 延迟时间，单位为毫秒 |
 
 ---
 
-## HTML 属性
+## HTML 标记属性
 
-| 名称    | 说明                     |
-| ------- | ------------------------ |
-| pressed | 在按下时设置（容器）     |
-| hovered | 在鼠标移入时设置（容器） |
+| 名称          | 说明                             |
+| ------------- | -------------------------------- |
+| ripple-showed | 在波纹触发时设置（在容器上设置） |
+
+---
+
+## 样式变量
+
+| 名称                      | 说明                                                           |
+| ------------------------- | -------------------------------------------------------------- |
+| --s-ripple-disabled       | 该 CSS 变量和 `disabled` 属性一致，区别是该变量优先级更高      |
+| --s-ripple-delay          | 该 CSS 变量和 `delay` 属性一致，区别是该变量优先级更高         |
+| --s-ripple-opacity        | 波纹不透明度，默认为 0.18                                      |
+| --s-ripple-color          | 波纹颜色，默认情况下使用 color 颜色                            |
+| --s-ripple-hover-opacity  | 悬停不透明度，默认为 0.12                                      |
+| --s-ripple-hover-disabled | 该 CSS 变量和 `hoverDisabled` 属性一致，区别是该变量优先级更高 |

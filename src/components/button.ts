@@ -132,6 +132,8 @@ const template = /*html*/`
 
 export class Button extends useElement({
   style: [buttonStyle, buttonVariant, style],
+  pressed: true,
+  hovered: true,
   focused: true,
   props, template,
   setup() {

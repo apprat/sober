@@ -33,7 +33,7 @@ const baseStyle = /*css*/`
   -webkit-tap-highlight-color: transparent;
 }
 :host(:focus-visible){
-  outline: auto 1px var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
+  outline: dashed 2px var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
   outline-offset: 2px;
 }
 *{
@@ -47,7 +47,7 @@ const baseStyle = /*css*/`
   box-sizing: border-box;
   touch-action: pan-y pan-x;
 }
-@media (pointer: fine) {
+@media (any-pointer: fine) {
   ::-webkit-scrollbar{
     background: var(--s-scrollbar-color, transparent);
     width: var(--s-scrollbar-width, 6px);
@@ -88,7 +88,7 @@ class PropMeta {
   to(v: any): Prop {
     switch (typeof this.value) {
       case 'string':
-        if (this.types.length > 0 && this.types.includes(v)) return v
+        if (this.types.length > 0) return this.types.includes(v) ? v : this.value
         return String(v)
       case 'number':
         const num = v === null ? this.value : Number(v)
@@ -129,7 +129,7 @@ type El<Props, Expose, Events extends { [key: string]: any }> = Props & Expose &
   [K in keyof Events as K extends string ? `on${K}` : never]: ((this: El<Props, Expose, Events>, e: InstanceType<Events[K]>) => any) | null
 }
 
-type States<T> = { props: T, initialized: boolean }
+type ReturnType<T extends ((...args: any) => any) | undefined> = T extends (...args: any) => infer R ? R : T
 
 export const useElement = <
   Props extends { [key: string]: Prop } = {},
@@ -143,7 +143,7 @@ export const useElement = <
   focused?: boolean
   pressed?: boolean
   hovered?: boolean
-  setup?: (this: Props & HTMLElement, shadowRoot: ShadowRoot, states: States<Props>) => Merge<{
+  setup?: (this: Props & HTMLElement, shadowRoot: ShadowRoot, info: { props: Props, isConnected: boolean }) => Merge<{
     onMounted?: (parent: ParentNode) => void | (() => void)
     onAttributeChanged?: (key: keyof Props, value: Props[keyof Props]) => void
     onAdopted?: () => void
@@ -174,8 +174,12 @@ export const useElement = <
     if (k in HTMLElement.prototype) continue
     state.events.push(k)
   }
-  type ReturnType<T extends ((...args: any) => any) | undefined> = T extends (...args: any) => infer R ? R : T
-  const map = new Map<HTMLElement, { setup: ReturnType<typeof options.setup>, states: States<Props>, lifetimes: { onUnmounted?: () => void } }>()
+  type MapValue = {
+    setup: ReturnType<typeof options.setup>,
+    info: { props: Props, isConnected: boolean },
+    lifetimes: { onUnmounted?: () => void }
+  }
+  const map = new Map<HTMLElement, MapValue>()
   class Component extends HTMLElement {
     static observedAttributes = observedAttributes
     static define(name: string) {
@@ -187,9 +191,8 @@ export const useElement = <
       const shadowRoot = this.attachShadow({ mode: 'open' })
       shadowRoot.innerHTML = options.template ?? ''
       setStyle(shadowRoot, [baseStyle, ...options.style ? (Array.isArray(options.style) ? options.style : [options.style]) : []])
-      const props = { ...options.props }
-      const states = { initialized: false, props, } as States<Props>
-      const mapItem = { setup: null as any, states, lifetimes: {} }
+      const props = { ...options.props } as Props
+      const mapValue: MapValue = { setup: null as any, info: { props, isConnected: false }, lifetimes: {} }
       options.focused && this.addEventListener('keydown', (e) => {
         if (!['Enter', ' '].includes(e.key)) return
         e.preventDefault()
@@ -198,6 +201,7 @@ export const useElement = <
       if (options.pressed) {
         const name = 'pressed'
         this.addEventListener('pointerdown', (e) => {
+          if (e.button !== 0) return
           this.setAttribute(name, '')
           document.addEventListener(e.pointerType === 'mouse' ? 'mouseup' : 'touchend', () => this.removeAttribute(name), { once: true })
         })
@@ -216,7 +220,7 @@ export const useElement = <
         if (initValue !== undefined) ahead[key] = initValue
         Object.defineProperty(this, key, {
           configurable: true,
-          get: () => mapItem.setup?.[`get${state.metaProps[key].capitalize}`]?.() ?? props[key],
+          get: () => mapValue.setup?.[`get${state.metaProps[key].capitalize}`]?.() ?? props[key],
           set: (v) => {
             const meta = state.metaProps[key]
             const value = v === null ? meta.value : meta.to(v)
@@ -229,12 +233,15 @@ export const useElement = <
               if (value !== meta.value && attrValue !== valueStr) return this.setAttribute(lowerKey, valueStr)
             }
             if (value === this[key as keyof this]) return
-            if (options.focused && key === 'disabled') value ? this.removeAttribute('tabindex') : this.setAttribute('tabindex', String(0))
             const old = props[key]
-            props[key] = value
-            const call = mapItem.setup?.[`set${state.metaProps[key].capitalize}`] as any
+            props[key] = value as never
+            if (options.focused && ['disabled', 'readOnly'].includes(key)) {
+              //@ts-ignore
+              (props.disabled || props.readOnly) ? this.removeAttribute('tabindex') : this.setAttribute('tabindex', '0')
+            }
+            const call = mapValue.setup?.[`set${state.metaProps[key].capitalize}`] as any
             call?.(value as never, old as never)
-            mapItem.setup?.onAttributeChanged?.(key, value as never)
+            mapValue.setup?.onAttributeChanged?.(key, value as never)
           }
         })
       }
@@ -249,28 +256,29 @@ export const useElement = <
         })
         this.addEventListener(key.slice(2), (event) => customEvents[key] && customEvents[key].bind(this)(event))
       }
-      mapItem.setup = options.setup?.call(this as any, shadowRoot as any, states)
-      for (const key in mapItem.setup?.expose ?? {}) Object.defineProperty(this, key, { get: () => mapItem.setup?.expose?.[key] })
+      mapValue.setup = options.setup?.call(this as any, shadowRoot as any, mapValue.info)
+      for (const key in mapValue.setup?.expose ?? {}) Object.defineProperty(this, key, { get: () => mapValue.setup?.expose?.[key] })
       for (const key in ahead) this[key as keyof this] = ahead[key] as never
-      map.set(this, mapItem)
-      Promise.resolve().then(() => states.initialized = true)
+      map.set(this, mapValue)
     }
     connectedCallback() {
-      const mapItem = map.get(this)
-      if (!mapItem) return
+      const mapValue = map.get(this)
+      if (!mapValue) return
+      mapValue.info.isConnected = true
       //@ts-ignore
-      if (options.focused && !this.disabled && this.tabIndex < 0) this.tabIndex = 0
-      if (mapItem.setup?.onMounted) {
+      if (options.focused && !this.disabled && !this.readOnly && !this.hasAttribute('tabindex')) this.tabIndex = 0
+      if (mapValue.setup?.onMounted) {
         const parentNode = this.parentNode!
-        const stop = mapItem.setup.onMounted(parentNode)
-        mapItem.lifetimes.onUnmounted = stop!
+        const stop = mapValue.setup.onMounted(parentNode)
+        mapValue.lifetimes.onUnmounted = stop!
       }
     }
     disconnectedCallback() {
-      const mapItem = map.get(this)
-      if (!mapItem) return
-      mapItem.lifetimes.onUnmounted?.()
-      delete mapItem.lifetimes.onUnmounted
+      const mapValue = map.get(this)
+      if (!mapValue) return
+      mapValue.info.isConnected = false
+      mapValue.lifetimes.onUnmounted?.()
+      delete mapValue.lifetimes.onUnmounted
     }
     adoptedCallback() {
       map.get(this)?.setup?.onAdopted?.()

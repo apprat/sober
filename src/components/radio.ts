@@ -17,7 +17,10 @@ const style = /*css*/`
   cursor: pointer;
   position: relative;
   height: 40px;
+  border-radius: 4px;
   color: var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
+  transition-timing-function: var(--s-motion-easing-emphasized, ${scheme.motion.easing.emphasized});
+  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
 }
 :host([checked]){
   color: var(--s-color-primary, ${scheme.color.primary});
@@ -29,6 +32,12 @@ const style = /*css*/`
     opacity: .38 !important;
   }
 }
+:host(:is([pressed], [hovered])){
+  .layout>.ripple{
+    opacity: .12;
+    transform: scale(1);
+  }
+}
 .layout{
   position: relative;
   height: 100%;
@@ -37,6 +46,17 @@ const style = /*css*/`
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
+  .ripple{
+    aspect-ratio: 1;
+    -webkit-aspect-ratio: 1;
+    height: 100%;
+    width: auto;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0;
+    transform: scale(.5);
+    transition-property: opacity, background, transform;
+  }
 }
 .unchecked,
 .checked{
@@ -54,8 +74,6 @@ const style = /*css*/`
   transform: scale(.5);
   opacity: 0;
   transition-property: transform, opacity;
-  transition-timing-function: var(--s-motion-easing-emphasized, ${scheme.motion.easing.emphasized});
-  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
 }
 :host([checked]:not([indeterminate])) .checked{
   opacity: 1;
@@ -66,13 +84,6 @@ const style = /*css*/`
   height: 60%;
   transform: scale(0.4);
   background: currentColor;
-  border-radius: 50%;
-}
-.ripple{
-  aspect-ratio: 1;
-  -webkit-aspect-ratio: 1;
-  height: 100%;
-  width: auto;
   border-radius: 50%;
 }
 svg,
@@ -94,13 +105,15 @@ const template = /*html*/`
   <slot class="checked" name="checked">
     <div class="dot"></div>
   </slot>
+  <div class="ripple" part="ripple"></div>
 </div>
 <slot></slot>
-<s-ripple class="ripple" part="ripple"></s-ripple>
 `
 
 export class Radio extends useElement({
   focused: true,
+  pressed: true,
+  hovered: true,
   style, template, props,
   setup() {
     this.addEventListener('click', () => {

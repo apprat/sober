@@ -67,7 +67,7 @@ export class Drawer extends useElement({
     new ResizeObserver(() => this.toggleAttribute('floating', this.offsetWidth <= this.breakpointFloating)).observe(this)
     return {
       setStartOpened: (v) => {
-        if (!this.isConnected || !states.initialized) return
+        if (!this.isConnected) return
         start.style.display = 'block'
         start.animate({ width: [`${start.offsetWidth}px`, '0'] }, { duration: 2000 })
       },

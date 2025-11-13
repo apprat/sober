@@ -91,6 +91,8 @@ const template = /*html*/`
 export class FAB extends useElement({
   style: [buttonStyle, style],
   focused: true,
+  pressed: true,
+  hovered: true,
   props, template,
 }) { }
 

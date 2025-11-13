@@ -4,8 +4,9 @@ import { useComputedStyle } from '../core/utils/CSS.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
-  centered: false,
-  disabled: false
+  disabled: false,
+  hoverDisabled: false,
+  $delay: 0
 })
 
 
@@ -24,19 +25,19 @@ const style = /*css*/`
   inset: 0;
   content: '';
   opacity: 0;
-  background: var(--ripple-color, currentColor);
+  background: var(--s-ripple-color, currentColor);
   transition: opacity var(--s-motion-duration-short4, ${scheme.motion.duration.short4}) var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
 }
 .hovered{
-  opacity: var(--ripple-hover-opacity, .08);
+  opacity: var(--s-ripple-hover-opacity, .12);
 }
 .ripple{
   position: absolute;
   inset: 0;
   opacity: 0;
   border-radius: 50%;
-  background: currentColor;
-  filter: opacity(var(--ripple-opacity, .18));
+  background: var(--s-ripple-color, currentColor);
+  filter: opacity(var(--s-ripple-opacity, .18));
   animation-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
   animation-duration: var(--s-motion-duration-long4, ${scheme.motion.duration.long4});
 }
@@ -57,24 +58,20 @@ const startRipple = (options: {
   animateOptions: { duration: number, easing: string }
 }) => {
   let size = Math.sqrt(options.root.offsetWidth ** 2 + options.root.offsetHeight ** 2)
-  const coordinate = { x: '50%', y: '50%' }
-  if (!options.root.centered) {
-    const rect = options.root.getBoundingClientRect()
-    const x = Math.max(rect.left, Math.min(options.event.clientX, rect.left + rect.width))
-    const y = Math.max(rect.top, Math.min(options.event.clientY, rect.top + rect.height))
-    const state = { x: x - rect.left, y: y - rect.top, h: rect.height / 2, w: rect.width / 2 }
-    const edgeW = (Math.abs(state.h - state.y) + state.h) * 2
-    const edgeH = (Math.abs(state.w - state.x) + state.w) * 2
-    size = Math.sqrt(edgeW ** 2 + edgeH ** 2)
-    coordinate.x = `${state.x}px`
-    coordinate.y = `${state.y}px`
-  }
+  const rect = options.root.getBoundingClientRect()
+  const x = Math.max(rect.left, Math.min(options.event.clientX, rect.left + rect.width))
+  const y = Math.max(rect.top, Math.min(options.event.clientY, rect.top + rect.height))
+  const state = { x: x - rect.left, y: y - rect.top, h: rect.height / 2, w: rect.width / 2 }
+  const edgeW = (Math.abs(state.h - state.y) + state.h) * 2
+  const edgeH = (Math.abs(state.w - state.x) + state.w) * 2
+  size = Math.sqrt(edgeW ** 2 + edgeH ** 2)
+  const coordinate = { x: `${state.x}px`, y: `${state.y}px` }
   let newRipple = options.ripple
   if (newRipple.getAnimations().length > 0) {
     newRipple = options.ripple.cloneNode() as HTMLDivElement
     options.shadowRoot.appendChild(newRipple)
   }
-  options.parent.setAttribute('pressed', '')
+  options.parent.setAttribute('ripple-showed', '')
   const animation = newRipple.animate({
     opacity: [1, 1],
     width: [`${size}px`, `${size}px`],
@@ -84,8 +81,8 @@ const startRipple = (options: {
     top: [coordinate.y, coordinate.y],
   }, { ...options.animateOptions, fill: 'forwards' })
   return () => {
-    if (!options.parent.hasAttribute('pressed')) return
-    options.parent.removeAttribute('pressed')
+    if (!options.parent.hasAttribute('ripple-showed')) return
+    options.parent.removeAttribute('ripple-showed')
     const time = Number(animation.currentTime)
     const short = options.animateOptions.duration / 2
     const diff = options.animateOptions.duration - short
@@ -108,27 +105,35 @@ export class Ripple extends useElement({
     }
     const state = { parent: undefined as HTMLElement | undefined }
     const run = (event: PointerEvent) => startRipple({ root: this, parent: state.parent!, ripple, shadowRoot, event, animateOptions: getAnimateOptions() })
-    const down = (event: PointerEvent) => {
-      if (this.disabled || event.button !== 0) return
+    const start = (event: PointerEvent) => {
+      const cssDisabled = computedStyle.getValue('--ripple-disabled')
+      const rippled = ['', 'none'].includes(cssDisabled) ? this.disabled : Boolean(cssDisabled)
+      if (rippled || event.button !== 0) return
       if (event.pointerType === 'mouse') return document.addEventListener('pointerup', run(event), { once: true })
-      const data: { timer?: number, upper?: boolean } = {}
-      let remove: Function
-      data.timer = setTimeout(() => {
-        remove = run(event)
-        document.removeEventListener('touchmove', move)
-        if (data.upper) remove()
-      }, 50)
-      document.addEventListener('touchend', () => {
-        if (!remove) return data.upper = true
-        remove()
-      }, { once: true })
-      const move = () => clearTimeout(data.timer)
-      document.addEventListener('touchmove', move, { once: true })
+      const cssDelay = computedStyle.getValue('--s-ripple-delay')
+      const delay = ['', 'none'].includes(cssDelay) ? this.delay : Number(cssDelay)
+      if (delay <= 0) return document.addEventListener('touchend', run(event), { once: true })
+      let stop: Function | null = null
+      const timer = setTimeout(() => stop = run(event), delay)
+      const removeEvents = () => {
+        document.removeEventListener('touchmove', calcel)
+        document.removeEventListener('touchend', calcel)
+      }
+      const calcel = (e: TouchEvent) => {
+        removeEvents()
+        clearTimeout(timer)
+        stop && stop()
+        if (e.type === 'touchmove') return
+        !stop && run(event)()
+      }
+      document.addEventListener('touchmove', calcel)
+      document.addEventListener('touchend', calcel)
     }
     const hovering = (force = true) => {
-      if (!device.mouseEnabled || this.disabled) return
-      state.parent?.toggleAttribute('hovered', force)
-      hover.classList.toggle('hovered', force)
+      if (!device.mouseEnabled) return
+      const cssDisabled = computedStyle.getValue('--s-ripple-hover-disabled')
+      const hovered = ['', 'none'].includes(cssDisabled) ? this.hoverDisabled : Boolean(cssDisabled)
+      !hovered && hover.classList.toggle('hovered', force)
     }
     return {
       onMounted: (parent) => {
@@ -137,6 +142,7 @@ export class Ripple extends useElement({
         state.parent = parentElement
         const hover = () => hovering()
         const unHover = () => hovering(false)
+        const down = (event: PointerEvent) => start(event)
         parentElement.addEventListener('pointerdown', down)
         parentElement.addEventListener('mouseenter', hover)
         parentElement.addEventListener('mouseleave', unHover)

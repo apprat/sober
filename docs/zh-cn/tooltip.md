@@ -11,24 +11,33 @@
 
 ---
 
-默认情况下，该组件会寻找合适的位置显示，你无需关心它的出现位置，但是你依旧可以设置 `placement` 属性默认方向（如果你希望响应式变化，请考虑使用 CSS 变量 `--tooltip-placement` 去设置），它只会影响在空间足够显示的情况下的显示位置，如果空间不足，则会自动调整显示位置
+默认情况下，该组件会寻找合适的位置显示，你无需关心它的出现位置，但是你依旧可以设置 `gravity` 属性默认位置，它只会影响在空间足够显示的情况下的显示位置，如果空间不足，则会自动调整显示位置
 
 ```html preview
 <s-button>
   top
-  <s-tooltip placement="top"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
+  <s-tooltip gravity="top"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
 </s-button>
 <s-button>
   bottom
-  <s-tooltip placement="bottom"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
+  <s-tooltip gravity="bottom"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
 </s-button>
 <s-button>
   left
-  <s-tooltip placement="left"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
+  <s-tooltip gravity="left"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
 </s-button>
 <s-button>
   right
-  <s-tooltip placement="right"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
+  <s-tooltip gravity="right"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
+</s-button>
+```
+
+自定义样式
+
+```html preview
+<s-button>
+  text
+  <s-tooltip style="background: red; color: #fff;padding: 8px 12px; border-radius: 20px"> 测试文本 </s-tooltip>
 </s-button>
 ```
 
@@ -36,10 +45,10 @@
 
 ## 属性
 
-| 名称      | 类型                     | 默认值 | 同步 | 介绍                                                                   |
-| --------- | ------------------------ | ------ | ---- | ---------------------------------------------------------------------- |
-| placement | bottom, top, left, right | bottom | ✔️ | 显示位置，该属性只影响默认位置，在屏幕无法完整显示时会自动调整显示方向 |
-| disabled  | boolean                  | false  | ✔️ | 禁用的，设置该属性后不再主动触发显示                                   |
+| 名称     | 类型                     | 默认值 | 同步 | 介绍                                                                   |
+| -------- | ------------------------ | ------ | ---- | ---------------------------------------------------------------------- |
+| disabled | boolean                  | false  | ✔️ | 禁用的，设置该属性后不再主动触发显示                                   |
+| gravity  | bottom, top, left, right | bottom | ✔️ | 显示位置，该属性只影响默认位置，在屏幕无法完整显示时会自动调整显示方向 |
 
 ---
 
@@ -55,14 +64,14 @@
 
 ---
 
-## 方法
+## 原型
 
-- `show(parent: HTMLElement)`： 显示， `parent` 目标元素，
-- `close(parent: HTMLElement)`： 关闭。
+- `open(parent: HTMLElement)`： 显示， `parent` 定位元素，
+- `close(parent: HTMLElement)`： 关闭，`parent` 定位元素。
 
 ---
 
-## HTML 属性
+## HTML 标记属性
 
 | 名称           | 说明                          |
 | -------------- | ----------------------------- |
@@ -72,8 +81,9 @@
 
 ---
 
-## 样式变量
+## CSS 样式变量
 
-| 名称                | 说明                                                       |
-| ------------------- | ---------------------------------------------------------- |
-| --tooltip-placement | 该 CSS 变量和 `placement` 属性一致，区别是该变量优先级更高 |
+| 名称               | 说明                                                      |
+| ------------------ | --------------------------------------------------------- |
+| --s-tooltip-disabled | 该 CSS 变量和 `disabled` 属性一致，区别是该变量优先级更高 |
+| --s-tooltip-gravity  | 该 CSS 变量和 `gravity` 属性一致，区别是该变量优先级更高  |

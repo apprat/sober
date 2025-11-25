@@ -33,11 +33,11 @@ const style = /*css*/`
   border-radius: 28px;
   white-space: normal;
   font-size: .875rem;
-  animation-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  animation-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
-  background: var(--s-color-surface-container-high, ${scheme.color.surfaceContainerHigh});
-  color: var(--s-color-on-surface, ${scheme.color.onSurface});
-  box-shadow: var(--s-elevation-level4, ${scheme.elevation.level4});
+  animation-timing-function: ${scheme.motion.easing.standard};
+  animation-duration: ${scheme.motion.duration.short4};
+  background: ${scheme.color.surfaceContainerHigh};
+  color: ${scheme.color.onSurface};
+  box-shadow: ${scheme.elevation.level4};
 }
 :host([size=full-screen]){
   max-width: none;
@@ -62,6 +62,13 @@ const style = /*css*/`
   box-shadow: inherit;
   border-radius: inherit;
   padding: inherit;
+  &::backdrop{
+    filter: opacity(.75);
+    background: ${scheme.color.scrim};
+  }
+  &.opened{
+    display: flex;
+  }
   .layout{
     flex-grow: 1;
     height: -moz-available;
@@ -71,41 +78,34 @@ const style = /*css*/`
     flex-direction: column;
     max-width: -moz-available;
     max-width: -webkit-fill-available;
+    ::slotted([slot=title]){
+      font-size: calc(var(--s-font-size) * 24px);
+      font-weight: 600;
+      padding: 24px 24px 0;
+      line-height: 1.6;
+      flex-shrink: 0;
+    }
+    ::slotted([slot=text]){
+      cursor: text;
+      padding: 16px 24px;
+      line-height: 1.6;
+      word-break: break-all;
+      overflow: auto;
+      outline: none;
+      flex-grow: 1;
+    }
+    .actions{
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0px 14px;
+      flex-shrink: 0;
+      ::slotted([slot=action]){
+        min-width: 64px;
+        margin: 16px 2px;
+      }
+    }
   }
-}
-.popover::backdrop{
-  filter: opacity(.75);
-  background: var(--s-color-scrim, ${scheme.color.scrim});
-}
-.popover.opened{
-  display: flex;
-}
-.actions{
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0px 14px;
-  flex-shrink: 0;
-}
-::slotted([slot=title]){
-  font-size: calc(var(--s-font-size) * 24px);
-  font-weight: 600;
-  padding: 24px 24px 0;
-  line-height: 1.6;
-  flex-shrink: 0;
-}
-::slotted([slot=text]){
-  cursor: text;
-  padding: 16px 24px;
-  line-height: 1.6;
-  word-break: break-all;
-  overflow: auto;
-  outline: none;
-  flex-grow: 1;
-}
-::slotted([slot=action]){
-  min-width: 64px;
-  margin: 16px 2px;
 }
 `
 

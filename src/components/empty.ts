@@ -9,18 +9,18 @@ const style = /*css*/`
   align-items: center;
   padding: 48px 16px;
   gap: 12px;
-  font-size: .75rem;
+  font-size: calc(var(--s-font-size, 1) * 12px);
   border-radius: 4px;
-  color: var(--s-color-outline, ${scheme.color.outline});
+  color: ${scheme.color.outline};
 }
 .shadow{
-  fill: var(--s-color-surface-container-high, ${scheme.color.surfaceContainerHigh});
+  fill: ${scheme.color.surfaceContainerHigh};
 }
 .box{
-  fill: var(--s-color-surface-container-highest, ${scheme.color.surfaceContainerHighest});
+  fill: ${scheme.color.surfaceContainerHighest};
 }
 .border{
-  stroke: var(--s-color-outline, ${scheme.color.outline});
+  stroke: ${scheme.color.outline};
 }
 ::slotted(:is(svg, s-icon)){
   color: currentColor;

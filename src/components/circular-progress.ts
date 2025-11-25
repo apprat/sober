@@ -21,9 +21,9 @@ const style = /*css*/`
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   border-radius: 50%;
-  transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
-  color: var(--s-color-primary, ${scheme.color.primary});
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.short4};
+  color: ${scheme.color.primary};
 }
 .layout{
   display: block;
@@ -57,7 +57,7 @@ const style = /*css*/`
 .track{
   --s_track-offset: 35px;
   transform: rotate(250deg);
-  stroke: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
+  stroke: ${scheme.color.secondaryContainer};
   stroke-dashoffset: calc(min(var(--s_max), var(--s_max) / 100 * var(--s_value) + var(--s_track-offset)) * -1);
 }
 .indicator{

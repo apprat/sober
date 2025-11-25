@@ -1,4 +1,4 @@
-import { useProps, useElement, useThrottle } from '../core/element.js'
+import { useProps, useElement } from '../core/element.js'
 import * as scheme from '../core/scheme.js'
 import { BaseSlider } from './base-slider.js'
 
@@ -14,104 +14,136 @@ const props = useProps({
 
 const style = /*css*/`
 :host{
-  display: inline-grid;
+  display: inline-block;
   vertical-align: middle;
   height: 36px;
   position: relative;
-  grid-template-areas: "a" "a";
   font-size: 36px;
   line-height: 1;
   cursor: pointer;
   border-radius: 4px;
-  color: var(--s-color-primary, ${scheme.color.primary});
-  transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
+  color:  ${scheme.color.primary};
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.short4};
 }
-:host([disabled]){
-  pointer-events: none;
-  color: color-mix(in srgb, var(--s-color-on-surface, ${scheme.color.onSurface}) 38%, transparent) !important;
-  .track{
-    color: color-mix(in srgb, var(--s-color-on-surface, ${scheme.color.onSurface}) 12%, transparent) !important;
-  }
-}
-:host([reversed]){
-  .slider[sliding]+.fill{
-    box-shadow: 1px 0 0 inset currentColor;
-  }
-  .track{
-    justify-self: start;
-    justify-content: flex-start;
-  }
-  .fill{
-    justify-self: end;
-    justify-content: flex-end;
-  }
-}
-:host([readonly]){
-  cursor: default;
-  .slider{
-    pointer-events: none;
-  }
-}
-.slider{
-  position: absolute;
-  inset: 0;
+.layout{
+  --s_value: 50%;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  opacity: 0;
-  --base-slider-thumb-size: 0px;
-}
-.slider[sliding]+.fill{
-  box-shadow: -1px 0 0 inset currentColor;
 }
 .track,
 .fill{
   display: flex;
-  overflow: hidden;
+  position: relative;
   height: 100%;
-  width: 50%;
-  grid-area: a;
+  flex-shrink: 0;
 }
 .fill{
-  transition-property: box-shadow;
-  transition-duration: inherit;
-  transition-timing-function: inherit; 
+  position: relative;
+  top: -100%;
+  clip-path: polygon(0 0, 0 100%, var(--s_value) 100%, var(--s_value) 0);
 }
 .track{
-  justify-self: end;
-  justify-content: flex-end;
-  color: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
+  clip-path: polygon(var(--s_value) 0, var(--s_value) 100%, 100% 100%, 100% 0);
+  color: ${scheme.color.secondaryContainer};
+}
+.slider{
+  position: absolute;
+  inset: 0;
+  height: auto;
+  color: inherit;
+  --base-slider-thumb-size: 0px;
+  &::part(track-fill),
+  &::part(track-end),
+  &::part(thumb-end){
+    opacity: 0;
+    content-visibility: hidden;
+  }
+  .indicator{
+    position: absolute;
+    background: currentColor;
+    width: 2px;
+    border-radius: 1px;
+    height: 100%;
+    transform: translateX(-1px);
+    left: var(--s_value);
+    opacity: 0;
+    transition-property: opacity;
+  }
+  &[end-pressed]{
+    .indicator{
+      opacity: 1;
+    }
+  }
 }
 svg,
-::slotted(*){
+::slotted(:is(svg, s-icon)){
+  flex-shrink: 0;
   height: 100%;
   width: auto;
-  flex-shrink: 0;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   fill: currentColor;
   color: currentColor;
 }
+:host([disabled]){
+  pointer-events: none;
+  color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
+  .track{
+    color: color-mix(in srgb, ${scheme.color.onSurface} 12%, transparent) !important;
+  }
+}
+:host([reversed]){
+  .indicator{
+    left: auto;
+    right: var(--s_value);
+    transform: translateX(1px);
+  }
+  .track{
+    clip-path: polygon(0 0, calc(100% - var(--s_value)) 0, calc(100% - var(--s_value)) 100%, 0 100%);
+  }
+  .fill{
+    clip-path: polygon(calc(100% - var(--s_value)) 0, calc(100% - var(--s_value)) 100%, 100% 100%, 100% 0);
+  }
+}
+:host([readonly]){
+  cursor: default;
+  pointer-events: none;
+}
+@supports not (color: color-mix(in srgb, black, white)){
+  :host([disabled]){
+    color: ${scheme.color.outlineVariant} !important;
+    .track{
+      color: ${scheme.color.surfaceContainerHigh} !important;
+    }
+  }
+}
 `
 const template = /*html*/`
-<s-base-slider tabindex="-1" class="slider" part="slider" mode="single" slidingMode="all" end="${props.value}" max="${props.max}" min="${props.min}" step="${props.step}"></s-base-slider>
-<slot class="fill" name="fill" part="fill">
-  <svg viewBox="0 -960 960 960" id="fill">
-    <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"></path>
-  </svg>
-  <svg><use xlink:href="#fill"></use></svg>
-  <svg><use xlink:href="#fill"></use></svg>
-  <svg><use xlink:href="#fill"></use></svg>
-  <svg><use xlink:href="#fill"></use></svg>
-</slot>
-<slot class="track" name="track" part="track">
-  <svg viewBox="0 -960 960 960" id="track">
-    <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"></path>
-  </svg>
-  <svg><use xlink:href="#track"></use></svg>
-  <svg><use xlink:href="#track"></use></svg>
-  <svg><use xlink:href="#track"></use></svg>
-  <svg><use xlink:href="#track"></use></svg>
-</slot>
+<div class="layout" part="layout">
+  <slot class="track" name="track" part="track">
+    <svg viewBox="0 -960 960 960" id="track">
+      <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"></path>
+    </svg>
+    <svg><use xlink:href="#track"></use></svg>
+    <svg><use xlink:href="#track"></use></svg>
+    <svg><use xlink:href="#track"></use></svg>
+    <svg><use xlink:href="#track"></use></svg>
+  </slot>
+  <slot class="fill" name="fill" part="fill">
+    <svg viewBox="0 -960 960 960" id="fill">
+      <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"></path>
+    </svg>
+    <svg><use xlink:href="#fill"></use></svg>
+    <svg><use xlink:href="#fill"></use></svg>
+    <svg><use xlink:href="#fill"></use></svg>
+    <svg><use xlink:href="#fill"></use></svg>
+  </slot>
+  <s-base-slider tabindex="-1" class="slider" part="slider" slidingMode="all" end="${props.value}" max="${props.max}" min="${props.min}" step="${props.step}">
+    <div class="indicator" part="indicator"></div>
+  </s-base-slider>
+</div>
 `
 
 export class Rating extends useElement({
@@ -121,12 +153,10 @@ export class Rating extends useElement({
   style, props, template,
   setup(shadowRoot) {
     const baseSlider = shadowRoot.querySelector<BaseSlider>('s-base-slider')!
-    const track = shadowRoot.querySelector<HTMLSlotElement>('.track')!
-    const fill = shadowRoot.querySelector<HTMLSlotElement>('.fill')!
+    const layout = shadowRoot.querySelector<HTMLSlotElement>('.layout')!
     const render = () => {
       const v = ((baseSlider.end - this.min) / (this.max - this.min)) * 100
-      track.style.width = (100 - v) + '%'
-      fill.style.width = v + '%'
+      layout.style.setProperty('--s_value', `${v}%`)
     }
     baseSlider.oninput = () => {
       this.dispatchEvent(new Event('input'))
@@ -144,7 +174,7 @@ export class Rating extends useElement({
       setStep: (v) => baseSlider.step = v,
       getValue: () => baseSlider.end,
       setValue: (v) => baseSlider.end = v,
-      setReversed: (v) => baseSlider.mode = v ? 'single-reversed' : 'single',
+      setReversed: (v) => baseSlider.mode = v ? 'reversed' : 'single',
     }
   }
 }) { }

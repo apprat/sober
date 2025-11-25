@@ -9,13 +9,21 @@ const props = useProps({
   $step: 1,
   $min: 0,
   $max: 100,
+  $steps: '',
   clickChanged: true,
   slidingPriority: false,
-  mode: ['single', 'single-reversed', 'range'],
+  mode: ['single', 'reversed', 'range'],
   slidingMode: ['thumb', 'all', 'all-cumulative'],
   variant: ['standard', 'segmented'],
   orientation: ['horizontal', 'vertical'],
 })
+
+const events = {
+  press: CustomEvent<{ name: 'start' | 'end' }>,
+  pressout: CustomEvent<{ name: 'start' | 'end' }>,
+  hover: CustomEvent<{ name: 'start' | 'end' }>,
+  hoverout: CustomEvent<{ name: 'start' | 'end' }>,
+}
 
 const style = /*css*/`
 :host{
@@ -23,9 +31,9 @@ const style = /*css*/`
   align-items: center;
   justify-content: center;
   position: relative;
-  color: var(--s-color-primary, ${scheme.color.primary});
-  transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
+  color: ${scheme.color.primary};
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.short4};
   height: 24px;
   cursor: pointer;
 }
@@ -51,13 +59,12 @@ const style = /*css*/`
 }
 slot:is([name=track-start], [name=track-fill], [name=track-end], [name=thumb-start], [name=thumb-end]){
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-shrink: 0;
   position: absolute;
 }
 slot:is([name=track-start], [name=track-fill], [name=track-end]){
-  background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
+  background: ${scheme.color.secondaryContainer};
   border-radius: 4px;
   height: calc(100% / 3);
   left: 0;
@@ -80,6 +87,7 @@ slot:is([name=thumb-start], [name=thumb-end]){
   background: currentColor;
   border-radius: 50%;
   cursor: grab;
+  justify-content: center;
   &::before,
   &::after{
     content: '';
@@ -119,7 +127,7 @@ slot[name=thumb-end]{
   opacity: .12;
   transform: scale(1);
 }
-:host([mode=single-reversed]){
+:host([mode=reversed]){
   slot[name=track-fill]{
     left: auto;
     right: var(--s_track-fill-position);
@@ -194,7 +202,7 @@ slot[name=thumb-end]{
     bottom: calc(var(--s_end) * 1%);
     transform: translateY(calc(var(--s_end) * 1%));
   }
-  &:host([mode=single-reversed]){
+  &:host([mode=reversed]){
     slot:is([name=thumb-start], [name=thumb-end]){
       right: auto;
       top: calc(var(--s_end) * 1%);
@@ -207,6 +215,11 @@ slot[name=thumb-end]{
     slot[name=track-end]{
       inset: auto;
       bottom: 0;
+    }
+  }
+  &:host([mode=range]){
+    slot[name=track-start]{
+      height: var(--s_track-start-size);
     }
   }
 }
@@ -231,18 +244,63 @@ const whichIsCloser = (v: number, start: number, end: number) => {
   return toSatart < toEnd ? 1 : toEnd < toSatart ? 2 : 0
 }
 const findClosestStep = (num: number, step: number, max: number) => Math.max(0, Math.min(max / step, Math.round(num / step))) * step
+const findClosestStepFromArray = (num: number, arr: number[], min: number, max: number) => {
+  return arr.reduce((closest, current) => {
+    if (current < min || current > max) return closest
+    const currentDiff = Math.abs(current - num)
+    const closestDiff = Math.abs(closest - num)
+    return currentDiff < closestDiff ? current : closest
+  })
+}
 const orientation = {
   horizontal: { offsetWidth: 'offsetWidth', clientX: 'clientX', clientY: 'clientY', left: 'left' },
   vertical: { offsetWidth: 'offsetHeight', clientX: 'clientY', clientY: 'clientX', left: 'top' }
 } as const
 const getEventNames = (type: string) => {
-  const mouse = { move: 'mousemove', up: 'mouseup' } as const
+  const mouse = { move: 'pointermove', up: 'pointerup' } as const
   const touch = { move: 'touchmove', up: 'touchend' } as const
   return type === 'mouse' ? mouse : touch
 }
 
+const onKeydown = (el: BaseSlider, key: string, steps: number[]) => {
+  type K = 'start' | 'end'
+  const sub = (key: K = 'end') => {
+    const info = { old: el[key], min: el.min, value: el[key] - el.step }
+    if (steps.length > 0) {
+      info.min = steps[0]
+      info.value = steps[steps.findLastIndex((v) => v < info.old)] ?? info.min
+    }
+    el[key] = Math.max(info.value, key === 'end' ? el.start : info.min)
+  }
+  const add = (key: K = 'end') => {
+    const info = { old: el[key], max: el.max, value: el[key] + el.step }
+    if (steps.length > 0) {
+      info.max = steps[steps.length - 1]
+      info.value = steps.find((v) => v > info.old) ?? info.max
+    }
+    el[key] = Math.min(info.value, key === 'end' ? info.max : el.end)
+  }
+  const k = key as keyof typeof calls
+  let calls: { [key: string]: Function } = { ArrowLeft: sub, ArrowRight: add }
+  const { start, end } = el
+  if (el.mode === 'reversed') calls = { ArrowLeft: add, ArrowRight: sub }
+  if (el.mode === 'range') calls = { ArrowLeft: sub, ArrowRight: add, ArrowUp: () => sub('start'), ArrowDown: () => add('start') }
+  if (el.orientation === 'vertical') {
+    calls = { ArrowUp: add, ArrowDown: sub }
+    if (el.mode === 'reversed') calls = { ArrowUp: sub, ArrowDown: add }
+    if (el.mode === 'range') calls = { ArrowUp: add, ArrowDown: sub, ArrowLeft: () => add('start'), ArrowRight: () => sub('start') }
+  }
+  calls[k]?.()
+  if (start !== el.start || end !== el.end) {
+    el.dispatchEvent(new Event('input'))
+    el.dispatchEvent(new Event('change'))
+    return true
+  }
+  return false
+}
+
 export class BaseSlider extends useElement({
-  props, template, style,
+  props, template, style, events,
   focused: true,
   pressed: true,
   hovered: true,
@@ -251,11 +309,11 @@ export class BaseSlider extends useElement({
     const thumbStartSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=thumb-start]')!
     const thumbEndSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=thumb-end]')!
     const computedStyle = useComputedStyle(this)
-    const getPercent = (v: number) => ((v - this.min) / (this.max - this.min)) * 100
+    let steps: number[] = []
     const render = () => {
       const [start, end] = [
-        findClosestStep(getPercent(this.start), this.step / this.max * 100, 100),
-        findClosestStep(getPercent(this.end), this.step / this.max * 100, 100)
+        (this.start - this.min) / (this.max - this.min) * 100,
+        (this.end - this.min) / (this.max - this.min) * 100
       ].sort((a, b) => a - b)
       const name = '--s_'
       layout.style.setProperty(`${name}diff`, `${end - start}`)
@@ -284,10 +342,12 @@ export class BaseSlider extends useElement({
       return (['end', 'start', 'end'] as const)[closer]
     }
     const getValue = (left: number, thumbSize: number, size: number) => {
-      if ((this.orientation === 'horizontal' && this.mode === 'single-reversed') || (this.orientation === 'vertical' && this.mode !== 'single-reversed')) left = size - left
+      if ((this.orientation === 'horizontal' && this.mode === 'reversed') || (this.orientation === 'vertical' && this.mode !== 'reversed')) left = size - left
       const offset = Math.min(Math.max(0 + thumbSize / 2, (left / size * 100)), 100 - thumbSize / 2)
       const percent = ((offset - thumbSize / 2) / (100 - thumbSize)) * 100
-      const newValue = findClosestStep(this.min + (percent / 100) * (this.max - this.min), this.step, this.max)
+      const max = this.max - this.min
+      const val = percent / 100 * max
+      const newValue = steps.length > 0 ? findClosestStepFromArray(val, steps, this.min, this.max) : findClosestStep(val, this.step, max) + this.min
       return newValue
     }
     let touched = false
@@ -308,15 +368,17 @@ export class BaseSlider extends useElement({
         this.dispatchEvent(new Event('change'))
       }
     })
+    const setPress = (name: 'start' | 'end') => {
+      if (this.hasAttribute(`${name}-pressed`)) return
+      this.setAttribute(`${name}-pressed`, '')
+      this.dispatchEvent(new CustomEvent('press', { detail: { name } }))
+    }
     const down = (event: PointerEvent, name?: 'start' | 'end') => {
       const ori = orientation[this.orientation]
       const rect = this.getBoundingClientRect()
       const size = this[ori.offsetWidth]
       const notThumb = !name
-      if (!name) {
-        name = this.mode === 'range' ? getCloser(event[ori.clientX]) : 'end'
-        event.pointerType === 'mouse' && this.setAttribute(`${name}-pressed`, '')
-      }
+      if (!name) name = this.mode === 'range' ? getCloser(event[ori.clientX]) : 'end'
       const thumbSize = { start: thumbStartSlot, end: thumbEndSlot }[name][ori.offsetWidth] / size * 100
       const startValue = this.start
       const endValue = this.end
@@ -341,12 +403,12 @@ export class BaseSlider extends useElement({
         let left = (e[ori.clientX] - rect[ori.left]) + offsetClientX
         let newValue = getValue(left, thumbSize, size)
         const v = { start: Math.min(newValue, endValue), end: Math.max(newValue, startValue) }[name]
+        !this.hasAttribute('sliding') && this.setAttribute('sliding', '')
+        setPress(name)
         if (v !== this[name]) {
           this[name] = v
           this.dispatchEvent(new Event('input'))
         }
-        !this.hasAttribute('sliding') && this.setAttribute('sliding', '')
-        !this.hasAttribute(`${name}-pressed`) && this.setAttribute(`${name}-pressed`, '')
       }
       const up = () => {
         allowed = true
@@ -355,6 +417,7 @@ export class BaseSlider extends useElement({
         this.removeAttribute('start-pressed')
         this.removeAttribute('end-pressed')
         this.removeAttribute('sliding')
+        this.dispatchEvent(new CustomEvent('pressout', { detail: { name } }))
         if (startValue !== this.start || endValue !== this.end) this.dispatchEvent(new Event('change'))
       }
       const eventNames = getEventNames(event.pointerType)
@@ -372,52 +435,26 @@ export class BaseSlider extends useElement({
     const thumbDown = (event: PointerEvent, name: 'start' | 'end') => {
       if (event.button !== 0) return
       allowed = false
-      this.setAttribute(`${name}-pressed`, '')
+      setPress(name)
       down(event, name)
     }
     thumbStartSlot.addEventListener('pointerdown', (event) => thumbDown(event, 'start'))
     thumbEndSlot.addEventListener('pointerdown', (event) => thumbDown(event, 'end'))
-    thumbStartSlot.onmouseenter = () => device.mouseEnabled && this.setAttribute('start-hovered', '')
-    thumbStartSlot.onmouseleave = () => device.mouseEnabled && this.removeAttribute('start-hovered')
-    thumbEndSlot.onmouseenter = () => device.mouseEnabled && this.setAttribute('end-hovered', '')
-    thumbEndSlot.onmouseleave = () => device.mouseEnabled && this.removeAttribute('end-hovered')
-    const keydown = (key: string) => {
-      const subEnd = () => this.end = Math.max(this.end - this.step, this.start)
-      const addEnd = () => this.end = Math.max(this.end + this.step, this.start)
-      const subStart = () => this.start = Math.min(this.start - this.step, this.end)
-      const addStart = () => this.start = Math.min(this.start + this.step, this.end)
-      let calls = { ArrowLeft: subEnd, ArrowRight: addEnd, ArrowUp: subStart, ArrowDown: addStart }
-      let k = key as keyof typeof calls
-      if (!(key in calls)) return false
-      const startValue = this.start
-      const endValue = this.end
-      if (this.orientation === 'horizontal') {
-        if (this.mode === 'single') {
-          calls.ArrowUp = subEnd
-          calls.ArrowDown = addEnd
-        }
-        if (this.mode === 'single-reversed') {
-          calls.ArrowUp = calls.ArrowLeft = addEnd
-          calls.ArrowDown = calls.ArrowRight = subEnd
-        }
-      } else {
-        calls = { ArrowLeft: addStart, ArrowRight: subStart, ArrowUp: addEnd, ArrowDown: subEnd }
-        if (this.mode === 'single') {
-          calls.ArrowLeft = addEnd
-          calls.ArrowRight = subEnd
-        }
-        if (this.mode === 'single-reversed') {
-          calls.ArrowLeft = calls.ArrowUp = subEnd
-          calls.ArrowRight = calls.ArrowDown = addEnd
-        }
-      }
-      calls[k]()
-      if (startValue !== this.start || endValue !== this.end) {
-        this.dispatchEvent(new Event('input'))
-        this.dispatchEvent(new Event('change'))
-      }
-      return true
+    const hover = (name: 'start' | 'end' = 'end') => {
+      if (!device.mouseEnabled || this.hasAttribute(`${name}-hovered`)) return
+      this.setAttribute(`${name}-hovered`, '')
+      this.dispatchEvent(new CustomEvent('hover', { detail: { name } }))
     }
+    const hoverOut = (name: 'start' | 'end' = 'end') => {
+      if (!device.mouseEnabled || !this.hasAttribute(`${name}-hovered`)) return
+      this.removeAttribute(`${name}-hovered`)
+      this.dispatchEvent(new CustomEvent('hoverout', { detail: { name } }))
+    }
+    thumbStartSlot.onmouseenter = () => hover('start')
+    thumbStartSlot.onmouseleave = () => hoverOut('start')
+    thumbEndSlot.onmouseenter = () => hover()
+    thumbEndSlot.onmouseleave = () => hoverOut()
+    const keydown = (key: string) => onKeydown(this as never, key, steps)
     this.addEventListener('keydown', (e) => {
       if (!keydown(e.key)) return
       e.preventDefault()
@@ -427,7 +464,7 @@ export class BaseSlider extends useElement({
       expose: { keydown },
       onAttributeChanged: (name) => ['start', 'end', 'max', 'min', 'step', 'mode'].includes(name) && useThrottle(render),
       getStart: () => {
-        if (this.mode !== 'range') return 0
+        if (this.mode !== 'range') return info.props.min
         return Math.max(Math.min(info.props.start, info.props.max), info.props.min)
       },
       getEnd: () => Math.min(Math.max(info.props.end, info.props.min), info.props.max),
@@ -435,6 +472,11 @@ export class BaseSlider extends useElement({
       getMin: () => {
         if (info.props.min > info.props.max) return 0
         return info.props.min % info.props.step === 0 ? info.props.min : 0
+      },
+      getSteps: () => steps.join(),
+      setSteps: (v) => {
+        if (v === '') return steps = []
+        steps = v.split(',').map((v) => Number(v)).sort((a, b) => a - b)
       }
     }
   }

@@ -13,29 +13,29 @@ const style = /*css*/`
 :host{
   display: flex;
   padding: 12px 16px;
-  line-height: 1.6;
+  line-height: 1.5;
   font-weight: 500;
   min-height: 48px;
   border-radius: 4px;
   word-break: break-all;
   transition-property: color, background-color;
   font-size: calc(var(--s-font-size, 1) * 14px);
-  color: var(--s-color-on-secondary-container, ${scheme.color.onSecondaryContainer});
-  background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
-  transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
+  color: ${scheme.color.onSecondaryContainer};
+  background: ${scheme.color.secondaryContainer};
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.short4};
 }
 :host([variant=success]){
-  color: var(--s-color-on-success-container, ${scheme.color.onSuccessContainer});
-  background: var(--s-color-success-container, ${scheme.color.successContainer});
+  color: ${scheme.color.onSuccessContainer};
+  background: ${scheme.color.successContainer};
 }
 :host([variant=warning]){
-  color: var(--s-color-on-warning-container, ${scheme.color.onWarningContainer});
-  background: var(--s-color-warning-container, ${scheme.color.warningContainer});
+  color: ${scheme.color.onWarningContainer};
+  background: ${scheme.color.warningContainer};
 }
 :host([variant=error]){
-  color: var(--s-color-on-error-container, ${scheme.color.onErrorContainer});
-  background: var(--s-color-error-container, ${scheme.color.errorContainer});
+  color: ${scheme.color.onErrorContainer};
+  background: ${scheme.color.errorContainer};
 }
 .icon{
   display: none;
@@ -77,7 +77,7 @@ svg{
   width: 36px;
   height: 36px;
   margin: -6px -8px -6px 4px;
-  color: var(--s-color-primary, ${scheme.color.primary});
+  color: ${scheme.color.primary};
   svg{
     transition-property: transform;
     transition-duration: inherit;
@@ -116,7 +116,6 @@ svg{
 }
 ::slotted([slot=title]){
   font-weight: 500;
-  line-height: 1.5;
   font-size: calc(var(--s-font-size, 1) * 15px);
 }
 ::slotted(s-button[slot=action]){
@@ -127,7 +126,7 @@ svg{
 }
 ::slotted(s-icon-button:is([slot=action], [slot=toggle])){
   margin: -6px -8px -6px 4px;
-  color: var(--s-color-primary, ${scheme.color.primary});
+  color: ${scheme.color.primary};
 }
 `
 const template = /*html*/`
@@ -178,20 +177,19 @@ export class Alert extends useElement({
     }
     return {
       setOpened: (v) => {
-        if (!info.isConnected) return
+        if (!info.isConnected || !this.collapsed) return
         const [old] = content.getAnimations()
+        content.style.display = 'block'
         if (old) return old.reverse()
-        const keyframe = { height: ['0', `${content.offsetHeight}px`], display: ['block', 'block'] }
+        const keyframe = { height: ['0px', `${content.offsetHeight}px`] }
         if (!v) {
-          content.style.display = 'block'
           keyframe.height[1] = `${content.offsetHeight}px`
           keyframe.height.reverse()
-          content.style.removeProperty('display')
         }
         content.animate(keyframe, {
           easing: computedStyle.getValue('transition-timing-function'),
           duration: computedStyle.getDuration('transition-duration')
-        })
+        }).finished.then(() => content.style.removeProperty('display'))
       }
     }
   }

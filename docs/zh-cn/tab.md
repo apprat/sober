@@ -52,7 +52,7 @@
 </s-tab>
 ```
 
-## 使用插槽布局
+## 使用插槽布局和禁用
 
 使用 `icon` 插槽放置垂直图标，使用 `badge` 插槽放置浮动徽标：
 
@@ -70,6 +70,11 @@
   <s-tab-item>
     <s-icon slot="icon" name="home"></s-icon>
     Users
+    <s-badge slot="badge">99</s-badge>
+  </s-tab-item>
+  <s-tab-item disabled>
+    <s-icon slot="icon" name="home"></s-icon>
+    Auth
     <s-badge slot="badge">99</s-badge>
   </s-tab-item>
 </s-tab>
@@ -169,9 +174,18 @@
 
 ```html preview
 <s-tab orientation="vertical">
-  <s-tab-item>Tab 1</s-tab-item>
-  <s-tab-item selected>Tab 2</s-tab-item>
-  <s-tab-item>Tab 3</s-tab-item>
+  <s-tab-item>
+    <s-icon name="home"></s-icon>
+    Tab 1
+  </s-tab-item>
+  <s-tab-item selected>
+    <s-icon name="star"></s-icon>
+    Tab 2
+  </s-tab-item>
+  <s-tab-item>
+    <s-icon name="dark_mode"></s-icon>
+    Tab 3
+  </s-tab-item>
 </s-tab>
 <s-tab orientation="vertical" variant="segmented" style="margin-left: 24px;">
   <s-tab-item>

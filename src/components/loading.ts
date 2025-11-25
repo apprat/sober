@@ -16,10 +16,10 @@ const style = /*css*/`
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   border-radius: 50%;
-  color: var(--s-color-primary, ${scheme.color.primary});
+  color: ${scheme.color.primary};
 }
 :host([variant=contained]){
-  background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
+  background: ${scheme.color.secondaryContainer};
 }
 svg{
   width: 100%;
@@ -57,7 +57,7 @@ const template = /*html*/`
 const state = {
   div: document.createElement('div'),
   dialog: document.createElement('dialog'),
-  loading: document.createElement('s-loading')
+  loading: document.createElement('s-loading') as Loading
 }
 state.div.attachShadow({ mode: 'open' })
 state.div.shadowRoot!.innerHTML = /*html*/ `

@@ -20,18 +20,18 @@ const style = /*css*/`
 :host{
   display: block;
   vertical-align: middle;
-  font-size: .875rem;
-  box-shadow: 0 -1px 0 var(--s-color-surface-variant, ${scheme.color.surfaceVariant}) inset;
-  background: var(--s-color-surface, ${scheme.color.surface});
-  color: var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
+  font-size: calc(var(--s-font-size, 1) * 14px);
+  box-shadow: 0 -1px 0 ${scheme.color.surfaceVariant} inset;
+  background: ${scheme.color.surface};
+  color: ${scheme.color.onSurfaceVariant};
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.medium4};
 }
 .layout{
   display: flex;
   height: 100%;
   overflow: auto;
   scrollbar-width: none;
-  animation-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  animation-duration: var(--s-motion-duration-medium4, ${scheme.motion.duration.medium4});
 }
 :host([mode=fixed]){
   ::slotted(s-tab-item){
@@ -40,17 +40,21 @@ const style = /*css*/`
   }
 }
 :host([variant=segmented]){
-  font-size: .8125rem;
-  box-shadow: 0 0 0 1px var(--s-color-surface-variant, ${scheme.color.surfaceVariant}) inset;
-  background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
-  --s-private-indicator-width: 100%;
-  --s-private-indicator-height: 100%;
-  --s-private-indicator-inset: 0;
-  --s-private-indicator-border-radius: 0px;
-  --s-private-layout-padding: 4px 16px;
-  --s-private-layout-position: static;
-  --s-private-icon-width: 20px;
-  --s-private-icon-height: 20px;
+  display: inline-block;
+  max-width: -moz-available;
+  max-width: -webkit-fill-available;
+  font-size: calc(var(--s-font-size, 1) * 13px);
+  border-radius: 20px;
+  box-shadow: 0 0 0 1px ${scheme.color.surfaceVariant} inset;
+  background: ${scheme.color.surfaceContainer};
+  --s_indicator-width: 100%;
+  --s_indicator-height: 100%;
+  --s_indicator-inset: 0;
+  --s_indicator-border-radius: 17px;
+  --s_layout-padding: 4px 16px;
+  --s_layout-position: static;
+  --s_icon-width: 20px;
+  --s_icon-height: 20px;
   .layout{
     padding: 3px;
     border-radius: inherit;
@@ -58,49 +62,39 @@ const style = /*css*/`
   ::slotted(s-tab-item){
     padding: 0;
     min-height: 34px;
-    border-radius: 0;
+    border-radius: 17px;
   }
   ::slotted(s-tab-item[selected]){
-    color: var(--s-color-on-primary, ${scheme.color.onPrimary});
-    --s-private-indicator-background: var(--s-color-primary, ${scheme.color.primary});
+    color: ${scheme.color.onPrimary};
+    --s_indicator-background: ${scheme.color.primary};
   }
-}
-:host([variant=segmented]:not([orientation=vertical])){
-  display: inline-block;
-  border-radius: 0px;
-  max-width: -moz-available;
-  max-width: -webkit-fill-available;
-}
-:host([variant=segmented][orientation=vertical]){
-  border-radius: 0px;
-  --s-private-indicator-border-radius: 0px;
-  .layout{
-    gap: 3px;
+  &:host([mode=fixed]){
+    display: block;
   }
-  ::slotted(s-tab-item){
-    border-radius: 8px;
-  }
-}
-:host([variant=segmented][mode=fixed]){
-  display: block;
 }
 :host([orientation=vertical]){
   display: inline-block;
   height: auto;
+  --s_indicator-width: 3px;
+  --s_indicator-height: 2em;
+  --s_indicator-inset: auto auto auto 0;
+  --s_layout-position: static;
+  --s_indicator-border-radius: 0 3px 3px 0;
+  box-shadow: 1px 0 0 ${scheme.color.surfaceVariant} inset;
   .layout{ 
     flex-direction: column;
+    gap: 3px;
   }
-}
-:host([orientation=vertical]:not([variant=segmented])){
-  --s-private-indicator-width: 3px;
-  --s-private-indicator-height: 2em;
-  --s-private-indicator-inset: auto auto auto 0;
-  --s-private-layout-position: static;
-  box-shadow: 1px 0 0 var(--s-color-surface-variant, ${scheme.color.surfaceVariant}) inset;
-  ::slotted(s-tab-item){
-    padding: 12px 16px;
-    height: 48px;
-    justify-content: flex-start;
+  &:host([variant=segmented]){
+    border-radius: 8px;
+    box-shadow: 0 0 0 1px ${scheme.color.surfaceVariant} inset;
+    --s_indicator-width: 100%;
+    --s_indicator-height: 100%;
+    --s_indicator-inset: 0;
+    --s_indicator-border-radius: 4px;
+    ::slotted(s-tab-item){
+      border-radius: 4px;
+    }
   }
 }
 `
@@ -117,33 +111,44 @@ const itemStyle = /*css*/`
   line-height: 1;
   flex-shrink: 0;
   transition-property: color;
-  transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.short4};
 }
 :host([selected]){
-  color: var(--s-color-primary, ${scheme.color.primary});
+  color: ${scheme.color.primary};
   .indicator{
     opacity: 1;
   }
 }
+:host([disabled]){
+  pointer-events: none;
+  color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
+  .indicator{
+    background: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent);
+  }
+  ::slotted(s-badge){
+    background: color-mix(in srgb, ${scheme.color.onSurface} 12%, transparent) !important;
+    color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
+  }
+}
 .layout{
-  position: var(--s-private-layout-position, relative);
+  position: var(--s_layout-position, relative);
   display: flex;
   gap: 3px;
-  flex-direction: var(--s-private-layout-direction, column);
+  flex-direction: var(--s_layout-direction, column);
   justify-content: center;
   align-items: center;
   height: 100%;
-  padding: var(--s-private-layout-padding, 12px 0);
+  padding: var(--s_layout-padding, 12px 0);
 }
 .indicator{
   position: absolute;
   opacity: 0;
-  inset: var(--s-private-indicator-inset, auto auto 0 auto);
-  width: var(--s-private-indicator-width, 100%);
-  height: var(--s-private-indicator-height, 3px);
-  border-radius: var(--s-private-indicator-border-radius, 3px 3px 0 0);
-  background: var(--s-private-indicator-background, var(--s-color-primary, ${scheme.color.primary}));
+  inset: var(--s_indicator-inset, auto auto 0 auto);
+  width: var(--s_indicator-width, 100%);
+  height: var(--s_indicator-height, 3px);
+  border-radius: var(--s_indicator-border-radius, 3px 3px 0 0);
+  background: var(--s_indicator-background, ${scheme.color.primary});
 }
 .text{
   display: flex;
@@ -152,8 +157,8 @@ const itemStyle = /*css*/`
   position: relative;
 }
 ::slotted(:is(svg, s-icon)){
-  width: var(--s-private-icon-width, 24px);
-  height: var(--s-private-icon-height, 24px);
+  width: var(--s_icon-width, 24px);
+  height: var(--s_icon-height, 24px);
   color: inherit;
   position: relative;
 }
@@ -167,6 +172,19 @@ const itemStyle = /*css*/`
 }
 ::slotted(s-badge:not([slot]):not(:empty)){
   width: auto;
+}
+@supports not (color: color-mix(in srgb, black, white)){
+  :host([disabled]){
+    color: ${scheme.color.outline} !important;
+    .indicator{
+      background: ${scheme.color.outline} !important;
+    }
+    ::slotted(s-badge){
+      background: ${scheme.color.surfaceContainerHigh} !important;
+      color: ${scheme.color.outline} !important;
+    }
+    color: ${scheme.color.outline} !important;
+  }
 }
 `
 
@@ -200,8 +218,8 @@ export class Tab extends useElement({
     const select = new Select(this, slot, TabItem)
     const computedStyle = useComputedStyle(layout)
     const getAnimateOptions = () => {
-      const easing = computedStyle.getValue('animation-timing-function')
-      const duration = computedStyle.getDuration('animation-duration')
+      const easing = computedStyle.getValue('transition-timing-function')
+      const duration = computedStyle.getDuration('transition-duration')
       return { easing, duration }
     }
     const center = (behavior: 'auto' | 'smooth' = 'auto') => {

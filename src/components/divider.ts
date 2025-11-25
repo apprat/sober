@@ -8,13 +8,13 @@ const style = /*css*/`
   margin: 0 16px;
   gap: 8px;
   font-size: .75rem;
-  color: var(--s-color-outline, ${scheme.color.outline});
+  color: ${scheme.color.outline};
  }
 :host::before,
 :host::after{
   content: '';
   flex-grow: 1;
-  border-top: solid 1px var(--s-color-outline-variant, ${scheme.color.outlineVariant});
+  border-top: solid 1px ${scheme.color.outlineVariant};
 }
 :host(:empty){
   gap: 0;

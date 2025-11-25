@@ -129,7 +129,7 @@ class Dialog extends HTMLElement {
   static CLOSE_SOURCE_KEYBOARD = 2 //关闭来源常量：键盘。
   //生成对话框
   static builder(options: {
-    root?: Element //插入的目标元素，为空则寻找 document.body 下第一个 <s-page> 元素
+    root?: Element //插入的目标元素，为空则寻找 document 下第一个 <s-page> 元素
     title?: string //标题
     text?: string //文本
     view?: HTMLElement | ((dialog: Dialog) => void) //自定义视图

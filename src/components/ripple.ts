@@ -19,6 +19,9 @@ const style = /*css*/`
   pointer-events: none;
   border-radius: inherit;
   overflow: hidden;
+  animation-timing-function: ${scheme.motion.easing.standard};
+  animation-duration: ${scheme.motion.duration.long4};
+  transition-duration: ${scheme.motion.duration.short4};
 }
 .hover{
   position: absolute;
@@ -26,10 +29,10 @@ const style = /*css*/`
   content: '';
   opacity: 0;
   background: var(--s-ripple-color, currentColor);
-  transition: opacity var(--s-motion-duration-short4, ${scheme.motion.duration.short4}) var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-}
-.hovered{
-  opacity: var(--s-ripple-hover-opacity, .12);
+  transition-property: opacity;
+  &.hovered{
+    opacity: var(--s-ripple-hover-opacity, .12);
+  }
 }
 .ripple{
   position: absolute;
@@ -38,8 +41,6 @@ const style = /*css*/`
   border-radius: 50%;
   background: var(--s-ripple-color, currentColor);
   filter: opacity(var(--s-ripple-opacity, .18));
-  animation-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  animation-duration: var(--s-motion-duration-long4, ${scheme.motion.duration.long4});
 }
 `
 

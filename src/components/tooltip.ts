@@ -21,10 +21,10 @@ const style = /*css*/`
   position: absolute;
   border-radius: 4px;
   padding: 6px 8px;
-  animation-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  animation-duration: var(--s-motion-duration-medium4, ${scheme.motion.duration.medium4});
-  background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
-  color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.medium4};
+  background: ${scheme.color.inverseSurface};
+  color: ${scheme.color.inverseOnSurface};
 }
 .popover{
   pointer-events: none;
@@ -41,12 +41,12 @@ const style = /*css*/`
   max-height: 100%;
   padding: inherit;
   border-radius: inherit;
-  filter: opacity(.8);
+  filter: opacity(.9);
   background: inherit;
   color: inherit;
-}
-.opened{
-  display: block;
+  &.opened{
+    display: block;
+  }
 }
 `
 
@@ -60,8 +60,8 @@ export class Tooltip extends useElement({
     const popover = shadowRoot.querySelector<HTMLSlotElement>('.popover')!
     const computedStyle = useComputedStyle(this)
     const getAnimateOptions = () => {
-      const easing = computedStyle.getValue('animation-timing-function')
-      const duration = computedStyle.getDuration('animation-duration')
+      const easing = computedStyle.getValue('transition-timing-function')
+      const duration = computedStyle.getDuration('transition-duration')
       return { easing, duration }
     }
     const display = ['block', 'block']
@@ -86,7 +86,7 @@ export class Tooltip extends useElement({
         popover.style.zIndex = '3'
       }
       popover.style.removeProperty('display')
-      popover?.showPopover()
+      popover.showPopover?.()
       const rect = parent.getBoundingClientRect()
       const offsets = {
         top: rect.top - gap - offsetHeight,
@@ -144,7 +144,7 @@ export class Tooltip extends useElement({
       const animation = popover.animate({ opacity: [1, 0], display }, getAnimateOptions())
       animation.finished.then(() => {
         if (popover.classList.contains('opened')) return
-        popover?.hidePopover()
+        popover.hidePopover?.()
         this.dispatchEvent(new Event('closed'))
       })
     }

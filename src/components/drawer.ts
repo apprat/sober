@@ -44,8 +44,8 @@ const style = /*css*/`
   height: 100%;
   pointer-events: auto;
   position: relative;
-  background: var(--s-color-surface-container-low, ${scheme.color.surfaceContainerLow});
-  border-color: var(--s-color-surface-variant, #DCE4E8);
+  background: ${scheme.color.surfaceContainerLow};
+  border-color: ${scheme.color.surfaceVariant};
 }
 :host([startOpened=false]){
   .start{

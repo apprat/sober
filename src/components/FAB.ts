@@ -18,39 +18,51 @@ const style = /*css*/`
   gap: 6px;
   font-size: calc(var(--s-font-size, 1) * 16px);
   transition-property: border-radius, color, background-color, box-shadow, transform;
-  box-shadow: var(--s-elevation-level3, ${scheme.elevation.level3});
+  box-shadow: ${scheme.elevation.level3};
   border-radius: 16px;
+  ::slotted(:is(svg, s-icon):not([slot])){
+    margin: 0 -24px;
+  }
+  ::slotted(:is(svg, s-icon)[slot=start]){
+    margin-left: -2px;
+  }
+  ::slotted(:is(svg, s-icon)[slot=end]){
+    margin-right: -2px;
+  }
 }
 :host(:not([variant])){
-  background: var(--s-color-primary, ${scheme.color.primary});
-  color: var(--s-color-on-primary, ${scheme.color.onPrimary});
+  background: ${scheme.color.primary};
+  color: ${scheme.color.onPrimary};
 }
 :host([variant=secondary]){
-  background: var(--s-color-secondary, ${scheme.color.secondary});
-  color: var(--s-color-on-secondary, ${scheme.color.onSecondary});
+  background: ${scheme.color.secondary};
+  color: ${scheme.color.onSecondary};
 }
 :host([variant=tertiary]){
-  background: var(--s-color-tertiary, ${scheme.color.tertiary});
-  color: var(--s-color-on-tertiary, ${scheme.color.onTertiary});
+  background: ${scheme.color.tertiary};
+  color: ${scheme.color.onTertiary};
 }
 :host([variant=tonal-primary]){
-  background: var(--s-color-primary-container, ${scheme.color.primaryContainer});
-  color: var(--s-color-on-primary-container, ${scheme.color.onPrimaryContainer});
+  background: ${scheme.color.primaryContainer};
+  color: ${scheme.color.onPrimaryContainer};
 }
 :host([variant=tonal-secondary]){
-  background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
-  color: var(--s-color-on-secondary-container, ${scheme.color.onSecondaryContainer});
+  background: ${scheme.color.secondaryContainer};
+  color: ${scheme.color.onSecondaryContainer};
 }
 :host([variant=tonal-tertiary]){
-  background: var(--s-color-tertiary-container, ${scheme.color.tertiaryContainer});
-  color: var(--s-color-on-tertiary-container, ${scheme.color.onTertiaryContainer});
+  background: ${scheme.color.tertiaryContainer};
+  color: ${scheme.color.onTertiaryContainer};
 }
 :host([disabled]){
-  box-shadow: var(--s-elevation-level2, ${scheme.elevation.level2}) !important;
+  box-shadow: ${scheme.elevation.level2} !important;
 }
 :host([hidden]){
   transform: scale(0);
   pointer-events: none;
+}
+:host([pressed]){
+  box-shadow: ${scheme.elevation.level4};
 }
 /*Size*/
 :host([size=small]){
@@ -66,18 +78,6 @@ const style = /*css*/`
   border-radius: 18px;
   font-size: calc(var(--s-font-size, 1) * 18px);
   padding: 0 24px;
-}
-::slotted(:is(svg, s-icon):not([slot])){
-  margin: 0 -24px;
-}
-::slotted(:is(svg, s-icon)[slot=start]){
-  margin-left: -2px;
-}
-::slotted(:is(svg, s-icon)[slot=end]){
-  margin-right: -2px;
-}
-:host([pressed]){
-  box-shadow: var(--s-elevation-level4, ${scheme.elevation.level4});
 }
 `
 

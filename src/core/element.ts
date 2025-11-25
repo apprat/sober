@@ -33,10 +33,14 @@ const baseStyle = /*css*/`
   -webkit-tap-highlight-color: transparent;
 }
 :host(:focus-visible){
-  outline: dashed 2px var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
+  outline: dashed 2px ${scheme.color.onSurfaceVariant};
   outline-offset: 2px;
 }
-*{
+*:not(:defined){
+  background: red !important;
+}
+div,
+slot{
   transition-property: none;
   transition-timing-function: inherit;
   transition-duration: inherit;
@@ -55,13 +59,13 @@ const baseStyle = /*css*/`
     border-radius: var(--s-scrollbar-radius, 0);
   }
   ::-webkit-scrollbar-thumb{
-    background: var(--s-scrollbar-thumb-color, var(--s-color-outline-variant, ${scheme.color.outlineVariant}));
+    background: var(--s-scrollbar-thumb-color, ${scheme.color.outlineVariant});
     border-radius: var(--s-scrollbar-thumb-radius, 3px);
   }
   @supports not selector(::-webkit-scrollbar) {
     *{
       scrollbar-width: thin;
-      scrollbar-color: var(--s-scrollbar-thumb-color, var(--s-color-outline-variant, ${scheme.color.outlineVariant})) var(--s-scrollbar-color, transparent);
+      scrollbar-color: var(--s-scrollbar-thumb-color, ${scheme.color.outlineVariant}) var(--s-scrollbar-color, transparent);
     }
   }
 }

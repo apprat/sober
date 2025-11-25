@@ -18,17 +18,17 @@ const style = /*css*/`
   position: relative;
   height: 40px;
   border-radius: 4px;
-  color: var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
-  transition-timing-function: var(--s-motion-easing-emphasized, ${scheme.motion.easing.emphasized});
-  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
+  color: ${scheme.color.onSurfaceVariant};
+  transition-timing-function: ${scheme.motion.easing.emphasized};
+  transition-duration: ${scheme.motion.duration.short4};
 }
 :host([checked]){
-  color: var(--s-color-primary, ${scheme.color.primary});
+  color: ${scheme.color.primary};
 }
 :host([disabled]){
   pointer-events: none;
   .layout{
-    color: var(--s-color-on-surface, ${scheme.color.onSurface}) !important;
+    color: ${scheme.color.onSurface} !important;
     opacity: .38 !important;
   }
 }
@@ -74,17 +74,17 @@ const style = /*css*/`
   transform: scale(.5);
   opacity: 0;
   transition-property: transform, opacity;
+  .dot{
+    width: 60%;
+    height: 60%;
+    transform: scale(0.4);
+    background: currentColor;
+    border-radius: 50%;
+  }
 }
 :host([checked]:not([indeterminate])) .checked{
   opacity: 1;
   transform: scale(1);
-}
-.dot{
-  width: 60%;
-  height: 60%;
-  transform: scale(0.4);
-  background: currentColor;
-  border-radius: 50%;
 }
 svg,
 ::slotted(:is([slot=checked], [slot=unchecked])){

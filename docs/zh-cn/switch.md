@@ -20,13 +20,23 @@
 </s-switch>
 ```
 
-自定义大小
+禁用
 
 ```html preview
-<s-switch style="width: 42px">
+<s-switch disabled>
   <s-icon name="close" slot="unselected"></s-icon>
   <s-icon name="done" slot="selected"></s-icon>
 </s-switch>
+<s-switch checked disabled>
+  <s-icon name="close" slot="unselected"></s-icon>
+  <s-icon name="done" slot="selected"></s-icon>
+</s-switch>
+```
+
+自定义大小
+
+```html preview
+<s-switch style="width: 42px"></s-switch>
 ```
 
 ---

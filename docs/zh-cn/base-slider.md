@@ -7,18 +7,24 @@
 <s-base-slider oninput="console.log(this.end)"></s-base-slider>
 ```
 
-设置 `step` 属性来设置滑块的间隔。
+设置 `step` 属性来设置滑块的间隔，设置 `min` 设置最小值，设置 `max` 设置最大值。
 
 ```html preview
-<s-base-slider step="5"></s-base-slider>
+<s-base-slider step="10" end="50" min="20" max="200" oninput="console.log(this.end)"></s-base-slider>
+```
+
+设置 `steps` 你可以自定义间隔，以 `,` 分割多个值，滑块只会在该值中切换。
+
+```html preview
+<s-base-slider steps="0,20,80,100" end="20" oninput="console.log(this.end)"></s-base-slider>
 ```
 
 ---
 
-设置 `mode` 属性来设置不同滑块，`single-reversed` 反向单滑块，`range` 范围（默认值）。
+设置 `mode` 属性来设置不同滑块，`reversed` 反向滑块，`range` 范围。
 
 ```html preview
-<s-base-slider mode="single-reversed" end="80"></s-base-slider>
+<s-base-slider mode="reversed" end="80"></s-base-slider>
 <s-base-slider mode="range" end="80"></s-base-slider>
 ```
 
@@ -28,7 +34,7 @@
 
 ```html preview
 <s-base-slider variant="segmented"></s-base-slider>
-<s-base-slider variant="segmented" mode="single-reversed"></s-base-slider>
+<s-base-slider variant="segmented" mode="reversed"></s-base-slider>
 <s-base-slider variant="segmented" mode="range"></s-base-slider>
 ```
 
@@ -38,11 +44,11 @@
 
 ```html preview
 <s-base-slider orientation="vertical"></s-base-slider>
-<s-base-slider orientation="vertical" mode="single-reversed"></s-base-slider>
+<s-base-slider orientation="vertical" mode="reversed"></s-base-slider>
 <s-base-slider orientation="vertical" mode="range"></s-base-slider>
 分段
 <s-base-slider variant="segmented" orientation="vertical"></s-base-slider>
-<s-base-slider variant="segmented" orientation="vertical" mode="single-reversed"></s-base-slider>
+<s-base-slider variant="segmented" orientation="vertical" mode="reversed"></s-base-slider>
 <s-base-slider variant="segmented" orientation="vertical" mode="range"></s-base-slider>
 ```
 
@@ -157,28 +163,33 @@ all-cumulative
 
 ## 属性
 
-| 名称            | 类型                           | 默认值     | 同步 | 说明                                                                                 |
-| --------------- | ------------------------------ | ---------- | ---- | ------------------------------------------------------------------------------------ |
-| mode            | single, single-reversed, range | single     | ✔️ | 模式，single=单选选择，single-reversed=反向单选择,range=范围选择                     |
-| slidingMode     | thumb, all, all-cumulative     | thumb      | ✔️ | 滑动模式，thumb=仅指示器滑动，all=所有滑动，all-cumulative=所有滑动且累计值          |
-| variant         | standard, segmented            | standard   | ✔️ | 变体                                                                                 |
-| orientation     | horizontal, vertical           | horizontal | ✔️ | 方向                                                                                 |
-| clickChanged    | boolean                        | true       | ✔️ | 可单击切换的                                                                         |
-| slidingPriority | boolean                        | false      | ✔️ | 滑动优先，启用该属性时会在触屏设备上增强滑动响应的速度，适用于页面上没有滚动条时启用 |
-| step            | number                         | 1          | ✖️ | 步进，请确保能被 (max - min) 整除                                                    |
-| min             | number                         | 0          | ✖️ | 最小值                                                                               |
-| max             | number                         | 100        | ✖️ | 最大值                                                                               |
-| start           | number                         | 0          | ✖️ | 开始值（仅mode=range模式生效）                                                                               |
-| end             | number                         | 50         | ✖️ | 结束值（单滑块或反向单滑块模式下，该值用于设置进度）                                 |
+| 名称            | 类型                       | 默认值     | 同步 | 说明                                                                                     |
+| --------------- | -------------------------- | ---------- | ---- | ---------------------------------------------------------------------------------------- |
+| mode            | single, reversed, range    | single     | ✔️ | 模式，single=单选选择，reversed=反向单选择,range=范围选择                                |
+| slidingMode     | thumb, all, all-cumulative | thumb      | ✔️ | 滑动模式，thumb=仅指示器滑动，all=所有滑动，all-cumulative=所有滑动且累计值              |
+| variant         | standard, segmented        | standard   | ✔️ | 变体                                                                                     |
+| orientation     | horizontal, vertical       | horizontal | ✔️ | 方向                                                                                     |
+| clickChanged    | boolean                    | true       | ✔️ | 可单击切换的                                                                             |
+| slidingPriority | boolean                    | false      | ✔️ | 滑动优先，启用该属性时会在触屏设备上增强滑动响应的速度，适用于页面上没有滚动条时启用     |
+| steps           | string                     |            | ✖️ | 步进值，使用 `,` 分割，例如：`0,40,80,100`，如果提供了该值，操作滑块时只会在步进值上切换 |
+| step            | number                     | 1          | ✖️ | 步进，请确保能被 (max - min) 整除                                                        |
+| min             | number                     | 0          | ✖️ | 最小值                                                                                   |
+| max             | number                     | 100        | ✖️ | 最大值                                                                                   |
+| start           | number                     | 0          | ✖️ | 开始值（仅mode=range模式生效）                                                           |
+| end             | number                     | 50         | ✖️ | 结束值（单滑块或反向单滑块模式下，该值用于设置进度）                                     |
 
 ---
 
 ## 事件
 
-| 名称   | 参数  | 冒泡 | 可取消 | 说明                         |
-| ------ | ----- | ---- | ------ | ---------------------------- |
-| input  | Event | ✖️ | ✖️   | 值发生改变后触发             |
-| change | Event | ✖️ | ✖️   | 值发生改变后，失去焦点时触发 |
+| 名称     | 参数                                   | 冒泡 | 可取消 | 说明                         |
+| -------- | -------------------------------------- | ---- | ------ | ---------------------------- |
+| input    | Event                                  | ✖️ | ✖️   | 值发生改变后触发             |
+| change   | Event                                  | ✖️ | ✖️   | 值发生改变后，失去焦点时触发 |
+| press    | CustomEvent<{ name: 'start' \| 'end' } | ✖️ | ✖️   | 按下指示器时触发             |
+| pressout | CustomEvent<{ name: 'start' \| 'end' } | ✖️ | ✖️   | 松开指示器时触发             |
+| hover    | CustomEvent<{ name: 'start' \| 'end' } | ✖️ | ✖️   | 鼠标移入指示器时触发         |
+| hoverout | CustomEvent<{ name: 'start' \| 'end' } | ✖️ | ✖️   | 鼠标移出指示器时触发         |
 
 ---
 

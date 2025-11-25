@@ -11,212 +11,179 @@ const props = useProps({
 
 const style = /*css*/`
 :host{
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   vertical-align: middle;
   cursor: pointer;
   width: 52px;
   aspect-ratio: 1.625;
   -webkit-aspect-ratio: 1.625;
   border-radius: 16px;
-  cursor: grab;
-  color: var(--s-color-primary, ${scheme.color.primary});
-  transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
+  position: relative;
+  color: ${scheme.color.primary};
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.short4};
 }
 .track{
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  position: relative;
-  background: var(--s-color-surface-container-highest, ${scheme.color.surfaceContainerHighest});
-  box-shadow: 0 0 0 2px var(--s-color-outline, ${scheme.color.outline}) inset;
+  background: ${scheme.color.surfaceContainerHighest};
+  box-shadow: 0 0 0 2px ${scheme.color.outline} inset;
   border-radius: inherit;
   transition-property: background;
+}
+.handle{
+  height: 125%;
+  position: absolute;
+  aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
+  border-radius: 50%;
+  display: flex;
+  transform: translateX(-10%);
+  justify-content: center;
+  align-items: center;
+  transition-property: transform;
   &::before{
     content: '';
     position: absolute;
     inset: 0;
-    background: currentColor;
-    opacity: 0;
     border-radius: inherit;
+    transform: scale(.5);
+    transition-property: background, transform;
+    transition-timing-function: inherit;
+    transition-duration: inherit;
+    filter: opacity(.12);
+    opacity: 0;
+    background: ${scheme.color.outline};
   }
-}
-.handle{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  pointer-events: auto;
-  height: 125%;
-  width: auto;
-  inset: auto;
-  left: -8%;
-  aspect-ratio: 1;
-  -webkit-aspect-ratio: 1;
-  border-radius: 50%;
-  transition-property: transform;
   .thumb{
     max-width: 60%;
     min-width: 40%;
+    border-radius: inherit;
     aspect-ratio: 1;
     -webkit-aspect-ratio: 1;
-    border-radius: 50%;
     position: relative;
-    transition-property: transform, min-width, background;
-    background: var(--s-color-outline, ${scheme.color.outline});
-    &::before{
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background: var(--s-color-on-primary, ${scheme.color.onPrimary});
-      opacity: 0;
-    }
-  }
-  .ripple{
-    position: absolute;
-    inset: 0;
-    &::after,
-    &::before{
-      content: '';
-      border-radius: 50%;
-      position: absolute;
-      inset: 0;
-      background: var(--s-color-outline, ${scheme.color.outline});
-      opacity: 0;
-      transition-property: transform, opacity;
-      transition-duration: inherit;
-      transform: scale(1);
-    }
-    &::before{
-      opacity: 0;
-    }
-    &::after{
-      background: currentColor;
-      opacity: 0;
+    transition-property: min-width, background;
+    padding: 10%;
+    background: ${scheme.color.outline};
+    ::slotted(:is(svg, s-icon)){
+      color: currentColor;
+      fill: currentColor;
+      width: 100%;
+      height: 100%;
     }
   }
 }
-:host(:is([pressed],[hovered])){
-  .handle>.ripple::before{
-    transform: scale(1);
-    opacity: .12;
-  }
-}
-.selected,
 .unselected{
   display: flex;
-  position: relative;
-  padding: 10%;
-}
-.unselected{
-  color: var(--s-color-surface-variant, ${scheme.color.surfaceVariant});
-  opacity: 1;
+  color: ${scheme.color.surfaceVariant};
 }
 .selected{
-  color: currentColor;
-  position: absolute;
-  inset: 0;
-  opacity: 0;
+  display: none;
 }
 :host([checked]){
-  .track::before{
-    opacity: 1;
+  .unselected{
+    display: none;
+  }
+  .selected{
+    display: flex;
+  }
+  .track{
+    background: currentColor;
+    box-shadow: none;
   }
   .handle{
-    transform: translateX(50%);
+    transform: translateX(40%);
+    &::before{
+      background: currentColor;
+    }
     .thumb{
       min-width: 60%;
-      &::before{
-        opacity: 1;
+      background: ${scheme.color.onPrimary};
+    }
+  }
+}
+:host([disabled]){
+  pointer-events: none;
+  .track{
+    box-shadow: 0 0 0 2px color-mix(in srgb, ${scheme.color.onSurface} 12%, transparent) inset !important;
+    background: none !important;
+  }
+  .thumb{
+    box-shadow: none !important;
+    background: color-mix(in srgb, ${scheme.color.onSurface} 12%, transparent) !important;
+    .unselected{
+      color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
+    }
+  }
+  &:host([checked]){
+    .track{
+      background: color-mix(in srgb, ${scheme.color.onSurface} 12%, transparent) !important;
+      box-shadow: none !important;
+    }
+    .thumb{
+      background: ${scheme.color.surface} !important;
+      .selected{
+        color: color-mix(in srgb, currentColor 38%, transparent) !important;
       }
     }
   }
-  .unselected{
-    opacity: 0;
-  }
-  .selected{
+}
+:host(:is([hovered], [pressed])){
+  .handle::before{
     opacity: 1;
+    transform: scale(1);
   }
 }
-:host([pressed]) {
-  cursor: grabbing;
+:host([pressed]){
   .handle>.thumb{
     min-width: 70%;
   }
 }
-::slotted(:is(svg, s-icon)){
-  color: currentColor;
-  fill: currentColor;
-  width: 100%;
-  height: 100%;
+@supports not (color: color-mix(in srgb, black, white)){
+  :host([disabled]){
+    .track{
+      box-shadow: 0 0 0 2px ${scheme.color.surfaceContainerHighest} inset !important;
+    }
+    .thumb{
+      background: ${scheme.color.outlineVariant} !important;
+      .unselected{
+        color: ${scheme.color.surfaceContainerHighest} !important;
+      }
+    }
+    &:host([checked]){
+      .track{
+        background: ${scheme.color.surfaceContainerHighest} !important;
+      }
+      .thumb{
+        .selected{
+          color: ${scheme.color.outlineVariant} !important;
+        }
+      }
+    }
+  }
 }
 `
 
 const template = /*html*/`
-<div class="track" part="track">
-  <div class="handle" part="handle">
-    <div class="ripple" part="ripple"></div>
-    <div class="thumb" part="thumb">
-      <slot name="unselected" class="unselected" part="unselected"></slot>
-      <slot name="selected" class="selected" part="selected"></slot>
-    </div>
+<div class="track" part="track"></div>
+<div class="handle" part="handle">
+  <div class="thumb" part="thumb">
+    <slot name="unselected" class="unselected" part="unselected"></slot>
+    <slot name="selected" class="selected" part="selected"></slot>
   </div>
 </div>
 `
-
-const getEventNames = (type: string) => {
-  const mouse = { move: 'mousemove', up: 'mouseup' } as const
-  const touch = { move: 'touchmove', up: 'touchend' } as const
-  return type === 'mouse' ? mouse : touch
-}
 
 export class Switch extends useElement({
   style, template, props,
   focused: true,
   pressed: true,
   hovered: true,
-  setup(shadowRoot) {
-    const track = shadowRoot.querySelector<HTMLDivElement>('.track')!
-    const handle = shadowRoot.querySelector<HTMLDivElement>('.handle')!
-    let touched = false
+  setup() {
     this.addEventListener('click', () => {
-      if (touched) return
       this.checked = !this.checked
       this.dispatchEvent(new Event('change'))
-    })
-    this.addEventListener('pointerdown', (event) => {
-      if (event.button !== 0) return
-      touched = false
-    })
-    this.addEventListener('pointerdown', (event) => {
-      if (event.button !== 0) return
-      const state = { x: event.pageX, checked: this.checked }
-      const move = (event: PointerEvent | TouchEvent) => {
-        const e = event instanceof TouchEvent ? event.touches[0] : event
-        event.cancelable && event.preventDefault()
-        touched = true
-        const left = Math.min(Math.max(0, (e.pageX - state.x) + (state.checked ? handle.offsetWidth / 2 : 0)), handle.offsetWidth / 2)
-        handle.style.transition = 'none'
-        handle.style.transform = `translateX(${left}px)`
-        const percentage = left / (handle.offsetWidth / 2) * 1
-        track.style.setProperty('--opacity', percentage.toString())
-        //const checked = left >= handle.offsetWidth / 4
-        //if (this.checked !== checked) {
-        //this.checked = checked
-        //this.dispatchEvent(new Event('change'))
-        //}
-      }
-      const eventNames = getEventNames(event.pointerType)
-      const remove = () => {
-        handle.style.removeProperty('transition')
-        handle.style.removeProperty('transform')
-        track.style.removeProperty('--opacity')
-        //document.removeEventListener(eventNames.move, move)
-      }
-      //document.addEventListener(eventNames.move, move, { passive: false })
-      //document.addEventListener(eventNames.up, remove, { once: true })
     })
   }
 }) { }

@@ -9,10 +9,10 @@ const style = /*css*/`
   width: 8px;
   height: 8px;
   border-radius: 8px;
-  font-size: .625rem;
+  font-size: calc(var(--s-font-size, 1) * 10px);
   vertical-align: middle;
-  background: var(--s-color-error, ${scheme.color.error});
-  color: var(--s-color-on-error, ${scheme.color.onError});
+  background: ${scheme.color.error};
+  color: ${scheme.color.onError};
 }
 :host(:not(:empty)) .text{
   height: 16px;

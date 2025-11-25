@@ -17,9 +17,9 @@ const style = /*css*/`
   position: relative;
   overflow: hidden;
   border-radius: 2px;
-  color: var(--s-color-primary, ${scheme.color.primary});
-  transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
-  transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
+  color: ${scheme.color.primary};
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.short4};
 }
 .layout{
   display: contents;
@@ -38,7 +38,7 @@ const style = /*css*/`
 }
 .track{
   flex-grow: 1;
-  background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
+  background: ${scheme.color.secondaryContainer};
 }
 .indicator{
   background: currentColor;
@@ -64,7 +64,7 @@ span{
     right: 2px;
   }
 }
-@keyframes linear{
+@keyframes linears{
   0%{ 
     transform: translateX(0);
   }
@@ -79,7 +79,7 @@ span{
     gap: inherit;
     flex-grow: 1;
     justify-content: flex-end;
-    animation: cubic-bezier(0.4, 0, 1, 1) 2s infinite linear;
+    animation: cubic-bezier(0.4, 0, 1, 1) 2s infinite linears;
     .track,
     .indicator,
     &::before,
@@ -95,7 +95,7 @@ span{
     &::before,
     &::after{
       content: '';
-      background: var(--s-color-secondary-container, ${scheme.color.secondaryContainer});
+      background: ${scheme.color.secondaryContainer};
     }
     .indicator{
       width: 30%;

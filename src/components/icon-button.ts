@@ -19,7 +19,7 @@ const style = /*css*/`
   width: 40px;
   height: 40px;
   transition-property: all;
-  color: var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
+  color: ${scheme.color.onSurfaceVariant};
   ::slotted(:is(svg, s-icon)){
     flex-shrink: 1;
   }
@@ -28,10 +28,15 @@ const style = /*css*/`
     right: 2px;
     top: 2px; 
   }
+  ::slotted(:is(svg, s-icon)){
+    transition-duration: inherit;
+    transition-timing-function: inherit;
+    transform: var(--s-icon-button-transform, none);
+  }
 }
 :host([variant=filled]){
-  background: var(--s-color-primary, ${scheme.color.primary});
-  color: var(--s-color-on-primary, ${scheme.color.onPrimary});
+  background: ${scheme.color.primary};
+  color: ${scheme.color.onPrimary};
 }
 /**Checkable**/
 :host([checkable]){
@@ -39,26 +44,26 @@ const style = /*css*/`
     border-radius: 12px;
   }
   &:host(:is(:not([variant]), [variant=filled])){
-    background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
-    color: var(--s-color-on-surface-variant,${scheme.color.onSurfaceVariant});
+    background: ${scheme.color.surfaceContainer};
+    color: ${scheme.color.onSurfaceVariant};
   }
   &:host([checked]){
     &:host(:not([variant])){
-      background: var(--s-color-primary-container, ${scheme.color.primaryContainer});
-      color: var(--s-color-on-primary-container, ${scheme.color.onPrimaryContainer});
+      background: ${scheme.color.primaryContainer};
+      color: ${scheme.color.onPrimaryContainer};
     }
     &:host([variant=filled]){
-      background: var(--s-color-primary, ${scheme.color.primary});
-      color: var(--s-color-on-primary,${scheme.color.onPrimary});
+      background: ${scheme.color.primary};
+      color: ${scheme.color.onPrimary};
     }
     &:host([variant=tonal]){
-      background: var(--s-color-secondary, ${scheme.color.secondary});
-      color: var(--s-color-on-secondary, ${scheme.color.onSecondary});
+      background: ${scheme.color.secondary};
+      color: ${scheme.color.onSecondary};
     }
     &:host([variant=outlined]){
       box-shadow: none;
-      background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
-      color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
+      background: ${scheme.color.inverseSurface};
+      color: ${scheme.color.inverseOnSurface};
     }
   }
 }
@@ -119,11 +124,6 @@ const style = /*css*/`
   &:host([size=extra-large]){
     width: 48px;
   }
-}
-::slotted(:is(svg, s-icon)){
-  transition-duration: inherit;
-  transition-timing-function: inherit;
-  transform: var(--s-icon-button-transform, none);
 }
 `
 

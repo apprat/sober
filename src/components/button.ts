@@ -37,19 +37,19 @@ const style = /*css*/`
   }
 }
 :host(:not([variant])){
-  background: var(--s-color-primary, ${scheme.color.primary});
-  color: var(--s-color-on-primary, ${scheme.color.onPrimary});
+  background: ${scheme.color.primary};
+  color: ${scheme.color.onPrimary};
 }
 :host([variant=elevated]){
-  background: var(--s-color-surface-container-low, ${scheme.color.surfaceContainerLow});
-  color: var(--s-color-primary, ${scheme.color.primary});
-  box-shadow: var(--s-elevation-level1, ${scheme.elevation.level1});
+  background: ${scheme.color.surfaceContainerLow};
+  color: ${scheme.color.primary};
+  box-shadow: ${scheme.elevation.level1};
   &:host([pressed]){
-    box-shadow: var(--s-elevation-level2, ${scheme.elevation.level2});
+    box-shadow: ${scheme.elevation.level2};
   }
 }
 :host([variant=text]){
-  color: var(--s-color-primary, ${scheme.color.primary});
+  color: ${scheme.color.primary};
 }
 /**Checkable**/
 :host([checkable]){
@@ -57,26 +57,26 @@ const style = /*css*/`
     border-radius: 12px;
   }
   &:host(:not([variant])){
-    background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
-    color: var(--s-color-on-surface-variant,${scheme.color.onSurfaceVariant});
+    background: ${scheme.color.surfaceContainer};
+    color: ${scheme.color.onSurfaceVariant};
   }
   &:host([checked]){
     &:host(:is(:not([variant]), [variant=elevated])){
-      background: var(--s-color-primary, ${scheme.color.primary});
-      color: var(--s-color-on-primary, ${scheme.color.onPrimary});
+      background: ${scheme.color.primary};
+      color: ${scheme.color.onPrimary};
     }
     &:host([variant=tonal]){
-      background: var(--s-color-secondary, ${scheme.color.secondary});
-      color: var(--s-color-on-secondary, ${scheme.color.onSecondary});
+      background: ${scheme.color.secondary};
+      color: ${scheme.color.onSecondary};
     }
     &:host([variant=outlined]){
       box-shadow: none;
-      background: var(--s-color-inverse-surface, ${scheme.color.inverseSurface});
-      color: var(--s-color-inverse-on-surface, ${scheme.color.inverseOnSurface});
+      background: ${scheme.color.inverseSurface};
+      color: ${scheme.color.inverseOnSurface};
     }
     &:host([variant=text]){
-      background: var(--s-color-primary-container, ${scheme.color.primaryContainer});
-      color: var(--s-color-on-primary-container, ${scheme.color.onPrimaryContainer});
+      background: ${scheme.color.primaryContainer};
+      color: ${scheme.color.onPrimaryContainer};
     }
   }
 }
@@ -84,7 +84,7 @@ const style = /*css*/`
 :host([size=extra-small]){
   height: 32px;
   gap: 4px;
-  font-size: calc(var(--s-font-size) * 11px);
+  font-size: calc(var(--s-font-size, 1) * 11px);
   padding: 0 12px;
   border-radius: 16px;
   ::slotted(:is(svg, s-icon)){
@@ -94,7 +94,7 @@ const style = /*css*/`
 :host([size=small]){
   height: 36px;
   gap: 4px;
-  font-size: calc(var(--s-font-size) * 12px);
+  font-size: calc(var(--s-font-size, 1) * 12px);
   padding: 0 16px;
   border-radius: 18px;
   ::slotted(:is(svg, s-icon)){
@@ -104,7 +104,7 @@ const style = /*css*/`
 :host([size=large]){
   height: 48px;
   gap: 8px;
-  font-size: calc(var(--s-font-size) * 16px);
+  font-size: calc(var(--s-font-size, 1) * 16px);
   padding: 0 22px;
   border-radius: 24px;
   ::slotted(:is(svg, s-icon)){
@@ -114,7 +114,7 @@ const style = /*css*/`
 :host([size=extra-large]){
   height: 56px;
   gap: 8px;
-  font-size: calc(var(--s-font-size) * 18px);
+  font-size: calc(var(--s-font-size, 1) * 18px);
   padding: 0 28px;
   border-radius: 28px;
   ::slotted(:is(svg, s-icon)){

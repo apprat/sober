@@ -15,7 +15,7 @@ const style = /*css*/`
   gap: 12px;
   height: 64px;
   padding: 0 16px;
-  background: var(--s-color-surface-container, ${scheme.color.surfaceContainer});
+  background: ${scheme.color.surfaceContainer};
 }
 :host([compacted]){
   padding: 0 16px;
@@ -38,7 +38,7 @@ const style = /*css*/`
 }
 ::slotted([slot=logo]){
   height: 32px;
-  color: var(--s-color-primary, ${scheme.color.primary});
+  color: ${scheme.color.primary};
   fill: currentColor;
 }
 ::slotted(:is([slot=title], [slot=subtitle])){
@@ -51,13 +51,13 @@ const style = /*css*/`
   font-size: 1.375rem;
   font-weight: 600;
   text-transform: capitalize;
-  color: var(--s-color-primary, ${scheme.color.primary});
+  color: ${scheme.color.primary};
 }
 ::slotted([slot=subtitle]){
   font-size: .75rem;
   font-weight: 400;
   letter-spacing: .5px;
-  color: var(--s-color-on-surface-variant, ${scheme.color.onSurfaceVariant});
+  color: ${scheme.color.onSurfaceVariant};
 }
 ::slotted([slot=action]:last-child){
   margin-right: -8px;

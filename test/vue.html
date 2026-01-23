@@ -5,99 +5,28 @@
   <meta charset="UTF-8" />
   <title>Test</title>
   <script>
-    class MyApp extends HTMLElement {
-      static get observedAttributes() {
-        return ['variant']
-      }
-      constructor() {
-        super()
-        this.attachShadow({ mode: 'open' }).innerHTML = `
-                    <style>
-                      :host {
-                        display: block;
-                        width: 200px;
-                        height: 200px;
-                        background: lightgray;
-                      }
-                    </style>
-                    <div>My App Component</div>
-                  `
-        console.log('初始化[MyApp]', this.getAttribute('variant'))
-      }
-      attributeChangedCallback(name, oldValue, newValue) {
-        console.log(`[MyApp change]: ${newValue}`)
-      }
-      connectedCallback() {
-        console.log('连接[MyApp]')
-      }
-
-    }
-    customElements.define('my-app', MyApp)
   </script>
 </head>
 
 <body>
-  <my-app variant="zz"></my-app>
   <template id="template">
-    <my-app variant="zz"></my-app>
-    <h1>{{state.tab}}</h1>
-
-    <s-button @click="state.multiple=!state.multiple">设置多选 {{state.multiple}}</s-button>
-    <s-tab v-model.lazy="state.tab" :multiple="state.multiple">
-      <s-tab-item value="tab1">tab1</s-tab-item>
-      <s-tab-item value="tab2">tab2</s-tab-item>
-      <s-tab-item value="tab3">tab3</s-tab-item>
-      <s-tab-item value="tab4">tab4</s-tab-item>
-    </s-tab>
-
-    <s-tab v-model.lazy="state.tab" variant="segmented" :multiple="state.multiple" style="margin: 48px;">
-      <s-tab-item value="tab1">tab1</s-tab-item>
-      <s-tab-item value="tab2">tab2</s-tab-item>
-      <s-tab-item value="tab3">tab3</s-tab-item>
-      <s-tab-item value="tab4">tab4</s-tab-item>
-    </s-tab>
-
-    <select v-model="state.tab" :multiple="state.multiple">
-      <option value="tab1">tab1</option>
-      <option value="tab2">tab2</option>
-      <option value="tab3">tab3</option>
-      <option value="tab4">tab4</option>
-    </select>
-    <hr>
-
-    <input type="checkbox" value="0" v-model="state.sex">
-    <input type="checkbox" value="1" v-model="state.sex">
-    <input type="checkbox" value="2" v-model="state.sex">
-
-    <s-checkbox type="checkbox" value="3" v-model.lazy="state.sex"></s-checkbox>
-    <s-checkbox type="checkbox" value="4" v-model.lazy="state.sex"></s-checkbox>
-
-    <s-button type="checkbox" checkable value="5" v-model.lazy="state.sex"
-      onchange="console.log('change')">选择</s-button>
-    <s-button type="checkbox" checkable value="6" v-model.lazy="state.sex" variant="elevated">选择</s-button>
-    当前：{{state.sex}}
-    <hr>
-    <input type="radio" value="Male" v-model="state.gender"> Male
-    <input type="radio" value="Female" v-model="state.gender"> Female
-    <s-radio type="radio" value="Unkonw" v-model.lazy="state.gender"></s-radio> Unkonw
-    <s-radio type="radio" value="Lady" v-model.lazy="state.gender"></s-radio> Lady
-    当前：{{state.gender}}
+    <s-checkbox onchange="this.value='on'" v-model.lazy="state.checked">
+      {{state.checked}}</s-checkbox>
+    <input type="checkbox" v-model="state.checked">
 
   </template>
   <main id="app"></main>
-  <script type="module" src="../dist/main.js"></script>
+  <script src="../dist/sober.min.js"></script>
+  <script src="../dist/theme.min.js"></script>
+  <script src="../dist/design/fluent.min.js"></script>
   <script type="module">
     import { createApp, reactive } from 'https://unpkg.com/vue@3.5.13/dist/vue.esm-browser.prod.js'
     const template = document.querySelector('template').innerHTML
-    console.log('-----------初始化[vue]')
     const app = createApp({
       template,
       setup() {
         const state = reactive({
-          tab: 'tab4',
-          multiple: false,
-          sex: ['3', '4'],
-          gender: 'Male'
+          checked: false,
         })
         return { state }
       }

@@ -6,25 +6,19 @@ const style = /*css*/`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 8px;
-  height: 8px;
+  min-width: 8px;
+  min-height: 8px;
+  padding: 0 4px;
   border-radius: 8px;
   font-size: calc(var(--s-font-size, 1) * 10px);
   vertical-align: middle;
+  font-weight: 600;
   background: ${scheme.color.error};
   color: ${scheme.color.onError};
 }
-:host(:not(:empty)) .text{
-  height: 16px;
-  padding: 0 5px;
-  display: flex;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  background: inherit;
-  color: inherit;
-  box-shadow: inherit;
-  border-radius: 8px;
+:host(:not(:empty)){
+  min-width: 16px;
+  min-height: 16px;
 }
 `
 const template = /*html*/`<slot class="text" part="text"></slot>`

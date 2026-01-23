@@ -11,20 +11,22 @@ const style = /*css*/`
   justify-content: center;
   align-items: center;
   vertical-align: middle;
-  width: 48px;
-  padding: 5px;
+  width: 38px;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   border-radius: 50%;
   color: ${scheme.color.primary};
 }
 :host([variant=contained]){
+  width: 48px;
+  padding: 5px;
   background: ${scheme.color.secondaryContainer};
 }
 svg{
   width: 100%;
   height: 100%;
   overflow: visible;
+  will-change: contents;
   path{
     fill: currentColor;
   }
@@ -60,19 +62,18 @@ const state = {
   loading: document.createElement('s-loading') as Loading
 }
 state.div.attachShadow({ mode: 'open' })
-state.div.shadowRoot!.innerHTML = /*html*/ `
-<style>
-  dialog{
-    border: none;
-    outline: none;
-    background: none;
-  }
-  dialog::backdrop{
-    filter: opacity(.75);
-    background: var(--s-color-scrim, ${scheme.color.scrim});
-  }
-</style>
+const css = /*css*/`
+dialog{
+  border: none;
+  outline: none;
+  background: none;
+}
+dialog::backdrop{
+  filter: opacity(.75);
+  background: var(--s-color-scrim, ${scheme.color.scrim});
+}
 `
+state.div.shadowRoot!.innerHTML = `<style>${css}</style>`
 state.loading.variant = 'contained'
 state.dialog.appendChild(state.loading)
 state.div.shadowRoot!.appendChild(state.dialog)

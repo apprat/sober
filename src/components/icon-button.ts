@@ -1,16 +1,19 @@
 import { useElement, useProps } from '../core/element.js'
 import * as scheme from '../core/scheme.js'
-import { buttonStyle, buttonVariant } from '../core/style/button.js'
+import { buttonStyle } from '../core/style/button.js'
 import './ripple.js'
 
 const props = useProps({
   variant: ['standard', 'filled', 'tonal', 'outlined'],
-  size: ['medium', 'small', 'extra-small', 'large', 'extra-large'],
+  size: ['small', 'medium', 'extra-small', 'large', 'extra-large'],
   width: ['default', 'wide', 'narrow'],
   disabled: false,
-  checkable: false,
   checked: false,
-  $value: ''
+  type: ['icon-button', 'checkbox', 'submit', 'reset'],
+  defualtChecked: false,
+  name: '',
+  $value: '',
+  $requiring: ''
 })
 
 const style = /*css*/`
@@ -18,36 +21,42 @@ const style = /*css*/`
   border-radius: 20px;
   width: 40px;
   height: 40px;
-  transition-property: all;
+  font-size: calc(var(--s-font-size) * 24px);
+  transition-property: height, width, color, background-color, padding, border-radius;
   color: ${scheme.color.onSurfaceVariant};
-  ::slotted(:is(svg, s-icon)){
-    flex-shrink: 1;
-  }
-  ::slotted(s-badge){
-    position: absolute;
-    right: 2px;
-    top: 2px; 
-  }
-  ::slotted(:is(svg, s-icon)){
-    transition-duration: inherit;
-    transition-timing-function: inherit;
-    transform: var(--s-icon-button-transform, none);
-  }
+}
+:host([pressed]){
+  border-radius: 8px;
 }
 :host([variant=filled]){
   background: ${scheme.color.primary};
   color: ${scheme.color.onPrimary};
+  outline-color: ${scheme.color.primary};
 }
-/**Checkable**/
-:host([checkable]){
-  &:host(:is([checked]:not([pressed]), [pressed]:not([checked]))){
-    border-radius: 12px;
+:host([variant=tonal]){
+  background: ${scheme.color.secondaryContainer};
+  color: ${scheme.color.onSecondaryContainer};
+}
+:host([variant=outlined]){
+  color: ${scheme.color.onSurfaceVariant};
+  &::before{
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    inset: 0;
+    border: solid 1px ${scheme.color.outlineVariant};
+    border-radius: inherit;
   }
+}
+:host([type=checkbox]){
   &:host(:is(:not([variant]), [variant=filled])){
     background: ${scheme.color.surfaceContainer};
     color: ${scheme.color.onSurfaceVariant};
   }
   &:host([checked]){
+    &:host(:not([pressed])){
+      border-radius: 12px;
+    }
     &:host(:not([variant])){
       background: ${scheme.color.primaryContainer};
       color: ${scheme.color.onPrimaryContainer};
@@ -59,71 +68,120 @@ const style = /*css*/`
     &:host([variant=tonal]){
       background: ${scheme.color.secondary};
       color: ${scheme.color.onSecondary};
+      outline-color: ${scheme.color.secondary};
     }
     &:host([variant=outlined]){
       box-shadow: none;
       background: ${scheme.color.inverseSurface};
       color: ${scheme.color.inverseOnSurface};
+      outline-color: ${scheme.color.inverseSurface};
+      &::before{
+        content: none;
+      }
     }
   }
 }
-/*Size*/
+/**Size**/
 :host([size=extra-small]){
   width: 32px;
   height: 32px;
   border-radius: 16px;
-  ::slotted(:is(svg, s-icon)){
-    width: 18px;
+  font-size: calc(var(--s-font-size) * 20px);
+  &:host([pressed]){
+    border-radius: 8px;
   }
-}
-:host([size=small]){
-  width: 36px;
-  height: 36px;
-  border-radius: 18px;
-  ::slotted(:is(svg, s-icon)){
+  &:host([type=checkbox][checked]:not([pressed])){
+    border-radius: 12px;
+  }
+  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
     width: 20px;
   }
 }
+:host([size=medium]){
+  height: 56px;
+  width: 56px;
+  border-radius: 28px;
+  &:host([pressed]){
+    border-radius: 12px;
+  }
+  &:host([type=checkbox][checked]:not([pressed])){
+    border-radius: 16px;
+  }
+}
 :host([size=large]){
-  width: 48px;
-  height: 48px;
-  border-radius: 24px;
+  height: 96px;
+  width: 96px;
+  border-radius: 48px;
+  font-size: calc(var(--s-font-size) * 32px);
+  &:host([pressed]){
+    border-radius: 16px;
+  }
+  &:host([type=checkbox][checked]:not([pressed])){
+    border-radius: 28px;
+  }
+  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+    width: 32px;
+  }
 }
 :host([size=extra-large]){
-  width: 56px;
-  height: 56px;
-  border-radius: 28px;
-}
-/*Width*/
-:host([width=wide]){
-  width: 52px;
-  &:host([size=extra-small]){
+  height: 136px;
+  width: 136px;
+  border-radius: 68px;
+  font-size: calc(var(--s-font-size) * 40px);
+  &:host([pressed]){
+    border-radius: 16px;
+  }
+  &:host([type=checkbox][checked]:not([pressed])){
+    border-radius: 28px;
+  }
+  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
     width: 40px;
   }
-  &:host([size=small]){
-    width: 44px;
-  }
-  &:host([size=large]){
-    width: 64px;
-  }
-  &:host([size=extra-large]){
-    width: 72px;
-  }
 }
+/*Width*/
 :host([width=narrow]){
   width: 32px;
   &:host([size=extra-small]){
     width: 28px;
   }
-  &:host([size=small]){
-    width: 30px;
+  &:host([size=medium]){
+    width: 48px;
+    height: 56px;
   }
   &:host([size=large]){
-    width: 40px;
+    width: 64px;
+    height: 96px;
   }
   &:host([size=extra-large]){
-    width: 48px;
+    width: 104px;
+    height: 136px;
   }
+}
+:host([width=wide]){
+  width: 52px;
+  &:host([size=extra-small]){
+    width: 40px;
+  }
+  &:host([size=medium]){
+    width: 72px;
+    height: 56px;
+  }
+  &:host([size=large]){
+    width: 128px;
+    height: 96px;
+  }
+  &:host([size=extra-large]){
+    width: 184px;
+    height: 136px;
+  }
+}
+::slotted(s-badge){
+  position: absolute;
+  right: 15%;
+  top: 15%;
+  transform: translate(50%, -50%);
+  outline-offset: 0;
+  outline: solid 2px ${scheme.color.surface};
 }
 `
 
@@ -133,17 +191,23 @@ const template = /*html*/`
 `
 
 export class IconButton extends useElement({
-  style: [buttonStyle, buttonVariant, style],
-  focused: true,
-  pressed: true,
-  hovered: true,
+  style: [buttonStyle, style],
+  focused: 'keydown',
+  formAssociated: true,
   props, template,
-  setup() {
+  setup(_, info) {
+    const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)
     this.addEventListener('click', () => {
-      if (!this.checkable) return
+      if (this.type === 'reset') return info.internals.form?.reset()
+      if (this.type === 'submit') return info.internals.form?.requestSubmit()
+      if (this.type !== 'checkbox') return
       this.checked = !this.checked
       this.dispatchEvent(new Event('change'))
     })
+    return {
+      onFormReset: () => this.checked = this.defualtChecked,
+      onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom()
+    }
   }
 }) { }
 

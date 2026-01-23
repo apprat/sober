@@ -77,10 +77,11 @@
       {
         name: '基础',
         list: [
+          'icon',
           'button',
           'icon-button',
-          'icon',
           'floating-action-button',
+          'split-button',
           'checkbox',
           'radio',
           'progress',
@@ -105,7 +106,6 @@
           'page',
           'page-view',
           'button-group',
-          'split-button',
           'card',
           'drawer',
           'collapse',
@@ -135,6 +135,7 @@
           'pagination',
           'tooltip',
           'ripple',
+          'popup-or-dialog'
         ]
       },
       {
@@ -167,7 +168,7 @@
       list.append(title)
       for (const name of item.list) {
         const a = document.createElement('a')
-        a.href = `./preview.html?name=${name}`
+        a.href = `/docs/zh-cn/components/${name}.md`
         a.textContent = name
         list.appendChild(a)
       }

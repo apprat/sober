@@ -11,18 +11,39 @@
       padding: 24px;
     }
 
-    .test {
-      background: repeating-radial-gradient(closest-side, transparent, #ebf8e1, #f69d3c);
-      background-size: 10%;
-      height: 44px;
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-snap-stop: always;
+      height: 200px;
+      width: 500px;
+      background: #eee;
+    }
+
+    .carousel-item {
+      flex: 0 0 100%;
+      scroll-snap-align: center;
+    }
+
+    .carousel-item:nth-child(odd) {
+      background: #999;
     }
   </style>
 </head>
 
 <body>
-  <div class="test">
-
+  <div class="carousel">
+    <div class="carousel-item">1</div>
+    <div class="carousel-item">2</div>
+    <div class="carousel-item" style="scroll-target-group: none;">3</div>
+    <div class="carousel-item" style="scroll-target-group: none;">4</div>
   </div>
+  <input type="text" name="" id="" value="xxxx">
+  <button>change</button>
+  <script>
+  </script>
+
 </body>
 
 </html>

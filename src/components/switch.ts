@@ -6,7 +6,10 @@ const name = 's-switch'
 const props = useProps({
   disabled: false,
   checked: false,
-  $value: ''
+  defualtChecked: false,
+  name: '',
+  $value: '',
+  $requiring: ''
 })
 
 const style = /*css*/`
@@ -21,6 +24,7 @@ const style = /*css*/`
   border-radius: 16px;
   position: relative;
   color: ${scheme.color.primary};
+  outline-color: ${scheme.color.onSurface};
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
 }
@@ -30,7 +34,6 @@ const style = /*css*/`
   background: ${scheme.color.surfaceContainerHighest};
   box-shadow: 0 0 0 2px ${scheme.color.outline} inset;
   border-radius: inherit;
-  transition-property: background;
 }
 .handle{
   height: 125%;
@@ -39,31 +42,29 @@ const style = /*css*/`
   -webkit-aspect-ratio: 1;
   border-radius: 50%;
   display: flex;
+  transition-property: transform;
   transform: translateX(-10%);
   justify-content: center;
   align-items: center;
-  transition-property: transform;
   &::before{
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
     transform: scale(.5);
-    transition-property: background, transform;
-    transition-timing-function: inherit;
-    transition-duration: inherit;
     filter: opacity(.12);
+    transition-property: transform, opacity;
     opacity: 0;
     background: ${scheme.color.outline};
   }
   .thumb{
     max-width: 60%;
     min-width: 40%;
+    transition-property: min-width, min-height;
     border-radius: inherit;
     aspect-ratio: 1;
     -webkit-aspect-ratio: 1;
     position: relative;
-    transition-property: min-width, background;
     padding: 10%;
     background: ${scheme.color.outline};
     ::slotted(:is(svg, s-icon)){
@@ -82,6 +83,7 @@ const style = /*css*/`
   display: none;
 }
 :host([checked]){
+  outline-color: currentColor;
   .unselected{
     display: none;
   }
@@ -177,14 +179,31 @@ const template = /*html*/`
 
 export class Switch extends useElement({
   style, template, props,
-  focused: true,
+  focused: 'keydown',
   pressed: true,
   hovered: true,
-  setup() {
+  formAssociated: true,
+  setup(_, info) {
+    const updateFrom = () => {
+      if (!info.internals.form) return
+      let value: string | null = null
+      let valueMissing = false
+      if (!this.disabled && this.value !== '' && this.name !== '') {
+        value = this.checked ? this.value : null
+        if (this.requiring !== '') valueMissing = !this.checked
+      }
+      info.internals.setFormValue(value)
+      info.internals.setValidity({ valueMissing }, this.requiring, this)
+    }
     this.addEventListener('click', () => {
       this.checked = !this.checked
       this.dispatchEvent(new Event('change'))
     })
+    return {
+      onFormReset: () => this.checked = this.defualtChecked,
+      onFormAssociated: updateFrom,
+      onAttributeChanged: (name) => ['disabled', 'checked', 'name', 'value', 'requiring'].includes(name) && updateFrom()
+    }
   }
 }) { }
 

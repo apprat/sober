@@ -2,11 +2,14 @@ import { useElement, useProps } from '../core/element.js'
 import { device } from '../core/device.js'
 import { getStackingContext } from '../core/utils/getStackingContext.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
+import { oneEvent } from '../core/utils/oneEvent.js'
+import { popup } from '../core/utils/popup.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
   gravity: ['bottom', 'top', 'left', 'right'],
-  disabled: false
+  disabled: false,
+  $slotLayer: -1,
 })
 const events = {
   opened: Event,
@@ -16,13 +19,15 @@ const events = {
 const style = /*css*/`
 :host{
   display: contents;
-  font-size: .875rem;
+  font-size: calc(var(--s-font-size, 1) * 13px);
   font-weight: 400;
-  position: absolute;
   border-radius: 4px;
+  border: none;
   padding: 6px 8px;
+  outline-offset: 4px;
+  filter: opacity(.95);
   transition-timing-function: ${scheme.motion.easing.standard};
-  transition-duration: ${scheme.motion.duration.medium4};
+  transition-duration: ${scheme.motion.duration.short4};
   background: ${scheme.color.inverseSurface};
   color: ${scheme.color.inverseOnSurface};
 }
@@ -32,21 +37,19 @@ const style = /*css*/`
   display: none;
   inset: 0;
   margin: 0;
-  width: fit-content;
-  height: fit-content;
-  border: none;
+  width: max-content;
+  height: max-content;
+  border: inherit;
   overflow: hidden;
   outline: none;
   max-width: 100%;
   max-height: 100%;
   padding: inherit;
+  filter: inherit;
   border-radius: inherit;
-  filter: opacity(.9);
   background: inherit;
   color: inherit;
-  &.opened{
-    display: block;
-  }
+  transition-property: none;
 }
 `
 
@@ -64,126 +67,83 @@ export class Tooltip extends useElement({
       const duration = computedStyle.getDuration('transition-duration')
       return { easing, duration }
     }
-    const display = ['block', 'block']
-    const gravitys = {
-      top: ['bottom', 'left', 'right'],
-      bottom: ['top', 'left', 'right'],
-      left: ['right', 'top', 'bottom'],
-      right: ['left', 'top', 'bottom']
-    }
-    const open = (parent: HTMLElement) => {
-      if (!this.isConnected || popover.classList.contains('opened')) return
-      if (!this.dispatchEvent(new Event('open', { cancelable: true }))) return
+    const state: { parent?: HTMLElement, opened: boolean, timer?: number } = { opened: false }
+    const open = () => {
+      if (!this.isConnected || !state.parent || state.opened) return false
       popover.style.display = 'block'
-      const gap = 4
       popover.style.removeProperty('top')
       popover.style.removeProperty('left')
-      const { offsetHeight, offsetWidth } = popover
       if (!popover.showPopover) {
         const rect = getStackingContext(shadowRoot)
         popover.style.marginLeft = `${-rect.left}px`
         popover.style.marginTop = `${-rect.top}px`
         popover.style.zIndex = '3'
       }
-      popover.style.removeProperty('display')
       popover.showPopover?.()
-      const rect = parent.getBoundingClientRect()
-      const offsets = {
-        top: rect.top - gap - offsetHeight,
-        bottom: rect.top + gap + rect.height,
-        left: rect.left - gap - offsetWidth,
-        right: rect.left + gap + rect.width
-      }
-      const vertical = { name: 'top', side: { name: 'left', size: offsetWidth, innerSize: innerWidth, targetSize: rect.width } } as const
-      const horizontal = { name: 'left', side: { name: 'top', size: offsetHeight, innerSize: innerHeight, targetSize: rect.height } } as const
-      const options = {
-        top: { value: offsets.top, overflowed: offsets.top < 0, ...vertical },
-        bottom: { value: offsets.bottom, overflowed: offsets.bottom + offsetHeight > innerHeight, ...vertical },
-        left: { value: offsets.left, overflowed: offsets.left < 0, not: 'right', ...horizontal },
-        right: { value: offsets.right, overflowed: offsets.right + offsetWidth > innerWidth, ...horizontal }
-      } as const
-      const position = { top: 0, left: 0 }
-      if (options.top.overflowed && options.bottom.overflowed && options.left.overflowed && options.right.overflowed) {
-        position.top = (innerHeight - offsetHeight) / 2
-        position.left = (innerWidth - offsetWidth) / 2
-      } else {
-        const cssGravity = computedStyle.getValue('--s-tooltip-gravity')
-        const gravity = cssGravity in gravitys ? cssGravity as keyof typeof gravitys : this.gravity
-        for (const key of [gravity, ...gravitys[gravity]]) {
-          const name = key as keyof typeof options
-          const option = options[name]
-          if (!option.overflowed) {
-            position[option.name] = option.value
-            const side = option.side
-            position[side.name] = rect[side.name] - (side.size - side.targetSize) / 2
-            if (position[side.name] < 0 && rect[side.name] + side.size < side.innerSize) {
-              position[side.name] = rect[side.name]
-              break
-            }
-            if (position[side.name] + side.size > side.innerSize && rect[side.name] - side.size > 0) {
-              position[side.name] = rect[side.name] + side.targetSize - side.size
-              break
-            }
-            if (position[side.name] < 0 || position[side.name] + side.size > side.innerSize) position[side.name] = 0
-            break
-          }
-        }
-      }
+      const cssGravity = computedStyle.getValue('--s-tooltip-gravity') as typeof this.gravity
+      const gravity = ['top', 'bottom', 'left', 'right'].includes(cssGravity) ? cssGravity : this.gravity
+      const gap = Number(computedStyle.getValue('outline-offset').slice(0, -2))
+      const position = popup({ anchor: state.parent, shadowRoot, popover, gravity, gap })
       popover.style.top = `${position.top}px`
       popover.style.left = `${position.left}px`
-      popover.classList.add('opened')
-      parent.setAttribute('tooltip-opened', '')
-      popover.animate({ opacity: [0, 1], display }, getAnimateOptions()).finished.then(() => this.dispatchEvent(new Event('opened')))
+      popover.style.transformOrigin = position.origin.join(' ')
+      popover.animate({ opacity: [0, 1], transform: ['scale(.8)', 'scale(1)'] }, getAnimateOptions()).finished.then(() => this.dispatchEvent(new Event('opened')))
+      state.opened = true
       this.dispatchEvent(new Event('s-top-layer-open', { bubbles: true }))
+      return true
     }
-    const close = (parent: HTMLElement) => {
-      if (!this.isConnected || !popover.classList.contains('opened')) return
-      if (!this.dispatchEvent(new Event('close', { cancelable: true }))) return
-      popover.classList.remove('opened')
-      parent.removeAttribute('tooltip-opened')
-      const animation = popover.animate({ opacity: [1, 0], display }, getAnimateOptions())
-      animation.finished.then(() => {
-        if (popover.classList.contains('opened')) return
+    const close = () => {
+      if (!this.isConnected || !state.opened) return false
+      popover.animate({ opacity: [1, 0], transform: ['scale(1)', 'scale(.8)'] }, getAnimateOptions()).finished.then(() => {
+        if (state.opened) return
         popover.hidePopover?.()
+        popover.style.removeProperty('display')
         this.dispatchEvent(new Event('closed'))
       })
+      state.opened = false
+      this.dispatchEvent(new Event('s-top-layer-close', { bubbles: true }))
+      return true
+    }
+    const show = () => !this.disabled && open() && this.dispatchEvent(new Event('open'))
+    const hide = () => !this.disabled && close() && this.dispatchEvent(new Event('close'))
+    const hover = () => {
+      if (!device.mouseEnabled || !show()) return
+      oneEvent([
+        { element: state.parent!, events: ['pointerleave'] },
+        { element: document, events: ['wheel'] },
+        { element: window, events: ['resize'] }
+      ], hide)
+    }
+    const press = () => {
+      state.timer = setTimeout(show, 200)
+      oneEvent([
+        { element: document, events: ['touchend', 'touchmove', 'touchcancel'] },
+        { element: window, events: ['resize'] }
+      ], () => {
+        clearTimeout(state.timer)
+        state.opened && hide()
+      })
+    }
+    const setEvent = () => {
+      state.parent?.removeEventListener('pointerenter', hover)
+      state.parent?.removeEventListener('touchstart', press)
+      delete state.parent
+      let parent = this.parentNode!
+      if (this.slotLayer >= 0 && this.assignedSlot) {
+        parent = this.assignedSlot
+        for (let i = 0; i < this.slotLayer; i++) parent = parent.parentNode!
+      }
+      const parentElement = parent instanceof ShadowRoot ? parent.host : parent
+      if (!(parentElement instanceof HTMLElement)) return
+      state.parent = parentElement
+      parentElement.addEventListener('pointerenter', hover)
+      parentElement.addEventListener('touchstart', press)
     }
     return {
-      expose: { open },
-      onMounted: (parent) => {
-        const parentElement = parent instanceof ShadowRoot ? parent.host : parent
-        if (!(parentElement instanceof HTMLElement)) return
-        const show = () => {
-          const cssDisabled = computedStyle.getValue('--s-tooltip-disabled')
-          const disabled = ['', 'none'].includes(cssDisabled) ? this.disabled : Boolean(cssDisabled)
-          !disabled && open(parentElement)
-        }
-        const close2 = () => close(parentElement)
-        const hover = () => !device.touchEnabled && show()
-        const unHover = () => !device.touchEnabled && close2()
-        let timer: number
-        const touchstart = () => timer = setTimeout(show, 500)
-        const touchend = () => {
-          clearTimeout(timer)
-          close2()
-        }
-        parentElement.addEventListener('mouseover', hover)
-        parentElement.addEventListener('mouseleave', unHover)
-        parentElement.addEventListener('wheel', unHover)
-        parentElement.addEventListener('touchstart', touchstart, { passive: true })
-        parentElement.addEventListener('touchmove', touchend)
-        parentElement.addEventListener('touchend', touchend)
-        window.addEventListener('resize', close2)
-        return () => {
-          parentElement.removeEventListener('mouseover', hover)
-          parentElement.removeEventListener('mouseleave', unHover)
-          parentElement.removeEventListener('wheel', unHover)
-          window.removeEventListener('resize', close2)
-          parentElement.removeEventListener('touchstart', touchstart)
-          parentElement.removeEventListener('touchmove', touchend)
-          parentElement.removeEventListener('touchend', touchend)
-        }
-      }
+      expose: { open, close },
+      onMounted: setEvent,
+      onUnmounted: setEvent,
+      setSlotted: setEvent
     }
   }
 }) { }

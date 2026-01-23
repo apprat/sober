@@ -7,7 +7,8 @@ const props = useProps({
   gravity: ['center', 'top', 'bottom'],
   size: ['standard', 'full-screen'],
   opened: false,
-  disabled: false
+  disabled: false,
+  slotted: false
 })
 
 type CloseSource = 0 | 1 | 2
@@ -113,6 +114,8 @@ const template = /*html*/`
 <dialog class="popover" part="popover">
   <div class="layout" part="layout">
     <slot name="title"></slot>
+    <slot name="icon"></slot>
+    <slot name="center-title"></slot>
     <slot name="text"></slot>
     <slot></slot>
     <div class="actions" part="actions">
@@ -122,58 +125,7 @@ const template = /*html*/`
 </dialog>
 `
 
-type BuildActions = { text: string, click?: (event: MouseEvent) => void }
 
-const builder = (options: string | {
-  root?: Element
-  title?: string
-  text?: string
-  view?: HTMLElement | ((dialog: Dialog) => void)
-  actions?: BuildActions | BuildActions[],
-}) => {
-  let root: Element = document.body
-  const dialog = new Dialog()
-  const page = document.body.firstElementChild
-  if (page && page.tagName === 'S-PAGE') root = page
-  if (typeof options === 'string') {
-    const text = document.createElement('div')
-    text.slot = 'text'
-    text.textContent = options
-    dialog.appendChild(text)
-  } else {
-    if (options.root) root = options.root
-    if (options.title) {
-      const headline = document.createElement('div')
-      headline.slot = 'title'
-      headline.textContent = options.title
-      dialog.appendChild(headline)
-    }
-    if (options.text) {
-      const text = document.createElement('div')
-      text.slot = 'text'
-      text.textContent = options.text
-      dialog.appendChild(text)
-    }
-    if (options.view) {
-      typeof options.view === 'function' ? options.view(dialog) : dialog.appendChild(options.view)
-    }
-    const actions = options.actions ?? []
-    for (const item of Array.isArray(actions) ? actions : [actions]) {
-      const action = document.createElement('s-button') as Button
-      action.slot = 'action'
-      action.variant = 'text'
-      action.textContent = item.text
-      if (item.click) action.onclick = item.click
-      dialog.appendChild(action)
-    }
-  }
-  dialog.addEventListener('closed', () => root.removeChild(dialog))
-  root.appendChild(dialog)
-  setTimeout(() => {
-    dialog.opened = true
-  }, 0)
-  return dialog
-}
 
 export class Dialog extends useElement({
   style, template, props, events,
@@ -200,7 +152,6 @@ export class Dialog extends useElement({
       const gravity = getGravity()
       gravity !== 'center' && popover.style.setProperty(`margin-${gravity}`, 'inherit')
       popover.focus()
-      state.parent?.setAttribute('dialog-opened', '')
       if (animated) {
         let transform = ['scale(.9)', 'scale(1)']
         const animateOptions = getAnimateOptions()
@@ -218,7 +169,6 @@ export class Dialog extends useElement({
     const close = async (animated = true) => {
       if (!popover.classList.contains('opened')) return
       popover.blur()
-      state.parent?.removeAttribute('dialog-opened')
       if (animated) {
         const animateOptions = getAnimateOptions()
         const gravity = getGravity()
@@ -235,43 +185,14 @@ export class Dialog extends useElement({
       this.dispatchEvent(new Event('closed'))
       popover.close()
     }
-    layout.addEventListener('pointerdown', (e) => e.stopPropagation())
-    popover.addEventListener('pointerdown', (e) => {
-      e.stopPropagation()
-      e.button === 0 && dispatchCloseEvent(0) && (this.opened = false)
-    })
-    action.addEventListener('click', () => dispatchCloseEvent(1) && (this.opened = false))
-    const maskEvents = ['click', 'touchstart', 'mouseover']
-    maskEvents.forEach((name) => {
-      popover.addEventListener(name, (e) => e.stopPropagation())
-    })
-    popover.addEventListener('keydown', (e) => {
-      e.stopPropagation()
-      if (e.key !== 'Escape') return
-      e.preventDefault()
-      if (dispatchCloseEvent(2)) this.opened = false
-    })
+    popover.onkeydown = (e) => e.stopPropagation()
     return {
       setOpened: (v) => {
         if (!info.isConnected) return
         v ? open() : close()
       },
-      onMounted: (parent) => {
-        const parentElement = parent instanceof ShadowRoot ? parent.host : parent
-        if (!(parentElement instanceof HTMLElement)) return
-        state.parent = parentElement
-        const show = () => {
-          const cssVar = computedStyle.getValue('--dialog-disabled')
-          const disabled = cssVar === 'true' ? true : this.disabled
-          !disabled && (this.opened = true)
-        }
-        parentElement.addEventListener('click', show)
-        if (this.opened) open(false)
-        return () => {
-          if (this.opened) close()
-          delete state.parent
-          parentElement.removeEventListener('click', show)
-        }
+      onMounted: () => {
+
       }
     }
   }
@@ -279,7 +200,7 @@ export class Dialog extends useElement({
   static CLOSE_SOURCE_SCRIM = 0 as const
   static CLOSE_SOURCE_ACTION = 1 as const
   static CLOSE_SOURCE_KEYBOARD = 2 as const
-  static builder = builder
+  //static builder = builder
 }
 
 const name = Dialog.define('s-dialog')

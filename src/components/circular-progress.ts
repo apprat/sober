@@ -21,6 +21,7 @@ const style = /*css*/`
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   border-radius: 50%;
+  transition-property: none;
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
   color: ${scheme.color.primary};
@@ -41,6 +42,7 @@ const style = /*css*/`
   height: 100%;
   overflow: visible;
   fill: none;
+  display: block;
 }
 .track,
 .indicator{
@@ -52,7 +54,6 @@ const style = /*css*/`
   transform-origin: center;
   transform: rotate(-90deg);
   stroke-dasharray: var(--s_max);
-  transition-property: stroke-dashoffset;
 }
 .track{
   --s_track-offset: 35px;

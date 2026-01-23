@@ -182,12 +182,7 @@ export const Page = useElement({
   setup() {
     const computedStyle = useComputedStyle(this)
     const darker = matchMedia('(prefers-color-scheme: dark)')
-    const isDark = () => {
-      if (this.theme === 'auto') return darker.matches
-      if (this.theme === 'dark') return true
-      return false
-    }
-    const toggle = async (theme: typeof props['theme'], trigger?: HTMLElement) => {
+    const toggleTheme = async (theme: typeof props['theme'], anchor?: HTMLElement) => {
       if (this.theme === theme) return
       const isDark = darker.matches
       const getTheme = (theme: typeof props['theme']) => theme === 'auto' ? (isDark ? 'dark' : 'light') : theme
@@ -198,10 +193,10 @@ export const Page = useElement({
         return
       }
       const keyframes = { clipPath: [`circle(0px at 50% ${innerHeight / 2}px)`, `circle(${Math.sqrt(innerWidth ** 2 + innerHeight ** 2) / 2}px at 50% ${innerHeight / 2}px)`] }
-      if (trigger && trigger.isConnected) {
-        const { left, top } = trigger.getBoundingClientRect()
-        const x = left + trigger.offsetWidth / 2
-        const y = top + trigger.offsetHeight / 2
+      if (anchor && anchor.isConnected) {
+        const { left, top } = anchor.getBoundingClientRect()
+        const x = left + anchor.offsetWidth / 2
+        const y = top + anchor.offsetHeight / 2
         const size = Math.sqrt(Math.max(innerWidth - x, x) ** 2 + Math.max(innerHeight - y, y) ** 2)
         keyframes.clipPath[0] = `circle(0px at ${x}px ${y}px)`
         keyframes.clipPath[1] = `circle(${size}px at ${x}px ${y}px)`
@@ -219,12 +214,7 @@ export const Page = useElement({
       })
     }
     return {
-      expose: {
-        toggle,
-        get isDark() {
-          return isDark()
-        }
-      },
+      expose: { toggleTheme },
       setTheme: (value) => {
         if (value === 'light') return this.removeAttribute('dark')
         if (value === 'dark') return this.setAttribute('dark', '')

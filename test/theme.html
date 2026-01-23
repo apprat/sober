@@ -6,7 +6,6 @@
   <title>Theme builder</title>
   <meta name="viewport"
     content="width=device-width,viewport-fit=cover,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-  <script type="module" src="../dist/main.js"></script>
   <style>
     html,
     body {
@@ -67,6 +66,10 @@
     <s-icon-button variant="outlined" width="narrow">
       <s-icon name="more_vert"></s-icon>
     </s-icon-button>
+    <s-split-button>
+      <s-icon name="star" slot="start"></s-icon>
+      Label
+    </s-split-button>
     <hr>
     <s-checkbox>Yes</s-checkbox>
     <s-checkbox checked>No</s-checkbox>
@@ -179,14 +182,21 @@
       <span slot="title">Material 3</span>
       <span slot="subtitle">Google M3 Expressive</span>
     </s-appbar>
+    <s-button id="toggleDesign">Fluent</s-button>
   </s-page>
-  <script src="../dist/sober.theme.min.js"></script>
+  <script src="../dist/sober.min.js"></script>
+  <script src="../dist/theme.min.js"></script>
+  <script src="../dist/design/fluent.min.js"></script>
   <script type="module">
     const inputColor = document.querySelector('#inputColor')
     inputColor.onchange = async () => {
       const color = inputColor.value
       const scheme = await sober.theme.createScheme(color)
       scheme.apply(document.querySelector('s-page'))
+    }
+    const toggleDesign = document.querySelector('#toggleDesign')
+    toggleDesign.onclick = () => {
+      sober.design.fluent(sober.components)
     }
   </script>
 </body>

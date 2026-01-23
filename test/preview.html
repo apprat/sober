@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ZH-cn">
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> {% title %} </title>
   <meta name="viewport"
     content="width=device-width,viewport-fit=cover,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-  <script type="module" src="../dist/main.js"></script>
-  <link rel="stylesheet" href="../style/scroll-view.css">
-  <link rel="stylesheet" href="../style/table.css">
-  <title>Preview Markdown</title>
+  <link rel="stylesheet" href="/style/scroll-view.css">
+  <link rel="stylesheet" href="/style/table.css">
   <style>
+    :not(:defined) {
+      display: none;
+    }
+
     html,
     body {
       margin: 0;
@@ -20,20 +24,15 @@
     .page {
       height: 100%;
       overflow: auto;
-      touch-action: pan-y pan-x;
-    }
-
-    .markdown {
       margin: 0 auto;
-      max-width: 1280px;
-      min-height: 100vh;
       padding: 32px;
-      gap: 16px;
-      display: flex;
-      flex-direction: column;
-      box-sizing: border-box;
+      max-width: 1280px;
       box-shadow: var(--s-elevation-level1);
       user-select: text;
+    }
+
+    .page>* {
+      margin: 16px 0;
     }
 
     h1,
@@ -51,6 +50,10 @@
       line-height: 2;
     }
 
+    a {
+      color: var(--s-color-primary);
+    }
+
     pre {
       white-space: pre-wrap;
       background: var(--s-color-surface-container-high);
@@ -61,30 +64,31 @@
       white-space: revert;
       line-height: 1.6;
       font-family: monospace;
-
-      code {
-        background: none;
-        padding: 0;
-        font-family: monospace;
-      }
     }
 
-    details {
-      summary {
-        cursor: pointer;
-        background: var(--s-color-surface-container-high);
-        padding: 8px 12px;
-        border-radius: 4px;
-      }
+    pre>code {
+      background: none;
+      padding: 0;
+      font-family: monospace;
+    }
+
+    details>summary {
+      cursor: pointer;
+      background: var(--s-color-surface-container-low);
+      padding: 8px 12px;
+      border-radius: 4px;
     }
 
     blockquote {
       border-left: 4px solid var(--s-color-on-surface-variant);
       padding-left: 12px;
       margin: 0;
-      color: var(--s-color-on-surface-variant);
+      color: var(--s-color-on-primary-container);
       font-style: italic;
       font-size: 14px;
+      background: var(--s-color-primary-container);
+      padding: 8px 12px;
+      border-radius: 4px;
     }
 
     hr {
@@ -105,30 +109,37 @@
       padding: 0;
       margin: 0;
       line-height: 2;
+    }
 
-      li {
-        margin-left: 20px;
-      }
+    :is(ol, ul)>li {
+      margin-left: 20px;
     }
 
     .preview {
-      .view {
-        &>:is(s-button, s-icon, s-icon-button, s-radio, s-checkbox, s-fab) {
-          margin: 4px;
-        }
+      border: solid 1px var(--s-color-outline-variant);
+      border-radius: 4px;
+    }
 
-        &>*+:is(s-alert, s-tab) {
-          margin-top: 16px;
-        }
-      }
+    .preview>.view {
+      padding: 12px;
+    }
 
-      details {
-        margin-top: 16px;
+    .preview>.view>hr {
+      margin: 8px 0;
+    }
 
-        pre {
-          border-top: solid 1px var(--s-color-surface-variant);
-        }
-      }
+    .preview>.view>details>summary {
+      user-select: none;
+      border-top: solid 1px var(--s-color-outline-variant);
+      border-top: none;
+    }
+
+    .preview>.view>details>pre {
+      border-radius: 0;
+    }
+
+    .preview>.view>* {
+      margin: 4px;
     }
   </style>
   <style>
@@ -148,10 +159,10 @@
 
 <body>
   <s-page class="page">
-    <div class="markdown"></div>
+    {% content %}
     <s-fab class="toggle-style" onclick="toggleStyle()">
       <s-icon name="add"></s-icon>
-      <s-tooltip gravity="left">切换风格</s-tooltip>
+      <s-tooltip gravity="left">切换Fluent设计</s-tooltip>
     </s-fab>
     <s-fab class="toggle-theme" onclick="toggleTheme(this)">
       <s-icon name="dark_mode"></s-icon>
@@ -159,25 +170,21 @@
     </s-fab>
   </s-page>
   <script type="module">
-    const markdown = document.querySelector('.markdown')
+    import * as components from '/dist/main.js'
+    import { material } from '/dist/design/material.js'
+    import { fluent } from '/dist/design/fluent.js'
+
+    window.sober = {
+      components,
+      design: { material, fluent }
+    }
     const page = document.querySelector('.page')
-    const init = async () => {
-      const p = new URLSearchParams(location.search)
-      const name = p.get('name')
-      const f = await fetch(`/docs/zh-cn/${name}.md`)
-      const text = await f.text()
-      markdown.innerHTML = text
-    }
-    window.toggleTheme = (el) => {
-      page.toggle(page.isDark ? 'light' : 'dark', el)
-    }
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.href = '../style/liquid-glass.css'
+    window.toggleTheme = (el) => page.toggleTheme(page.hasAttribute('dark') ? 'light' : 'dark', el)
+    let isFluent = false
     window.toggleStyle = () => {
-      link.isConnected ? link.remove() : document.head.appendChild(link)
+      isFluent ? material(components) : fluent(components)
+      isFluent = !isFluent
     }
-    init()
   </script>
 </body>
 

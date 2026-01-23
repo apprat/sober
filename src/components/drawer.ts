@@ -2,11 +2,12 @@ import { useElement, useProps } from '../core/element.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
-  startOpened: true,
-  endOpened: true,
-  startFloatingOpened: false,
-  endFloatingOpened: false,
-  $breakpointFloating: 1024
+  $mode: ['auto', 'sidebar', 'overlay'],
+  modeBreakpoint: 1024,
+  sidebarStartOpened: true,
+  sidebarEndOpened: true,
+  overlayStartOpened: false,
+  overlayEndOpened: false,
 })
 
 const style = /*css*/`
@@ -14,43 +15,24 @@ const style = /*css*/`
   display: flex;
   overflow: hidden;
 }
-:host([floating]){
-  .start,
-  .end{
-    display: none;
-  }
-}
-.view,
-.start,
-.end{
+slot{
   display: block;
+  flex-shrink: 0;
 }
-.start,
-.end{
-  overflow: hidden;
-  transition: width 2s;
-  width: 280px;
+.view{
+  flex-shrink: 1;
+  flex-grow: 1;
+  min-width: 0;
+  overflow: auto;
 }
 .start{
   order: -1;
 }
-.view{
-  flex-grow: 1;
-  min-width: 0;
-}
-::slotted(:is([slot=start], [slot=end])){
+::slotted([slot=start]),
+::slotted([slot=end]){
   width: 280px;
-  border-width: 1px;
   height: 100%;
-  pointer-events: auto;
-  position: relative;
   background: ${scheme.color.surfaceContainerLow};
-  border-color: ${scheme.color.surfaceVariant};
-}
-:host([startOpened=false]){
-  .start{
-    display: none;
-  }
 }
 `
 const template = /*html*/`
@@ -61,22 +43,19 @@ const template = /*html*/`
 
 export class Drawer extends useElement({
   style, template, props,
-  setup(shadowRoot, states) {
+  setup(shadowRoot, info) {
     const start = shadowRoot.querySelector<HTMLSlotElement>('.start')!
     const end = shadowRoot.querySelector<HTMLSlotElement>('.end')!
-    new ResizeObserver(() => this.toggleAttribute('floating', this.offsetWidth <= this.breakpointFloating)).observe(this)
+    const obs = new ResizeObserver(() => {
+      this.toggleAttribute('overlaid', this.offsetWidth <= this.modeBreakpoint)
+    })
+    obs.observe(this)
     return {
-      setStartOpened: (v) => {
-        if (!this.isConnected) return
-        start.style.display = 'block'
-        start.animate({ width: [`${start.offsetWidth}px`, '0'] }, { duration: 2000 })
-      },
-      setEndOpened: (v) => {
-      },
-      setStartFloatingOpened: (v) => {
-      },
-      setEndFloatingOpened: (v) => {
-      },
+      setMode: (v) => {
+        if (v === 'auto') return obs.observe(this)
+        obs.unobserve(this)
+        this.toggleAttribute('overlaid', v === 'overlay')
+      }
     }
   }
 }) { }

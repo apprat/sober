@@ -34,7 +34,6 @@ const style = /*css*/`
   display: flex;
   align-items: center;
   will-change: width;
-  transition-property: width, flex-grow;
 }
 .track{
   flex-grow: 1;

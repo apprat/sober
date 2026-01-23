@@ -1,14 +1,20 @@
 import { useElement, useProps } from '../core/element.js'
 import { device } from '../core/device.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
+import { oneEvent } from '../core/utils/oneEvent.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
   disabled: false,
   hoverDisabled: false,
+  $slotLayer: -1,
   $delay: 0
 })
 
+const events = {
+  opened: Event,
+  closed: Event
+}
 
 const style = /*css*/`
 :host{
@@ -19,6 +25,7 @@ const style = /*css*/`
   pointer-events: none;
   border-radius: inherit;
   overflow: hidden;
+  transition-property: none;
   animation-timing-function: ${scheme.motion.easing.standard};
   animation-duration: ${scheme.motion.duration.long4};
   transition-duration: ${scheme.motion.duration.short4};
@@ -28,19 +35,21 @@ const style = /*css*/`
   inset: 0;
   content: '';
   opacity: 0;
-  background: var(--s-ripple-color, currentColor);
   transition-property: opacity;
+  background: var(--s-ripple-color, currentColor);
   &.hovered{
-    opacity: var(--s-ripple-hover-opacity, .12);
+    opacity: var(--s-ripple-hover-opacity, .08);
   }
 }
 .ripple{
   position: absolute;
   inset: 0;
   opacity: 0;
+  animation-timing-function: inherit;
+  animation-duration: inherit;
   border-radius: 50%;
   background: var(--s-ripple-color, currentColor);
-  filter: opacity(var(--s-ripple-opacity, .18));
+  filter: opacity(var(--s-ripple-opacity, .1));
 }
 `
 
@@ -52,7 +61,6 @@ const template = /*html*/`
 
 const startRipple = (options: {
   root: Ripple,
-  parent: HTMLElement,
   ripple: HTMLElement,
   shadowRoot: ShadowRoot,
   event: PointerEvent,
@@ -72,7 +80,6 @@ const startRipple = (options: {
     newRipple = options.ripple.cloneNode() as HTMLDivElement
     options.shadowRoot.appendChild(newRipple)
   }
-  options.parent.setAttribute('ripple-showed', '')
   const animation = newRipple.animate({
     opacity: [1, 1],
     width: [`${size}px`, `${size}px`],
@@ -81,20 +88,22 @@ const startRipple = (options: {
     left: [coordinate.x, coordinate.x],
     top: [coordinate.y, coordinate.y],
   }, { ...options.animateOptions, fill: 'forwards' })
+  animation.finished.then(() => options.root.dispatchEvent(new Event('opened')))
+  options.root.dispatchEvent(new Event('open'))
   return () => {
-    if (!options.parent.hasAttribute('ripple-showed')) return
-    options.parent.removeAttribute('ripple-showed')
     const time = Number(animation.currentTime)
     const short = options.animateOptions.duration / 2
     const diff = options.animateOptions.duration - short
     const duration = time > diff ? short : options.animateOptions.duration - time
     const animate = newRipple.animate({ opacity: [1, 0] }, { ...options.animateOptions, duration, easing: options.animateOptions.easing, fill: 'forwards' })
     animate.finished.then(() => newRipple !== options.ripple && newRipple.isConnected && options.shadowRoot.removeChild(newRipple))
+    animate.finished.then(() => options.root.dispatchEvent(new Event('closed')))
+    options.root.dispatchEvent(new Event('close'))
   }
 }
 
 export class Ripple extends useElement({
-  style, template, props,
+  style, template, props, events,
   setup(shadowRoot) {
     const ripple = shadowRoot.querySelector<HTMLDivElement>('.ripple')!
     const hover = shadowRoot.querySelector<HTMLDivElement>('.hover')!
@@ -105,55 +114,59 @@ export class Ripple extends useElement({
       return { easing, duration }
     }
     const state = { parent: undefined as HTMLElement | undefined }
-    const run = (event: PointerEvent) => startRipple({ root: this, parent: state.parent!, ripple, shadowRoot, event, animateOptions: getAnimateOptions() })
     const start = (event: PointerEvent) => {
-      const cssDisabled = computedStyle.getValue('--ripple-disabled')
+      const cssDisabled = computedStyle.getValue('--s-ripple-disabled')
       const rippled = ['', 'none'].includes(cssDisabled) ? this.disabled : Boolean(cssDisabled)
       if (rippled || event.button !== 0) return
+      const run = (event: PointerEvent) => startRipple({ root: this as never, ripple, shadowRoot, event, animateOptions: getAnimateOptions() })
       if (event.pointerType === 'mouse') return document.addEventListener('pointerup', run(event), { once: true })
       const cssDelay = computedStyle.getValue('--s-ripple-delay')
       const delay = ['', 'none'].includes(cssDelay) ? this.delay : Number(cssDelay)
       if (delay <= 0) return document.addEventListener('touchend', run(event), { once: true })
       let stop: Function | null = null
       const timer = setTimeout(() => stop = run(event), delay)
-      const removeEvents = () => {
-        document.removeEventListener('touchmove', calcel)
-        document.removeEventListener('touchend', calcel)
-      }
       const calcel = (e: TouchEvent) => {
-        removeEvents()
         clearTimeout(timer)
         stop && stop()
         if (e.type === 'touchmove') return
         !stop && run(event)()
       }
-      document.addEventListener('touchmove', calcel)
-      document.addEventListener('touchend', calcel)
+      oneEvent([{ element: document, events: ['touchcancel', 'touchmove', 'touchend'] }], calcel)
     }
-    const hovering = (force = true) => {
+    const hovering = (event: MouseEvent) => {
       if (!device.mouseEnabled) return
+      const force = event.type === 'mouseenter'
+      state.parent?.toggleAttribute('hovered', force)
       const cssDisabled = computedStyle.getValue('--s-ripple-hover-disabled')
       const hovered = ['', 'none'].includes(cssDisabled) ? this.hoverDisabled : Boolean(cssDisabled)
       !hovered && hover.classList.toggle('hovered', force)
     }
-    return {
-      onMounted: (parent) => {
-        const parentElement = parent instanceof ShadowRoot ? parent.host : parent
-        if (!(parentElement instanceof HTMLElement)) return
-        state.parent = parentElement
-        const hover = () => hovering()
-        const unHover = () => hovering(false)
-        const down = (event: PointerEvent) => start(event)
-        parentElement.addEventListener('pointerdown', down)
-        parentElement.addEventListener('mouseenter', hover)
-        parentElement.addEventListener('mouseleave', unHover)
-        return () => {
-          delete state.parent
-          parentElement.removeEventListener('pointerdown', down)
-          parentElement.removeEventListener('mouseenter', hover)
-          parentElement.removeEventListener('mouseleave', unHover)
-        }
+    const down = (event: PointerEvent) => {
+      event.button === 0 && state.parent?.setAttribute('pressed', '')
+      document.addEventListener(event.pointerType === 'mouse' ? 'mouseup' : 'touchend', () => state.parent?.removeAttribute('pressed'), { once: true })
+      start(event)
+    }
+    const setEvent = () => {
+      state.parent?.removeEventListener('mouseenter', hovering)
+      state.parent?.removeEventListener('mouseleave', hovering)
+      state.parent?.removeEventListener('pointerdown', down)
+      delete state.parent
+      let parent = this.parentNode!
+      if (this.slotLayer >= 0 && this.assignedSlot) {
+        parent = this.assignedSlot
+        for (let i = 0; i < this.slotLayer; i++) parent = parent.parentNode!
       }
+      const parentElement = parent instanceof ShadowRoot ? parent.host : parent
+      if (!(parentElement instanceof HTMLElement)) return
+      state.parent = parentElement
+      state.parent.addEventListener('mouseenter', hovering)
+      state.parent.addEventListener('mouseleave', hovering)
+      state.parent.addEventListener('pointerdown', down)
+    }
+    return {
+      setSlotLayer: setEvent,
+      onMounted: setEvent,
+      onUnmounted: setEvent
     }
   }
 }) { }

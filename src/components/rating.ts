@@ -10,6 +10,8 @@ const props = useProps({
   $step: 1,
   $min: 0,
   reversed: false,
+  $name: '',
+  $defualtValue: 0
 })
 
 const style = /*css*/`
@@ -62,11 +64,11 @@ const style = /*css*/`
   }
   .indicator{
     position: absolute;
-    background: currentColor;
-    width: 2px;
+    width: auto;
+    border-left: solid 2px currentColor;
     border-radius: 1px;
     height: 100%;
-    transform: translateX(-1px);
+    transform: translateX(-50%);
     left: var(--s_value);
     opacity: 0;
     transition-property: opacity;
@@ -87,6 +89,12 @@ svg,
   fill: currentColor;
   color: currentColor;
 }
+:host(:focus-visible){
+  outline: none;
+  .indicator{
+    opacity: 1;
+  }
+}
 :host([disabled]){
   pointer-events: none;
   color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
@@ -98,7 +106,7 @@ svg,
   .indicator{
     left: auto;
     right: var(--s_value);
-    transform: translateX(1px);
+    transform: translateX(50%);
   }
   .track{
     clip-path: polygon(0 0, calc(100% - var(--s_value)) 0, calc(100% - var(--s_value)) 100%, 0 100%);
@@ -150,10 +158,12 @@ export class Rating extends useElement({
   pressed: true,
   hovered: true,
   focused: true,
+  formAssociated: true,
   style, props, template,
-  setup(shadowRoot) {
+  setup(shadowRoot, info) {
     const baseSlider = shadowRoot.querySelector<BaseSlider>('s-base-slider')!
     const layout = shadowRoot.querySelector<HTMLSlotElement>('.layout')!
+    const updateFrom = () => info.internals.setFormValue(this.disabled ? null : String(baseSlider.end))
     const render = () => {
       const v = ((baseSlider.end - this.min) / (this.max - this.min)) * 100
       layout.style.setProperty('--s_value', `${v}%`)
@@ -161,20 +171,26 @@ export class Rating extends useElement({
     baseSlider.oninput = () => {
       this.dispatchEvent(new Event('input'))
       render()
+      updateFrom()
     }
     baseSlider.onchange = () => this.dispatchEvent(new Event('change'))
     this.addEventListener('keydown', (e) => {
       if (this.readOnly || !baseSlider.keydown(e.key)) return
       e.preventDefault()
     })
+    updateFrom()
     return {
-      onAttributeChanged: (name) => ['max', 'min', 'step', 'value'].includes(name) && render(),
+      onAttributeChanged: (name) => {
+        if (['max', 'min', 'step', 'value'].includes(name)) render()
+        if (['disabled', 'value'].includes(name)) updateFrom()
+      },
       setMax: (v) => baseSlider.max = v,
       setMin: (v) => baseSlider.min = v,
       setStep: (v) => baseSlider.step = v,
       getValue: () => baseSlider.end,
       setValue: (v) => baseSlider.end = v,
       setReversed: (v) => baseSlider.mode = v ? 'reversed' : 'single',
+      onFormReset: () => this.value = this.defualtValue,
     }
   }
 }) { }

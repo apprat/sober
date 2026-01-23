@@ -5,71 +5,79 @@ import { Fieldset } from './fieldset.js'
 const props = useProps({
   disabled: false,
   readOnly: false,
+  error: false,
+  autocomplete: 'off',
+  pattern: '',
+  name: '',
   value: '',
+  defualtValue: '',
   placeholder: '',
+  requiring: '',
   maxLength: -1,
-  type: ['text', 'password', 'number', 'multiline']
+  type: ['text', 'password', 'number', 'email', 'tel', 'multiline']
 })
 
 const style = /*css*/`
 :host{
-  display: inline-block;
-  vertical-align: middle;
+  display: block;
   min-height: 48px;
-  min-width: 280px;
-  font-size: calc(var(--s-font-size) * 16px);
+  font-size: calc(var(--s-font-size) * 15px);
   color: ${scheme.color.onSurface};
   transition-timing-function: ${scheme.motion.easing.emphasized};
   transition-duration: ${scheme.motion.duration.short4};
 }
 .fieldset{
-  display: flex;
-  font-size: inherit;
-  color: inherit;
   height: 100%;
-  font-family: inherit;
   min-height: inherit;
-  --s_padding: var(--s-text-field-padding);
-  --s_padding-top: var(--s-text-field-padding-top);
-  --s_padding-bottom: var(--s-text-field-padding-bottom);
-  --s_padding-left: var(--s-text-field-padding-left);
-  --s_padding-right: var(--s-text-field-padding-right);
-  --s-fieldset-title-gap: 4px;
-  --s-fieldset-padding: var(--s_padding);
-  --s-fieldset-padding-top: var(--s_padding-top);
-  --s-fieldset-padding-right: var(--s_padding-right);
-  --s-fieldset-padding-bottom: var(--s_padding-bottom);
-  --s-fieldset-padding-left: var(--s_padding-left);
+  max-height: inherit;
+  line-height: inherit;
+  font-size: inherit;
   ::slotted([slot=label]){
-    display: flex;
-    height: 100%;
-    align-items: center;
-    font-size: inherit;
-    box-sizing: border-box;
+    height: 50%;
+    align-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin-left: min(var(--s_title_gap), var(--s_padding-left));
     margin-right: min(var(--s_title_gap), var(--s_padding-right));
-    color: var(--s_border-color);
-    transform: translateY(0%);
-    transition-property: transform, font-size, color;
+    transition-property: all;
     transition-duration: inherit;
     transition-timing-function: inherit;
-  }
-  ::slotted([slot=label]:empty){
-    display: none;
+    box-sizing: border-box;
+    transform: translateY(50%);
+    color: ${scheme.color.outline};
   }
   &:not([floated]){
     ::slotted([slot=label]){
-      transform: translateY(-50%);
-      font-size: calc(var(--s-font-size) * 12px);
-      height: auto;
-      padding-top: var(--s_padding-top);
-      padding-bottom: var(--s_padding-bottom);
-      color: var(--s-color-primary, ${scheme.color.primary});
+      font-size: calc(var(--s-font-size, 1) * 12px);
+      transform: translateY(0%);
     }
+  }
+  &[focused]{
+    ::slotted([slot=label]){
+      color: ${scheme.color.primary};
+    }
+  }
+  ::slotted(:is(s-icon, svg)[slot=start]){
+    margin-left: 12px;
+    margin-right: -4px;
+  }
+  ::slotted(:is(s-icon, svg)[slot=end]){
+    margin-right: 12px;
+    margin-left: -4px;
+  }
+  ::slotted(s-icon-button[slot=start]){
+    margin-left: 4px;
+    margin-right: -8px;
+  }
+  ::slotted(s-icon-button[slot=end]){
+    margin-right: 4px;
+    margin-left: -8px;
   }
 }
 input,
-textarea{
+textarea,
+.shadow{
   width: 100%;
   height: 100%;
   display: block;
@@ -78,7 +86,7 @@ textarea{
   outline: none;
   font-family: inherit;
   padding: 0 var(--s_padding-right) 0 var(--s_padding-left);
-  line-height: 1;
+  line-height: inherit;
   font-size: inherit;
   color: inherit;
   caret-color: var(--s-color-primary, ${scheme.color.primary});
@@ -87,38 +95,75 @@ textarea{
     color: var(--s-color-on-primary, ${scheme.color.onPrimary});
   }
 }
-textarea{
+textarea,
+.shadow{
+  overflow: visible;
+  overflow-wrap: break-word;
+  word-break: break-all;
   padding-top: var(--s_padding-top);
   padding-bottom: var(--s_padding-bottom);
   resize: none;
+  min-height: 100%;
+  white-space: pre-wrap;
+}
+textarea{
+  position: absolute;
+  inset: 0;
+}
+.shadow{
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  opacity: 0;
+  &::after{
+    content: ' ';
+  }
 }
 :host([type=multiline]){
-  min-height: 120px;
+  min-height: 100px;
+  line-height: 1.5;
+  .fieldset{
+    ::slotted([slot=label]){
+      height: auto;
+      padding-top: var(--s_padding-top);
+      padding-bottom: var(--s_padding-bottom);
+    }
+  }
 }
 `
 const template = /*html*/`
 <s-fieldset class="fieldset" floated>
-  <slot name="label" class="label" slot="title"></slot>
+  <slot name="label" slot="title"></slot>
+  <slot name="start" slot="start"></slot>
   <input type="text" name="input" autocomplete="off" tabindex="-1">
+  <slot name="end" slot="end"></slot>
 </s-fieldset>
 `
 
 export class TextField extends useElement({
-  focused: true,
   style, template, props,
+  focused: true,
+  formAssociated: true,
   setup(shadowRoot, info) {
     const fieldset = shadowRoot.querySelector<Fieldset>(`s-fieldset`)!
     const textarea = document.createElement('textarea') as HTMLTextAreaElement
-    textarea.name = 'input'
-    textarea.rows = 1
+    const shadow = document.createElement('div') as HTMLDivElement
     const input = shadowRoot.querySelector<HTMLInputElement>('input')!
+    shadow.className = 'shadow'
+    textarea.name = input.name
+    textarea.rows = 1
+    textarea.tabIndex = -1
+    textarea.autocomplete = input.autocomplete
     const getInput = () => this.type === 'multiline' ? textarea : input
+    const setValue = () => info.internals.setFormValue(!this.disabled ? this.value : null)
+    const setRequired = () => this.requiring && info.internals.setValidity({ valueMissing: !this.value }, this.requiring, this)
     const onInput = () => {
       this.dispatchEvent(new Event('input'))
+      shadow.textContent = textarea.value
+      setValue()
+      setRequired()
     }
-    const onChange = () => {
-      this.dispatchEvent(new Event('change'))
-    }
+    const onChange = () => this.dispatchEvent(new Event('change'))
     const onFocus = () => {
       if (getInput().value === '') fieldset.floated = false
       fieldset.focused = true
@@ -131,19 +176,35 @@ export class TextField extends useElement({
     input.onchange = textarea.onchange = onChange
     input.onfocus = textarea.onfocus = onFocus
     input.onblur = textarea.onblur = onBlur
-    this.addEventListener('focus', () => getInput().focus())
+    const focus = () => getInput().focus()
+    this.addEventListener('focus', focus)
     return {
+      onFormReset: () => this.value = this.defualtValue,
       getValue: () => getInput().value,
-      setValue: (v) => getInput().value = v,
+      setValue: (v) => {
+        getInput().value = v
+        fieldset.floated = v === ''
+        setRequired()
+        setValue()
+      },
+      setDisabled: setValue,
+      setRequiring: setRequired,
+      setAutocomplete: (v) => input.autocomplete = textarea.autocomplete = v as AutoFill,
       setPlaceholder: (v) => input.placeholder = textarea.placeholder = v,
       setMaxLength: (v) => input.maxLength = textarea.maxLength = v,
       setType: (v, old) => {
         if ([v, old].includes('multiline')) {
-          const arr = [input, textarea]
-          if (old === 'multiline') arr.reverse()
-          arr[0].after(arr[1])
-          arr[0].remove()
-          arr[1].value = arr[1].value
+          if (old === 'multiline') {
+            textarea.after(input)
+            shadow.remove()
+            textarea.remove()
+            input.value = textarea.value
+          } else {
+            input.after(shadow)
+            input.after(textarea)
+            input.remove()
+            textarea.value = input.value
+          }
         }
         if (getInput() === textarea) return
         input.type = v

@@ -7,7 +7,7 @@ const props = useProps({
   $value: '',
   multiple: false,
   mode: ['scrollable', 'fixed'],
-  variant: ['standard', 'segmented'],
+  variant: ['primary', 'secondary', 'segmented'],
   orientation: ['horizontal', 'vertical'],
 })
 const itemProps = useProps({
@@ -110,9 +110,13 @@ const itemStyle = /*css*/`
   padding: 0 16px;
   line-height: 1;
   flex-shrink: 0;
-  transition-property: color;
+  outline-offset: -3px;
+  border-radius: 12px;
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
+}
+:host(:focus-visible){
+  border-radius: 12px;
 }
 :host([selected]){
   color: ${scheme.color.primary};
@@ -162,16 +166,17 @@ const itemStyle = /*css*/`
   color: inherit;
   position: relative;
 }
-::slotted(s-badge){
-  position: static;
-}
 ::slotted(s-badge[slot=badge]){
   position: absolute;
-  right: 0;
-  top: 12px;
+  right: 10%;
+  top: 20%;
+  transform: translate(50%, -50%);
 }
 ::slotted(s-badge:not([slot]):not(:empty)){
   width: auto;
+}
+s-ripple{
+  border-radius: 0;
 }
 @supports not (color: color-mix(in srgb, black, white)){
   :host([disabled]){
@@ -244,11 +249,9 @@ export class Tab extends useElement({
       const indicator = item.shadowRoot?.querySelector<HTMLDivElement>('.indicator')!
       const rect = indicator.getBoundingClientRect()
       const offset = oldRect[orientation.left] - rect[orientation.left]
-      const widths = [`${oldRect[orientation.width]}px`, `${rect[orientation.width] * 2}px`, `${rect[orientation.width]}px`]
-      if (this.variant === 'segmented') widths.splice(1, 1)
       indicator.animate({
         transform: [`${orientation.translateX}(${offset}px)`, `${orientation.translateX}(0)`],
-        [orientation.width]: widths
+        [orientation.width]: [`${oldRect[orientation.width]}px`, `${rect[orientation.width]}px`]
       }, getAnimateOptions())
     }
     return {
@@ -279,7 +282,7 @@ export class Tab extends useElement({
 export class TabItem extends useElement({
   style: itemStyle,
   props: itemProps,
-  focused: true,
+  focused: 'keydown',
   template: itemTemplate,
   setup() {
     this.addEventListener('click', () => this.dispatchEvent(new Event(`${name}:select`, { bubbles: true })))

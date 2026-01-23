@@ -1,32 +1,52 @@
-import { useElement, useProps } from '../core/element.js'
+import { useElement } from '../core/element.js'
 import * as scheme from '../core/scheme.js'
-
-const props = useProps({
-
-})
 
 const style = /*css*/`
 :host{
-  display: block;
+  display: inline-flex;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
+  position: relative;
+  font-size: calc(var(--s-font-size) * 24px);
+  font-weight: 500;
+  width: 40px;
+  border-radius: 50%;
+  color: ${scheme.color.onTertiary};
+  background: ${scheme.color.tertiary};
 }
-.scroll{
-  overflow: auto;
-  height: 200px;
+::slotted(:is(svg, s-icon)){
+  color: currentColor;
+  fill: currentColor;
+  width: 24px;
+  aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
+}
+::slotted(s-badge){
+  position: absolute;
+  right: 15%;
+  bottom: 15%;
+  transform: translate(50%, 50%);
+  outline-offset: 0;
+  outline: solid 2px ${scheme.color.surface};
+  color: ${scheme.color.onSuccess};
+  background: ${scheme.color.success};
+}
+::slotted(:is(img, object)){
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
 }
 `
 
 const template = /*html*/`
-<div class="scroll">
-  12
-  <h1 style="height: 800px"></h1>
-  32
-</div>
+<slot></slot>
 `
 
 export class Avatar extends useElement({
-  style, props, template,
-  setup() {
-  }
+  style, template
 }) { }
 
 const name = Avatar.define('s-avatar')
@@ -39,7 +59,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
       }
     }
   }
@@ -54,7 +74,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes
     } & Avatar
   }
 }
@@ -63,7 +83,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div']
     }
   }
 }
@@ -73,7 +93,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement>
     }
   }
 }
@@ -83,7 +103,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement>
     }
   }
 }

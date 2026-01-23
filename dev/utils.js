@@ -37,15 +37,24 @@ const md = markdownIt({ html: true })
 
 md.renderer.rules.fence = (tokens, idx) => {
   const token = tokens[idx]
-  if (token.info !== 'html preview') return highlight(token.content, token.info)
-  return `<div class="preview">
+  if (token.info === 'html preview') {
+    return `<div class="preview">
     <div class="view">${token.content}</div>
     <details>
       <summary>查看代码</summary>
       ${highlight(token.content)}
     </details>
-  </div>`
+    </div>`
+  }
+  if (token.info === 'html preview-only') {
+    return `<div class="preview">
+    <div class="view">${token.content}</div>
+    </div>`
+  }
+  return highlight(token.content, token.info)
 }
+
+const template = fs.readFileSync(path.resolve(__dirname, './test/preview.html'), 'utf-8')
 
 export const useServer = (port) => {
   const server = http.createServer((_, res) => {
@@ -54,8 +63,10 @@ export const useServer = (port) => {
     const extname = path.extname(filename).slice(1)
     if (!fs.existsSync(filename) || !fs.lstatSync(filename).isFile()) return res.end()
     if (extname === 'md') {
+      const content = md.render(fs.readFileSync(filename, 'utf-8'))
+      const value = template.replace('{% title %}', filename).replace('{% content %}', content)
       res.setHeader('Content-Type', 'text/html; charset=utf-8')
-      return res.end(md.render(fs.readFileSync(filename, 'utf-8')))
+      return res.end(value)
     }
     if (mineTypeMap[extname]) res.setHeader('Content-Type', mineTypeMap[extname])
     return fs.createReadStream(filename).pipe(res)

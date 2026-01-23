@@ -36,7 +36,6 @@ const style = /*css*/`
   transform-origin: center bottom;
   transition-timing-function: var(--s-motion-easing-standard, ${scheme.motion.easing.standard});
   transition-duration: var(--s-motion-duration-short4, ${scheme.motion.duration.short4});
-  transition-property: transform, opacity;
 }
 :host([open]) .container{
   opacity: 1;

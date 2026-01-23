@@ -13,12 +13,11 @@ const style = /*css*/`
 :host{
   display: flex;
   padding: 12px 16px;
-  line-height: 1.5;
   font-weight: 500;
   min-height: 48px;
   border-radius: 4px;
   word-break: break-all;
-  transition-property: color, background-color;
+  line-height: calc(100% + 8px);
   font-size: calc(var(--s-font-size, 1) * 14px);
   color: ${scheme.color.onSecondaryContainer};
   background: ${scheme.color.secondaryContainer};
@@ -56,6 +55,7 @@ svg{
 .text{
   display: flex;
   flex-direction: column;
+  justify-content: center;
   flex-grow: 1;
   min-width: 0;
   text-align: left;
@@ -74,28 +74,40 @@ svg{
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  margin: -6px -8px -6px 4px;
+  width: 32px;
+  height: 32px;
+  margin: -4px -8px -4px 4px;
+  transition-property: border-radius;
   color: ${scheme.color.primary};
-  svg{
-    transition-property: transform;
+  &[pressed]{
+    border-radius: 8px;
+  }
+  svg,
+  ::slotted(:is(s-icon, svg)[slot=toggle-icon]){
     transition-duration: inherit;
     transition-timing-function: inherit;
+  }
+  svg{
+    width: 20px;
+    height: 20px;
+  }
+  ::slotted(:is(s-icon, svg)[slot=toggle-icon]){
+    width: 20px;
+    height: 20px;
   }
 }
 :host([collapsed]){
   &:host(:not([opened])){
     .text>.content{
-      display: none;
+      height: 0;
     }
   }
   &:host([opened]){
-    .toggle>svg{
-      transform: rotate(-180deg);
-    }
-    slot[name=toggle]{
-      --s-icon-button-transform: rotate(-180deg);
+    .toggle{
+      svg,
+      ::slotted(:is(s-icon, svg)[slot=toggle-icon]){
+        transform: rotate(-180deg);
+      }
     }
   }
   .toggle{
@@ -121,11 +133,10 @@ svg{
 ::slotted(s-button[slot=action]){
   min-width: 0;
   padding: 0 8px;
-  border-radius: 4px;
-  margin: -4px -6px -4px 6px;
+  margin: -4px -8px -4px 8px;
 }
-::slotted(s-icon-button:is([slot=action], [slot=toggle])){
-  margin: -6px -8px -6px 4px;
+::slotted(s-icon-button[slot=action]){
+  margin: -4px -8px -4px 4px;
   color: ${scheme.color.primary};
 }
 `
@@ -148,38 +159,37 @@ const template = /*html*/`
   <slot name="title"></slot>
   <slot class="content" part="content"></slot>
 </div>
-<slot name="toggle">
-  <div class="toggle" part="toggle" tabindex="0">
+<div class="toggle" part="toggle" tabindex="0">
+  <slot name="toggle-icon">
     <svg viewBox="0 -960 960 960">
       <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"></path>
     </svg>
-    <s-ripple></s-ripple>
-  </div>
-</slot>
+  </slot>
+  <slot name="toggle"></slot>
+  <s-ripple></s-ripple>
+</div>
 <slot name="action"></slot>
 `
 
 export class Alert extends useElement({
   style, props, template,
   setup(shadowRoot, info) {
-    const toggleSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=toggle]')!
-    const toggleEl = shadowRoot.querySelector<HTMLSlotElement>('.toggle')!
+    const toggle = shadowRoot.querySelector<HTMLSlotElement>('.toggle')!
     const content = shadowRoot.querySelector<HTMLSlotElement>('.content')!
     const computedStyle = useComputedStyle(this)
-    toggleSlot.onclick = () => {
+    toggle.onclick = () => {
       this.opened = !this.opened
       this.dispatchEvent(new Event('toggle'))
     }
-    toggleEl.onkeydown = (e) => {
+    toggle.onkeydown = (e) => {
       if (e.key !== 'Enter' && e.key !== ' ') return
-      e.preventDefault()
-      toggleSlot.click()
+      toggle.click()
     }
     return {
       setOpened: (v) => {
         if (!info.isConnected || !this.collapsed) return
         const [old] = content.getAnimations()
-        content.style.display = 'block'
+        content.style.height = 'auto'
         if (old) return old.reverse()
         const keyframe = { height: ['0px', `${content.offsetHeight}px`] }
         if (!v) {
@@ -189,7 +199,7 @@ export class Alert extends useElement({
         content.animate(keyframe, {
           easing: computedStyle.getValue('transition-timing-function'),
           duration: computedStyle.getDuration('transition-duration')
-        }).finished.then(() => content.style.removeProperty('display'))
+        }).finished.then(() => content.style.removeProperty('height'))
       }
     }
   }

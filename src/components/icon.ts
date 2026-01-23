@@ -1,4 +1,5 @@
 import { useElement, useProps } from '../core/element.js'
+import * as scheme from '../core/scheme.js'
 
 interface SVGData {
   [key: string]: string | { name: string, angle: number }
@@ -46,14 +47,14 @@ const style = /*css*/`
   width: 24px;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
-  fill: currentColor;
   color: inherit;
 }
 svg,
-img,
+object,
 ::slotted(*){
   width: 100%;
   height: 100%;
+  fill: currentColor;
 }
 `
 
@@ -63,7 +64,7 @@ export class Icon extends useElement({
   style, template, props,
   setup(shadowRoot) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
-    const img = document.createElement('img')
+    const object = document.createElement('object')
     const getSVG = (d = svgData.none, transform = '') => `<svg viewBox="0 -960 960 960"><path d="${d}" transform="${transform}"></path></svg>`
     return {
       setName: (value) => {
@@ -73,31 +74,18 @@ export class Icon extends useElement({
         if (typeof svgData[name] !== 'string') return
         slot.innerHTML = getSVG(svgData[name], `rotate(${data.angle} 480 -480)`)
       },
-      setSrc: async () => {
-        try {
-          const url = new URL(this.src, location.href)
-          if (url.pathname.endsWith('.svg')) {
-            const res = await fetch(url.href)
-            const svg = await res.text()
-            const temp = document.createElement('template')
-            temp.innerHTML = svg
-            const el = temp.content.childNodes[0]
-            if (!(el instanceof SVGElement)) throw 'Invalid SVG'
-            slot.innerHTML = ''
-            slot.appendChild(el)
-            this.dispatchEvent(new Event('load'))
-          } else {
-            img.src = url.href
-            img.onload = () => {
-              slot.innerHTML = ''
-              slot.appendChild(img)
-              this.dispatchEvent(new Event('load'))
-            }
-            img.onerror = (error) => this.dispatchEvent(new ErrorEvent('error', { error }))
-          }
-        } catch (error) {
-          this.dispatchEvent(new ErrorEvent('error', { error }))
+      setSrc: async (v) => {
+        object.data = v
+        object.onload = () => {
+          this.dispatchEvent(new Event('load'))
+          const doc = object.contentDocument
+          if (!doc || doc.contentType !== 'image/svg+xml') return
+          const svg = doc.childNodes[0] as SVGElement
+          slot.innerHTML = svg.outerHTML
+          shadowRoot.removeChild(object)
         }
+        object.onerror = (error) => this.dispatchEvent(new ErrorEvent('error', { error }))
+        shadowRoot.appendChild(object)
       }
     }
   }

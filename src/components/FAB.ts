@@ -5,42 +5,36 @@ import './ripple.js'
 
 const props = useProps({
   variant: ['primary', 'secondary', 'tertiary', 'tonal-primary', 'tonal-secondary', 'tonal-tertiary'],
-  size: ['medium', 'small', 'large'],
+  size: ['small', 'medium', 'large'],
   disabled: false,
   hidden: false
 })
 
 const style = /*css*/`
 :host{
-  min-height: 56px;
+  height: 56px;
   min-width: 56px;
-  padding: 0 20px;
-  gap: 6px;
+  padding: 0 16px;
+  gap: 8px;
   font-size: calc(var(--s-font-size, 1) * 16px);
-  transition-property: border-radius, color, background-color, box-shadow, transform;
-  box-shadow: ${scheme.elevation.level3};
   border-radius: 16px;
-  ::slotted(:is(svg, s-icon):not([slot])){
-    margin: 0 -24px;
-  }
-  ::slotted(:is(svg, s-icon)[slot=start]){
-    margin-left: -2px;
-  }
-  ::slotted(:is(svg, s-icon)[slot=end]){
-    margin-right: -2px;
-  }
+  transition-property: height, min-width, color, background-color, box-shadow, padding, gap, border-radius, font-size, transform;
+  box-shadow: ${scheme.elevation.level3};
 }
 :host(:not([variant])){
   background: ${scheme.color.primary};
   color: ${scheme.color.onPrimary};
+  outline-color: ${scheme.color.primary};
 }
 :host([variant=secondary]){
   background: ${scheme.color.secondary};
   color: ${scheme.color.onSecondary};
+  outline-color: ${scheme.color.secondary};
 }
 :host([variant=tertiary]){
   background: ${scheme.color.tertiary};
   color: ${scheme.color.onTertiary};
+  outline-color: ${scheme.color.tertiary};
 }
 :host([variant=tonal-primary]){
   background: ${scheme.color.primaryContainer};
@@ -55,48 +49,52 @@ const style = /*css*/`
   color: ${scheme.color.onTertiaryContainer};
 }
 :host([disabled]){
-  box-shadow: ${scheme.elevation.level2} !important;
+  box-shadow: ${scheme.elevation.level1} !important;
 }
 :host([hidden]){
   transform: scale(0);
   pointer-events: none;
 }
-:host([pressed]){
+:host([hovered]){
   box-shadow: ${scheme.elevation.level4};
 }
 /*Size*/
-:host([size=small]){
-  min-height: 48px;
-  min-width: 48px;
-  border-radius: 14px;
-  font-size: calc(var(--s-font-size, 1) * 14px);
-  padding: 0 18px;
+:host([size=medium]){
+  height: 80px;
+  min-width: 80px;
+  gap: 12px;
+  border-radius: 20px;
+  font-size: calc(var(--s-font-size, 1) * 22px);
+  padding: 0 26px;
+  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+    width: 28px;
+  }
 }
 :host([size=large]){
-  min-height: 64px;
-  min-width: 64px;
-  border-radius: 18px;
-  font-size: calc(var(--s-font-size, 1) * 18px);
-  padding: 0 24px;
+  height: 96px;
+  min-width: 96px;
+  gap: 16px;
+  border-radius: 28px;
+  font-size: calc(var(--s-font-size, 1) * 24px);
+  padding: 0 28px;
+  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+    width: 36px;
+  }
 }
 `
 
 const template = /*html*/`
 <slot name="start"></slot>
-<slot></slot>
+<slot class="text" part="text"></slot>
 <slot name="end"></slot>
 <s-ripple class="ripple" part="ripple"></s-ripple>
 `
 
 export class FAB extends useElement({
   style: [buttonStyle, style],
-  focused: true,
-  pressed: true,
-  hovered: true,
+  focused: 'keydown',
   props, template,
 }) { }
-
-export { FAB as FloatingActionButton }
 
 const name = FAB.define('s-fab')
 

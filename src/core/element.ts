@@ -3,49 +3,64 @@ import { device } from './device.js'
 
 type Prop = string | number | boolean
 
-export const supports = { CSSStyleSheet: true, CSSContainer: CSS.supports('container-type', 'size') }
+export const supports = {
+  CSS: {
+    StyleSheet: true,
+    positionAnchor: CSS.supports('position-anchor', 'auto')
+  }
+}
 
 try {
   new CSSStyleSheet()
 } catch (error) {
-  supports.CSSStyleSheet = false
+  supports.CSS.StyleSheet = false
 }
 
-const setStyle = (shadowRoot: ShadowRoot, cssStr: string[]) => {
-  for (const css of cssStr) {
-    if (!supports.CSSStyleSheet) {
-      const el = document.createElement('style')
-      el.textContent = css
-      shadowRoot.insertBefore(el, shadowRoot.firstChild)
-      continue
-    }
-    const sheet = new CSSStyleSheet()
-    sheet.replaceSync(css)
-    shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, sheet]
+const setStyle = (shadowRoot: ShadowRoot, css: string) => {
+  if (!supports.CSS.StyleSheet) {
+    const el = document.createElement('style')
+    el.textContent = css
+    shadowRoot.appendChild(el)
+    return el
   }
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync(css)
+  shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, sheet]
+  return sheet
+}
+
+const removeStyle = (shadowRoot: ShadowRoot, target: HTMLStyleElement | CSSStyleSheet) => {
+  if (target instanceof HTMLStyleElement) {
+    shadowRoot.removeChild(target)
+    return
+  }
+  shadowRoot.adoptedStyleSheets = shadowRoot.adoptedStyleSheets.filter((sheet) => sheet !== target)
 }
 
 const baseStyle = /*css*/`
 :host{
-  outline: none;
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
+  outline-width: 3px;
+  outline-offset: 2px;
+  outline-color: ${scheme.color.onSurfaceVariant};
 }
 :host(:focus-visible){
-  outline: dashed 2px ${scheme.color.onSurfaceVariant};
-  outline-offset: 2px;
+  outline-style: solid;
 }
-*:not(:defined){
-  background: red !important;
-}
+slot,
 div,
-slot{
+div::before,
+div::after,
+slot::before,
+slot::after{
   transition-property: none;
   transition-timing-function: inherit;
   transition-duration: inherit;
-  animation-timing-function: inherit;
-  animation-duration: inherit;
+}
+slot{
+  border-radius: inherit;
 }
 :host, *{
   box-sizing: border-box;
@@ -106,11 +121,11 @@ class PropMeta {
 
 export const useProps = <const T extends { [key: string]: Prop | string[] } = {}>(options: T): {
   -readonly [K in keyof T as K extends `$${infer NK}` ? NK : K]
-  : T[K] extends string[] ? T[K][number]
+  : T[K] extends readonly string[] ? T[K][number]
   : T[K] extends string ? string
   : T[K] extends number ? number
   : T[K] extends boolean ? boolean
-  : never
+  : T[K]
 } => {
   const props: { [key: string]: Prop } = {}
   const meta: { [key: string]: PropMeta } = {}
@@ -135,31 +150,49 @@ type El<Props, Expose, Events extends { [key: string]: any }> = Props & Expose &
 
 type ReturnType<T extends ((...args: any) => any) | undefined> = T extends (...args: any) => infer R ? R : T
 
+export const setKeydownClick = (el: HTMLElement | HTMLElement[]) => {
+  const arr = Array.isArray(el) ? el : [el]
+  arr.forEach((v) => {
+    v.addEventListener('keydown', (e) => {
+      if (!['Enter', ' '].includes(e.key)) return
+      v.click()
+    })
+  })
+}
+
 export const useElement = <
   Props extends { [key: string]: Prop } = {},
   Expose extends { [key: string]: any } = {},
   Events extends { [key: string]: any } = {},
+  FormAssociated extends boolean = false
 >(options: {
   style?: string | string[]
   props?: Props
   events?: Events
   template?: string
-  focused?: boolean
-  pressed?: boolean
-  hovered?: boolean
-  setup?: (this: Props & HTMLElement, shadowRoot: ShadowRoot, info: { props: Props, isConnected: boolean }) => Merge<{
-    onMounted?: (parent: ParentNode) => void | (() => void)
+  focused?: true | 'keydown'
+  pressed?: true
+  hovered?: true
+  formAssociated?: FormAssociated
+  setup?: (this: Props & HTMLElement, shadowRoot: ShadowRoot, info: { props: Props, isConnected: boolean, internals: FormAssociated extends true ? ElementInternals : undefined }) => Merge<{
+    onMounted?: () => void | (() => void)
+    onUnmounted?: () => void
     onAttributeChanged?: (key: keyof Props, value: Props[keyof Props]) => void
     onAdopted?: () => void
+    onFormAssociated?: () => void
+    onFormReset?: () => void
+    onDisabledStateChanged?: (disabled: boolean) => void
     expose?: Expose & { [K in keyof Props]?: never }
   },
     { [K in keyof Props as K extends string ? `get${Capitalize<K>}` : never]?: () => Props[K] },
     { [K in keyof Props as K extends string ? `set${Capitalize<K>}` : never]?: (v: Props[K], old: Props[K]) => void }
   > | void
 }): {
-  new(): El<Props, Expose, Events>
-  prototype: HTMLElement
-  define<T extends string>(name: T): T
+  new(): El<Props, Expose, Events>,
+  prototype: HTMLElement,
+  define<T extends string>(name: T): T,
+  connects: (El<Props, Expose, Events> & HTMLElement)[],
+  setStyle(style: string): void
 } => {
   const observedAttributes: string[] = []
   const state = {
@@ -180,28 +213,60 @@ export const useElement = <
   }
   type MapValue = {
     setup: ReturnType<typeof options.setup>,
-    info: { props: Props, isConnected: boolean },
-    lifetimes: { onUnmounted?: () => void }
+    info: { props: Props, isConnected: boolean, internals: FormAssociated extends true ? ElementInternals : undefined },
+    style?: CSSStyleSheet | HTMLStyleElement
   }
-  const map = new Map<HTMLElement, MapValue>()
+  const map = new WeakMap<HTMLElement, MapValue>()
+  const t = document.createElement('template')
+  t.innerHTML = options.template ?? ''
+  const info: { style?: string, template: Node } = { template: t.content }
   class Component extends HTMLElement {
+    static get formAssociated() {
+      return options.formAssociated
+    }
     static observedAttributes = observedAttributes
+    static connects: HTMLElement[] = []
     static define(name: string) {
       !customElements.get(name) && customElements.define(name, this)
       return name
     }
+    static setStyle(style?: string) {
+      style ? info.style = style : delete info.style
+      this.connects.forEach((el) => {
+        const mapValue = map.get(el)
+        if (!mapValue) return
+        const shadowRoot = el.shadowRoot!
+        if (!style) {
+          mapValue.style && removeStyle(shadowRoot, mapValue.style)
+          return delete mapValue.style
+        }
+        if (mapValue.style) removeStyle(shadowRoot, mapValue.style)
+        mapValue.style = setStyle(shadowRoot, style)
+      })
+    }
     constructor() {
       super()
-      const shadowRoot = this.attachShadow({ mode: 'open' })
-      shadowRoot.innerHTML = options.template ?? ''
-      setStyle(shadowRoot, [baseStyle, ...options.style ? (Array.isArray(options.style) ? options.style : [options.style]) : []])
+      const shadowRoot = this.attachShadow({ mode: 'open', serializable: true })
+      shadowRoot.appendChild(info.template.cloneNode(true))
+      const styles = [baseStyle, ...Array.isArray(options.style) ? options.style : [options.style]]
+      const sheets: CSSStyleSheet[] = []
+      let style: undefined | CSSStyleSheet | HTMLStyleElement
+      for (const item of styles) {
+        if (!item) continue
+        setStyle(shadowRoot, item)
+      }
+      if (info.style) {
+        const out = setStyle(shadowRoot, info.style)
+        style = out
+      }
+      if (sheets.length > 0) shadowRoot.adoptedStyleSheets = sheets
       const props = { ...options.props } as Props
-      const mapValue: MapValue = { setup: null as any, info: { props, isConnected: false }, lifetimes: {} }
-      options.focused && this.addEventListener('keydown', (e) => {
-        if (!['Enter', ' '].includes(e.key)) return
-        e.preventDefault()
-        this.click()
-      })
+      const mapValue: MapValue = {
+        setup: null as any, style,
+        info: { props, isConnected: false, internals: (options.formAssociated ? this.attachInternals() : undefined) as any }
+      }
+      map.set(this, mapValue)
+      options.focused === 'keydown' && setKeydownClick(this)
       if (options.pressed) {
         const name = 'pressed'
         this.addEventListener('pointerdown', (e) => {
@@ -263,26 +328,45 @@ export const useElement = <
       mapValue.setup = options.setup?.call(this as any, shadowRoot as any, mapValue.info)
       for (const key in mapValue.setup?.expose ?? {}) Object.defineProperty(this, key, { get: () => mapValue.setup?.expose?.[key] })
       for (const key in ahead) this[key as keyof this] = ahead[key] as never
-      map.set(this, mapValue)
+    }
+    formAssociatedCallback() {
+      map.get(this)?.setup?.onFormAssociated?.()
+    }
+    disabledStateChangedCallback(disabled: boolean) {
+      const mapValue = map.get(this)
+      mapValue?.setup?.onDisabledStateChanged?.(disabled)
+      //@ts-ignore
+      if (typeof mapValue?.info.props.disabled === 'boolean') this.disabled = disabled
+    }
+    formResetCallback() {
+      map.get(this)?.setup?.onFormReset?.()
     }
     connectedCallback() {
+      //@ts-ignore
+      this.constructor.connects.push(this)
       const mapValue = map.get(this)
       if (!mapValue) return
+      if (info.style && !mapValue.style) {
+        mapValue.style = setStyle(this.shadowRoot!, info.style)
+      }
+      if (!info.style && mapValue.style) {
+        removeStyle(this.shadowRoot!, mapValue.style)
+        delete mapValue.style
+      }
       mapValue.info.isConnected = true
       //@ts-ignore
       if (options.focused && !this.disabled && !this.readOnly && !this.hasAttribute('tabindex')) this.tabIndex = 0
-      if (mapValue.setup?.onMounted) {
-        const parentNode = this.parentNode!
-        const stop = mapValue.setup.onMounted(parentNode)
-        mapValue.lifetimes.onUnmounted = stop!
-      }
+      const call = mapValue?.setup?.onMounted?.()
+      if (call) mapValue!.setup!.onUnmounted = call
     }
     disconnectedCallback() {
+      //@ts-ignore
+      const connects = this.constructor.connects as HTMLElement[]
+      connects.splice(connects.indexOf(this), 1)
       const mapValue = map.get(this)
       if (!mapValue) return
       mapValue.info.isConnected = false
-      mapValue.lifetimes.onUnmounted?.()
-      delete mapValue.lifetimes.onUnmounted
+      mapValue?.setup?.onUnmounted?.()
     }
     adoptedCallback() {
       map.get(this)?.setup?.onAdopted?.()

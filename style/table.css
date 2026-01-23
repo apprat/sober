@@ -4,23 +4,26 @@ table {
   max-width: -moz-available;
   max-width: -webkit-fill-available;
   overflow: auto;
-  border-radius: var(--s-shape-corner-small, 8px);
+  border-radius: 8px;
   font-size: calc(var(--s-font-size, 1) * 14px);
   white-space: nowrap;
   position: relative;
 }
 
-table,
-table :is(th, td) {
+table {
   border: solid 1px var(--s-color-surface-variant, #dce3e9);
 }
 
-table th {
+table>tbody>tr {
+  border-top: solid 1px var(--s-color-surface-variant, #dce3e9);
+}
+
+table tr th {
   text-align: left;
   font-weight: 600;
 }
 
-table thead {
+table>thead {
   position: sticky;
   top: 0;
   background: var(--s-color-surface-container, #edeef0);
@@ -30,19 +33,6 @@ table :is(th, td) {
   padding: 12px 16px;
 }
 
-table th {
-  border-top: none;
-}
-
 table :is(td, th):first-child {
-  border-left: none;
   width: 100%;
-}
-
-table :is(td, th):last-child {
-  border-right: none;
-}
-
-table tr:last-child>td {
-  border-bottom: none;
 }

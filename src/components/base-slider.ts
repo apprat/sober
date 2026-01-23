@@ -9,9 +9,12 @@ const props = useProps({
   $step: 1,
   $min: 0,
   $max: 100,
+  $name: '',
   $steps: '',
+  $defualtStart: 0,
+  $defualtEnd: 0,
   clickChanged: true,
-  slidingPriority: false,
+  scrollPriority: false,
   mode: ['single', 'reversed', 'range'],
   slidingMode: ['thumb', 'all', 'all-cumulative'],
   variant: ['standard', 'segmented'],
@@ -32,10 +35,17 @@ const style = /*css*/`
   justify-content: center;
   position: relative;
   color: ${scheme.color.primary};
+  transition-property: none;
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
   height: 24px;
   cursor: pointer;
+}
+:host(:focus-visible){
+  outline-style: none;
+  slot:is([name=thumb-start], [name=thumb-end]){
+    outline-style: solid;
+  }
 }
 .layout{
   display: contents;
@@ -88,6 +98,9 @@ slot:is([name=thumb-start], [name=thumb-end]){
   border-radius: 50%;
   cursor: grab;
   justify-content: center;
+  outline-color: currentColor;
+  outline-offset: 2px;
+  outline-width: 3px;
   &::before,
   &::after{
     content: '';
@@ -101,8 +114,6 @@ slot:is([name=thumb-start], [name=thumb-end]){
     transform: scale(.5);
     background: currentColor;
     transition-property: opacity, transform;
-    transition-duration: inherit;
-    transition-timing-function: inherit;
   }
 }
 slot[name=thumb-start]{
@@ -304,6 +315,7 @@ export class BaseSlider extends useElement({
   focused: true,
   pressed: true,
   hovered: true,
+  formAssociated: true,
   setup(shadowRoot, info) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const thumbStartSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=thumb-start]')!
@@ -324,9 +336,9 @@ export class BaseSlider extends useElement({
       const cssSlidingMode = computedStyle.getValue('--s-base-slider-sliding-mode')
       return ['thumb', 'all', 'all-cumulative'].includes(cssSlidingMode) ? cssSlidingMode : this.slidingMode
     }
-    const getSlidingPriority = () => {
-      const cssSlidingPriority = computedStyle.getValue('--s-base-slider-sliding-priority')
-      return ['', 'none'].includes(cssSlidingPriority) ? this.slidingPriority : Boolean(cssSlidingPriority)
+    const getScrollPriority = () => {
+      const cssScrollPriority = computedStyle.getValue('--s-base-slider-sliding-priority')
+      return ['', 'none'].includes(cssScrollPriority) ? this.scrollPriority : Boolean(cssScrollPriority)
     }
     const getClickChanged = () => {
       const cssClickChanged = computedStyle.getValue('--s-base-slider-click-changed')
@@ -384,12 +396,12 @@ export class BaseSlider extends useElement({
       const endValue = this.end
       const thumbRect = { start: thumbStartSlot.getBoundingClientRect(), end: thumbEndSlot.getBoundingClientRect() }[name]
       const slidingMode = getSlidingMode()
-      const slidingPriority = getSlidingPriority()
+      const scrollPriority = getScrollPriority()
       const offsetClientX = slidingMode === 'all-cumulative' ? thumbRect[ori.left] - event[ori.clientX] : 0
       const state = { x: event[ori.clientX], y: event[ori.clientY], allowed: false, initialized: false }
       const move = (ev: MouseEvent | TouchEvent) => {
         const e = ev instanceof TouchEvent ? ev.touches[0] : ev
-        if (notThumb && event.pointerType !== 'mouse' && !slidingPriority) {
+        if (notThumb && event.pointerType !== 'mouse' && scrollPriority) {
           const x = Math.abs(state.x - e[ori.clientX])
           const y = Math.abs(state.y - e[ori.clientY])
           if (x > 5 || y > 5) state.initialized = true
@@ -459,10 +471,19 @@ export class BaseSlider extends useElement({
       if (!keydown(e.key)) return
       e.preventDefault()
     })
+    const updateFrom = () => info.internals.setFormValue(String(this.mode !== 'range' ? this.end : `${this.start}-this.end`))
     useThrottle(render)
+    updateFrom()
     return {
       expose: { keydown },
-      onAttributeChanged: (name) => ['start', 'end', 'max', 'min', 'step', 'mode'].includes(name) && useThrottle(render),
+      onAttributeChanged: (name) => {
+        if (['start', 'end', 'max', 'min', 'step', 'mode'].includes(name)) useThrottle(render)
+        if (['start', 'end', 'mode'].includes(name)) updateFrom()
+      },
+      onFormReset: () => {
+        this.start = this.defualtStart
+        this.end = this.defualtEnd
+      },
       getStart: () => {
         if (this.mode !== 'range') return info.props.min
         return Math.max(Math.min(info.props.start, info.props.max), info.props.min)

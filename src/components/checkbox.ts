@@ -5,7 +5,9 @@ const props = useProps({
   disabled: false,
   checked: false,
   indeterminate: false,
-  $value: ''
+  defualtChecked: false,
+  name: '',
+  $value: '',
 })
 
 const style = /*css*/`
@@ -16,7 +18,9 @@ const style = /*css*/`
   cursor: pointer;
   position: relative;
   height: 40px;
-  border-radius: 4px;
+  max-width: -moz-available;
+  max-width: -webkit-fill-available;
+  outline-color: currentColor;
   color: ${scheme.color.onSurfaceVariant};
   transition-timing-function: ${scheme.motion.easing.emphasized};
   transition-duration: ${scheme.motion.duration.short4};
@@ -37,6 +41,13 @@ const style = /*css*/`
     transform: scale(1);
   }
 }
+:host(:focus-visible){
+  outline-style: none;
+  .layout{
+    outline-style: solid;
+    outline-width: 3px;
+  }
+}
 .layout{
   position: relative;
   height: 100%;
@@ -45,6 +56,8 @@ const style = /*css*/`
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
+  outline-offset: inherit;
+  outline-color: inherit;
   .ripple{
     aspect-ratio: 1;
     -webkit-aspect-ratio: 1;
@@ -54,7 +67,7 @@ const style = /*css*/`
     background: currentColor;
     opacity: 0;
     transform: scale(.5);
-    transition-property: opacity, background, transform;
+    transition-property: opacity, transform;
   }
 }
 .unchecked,
@@ -74,6 +87,7 @@ const style = /*css*/`
   transform: scale(.5);
   opacity: 0;
   transition-property: transform, opacity;
+  transition-timing-function: cubic-bezier(.5, .5, .5, 2);
 }
 :host([indeterminate]) .unchecked{
   opacity: 0;
@@ -82,6 +96,13 @@ const style = /*css*/`
 :host([indeterminate]) .indeterminate{
   opacity: 1;
   transform: scale(1);
+}
+.text{
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 svg,
 ::slotted(:is([slot=checked], [slot=unchecked], [slot=indeterminate])){
@@ -111,20 +132,26 @@ const template = /*html*/`
   </slot>
   <div class="ripple" part="ripple"></div>
 </div>
-<slot></slot>
+<slot class="text" part="text"></slot>
 `
 
 export class Checkbox extends useElement({
-  focused: true,
+  focused: 'keydown',
   pressed: true,
   hovered: true,
+  formAssociated: true,
   style, template, props,
-  setup() {
+  setup(_, info) {
+    const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)
     this.addEventListener('click', () => {
       if (this.indeterminate) this.indeterminate = false
       this.checked = !this.checked
       this.dispatchEvent(new Event('change'))
     })
+    return {
+      onFormReset: () => this.checked = this.defualtChecked,
+      onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom()
+    }
   }
 }) { }
 

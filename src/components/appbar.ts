@@ -2,9 +2,8 @@ import { useProps, useElement } from '../core/element.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
-  variant: ['surface', 'dark'],
-  breakpointCompact: 1024,
-  centerTitle: false
+  variant: ['surface', 'primary'],
+  $compactBreakpoint: 1024
 })
 
 const style = /*css*/`
@@ -17,58 +16,72 @@ const style = /*css*/`
   padding: 0 16px;
   background: ${scheme.color.surfaceContainer};
 }
-:host([compacted]){
-  padding: 0 16px;
-  height: 56px;
-}
 .headline{
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
   height: 100%;
-  gap: 2px;
   overflow: hidden;
+}
+.view{
+  flex-grow: 1;
 }
 ::slotted(*){
   flex-shrink: 0;
-}
-::slotted([slot=nav]){
-  --margin-left: -8px;
 }
 ::slotted([slot=logo]){
   height: 32px;
   color: ${scheme.color.primary};
   fill: currentColor;
 }
+::slotted([slot=action]:last-child){
+  margin-right: -4px;
+}
 ::slotted(:is([slot=title], [slot=subtitle])){
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
+  overflow: hidden;
+  line-height: calc(100% + 4px);
 }
 ::slotted([slot=title]){
-  font-size: 1.375rem;
+  font-size: calc(var(--s-font-size) * 24px);
   font-weight: 600;
   text-transform: capitalize;
   color: ${scheme.color.primary};
 }
 ::slotted([slot=subtitle]){
-  font-size: .75rem;
+  font-size: calc(var(--s-font-size) * 12px);
   font-weight: 400;
-  letter-spacing: .5px;
   color: ${scheme.color.onSurfaceVariant};
 }
-::slotted([slot=action]:last-child){
-  margin-right: -8px;
+:host([variant=primary]){
+  background: ${scheme.color.primary};
+  color: ${scheme.color.onPrimary};
+  ::slotted(:is([slot=nav], [slot=logo], [slot=title], [slot=subtitle], [slot=action])){
+    color: inherit;
+  }
+  ::slotted(:is([slot=nav], [slot=action]):focus-visible){
+    outline: solid 2px currentColor;
+  }
 }
-.view{
-  flex-grow: 1;
+:host([compacted]){
+  height: 56px;
+  gap: 8px;
+  padding: 0 12px;
+  .headline{
+    ::slotted([slot=title]){
+      font-size: calc(var(--s-font-size) * 20px);
+    }
+    ::slotted([slot=subtitle]){
+      font-size: calc(var(--s-font-size) * 10px);
+    }
+  }
 }
 `
 
 const template = /*html*/`
-<slot name="leading"></slot>
+<slot name="start"></slot>
 <slot name="nav"></slot>
 <slot name="logo"></slot>
 <div class="headline" part="headline">
@@ -79,16 +92,14 @@ const template = /*html*/`
   <slot></slot>
 </div>
 <slot name="action"></slot>
-<slot name="trailing"></slot>
+<slot name="end"></slot>
 `
 
 export class Appbar extends useElement({
-  style, template,
-  setup(shadowRoot) {
-    //const view = shadowRoot.querySelector<HTMLDivElement>('.view')!
+  props, style, template,
+  setup() {
     new ResizeObserver(() => {
-      //view.classList.toggle('s-laptop', this.offsetWidth <= 1024)
-      //view.classList.toggle('s-tablet', this.offsetWidth <= 768)
+      this.toggleAttribute('compacted', this.offsetWidth <= this.compactBreakpoint)
     }).observe(this)
   }
 }) { }

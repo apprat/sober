@@ -1,9 +1,9 @@
-import { useProps, useElement } from '../core/element.js'
+import { useProps, useElement } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
   variant: ['surface', 'primary'],
-  $compactBreakpoint: 1024
+  size: ['auto', 'medium', 'small']
 })
 
 const style = /*css*/`
@@ -13,14 +13,18 @@ const style = /*css*/`
   position: relative;
   gap: 12px;
   height: 64px;
-  padding: 0 16px;
+  padding: 0 12px;
+  transition-property: background-color, color, height, padding;
   background: ${scheme.color.surfaceContainer};
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.short4};
 }
 .headline{
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 100%;
+  gap: 3px;
   overflow: hidden;
 }
 .view{
@@ -34,15 +38,16 @@ const style = /*css*/`
   color: ${scheme.color.primary};
   fill: currentColor;
 }
-::slotted([slot=action]:last-child){
-  margin-right: -4px;
-}
 ::slotted(:is([slot=title], [slot=subtitle])){
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
   overflow: hidden;
-  line-height: calc(100% + 4px);
+  overflow: clip visible;
+  line-height: 1;
+  transition-property: font-size;
+  transition-timing-function: inherit;
+  transition-duration: inherit;
 }
 ::slotted([slot=title]){
   font-size: calc(var(--s-font-size) * 24px);
@@ -65,7 +70,7 @@ const style = /*css*/`
     outline: solid 2px currentColor;
   }
 }
-:host([compacted]){
+:host([size=small]){
   height: 56px;
   gap: 8px;
   padding: 0 12px;
@@ -75,6 +80,21 @@ const style = /*css*/`
     }
     ::slotted([slot=subtitle]){
       font-size: calc(var(--s-font-size) * 10px);
+    }
+  }
+}
+@media (orientation: portrait){
+  :host(:not([size])){
+    height: 56px;
+    gap: 8px;
+    padding: 0 10px;
+    .headline{
+      ::slotted([slot=title]){
+        font-size: calc(var(--s-font-size) * 20px);
+      }
+      ::slotted([slot=subtitle]){
+        font-size: calc(var(--s-font-size) * 10px);
+      }
     }
   }
 }
@@ -97,11 +117,6 @@ const template = /*html*/`
 
 export class Appbar extends useElement({
   props, style, template,
-  setup() {
-    new ResizeObserver(() => {
-      this.toggleAttribute('compacted', this.offsetWidth <= this.compactBreakpoint)
-    }).observe(this)
-  }
 }) { }
 
 const name = Appbar.define('s-appbar')
@@ -114,7 +129,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -129,7 +144,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & Appbar
   }
 }
@@ -138,7 +153,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -148,7 +163,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -158,7 +173,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

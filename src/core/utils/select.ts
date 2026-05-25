@@ -1,11 +1,12 @@
-interface Base extends HTMLElement {
+export interface Base extends HTMLElement {
   value: string
   multiple: boolean
 }
 
-interface BaseItem extends HTMLElement {
+export interface BaseItem extends HTMLElement {
   selected: boolean
   value: string
+  disabled: boolean
 }
 
 export class Select<Root extends Base, Item extends BaseItem> {
@@ -113,4 +114,6 @@ export class Select<Root extends Base, Item extends BaseItem> {
   declare onRender?: (olds: Item[]) => void
   declare onChange?: (olds: Item[]) => void
   declare onSlotChange?: () => void
-} 
+}
+
+

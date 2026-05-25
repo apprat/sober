@@ -1,4 +1,4 @@
-import { useProps, useElement, useThrottle } from '../core/element.js'
+import { useProps, useElement, useThrottle } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
@@ -122,7 +122,7 @@ export class CircularProgress extends useElement({
       layout.style.setProperty('--s_value', `${Math.min(this.value, this.max) / this.max * 100}`)
     }
     return {
-      setValue: () => useThrottle(rander)
+      value: () => useThrottle(rander)
     }
   }
 }) { }
@@ -137,7 +137,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [Alert.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [Alert.tagName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -152,7 +152,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & CircularProgress
   }
 }
@@ -161,7 +161,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -171,7 +171,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -181,7 +181,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

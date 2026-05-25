@@ -4,11 +4,12 @@ import path from 'path'
 import markdownIt from 'markdown-it'
 import url from 'url'
 import * as shiki from 'shiki'
+import { transformerNotationHighlight } from '@shikijs/transformers'
 
 const __dirname = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), '../')
 const highlighter = await shiki.createHighlighter({
   themes: ['github-dark'],
-  langs: ['shell', 'json', 'js', 'javascript', 'jsx', 'ts', 'typescript', 'tsx', 'css', 'xml', 'html', 'vue']
+  langs: ['shell', 'json', 'js', 'javascript', 'jsx', 'ts', 'typescript', 'tsx', 'css', 'xml', 'html', 'vue'],
 })
 
 const mineTypeMap = {
@@ -30,7 +31,7 @@ const mineTypeMap = {
 }
 
 function highlight(v, lang = 'html') {
-  return highlighter.codeToHtml(v.trim(), { lang, theme: 'github-dark' })
+  return highlighter.codeToHtml(v.trim(), { lang, theme: 'github-dark', transformers: [transformerNotationHighlight()] })
 }
 
 const md = markdownIt({ html: true })

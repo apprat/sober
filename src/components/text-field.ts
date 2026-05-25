@@ -1,4 +1,4 @@
-import { useElement, useProps } from '../core/element.js'
+import { useElement, useProps } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { Fieldset } from './fieldset.js'
 
@@ -142,8 +142,7 @@ const template = /*html*/`
 
 export class TextField extends useElement({
   style, template, props,
-  focused: true,
-  formAssociated: true,
+  states: ['focused', 'formAssociated'],
   setup(shadowRoot, info) {
     const fieldset = shadowRoot.querySelector<Fieldset>(`s-fieldset`)!
     const textarea = document.createElement('textarea') as HTMLTextAreaElement
@@ -179,20 +178,24 @@ export class TextField extends useElement({
     const focus = () => getInput().focus()
     this.addEventListener('focus', focus)
     return {
+      expose: {
+        get value() {
+          return getInput().value
+        }
+      },
       onFormReset: () => this.value = this.defualtValue,
-      getValue: () => getInput().value,
-      setValue: (v) => {
+      value: (v) => {
         getInput().value = v
         fieldset.floated = v === ''
         setRequired()
         setValue()
       },
-      setDisabled: setValue,
-      setRequiring: setRequired,
-      setAutocomplete: (v) => input.autocomplete = textarea.autocomplete = v as AutoFill,
-      setPlaceholder: (v) => input.placeholder = textarea.placeholder = v,
-      setMaxLength: (v) => input.maxLength = textarea.maxLength = v,
-      setType: (v, old) => {
+      disabled: setValue,
+      requiring: setRequired,
+      autocomplete: (v) => input.autocomplete = textarea.autocomplete = v as AutoFill,
+      placeholder: (v) => input.placeholder = textarea.placeholder = v,
+      maxLength: (v) => input.maxLength = textarea.maxLength = v,
+      type: (v, old) => {
         if ([v, old].includes('multiline')) {
           if (old === 'multiline') {
             textarea.after(input)
@@ -223,7 +226,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -238,7 +241,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & TextField
   }
 }
@@ -247,7 +250,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -257,7 +260,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -267,7 +270,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

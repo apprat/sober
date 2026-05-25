@@ -1,4 +1,4 @@
-import { useElement, useProps } from '../core/element.js'
+import { useElement, useProps } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
 
@@ -12,7 +12,7 @@ const style = /*css*/`
   height: -moz-available;
   height: -webkit-fill-available;
   overflow: auto;
-  font-family: system-ui;
+  font-family: sans-serif, system-ui;
   color: var(--s-color-on-background);
   background: var(--s-color-background);
   animation-timing-function: var(--s-motion-easing-standard-accelerate);
@@ -182,10 +182,10 @@ export const Page = useElement({
   setup() {
     const computedStyle = useComputedStyle(this)
     const darker = matchMedia('(prefers-color-scheme: dark)')
-    const toggleTheme = async (theme: typeof props['theme'], anchor?: HTMLElement) => {
+    const toggleTheme = async (theme: typeof props.values.theme, anchor?: HTMLElement) => {
       if (this.theme === theme) return
       const isDark = darker.matches
-      const getTheme = (theme: typeof props['theme']) => theme === 'auto' ? (isDark ? 'dark' : 'light') : theme
+      const getTheme = (theme: typeof props.values.theme) => theme === 'auto' ? (isDark ? 'dark' : 'light') : theme
       const oldTheme = getTheme(this.theme)
       const newTheme = getTheme(theme)
       if (oldTheme === newTheme || !document.startViewTransition) {
@@ -215,7 +215,7 @@ export const Page = useElement({
     }
     return {
       expose: { toggleTheme },
-      setTheme: (value) => {
+      theme: (value) => {
         if (value === 'light') return this.removeAttribute('dark')
         if (value === 'dark') return this.setAttribute('dark', '')
         const change = () => {
@@ -239,7 +239,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.detailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<Props>
+        [name]: React.detailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -254,7 +254,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & typeof Page
   }
 }
@@ -263,7 +263,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -273,7 +273,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -283,7 +283,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

@@ -72,7 +72,7 @@ scheme.apply(page)
 
 ## 兼容性 (Browser compatibility)
 
-| 浏览器 Browser     | 支持 Support |
+| 浏览器 Browser    | 支持 Support |
 | ----------------- | ------------ |
 | Chromium (Chrome) | 88+          |
 | Gecko (Firefox)   | 78+          |

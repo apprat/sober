@@ -1,49 +1,21 @@
 <!DOCTYPE html>
-<html lang="ZH-cn">
+<html>
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test Page</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 24px;
-    }
-
-    .carousel {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-snap-stop: always;
-      height: 200px;
-      width: 500px;
-      background: #eee;
-    }
-
-    .carousel-item {
-      flex: 0 0 100%;
-      scroll-snap-align: center;
-    }
-
-    .carousel-item:nth-child(odd) {
-      background: #999;
-    }
-  </style>
+  <meta charset="utf-8">
+  <title>test</title>
+  <script type="module">
+    import * as components from '/dist/main.js'
+  </script>
 </head>
 
 <body>
-  <div class="carousel">
-    <div class="carousel-item">1</div>
-    <div class="carousel-item">2</div>
-    <div class="carousel-item" style="scroll-target-group: none;">3</div>
-    <div class="carousel-item" style="scroll-target-group: none;">4</div>
-  </div>
-  <input type="text" name="" id="" value="xxxx">
-  <button>change</button>
-  <script>
-  </script>
-
+  <s-navigation-bar>
+    <s-navigation-bar-item>
+      <s-tooltip ancestorLevel="2">Home</s-tooltip>
+    </s-navigation-bar-item>
+  </s-navigation-bar>
 </body>
+</script>
 
 </html>

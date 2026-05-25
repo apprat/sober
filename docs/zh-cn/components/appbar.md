@@ -34,6 +34,8 @@
 </s-appbar>
 ```
 
+## 变体
+
 设置属性 `variant` 使用变体。
 
 ```html preview
@@ -53,14 +55,31 @@
 </s-appbar>
 ```
 
+## 尺寸
+
+设置属性 `size` 定义尺寸，默认为 `auto` 它会根据**窗口宽高比例**选择 `small` 或者 `medium`，你也可以设置该属性固定尺寸。
+
+```html preview
+<s-appbar size="small">
+  <s-icon-button slot="nav">
+    <s-icon name="menu"></s-icon>
+  </s-icon-button>
+  <span slot="title">Material 3</span>
+  <s-icon-button slot="action">
+    <s-icon name="search"></s-icon>
+    <s-tooltip>搜索</s-tooltip>
+  </s-icon-button>
+</s-appbar>
+```
+
 ---
 
 ## 属性
 
-| 名称              | 类型             | 默认值  | 同步 | 说明                                           |
-| ----------------- | ---------------- | ------- | ---- | ---------------------------------------------- |
-| variant           | surface, primary | surface | √    | 变体                                           |
-| compactBreakpoint | number           | 1024    | ×    | 紧凑型断点，在组件宽度小于该值时会切换为紧凑型 |
+| 名称    | 类型                | 默认值  | 同步 | 说明                                                         |
+| ------- | ------------------- | ------- | ---- | ------------------------------------------------------------ |
+| variant | surface, primary    | surface | √    | 变体                                                         |
+| size    | auto, medium, small | auto    | √    | 尺寸，默认为 auto 会根据窗口宽高比例自动为 small 或者 medium |
 
 ---
 

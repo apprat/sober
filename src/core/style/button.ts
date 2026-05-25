@@ -19,11 +19,12 @@ export const buttonStyle = /*css*/`
   .text{
     display: block;
     overflow: hidden;
+    overflow: clip visible;
     text-overflow: ellipsis;
     white-space: nowrap;
     min-width: 0;
     border-radius: 0;
-    line-height: calc(100% + 8px);
+    line-height: 1;
   }
 }
 :host([disabled]){

@@ -1,4 +1,4 @@
-import { useProps, useElement } from '../core/element.js'
+import { useProps, useElement } from '../core/elements.js'
 import { buttonStyle } from '../core/style/button.js'
 import * as scheme from '../core/scheme.js'
 import './ripple.js'
@@ -128,7 +128,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [FloatingActionButtonMenu.name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [FloatingActionButtonMenu.name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.value>
       }
     }
   }
@@ -143,7 +143,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & FloatingActionButtonMenu
   }
 }
@@ -152,7 +152,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -162,7 +162,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -172,7 +172,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

@@ -3,45 +3,59 @@
 对话框。
 
 ```html preview
+<div onclick="console.log('click')">
 <s-button>
   对话框
   <s-tooltip>显示对话框</s-tooltip>
-  <s-dialog>
+  <s-dialog attached>
     <div slot="title">标题</div>
     <div slot="text">
       问人生、头白京国，算来何事消得。不如罨画清溪上，蓑笠扁舟一只。人不识，且笑煮、鲈鱼趁著莼丝碧。无端酸鼻，向岐路消魂，征轮驿骑，断雁西风急。 英雄辈，事业东西南北。临风因甚泣。酬知有愿频挥手，零雨凄其此日。休太息，须信道、诸公衮衮皆虚掷。年来踪迹。有多少雄心，几翻恶梦，泪点霜华织。
+      <a>测试<s-tooltip>显示链接</s-tooltip></a>
     </div>
     <s-button slot="action" variant="text">取消</s-button>
     <s-button slot="action" variant="text">确定</s-button>
   </s-dialog>
-</s-button>
+ </s-button>
+</div>
+```
+
+设置 `opened` 属性来更加灵活的控制对话框展开与关闭。
+
+```html preview
+<s-button onclick="document.querySelector('#test-dialog').opened=true"> 对话框 </s-button>
+
+<s-dialog id="test-dialog">
+  <div slot="title">标题</div>
+  <div slot="text">
+    问人生、头白京国，算来何事消得。不如罨画清溪上，蓑笠扁舟一只。人不识，且笑煮、鲈鱼趁著莼丝碧。无端酸鼻，向岐路消魂，征轮驿骑，断雁西风急。 英雄辈，事业东西南北。临风因甚泣。酬知有愿频挥手，零雨凄其此日。休太息，须信道、诸公衮衮皆虚掷。年来踪迹。有多少雄心，几翻恶梦，泪点霜华织。
+  </div>
+  <s-button slot="action" variant="text">取消</s-button>
+  <s-button slot="action" variant="text">确定</s-button>
+</s-dialog>
 ```
 
 设置 `gravity` 设置位置。
 
 ```html preview
-<s-button>
-  顶部对话框
-  <s-dialog gravity="top">
-    <div slot="title">标题</div>
-    <div slot="text">
-      确认操作？
-    </div>
-    <s-button slot="action" variant="text">取消</s-button>
-    <s-button slot="action" variant="text">确定</s-button>
-  </s-dialog>
-</s-button>
-<s-button>
-  底部对话框
-  <s-dialog gravity="bottom">
-    <div slot="title">标题</div>
-    <div slot="text">
-      确认操作？
-    </div>
-    <s-button slot="action" variant="text">取消</s-button>
-    <s-button slot="action" variant="text">确定</s-button>
-  </s-dialog>
-</s-button>
+<!-- <s-dialog gravity="top">
+  <s-button slot="trigger"> 顶部对话框 </s-button>
+  <div slot="title">标题</div>
+  <div slot="text">
+    确认操作？
+  </div>
+  <s-button slot="action" variant="text">取消</s-button>
+  <s-button slot="action" variant="text">确定</s-button>
+</s-dialog>
+<s-dialog gravity="bottom">
+  <s-button slot="trigger"> 底部对话框 </s-button>
+  <div slot="title">标题</div>
+  <div slot="text">
+    确认操作？
+  </div>
+  <s-button slot="action" variant="text">取消</s-button>
+  <s-button slot="action" variant="text">确定</s-button>
+</s-dialog> -->
 ```
 
 设置 `size=full-screen` 设置全屏对话框
@@ -98,9 +112,10 @@ const dialog = Dialog.builder({
 
 | 名称     | 类型                | 默认值 | 同步 | 说明   |
 | -------- | ------------------- | ------ | ---- | ------ |
-| disabled | boolean             | false  | ✔️ | 禁用的 |
-| opened   | boolean             | false  | ✔️ | 打开的 |
-| gravity  | center, top, bottom | center | ✔️ | 位置   |
+| disabled | boolean             | false  | √    | 禁用的 |
+| opened   | boolean             | false  | √    | 打开的 |
+| attached | boolean             | false  | √    | 依附的 |
+| gravity  | center, top, bottom | center | √    | 位置   |
 
 ---
 
@@ -108,10 +123,10 @@ const dialog = Dialog.builder({
 
 | 名称   | 参数                             | 冒泡 | 可取消 | 说明                          |
 | ------ | -------------------------------- | ---- | ------ | ----------------------------- |
-| open   | Event                            | ✖️ | ✔️   | 打开时触发                    |
-| close  | CustomEvent<{ source: 0\|1\|2 }> | ✖️ | ✔️   | 关闭时触发，source=关闭的方式 |
-| opened | Event                            | ✖️ | ✖️   | 打开完成时触发                |
-| closed | Event                            | ✖️ | ✖️   | 关闭完成时触发                |
+| open   | Event                            | ×    | √      | 打开时触发                    |
+| close  | CustomEvent<{ source: 0\|1\|2 }> | ×    | √      | 关闭时触发，source=关闭的方式 |
+| opened | Event                            | ×    | ×      | 打开完成时触发                |
+| closed | Event                            | ×    | ×      | 关闭完成时触发                |
 
 ---
 

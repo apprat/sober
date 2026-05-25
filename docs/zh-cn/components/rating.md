@@ -59,7 +59,7 @@
 该组件可以作为表单元素使用。
 
 ```html preview
-<form action="/link" method="get">
+<form action="http://coolaf.com/tool/params" method="get">
   选择标签：
   <s-rating name="star" defualtValue="5"></s-rating>
   <hr>

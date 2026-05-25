@@ -1,4 +1,4 @@
-import { useElement, useProps } from '../core/element.js'
+import { useElement, useProps } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { buttonStyle } from '../core/style/button.js'
 import './ripple.js'
@@ -175,6 +175,9 @@ const style = /*css*/`
     height: 136px;
   }
 }
+::slotted(:is(svg, s-icon, s-loading, s-circular-progress)) {
+  flex-shrink: 1;
+}
 ::slotted(s-badge){
   position: absolute;
   right: 15%;
@@ -192,8 +195,7 @@ const template = /*html*/`
 
 export class IconButton extends useElement({
   style: [buttonStyle, style],
-  focused: 'keydown',
-  formAssociated: true,
+  states: ['keydown-focused', 'formAssociated'],
   props, template,
   setup(_, info) {
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)
@@ -221,7 +223,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -236,7 +238,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & IconButton
   }
 }
@@ -245,7 +247,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -255,7 +257,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -265,7 +267,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

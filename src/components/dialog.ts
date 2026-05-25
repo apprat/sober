@@ -1,14 +1,13 @@
-import { useElement, useProps } from '../core/element.js'
+import { useElement, useProps } from '../core/elements.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
 import * as scheme from '../core/scheme.js'
-import type { Button } from './button.js'
 
 const props = useProps({
   gravity: ['center', 'top', 'bottom'],
   size: ['standard', 'full-screen'],
   opened: false,
-  disabled: false,
-  slotted: false
+  attached: false,
+  $slotLayer: -1,
 })
 
 type CloseSource = 0 | 1 | 2
@@ -29,13 +28,12 @@ const style = /*css*/`
   max-width: calc(100% - 48px);
   max-height: calc(100% - 48px);
   cursor: default;
-  text-align: start;
-  margin: 24px;
+  outline-offset: 24px;
   border-radius: 28px;
   white-space: normal;
   font-size: .875rem;
-  animation-timing-function: ${scheme.motion.easing.standard};
-  animation-duration: ${scheme.motion.duration.short4};
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.short4};
   background: ${scheme.color.surfaceContainerHigh};
   color: ${scheme.color.onSurface};
   box-shadow: ${scheme.elevation.level4};
@@ -67,7 +65,7 @@ const style = /*css*/`
     filter: opacity(.75);
     background: ${scheme.color.scrim};
   }
-  &.opened{
+  &:open{
     display: flex;
   }
   .layout{
@@ -79,7 +77,7 @@ const style = /*css*/`
     flex-direction: column;
     max-width: -moz-available;
     max-width: -webkit-fill-available;
-    ::slotted([slot=title]){
+    ::slotted(:is([slot=title], [slot=center-title])){
       font-size: calc(var(--s-font-size) * 24px);
       font-weight: 600;
       padding: 24px 24px 0;
@@ -108,13 +106,23 @@ const style = /*css*/`
     }
   }
 }
+:host([gravity=top]){
+  .popover{
+    margin-top: 0;
+  }
+}
+:host([gravity=bottom]){
+  .popover{
+    margin-bottom: 0;
+  }
+}
 `
 
 const template = /*html*/`
 <dialog class="popover" part="popover">
   <div class="layout" part="layout">
-    <slot name="title"></slot>
     <slot name="icon"></slot>
+    <slot name="title"></slot>
     <slot name="center-title"></slot>
     <slot name="text"></slot>
     <slot></slot>
@@ -125,8 +133,6 @@ const template = /*html*/`
 </dialog>
 `
 
-
-
 export class Dialog extends useElement({
   style, template, props, events,
   setup(shadowRoot, info) {
@@ -135,72 +141,95 @@ export class Dialog extends useElement({
     const action = shadowRoot.querySelector<HTMLDivElement>('slot[name=action')!
     const computedStyle = useComputedStyle(this)
     const getAnimateOptions = () => {
-      const easing = computedStyle.getValue('animation-timing-function')
-      const duration = computedStyle.getDuration('animation-duration')
+      const easing = computedStyle.getValue('transition-timing-function')
+      const duration = computedStyle.getDuration('transition-duration')
       return { easing, duration }
     }
+    const toClose = (source: number) => {
+      this.opened = false
+      this.dispatchEvent(new CustomEvent('close', { detail: { source } }))
+    }
     const getGravity = () => {
-      const cssVar = computedStyle.getValue('--dialog-gravity') as typeof this.gravity
-      const gravity = ['center', 'top', 'bottom'].includes(cssVar) ? cssVar : this.gravity
-      return gravity
+      const cssGravity = computedStyle.getValue('--s-dialog-gravity') as typeof this.gravity
+      return props.metadata.gravity.types?.includes(cssGravity) ? cssGravity : this.gravity
     }
-    const state = { parent: undefined as HTMLElement | undefined }
-    const open = async (animated = true) => {
-      if (popover.classList.contains('opened')) return
+    popover.onkeydown = (e) => {
+      if (e.key !== 'Escape') return
+      e.preventDefault()
+      toClose(Dialog.CLOSE_SOURCE_KEYBOARD)
+    }
+    popover.onmouseover = (e) => e.stopPropagation()
+    popover.onpointerdown = (e) => e.stopPropagation()
+    layout.onclick = (e) => {
+      e.stopPropagation()
+      //info.parentElement?.dispatchEvent(new PointerEvent('click', e))
+      //console.log('click', info.parentElement)
+    }
+    action.onclick = () => toClose(Dialog.CLOSE_SOURCE_ACTION)
+    popover.onclick = (e) => {
+      toClose(Dialog.CLOSE_SOURCE_SCRIM)
+      e.stopPropagation()
+    }
+    const open = async () => {
+      if (!info.isConnected || popover.open) return
       popover.showModal()
-      popover.classList.add('opened')
-      const gravity = getGravity()
-      gravity !== 'center' && popover.style.setProperty(`margin-${gravity}`, 'inherit')
       popover.focus()
-      if (animated) {
-        let transform = ['scale(.9)', 'scale(1)']
-        const animateOptions = getAnimateOptions()
-        if (gravity !== 'center') {
-          transform = [`translateY(-48px)`, 'translateY(0)']
-          if (gravity === 'bottom') transform[0] = `translateY(48px)`
+      const offset = computedStyle.getValue('outline-offset')
+      const gravity = getGravity()
+      if (info.isConnected) {
+        const transforms = {
+          top: ['translateY(-100%)', 'translateY(0)'],
+          bottom: ['translateY(100%)', 'translateY(0)'],
+          center: ['scale(.9)', 'scale(1)']
         }
-        const animation = popover.animate({ transform, opacity: [0, 1] }, animateOptions)
-        popover.animate({ opacity: [0, 1] }, { ...animateOptions, pseudoElement: '::backdrop' })
-        await animation.finished
+        const animateOptions = getAnimateOptions()
+        await Promise.all([
+          popover.animate({ transform: transforms[gravity], opacity: [0, 1] }, animateOptions).finished,
+          popover.animate({ opacity: [0, 1] }, { ...animateOptions, pseudoElement: '::backdrop' }).finished
+        ])
       }
-      this.dispatchEvent(new Event('opened'))
     }
-    const dispatchCloseEvent = (source: CloseSource) => this.dispatchEvent(new CustomEvent('close', { cancelable: true, detail: { source } }))
-    const close = async (animated = true) => {
-      if (!popover.classList.contains('opened')) return
-      popover.blur()
-      if (animated) {
+    const close = async () => {
+      console.log('close')
+      if (!popover.open) return
+      if (info.isConnected) {
         const animateOptions = getAnimateOptions()
-        const gravity = getGravity()
-        let transform = ['scale(1)', 'scale(.9)']
-        if (gravity !== 'center') {
-          transform = ['translateY(0)', `translateY(calc(-48px)`]
-          if (gravity === 'bottom') transform[1] = `translateY(48px)`
-        }
-        const animation = popover.animate({ transform, opacity: [1, 0] }, animateOptions)
-        popover.animate({ opacity: [1, 0] }, { ...animateOptions, pseudoElement: '::backdrop' })
-        await animation.finished
+        await Promise.all([
+          popover.animate({ transform: ['scale(1)', 'scale(.9)'], opacity: [1, 0] }, animateOptions).finished,
+          popover.animate({ opacity: [1, 0] }, { ...animateOptions, pseudoElement: '::backdrop' }).finished
+        ])
       }
-      popover.classList.remove('opened')
-      this.dispatchEvent(new Event('closed'))
       popover.close()
     }
-    popover.onkeydown = (e) => e.stopPropagation()
-    return {
-      setOpened: (v) => {
-        if (!info.isConnected) return
-        v ? open() : close()
-      },
-      onMounted: () => {
-
+    const show = () => this.opened = true
+    const addEvent = () => {
+      if (!info.parentNode || !this.attached) return
+      let parentElement = info.parentNode
+      if (this.slotLayer >= 0 && this.assignedSlot) {
+        parentElement = this.assignedSlot
+        for (let i = 0; i < this.slotLayer; i++) parentElement = parentElement.parentElement!
       }
+      const parent = (parentElement instanceof ShadowRoot ? parentElement.host : parentElement) as HTMLElement
+      if (!(parent instanceof HTMLElement)) return
+      parent.addEventListener('click', show)
+      info.parentNode = parent
+    }
+    const removeEvent = () => info.parentNode?.removeEventListener('click', show)
+    return {
+      onMounted: addEvent,
+      onUnmounted: removeEvent,
+      setSlotLayer: () => {
+        removeEvent()
+        addEvent()
+      },
+      attached: (v) => v ? addEvent() : removeEvent(),
+      opened: (v) => v ? open() : close()
     }
   }
 }) {
-  static CLOSE_SOURCE_SCRIM = 0 as const
-  static CLOSE_SOURCE_ACTION = 1 as const
-  static CLOSE_SOURCE_KEYBOARD = 2 as const
-  //static builder = builder
+  static readonly CLOSE_SOURCE_SCRIM = 0 as const
+  static readonly CLOSE_SOURCE_ACTION = 1 as const
+  static readonly CLOSE_SOURCE_KEYBOARD = 2 as const
 }
 
 const name = Dialog.define('s-dialog')

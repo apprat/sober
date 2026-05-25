@@ -50,7 +50,7 @@
 该组件可以作为表单元素使用。
 
 ```html preview
-<form action="/link" method="get">
+<form action="http://coolaf.com/tool/params" method="get">
   选择标签：
   <s-checkbox name="tag" value="java"> Java </s-checkbox>
   <s-checkbox name="tag" value="rust"> Rust </s-checkbox>

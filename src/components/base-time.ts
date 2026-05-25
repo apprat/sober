@@ -1,9 +1,9 @@
-import { useProps, useElement, setKeydownClick, useThrottle } from '../core/element.js'
+import { useProps, useElement, focusKeydownClick, useThrottle } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import './ripple.js'
 
 const props = useProps({
-  orientation: ['vertical', 'horizontal'],
+  orientation: ['auto', 'horizontal', 'vertical'],
   $name: '',
   $value: '',
   $defualtValue: ''
@@ -12,8 +12,10 @@ const props = useProps({
 const style = /*css*/`
 :host{
   display: inline-flex;
+  vertical-align: middle;
+  flex-direction: row;
   justify-content: center;
-  flex-direction: column;
+  align-items: center;
   gap: 36px;
   padding: 24px;
   position: relative;
@@ -50,16 +52,17 @@ const style = /*css*/`
   }
 }
 .headline{
-  gap: 12px;
-  height: 80px;
-  width: 100%;
+  gap: 16px;
+  flex-direction: column;
+  flex-grow: 1;
   .time-selector{
     gap: 9px;
-    height: 100%;
-    flex-grow: 1;
+    height: 80px;
+    width: 100%;
     .text{
       height: 100%;
-      min-width: 95px;
+      width: 96px;
+      max-width: 100%;
       font-weight: 400;
       flex-grow: 1;
       cursor: pointer;
@@ -75,6 +78,7 @@ const style = /*css*/`
       }
     }
     .separator{
+      flex-shrink: 0;
       flex-direction: column;
       gap: 16px;
       &::before,
@@ -88,17 +92,16 @@ const style = /*css*/`
     }
   }
   .period-selector{
-    flex-direction: column;
-    width: 52px;
-    height: 100%;
+    width: 100%;
+    height: 38px;
     flex-shrink: 0;
     hr{
       margin: 0;
-      width: 100%;
+      height: 100%;
       border: none;
       border-width: 1px;
       border-color: ${scheme.color.outline};
-      border-top-style: solid;
+      border-left-style: solid;
     }
     .text{
       position: relative;
@@ -126,16 +129,16 @@ const style = /*css*/`
       }
       &.am{
         border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
+        border-bottom-left-radius: 8px;
         &::before{
-          border-bottom-style: none;
+          border-right-style: none;
         }
       }
       &.pm{
-        border-bottom-left-radius: 8px;
+        border-top-right-radius: 8px;
         border-bottom-right-radius: 8px;
         &::before{ 
-          border-top-style: none;
+          border-left-style: none;
         }
       }
     }
@@ -143,7 +146,8 @@ const style = /*css*/`
 }
 .clock-dial{
   width: 256px;
-  margin: 0 12px;
+  max-width: 100%;
+  flex-grow: 2;
   border-radius: 50%;
   position: relative;
   aspect-ratio: 1;
@@ -155,21 +159,36 @@ const style = /*css*/`
   background: ${scheme.color.surfaceContainerHighest};
   .icon-btn{
     position: absolute;
-    width: 48px;
-    height: 48px;
+    height: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
     flex-shrink: 0;
-    transform: translate(-50%, -50%);
     counter-increment: clock;
+    transform: rotate(calc(var(--s_rotate) * 1deg));
+    &::after,
+    &::before{
+      height: 48px;
+      width: 48px;
+    }
     &::after{
+      position: absolute;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       content: counter(clock);
+      transform: rotate(calc(360deg - (var(--s_rotate) * 1deg)));
+    }
+    &::before{
+      content: '';
+      border-radius: 50%;
     }
     &.checked{
-      color: ${scheme.color.onPrimary};
-      background: ${scheme.color.primary};
+      &::before{
+        background: ${scheme.color.primary};
+      }
+      &::after{
+        color: ${scheme.color.onPrimary};
+      }
     }
   }
   .track{
@@ -198,37 +217,79 @@ const style = /*css*/`
     }
   }
 }
-:host([orientation=horizontal]){
-  flex-direction: row;
-  align-items: center;
+:host([orientation=vertical]){
+  flex-direction: column;
   .headline{
-    flex-direction: column;
+    flex-direction: row;
+    width: 100%;
     .period-selector{
-      flex-direction: row;
-      width: 100%;
-      height: 38px;
+      flex-direction: column;
+      width: 52px;
+      height: 80px;
       hr{
-        border-top-style: none;
-        border-left-style: solid;
-        width: auto;
-        height: 100%;
+        border-left-style: none;
+        border-top-style: solid;
+        width: 100%;
+        height: auto;
       }
       .am{
-        border-bottom-left-radius: 8px;
-        border-top-right-radius: 0;
-        &::before{
-          border-style: solid;
-          border-right-style: none;
-        }
-      }
-      .pm{
         border-top-right-radius: 8px;
         border-bottom-left-radius: 0;
         &::before{
           border-style: solid;
-          border-left-style: none;
+          border-bottom-style: none;
         }
       }
+      .pm{
+        border-bottom-left-radius: 8px;
+        border-top-right-radius: 0;
+        &::before{
+          border-style: solid;
+          border-top-style: none;
+        }
+      }
+    }
+  }
+  .clock-dial{
+    width: calc(100% - 28px);
+  }
+}
+@media (orientation: portrait) {
+  :host(:not([orientation])){
+    flex-direction: column;
+    .headline{
+      flex-direction: row;
+      width: 100%;
+      .period-selector{
+        flex-direction: column;
+        width: 52px;
+        height: 80px;
+        hr{
+          border-left-style: none;
+          border-top-style: solid;
+          width: 100%;
+          height: auto;
+        }
+        .am{
+          border-top-right-radius: 8px;
+          border-bottom-left-radius: 0;
+          &::before{
+            border-style: solid;
+            border-bottom-style: none;
+          }
+        }
+        .pm{
+          border-bottom-left-radius: 8px;
+          border-top-right-radius: 0;
+          &::before{
+            border-style: solid;
+            border-top-style: none;
+          }
+        }
+      }
+    }
+    .clock-dial{
+      width: calc(100% - 28px);
     }
   }
 }
@@ -249,18 +310,18 @@ const template = /*html*/`
   </div>
   <div class="clock-dial flex-center" part="clock-dial">
     <div class="track flex-center" part="clock-dial-track"></div>
-    <div class="icon-btn" part="clock-dial-text" style="left: 70%; top: 15%"></div>
-    <div class="icon-btn" part="clock-dial-text" style="left: 85%; top: 30%" ></div>
-    <div class="icon-btn" part="clock-dial-text" style="transform: translate(-100%, -50%); left: 100%; top: 50%"></div>
-    <div class="icon-btn" part="clock-dial-text" style="left: 85%; top: 70%"></div>
-    <div class="icon-btn" part="clock-dial-text" style="left: 70%; top: 85%"></div>
-    <div class="icon-btn" part="clock-dial-text" style="transform: translate(0, -100%); top: 100%"></div>
-    <div class="icon-btn" part="clock-dial-text" style="left: 30%; top: 85%"></div>
-    <div class="icon-btn" part="clock-dial-text" style="left: 15%; top: 70%"></div>
-    <div class="icon-btn" part="clock-dial-text" style="transform: translate(0, -50%); left: 0; top: 50%"></div>
-    <div class="icon-btn" part="clock-dial-text" style="left: 15%; top: 30%"></div>
-    <div class="icon-btn" part="clock-dial-text" style="left: 30%; top: 15%"></div>
-    <div class="icon-btn checked" part="clock-dial-text" style="transform: none; top: 0"></div>
+    <div class="icon-btn" part="clock-dial-text" style="--s_rotate: 30"></div>
+    <div class="icon-btn" part="clock-dial-text" style="--s_rotate: 60"></div>
+    <div class="icon-btn" part="clock-dial-text" style="--s_rotate: 90"></div>
+    <div class="icon-btn" part="clock-dial-text" style="--s_rotate: 120"></div>
+    <div class="icon-btn" part="clock-dial-text" style="--s_rotate: 150"></div>
+    <div class="icon-btn" part="clock-dial-text" style="--s_rotate: 180"></div>
+    <div class="icon-btn" part="clock-dial-text" style="--s_rotate: 210"></div>
+    <div class="icon-btn" part="clock-dial-text" style="--s_rotate: 240"></div>
+    <div class="icon-btn" part="clock-dial-text" style="--s_rotate: 270"></div>
+    <div class="icon-btn" part="clock-dial-text" style="--s_rotate: 300"></div>
+    <div class="icon-btn" part="clock-dial-text" style="--s_rotate: 330"></div>
+    <div class="icon-btn checked" part="clock-dial-text"></div>
   </div>
 </div>
 `
@@ -273,7 +334,7 @@ const getEventNames = (type: string) => {
 
 export class BaseTime extends useElement({
   props, style, template,
-  formAssociated: true,
+  states: ['formAssociated'],
   setup(shadowRoot, info) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const hour = shadowRoot.querySelector<HTMLDivElement>('.hour')!
@@ -354,12 +415,13 @@ export class BaseTime extends useElement({
     }
     am.onclick = () => changePeriod()
     pm.onclick = () => changePeriod(false)
-    setKeydownClick([hour, minute, am, pm])
+    focusKeydownClick(hour, minute, am, pm)
     clockDial.onpointerdown = (e) => {
       if (e.button !== 0) return
       const hourClock = isHourClock()
       const rect = clockDial.getBoundingClientRect()
       const move = (event: MouseEvent | TouchEvent) => {
+        event.preventDefault()
         const ev = event instanceof MouseEvent ? event : event.touches[0]
         const x = (ev.clientX - rect.left) - rect.width / 2
         const y = (ev.clientY - rect.top) - rect.height / 2
@@ -384,6 +446,7 @@ export class BaseTime extends useElement({
           change()
         }
       }
+      move(e)
       const up = () => {
         document.removeEventListener(eventNames.move, move)
         document.removeEventListener(eventNames.up, up)
@@ -396,9 +459,13 @@ export class BaseTime extends useElement({
     useThrottle(rander)
     updateFrom()
     return {
+      expose: {
+        get value() {
+          return `${getHoursText(date.getHours())}:${getMinutesText(date.getMinutes())}`
+        }
+      },
       onFormReset: () => this.value = this.defualtValue,
-      getValue: () => `${getHoursText(date.getHours())}:${getMinutesText(date.getMinutes())}`,
-      setValue: (v) => {
+      value: (v) => {
         const [h, m] = v.split(':')
         date.setHours(Number(h), Number(m))
         useThrottle(rander)
@@ -418,7 +485,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -433,7 +500,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & BaseTime
   }
 }
@@ -442,7 +509,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -452,7 +519,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -462,7 +529,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

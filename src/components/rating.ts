@@ -1,4 +1,4 @@
-import { useProps, useElement } from '../core/element.js'
+import { useProps, useElement } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { BaseSlider } from './base-slider.js'
 
@@ -148,17 +148,14 @@ const template = /*html*/`
     <svg><use xlink:href="#fill"></use></svg>
     <svg><use xlink:href="#fill"></use></svg>
   </slot>
-  <s-base-slider tabindex="-1" class="slider" part="slider" slidingMode="all" end="${props.value}" max="${props.max}" min="${props.min}" step="${props.step}">
+  <s-base-slider tabindex="-1" class="slider" part="slider" slidingMode="all" end="${props.values.value}" max="${props.values.max}" min="${props.values.min}" step="${props.values.step}">
     <div class="indicator" part="indicator"></div>
   </s-base-slider>
 </div>
 `
 
 export class Rating extends useElement({
-  pressed: true,
-  hovered: true,
-  focused: true,
-  formAssociated: true,
+  states: ['focused', 'pressed', 'hovered', 'formAssociated'],
   style, props, template,
   setup(shadowRoot, info) {
     const baseSlider = shadowRoot.querySelector<BaseSlider>('s-base-slider')!
@@ -180,17 +177,21 @@ export class Rating extends useElement({
     })
     updateFrom()
     return {
+      expose: {
+        get value() {
+          return baseSlider.end
+        }
+      },
       onAttributeChanged: (name) => {
         if (['max', 'min', 'step', 'value'].includes(name)) render()
         if (['disabled', 'value'].includes(name)) updateFrom()
       },
-      setMax: (v) => baseSlider.max = v,
-      setMin: (v) => baseSlider.min = v,
-      setStep: (v) => baseSlider.step = v,
-      getValue: () => baseSlider.end,
-      setValue: (v) => baseSlider.end = v,
-      setReversed: (v) => baseSlider.mode = v ? 'reversed' : 'single',
       onFormReset: () => this.value = this.defualtValue,
+      max: (v) => baseSlider.max = v,
+      min: (v) => baseSlider.min = v,
+      step: (v) => baseSlider.step = v,
+      value: (v) => baseSlider.end = v,
+      reversed: (v) => baseSlider.mode = v ? 'reversed' : 'single'
     }
   }
 }) { }
@@ -205,7 +206,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -220,7 +221,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & Rating
   }
 }
@@ -229,7 +230,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -239,7 +240,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -249,7 +250,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

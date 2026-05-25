@@ -16,19 +16,27 @@
 ```html preview
 <s-button>
   top
-  <s-tooltip gravity="top"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
+  <s-tooltip gravity="top"> <!-- [!code highlight] -->
+    测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本
+  </s-tooltip>
 </s-button>
 <s-button>
   bottom
-  <s-tooltip gravity="bottom"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
+  <s-tooltip gravity="bottom"> <!-- [!code highlight] -->
+    测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本
+  </s-tooltip>
 </s-button>
 <s-button>
   left
-  <s-tooltip gravity="left"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
+  <s-tooltip gravity="left"> <!-- [!code highlight] -->
+    测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本
+  </s-tooltip>
 </s-button>
 <s-button>
   right
-  <s-tooltip gravity="right"> 测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本 </s-tooltip>
+  <s-tooltip gravity="right"> <!-- [!code highlight] -->
+    测试文本 测试文本<br>测试文本 测试文本<br>测试文本 测试文本
+  </s-tooltip>
 </s-button>
 ```
 
@@ -43,14 +51,16 @@
 
 ## 在其他组件中使用
 
-如果你在其他组件中使用，可以设置 `slotLayer` 属性来指定一个层级，在第几层插槽的祖先元素中触发。
+如果你在其他组件中使用，可以设置 `ancestorLevel` 属性来指定一个层级，在第几层插槽的祖先元素中触发。
 
 ```html preview
 <s-alert collapsed>
   <div slot="title"> 遣悲怀三首·其二 </div>
   昔日戏言身后意，今朝都到眼前来
   <!--设置插槽和层级-->
-  <s-tooltip slot="toggle" slotLayer="1">提示信息</s-tooltip>
+  <s-tooltip slot="toggle" ancestorLevel="1"> <!-- [!code highlight] -->
+    提示信息
+  </s-tooltip>
 </s-alert>
 ```
 
@@ -58,11 +68,11 @@
 
 ## 属性
 
-| 名称      | 类型                     | 默认值 | 同步 | 介绍                                                                   |
-| --------- | ------------------------ | ------ | ---- | ---------------------------------------------------------------------- |
-| disabled  | boolean                  | false  | √    | 禁用的，设置该属性后不再主动触发显示                                   |
-| slotLayer | number                   | -1     | ×    | 插槽层数，启用该属性会在**插槽的祖先元素层级**触发                     |
-| gravity   | bottom, top, left, right | bottom | √    | 显示位置，该属性只影响默认位置，在屏幕无法完整显示时会自动调整显示方向 |
+| 名称          | 类型                     | 默认值 | 同步 | 介绍                                                                                                   |
+| ------------- | ------------------------ | ------ | ---- | ------------------------------------------------------------------------------------------------------ |
+| disabled      | boolean                  | false  | √    | 禁用的，设置该属性后不再主动触发显示                                                                   |
+| ancestorLevel | number                   | -1     | ×    | 父级层数，该属性会设置在**祖先元素第几层**触发。如果组件作为其他组件的插槽插入，会查找插槽内的祖先元素 |
+| gravity       | bottom, top, left, right | bottom | √    | 显示位置，该属性只影响默认位置，在屏幕无法完整显示时会自动调整显示方向                                 |
 
 ---
 

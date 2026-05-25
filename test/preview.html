@@ -26,7 +26,7 @@
       overflow: auto;
       margin: 0 auto;
       padding: 32px;
-      max-width: 1280px;
+      max-width: 1440px;
       box-shadow: var(--s-elevation-level1);
       user-select: text;
     }
@@ -57,12 +57,11 @@
     pre {
       white-space: pre-wrap;
       background: var(--s-color-surface-container-high);
-      padding: 8px 12px;
       margin: 0;
+      padding: 8px;
       border-radius: 4px;
       overflow: auto;
       white-space: revert;
-      line-height: 1.6;
       font-family: monospace;
     }
 
@@ -70,6 +69,12 @@
       background: none;
       padding: 0;
       font-family: monospace;
+      display: block;
+      line-height: calc(100% + 6px);
+    }
+
+    pre>code .highlighted {
+      border-bottom: solid 1px rgba(255, 255, 255, .2);
     }
 
     details>summary {
@@ -122,6 +127,7 @@
 
     .preview>.view {
       padding: 12px;
+      overflow: auto;
     }
 
     .preview>.view>hr {
@@ -155,20 +161,6 @@
       bottom: 24px;
     }
   </style>
-</head>
-
-<body>
-  <s-page class="page">
-    {% content %}
-    <s-fab class="toggle-style" onclick="toggleStyle()">
-      <s-icon name="add"></s-icon>
-      <s-tooltip gravity="left">切换Fluent设计</s-tooltip>
-    </s-fab>
-    <s-fab class="toggle-theme" onclick="toggleTheme(this)">
-      <s-icon name="dark_mode"></s-icon>
-      <s-tooltip gravity="left">切换主题</s-tooltip>
-    </s-fab>
-  </s-page>
   <script type="module">
     import * as components from '/dist/main.js'
     import { material } from '/dist/design/material.js'
@@ -186,6 +178,21 @@
       isFluent = !isFluent
     }
   </script>
+</head>
+
+<body>
+  <s-page class="page">
+    {% content %}
+    <s-fab class="toggle-style" onclick="toggleStyle()">
+      <s-icon name="add"></s-icon>
+      <s-tooltip gravity="left">切换Fluent设计</s-tooltip>
+    </s-fab>
+    <s-fab class="toggle-theme" onclick="toggleTheme(this)">
+      <s-icon name="dark_mode"></s-icon>
+      <s-tooltip gravity="left">切换主题</s-tooltip>
+    </s-fab>
+  </s-page>
+
 </body>
 
 </html>

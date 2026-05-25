@@ -1,4 +1,4 @@
-import { useElement, useProps, useThrottle } from '../core/element.js'
+import { useElement, useProps, useThrottle } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { device } from '../core/device.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
@@ -312,10 +312,7 @@ const onKeydown = (el: BaseSlider, key: string, steps: number[]) => {
 
 export class BaseSlider extends useElement({
   props, template, style, events,
-  focused: true,
-  pressed: true,
-  hovered: true,
-  formAssociated: true,
+  states: ['focused', 'pressed', 'hovered', 'formAssociated'],
   setup(shadowRoot, info) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const thumbStartSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=thumb-start]')!
@@ -475,7 +472,26 @@ export class BaseSlider extends useElement({
     useThrottle(render)
     updateFrom()
     return {
-      expose: { keydown },
+      expose: {
+        keydown,
+        get start() {
+          if (info.props.mode !== 'range') return info.props.min
+          return Math.max(Math.min(info.props.start, info.props.max), info.props.min)
+        },
+        get end() {
+          return Math.min(Math.max(info.props.end, info.props.min), info.props.max)
+        },
+        get max() {
+          return info.props.max <= 1 ? 1 : info.props.max
+        },
+        get min() {
+          if (info.props.min > info.props.max) return 0
+          return info.props.min % info.props.step === 0 ? info.props.min : 0
+        },
+        get getSteps() {
+          return steps.join()
+        }
+      },
       onAttributeChanged: (name) => {
         if (['start', 'end', 'max', 'min', 'step', 'mode'].includes(name)) useThrottle(render)
         if (['start', 'end', 'mode'].includes(name)) updateFrom()
@@ -484,18 +500,7 @@ export class BaseSlider extends useElement({
         this.start = this.defualtStart
         this.end = this.defualtEnd
       },
-      getStart: () => {
-        if (this.mode !== 'range') return info.props.min
-        return Math.max(Math.min(info.props.start, info.props.max), info.props.min)
-      },
-      getEnd: () => Math.min(Math.max(info.props.end, info.props.min), info.props.max),
-      getMax: () => info.props.max <= 1 ? 1 : info.props.max,
-      getMin: () => {
-        if (info.props.min > info.props.max) return 0
-        return info.props.min % info.props.step === 0 ? info.props.min : 0
-      },
-      getSteps: () => steps.join(),
-      setSteps: (v) => {
+      steps: (v) => {
         if (v === '') return steps = []
         steps = v.split(',').map((v) => Number(v)).sort((a, b) => a - b)
       }
@@ -513,7 +518,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -528,7 +533,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & BaseSlider
   }
 }
@@ -537,7 +542,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -547,7 +552,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -557,7 +562,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

@@ -1,29 +1,31 @@
-import { useProps, useElement, useThrottle } from '../core/element.js'
-import { Select } from '../core/utils/select.js'
+import { useProps, useElement, useThrottle } from '../core/elements.js'
+import { Selector } from '../core/utils/selector.js'
 import * as scheme from '../core/scheme.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
 
 const props = useProps({
+  name: '',
   $value: '',
+  $defaultValue: '',
   multiple: false,
   mode: ['scrollable', 'fixed'],
   variant: ['primary', 'secondary', 'segmented'],
   orientation: ['horizontal', 'vertical'],
+  itemsOrientation: ['auto', 'horizontal', 'vertical'],
 })
 const itemProps = useProps({
   $value: '',
   selected: false,
-  disabled: false
+  disabled: false,
 })
 
 const style = /*css*/`
 :host{
   display: block;
-  vertical-align: middle;
-  font-size: calc(var(--s-font-size, 1) * 14px);
   box-shadow: 0 -1px 0 ${scheme.color.surfaceVariant} inset;
   background: ${scheme.color.surface};
   color: ${scheme.color.onSurfaceVariant};
+  transition-property: none;
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.medium4};
 }
@@ -39,62 +41,24 @@ const style = /*css*/`
     flex-shrink: 1;
   }
 }
-:host([variant=segmented]){
-  display: inline-block;
-  max-width: -moz-available;
-  max-width: -webkit-fill-available;
-  font-size: calc(var(--s-font-size, 1) * 13px);
-  border-radius: 20px;
-  box-shadow: 0 0 0 1px ${scheme.color.surfaceVariant} inset;
-  background: ${scheme.color.surfaceContainer};
-  --s_indicator-width: 100%;
-  --s_indicator-height: 100%;
-  --s_indicator-inset: 0;
-  --s_indicator-border-radius: 17px;
-  --s_layout-padding: 4px 16px;
-  --s_layout-position: static;
-  --s_icon-width: 20px;
-  --s_icon-height: 20px;
-  .layout{
-    padding: 3px;
-    border-radius: inherit;
-  }
-  ::slotted(s-tab-item){
-    padding: 0;
-    min-height: 34px;
-    border-radius: 17px;
-  }
-  ::slotted(s-tab-item[selected]){
-    color: ${scheme.color.onPrimary};
-    --s_indicator-background: ${scheme.color.primary};
-  }
-  &:host([mode=fixed]){
-    display: block;
-  }
+:host([itemsOrientation=vertical]){
+  --s_item-font-size: 12px;
+  --s_item-layout-flex-direction: column;
+  --s_item-layout-padding: 12px 0;
+  --s_item-layout-gap: 4px;
+  --s_item-icon-display: flex;
+  --s_item-badge-position: absolute;
+  --s_item-badge-transform: translate(50%, -50%);
 }
-:host([orientation=vertical]){
-  display: inline-block;
-  height: auto;
-  --s_indicator-width: 3px;
-  --s_indicator-height: 2em;
-  --s_indicator-inset: auto auto auto 0;
-  --s_layout-position: static;
-  --s_indicator-border-radius: 0 3px 3px 0;
-  box-shadow: 1px 0 0 ${scheme.color.surfaceVariant} inset;
-  .layout{ 
-    flex-direction: column;
-    gap: 3px;
-  }
-  &:host([variant=segmented]){
-    border-radius: 8px;
-    box-shadow: 0 0 0 1px ${scheme.color.surfaceVariant} inset;
-    --s_indicator-width: 100%;
-    --s_indicator-height: 100%;
-    --s_indicator-inset: 0;
-    --s_indicator-border-radius: 4px;
-    ::slotted(s-tab-item){
-      border-radius: 4px;
-    }
+@media (orientation: portrait){
+  :host(:not([itemsOrientation])){
+    --s_item-font-size: 12px;
+    --s_item-layout-flex-direction: column;
+    --s_item-layout-padding: 12px 0;
+    --s_item-layout-gap: 4px;
+    --s_item-icon-display: flex;
+    --s_item-badge-position: absolute;
+    --s_item-badge-transform: translate(50%, -50%);
   }
 }
 `
@@ -115,8 +79,71 @@ const itemStyle = /*css*/`
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
 }
-:host(:focus-visible){
-  border-radius: 12px;
+.layout{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 6px;
+  &.has-icon:not(.has-text){
+    .icon{
+      display: flex;
+    }
+    ::slotted(s-badge){
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      transform: translate(50%, -50%);
+    }
+  }
+  &.has-icon.has-text{
+    flex-direction: var(--s_item-layout-flex-direction, row);
+    padding: var(--s_item-layout-padding, 0);
+    gap: var(--s_item-layout-gap, 6px);
+    .icon{
+      display: var(--s_item-icon-display, contents);
+    }
+    ::slotted([slot=text]){
+      font-size: calc(var(--s-font-size, 1) * var(--s_item-font-size, 14px));
+    }
+    ::slotted(s-badge){
+      position: var(--s_item-badge-position, static);
+      transform: var(--s_item-badge-transform, none);
+    }
+  }
+  .indicator{
+    position: absolute;
+    opacity: 0;
+    inset: auto auto 0 auto;
+    width: 100%;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background: ${scheme.color.primary};
+  }
+  .icon{
+    display: contents;
+    position: relative;
+  }
+}
+.ripple{
+  border-radius: 0;
+}
+::slotted([slot=icon]){
+  width: 24px;
+  height: 24px;
+  color: inherit;
+  fill: currentColor;
+}
+::slotted([slot=text]){
+  line-height: 1;
+  font-weight: 500;
+  font-size: calc(var(--s-font-size, 1) * 14px);
+}
+::slotted(s-badge){
+  order: 1;
+  top: 2px;
+  right: 2px;
 }
 :host([selected]){
   color: ${scheme.color.primary};
@@ -135,49 +162,7 @@ const itemStyle = /*css*/`
     color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
   }
 }
-.layout{
-  position: var(--s_layout-position, relative);
-  display: flex;
-  gap: 3px;
-  flex-direction: var(--s_layout-direction, column);
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  padding: var(--s_layout-padding, 12px 0);
-}
-.indicator{
-  position: absolute;
-  opacity: 0;
-  inset: var(--s_indicator-inset, auto auto 0 auto);
-  width: var(--s_indicator-width, 100%);
-  height: var(--s_indicator-height, 3px);
-  border-radius: var(--s_indicator-border-radius, 3px 3px 0 0);
-  background: var(--s_indicator-background, ${scheme.color.primary});
-}
-.text{
-  display: flex;
-  align-items: center;
-  gap: inherit;
-  position: relative;
-}
-::slotted(:is(svg, s-icon)){
-  width: var(--s_icon-width, 24px);
-  height: var(--s_icon-height, 24px);
-  color: inherit;
-  position: relative;
-}
-::slotted(s-badge[slot=badge]){
-  position: absolute;
-  right: 10%;
-  top: 20%;
-  transform: translate(50%, -50%);
-}
-::slotted(s-badge:not([slot]):not(:empty)){
-  width: auto;
-}
-s-ripple{
-  border-radius: 0;
-}
+
 @supports not (color: color-mix(in srgb, black, white)){
   :host([disabled]){
     color: ${scheme.color.outline} !important;
@@ -202,79 +187,77 @@ const template = /*html*/`
 const itemTemplate = /*html*/`
 <div class="layout" part="layout">
   <div class="indicator"></div>
-  <slot name="icon"></slot>
-  <slot class="text" part="text"></slot>
-  <slot name="badge"></slot>
+  <div class="icon">
+    <slot name="icon"></slot>
+    <slot></slot>
+  </div>
+  <slot name="text"></slot>
 </div>
-<s-ripple></s-ripple>
+<s-ripple class="ripple"></s-ripple>
 `
 
 const orientationOptions = {
   horizontal: { scrollWidth: 'scrollWidth', offsetWidth: 'offsetWidth', offsetLeft: 'offsetLeft', left: 'left', translateX: 'translateX', width: 'width' },
   vertical: { scrollWidth: 'scrollHeight', offsetWidth: 'offsetHeight', offsetLeft: 'offsetTop', left: 'top', translateX: 'translateY', width: 'height' }
 } as const
-const getOrientation = (orientation: typeof props.orientation) => orientationOptions[orientation]
+const getOrientation = (orientation: typeof props.values.orientation) => orientationOptions[orientation]
 
 export class Tab extends useElement({
   style, props, template,
+  states: ['formAssociated'],
   setup(shadowRoot, info) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
-    const select = new Select(this, slot, TabItem)
+    const selector = new Selector(this, slot, TabItem)
     const computedStyle = useComputedStyle(layout)
     const getAnimateOptions = () => {
       const easing = computedStyle.getValue('transition-timing-function')
       const duration = computedStyle.getDuration('transition-duration')
       return { easing, duration }
     }
-    const center = (behavior: 'auto' | 'smooth' = 'auto') => {
-      if (this.mode === 'fixed' || !info.isConnected) return
+    selector.onValueChange = () => info.internals.setFormValue(selector.getFormData())
+    selector.onRender = (olds) => {
       const orientation = getOrientation(this.orientation)
-      const index = this.multiple ? select.selectedList.length - 1 : 0
-      const item = select.selectedList[index]
-      if (layout[orientation.scrollWidth] === layout[orientation.offsetWidth]) return
-      const left = (item[orientation.offsetLeft] - layout[orientation.offsetLeft]) - (layout[orientation.offsetWidth] / 2 - item[orientation.offsetWidth] / 2)
-      layout.scrollTo({ [orientation.left]: left, behavior })
-    }
-    select.onSlotChange = () => useThrottle(center)
-    select.onRender = (olds) => {
-      if (select.selectedList.length === 0) return
-      useThrottle(center, info.isConnected && olds.length > 0 ? 'smooth' : 'auto')
-      if (this.multiple || !info.isConnected) return
-      const item = select.selectedList[0]
-      const old = olds[0]
-      if (!item || !old) return
-      const orientation = getOrientation(this.orientation)
-      const oldRect = old.shadowRoot!.querySelector('.indicator')!.getBoundingClientRect()
-      const indicator = item.shadowRoot?.querySelector<HTMLDivElement>('.indicator')!
-      const rect = indicator.getBoundingClientRect()
-      const offset = oldRect[orientation.left] - rect[orientation.left]
-      indicator.animate({
-        transform: [`${orientation.translateX}(${offset}px)`, `${orientation.translateX}(0)`],
-        [orientation.width]: [`${oldRect[orientation.width]}px`, `${rect[orientation.width]}px`]
-      }, getAnimateOptions())
+      if (info.isConnected && selector.selectedItems.length > 0 && layout[orientation.scrollWidth] !== layout[orientation.offsetWidth]) {
+        const selected = selector.selectedItems[0]
+        const left = (selected[orientation.offsetLeft] - layout[orientation.offsetLeft]) - (layout[orientation.offsetWidth] / 2 - selected[orientation.offsetWidth] / 2)
+        layout.scrollTo({ left, behavior: olds.length === 0 ? 'instant' : 'smooth' })
+      }
+      if (olds.length === 0) return
+      if (!this.multiple) {
+        const old = olds[0]
+        const item = selector.selectedItems[0]
+        if (!item || !old) return
+        const oldRect = old.shadowRoot!.querySelector('.indicator')!.getBoundingClientRect()
+        const indicator = item.shadowRoot!.querySelector<HTMLDivElement>('.indicator')!
+        const rect = indicator.getBoundingClientRect()
+        const offset = oldRect[orientation.left] - rect[orientation.left]
+        indicator.animate({
+          transform: [`${orientation.translateX}(${offset}px)`, `${orientation.translateX}(0)`],
+          [orientation.width]: [`${oldRect[orientation.width]}px`, `${rect[orientation.width]}px`]
+        }, getAnimateOptions())
+      }
     }
     return {
       expose: {
-        get options() {
-          return select.list
+        get items() {
+          return selector.items
         },
-        get selectedOptions() {
-          return select.selectedList
+        get selectedItems() {
+          return selector.selectedItems
         },
         get selectedIndex() {
-          return select.selectedIndex()
+          return selector.selectedIndex
         },
-        get selectedIndexAll() {
-          return select.selectedIndexAll()
+        get selectedIndexes() {
+          return selector.selectedIndexes
+        },
+        get value() {
+          return selector.value
         }
       },
-      onMounted: () => useThrottle(center),
-      getValue: () => select.getValue(),
-      setValue: (v) => {
-        select.setValue(v)
-      },
-      setMultiple: () => select.setMultiple(),
+      value: (v) => selector.value = v,
+      onFormReset: () => this.value = this.defaultValue,
     }
   }
 }) { }
@@ -282,12 +265,19 @@ export class Tab extends useElement({
 export class TabItem extends useElement({
   style: itemStyle,
   props: itemProps,
-  focused: 'keydown',
   template: itemTemplate,
-  setup() {
-    this.addEventListener('click', () => this.dispatchEvent(new Event(`${name}:select`, { bubbles: true })))
+  states: ['keydown-focused'],
+  setup(shadowRoot) {
+    const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
+    const iconSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=icon]')!
+    const textSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=text]')!
+    iconSlot.addEventListener('slotchange', () => layout.classList.toggle('has-icon', iconSlot.assignedElements().length > 0))
+    textSlot.addEventListener('slotchange', () => layout.classList.toggle('has-text', textSlot.assignedElements().length > 0))
+    this.addEventListener('click', () => this.dispatchEvent(new Event(`${name}:toggle`, { bubbles: true })))
     return {
-      setSelected: () => this.dispatchEvent(new Event(`${name}:render`, { bubbles: true }))
+      selected: () => this.dispatchEvent(new Event(`${name}:selected`, { bubbles: true })),
+      value: (_, old) => this.dispatchEvent(new CustomEvent(`${name}:valued`, { bubbles: true, detail: { old } })),
+      disabled: () => this.dispatchEvent(new Event(`${name}:disabled`, { bubbles: true }))
     }
   }
 }) { }
@@ -304,9 +294,9 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
         //@ts-ignore
-        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps>
+        [itemName]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof itemProps.values>
       }
     }
   }
@@ -321,13 +311,13 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & Tab
     [itemName]: new () => {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof itemProps>
+      $props: HTMLAttributes & Partial<typeof itemProps.values>
     } & TabItem
   }
 }
@@ -336,9 +326,9 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
       //@ts-ignore
-      [itemName]: IntrinsicElements['div'] & Partial<typeof itemProps>
+      [itemName]: IntrinsicElements['div'] & Partial<typeof itemProps.values>
     }
   }
 }
@@ -348,9 +338,9 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
       //@ts-ignore
-      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [itemName]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof itemProps.values>
     }
   }
 }
@@ -360,9 +350,9 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
       //@ts-ignore
-      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps>
+      [itemName]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof itemProps.values>
     }
   }
 }

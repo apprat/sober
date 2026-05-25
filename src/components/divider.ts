@@ -1,4 +1,4 @@
-import { useElement } from '../core/element.js'
+import { useElement } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 
 const style = /*css*/`

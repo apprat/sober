@@ -1,4 +1,4 @@
-import { useProps, useElement } from '../core/element.js'
+import { useProps, useElement, focusKeydownClick } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
 import './ripple.js'
@@ -129,6 +129,9 @@ svg{
 ::slotted([slot=title]){
   font-weight: 500;
   font-size: calc(var(--s-font-size, 1) * 15px);
+  overflow: hidden;
+  overflow: clip visible;
+  line-height: 1;
 }
 ::slotted(s-button[slot=action]){
   min-width: 0;
@@ -181,12 +184,9 @@ export class Alert extends useElement({
       this.opened = !this.opened
       this.dispatchEvent(new Event('toggle'))
     }
-    toggle.onkeydown = (e) => {
-      if (e.key !== 'Enter' && e.key !== ' ') return
-      toggle.click()
-    }
+    focusKeydownClick(toggle)
     return {
-      setOpened: (v) => {
+      opened: (v) => {
         if (!info.isConnected || !this.collapsed) return
         const [old] = content.getAnimations()
         content.style.height = 'auto'
@@ -215,7 +215,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -230,7 +230,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & Alert
   }
 }
@@ -239,7 +239,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -249,7 +249,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -259,7 +259,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

@@ -1,165 +1,188 @@
-# 概述
+# Tab
 
-用于在多个选项卡之间进行切换的组件，支持多种样式和交互模式，该组件由 `<s-tab>` 和 `<s-tab-item>` 两个组件组成。
-
-```html preview
-<s-tab>
-  <s-tab-item>Tab 1</s-tab-item>
-  <s-tab-item selected>Tab 2</s-tab-item>
-  <s-tab-item>Tab 3</s-tab-item>
-</s-tab>
-```
+用于在多个选项卡之间进行切换。
 
 ```html preview
 <s-tab>
   <s-tab-item>
     <s-icon slot="icon" name="home"></s-icon>
-    <s-tooltip>主页</s-tooltip>
-  </s-tab-item>
-  <s-tab-item selected>
-    <s-icon slot="icon" name="star"></s-icon>
-    <s-tooltip>收藏</s-tooltip>
+    <div slot="text"> 选项卡1 </div>
   </s-tab-item>
   <s-tab-item>
-    <s-icon slot="icon" name="favorite"></s-icon>
-    <s-tooltip>喜欢</s-tooltip>
-  </s-tab-item>
-</s-tab>
-```
-
-```html preview
-<s-tab>
-  <s-tab-item>
-    <s-icon name="home"></s-icon>
-    Home
-  </s-tab-item>
-  <s-tab-item selected>
-    <s-icon name="star"></s-icon>
-    Search
+    <s-icon slot="icon" name="light_mode"></s-icon>
+    <div slot="text"> 选项卡2 </div>
     <s-badge></s-badge>
   </s-tab-item>
   <s-tab-item>
-    <s-icon name="close"></s-icon>
-    User
-    <s-badge>99</s-badge>
+    <s-icon slot="icon" name="favorite"></s-icon>
+    <div slot="text"> 选项卡3 </div>
+    <s-badge>3</s-badge>
   </s-tab-item>
 </s-tab>
 ```
+
+纯文本
+
+```html preview
+<s-tab>
+  <s-tab-item>
+    <div slot="text"> 选项卡1 </div>
+  </s-tab-item>
+  <s-tab-item>
+    <div slot="text"> 选项卡2 </div>
+    <s-badge></s-badge>
+  </s-tab-item>
+  <s-tab-item>
+    <div slot="text"> 选项卡3 </div>
+    <s-badge>3</s-badge>
+  </s-tab-item>
+</s-tab>
+```
+
+纯图标+工具提示
 
 ```html preview
 <s-tab>
   <s-tab-item>
     <s-icon slot="icon" name="home"></s-icon>
-    Home
-  </s-tab-item>
-  <s-tab-item selected>
-    <s-icon slot="icon" name="star"></s-icon>
-    Search
-    <s-badge slot="badge"></s-badge>
+    <s-tooltip> 选项卡1 </s-tooltip>
   </s-tab-item>
   <s-tab-item>
-    <s-icon slot="icon" name="home"></s-icon>
-    Users
-    <s-badge slot="badge">99</s-badge>
+    <s-icon slot="icon" name="light_mode"></s-icon>
+    <s-badge></s-badge>
+    <s-tooltip> 选项卡2 </s-tooltip>
   </s-tab-item>
-  <s-tab-item disabled>
-    <s-icon slot="icon" name="home"></s-icon>
-    Auth
-    <s-badge slot="badge">99</s-badge>
+  <s-tab-item>
+    <s-icon slot="icon" name="favorite"></s-icon>
+    <s-badge>3</s-badge>
+    <s-tooltip> 选项卡3 </s-tooltip>
   </s-tab-item>
 </s-tab>
 ```
 
-## 变体
+## 方向
 
-通过 `variant` 属性设置选项卡变体。
+设置 `orientation` 属性为 `vertical` 启用竖向布局。
 
 ```html preview
-<s-tab variant="secondary">
-  <s-tab-item>Tab 1</s-tab-item>
-  <s-tab-item selected>Tab 2</s-tab-item>
-  <s-tab-item>Tab 3</s-tab-item>
-  <s-tab-item>Tab 4</s-tab-item>
-  <s-tab-item>Tab 5</s-tab-item>
-</s-tab>
-<s-tab variant="segmented">
-  <s-tab-item>Tab 1</s-tab-item>
-  <s-tab-item selected>Tab 2</s-tab-item>
-  <s-tab-item>Tab 3</s-tab-item>
-  <s-tab-item>Tab 4</s-tab-item>
-  <s-tab-item>Tab 5</s-tab-item>
+<s-tab orientation="vertical"> <!-- [!code highlight] -->
+  <s-tab-item>
+    <s-icon slot="icon" name="home"></s-icon>
+    <div slot="text"> 选项卡1 </div>
+  </s-tab-item>
+  <s-tab-item>
+    <s-icon slot="icon" name="light_mode"></s-icon>
+    <div slot="text"> 选项卡2 </div>
+    <s-badge></s-badge>
+  </s-tab-item>
+  <s-tab-item>
+    <s-icon slot="icon" name="favorite"></s-icon>
+    <div slot="text"> 选项卡3 </div>
+    <s-badge>3</s-badge>
+  </s-tab-item>
 </s-tab>
 ```
 
-## 固定模式
+## 设置选中
 
-通过 mode 属性设置模式，在 `fixed` 模式下，选项卡会均分容器宽度且不支持滚动：
+你可以使用以下两种方式来设置选中。
+
+1. 在 `s-tab-item` 上设置 `selected` 属性来设置选中。  
+2. 在 `s-tab` 上设置 `value` 属性，然后在 `s-tab-item` 上设置相同的 `value` 值来设置选中。
 
 ```html preview
-<s-tab mode="fixed">
+<s-tab>
   <s-tab-item>
-    <s-icon slot="icon" name="home"></s-icon>
-    Tab 1
+    <div slot="text"> 选项卡1 </div>
   </s-tab-item>
-  <s-tab-item selected>
-    <s-icon slot="icon" name="star"></s-icon>
-    Tab 2
+  <s-tab-item selected> <!-- [!code highlight] -->
+    <div slot="text"> 选项卡2 </div>
+    <s-badge></s-badge>
   </s-tab-item>
   <s-tab-item>
-    <s-icon slot="icon" name="home"></s-icon>
-    Tab 3
+    <div slot="text"> 选项卡3 </div>
+    <s-badge>3</s-badge>
+  </s-tab-item>
+</s-tab>
+
+<s-tab value="a2"> <!-- [!code highlight] -->
+  <s-tab-item value="a1">
+    <div slot="text"> 选项卡1 </div>
+  </s-tab-item>
+  <s-tab-item value="a2"> <!-- [!code highlight] -->
+    <div slot="text"> 选项卡2 </div>
+    <s-badge></s-badge>
+  </s-tab-item>
+  <s-tab-item value="a3">
+    <div slot="text"> 选项卡3 </div>
+    <s-badge>3</s-badge>
   </s-tab-item>
 </s-tab>
 ```
 
 ## 多选支持
 
-通过 `multiple` 属性允许多选，设置该属性后，`value` 需要用逗号分隔多个值：。
+设置 `multiple` 属性，即可开启多选功能。  
+如果在 `s-tab` 设置 `value` 来选中，需要使用 `,` 分割多个值。  
+你可以通过 `.selectedIndexes` 获取当前选中的下标合集，也可以通过 `.selectedItems` 获取当前选中的元素合集。
 
 ```html preview
-<s-tab value="tab2,tab3" multiple>
-  <s-tab-item value="tab1">Tab 1</s-tab-item>
-  <s-tab-item value="tab2">Tab 2</s-tab-item>
-  <s-tab-item value="tab3">Tab 2</s-tab-item>
+<s-tab multiple value="a1,a2"> <!-- [!code highlight] -->
+  <s-tab-item value="a1"> <!-- [!code highlight] -->
+    <div slot="text"> 选项卡1 </div>
+  </s-tab-item>
+  <s-tab-item value="a2"> <!-- [!code highlight] -->
+    <div slot="text"> 选项卡2 </div>
+    <s-badge></s-badge>
+  </s-tab-item>
+  <s-tab-item value="a3">
+    <div slot="text"> 选项卡3 </div>
+    <s-badge>3</s-badge>
+  </s-tab-item>
 </s-tab>
 ```
 
-## 设置方向
+## 表单支持
 
-通过 `orientation` 属性设置方向。
+该组件支持表单，你可以在为 `s-tab` 设置一个 `name` 唯一的属性。  
 
 ```html preview
-<s-tab orientation="vertical">
-  <s-tab-item>
-    <s-icon name="home"></s-icon>
-    Tab 1
-  </s-tab-item>
-  <s-tab-item selected>
-    <s-icon name="star"></s-icon>
-    Tab 2
-  </s-tab-item>
-  <s-tab-item>
-    <s-icon name="dark_mode"></s-icon>
-    Tab 3
-  </s-tab-item>
-</s-tab>
+<form method="get" action="http://coolaf.com/tool/params">
+  <s-tab multiple name="tab" value="a1,a2" defaultValue="a1,a2"> <!-- [!code highlight] -->
+    <s-tab-item value="a1"> <!-- [!code highlight] -->
+      <div slot="text"> 选项卡1 </div>
+    </s-tab-item>
+    <s-tab-item value="a2"> <!-- [!code highlight] -->
+      <div slot="text"> 选项卡2 </div>
+      <s-badge></s-badge>
+    </s-tab-item>
+    <s-tab-item value="a3">
+      <div slot="text"> 选项卡3 </div>
+      <s-badge>3</s-badge>
+    </s-tab-item>
+  </s-tab>
+  <hr>
+  <s-button type="reset" variant="outlined"> 重置 </s-button>
+  <s-button type="submit"> 提交 </s-button>
+</form>
 ```
 
 ---
 
 ## 属性
 
-| 名称                    | 类型                          | 默认值     | 同步 | 说明                                  |
-| ----------------------- | ----------------------------- | ---------- | ---- | ------------------------------------- |
-| value                   | string                        |            | ×    | 选中的值（多选时使用 `,` 分割多个值） |
-| multiple                | boolean                       | false      | √    | 多选的                                |
-| mode                    | scrollable, fixed             | scrollable | √    | 模式，scrollable=滚动，fixed=固定     |
-| variant                 | primary, secondary, segmented | primary    | √    | 变体，standard=标准，segmented=分割的 |
-| orientation             | horizontal, vertical          | horizontal | √    | 方向，horizontal=横向，vertical=竖向  |
-| selectedIndex `只读`    | number                        | -1         |      | 当前选中下标                          |
-| selectedIndexAll `只读` | number[]                      | []         |      | 当前多选下标数组(多选时)              |
-| selectedOptions `只读`  | TabItem[]                     | []         |      | 选中的子项目                          |
-| options `只读`          | TabItem[]                     | []         |      | 子项目                                |
+| 名称                   | 类型                       | 默认值     | 同步 | 说明                                                                            |
+| ---------------------- | -------------------------- | ---------- | ---- | ------------------------------------------------------------------------------- |
+| name                   | string                     |            | ×    | 提交表单时使用的 name 属性                                                      |
+| value                  | string                     |            | ×    | 选中的值（多选时使用 `,` 分割多个值），该值的优先级高于子元素的 `selected` 属性 |
+| defaultValue           | string                     |            | ×    | 默认选中值（仅表单重置时会设置，同 `value` 属性）                               |
+| multiple               | boolean                    | false      | √    | 多选的                                                                          |
+| orientation            | horizontal, vertical       | horizontal | √    | 组件方向，horizontal=横向，vertical=竖向                                        |
+| itemsOrientation       | auto, horizontal, vertical | auto       | √    | 子元素方向，auto=自动，horizontal=横向，vertical=竖向                           |
+| items `只读`           | TabItem[]                  | []         |      | 所有子元素                                                                      |
+| selectedItems `只读`   | TabItem[]                  | []         |      | 选中的子元素                                                                    |
+| selectedIndex `只读`   | number                     | -1         |      | 当前选中下标                                                                    |
+| selectedIndexes `只读` | number[]                   | []         |      | 当前多选下标数组                                                                |
 
 ## 事件
 
@@ -181,11 +204,12 @@
 
 ## TabItem 属性
 
-| 名称     | 类型    | 默认值 | 同步 | 说明                                    |
-| -------- | ------- | ------ | ---- | --------------------------------------- |
-| value    | string  |        | ×    | 任意值，该值提供给 `Tab` 组件选中时使用 |
-| selected | boolean | false  | √    | 选中的                                  |
-| disabled | boolean | false  | √    | 禁用的                                  |
+| 名称        | 类型                       | 默认值 | 同步 | 说明                                                |
+| ----------- | -------------------------- | ------ | ---- | --------------------------------------------------- |
+| value       | string                     |        | ×    | 任意值，该值提供给 `Tab` 组件选中时使用             |
+| selected    | boolean                    | false  | √    | 选中的                                              |
+| disabled    | boolean                    | false  | √    | 禁用的                                              |
+| orientation | auto, horizontal, vertical | auto   | √    | 布局方向，auto=自动，horizontal=横向，vertical=竖向 |
 
 ## TabItem 插槽
 

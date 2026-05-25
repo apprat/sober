@@ -21,27 +21,27 @@
 设置 `variant` 来设置不同的变体：`filled`、`elevated`、`tonal`、`outlined`、`text`。
 
 ```html preview
-<s-button variant="filled">
+<s-button variant="filled"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button variant="elevated">
+<s-button variant="elevated"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button variant="tonal">
+<s-button variant="tonal"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button variant="outlined">
+<s-button variant="outlined"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button variant="text">
+<s-button variant="text"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
@@ -52,27 +52,27 @@
 设置 `disabled` 来禁用按钮。
 
 ```html preview
-<s-button disabled> 
+<s-button disabled> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button disabled variant="elevated">
+<s-button disabled variant="elevated"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button disabled variant="tonal"> 
+<s-button disabled variant="tonal"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button disabled variant="outlined">
+<s-button disabled variant="outlined"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button disabled variant="text">
+<s-button disabled variant="text"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
@@ -83,27 +83,27 @@
 设置 `type` 属性为 `checkbox`，按钮会允许选中，同时你可以设置 `checked` 属性来默认选中，选中切换时触发 `change` 事件。
 
 ```html preview
-<s-button type="checkbox" checked>
+<s-button type="checkbox" checked> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button type="checkbox" checked variant="elevated">
+<s-button type="checkbox" checked variant="elevated"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button type="checkbox" checked variant="tonal">
+<s-button type="checkbox" checked variant="tonal"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button type="checkbox" checked variant="outlined">
+<s-button type="checkbox" checked variant="outlined"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
 
-<s-button type="checkbox" checked variant="text">
+<s-button type="checkbox" checked variant="text"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   Button
 </s-button>
@@ -114,27 +114,27 @@
 设置 `size` 属性来设置按钮尺寸（你也可以设置 CSS 样式 `height` 来更精确的定义按钮高度） 。
 
 ```html preview
-<s-button size="extra-small"> 
+<s-button size="extra-small"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   button
 </s-button>
 
-<s-button size="small"> 
+<s-button size="small"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   button
 </s-button>
 
-<s-button size="medium"> 
+<s-button size="medium"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   button
 </s-button>
 
-<s-button size="large"> 
+<s-button size="large"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   button
 </s-button>
 
-<s-button size="extra-large"> 
+<s-button size="extra-large"> <!-- [!code highlight] -->
   <s-icon name="star" slot="start"></s-icon>
   button
 </s-button>
@@ -190,7 +190,7 @@ disabled =
 该组件可以作为表单元素使用，可以作为复选框、表单重置、提交按钮。
 
 ```html preview
-<form action="/link" method="get">
+<form action="http://coolaf.com/tool/params" method="get">
   选择标签：
   <s-button name="tag" type="checkbox" value="java"> Java </s-button>
   <s-button name="tag" type="checkbox" value="rust"> Rust </s-button>

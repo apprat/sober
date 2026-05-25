@@ -1,6 +1,5 @@
-import { useElement, useProps } from '../core/element.js'
+import { useElement, useProps } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
-import { device } from '../core/device.js'
 
 const name = 's-switch'
 const props = useProps({
@@ -179,10 +178,7 @@ const template = /*html*/`
 
 export class Switch extends useElement({
   style, template, props,
-  focused: 'keydown',
-  pressed: true,
-  hovered: true,
-  formAssociated: true,
+  states: ['keydown-focused', 'pressed', 'hovered', 'formAssociated'],
   setup(_, info) {
     const updateFrom = () => {
       if (!info.internals.form) return
@@ -217,7 +213,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -232,7 +228,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & Switch
   }
 }
@@ -242,7 +238,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -252,7 +248,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -262,16 +258,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
-}
-
-function interpolateColor(startHex: string, endHex: string, progress: number) {
-  const start = parseInt(startHex.substring(1), 16);
-  const end = parseInt(endHex.substring(1), 16);
-  const r = Math.round((end >> 16 & 0xFF) * progress / 100 + (start >> 16 & 0xFF) * (1 - progress / 100))
-  const g = Math.round((end >> 8 & 0xFF) * progress / 100 + (start >> 8 & 0xFF) * (1 - progress / 100))
-  const b = Math.round((end & 0xFF) * progress / 100 + (start & 0xFF) * (1 - progress / 100))
-  return `#${[r, g, b].map(c => c.toString(16).padStart(2, '0')).join('')}`
 }

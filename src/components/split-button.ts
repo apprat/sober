@@ -1,4 +1,4 @@
-import { useProps, useElement, setKeydownClick } from '../core/element.js'
+import { useProps, useElement, focusKeydownClick } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import './ripple.js'
 
@@ -279,9 +279,9 @@ export class SplitButton extends useElement({
       this.checked = !this.checked
       this.dispatchEvent(new Event('toggle'))
     }
-    setKeydownClick([layout, toggle])
+    focusKeydownClick(layout, toggle)
     return {
-      setDisabled: (v) => {
+      disabled: (v) => {
         layout.tabIndex = v ? -1 : 0
         toggle.tabIndex = v ? -1 : 0
       }
@@ -299,7 +299,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -314,7 +314,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & SplitButton
   }
 }
@@ -323,7 +323,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -333,7 +333,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -343,7 +343,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

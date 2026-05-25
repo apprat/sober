@@ -1,4 +1,4 @@
-import { useProps, useElement, useThrottle } from '../core/element.js'
+import { useProps, useElement, useThrottle } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { BaseSlider } from './base-slider.js'
 
@@ -43,17 +43,14 @@ const style = /*css*/`
 `
 
 const template = /*html*/`
-<s-base-slider variant="segmented" mode="${props.mode}" min="${props.min}" max="${props.max}" step="${props.step}" class="slider" part="base-slider" tabindex="-1">
+<s-base-slider variant="segmented" mode="${props.values.mode}" min="${props.values.min}" max="${props.values.max}" step="${props.values.step}" class="slider" part="base-slider" tabindex="-1">
 
 </s-base-slider>
 `
 
 export class Slider extends useElement({
   style, props, events, template,
-  focused: true,
-  pressed: true,
-  hovered: true,
-  formAssociated: true,
+  states: ['focused', 'pressed', 'hovered', 'formAssociated'],
   setup(shadowRoot, info) {
     const slider = shadowRoot.querySelector<BaseSlider>('.slider')!
   }
@@ -69,7 +66,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -84,7 +81,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & Slider
   }
 }
@@ -93,7 +90,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -103,7 +100,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -113,7 +110,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

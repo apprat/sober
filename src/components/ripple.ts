@@ -1,4 +1,4 @@
-import { useElement, useProps } from '../core/element.js'
+import { useElement, useProps } from '../core/elements.js'
 import { device } from '../core/device.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
 import { oneEvent } from '../core/utils/oneEvent.js'
@@ -7,7 +7,7 @@ import * as scheme from '../core/scheme.js'
 const props = useProps({
   disabled: false,
   hoverDisabled: false,
-  $slotLayer: -1,
+  $ancestorLevel: -1,
   $delay: 0
 })
 
@@ -30,10 +30,15 @@ const style = /*css*/`
   animation-duration: ${scheme.motion.duration.long4};
   transition-duration: ${scheme.motion.duration.short4};
 }
-.hover{
+.hover,
+.container,
+.ripple{
   position: absolute;
   inset: 0;
-  content: '';
+  animation-timing-function: inherit;
+  animation-duration: inherit;
+}
+.hover{
   opacity: 0;
   transition-property: opacity;
   background: var(--s-ripple-color, currentColor);
@@ -42,11 +47,7 @@ const style = /*css*/`
   }
 }
 .ripple{
-  position: absolute;
-  inset: 0;
   opacity: 0;
-  animation-timing-function: inherit;
-  animation-duration: inherit;
   border-radius: 50%;
   background: var(--s-ripple-color, currentColor);
   filter: opacity(var(--s-ripple-opacity, .1));
@@ -55,19 +56,21 @@ const style = /*css*/`
 
 const template = /*html*/`
 <slot></slot>
-<div class="hover" part="hover"></div>
-<div class="ripple" part="ripple"></div>
+<div class="container" part="container">
+  <div class="hover" part="hover"></div>
+  <div class="ripple" part="ripple"></div>
+</div>
 `
 
 const startRipple = (options: {
-  root: Ripple,
+  root: HTMLElement,
   ripple: HTMLElement,
-  shadowRoot: ShadowRoot,
+  container: HTMLDivElement,
   event: PointerEvent,
   animateOptions: { duration: number, easing: string }
 }) => {
-  let size = Math.sqrt(options.root.offsetWidth ** 2 + options.root.offsetHeight ** 2)
-  const rect = options.root.getBoundingClientRect()
+  let size = Math.sqrt(options.container.offsetWidth ** 2 + options.container.offsetHeight ** 2)
+  const rect = options.container.getBoundingClientRect()
   const x = Math.max(rect.left, Math.min(options.event.clientX, rect.left + rect.width))
   const y = Math.max(rect.top, Math.min(options.event.clientY, rect.top + rect.height))
   const state = { x: x - rect.left, y: y - rect.top, h: rect.height / 2, w: rect.width / 2 }
@@ -78,7 +81,7 @@ const startRipple = (options: {
   let newRipple = options.ripple
   if (newRipple.getAnimations().length > 0) {
     newRipple = options.ripple.cloneNode() as HTMLDivElement
-    options.shadowRoot.appendChild(newRipple)
+    options.container.appendChild(newRipple)
   }
   const animation = newRipple.animate({
     opacity: [1, 1],
@@ -96,7 +99,7 @@ const startRipple = (options: {
     const diff = options.animateOptions.duration - short
     const duration = time > diff ? short : options.animateOptions.duration - time
     const animate = newRipple.animate({ opacity: [1, 0] }, { ...options.animateOptions, duration, easing: options.animateOptions.easing, fill: 'forwards' })
-    animate.finished.then(() => newRipple !== options.ripple && newRipple.isConnected && options.shadowRoot.removeChild(newRipple))
+    animate.finished.then(() => newRipple !== options.ripple && newRipple.isConnected && options.container.removeChild(newRipple))
     animate.finished.then(() => options.root.dispatchEvent(new Event('closed')))
     options.root.dispatchEvent(new Event('close'))
   }
@@ -104,7 +107,8 @@ const startRipple = (options: {
 
 export class Ripple extends useElement({
   style, template, props, events,
-  setup(shadowRoot) {
+  setup(shadowRoot, info) {
+    const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const ripple = shadowRoot.querySelector<HTMLDivElement>('.ripple')!
     const hover = shadowRoot.querySelector<HTMLDivElement>('.hover')!
     const computedStyle = useComputedStyle(ripple)
@@ -113,12 +117,11 @@ export class Ripple extends useElement({
       const duration = computedStyle.getDuration('animation-duration')
       return { easing, duration }
     }
-    const state = { parent: undefined as HTMLElement | undefined }
     const start = (event: PointerEvent) => {
       const cssDisabled = computedStyle.getValue('--s-ripple-disabled')
       const rippled = ['', 'none'].includes(cssDisabled) ? this.disabled : Boolean(cssDisabled)
       if (rippled || event.button !== 0) return
-      const run = (event: PointerEvent) => startRipple({ root: this as never, ripple, shadowRoot, event, animateOptions: getAnimateOptions() })
+      const run = (event: PointerEvent) => startRipple({ root: this, ripple, container, event, animateOptions: getAnimateOptions() })
       if (event.pointerType === 'mouse') return document.addEventListener('pointerup', run(event), { once: true })
       const cssDelay = computedStyle.getValue('--s-ripple-delay')
       const delay = ['', 'none'].includes(cssDelay) ? this.delay : Number(cssDelay)
@@ -136,37 +139,56 @@ export class Ripple extends useElement({
     const hovering = (event: MouseEvent) => {
       if (!device.mouseEnabled) return
       const force = event.type === 'mouseenter'
-      state.parent?.toggleAttribute('hovered', force)
       const cssDisabled = computedStyle.getValue('--s-ripple-hover-disabled')
       const hovered = ['', 'none'].includes(cssDisabled) ? this.hoverDisabled : Boolean(cssDisabled)
       !hovered && hover.classList.toggle('hovered', force)
+      info.parentNode?.toggleAttribute('hovered', force)
     }
     const down = (event: PointerEvent) => {
-      event.button === 0 && state.parent?.setAttribute('pressed', '')
-      document.addEventListener(event.pointerType === 'mouse' ? 'mouseup' : 'touchend', () => state.parent?.removeAttribute('pressed'), { once: true })
+      if (!info.parentNode) return
+      event.button === 0 && info.parentNode?.setAttribute('pressed', '')
+      document.addEventListener(event.pointerType === 'mouse' ? 'mouseup' : 'touchend', () => info.parentNode?.removeAttribute('pressed'), { once: true })
       start(event)
     }
-    const setEvent = () => {
-      state.parent?.removeEventListener('mouseenter', hovering)
-      state.parent?.removeEventListener('mouseleave', hovering)
-      state.parent?.removeEventListener('pointerdown', down)
-      delete state.parent
-      let parent = this.parentNode!
-      if (this.slotLayer >= 0 && this.assignedSlot) {
-        parent = this.assignedSlot
-        for (let i = 0; i < this.slotLayer; i++) parent = parent.parentNode!
+    const addEvent = () => {
+      if (!info.parentNode) return
+      let parent = info.parentNode
+      if (this.ancestorLevel > -1 && this.parentNode) {
+        let ancestor: HTMLElement = this
+        for (let i = -1; i < this.ancestorLevel; i++) {
+          if (ancestor.assignedSlot) {
+            ancestor = ancestor.assignedSlot
+            continue
+          }
+          if (!ancestor.parentNode) return
+          if (ancestor.parentNode instanceof ShadowRoot) {
+            const host = ancestor.parentNode.host
+            if (!(host instanceof HTMLElement)) return
+            ancestor = host
+            continue
+          }
+          if (!(ancestor.parentNode instanceof HTMLElement)) return
+          ancestor = ancestor.parentNode
+        }
+        parent = ancestor
       }
-      const parentElement = parent instanceof ShadowRoot ? parent.host : parent
-      if (!(parentElement instanceof HTMLElement)) return
-      state.parent = parentElement
-      state.parent.addEventListener('mouseenter', hovering)
-      state.parent.addEventListener('mouseleave', hovering)
-      state.parent.addEventListener('pointerdown', down)
+      parent.addEventListener('mouseenter', hovering)
+      parent.addEventListener('mouseleave', hovering)
+      parent.addEventListener('pointerdown', down)
+      info.parentNode = parent
+    }
+    const removeEvent = () => {
+      info.parentNode?.removeEventListener('mouseenter', hovering)
+      info.parentNode?.removeEventListener('mouseleave', hovering)
+      info.parentNode?.removeEventListener('pointerdown', down)
     }
     return {
-      setSlotLayer: setEvent,
-      onMounted: setEvent,
-      onUnmounted: setEvent
+      onMounted: addEvent,
+      onUnmounted: removeEvent,
+      ancestorLevel: () => {
+        removeEvent()
+        addEvent()
+      }
     }
   }
 }) { }
@@ -181,7 +203,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props>
+        [name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.values>
       }
     }
   }
@@ -196,7 +218,7 @@ declare module 'vue' {
       /**
       * @deprecated
       **/
-      $props: HTMLAttributes & Partial<typeof props>
+      $props: HTMLAttributes & Partial<typeof props.values>
     } & Ripple
   }
 }
@@ -205,7 +227,7 @@ declare module 'vue/jsx-runtime' {
   namespace JSX {
     export interface IntrinsicElements {
       //@ts-ignore
-      [name]: IntrinsicElements['div'] & Partial<typeof props>
+      [name]: IntrinsicElements['div'] & Partial<typeof props.values>
     }
   }
 }
@@ -215,7 +237,7 @@ declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSX.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }
@@ -225,7 +247,7 @@ declare module 'preact' {
   namespace JSX {
     interface IntrinsicElements {
       //@ts-ignore
-      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props>
+      [name]: JSXInternal.HTMLAttributes<HTMLElement> & Partial<typeof props.values>
     }
   }
 }

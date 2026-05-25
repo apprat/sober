@@ -1,4 +1,4 @@
-import { useElement } from '../core/element.js'
+import { useElement } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 
 const style = /*css*/`
@@ -10,9 +10,10 @@ const style = /*css*/`
   min-height: 8px;
   padding: 0 4px;
   border-radius: 8px;
-  font-size: calc(var(--s-font-size, 1) * 10px);
+  font-size: calc(var(--s-font-size, 1) * 12px);
   vertical-align: middle;
   font-weight: 600;
+  font-family: monospace;
   background: ${scheme.color.error};
   color: ${scheme.color.onError};
 }

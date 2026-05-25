@@ -10,10 +10,9 @@ type Options = {
   popover: HTMLElement
   gravity: keyof typeof orders
   gap: number
-  shadowRoot: ShadowRoot
 }
 
-export const popup = ({ anchor, shadowRoot, popover, gravity, gap }: Options) => {
+export const popup = ({ anchor, popover, gravity, gap }: Options) => {
   const position = { top: 0, left: 0, origin: [] as string[] }
   popover.style.maxHeight = `${innerHeight}px`
   popover.style.maxWidth = `${innerWidth}px`

@@ -32,10 +32,10 @@
 
 ```html preview
 <s-fab>
-  <s-loading></s-loading>
+  <s-loading></s-loading> <!-- [!code highlight] -->
 </s-fab>
 <s-fab>
-  <s-circular-progress indeterminate></s-circular-progress>
+  <s-circular-progress indeterminate></s-circular-progress> <!-- [!code highlight] -->
 </s-fab>
 ```
 
@@ -44,27 +44,27 @@
 设置 `disbled` 属性禁用按钮
 
 ```html preview
-<s-fab disabled>
+<s-fab disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
 </s-fab>
 
-<s-fab variant="secondary" disabled>
+<s-fab variant="secondary" disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
 </s-fab>
 
-<s-fab variant="tertiary" disabled>
+<s-fab variant="tertiary" disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
 </s-fab>
 
-<s-fab variant="tonal-primary" disabled>
+<s-fab variant="tonal-primary" disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
 </s-fab>
 
-<s-fab variant="tonal-secondary" disabled>
+<s-fab variant="tonal-secondary" disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
 </s-fab>
 
-<s-fab variant="tonal-tertiary" disabled>
+<s-fab variant="tonal-tertiary" disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
 </s-fab>
 ```
@@ -89,11 +89,11 @@
   <s-icon name="add"></s-icon>
 </s-fab>
 
-<s-fab size="medium">
+<s-fab size="medium"> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
 </s-fab>
 
-<s-fab size="large">
+<s-fab size="large"> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
 </s-fab>
 ```
@@ -104,18 +104,21 @@
 
 ```html preview
 <s-fab>
-  <s-icon name="add" slot="start"></s-icon>
+  <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
   提交信息
+  <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
 </s-fab>
 
 <s-fab size="medium" variant="secondary">
-  <s-icon name="add" slot="start"></s-icon>
+  <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
   提交信息
+  <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
 </s-fab>
 
 <s-fab size="large" variant="tertiary">
-  <s-icon name="add" slot="start"></s-icon>
+  <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
   提交信息
+  <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
 </s-fab>
 ```
 

@@ -16,15 +16,15 @@
   回乐烽前沙似雪，受降城外月如霜。
   不知何处吹芦管，一夜征人尽望乡。
 </s-alert>
-<s-alert variant="success">
+<s-alert variant="success"> <!-- [!code highlight] -->
   千山鸟飞绝，万径人踪灭。
   孤舟蓑笠翁，独钓寒江雪。
 </s-alert>
-<s-alert variant="warning">
+<s-alert variant="warning"> <!-- [!code highlight] -->
   孤云将野鹤，岂向人间住。
   莫买沃洲山，时人已知处。
 </s-alert>
-<s-alert variant="error">
+<s-alert variant="error"> <!-- [!code highlight] -->
   折戟沉沙铁未销，自将磨洗认前朝。
   东风不与周郎便，铜雀春深锁二乔。
 </s-alert>
@@ -34,22 +34,22 @@
 
 ```html preview
 <s-alert>
-  <s-icon name="star" slot="icon"></s-icon>
+  <s-icon name="star" slot="icon"></s-icon> <!-- [!code highlight] -->
   长簟迎风早，空城澹月华。
   星河秋一雁，砧杵夜千家。
   节候看应晚，心期卧亦赊。
   向来吟秀句，不觉已鸣鸦。
-  <s-button slot="action" variant="text" size="extra-small">关闭</s-button>
+  <s-button slot="action" variant="text" size="extra-small">关闭</s-button> <!-- [!code highlight] -->
 </s-alert>
 <s-alert>
-  <span slot="icon"></span>
+  <span slot="icon"></span> <!-- [!code highlight] -->
   一路经行处，莓苔见履痕。
   白云依静渚，春草闭闲门。
   过雨看松色，随山到水源。
   溪花与禅意，相对亦忘言。
-  <s-icon-button slot="action" size="extra-small">
-    <s-icon name="close"></s-icon>
-  </s-icon-button>
+  <s-icon-button slot="action" size="extra-small"> <!-- [!code highlight] -->
+    <s-icon name="close"></s-icon> <!-- [!code highlight] -->
+  </s-icon-button> <!-- [!code highlight] -->
 </s-alert>
 ```
 
@@ -58,7 +58,7 @@
 设置 `collapsed` 属性，可以启用折叠模式，这时正文默认不可见，点击切换按钮可展开，也可以使用 `opened` 默认展开。
 
 ```html preview
-<s-alert collapsed>
+<s-alert collapsed> <!-- [!code highlight] -->
   <div slot="title"> 遣悲怀三首·其二 </div>
   昔日戏言身后意，今朝都到眼前来。<br>
   衣裳已施行看尽，针线犹存未忍开。<br>
@@ -82,8 +82,8 @@
   衣裳已施行看尽，针线犹存未忍开。<br>
   尚想旧情怜婢仆，也曾因梦送钱财。<br>
   诚知此恨人人有，贫贱夫妻百事哀。
-  <s-icon slot="toggle-icon" name="arrow_downward"></s-icon>
-  <s-tooltip slot="toggle" slotLayer="0">切换</s-tooltip>
+  <s-icon slot="toggle-icon" name="arrow_downward"></s-icon> <!-- [!code highlight] -->
+  <s-tooltip slot="toggle" slotLayer="1">切换</s-tooltip>
 </s-alert>
 ```
 

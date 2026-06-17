@@ -48,40 +48,10 @@
 <s-base-slider slidingMode="all-cumulative"></s-base-slider>
 ```
 
-设置 `slidingMode` 属性后，可以启用属性 `scrollPriority` ，在触屏设备上会优先响应滚动（上下滑动时不会触发滑动）。
+设置 `slidingMode` 属性后，可以同时启用属性 `scrollPriority` ，在触屏设备上会优先响应滚动（上下滑动时不会触发滑动）。
 
 ```html preview
 <s-base-slider scrollPriority slidingMode="all"></s-base-slider>
-```
-
-## 预览
-
-```html preview-only
-<s-base-slider></s-base-slider>
-<hr>
-variant =
-<s-radio name="slider-variant" onchange="this.parentElement.querySelector('s-base-slider').variant=this.textContent" checked>standard</s-radio>
-<s-radio name="slider-variant" onchange="this.parentElement.querySelector('s-base-slider').variant=this.textContent">segmented</s-radio>
-<hr>
-mode =
-<s-radio name="slider-mode" onchange="this.parentElement.querySelector('s-base-slider').mode=this.textContent" checked>single</s-radio>
-<s-radio name="slider-mode" onchange="this.parentElement.querySelector('s-base-slider').mode=this.textContent">reversed</s-radio>
-<s-radio name="slider-mode" onchange="this.parentElement.querySelector('s-base-slider').mode=this.textContent">range</s-radio>
-<hr>
-slidingMode =
-<s-radio name="slider-sliding-mode" onchange="this.parentElement.querySelector('s-base-slider').slidingMode=this.textContent" checked>thumb</s-radio>
-<s-radio name="slider-sliding-mode" onchange="this.parentElement.querySelector('s-base-slider').slidingMode=this.textContent">all</s-radio>
-<s-radio name="slider-sliding-mode" onchange="this.parentElement.querySelector('s-base-slider').slidingMode=this.textContent">all-cumulative</s-radio>
-<hr>
-orientation =
-<s-radio name="slider-orientation" onchange="this.parentElement.querySelector('s-base-slider').orientation=this.textContent" checked>horizontal</s-radio>
-<s-radio name="slider-orientation" onchange="this.parentElement.querySelector('s-base-slider').orientation=this.textContent">vertical</s-radio>
-<hr>
-clickChanged =
-<s-checkbox onchange="this.parentElement.querySelector('s-base-slider').clickChanged=this.checked" checked></s-checkbox>
-<hr>
-scrollPriority =
-<s-checkbox onchange="this.parentElement.querySelector('s-base-slider').scrollPriority=this.checked"></s-checkbox>
 ```
 
 ## 自定义样式
@@ -188,7 +158,7 @@ scrollPriority =
 | slidingMode    | thumb, all, all-cumulative | thumb      | √    | 滑动模式，thumb=仅指示器滑动，all=所有滑动，all-cumulative=所有滑动且累计值              |
 | variant        | standard, segmented        | standard   | √    | 变体                                                                                     |
 | orientation    | horizontal, vertical       | horizontal | √    | 方向                                                                                     |
-| clickChanged   | boolean                    | true       | √    | 可单击切换的                                                                             |
+| clickable      | boolean                    | true       | √    | 可单击切换的                                                                             |
 | scrollPriority | boolean                    | false      | √    | 滚动优先，启用该属性时会在触屏设备上优先执行滚动                                         |
 | steps          | string                     |            | ×    | 步进值，使用 `,` 分割，例如：`0,40,80,100`，如果提供了该值，操作滑块时只会在步进值上切换 |
 | step           | number                     | 1          | ×    | 步进，请确保能被 (max - min) 整除                                                        |
@@ -245,7 +215,7 @@ scrollPriority =
 | --s-base-slider-thumb-end-height   | thumb-end 指示器高度                                             |
 | --s-base-slider-sliding-mode       | 该 CSS 变量和 `slidingMode` 属性一致，区别是该变量优先级更高     |
 | --s-base-slider-sliding-priority   | 该 CSS 变量和 `slidingPriority` 属性一致，区别是该变量优先级更高 |
-| --s-base-slider-click-changed      | 该 CSS 变量和 `clickChanged` 属性一致，区别是该变量优先级更高    |
+| --s-base-slider-clickable          | 该 CSS 变量和 `clickable` 属性一致，区别是该变量优先级更高       |
 
 > 注意：CSS 变量参与了尺寸的计算，你应该优先使用 CSS 变量来调整组件样式，如果直接使用 ::part() 选择器去调整尺寸，除非你明确知道你在做什么，否则可能会尺寸计算异常。
 
@@ -254,14 +224,12 @@ scrollPriority =
 | 名称          | 说明                       |
 | ------------- | -------------------------- |
 | pressed       | 按下时设置                 |
-| hovered       | 鼠标移入时设置             |
+| hover         | 鼠标移入时设置             |
 | sliding       | 滑动时设置                 |
 | start-pressed | start-thumb 按下时设置     |
 | end-pressed   | end-thumb 按下时设置       |
-| start-hovered | start-thumb 鼠标移入时设置 |
-| end-hovered   | end-thumb  鼠标移入时设置  |
-
-> 标记属性在一些情况下被设置到 HTML 属性上，以便于外部定义样式。
+| start-hover   | start-thumb 鼠标移入时设置 |
+| end-hover     | end-thumb  鼠标移入时设置  |
 
 ## 键盘快捷键
 

@@ -6,7 +6,7 @@ import './ripple.js'
 const props = useProps({
   variant: ['info', 'success', 'warning', 'error'],
   collapsed: false,
-  opened: false
+  open: false
 })
 
 const style = /*css*/`
@@ -64,6 +64,7 @@ svg{
   .content{
     display: block;
     overflow: hidden;
+    contain: layout;
   }
 }
 .toggle{
@@ -86,28 +87,18 @@ svg{
   ::slotted(:is(s-icon, svg)[slot=toggle-icon]){
     transition-duration: inherit;
     transition-timing-function: inherit;
-  }
-  svg{
-    width: 20px;
-    height: 20px;
-  }
-  ::slotted(:is(s-icon, svg)[slot=toggle-icon]){
     width: 20px;
     height: 20px;
   }
 }
 :host([collapsed]){
-  &:host(:not([opened])){
-    .text>.content{
-      height: 0;
-    }
+  &:host(:not([open])) .text>.content{
+    display: none;
   }
-  &:host([opened]){
-    .toggle{
-      svg,
-      ::slotted(:is(s-icon, svg)[slot=toggle-icon]){
-        transform: rotate(-180deg);
-      }
+  &:host([open]) .toggle{
+    svg,
+    ::slotted(:is(s-icon, svg)[slot=toggle-icon]){
+      transform: rotate(-180deg);
     }
   }
   .toggle{
@@ -128,22 +119,27 @@ svg{
 }
 ::slotted([slot=title]){
   font-weight: 500;
-  font-size: calc(var(--s-font-size, 1) * 15px);
+  font-size: calc(var(--s-font-size, 1) * 16px);
+  white-space: nowrap;
+  text-overflow: ellipsis;
   overflow: hidden;
   overflow: clip visible;
   line-height: 1;
+  padding: 16px 0;
+  margin: -12px 0;
 }
-::slotted(s-button[slot=action]){
+::slotted(s-button){
   min-width: 0;
   padding: 0 8px;
   margin: -4px -8px -4px 8px;
 }
-::slotted(s-icon-button[slot=action]){
+::slotted(s-icon-button){
   margin: -4px -8px -4px 4px;
   color: ${scheme.color.primary};
 }
 `
 const template = /*html*/`
+<slot name="start"></slot>
 <slot name="icon">
   <svg viewBox="0 0 24 24" class="icon info">
     <path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20, 12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10, 10 0 0,0 12,2M11,17H13V11H11V17Z"></path>
@@ -162,44 +158,44 @@ const template = /*html*/`
   <slot name="title"></slot>
   <slot class="content" part="content"></slot>
 </div>
-<div class="toggle" part="toggle" tabindex="0">
-  <slot name="toggle-icon">
-    <svg viewBox="0 -960 960 960">
-      <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"></path>
-    </svg>
-  </slot>
-  <slot name="toggle"></slot>
-  <s-ripple></s-ripple>
-</div>
+<slot name="toggle-button">
+  <div class="toggle" part="toggle" tabindex="0" role="button" aria-label="toggle">
+    <slot name="toggle"></slot>
+    <slot name="toggle-icon">
+      <svg viewBox="0 -960 960 960">
+        <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"></path>
+      </svg>
+    </slot>
+    <s-ripple></s-ripple>
+  </div>
+</slot>
 <slot name="action"></slot>
+<slot name="end"></slot>
 `
 
 export class Alert extends useElement({
   style, props, template,
   setup(shadowRoot, info) {
+    const toggleBtn = shadowRoot.querySelector<HTMLSlotElement>('slot[name=toggle-button]')!
     const toggle = shadowRoot.querySelector<HTMLSlotElement>('.toggle')!
     const content = shadowRoot.querySelector<HTMLSlotElement>('.content')!
     const computedStyle = useComputedStyle(this)
-    toggle.onclick = () => {
-      this.opened = !this.opened
+    toggleBtn.onclick = () => {
+      this.open = !this.open
       this.dispatchEvent(new Event('toggle'))
     }
     focusKeydownClick(toggle)
     return {
-      opened: (v) => {
+      open: async (v) => {
         if (!info.isConnected || !this.collapsed) return
         const [old] = content.getAnimations()
-        content.style.height = 'auto'
         if (old) return old.reverse()
-        const keyframe = { height: ['0px', `${content.offsetHeight}px`] }
-        if (!v) {
-          keyframe.height[1] = `${content.offsetHeight}px`
-          keyframe.height.reverse()
-        }
-        content.animate(keyframe, {
-          easing: computedStyle.getValue('transition-timing-function'),
-          duration: computedStyle.getDuration('transition-duration')
-        }).finished.then(() => content.style.removeProperty('height'))
+        content.style.display = 'block'
+        const height = content.offsetHeight
+        const keyframe = { height: ['0px', `${height}px`] }
+        if (!v) keyframe.height.reverse()
+        await content.animate(keyframe, { easing: computedStyle.getValue('transition-timing-function'), duration: computedStyle.getDuration('transition-duration') }).finished
+        content.style.removeProperty('display')
       }
     }
   }

@@ -195,7 +195,7 @@ const template = /*html*/`
 
 export class IconButton extends useElement({
   style: [buttonStyle, style],
-  states: ['keydown-focused', 'formAssociated'],
+  states: ['focusable', 'formable'],
   props, template,
   setup(_, info) {
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)

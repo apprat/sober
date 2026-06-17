@@ -30,7 +30,7 @@ const style = /*css*/`
   animation-duration: ${scheme.motion.duration.long4};
   transition-duration: ${scheme.motion.duration.short4};
 }
-.hover,
+.mask,
 .container,
 .ripple{
   position: absolute;
@@ -38,11 +38,11 @@ const style = /*css*/`
   animation-timing-function: inherit;
   animation-duration: inherit;
 }
-.hover{
+.mask{
   opacity: 0;
   transition-property: opacity;
   background: var(--s-ripple-color, currentColor);
-  &.hovered{
+  &.hover{
     opacity: var(--s-ripple-hover-opacity, .08);
   }
 }
@@ -57,7 +57,7 @@ const style = /*css*/`
 const template = /*html*/`
 <slot></slot>
 <div class="container" part="container">
-  <div class="hover" part="hover"></div>
+  <div class="mask" part="mask"></div>
   <div class="ripple" part="ripple"></div>
 </div>
 `
@@ -110,7 +110,7 @@ export class Ripple extends useElement({
   setup(shadowRoot, info) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const ripple = shadowRoot.querySelector<HTMLDivElement>('.ripple')!
-    const hover = shadowRoot.querySelector<HTMLDivElement>('.hover')!
+    const mask = shadowRoot.querySelector<HTMLDivElement>('.mask')!
     const computedStyle = useComputedStyle(ripple)
     const getAnimateOptions = () => {
       const easing = computedStyle.getValue('animation-timing-function')
@@ -140,9 +140,9 @@ export class Ripple extends useElement({
       if (!device.mouseEnabled) return
       const force = event.type === 'mouseenter'
       const cssDisabled = computedStyle.getValue('--s-ripple-hover-disabled')
-      const hovered = ['', 'none'].includes(cssDisabled) ? this.hoverDisabled : Boolean(cssDisabled)
-      !hovered && hover.classList.toggle('hovered', force)
-      info.parentNode?.toggleAttribute('hovered', force)
+      const hover = ['', 'none'].includes(cssDisabled) ? this.hoverDisabled : Boolean(cssDisabled)
+      !hover && mask.classList.toggle('hover', force)
+      info.parentNode?.toggleAttribute('hover', force)
     }
     const down = (event: PointerEvent) => {
       if (!info.parentNode) return

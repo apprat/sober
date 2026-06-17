@@ -1,4 +1,4 @@
-# Icon Button
+# IconButton
 
 图标按钮帮助用户只需点击一次即可执行操作。
 
@@ -159,47 +159,12 @@
 </s-icon-button>
 ```
 
-## 预览
-
-```html preview-only
-<s-icon-button> 
-  <s-icon name="star"></s-icon>
-</s-icon-button>
-<hr>
-variant =
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-icon-button').variant=this.textContent" checked>standard</s-radio>
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-icon-button').variant=this.textContent">filled</s-radio>
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-icon-button').variant=this.textContent">tonal</s-radio>
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-icon-button').variant=this.textContent">outlined</s-radio>
-<hr>
-size =
-<s-radio name="button-size" onchange="this.parentElement.querySelector('s-icon-button').size=this.textContent" checked>small</s-radio>
-<s-radio name="button-size" onchange="this.parentElement.querySelector('s-icon-button').size=this.textContent">extra-small</s-radio>
-<s-radio name="button-size" onchange="this.parentElement.querySelector('s-icon-button').size=this.textContent">medium</s-radio>
-<s-radio name="button-size" onchange="this.parentElement.querySelector('s-icon-button').size=this.textContent">large</s-radio>
-<s-radio name="button-size" onchange="this.parentElement.querySelector('s-icon-button').size=this.textContent">extra-large</s-radio>
-<hr>
-width =
-<s-radio name="button-width" onchange="this.parentElement.querySelector('s-icon-button').width=this.textContent" checked>default</s-radio>
-<s-radio name="button-width" onchange="this.parentElement.querySelector('s-icon-button').width=this.textContent">narrow</s-radio>
-<s-radio name="button-width" onchange="this.parentElement.querySelector('s-icon-button').width=this.textContent">wide</s-radio>
-<hr>
-type =
-<s-radio name="button-type" onchange="this.parentElement.querySelector('s-icon-button').type=this.textContent" checked>button</s-radio>
-<s-radio name="button-type" onchange="this.parentElement.querySelector('s-icon-button').type=this.textContent">checkbox</s-radio>
-<s-radio name="button-type" onchange="this.parentElement.querySelector('s-icon-button').type=this.textContent">reset</s-radio>
-<s-radio name="button-type" onchange="this.parentElement.querySelector('s-icon-button').type=this.textContent">submit</s-radio>
-<hr>
-disabled =
-<s-checkbox onchange="this.parentElement.querySelector('s-icon-button').disabled=this.checked"></s-checkbox>
-```
-
 ## 表单支持
 
 该组件可以作为表单元素使用，可以作为复选框、表单重置、提交按钮。
 
 ```html preview
-<form action="/link" method="get">
+<form action="http://coolaf.com/tool/params" method="get">
   选择标签：
   <s-icon-button name="tag" type="checkbox" value="star">
     <s-icon name="star"></s-icon>
@@ -252,12 +217,10 @@ disabled =
 
 ## HTML 标记属性
 
-| 名称          | 说明           |
-| ------------- | -------------- |
-| pressed       | 按下时设置     |
-| hovered       | 鼠标移入时设置 |
-
-> 标记属性在一些情况下被设置到 HTML 属性上，以便于外部定义样式。
+| 名称    | 说明           |
+| ------- | -------------- |
+| pressed | 按下时设置     |
+| hover   | 鼠标移入时设置 |
 
 ## 键盘快捷键
 

@@ -13,7 +13,7 @@ const props = useProps({
   $steps: '',
   $defualtStart: 0,
   $defualtEnd: 0,
-  clickChanged: true,
+  clickable: true,
   scrollPriority: false,
   mode: ['single', 'reversed', 'range'],
   slidingMode: ['thumb', 'all', 'all-cumulative'],
@@ -49,29 +49,30 @@ const style = /*css*/`
 }
 .layout{
   display: contents;
-  --s_gap: 0;
-  --s_gap: var(--base-slider-gap, 4px);
-  --s_thumb-size: var(--s-base-slider-thumb-size, 18px);
-  --s_thumb-width: var(--s-base-slider-thumb-width, var(--s_thumb-size));
-  --s_thumb-height: var(--s-base-slider-thumb-height, var(--s_thumb-size));
-  --s_thumb-start-width: var(--s-base-slider-thumb-start-width, var(--s_thumb-width));
-  --s_thumb-start-height: var(--s-base-slider-thumb-start-height, var(--s_thumb-height));
-  --s_thumb-end-width: var(--s-base-slider-thumb-end-width, var(--s_thumb-width));
-  --s_thumb-end-height: var(--s-base-slider-thumb-end-height, var(--s_thumb-height));
-  --s_thumb-start-size: var(--s_thumb-start-width);
-  --s_thumb-end-size: var(--s_thumb-end-width);
-  --s_start-offset: calc((0px - var(--s_thumb-start-size) / 2) / 50 * var(--s_start) + var(--s_thumb-start-size) / 2);
-  --s_end-offset: calc((0px - var(--s_thumb-end-size) / 2) / 50 * var(--s_end) + var(--s_thumb-end-size) / 2);
-  --s_track-start-size: calc(var(--s_start) * 1% + var(--s_start-offset));
-  --s_track-fill-position: 0px;
-  --s_track-fill-size: calc(var(--s_diff) * 1% + var(--s_end-offset));
-  --s_track-end-size: calc((100 - var(--s_end)) * 1% - var(--s_end-offset));
+  --s_base-slider-gap: 0;
+  --s_base-slider-gap: var(--base-slider-gap, 4px);
+  --s_base-slider-thumb-size: var(--s-base-slider-thumb-size, 18px);
+  --s_base-slider-thumb-width: var(--s-base-slider-thumb-width, var(--s_base-slider-thumb-size));
+  --s_base-slider-thumb-height: var(--s-base-slider-thumb-height, var(--s_base-slider-thumb-size));
+  --s_base-slider-thumb-start-width: var(--s-base-slider-thumb-start-width, var(--s_base-slider-thumb-width));
+  --s_base-slider-thumb-start-height: var(--s-base-slider-thumb-start-height, var(--s_base-slider-thumb-height));
+  --s_base-slider-thumb-end-width: var(--s-base-slider-thumb-end-width, var(--s_base-slider-thumb-width));
+  --s_base-slider-thumb-end-height: var(--s-base-slider-thumb-end-height, var(--s_base-slider-thumb-height));
+  --s_base-slider-thumb-start-size: var(--s_base-slider-thumb-start-width);
+  --s_base-slider-thumb-end-size: var(--s_base-slider-thumb-end-width);
+  --s_base-slider-start-offset: calc((0px - var(--s_base-slider-thumb-start-size) / 2) / 50 * var(--s_base-slider-start) + var(--s_base-slider-thumb-start-size) / 2);
+  --s_base-slider-end-offset: calc((0px - var(--s_base-slider-thumb-end-size) / 2) / 50 * var(--s_base-slider-end) + var(--s_base-slider-thumb-end-size) / 2);
+  --s_base-slider-track-start-size: calc(var(--s_base-slider-start) * 1% + var(--s_base-slider-start-offset));
+  --s_base-slider-track-fill-position: 0px;
+  --s_base-slider-track-fill-size: calc(var(--s_base-slider-diff) * 1% + var(--s_base-slider-end-offset));
+  --s_base-slider-track-end-size: calc((100 - var(--s_base-slider-end)) * 1% - var(--s_base-slider-end-offset));
 }
 slot:is([name=track-start], [name=track-fill], [name=track-end], [name=thumb-start], [name=thumb-end]){
   display: flex;
   align-items: center;
   flex-shrink: 0;
   position: absolute;
+  contain: size;
 }
 slot:is([name=track-start], [name=track-fill], [name=track-end]){
   background: ${scheme.color.secondaryContainer};
@@ -80,16 +81,16 @@ slot:is([name=track-start], [name=track-fill], [name=track-end]){
   left: 0;
 }
 slot[name=track-start]{
-  width: var(--s_track-start-size);
+  width: var(--s_base-slider-track-start-size);
   display: none;
 }
 slot[name=track-fill]{
-  width: var(--s_track-fill-size);
-  left: var(--s_track-fill-position);
+  width: var(--s_base-slider-track-fill-size);
+  left: var(--s_base-slider-track-fill-position);
   background: currentColor;
 }
 slot[name=track-end]{
-  width: var(--s_track-end-size);
+  width: var(--s_base-slider-track-end-size);
   right: 0;
   left: auto;
 }
@@ -118,30 +119,30 @@ slot:is([name=thumb-start], [name=thumb-end]){
 }
 slot[name=thumb-start]{
   display: none;
-  width: var(--s_thumb-start-width);
-  height: var(--s_thumb-start-height);
-  left: calc(var(--s_start) * 1%);
-  transform: translateX(calc(var(--s_start) * -1%));
+  width: var(--s_base-slider-thumb-start-width);
+  height: var(--s_base-slider-thumb-start-height);
+  left: calc(var(--s_base-slider-start) * 1%);
+  transform: translateX(calc(var(--s_base-slider-start) * -1%));
 }
 slot[name=thumb-end]{
-  width: var(--s_thumb-end-width);
-  height: var(--s_thumb-end-height);
-  left: calc(var(--s_end) * 1%);
-  transform: translateX(calc(var(--s_end) * -1%));
+  width: var(--s_base-slider-thumb-end-width);
+  height: var(--s_base-slider-thumb-end-height);
+  left: calc(var(--s_base-slider-end) * 1%);
+  transform: translateX(calc(var(--s_base-slider-end) * -1%));
 }
 :host([start-pressed]) slot[name=thumb-start],
 :host([end-pressed]) slot[name=thumb-end]{
   cursor: grabbing;
 }
-:host(:is([start-hovered], [start-pressed])) slot[name=thumb-start]::before,
-:host(:is([end-hovered], [end-pressed])) slot[name=thumb-end]::before{
+:host(:is([start-hover], [start-pressed])) slot[name=thumb-start]::before,
+:host(:is([end-hover], [end-pressed])) slot[name=thumb-end]::before{
   opacity: .12;
   transform: scale(1);
 }
 :host([mode=reversed]){
   slot[name=track-fill]{
     left: auto;
-    right: var(--s_track-fill-position);
+    right: var(--s_base-slider-track-fill-position);
   }
   slot[name=track-end]{
     left: 0;
@@ -149,14 +150,14 @@ slot[name=thumb-end]{
   }
   slot[name=thumb-end]{
     left: auto;
-    right: calc(var(--s_end) * 1%);
-    transform: translateX(calc(var(--s_end) * 1%));
+    right: calc(var(--s_base-slider-end) * 1%);
+    transform: translateX(calc(var(--s_base-slider-end) * 1%));
   }
 }
 :host([mode=range]){
   .layout{
-    --s_track-fill-position: calc(var(--s_start) * 1% + var(--s_start-offset));
-    --s_track-fill-size: calc(var(--s_diff) * 1% - var(--s_start-offset) + var(--s_end-offset));
+    --s_base-slider-track-fill-position: calc(var(--s_base-slider-start) * 1% + var(--s_base-slider-start-offset));
+    --s_base-slider-track-fill-size: calc(var(--s_base-slider-diff) * 1% - var(--s_base-slider-start-offset) + var(--s_base-slider-end-offset));
   }
   slot[name=thumb-start],
   slot[name=track-start]{
@@ -165,16 +166,16 @@ slot[name=thumb-end]{
 }
 :host([variant=segmented]){
   .layout{
-    --s_start-offset: calc((0px - var(--s_thumb-start-size) / 2) / 50 * var(--s_start) + var(--s_thumb-start-size) + var(--s_gap));
-    --s_end-offset: calc((0px - var(--s_thumb-end-size) / 2) / 50 * var(--s_end) + var(--s_thumb-end-size) / 2);
-    --s_track-start-size: calc(var(--s_start) * 1% + var(--s_start-offset) - var(--s_gap) * 2 - var(--s_thumb-start-size));
-    --s_track-fill-size: calc(var(--s_diff) * 1% + var(--s_end-offset) - var(--s_thumb-end-size) / 2 - var(--s_gap));
-    --s_track-end-size: calc((100 - var(--s_end)) * 1% - var(--s_end-offset) - var(--s_thumb-end-size) / 2 - var(--s_gap));
+    --s_base-slider-start-offset: calc((0px - var(--s_base-slider-thumb-start-size) / 2) / 50 * var(--s_base-slider-start) + var(--s_base-slider-thumb-start-size) + var(--s_base-slider-gap));
+    --s_base-slider-end-offset: calc((0px - var(--s_base-slider-thumb-end-size) / 2) / 50 * var(--s_base-slider-end) + var(--s_base-slider-thumb-end-size) / 2);
+    --s_base-slider-track-start-size: calc(var(--s_base-slider-start) * 1% + var(--s_base-slider-start-offset) - var(--s_base-slider-gap) * 2 - var(--s_base-slider-thumb-start-size));
+    --s_base-slider-track-fill-size: calc(var(--s_base-slider-diff) * 1% + var(--s_base-slider-end-offset) - var(--s_base-slider-thumb-end-size) / 2 - var(--s_base-slider-gap));
+    --s_base-slider-track-end-size: calc((100 - var(--s_base-slider-end)) * 1% - var(--s_base-slider-end-offset) - var(--s_base-slider-thumb-end-size) / 2 - var(--s_base-slider-gap));
   }
   &:host([mode=range]){
     .layout{
-      --s_track-fill-position: calc(var(--s_start) * 1% + var(--s_start-offset));
-      --s_track-fill-size: calc(var(--s_diff) * 1% - var(--s_start-offset) + var(--s_end-offset) - var(--s_thumb-end-size) / 2 - var(--s_gap));
+      --s_base-slider-track-fill-position: calc(var(--s_base-slider-start) * 1% + var(--s_base-slider-start-offset));
+      --s_base-slider-track-fill-size: calc(var(--s_base-slider-diff) * 1% - var(--s_base-slider-start-offset) + var(--s_base-slider-end-offset) - var(--s_base-slider-thumb-end-size) / 2 - var(--s_base-slider-gap));
     }
   }
 }
@@ -184,8 +185,8 @@ slot[name=thumb-end]{
   display: inline-flex;
   vertical-align: middle;
   .layout{
-    --s_thumb-start-size: var(--s_thumb-start-height);
-    --s_thumb-end-size: var(--s_thumb-end-height);
+    --s_base-slider-thumb-start-size: var(--s_base-slider-thumb-start-height);
+    --s_base-slider-thumb-end-size: var(--s_base-slider-thumb-end-height);
   }
   slot:is([name=track-start], [name=track-fill], [name=track-end]){
     width: calc(100% / 3);
@@ -193,35 +194,35 @@ slot[name=thumb-end]{
     bottom: 0;
   }
   slot[name=track-fill]{
-    bottom: var(--s_track-fill-position);
-    height: var(--s_track-fill-size);
+    bottom: var(--s_base-slider-track-fill-position);
+    height: var(--s_base-slider-track-fill-size);
   }
   slot[name=track-end]{
     inset: auto;
     top: 0;
-    height: var(--s_track-end-size);
+    height: var(--s_base-slider-track-end-size);
   }
   slot:is([name=thumb-start], [name=thumb-end]){
     left: auto;
     right: auto;
   }
   slot[name=thumb-start]{
-    bottom: calc(var(--s_start) * 1%);
-    transform: translateY(calc(var(--s_start) * 1%));
+    bottom: calc(var(--s_base-slider-start) * 1%);
+    transform: translateY(calc(var(--s_base-slider-start) * 1%));
   }
   slot[name=thumb-end]{
-    bottom: calc(var(--s_end) * 1%);
-    transform: translateY(calc(var(--s_end) * 1%));
+    bottom: calc(var(--s_base-slider-end) * 1%);
+    transform: translateY(calc(var(--s_base-slider-end) * 1%));
   }
   &:host([mode=reversed]){
     slot:is([name=thumb-start], [name=thumb-end]){
       right: auto;
-      top: calc(var(--s_end) * 1%);
-      transform: translateY(calc(var(--s_end) * -1%));
+      top: calc(var(--s_base-slider-end) * 1%);
+      transform: translateY(calc(var(--s_base-slider-end) * -1%));
     }
     slot[name=track-fill]{
       right: auto;
-      top: var(--s_track-fill-position);
+      top: var(--s_base-slider-track-fill-position);
     }
     slot[name=track-end]{
       inset: auto;
@@ -230,7 +231,7 @@ slot[name=thumb-end]{
   }
   &:host([mode=range]){
     slot[name=track-start]{
-      height: var(--s_track-start-size);
+      height: var(--s_base-slider-track-start-size);
     }
   }
 }
@@ -312,7 +313,7 @@ const onKeydown = (el: BaseSlider, key: string, steps: number[]) => {
 
 export class BaseSlider extends useElement({
   props, template, style, events,
-  states: ['focused', 'pressed', 'hovered', 'formAssociated'],
+  states: ['focusableOnly', 'pressable', 'hoverable', 'formable'],
   setup(shadowRoot, info) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const thumbStartSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=thumb-start]')!
@@ -324,7 +325,7 @@ export class BaseSlider extends useElement({
         (this.start - this.min) / (this.max - this.min) * 100,
         (this.end - this.min) / (this.max - this.min) * 100
       ].sort((a, b) => a - b)
-      const name = '--s_'
+      const name = '--s_base-slider-'
       layout.style.setProperty(`${name}diff`, `${end - start}`)
       layout.style.setProperty(`${name}start`, `${start}`)
       layout.style.setProperty(`${name}end`, `${end}`)
@@ -337,9 +338,9 @@ export class BaseSlider extends useElement({
       const cssScrollPriority = computedStyle.getValue('--s-base-slider-sliding-priority')
       return ['', 'none'].includes(cssScrollPriority) ? this.scrollPriority : Boolean(cssScrollPriority)
     }
-    const getClickChanged = () => {
-      const cssClickChanged = computedStyle.getValue('--s-base-slider-click-changed')
-      return ['', 'none'].includes(cssClickChanged) ? this.clickChanged : Boolean(cssClickChanged)
+    const getClickable = () => {
+      const cssClickChanged = computedStyle.getValue('--s-base-slider-clickable')
+      return ['', 'none'].includes(cssClickChanged) ? this.clickable : Boolean(cssClickChanged)
     }
     const getCloser = (x: number) => {
       const startRect = thumbStartSlot.getBoundingClientRect()
@@ -361,8 +362,8 @@ export class BaseSlider extends useElement({
     }
     let touched = false
     this.addEventListener('click', (event) => {
-      const clickChanged = getClickChanged()
-      if (!clickChanged || touched) return
+      const clickable = getClickable()
+      if (!clickable || touched) return
       const ori = orientation[this.orientation]
       const x = event[ori.clientX]
       const name = this.mode === 'range' ? getCloser(x) : 'end'
@@ -450,13 +451,13 @@ export class BaseSlider extends useElement({
     thumbStartSlot.addEventListener('pointerdown', (event) => thumbDown(event, 'start'))
     thumbEndSlot.addEventListener('pointerdown', (event) => thumbDown(event, 'end'))
     const hover = (name: 'start' | 'end' = 'end') => {
-      if (!device.mouseEnabled || this.hasAttribute(`${name}-hovered`)) return
-      this.setAttribute(`${name}-hovered`, '')
+      if (!device.mouseEnabled || this.hasAttribute(`${name}-hover`)) return
+      this.setAttribute(`${name}-hover`, '')
       this.dispatchEvent(new CustomEvent('hover', { detail: { name } }))
     }
     const hoverOut = (name: 'start' | 'end' = 'end') => {
-      if (!device.mouseEnabled || !this.hasAttribute(`${name}-hovered`)) return
-      this.removeAttribute(`${name}-hovered`)
+      if (!device.mouseEnabled || !this.hasAttribute(`${name}-hover`)) return
+      this.removeAttribute(`${name}-hover`)
       this.dispatchEvent(new CustomEvent('hoverout', { detail: { name } }))
     }
     thumbStartSlot.onmouseenter = () => hover('start')

@@ -10,6 +10,7 @@ const style = /*css*/`
   min-height: 8px;
   padding: 0 4px;
   border-radius: 8px;
+  line-height: 1;
   font-size: calc(var(--s-font-size, 1) * 12px);
   vertical-align: middle;
   font-weight: 600;

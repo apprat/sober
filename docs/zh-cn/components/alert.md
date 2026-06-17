@@ -9,7 +9,9 @@
 </s-alert>
 ```
 
-设置 `variant` 来设置不同的变体：`info、success、warning、error`。
+## 变体
+
+设置 `variant` 属性定义不同的变体：`info、success、warning、error`。
 
 ```html preview
 <s-alert>
@@ -55,7 +57,7 @@
 
 ## 折叠
 
-设置 `collapsed` 属性，可以启用折叠模式，这时正文默认不可见，点击切换按钮可展开，也可以使用 `opened` 默认展开。
+设置 `collapsed` 属性，可以启用折叠模式，这时正文默认不可见，点击切换按钮可展开，也可以使用 `open` 默认展开。
 
 ```html preview
 <s-alert collapsed> <!-- [!code highlight] -->
@@ -65,7 +67,7 @@
   尚想旧情怜婢仆，也曾因梦送钱财。<br>
   诚知此恨人人有，贫贱夫妻百事哀。
 </s-alert>
-<s-alert collapsed opened>
+<s-alert collapsed open> <!-- [!code highlight] -->
   <div slot="title"> 子夜吴歌·冬歌 </div>
   明朝驿使发，一夜絮征袍。<br>
   素手抽针冷，那堪把剪刀。<br>
@@ -73,7 +75,7 @@
 </s-alert>
 ```
 
-可以使用 `toggle-icon` 插槽来自定义折叠按钮图标。
+使用 `toggle-icon` 插槽来自定义折叠按钮图标。
 
 ```html preview
 <s-alert collapsed>
@@ -83,7 +85,34 @@
   尚想旧情怜婢仆，也曾因梦送钱财。<br>
   诚知此恨人人有，贫贱夫妻百事哀。
   <s-icon slot="toggle-icon" name="arrow_downward"></s-icon> <!-- [!code highlight] -->
-  <s-tooltip slot="toggle" slotLayer="1">切换</s-tooltip>
+</s-alert>
+```
+
+使用 `toggle-button` 插槽自定义切换按钮。
+
+```html preview
+<s-alert collapsed>
+  <div slot="title"> 遣悲怀三首·其二 </div>
+  昔日戏言身后意，今朝都到眼前来。<br>
+  衣裳已施行看尽，针线犹存未忍开。<br>
+  尚想旧情怜婢仆，也曾因梦送钱财。<br>
+  诚知此恨人人有，贫贱夫妻百事哀。
+  <s-button slot="toggle-button" variant="outlined" size="extra-small">
+    切换
+  </s-button>
+</s-alert>
+```
+
+使用 `toggle` 插槽插入 `s-tooltip`。
+
+```html preview
+<s-alert collapsed>
+  <div slot="title"> 遣悲怀三首·其二 </div>
+  昔日戏言身后意，今朝都到眼前来。<br>
+  衣裳已施行看尽，针线犹存未忍开。<br>
+  尚想旧情怜婢仆，也曾因梦送钱财。<br>
+  诚知此恨人人有，贫贱夫妻百事哀。
+  <s-tooltip slot="toggle" ancestorLevel="1">切换</s-tooltip> <!-- [!code highlight] -->
 </s-alert>
 ```
 
@@ -95,7 +124,7 @@
 | --------- | ----------------------------- | ------ | ---- | -------- |
 | variant   | info, success, warning, error | info   | √    | 变体     |
 | collapsed | boolean                       | false  | √    | 可折叠的 |
-| opened    | boolean                       | false  | √    | 展开的   |
+| open      | boolean                       | false  | √    | 展开的   |
 
 ---
 
@@ -109,14 +138,15 @@
 
 ## 插槽
 
-| 名称        | 说明         |
-| ----------- | ------------ |
-| 匿名        | 内容         |
-| icon        | 图标         |
-| title       | 标题文本     |
-| action      | 操作按钮     |
-| toggle      | 折叠按钮     |
-| toggle-icon | 折叠按钮图标 |
+| 名称          | 说明             |
+| ------------- | ---------------- |
+| 匿名          | 内容             |
+| icon          | 图标             |
+| title         | 标题文本         |
+| action        | 操作按钮         |
+| toggle        | 折叠切换按钮内容 |
+| toggle-button | 折叠切换按钮     |
+| toggle-icon   | 折叠切换按钮图标 |
 
 ---
 

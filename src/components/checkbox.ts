@@ -4,6 +4,7 @@ import * as scheme from '../core/scheme.js'
 const props = useProps({
   disabled: false,
   checked: false,
+  readOnly: false,
   indeterminate: false,
   defualtChecked: false,
   name: '',
@@ -24,29 +25,6 @@ const style = /*css*/`
   color: ${scheme.color.onSurfaceVariant};
   transition-timing-function: ${scheme.motion.easing.emphasized};
   transition-duration: ${scheme.motion.duration.short4};
-}
-:host([checked]){
-  color: ${scheme.color.primary};
-}
-:host([disabled]){
-  pointer-events: none;
-  .layout{
-    color: ${scheme.color.onSurface} !important;
-    opacity: .38 !important;
-  }
-}
-:host(:is([pressed], [hovered])){
-  .layout>.ripple{
-    opacity: .12;
-    transform: scale(1);
-  }
-}
-:host(:focus-visible){
-  outline-style: none;
-  .layout{
-    outline-style: solid;
-    outline-width: 3px;
-  }
 }
 .layout{
   position: relative;
@@ -111,6 +89,32 @@ svg,
   width: 60%;
   height: 60%;
 }
+:host([checked]){
+  color: ${scheme.color.primary};
+}
+:host([readOnly]){
+  pointer-events: none;
+}
+:host([disabled]){
+  pointer-events: none;
+  .layout{
+    color: ${scheme.color.onSurface} !important;
+    opacity: .38 !important;
+  }
+}
+:host(:is([pressed], [hover])){
+  .layout>.ripple{
+    opacity: .12;
+    transform: scale(1);
+  }
+}
+:host(:focus-visible){
+  outline-style: none;
+  .layout{
+    outline-style: solid;
+    outline-width: 3px;
+  }
+}
 `
 
 const template = /*html*/`
@@ -136,7 +140,7 @@ const template = /*html*/`
 `
 
 export class Checkbox extends useElement({
-  states: ['keydown-focused', 'formAssociated'],
+  states: ['focusable', 'formable', 'hoverable', 'pressable'],
   style, template, props,
   setup(_, info) {
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)

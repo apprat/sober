@@ -84,7 +84,7 @@ export class Tooltip extends useElement({
       popover.showPopover?.()
       const cssGravity = computedStyle.getValue('--s-tooltip-gravity') as typeof this.gravity
       const gravity = props.metadata.gravity.types?.includes(cssGravity) ? cssGravity : this.gravity
-      const gap = Number(computedStyle.getValue('outline-offset').slice(0, -2))
+      const gap = computedStyle.getNumber('outline-offset')
       const position = popup({ anchor: info.parentNode, popover, gravity, gap })
       popover.style.top = `${position.top}px`
       popover.style.left = `${position.left}px`
@@ -102,12 +102,16 @@ export class Tooltip extends useElement({
       this.dispatchEvent(new Event('closed'))
     }
     const show = () => {
-      if (this.disabled) return
+      const cssDisabled = computedStyle.getValue('--s-tooltip-disabled')
+      const disabled = ['none', ''].includes(cssDisabled) ? this.disabled : Boolean(cssDisabled)
+      if (disabled) return
       open()
       this.dispatchEvent(new Event('open'))
     }
     const hide = () => {
-      if (this.disabled) return
+      const cssDisabled = computedStyle.getValue('--s-tooltip-disabled')
+      const disabled = ['none', ''].includes(cssDisabled) ? this.disabled : Boolean(cssDisabled)
+      if (disabled) return
       close()
       this.dispatchEvent(new Event('close'))
     }

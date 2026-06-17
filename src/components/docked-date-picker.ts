@@ -30,15 +30,15 @@ const template = /*html*/`
 <div class="headline"></div>
 `
 
-export class BaseDate extends useElement({
+export class DockedDatePicker extends useElement({
   props, style, template
 }) { }
 
-const name = BaseDate.define('s-base-date')
+const name = DockedDatePicker.define('s-docked-date-picker')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: BaseDate
+    [name]: DockedDatePicker
   }
   namespace React {
     namespace JSX {
@@ -60,7 +60,7 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & BaseDate
+    } & DockedDatePicker
   }
 }
 //@ts-ignore

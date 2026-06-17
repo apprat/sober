@@ -4,13 +4,13 @@
 ![Static Badge](https://img.shields.io/badge/complete%20build-139kb-blue)
 ![Static Badge](https://img.shields.io/badge/gzip-33kb-wheat)
 
-Sober 是参考 Google M3 Expressive 设计规范的超级轻量级 Web Component UI 组件库。  
+Sober 是实现 Google Material 3 Expressive 设计规范轻量级的响应式 UI 组件库。  
 
-Sober 支持所有前端框架，如 Vue、React、Svelte 等，并且专门为 Vue 框架做了适配支持模版和 JSX 的补全以及使用 `v-model` 等语法。
+Sober 支持所有前端框架，如 Vue、React、Svelte、Solid-js 等，并且支持模版和 JSX 的 TypeScript 类型提示和补全。
 
-(Sober is an ultra-lightweight Web Component UI library designed with reference to Google's M3 Expressive guidelines.)
+(Sober is a lightweight responsive UI component library that implements Google Material 3 Expressive design specifications.)
 
-(Sober supports all front-end frameworks such as Vue, React, Svelte, and more. It is specifically tailored for the Vue framework, providing support for template and JSX completion, as well as the use of syntax like `v-model`.)
+(Sober supports all front-end frameworks including Vue, React, Svelte, Solid-js and more, and provides TypeScript type hints and autocompletion for both templates and JSX.)
 
 ## 安装 (Installation)
 
@@ -47,9 +47,9 @@ const App = () => {
 
 ## 文档 (Documentation)
 
-在 [soberjs.com](https://soberjs.com) 上查看 **Sober** 的完整文档。  
+在 [soberjs.com](https://soberjs.com) 上查看 **Sober** 的完整文档（建议在大屏设备上查看文档示例，以便于查看组件的响应式变化）。  
 
-(See Sober's full documentation on [soberjs.com](https://soberjs.com))
+(View the full documentation for Sober at [soberjs.com](https://soberjs.com). It is recommended to view the component demos on a large-screen device to observe their responsive behavior more clearly.)
 
 ## 主题生成器 (Theme Generator)
 

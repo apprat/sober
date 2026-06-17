@@ -76,7 +76,7 @@ const template = /*html*/`
 
 export class Chip extends useElement({
   style: [buttonStyle, style],
-  states: ['keydown-focused', 'formAssociated'],
+  states: ['focusable', 'formable'],
   template, props,
   setup(shadowRoot, info) {
     const action = shadowRoot.querySelector<HTMLSlotElement>('slot[name=action]')!

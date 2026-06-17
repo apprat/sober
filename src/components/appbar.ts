@@ -1,23 +1,28 @@
 import { useProps, useElement } from '../core/elements.js'
+import { MediaQueryer } from '../core/utils/mediaQueryer.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
-  variant: ['surface', 'primary'],
-  size: ['auto', 'medium', 'small']
+  $size: ['auto', 'medium', 'small'],
+  $media: '(orientation: portrait)'
 })
 
 const style = /*css*/`
 :host{
-  display: flex;
-  align-items: center;
+  display: block;
   position: relative;
-  gap: 12px;
   height: 64px;
-  padding: 0 12px;
+  padding: 0 24px;
   transition-property: background-color, color, height, padding;
   background: ${scheme.color.surfaceContainer};
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
+}
+.layout{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .headline{
   display: flex;
@@ -29,14 +34,28 @@ const style = /*css*/`
 }
 .view{
   flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  gap: inherit;
+  height: 100%;
 }
-::slotted(*){
+::slotted(:is([slot=nav], [slot=logo]):first-child){
+  margin-left: -8px;
+}
+::slotted(:not(:is([slot=title], [slot=subtitle])):last-child){
+  margin-right: -12px;
+}
+::slotted(:is([slot=nav], [slot=logo])){
+  margin-right: 4px;
   flex-shrink: 0;
 }
 ::slotted([slot=logo]){
   height: 32px;
   color: ${scheme.color.primary};
   fill: currentColor;
+  flex-shrink: 0;
 }
 ::slotted(:is([slot=title], [slot=subtitle])){
   text-overflow: ellipsis;
@@ -60,20 +79,16 @@ const style = /*css*/`
   font-weight: 400;
   color: ${scheme.color.onSurfaceVariant};
 }
-:host([variant=primary]){
-  background: ${scheme.color.primary};
-  color: ${scheme.color.onPrimary};
-  ::slotted(:is([slot=nav], [slot=logo], [slot=title], [slot=subtitle], [slot=action])){
-    color: inherit;
-  }
-  ::slotted(:is([slot=nav], [slot=action]):focus-visible){
-    outline: solid 2px currentColor;
-  }
+::slotted(s-icon-button){
+  flex-shrink: 0;
 }
-:host([size=small]){
+::slotted(s-navigation-responsive){
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+:host([small]){
   height: 56px;
-  gap: 8px;
-  padding: 0 12px;
+  padding: 0 20px;
   .headline{
     ::slotted([slot=title]){
       font-size: calc(var(--s-font-size) * 20px);
@@ -82,41 +97,42 @@ const style = /*css*/`
       font-size: calc(var(--s-font-size) * 10px);
     }
   }
-}
-@media (orientation: portrait){
-  :host(:not([size])){
-    height: 56px;
-    gap: 8px;
-    padding: 0 10px;
-    .headline{
-      ::slotted([slot=title]){
-        font-size: calc(var(--s-font-size) * 20px);
-      }
-      ::slotted([slot=subtitle]){
-        font-size: calc(var(--s-font-size) * 10px);
-      }
-    }
+  .layout{
+    gap: 6px;
   }
 }
 `
 
 const template = /*html*/`
-<slot name="start"></slot>
-<slot name="nav"></slot>
-<slot name="logo"></slot>
-<div class="headline" part="headline">
-  <slot name="title"></slot>
-  <slot name="subtitle"></slot>
+<div class="layout" part="layout">
+  <slot name="start"></slot>
+  <slot name="nav"></slot>
+  <slot name="logo"></slot>
+  <div class="headline" part="headline">
+    <slot name="title"></slot>
+    <slot name="subtitle"></slot>
+  </div>
+  <div class="view" part="view">
+    <slot></slot>
+  </div>
 </div>
-<div class="view" part="view">
-  <slot></slot>
-</div>
-<slot name="action"></slot>
-<slot name="end"></slot>
 `
 
 export class Appbar extends useElement({
   props, style, template,
+  setup() {
+    const mediaQueryer = new MediaQueryer(this.media)
+    mediaQueryer.on((v) => this.size === 'auto' && this.toggleAttribute('small', v))
+    const getSize = () => this.size === 'auto' ? (mediaQueryer.matches ? 'small' : 'medium') : this.size
+    return {
+      expose: { getSize },
+      size: (v) => {
+        if (v === 'auto') return mediaQueryer.call()
+        this.toggleAttribute('small', v === 'small')
+      },
+      media: (v) => mediaQueryer.replace(v)
+    }
+  }
 }) { }
 
 const name = Appbar.define('s-appbar')

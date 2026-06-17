@@ -38,21 +38,17 @@ const md = markdownIt({ html: true })
 
 md.renderer.rules.fence = (tokens, idx) => {
   const token = tokens[idx]
-  if (token.info === 'html preview') {
+  const [lang, ...options] = token.info.split(' ')
+  if (lang === 'html' && options.includes('preview')) {
     return `<div class="preview">
-    <div class="view">${token.content}</div>
+    <div class="view${options.includes('block') ? ' block' : ''}${options.includes('center') ? ' center' : ''}">${token.content}</div>
     <details>
       <summary>查看代码</summary>
       ${highlight(token.content)}
     </details>
     </div>`
   }
-  if (token.info === 'html preview-only') {
-    return `<div class="preview">
-    <div class="view">${token.content}</div>
-    </div>`
-  }
-  return highlight(token.content, token.info)
+  return highlight(token.content, lang)
 }
 
 const template = fs.readFileSync(path.resolve(__dirname, './test/preview.html'), 'utf-8')

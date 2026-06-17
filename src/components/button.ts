@@ -42,7 +42,7 @@ const style = /*css*/`
 :host([variant=tonal]){
   background: ${scheme.color.secondaryContainer};
   color: ${scheme.color.onSecondaryContainer};
-  &:host([hovered]:not([pressed])){
+  &:host([hover]:not([pressed])){
     box-shadow: ${scheme.elevation.level1};
   }
 }
@@ -172,7 +172,7 @@ const template = /*html*/`
 
 export class Button extends useElement({
   style: [buttonStyle, style],
-  states: ['keydown-focused', 'formAssociated'],
+  states: ['focusable', 'formable'],
   props, template,
   setup(_, info) {
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)

@@ -18,6 +18,16 @@
 <s-checkbox disabled indeterminate></s-checkbox>
 ```
 
+## 只读
+
+设置 `readOnly` 属性来只读复选框。
+
+```html preview
+<s-checkbox readOnly></s-checkbox>
+<s-checkbox readOnly checked></s-checkbox>
+<s-checkbox readOnly indeterminate></s-checkbox>
+```
+
 ## 自定义样式
 
 自定义图标和样式
@@ -93,9 +103,7 @@
 | 名称    | 说明           |
 | ------- | -------------- |
 | pressed | 按下时设置     |
-| hovered | 鼠标移入时设置 |
-
-> 标记属性在一些情况下被设置到 HTML 属性上，以便于外部定义样式。
+| hover   | 鼠标移入时设置 |
 
 ## 键盘快捷键
 

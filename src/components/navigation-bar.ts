@@ -1,5 +1,6 @@
 import { useProps, useElement } from '../core/elements.js'
 import { Selector } from '../core/utils/selector.js'
+import { MediaQueryer } from '../core/utils/mediaQueryer.js'
 import * as scheme from '../core/scheme.js'
 import './ripple.js'
 
@@ -8,41 +9,37 @@ const props = useProps({
   $value: '',
   $defaultValue: '',
   multiple: false,
+  selectable: true,
   media: '',
-  itemsOrientation: ['auto', 'horizontal', 'vertical'],
+  $itemsOrientation: ['auto', 'horizontal', 'vertical'],
+  $media: '(orientation: portrait)'
 })
 const itemProps = useProps({
   $value: '',
   selected: false,
+  selectable: true
 })
+const itemEvents = {
+  beforechange: Event
+}
 
 const style = /*css*/`
 :host{
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 6px;
   height: 64px;
   overflow: hidden;
   background: ${scheme.color.surfaceContainer};
-  color: ${scheme.color.onSurfaceVariant};
 }
-:host([itemsOrientation=vertical]){
-  --s_item-font-size: 12px;
-  --s_item-layout-flex-direction: column;
-  --s_item-layout-gap: 2px;
-  --s_item-indicator-inset: auto;
-  --s_item-indicator-height: 32px;
-  --s_item-indicator-width: 56px;
-}
-@media (orientation: portrait){
-  :host(:not([itemsOrientation])){
-    --s_item-font-size: 12px;
-    --s_item-layout-flex-direction: column;
-    --s_item-layout-gap: 2px;
-    --s_item-indicator-inset: auto;
-    --s_item-indicator-height: 32px;
-    --s_item-indicator-width: 56px;
-  }
+:host([item-vertical]){
+  --s_navigation-bar-item-font-size: 12px;
+  --s_navigation-bar-item-layout-flex-direction: column;
+  --s_navigation-bar-item-layout-gap: 2px;
+  --s_navigation-bar-item-indicator-inset: auto;
+  --s_navigation-bar-item-indicator-height: 32px;
+  --s_navigation-bar-item-indicator-width: 56px;
 }
 `
 
@@ -50,10 +47,9 @@ const itemStyle = /*css*/`
 :host{
   display: block;
   cursor: pointer;
-  height: 100%;
+  height: 56px;
   min-width: 56px;
   white-space: nowrap;
-  
   color: ${scheme.color.onSurfaceVariant};
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
@@ -67,74 +63,73 @@ const itemStyle = /*css*/`
   gap: 8px;
   padding: 0 16px;
   &.has-icon{
-    .ripple{
-      .icon{
-        display: flex;
-        position: relative;
-      }
-      ::slotted(s-badge){
-        position: absolute;
-        top: 2px;
-        right: 2px;
-        transform: translate(50%, -50%);
-      }
+    .icon{
+      display: flex;
+      position: relative;
+    }
+    ::slotted(s-badge){
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      transform: translate(50%, -50%);
     }
   }
   &.has-icon.has-text{
-    flex-direction: var(--s_item-layout-flex-direction, row);
-    gap: var(--s_item-layout-gap, 8px);
-    padding: var(--s_item-layout-padding, 0 16px);
+    flex-direction: var(--s_navigation-bar-item-layout-flex-direction, row);
+    gap: var(--s_navigation-bar-item-layout-gap, 8px);
+    padding: var(--s_navigation-bar-item-layout-padding, 0 16px);
     .ripple{
       display: flex;
-      height: var(--s_item-indicator-height, 100%);
+      height: var(--s_navigation-bar-item-indicator-height, 100%);
       &::part(container),
       &::before,
       &::after {
-        inset: var(--s_item-indicator-inset, auto 0);
-        border-radius: calc(var(--s_item-indicator-height, 40px) / 2);
-        width: var(--s_item-indicator-width, 100%);
-        height: var(--s_item-indicator-height, 40px);
+        inset: var(--s_navigation-bar-item-indicator-inset, auto 0);
+        border-radius: calc(var(--s_navigation-bar-item-indicator-height, 40px) / 2);
+        width: var(--s_navigation-bar-item-indicator-width, 100%);
+        height: var(--s_navigation-bar-item-indicator-height, 40px);
       }
     }
     ::slotted([slot=text]){
-      font-size: calc(var(--s-font-size, 1) * var(--s_item-font-size, 14px));
-    }
-  }
-  .ripple{
-    display: contents;
-    position: static;
-    justify-content: center;
-    align-items: center;
-    overflow: visible;
-    &::part(container),
-    &::before,
-    &::after{
-      content: '';
-      position: absolute;
-      overflow: hidden;
-      inset: auto 0;
-      border-radius: 20px;
-      width: 100%;
-      height: 40px;
-    }
-    &::after{
-      background: currentColor;
-      filter: opacity(.1);
-      opacity: 0;
-    }
-    &::before{
-      opacity: 0;
-      transform: scaleX(.5);
-      transition-property: transform, opacity;
-      transition-duration: inherit;
-      background: ${scheme.color.secondaryContainer};
-    }
-    .icon{
-      display: contents;
+      font-size: calc(var(--s-font-size, 1) * var(--s_navigation-bar-item-font-size, 14px));
     }
   }
 }
-::slotted([slot=icon]){
+.ripple{
+  width: auto;
+  display: contents;
+  position: static;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  &::part(container),
+  &::before,
+  &::after{
+    content: '';
+    position: absolute;
+    overflow: hidden;
+    inset: auto 0;
+    border-radius: 20px;
+    width: 100%;
+    height: 40px;
+  }
+  &::after{
+    background: currentColor;
+    filter: opacity(.1);
+    opacity: 0;
+  }
+  &::before{
+    opacity: 0;
+    transform: scaleX(.5);
+    transition-property: transform, opacity;
+    transition-duration: inherit;
+    background: ${scheme.color.secondaryContainer};
+  }
+}
+.icon{
+  display: contents;
+}
+::slotted(:is(s-icon, svg)[slot=icon]){
   width: 24px;
   height: 24px;
   color: currentColor;
@@ -151,6 +146,9 @@ const itemStyle = /*css*/`
   position: relative;
   order: 1;
 }
+::slotted(s-tooltip){
+  outline-offset: 0px;
+}
 :host(:focus-visible){
   outline: none;
   .ripple::after{
@@ -158,6 +156,7 @@ const itemStyle = /*css*/`
   }
 }
 :host([selected]){
+  color: ${scheme.color.primary};
   .ripple::before{
     opacity: 1;
     transform: scaleX(1);
@@ -166,7 +165,9 @@ const itemStyle = /*css*/`
 `
 
 const template = /*html*/`
+<slot name="start"></slot>
 <slot></slot>
+<slot name="end"></slot>
 `
 
 const itemTemplate = /*html*/`
@@ -181,18 +182,15 @@ const itemTemplate = /*html*/`
 </div>
 `
 
-const x = {
-  media: matchMedia('(prefers-color-scheme: dark)'),
-  style: ''
-}
-
 export class NavigationBar extends useElement({
   style, props, template,
-  states: ['formAssociated'],
+  states: ['formable'],
   setup(shadowRoot, info) {
-    const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
+    const slot = shadowRoot.querySelector<HTMLSlotElement>('slot:not([name])')!
     const selector = new Selector(this, slot, NavigationBarItem)
+    const mediaQueryer = new MediaQueryer(this.media)
     selector.onValueChange = () => info.internals.setFormValue(selector.getFormData())
+    mediaQueryer.on((v) => this.itemsOrientation === 'auto' && this.toggleAttribute('item-vertical', v))
     return {
       expose: {
         get items() {
@@ -212,7 +210,12 @@ export class NavigationBar extends useElement({
         }
       },
       onFormReset: () => this.value = this.defaultValue,
-      value: (v) => selector.value = v
+      value: (v) => selector.value = v,
+      media: (v) => mediaQueryer.replace(v),
+      itemsOrientation: (v) => {
+        if (v === 'auto') return mediaQueryer.call()
+        this.toggleAttribute('item-vertical', v === 'vertical')
+      }
     }
   }
 }) { }
@@ -221,14 +224,15 @@ export class NavigationBarItem extends useElement({
   style: itemStyle,
   props: itemProps,
   template: itemTemplate,
-  states: ['keydown-focused'],
+  events: itemEvents,
+  states: ['focusable'],
   setup(shadowRoot) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const iconSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=icon]')!
     const textSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=text]')!
     iconSlot.addEventListener('slotchange', () => layout.classList.toggle('has-icon', iconSlot.assignedElements().length > 0))
     textSlot.addEventListener('slotchange', () => layout.classList.toggle('has-text', textSlot.assignedElements().length > 0))
-    this.addEventListener('click', () => this.dispatchEvent(new Event(`${name}:toggle`, { bubbles: true })))
+    this.addEventListener('click', () => this.dispatchEvent(new Event(`${name}:change`, { bubbles: true })))
     return {
       selected: () => this.dispatchEvent(new Event(`${name}:selected`, { bubbles: true })),
       value: (_, old) => this.dispatchEvent(new CustomEvent(`${name}:valued`, { bubbles: true, detail: { old } })),
@@ -243,6 +247,7 @@ const itemName = NavigationBarItem.define('s-navigation-bar-item')
 declare global {
   interface HTMLElementTagNameMap {
     [name]: NavigationBar
+    [itemName]: NavigationBarItem
   }
   namespace React {
     namespace JSX {

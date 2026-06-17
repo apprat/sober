@@ -5,6 +5,7 @@ import './ripple.js'
 const props = useProps({
   disabled: false,
   checked: false,
+  readOnly: false,
   defualtChecked: false,
   name: '',
   $value: ''
@@ -25,36 +26,13 @@ const style = /*css*/`
   color: ${scheme.color.onSurfaceVariant};
   transition-timing-function: ${scheme.motion.easing.emphasized};
   transition-duration: ${scheme.motion.duration.short4};
-  .text{
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    min-width: 0;
-  }
 }
-:host([checked]){
-  color: ${scheme.color.primary};
-}
-:host([disabled]){
-  pointer-events: none;
-  .layout{
-    color: ${scheme.color.onSurface} !important;
-    opacity: .38 !important;
-  }
-}
-:host(:is([pressed], [hovered])){
-  .layout>.ripple{
-    opacity: .12;
-    transform: scale(1);
-  }
-}
-:host(:focus-visible){
-  outline-style: none;
-  .layout{
-    outline-style: solid;
-    outline-width: 3px;
-  }
+.text{
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 .layout{
   position: relative;
@@ -114,6 +92,32 @@ svg,
   width: 60%;
   height: 60%;
 }
+:host([checked]){
+  color: ${scheme.color.primary};
+}
+:host([readOnly]){
+  pointer-events: none;
+}
+:host([disabled]){
+  pointer-events: none;
+  .layout{
+    color: ${scheme.color.onSurface} !important;
+    opacity: .38 !important;
+  }
+}
+:host(:is([pressed], [hover])){
+  .layout>.ripple{
+    opacity: .12;
+    transform: scale(1);
+  }
+}
+:host(:focus-visible){
+  outline-style: none;
+  .layout{
+    outline-style: solid;
+    outline-width: 3px;
+  }
+}
 `
 
 const template = /*html*/`
@@ -132,7 +136,7 @@ const template = /*html*/`
 `
 
 export class Radio extends useElement({
-  states: ['keydown-focused', 'pressed', 'hovered', 'formAssociated'],
+  states: ['focusable', 'pressable', 'hoverable', 'formable'],
   style, template, props,
   setup(_, info) {
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)

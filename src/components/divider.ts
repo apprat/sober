@@ -5,16 +5,20 @@ const style = /*css*/`
 :host{
   display: flex;
   align-items: center;
-  margin: 0 16px;
   gap: 8px;
-  font-size: .75rem;
+  line-height: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  overflow: clip visible;
+  font-size: calc(var(--s-font-size, 1) * 12px);
   color: ${scheme.color.outline};
- }
-:host::before,
-:host::after{
-  content: '';
-  flex-grow: 1;
-  border-top: solid 1px ${scheme.color.outlineVariant};
+  &::before,
+  &::after{
+    content: '';
+    flex-grow: 1;
+    border-top: solid 1px ${scheme.color.outlineVariant};
+  }
 }
 :host(:empty){
   gap: 0;

@@ -33,6 +33,21 @@
 </s-switch>
 ```
 
+## 只读
+
+设置 `readOnly` 属性来只读复选框。
+
+```html preview
+<s-switch readOnly>
+  <s-icon name="close" slot="unselected"></s-icon>
+  <s-icon name="done" slot="selected"></s-icon>
+</s-switch>
+<s-switch checked readOnly>
+  <s-icon name="close" slot="unselected"></s-icon>
+  <s-icon name="done" slot="selected"></s-icon>
+</s-switch>
+```
+
 ## 自定义样式
 
 自定义大小

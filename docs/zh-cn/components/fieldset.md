@@ -54,13 +54,13 @@
 
 ## 浮动
 
-设置 `floated` 切换为浮动。
+设置 `floating` 切换为浮动。
 
 ```html preview
-<s-fieldset floated>
+<s-fieldset floating>
   <div slot="title">浣溪沙·谁念西风独自凉</div>
 </s-fieldset>
-<s-button onclick="this.previousElementSibling.floated=!this.previousElementSibling.floated"> 切换 </s-button>
+<s-button onclick="this.previousElementSibling.floating=!this.previousElementSibling.floating"> 切换 </s-button>
 ```
 
 ## 自定义样式
@@ -89,10 +89,10 @@
 
 ## 属性
 
-| 名称    | 类型    | 默认值 | 同步 | 说明   |
-| ------- | ------- | ------ | ---- | ------ |
-| focused | boolean | false  | √    | 聚焦的 |
-| floated | boolean | false  | √    | 浮动的 |
+| 名称     | 类型    | 默认值 | 同步 | 说明   |
+| -------- | ------- | ------ | ---- | ------ |
+| focused  | boolean | false  | √    | 聚焦的 |
+| floating | boolean | false  | √    | 浮动的 |
 
 ## 插槽
 

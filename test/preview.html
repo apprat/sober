@@ -121,31 +121,47 @@
     }
 
     .preview {
-      border: solid 1px var(--s-color-outline-variant);
-      border-radius: 4px;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
     }
 
     .preview>.view {
       padding: 12px;
-      overflow: auto;
+      background: var(--s-color-surface-container-lowest);
     }
 
-    .preview>.view>hr {
-      margin: 8px 0;
+    .preview>.view>* {
+      margin: 4px;
     }
 
-    .preview>.view>details>summary {
+    .preview>.view.block {
+      padding: 0;
+    }
+
+    .preview>.view.center {
+      text-align: center;
+    }
+
+    .preview>.view.block>* {
+      margin: 0;
+    }
+
+    .preview>.view hr {
+      margin: 8px 0 !important;
+    }
+
+    .preview>details {
+      position: relative;
+      box-shadow: 0px -1px 0 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .preview>details>summary {
       user-select: none;
       border-top: solid 1px var(--s-color-outline-variant);
       border-top: none;
     }
 
-    .preview>.view>details>pre {
+    .preview>details>pre {
       border-radius: 0;
-    }
-
-    .preview>.view>* {
-      margin: 4px;
     }
   </style>
   <style>
@@ -171,7 +187,7 @@
       design: { material, fluent }
     }
     const page = document.querySelector('.page')
-    window.toggleTheme = (el) => page.toggleTheme(page.hasAttribute('dark') ? 'light' : 'dark', el)
+    window.toggleTheme = (el) => page.toggle(page.hasAttribute('dark') ? 'light' : 'dark', el)
     let isFluent = false
     window.toggleStyle = () => {
       isFluent ? material(components) : fluent(components)
@@ -183,14 +199,14 @@
 <body>
   <s-page class="page">
     {% content %}
-    <s-fab class="toggle-style" onclick="toggleStyle()">
+    <s-floating-action-button class="toggle-style" onclick="toggleStyle()">
       <s-icon name="add"></s-icon>
       <s-tooltip gravity="left">切换Fluent设计</s-tooltip>
-    </s-fab>
-    <s-fab class="toggle-theme" onclick="toggleTheme(this)">
+    </s-floating-action-button>
+    <s-floating-action-button class="toggle-theme" onclick="toggleTheme(this)">
       <s-icon name="dark_mode"></s-icon>
       <s-tooltip gravity="left">切换主题</s-tooltip>
-    </s-fab>
+    </s-floating-action-button>
   </s-page>
 
 </body>

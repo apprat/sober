@@ -1,21 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 
 <head>
-  <meta charset="utf-8">
-  <title>test</title>
-  <script type="module">
-    import * as components from '/dist/main.js'
-  </script>
+  <meta charset="UTF-8">
+  <title>单个元素 View Transition</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #f5f5f5;
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body>
-  <s-navigation-bar>
-    <s-navigation-bar-item>
-      <s-tooltip ancestorLevel="2">Home</s-tooltip>
-    </s-navigation-bar-item>
-  </s-navigation-bar>
+  <input type="radio" name="a" onchange="console.log('change 1')">
+  <input type="radio" name="a" onchange="console.log('change 2')">
+  <script>
+  </script>
+
+  <script>
+  </script>
 </body>
-</script>
 
 </html>

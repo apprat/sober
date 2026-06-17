@@ -106,12 +106,12 @@ type El<Props, Expose, Events extends RawoObject> = Props & Expose & HTMLElement
 type Prop = string | number | boolean
 type RawoObject<T = any> = { [key: string]: T }
 type RawProps = { [key: string]: Prop | string[] }
-type RawStates = 'focused' | 'keydown-focused' | 'pressed' | 'hovered' | 'formAssociated'
+type RawStates = 'focusable' | 'focusableOnly' | 'pressable' | 'hoverable' | 'formable'
 type SetupCallInfo<P, S extends RawStates[]> = {
   props: P
   isConnected: boolean
   parentNode?: HTMLElement
-  internals: 'formAssociated' extends S[number] ? ElementInternals : undefined
+  internals: 'formable' extends S[number] ? ElementInternals : undefined
 }
 type Merge<T, R> = T & { [K in keyof R]: R[K] }
 type SetupReturn<Props, Expose> = Merge<{
@@ -139,25 +139,6 @@ type UseProps<T> = {
     transform: (value: unknown) => Prop
   }>
   caseKeys: RawoObject<string>
-}
-
-const throttleMap = new Map<Function, any>()
-export const useThrottle = <T extends any[]>(fn: (...args: T) => void, ...args: T) => {
-  if (throttleMap.has(fn)) {
-    throttleMap.set(fn, args)
-    return
-  }
-  throttleMap.set(fn, args)
-  Promise.resolve().then(() => {
-    fn(...throttleMap.get(fn))
-    throttleMap.delete(fn)
-  })
-}
-
-export const focusKeydownClick = (...nodes: HTMLElement[]) => {
-  nodes.forEach((node) => {
-    node.addEventListener('keydown', (e) => !node.hasAttribute('readonly') && ['Enter', ' '].includes(e.key) && node.click())
-  })
 }
 
 export const useProps = <const T extends RawProps = {}>(data: T): UseProps<T> => {
@@ -193,8 +174,6 @@ export const useProps = <const T extends RawProps = {}>(data: T): UseProps<T> =>
   return { values, metadata, caseKeys } as UseProps<T>
 }
 
-const whenDefines: Promise<CustomElementConstructor>[] = []
-
 export const useElement = <
   Props extends RawoObject<Prop>,
   Expose extends RawoObject = {},
@@ -227,8 +206,9 @@ export const useElement = <
   }
   class Component extends HTMLElement {
     declare disabled?: boolean
+    declare readOnly?: boolean
     static observedAttributes = attributes
-    static formAssociated = options.states?.includes('formAssociated')
+    static formAssociated = options.states?.includes('formable')
     static connectedNodes: (El<Props, Expose, Events> & HTMLElement)[] = []
     static define(name: string) {
       if (!customElements.get(name)) customElements.define(name, this)
@@ -257,7 +237,7 @@ export const useElement = <
       const info = {
         props: { ...props?.values } as RawoObject<Prop>,
         isConnected: false,
-        internals: options.states?.includes('formAssociated') ? this.attachInternals() : undefined
+        internals: options.states?.includes('formable') ? this.attachInternals() : undefined
       }
       //组件未初始化前的赋值
       const beforeAttrs: RawoObject = {}
@@ -282,8 +262,8 @@ export const useElement = <
             if (value === this[key as keyof this]) return
             const old = info.props[key]
             info.props[key] = value
-            if (options.states?.includes('focused') || options.states?.includes('keydown-focused') && key === 'disabled') {
-              value ? this.removeAttribute('tabindex') : this.setAttribute('tabindex', '0')
+            if ((options.states?.includes('focusable') || options.states?.includes('focusableOnly')) && ['disabled', 'readOnly'].includes(key)) {
+              info.props.disabled || info.props.readOnly ? this.removeAttribute('tabindex') : this.setAttribute('tabindex', '0')
             }
             setup?.[key]?.(value as never, old as never)
             setup?.onAttributeChanged?.(key, value as never)
@@ -317,15 +297,15 @@ export const useElement = <
       }
       map.set(this, { setup, info, customStyle, shadowRoot } as never)
       //绑定状态
-      if (options.states?.includes('hovered')) {
-        const name = 'hovered'
+      if (options.states?.includes('hoverable')) {
+        const name = 'hover'
         this.addEventListener('pointerenter', () => {
           if (!device.mouseEnabled) return
           this.setAttribute(name, '')
           this.addEventListener('pointerleave', () => this.removeAttribute(name), { once: true })
         })
       }
-      if (options.states?.includes('pressed')) {
+      if (options.states?.includes('pressable')) {
         const name = 'pressed'
         this.addEventListener('pointerdown', (e) => {
           if (e.button !== 0) return
@@ -333,7 +313,7 @@ export const useElement = <
           document.addEventListener(e.pointerType === 'mouse' ? 'mouseup' : 'touchend', () => this.removeAttribute(name), { once: true })
         })
       }
-      if (options.states?.includes('keydown-focused')) focusKeydownClick(this)
+      if (options.states?.includes('focusable')) focusKeydownClick(this)
     }
     formAssociatedCallback() {
       map.get(this)?.setup?.onFormAssociated?.()
@@ -364,8 +344,8 @@ export const useElement = <
         StyleTools.removeStyle(mapValue.shadowRoot, mapValue.customStyle)
         delete mapValue.customStyle
       }
-      if (options.states?.includes('focused') || options.states?.includes('keydown-focused')) {
-        if (!this.disabled && !this.hasAttribute('tabindex')) this.tabIndex = 0
+      if (options.states?.includes('focusable') || options.states?.includes('focusableOnly')) {
+        if (!this.disabled && !this.readOnly && !this.hasAttribute('tabindex')) this.tabIndex = 0
       }
       const parent = this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode
       mapValue.info.parentNode = !(parent instanceof HTMLElement) ? undefined : parent
@@ -383,4 +363,38 @@ export const useElement = <
     }
   }
   return Component as never
+}
+
+const throttleMap = new WeakMap<Function, any>()
+export const useThrottle = <T extends any[]>(fn: (...args: T) => void, ...args: T) => {
+  if (throttleMap.has(fn)) {
+    throttleMap.set(fn, args)
+    return
+  }
+  throttleMap.set(fn, args)
+  Promise.resolve().then(() => {
+    fn(...throttleMap.get(fn))
+    throttleMap.delete(fn)
+  })
+}
+
+const throttleMapDelay = new WeakMap<Function, number>()
+export const useThrottleDelay = <T extends any[]>(fn: (...args: T) => void, time: number, ...args: T) => {
+  const has = throttleMapDelay.get(fn)
+  if (has) clearTimeout(has)
+  const timer = setTimeout(() => {
+    fn(...args)
+    throttleMapDelay.delete(fn)
+  }, time)
+  throttleMapDelay.set(fn, timer)
+}
+
+export const focusKeydownClick = (...nodes: HTMLElement[]) => {
+  nodes.forEach((node) => {
+    node.addEventListener('keydown', (e) => {
+      if (node.hasAttribute('readonly') || !['Enter', ' '].includes(e.key)) return
+      node.click()
+      e.preventDefault()
+    })
+  })
 }

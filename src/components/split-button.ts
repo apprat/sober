@@ -50,7 +50,7 @@ const style = /*css*/`
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
   gap: 8px;
-  &:is([pressed], [hovered]){
+  &:is([pressed], [hover]){
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
   }
@@ -69,7 +69,7 @@ const style = /*css*/`
   border-bottom-right-radius: inherit;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
-  &:is([hovered], [pressed]){
+  &:is([hover], [pressed]){
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
   }
@@ -154,12 +154,12 @@ svg,
   .layout{
     gap: 4px;
     padding: 0 10px 0 12px;
-    &:is([pressed], [hovered]){
+    &:is([pressed], [hover]){
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
     }
   }
-  &:host(:not([checked])) .toggle:is([pressed], [hovered]){
+  &:host(:not([checked])) .toggle:is([pressed], [hover]){
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
   }
@@ -189,7 +189,7 @@ svg,
     gap: 12px;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
-    &:is([pressed], [hovered]){
+    &:is([pressed], [hover]){
       border-top-right-radius: 20px;
       border-bottom-right-radius: 20px;
     }
@@ -197,7 +197,7 @@ svg,
   &:host(:not([checked])) .toggle{
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
-    &:is([pressed], [hovered]){
+    &:is([pressed], [hover]){
       border-top-left-radius: 20px;
       border-bottom-left-radius: 20px;
     }
@@ -220,7 +220,7 @@ svg,
     gap: 16px;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
-    &:is([pressed], [hovered]){
+    &:is([pressed], [hover]){
       border-top-right-radius: 20px;
       border-bottom-right-radius: 20px;
     }
@@ -228,7 +228,7 @@ svg,
   &:host(:not([checked])) .toggle{
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
-    &:is([pressed], [hovered]){
+    &:is([pressed], [hover]){
       border-top-left-radius: 20px;
       border-bottom-left-radius: 20px;
     }
@@ -252,19 +252,19 @@ svg,
 `
 
 const template = /*html*/`
-<div class="layout btn" part="layout" tabindex="0">
+<div class="layout btn" part="layout" tabindex="0" role="button">
   <slot name="start"></slot>
   <slot class="text" part="text"></slot>
   <slot name="end"></slot>
   <s-ripple></s-ripple>
 </div>
-<div class="toggle btn" part="toggle" tabindex="0">
+<div class="toggle btn" part="toggle" tabindex="0" role="toggle">
+  <slot name="toggle"></slot>
   <slot name="toggle-icon">
     <svg viewBox="0 -960 960 960">
       <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"></path>
     </svg>
   </slot>
-  <slot name="toggle"></slot>
   <s-ripple></s-ripple>
 </div>
 `

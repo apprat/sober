@@ -1,12 +1,14 @@
 type Component = {
   value: string
   multiple: boolean
+  selectable: boolean
   name: string
 } & HTMLElement
 
 type ComponentItem = {
   selected: boolean
   disabled?: boolean
+  selectable: boolean
   value: string
 } & HTMLElement
 
@@ -14,14 +16,17 @@ export class Selector<C extends Component, CI extends ComponentItem> {
   items: CI[] = []
   selectedItems: CI[] = []
   selectedIndexes: number[] = []
+
   private _values = new Set<string>()
   private flagged = false
-  declare onRender?: (olds: CI[]) => void
+  declare onRender?: (olds: CI[], initial?: true) => void
   declare onChange?: (olds: CI[]) => void
   declare onValueChange?: () => void
-  declare onSlotChange?: () => void
+  declare onSlotChange?: (olds: CI[]) => void
+  declare onFocus?: (item: CI) => void
   constructor(private component: C, slot: HTMLSlotElement, itemClass: { new(): CI }) {
     slot.addEventListener('slotchange', () => {
+      const olds = [...this.items]
       const elements = slot.assignedElements()
       this.items.splice(0, this.items.length)
       this.selectedItems.splice(0, this.selectedItems.length)
@@ -42,20 +47,23 @@ export class Selector<C extends Component, CI extends ComponentItem> {
         }
       }
       this.flagged = true
-      this.onSlotChange?.()
+      this.onSlotChange?.(olds)
       this.onValueChange?.()
-      this.onRender?.([])
+      this.onRender?.([], true)
     })
     const name = component.tagName.toLocaleLowerCase()
-    slot.addEventListener(`${name}:toggle`, (event) => {
+    component.addEventListener(`${name}:change`, (event) => {
       event.stopPropagation()
       const target = event.target as CI
+      target.dispatchEvent(new Event('beforechange'))
+      if (target.disabled || !target.selectable || !this.component.selectable) return
       const selected = target.selected
       const old = [...this.selectedItems]
-      target.selected = this.component.multiple ? !selected : true
+      target.selected = component.multiple ? !selected : true
       if (selected !== target.selected) {
         this.onChange?.(old)
-        this.component.dispatchEvent(new Event('change'))
+        target.dispatchEvent(new Event('change'))
+        component.dispatchEvent(new Event('change'))
       }
     })
     component.addEventListener(`${name}:selected`, (event) => {
@@ -102,6 +110,10 @@ export class Selector<C extends Component, CI extends ComponentItem> {
       event.stopPropagation()
       if (!this.flagged) return
       this.onValueChange?.()
+    })
+    component.addEventListener(`${name}:focus`, (event) => {
+      event.stopPropagation()
+      this.onFocus?.(event.target as CI)
     })
   }
   get value() {

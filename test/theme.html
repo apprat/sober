@@ -35,6 +35,7 @@
 <body>
   <s-page theme="auto">
     <input type="color" id="inputColor">
+    <s-checkbox id="dark">Dark</s-checkbox>
     <hr>
     <s-button>
       <s-icon name="star" slot="start"></s-icon>
@@ -159,21 +160,24 @@
     <s-tab>
       <s-tab-item>
         <s-icon slot="icon" name="home"></s-icon>
-        Home
+        <div slot="text">Home</div>
       </s-tab-item>
       <s-tab-item selected>
         <s-icon slot="icon" name="star"></s-icon>
-        Search
+        <div slot="text">Search</div>
         <s-badge slot="badge"></s-badge>
       </s-tab-item>
       <s-tab-item>
         <s-icon slot="icon" name="home"></s-icon>
-        Users
+        <div slot="text">Users</div>
         <s-badge slot="badge">99</s-badge>
       </s-tab-item>
     </s-tab>
     <hr>
     <s-appbar>
+      <s-icon-button slot="nav">
+        <s-icon name="menu"></s-icon>
+      </s-icon-button>
       <svg viewBox="0 0 1024 1024" slot="logo">
         <path
           d="M913.4 757.4c-105-16-113-31.4-113-31.4 21.6-129.8-45.4-294.2-154.8-383.2-145.6-118.4-367-32.4-539.4-212.4-40.2-42-16.8 471 199 665.4 157.8 142 343.6 98.4 394.6 75.2 46.2-21.2 78.6-59.8 78.6-59.8 84.2 26 125.8 24.4 125.8 24.4C933.8 839.2 948.8 762.8 913.4 757.4zM721.2 766.2c-276.4-81.8-484.2-369-484.2-369s182.4 215.4 504 320.4C741.4 733.8 731.8 757 721.2 766.2z">
@@ -181,19 +185,67 @@
       </svg>
       <span slot="title">Material 3</span>
       <span slot="subtitle">Google M3 Expressive</span>
+      <s-navigation-responsive>
+        <s-icon-button slot="toggle" width="narrow">
+          <s-icon name="more_vert"></s-icon>
+          <s-tooltip> More </s-tooltip>
+        </s-icon-button>
+        <s-navigation-responsive-item selected>
+          <s-icon name="home" slot="icon"></s-icon>
+          <div slot="text"> Home </div>
+          <s-tooltip> home </s-tooltip>
+        </s-navigation-responsive-item>
+        <s-navigation-responsive-item>
+          <s-icon name="star" slot="icon"></s-icon>
+          <div slot="text"> Find </div>
+          <s-badge></s-badge>
+          <s-tooltip> find </s-tooltip>
+        </s-navigation-responsive-item>
+        <s-navigation-responsive-item>
+          <s-icon name="favorite" slot="icon"></s-icon>
+          <div slot="text"> Favorite </div>
+          <s-badge>3</s-badge>
+          <s-tooltip> favorite </s-tooltip>
+        </s-navigation-responsive-item>
+        <s-navigation-responsive-item>
+          <s-icon name="dark_mode" slot="icon"></s-icon>
+          <div slot="text"> Help </div>
+          <s-badge>99</s-badge>
+          <s-tooltip> help </s-tooltip>
+        </s-navigation-responsive-item>
+      </s-navigation-responsive>
     </s-appbar>
+    <s-navigation-bar>
+      <s-navigation-bar-item>
+        <s-icon slot="icon" name="home"></s-icon>
+        <div slot="text"> Home </div>
+      </s-navigation-bar-item>
+      <s-navigation-bar-item selected>
+        <s-icon slot="icon" name="light_mode"></s-icon>
+        <s-badge></s-badge>
+        <div slot="text"> Find </div>
+      </s-navigation-bar-item>
+      <s-navigation-bar-item>
+        <s-icon slot="icon" name="favorite"></s-icon>
+        <s-badge>3</s-badge>
+        <div slot="text"> Help </div>
+      </s-navigation-bar-item>
+    </s-navigation-bar>
     <s-button id="toggleDesign">Fluent</s-button>
   </s-page>
-  <script src="../dist/sober.min.js"></script>
+  <script type="module" src="../dist/main.js"></script>
   <script src="../dist/theme.min.js"></script>
   <script src="../dist/design/fluent.min.js"></script>
   <script type="module">
+    const page = document.querySelector('s-page')
     const inputColor = document.querySelector('#inputColor')
+    const dark = document.querySelector('#dark')
     inputColor.onchange = async () => {
       const color = inputColor.value
       const scheme = await sober.theme.createScheme(color)
       scheme.apply(document.querySelector('s-page'))
     }
+    dark.onchange = () => page.toggle(dark.checked ? 'dark' : 'light', dark)
     const toggleDesign = document.querySelector('#toggleDesign')
     toggleDesign.onclick = () => {
       sober.design.fluent(sober.components)

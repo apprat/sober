@@ -7,7 +7,7 @@
   <s-avatar slot="header-avatar">U</s-avatar>
   <div slot="header-title">Header Title</div>
   <div slot="header-subtitle">Header SubTitle</div>
-  <s-icon-button slot="header-action"> 
+  <s-icon-button slot="header-action" width="narrow"> 
     <s-icon name="more_vert"></s-icon>
   </s-icon-button>
   <div slot="media"></div>
@@ -32,7 +32,7 @@
   <s-avatar slot="header-avatar">U</s-avatar>
   <div slot="header-title">Header Title</div>
   <div slot="header-subtitle">Header SubTitle</div>
-  <s-icon-button slot="header-action"> 
+  <s-icon-button slot="header-action" width="narrow"> 
     <s-icon name="more_vert"></s-icon>
   </s-icon-button>
   <div slot="media"></div>
@@ -50,7 +50,7 @@
   <s-avatar slot="header-avatar">U</s-avatar>
   <div slot="header-title">Header Title</div>
   <div slot="header-subtitle">Header SubTitle</div>
-  <s-icon-button slot="header-action"> 
+  <s-icon-button slot="header-action" width="narrow"> 
     <s-icon name="more_vert"></s-icon>
   </s-icon-button>
   <div slot="media"></div>
@@ -75,7 +75,7 @@
   <s-avatar slot="header-avatar">U</s-avatar>
   <div slot="header-title">Header Title</div>
   <div slot="header-subtitle">Header SubTitle</div>
-  <s-icon-button slot="header-action" onpointerdown="event.stopPropagation()"> 
+  <s-icon-button slot="header-action" width="narrow" onpointerdown="event.stopPropagation()"> 
     <s-icon name="more_vert"></s-icon>
   </s-icon-button>
   <div slot="media"></div>
@@ -89,40 +89,6 @@
     Primary
   </s-button>
 </s-card>
-```
-
-## 预览
-
-```html preview-only
-<s-card>
-  <s-avatar slot="header-avatar">U</s-avatar>
-  <div slot="header-title">Header Title</div>
-  <div slot="header-subtitle">Header SubTitle</div>
-  <s-icon-button slot="header-action" onpointerdown="event.stopPropagation()"> 
-    <s-icon name="more_vert"></s-icon>
-  </s-icon-button>
-  <div slot="media"></div>
-  <div slot="title">Title</div>
-  <div slot="subtitle">subTitle</div>
-  <div slot="text">Color values are implemented through design tokens. For design, this means working with color values that correspond with tokens. </div>
-  <s-button slot="action" variant="outlined" onpointerdown="event.stopPropagation()">
-    Secondary
-  </s-button>
-  <s-button slot="action" onpointerdown="event.stopPropagation()">
-    Primary
-  </s-button>
-</s-card>
-<hr>
-variant =
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-card').variant=this.textContent" checked>elevated</s-radio>
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-card').variant=this.textContent">filled</s-radio>
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-card').variant=this.textContent">outlined</s-radio>
-<hr>
-clickable =
-<s-checkbox onchange="this.parentElement.querySelector('s-card').clickable=this.checked"></s-checkbox>
-<hr>
-disabled =
-<s-checkbox onchange="this.parentElement.querySelector('s-card').disabled=this.checked"></s-checkbox>
 ```
 
 ---

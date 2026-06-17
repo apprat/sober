@@ -1,9 +1,11 @@
 import { useElement, useProps } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
+import { MediaQueryer } from '../core/utils/mediaQueryer.js'
 
 const props = useProps({
-  $theme: ['light', 'dark', 'auto']
+  $theme: ['auto', 'light', 'dark'],
+  $media: '(prefers-color-scheme: dark)'
 })
 
 const style = /*css*/`
@@ -174,66 +176,75 @@ const style = /*css*/`
 
 const template = /*html*/`<slot></slot>`
 
-const viewTransitionStyle = document.createElement('style')
-viewTransitionStyle.textContent = `::view-transition-old(root),::view-transition-new(root) { animation: none; mix-blend-mode: normal}`
+const getTransitionStyle = (name: string) => `
+::view-transition-old(${name}),
+::view-transition-new(${name}){ 
+  animation: none;
+  mix-blend-mode: normal;
+}`
 
-export const Page = useElement({
+export class Page extends useElement({
   props, template, style,
   setup() {
     const computedStyle = useComputedStyle(this)
-    const darker = matchMedia('(prefers-color-scheme: dark)')
-    const toggleTheme = async (theme: typeof props.values.theme, anchor?: HTMLElement) => {
+    const mediaQueryer = new MediaQueryer(this.media)
+    mediaQueryer.on((v) => this.theme === 'auto' && this.toggleAttribute('dark', v))
+    const getTheme = () => this.theme === 'auto' ? (mediaQueryer.matches ? 'dark' : 'light') : this.theme
+    const toggle = async (theme: typeof props.values.theme, anchor?: HTMLElement) => {
       if (this.theme === theme) return
-      const isDark = darker.matches
-      const getTheme = (theme: typeof props.values.theme) => theme === 'auto' ? (isDark ? 'dark' : 'light') : theme
-      const oldTheme = getTheme(this.theme)
-      const newTheme = getTheme(theme)
-      if (oldTheme === newTheme || !document.startViewTransition) {
+      const old = getTheme()
+      const val = theme === 'auto' ? mediaQueryer.matches ? 'dark' : 'light' : theme
+      if (old === val || !document.startViewTransition) {
         this.theme = theme
         return
       }
-      const keyframes = { clipPath: [`circle(0px at 50% ${innerHeight / 2}px)`, `circle(${Math.sqrt(innerWidth ** 2 + innerHeight ** 2) / 2}px at 50% ${innerHeight / 2}px)`] }
-      if (anchor && anchor.isConnected) {
-        const { left, top } = anchor.getBoundingClientRect()
-        const x = left + anchor.offsetWidth / 2
-        const y = top + anchor.offsetHeight / 2
-        const size = Math.sqrt(Math.max(innerWidth - x, x) ** 2 + Math.max(innerHeight - y, y) ** 2)
-        keyframes.clipPath[0] = `circle(0px at ${x}px ${y}px)`
-        keyframes.clipPath[1] = `circle(${size}px at ${x}px ${y}px)`
+      const transitionName = `page-${Math.random().toString(36).substring(2, 10)}`
+      this.style.setProperty('view-transition-name', transitionName)
+      const keyframes = { clipPath: [`circle(0px at 50%)`, `circle(${Math.hypot(this.offsetWidth, this.offsetWidth)}px at 50%)`] }
+      if (this.isConnected && anchor && anchor.isConnected) {
+        const rect = this.getBoundingClientRect()
+        const anchorRect = anchor.getBoundingClientRect()
+        const left = Math.max(Math.min((anchorRect.left - rect.left) + anchorRect.width / 2, rect.width), 0)
+        const top = Math.max(Math.min((anchorRect.top - rect.top) + anchorRect.height / 2, rect.height), 0)
+        const diameter = Math.hypot(Math.max(rect.width - left, left) * 2, Math.max(rect.height - top, top) * 2)
+        const x = left / rect.width * 100
+        const y = top / rect.height * 100
+        keyframes.clipPath[0] = `circle(0px at ${x}% ${y}%)`
+        keyframes.clipPath[1] = `circle(${diameter}px at ${x}% ${y}%)`
       }
+      const styleNode = document.createElement('style')
       const transition = document.startViewTransition(() => {
-        this.theme = theme
-        document.head.appendChild(viewTransitionStyle)
+        styleNode.textContent = getTransitionStyle(transitionName)
+        document.head.appendChild(styleNode)
+        this.theme = val
       })
       await transition.ready
-      transition.finished.then(() => viewTransitionStyle.remove())
+      transition.finished.then(() => {
+        styleNode.remove()
+        this.style.removeProperty('view-transition-name')
+      })
       return document.documentElement.animate(keyframes, {
         easing: computedStyle.getValue('animation-timing-function'),
         duration: computedStyle.getDuration('animation-duration'),
-        pseudoElement: '::view-transition-new(root)'
+        pseudoElement: `::view-transition-new(${transitionName})`
       })
     }
     return {
-      expose: { toggleTheme },
-      theme: (value) => {
-        if (value === 'light') return this.removeAttribute('dark')
-        if (value === 'dark') return this.setAttribute('dark', '')
-        const change = () => {
-          darker.matches ? this.setAttribute('dark', '') : this.removeAttribute('dark')
-          this.dispatchEvent(new Event('change'))
-        }
-        darker.onchange = change
-        change()
+      expose: { toggle, getTheme },
+      media: (v) => mediaQueryer.replace(v),
+      theme: (v) => {
+        if (v === 'auto') return mediaQueryer.call()
+        this.toggleAttribute('dark', v === 'dark')
       }
     }
   }
-})
+}) { }
 
 const name = Page.define('s-page')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: typeof Page
+    [name]: Page
   }
   namespace React {
     namespace JSX {

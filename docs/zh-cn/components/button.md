@@ -111,7 +111,7 @@
 
 ## 尺寸
 
-设置 `size` 属性来设置按钮尺寸（你也可以设置 CSS 样式 `height` 来更精确的定义按钮高度） 。
+设置 `size` 属性来设置按钮尺寸。
 
 ```html preview
 <s-button size="extra-small"> <!-- [!code highlight] -->
@@ -140,44 +140,12 @@
 </s-button>
 ```
 
-## 预览
-
-```html preview-only
-<s-button> 
-  <s-icon name="star" slot="start"></s-icon>
-  button
-</s-button>
-<hr>
-variant =
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-button').variant=this.textContent" checked>filled</s-radio>
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-button').variant=this.textContent">elevated</s-radio>
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-button').variant=this.textContent">tonal</s-radio>
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-button').variant=this.textContent">outlined</s-radio>
-<s-radio name="button-variant" onchange="this.parentElement.querySelector('s-button').variant=this.textContent">text</s-radio>
-<hr>
-size =
-<s-radio name="button-size" onchange="this.parentElement.querySelector('s-button').size=this.textContent" checked>small</s-radio>
-<s-radio name="button-size" onchange="this.parentElement.querySelector('s-button').size=this.textContent">extra-small</s-radio>
-<s-radio name="button-size" onchange="this.parentElement.querySelector('s-button').size=this.textContent">medium</s-radio>
-<s-radio name="button-size" onchange="this.parentElement.querySelector('s-button').size=this.textContent">large</s-radio>
-<s-radio name="button-size" onchange="this.parentElement.querySelector('s-button').size=this.textContent">extra-large</s-radio>
-<hr>
-type =
-<s-radio name="button-type" onchange="this.parentElement.querySelector('s-button').type=this.textContent" checked>button</s-radio>
-<s-radio name="button-type" onchange="this.parentElement.querySelector('s-button').type=this.textContent">checkbox</s-radio>
-<s-radio name="button-type" onchange="this.parentElement.querySelector('s-button').type=this.textContent">reset</s-radio>
-<s-radio name="button-type" onchange="this.parentElement.querySelector('s-button').type=this.textContent">submit</s-radio>
-<hr>
-disabled =
-<s-checkbox onchange="this.parentElement.querySelector('s-button').disabled=this.checked"></s-checkbox>
-```
-
 ## 自定义样式
 
 你可以像使用普通元素一样设置样式，或者 class 引用样式等，或者设置为 `display: flex` 占满容器。
 
 ```html preview
-<s-button style="background-color: #278d1e;"> 
+<s-button style="background-color: #278d1e; display: flex;"> 
   <s-icon name="done" slot="start"></s-icon>
   full width
   <s-icon name="close" slot="end"></s-icon>
@@ -187,7 +155,7 @@ disabled =
 
 ## 表单支持
 
-该组件可以作为表单元素使用，可以作为复选框、表单重置、提交按钮。
+该组件可以作为表单元素使用，可以作为复选框(`type=checkbox`)、表单重置按钮(`type=reset`)、提交按钮(`type=submit`)。
 
 ```html preview
 <form action="http://coolaf.com/tool/params" method="get">
@@ -232,12 +200,10 @@ disabled =
 
 ## HTML 标记属性
 
-| 名称          | 说明           |
-| ------------- | -------------- |
-| pressed       | 按下时设置     |
-| hovered       | 鼠标移入时设置 |
-
-> 标记属性在一些情况下被设置到 HTML 属性上，以便于外部定义样式。
+| 名称    | 说明           |
+| ------- | -------------- |
+| pressed | 按下时设置     |
+| hover   | 鼠标移入时设置 |
 
 ## 键盘快捷键
 

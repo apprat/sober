@@ -5,6 +5,7 @@ const name = 's-switch'
 const props = useProps({
   disabled: false,
   checked: false,
+  readOnly: false,
   defualtChecked: false,
   name: '',
   $value: '',
@@ -130,7 +131,10 @@ const style = /*css*/`
     }
   }
 }
-:host(:is([hovered], [pressed])){
+:host([readOnly]){
+  pointer-events: none;
+}
+:host(:is([hover], [pressed])){
   .handle::before{
     opacity: 1;
     transform: scale(1);
@@ -178,7 +182,7 @@ const template = /*html*/`
 
 export class Switch extends useElement({
   style, template, props,
-  states: ['keydown-focused', 'pressed', 'hovered', 'formAssociated'],
+  states: ['focusable', 'pressable', 'hoverable', 'formable'],
   setup(_, info) {
     const updateFrom = () => {
       if (!info.internals.form) return

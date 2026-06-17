@@ -69,7 +69,7 @@ const template = /*html*/`
 
 export class Search extends useElement({
   style: [buttonStyle, style],
-  states: ['keydown-focused', 'formAssociated'],
+  states: ['focusable', 'formable'],
   template, props,
   setup(shadowRoot, info) {
     const placeholder = shadowRoot.querySelector<HTMLDivElement>('.placeholder')!

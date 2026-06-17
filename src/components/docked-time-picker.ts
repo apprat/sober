@@ -332,9 +332,9 @@ const getEventNames = (type: string) => {
   return type === 'mouse' ? mouse : touch
 }
 
-export class BaseTime extends useElement({
+export class DockedTimePicker extends useElement({
   props, style, template,
-  states: ['formAssociated'],
+  states: ['formable'],
   setup(shadowRoot, info) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const hour = shadowRoot.querySelector<HTMLDivElement>('.hour')!
@@ -475,11 +475,11 @@ export class BaseTime extends useElement({
   }
 }) { }
 
-const name = BaseTime.define('s-base-time')
+const name = DockedTimePicker.define('s-docked-time-picker')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: BaseTime
+    [name]: DockedTimePicker
   }
   namespace React {
     namespace JSX {
@@ -501,7 +501,7 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & BaseTime
+    } & DockedTimePicker
   }
 }
 //@ts-ignore

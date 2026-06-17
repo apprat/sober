@@ -17,6 +17,15 @@
 <s-radio disabled checked></s-radio>
 ```
 
+## 只读
+
+设置 `readOnly` 属性来只读复选框。
+
+```html preview
+<s-radio readOnly></s-radio>
+<s-radio readOnly checked></s-radio>
+```
+
 在 **Vue** 框架中使用 `v-model` 语法时，可以省略 `name` 属性。
 
 ```vue
@@ -108,9 +117,7 @@
 | 名称    | 说明           |
 | ------- | -------------- |
 | pressed | 按下时设置     |
-| hovered | 鼠标移入时设置 |
-
-> 标记属性在一些情况下被设置到 HTML 属性上，以便于外部定义样式。
+| hover   | 鼠标移入时设置 |
 
 ## 键盘快捷键
 

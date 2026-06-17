@@ -55,7 +55,7 @@ const style = /*css*/`
   transform: scale(0);
   pointer-events: none;
 }
-:host([hovered]){
+:host([hover]){
   box-shadow: ${scheme.elevation.level4};
 }
 /*Size*/
@@ -90,17 +90,17 @@ const template = /*html*/`
 <s-ripple class="ripple" part="ripple"></s-ripple>
 `
 
-export class FAB extends useElement({
+export class FloatingActionButton extends useElement({
   style: [buttonStyle, style],
-  states: ['keydown-focused'],
+  states: ['focusable'],
   props, template,
 }) { }
 
-const name = FAB.define('s-fab')
+const name = FloatingActionButton.define('s-floating-action-button')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: FAB
+    [name]: FloatingActionButton
   }
   namespace React {
     namespace JSX {
@@ -122,7 +122,7 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & FAB
+    } & FloatingActionButton
   }
 }
 //@ts-ignore

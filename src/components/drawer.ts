@@ -1,14 +1,15 @@
 import { useElement, useProps } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
-import { device } from '../core/device.js'
+import { MediaQueryer } from '../core/utils/mediaQueryer.js'
 
 const props = useProps({
-  mode: ['auto', 'sidebar', 'overlay'],
-  sidebarStartOpened: true,
-  sidebarEndOpened: true,
-  overlayStartOpened: false,
-  overlayEndOpened: false,
+  startOpen: true,
+  endOpen: true,
+  startModalOpen: false,
+  endModalOpen: false,
+  $mode: ['auto', 'standard', 'modal'],
+  $media: '(orientation: portrait)'
 })
 
 const style = /*css*/`
@@ -20,15 +21,49 @@ const style = /*css*/`
   transition-timing-function: ${scheme.motion.easing.standardDecelerate};
   transition-duration: ${scheme.motion.duration.medium2};
 }
-slot{
-  display: block;
-  flex-shrink: 0;
+:host([modal]){
+  .start,
+  .end{
+    display: none;
+  }
+  ::slotted(:is([slot=start], [slot=end])){
+    position: absolute;
+    max-width: 80%;
+    transition-property: box-shadow;
+  }
+  ::slotted([slot=end]){
+    right: 0;
+  }
+  &:host(:is([startModalOpen], [endModalOpen])) .scrim{
+    pointer-events: auto;
+    opacity: 1;
+  }
+  &:host([startModalOpen]) .start,
+  &:host([endModalOpen]) .end{
+    display: contents;
+  }
+  &:host([startModalOpen]) ::slotted([slot=start]),
+  &:host([endModalOpen]) ::slotted([slot=end]){
+    box-shadow: ${scheme.elevation.level3};
+  }
+}
+:host(:not([modal])){
+  .start,
+  .end{
+    transition-property: margin;
+  }
+  &:host([startOpen=false]) .start,
+  &:host([endOpen=false]) .end{
+    display: none;
+  }
 }
 .view{
+  display: block;
   flex-shrink: 1;
   flex-grow: 1;
   min-width: 0;
   overflow: auto;
+  position: relative;
 }
 .scrim{
   position: absolute;
@@ -39,124 +74,29 @@ slot{
   transition-property: opacity;
   background: ${scheme.color.scrim};
 }
+.start,
+.end{
+  display: block;
+  max-width: 50%;
+  height: 100%;
+  right: 0;
+  overflow: hidden;
+  contain: layout;
+}
 .start{
+  left: 0;
+  right: auto;
   order: -1;
 }
 ::slotted(:is([slot=start], [slot=end])){
-  width: 280px;
+  width: 260px;
   height: 100%;
   max-width: 100%;
-  pointer-events: auto;
+  position: relative;
+  box-sizing: border-box;
+  align-self: stretch;
+  overflow: auto;
   background: ${scheme.color.surfaceContainerLow};
-  border-color: ${scheme.color.surfaceVariant};
-}
-:host([mode=sidebar]){
-  .start,
-  .end{
-    overflow: hidden;
-  }
-  &:host([sidebarstartopened=false]) .start,
-  &:host([sidebarendopened=false]) .end{
-    width: 0;
-  }
-  ::slotted([slot=start]){
-    border-right-style: solid;
-    border-right-width: 1px;
-  }
-  ::slotted([slot=end]){
-    border-left-style: solid;
-    border-left-width: 1px;
-  }
-}
-@media (orientation: landscape){
-  :host(:not([mode])){
-    .start,
-    .end{
-      overflow: hidden;
-    }
-    &:host([sidebarstartopened=false]) .start,
-    &:host([sidebarendopened=false]) .end{
-      width: 0;
-    }
-    ::slotted([slot=start]){
-      border-right-style: solid;
-      border-right-width: 1px;
-    }
-    ::slotted([slot=end]){
-      border-left-style: solid;
-      border-left-width: 1px;
-    }
-  }
-}
-:host([mode=overlay]){
-  .start,
-  .end{
-    position: absolute;
-    height: 100%;
-    width: fit-content;
-    top: -100%;
-    pointer-events: none;
-    max-width: 70%;
-  }
-  .end{
-    right: 0;
-  }
-  &:host(:is([overlaystartopened], [overlayendopened])) .scrim{
-    opacity: 1;
-    pointer-events: auto;
-  }
-  &:host([overlaystartopened]){
-    .start{
-      top: 0;
-    }
-    ::slotted([slot=start]){
-      box-shadow: ${scheme.elevation.level3}
-    }
-  }
-  &:host([overlayendopened]){
-    .end{
-      top: 0;
-    }
-    ::slotted([slot=end]){
-      box-shadow: ${scheme.elevation.level3}
-    }
-  }
-}
-@media (orientation: portrait) {
-  :host(:not([mode])){
-    .start,
-    .end{
-      position: absolute;
-      height: 100%;
-      width: fit-content;
-      top: -100%;
-      pointer-events: none;
-      max-width: 70%;
-    }
-    .end{
-      right: 0;
-    }
-    &:host(:is([overlaystartopened], [overlayendopened])) .scrim{
-      opacity: 1;
-      pointer-events: auto;
-    }
-    &:host([overlaystartopened]){
-      .start{
-        top: 0;
-      }
-      ::slotted([slot=start]){
-        box-shadow: ${scheme.elevation.level3}
-      }
-    }
-    &:host([overlayendopened]){
-      .end{
-        top: 0;
-      }
-      ::slotted([slot=end]){
-        box-shadow: ${scheme.elevation.level3}
-      }
-    }
-  }
 }
 `
 const template = /*html*/`
@@ -169,44 +109,63 @@ const template = /*html*/`
 export class Drawer extends useElement({
   style, template, props,
   setup(shadowRoot, info) {
+    const scrim = shadowRoot.querySelector<HTMLDivElement>('.scrim')!
+    const start = shadowRoot.querySelector<HTMLSlotElement>('.start')!
+    const end = shadowRoot.querySelector<HTMLSlotElement>('.end')!
+    const mediaQueryer = new MediaQueryer(this.media)
     const computedStyle = useComputedStyle(this)
     const getAnimateOptions = () => {
       const easing = computedStyle.getValue('transition-timing-function')
       const duration = computedStyle.getDuration('transition-duration')
       return { easing, duration }
     }
-    const scrim = shadowRoot.querySelector<HTMLDivElement>('.scrim')!
-    const start = shadowRoot.querySelector<HTMLSlotElement>('.start')!
-    const end = shadowRoot.querySelector<HTMLSlotElement>('.end')!
+    mediaQueryer.on((v) => this.mode === 'auto' && this.toggleAttribute('modal', v))
     scrim.onclick = () => {
-      this.overlayStartOpened = false
-      this.overlayEndOpened = false
+      this.startModalOpen = false
+      this.endModalOpen = false
     }
-    const getMode = () => this.mode === 'auto' ? (device.orientation.portrait ? 'overlay' : 'sidebar') : this.mode
+    const getMode = () => this.mode === 'auto' ? (mediaQueryer.matches ? 'modal' : 'standard') : this.mode
     const toggle = (slot: 'start' | 'end', mode: typeof props.values.mode = 'auto') => {
       const modeName = mode === 'auto' ? getMode() : mode
-      const name = `${modeName}${slot === 'start' ? 'Start' : 'End'}Opened` as const
+      const data = {
+        standard: { start: 'startOpen', end: 'endOpen' },
+        modal: { start: 'startModalOpen', end: 'endModalOpen' }
+      } as const
+      const name = data[modeName][slot]
       this[name] = !this[name]
     }
-    const overlayAnimate = (el: HTMLSlotElement, state: boolean, negatived = false) => {
-      if (!info.isConnected || getMode() === 'sidebar') return
-      const transform = ['translateX(0)', `translateX(${negatived ? '' : '-'}100%)`]
-      if (state) transform.reverse()
-      el.animate({ transform, top: [0, 0] }, getAnimateOptions())
+    const animate = async (started: boolean, open: boolean) => {
+      if (!info.isConnected || getMode() === 'modal') return
+      const target = started ? start : end
+      target.style.display = 'block'
+      const values = ['0px', `${target.offsetWidth * -1}px`]
+      if (open) values.reverse()
+      const animateOptions = getAnimateOptions()
+      await target.animate({ [started ? 'marginLeft' : 'marginRight']: values }, animateOptions).finished
+      target.style.removeProperty('display')
     }
-    const sidebarAnimate = (el: HTMLSlotElement, state: boolean) => {
-      if (!info.isConnected || getMode() === 'overlay') return
-      el.style.width = 'auto'
-      const width = ['0', `${el.offsetWidth}px`]
-      if (!state) width.reverse()
-      el.animate({ width }, getAnimateOptions()).finished.then(() => el.style.removeProperty('width'))
+    const modalAnimate = async (started: boolean, open: boolean) => {
+      if (!info.isConnected || getMode() === 'standard') return
+      const target = started ? start : end
+      const [el] = target.assignedElements()
+      if (!el) return
+      const transform = ['translateX(0)', `translateX(${started ? '-' : ''}100%)`]
+      if (open) transform.reverse()
+      target.style.display = 'contents'
+      await el.animate({ transform, top: [0, 0] }, getAnimateOptions()).finished
+      target.style.removeProperty('display')
     }
     return {
       expose: { toggle, getMode },
-      overlayStartOpened: (v) => overlayAnimate(start, v),
-      sidebarStartOpened: (v) => sidebarAnimate(start, v),
-      overlayEndOpened: (v) => overlayAnimate(end, v, true),
-      sidebarEndOpened: (v) => sidebarAnimate(end, v)
+      mode: (v) => {
+        if (v === 'auto') return mediaQueryer.call()
+        this.toggleAttribute('modal', v === 'modal')
+      },
+      media: (v) => mediaQueryer.replace(v),
+      startOpen: (v) => animate(true, v),
+      endOpen: (v) => animate(false, v),
+      startModalOpen: (v) => modalAnimate(true, v),
+      endModalOpen: (v) => modalAnimate(false, v)
     }
   }
 }) { }

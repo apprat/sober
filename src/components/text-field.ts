@@ -142,7 +142,7 @@ const template = /*html*/`
 
 export class TextField extends useElement({
   style, template, props,
-  states: ['focused', 'formAssociated'],
+  states: ['focusableOnly', 'formable'],
   setup(shadowRoot, info) {
     const fieldset = shadowRoot.querySelector<Fieldset>(`s-fieldset`)!
     const textarea = document.createElement('textarea') as HTMLTextAreaElement
@@ -164,11 +164,11 @@ export class TextField extends useElement({
     }
     const onChange = () => this.dispatchEvent(new Event('change'))
     const onFocus = () => {
-      if (getInput().value === '') fieldset.floated = false
+      if (getInput().value === '') fieldset.floating = false
       fieldset.focused = true
     }
     const onBlur = () => {
-      if (getInput().value === '') fieldset.floated = true
+      if (getInput().value === '') fieldset.floating = true
       fieldset.focused = false
     }
     input.oninput = textarea.oninput = onInput
@@ -186,7 +186,7 @@ export class TextField extends useElement({
       onFormReset: () => this.value = this.defualtValue,
       value: (v) => {
         getInput().value = v
-        fieldset.floated = v === ''
+        fieldset.floating = v === ''
         setRequired()
         setValue()
       },

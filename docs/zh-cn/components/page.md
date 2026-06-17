@@ -2,7 +2,7 @@
 
 该组件用于创建主题页面，它和 `<div>` 类似，大多数情况下我们都建议你使用它来作为根元素。
 
-```html preview
+```html preview block
 <s-page style="padding: 16px">
   <s-button> Button </s-button>
   <s-button variant="outlined"> Button </s-button>
@@ -12,9 +12,21 @@
 
 ## 主题模式
 
-你可以使用 `theme` 属性来设置主题模式，可选值有 `light`、`dark`、`auto`。
+你可以使用 `theme` 属性来设置主题模式（暗色或亮色），默认为 `auto` 跟随系统。  
 
-```html preview
+固定亮色：
+
+```html preview block
+<s-page theme="light" style="padding: 16px">
+  <s-button> Button </s-button>
+  <s-button variant="outlined"> Button </s-button>
+  <s-checkbox></s-checkbox>
+</s-page>
+```
+
+固定暗色：
+
+```html preview block
 <s-page theme="dark" style="padding: 16px">
   <s-button> Button </s-button>
   <s-button variant="outlined"> Button </s-button>
@@ -22,15 +34,15 @@
 </s-page>
 ```
 
-## 动态切换
+## 动态切换主题
 
-调用 `.toggleTheme(theme, anchor)` 方法，你可以动态切换主题模式，和直接设置 `theme` 属性相比它增加了一个全屏的过渡动画。
+调用 `.toggle(theme, anchor)` 方法，你可以动态切换主题模式，和直接设置 `theme` 属性相比它增加了一个全屏的过渡动画。
 
-```html preview
+```html preview block
 <s-page style="padding: 16px" id="test-page">
-  <s-radio name="toggle" onchange="document.querySelector('#test-page').toggleTheme('light', this)" checked> Light </s-radio>
-  <s-radio name="toggle" onchange="document.querySelector('#test-page').toggleTheme('dark', this)"> Dark </s-radio>
-  <s-radio name="toggle" onchange="document.querySelector('#test-page').toggleTheme('auto', this)"> Auto </s-radio>
+  <s-radio name="toggle" onchange="document.querySelector('#test-page').toggle('auto', this)" checked> Auto </s-radio>
+  <s-radio name="toggle" onchange="document.querySelector('#test-page').toggle('light', this)"> Light </s-radio>
+  <s-radio name="toggle" onchange="document.querySelector('#test-page').toggle('dark', this)"> Dark </s-radio>
 </s-page>
 ```
 
@@ -42,15 +54,10 @@
 
 ## 属性
 
-| 名称          | 类型              | 默认值 | 同步 | 说明             |
-| ------------- | ----------------- | ------ | ---- | ---------------- |
-| theme         | light, dark, auto | light  | ×    | 主题模式         |
-
-## 事件
-
-| 名称   | 参数  | 冒泡 | 可取消 | 说明                                 |
-| ------ | ----- | ---- | ------ | ------------------------------------ |
-| change | Event | ×    | ×      | 模式变化后触发（仅 auto 模式时有效） |
+| 名称  | 类型              | 默认值                       | 同步 | 说明                                                            |
+| ----- | ----------------- | ---------------------------- | ---- | --------------------------------------------------------------- |
+| theme | auto, light, dark | auto                         | ×    | 主题模式                                                        |
+| media | string            | (prefers-color-scheme: dark) | ×    | 媒体查询，系统主题处于深色，设置该属性可控制 `theme` 的切换时机 |
 
 ## 插槽
 
@@ -60,11 +67,10 @@
 
 ## 方法
 
-`.toggleTheme(theme, anchor)` 切换主题模式。
+`.toggleTheme(theme, anchor): Promise<Animation | undefined>` 切换主题模式，如果存在过渡动画，则返回该动画对象。
 
 - `theme`：`light | dark | auto` 目标模式。
 - `anchor`：`HTMLElement` 可选，描点元素，动画以描点为中心执行。
-- `return`：`Promise<Animation | undefined>` 如果存在过渡动画，则返回该动画对象，否则返回 `undefined`。
 
 ## HTML 标记属性
 

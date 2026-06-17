@@ -1,23 +1,31 @@
-import { useProps, useElement, useThrottle } from '../core/elements.js'
+import { useProps, useElement } from '../core/elements.js'
 import { Selector } from '../core/utils/selector.js'
 import * as scheme from '../core/scheme.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
+import { scrollElement } from '../core/utils/scrollElement.js'
+import { MediaQueryer } from '../core/utils/mediaQueryer.js'
 
 const props = useProps({
   name: '',
   $value: '',
   $defaultValue: '',
   multiple: false,
+  selectable: true,
   mode: ['scrollable', 'fixed'],
   variant: ['primary', 'secondary', 'segmented'],
   orientation: ['horizontal', 'vertical'],
-  itemsOrientation: ['auto', 'horizontal', 'vertical'],
+  $itemsOrientation: ['auto', 'horizontal', 'vertical'],
+  $media: '(orientation: portrait)'
 })
 const itemProps = useProps({
   $value: '',
   selected: false,
   disabled: false,
+  selectable: true,
 })
+const itemEvents = {
+  beforechange: Event
+}
 
 const style = /*css*/`
 :host{
@@ -35,31 +43,37 @@ const style = /*css*/`
   overflow: auto;
   scrollbar-width: none;
 }
-:host([mode=fixed]){
+:host([mode=fixed]:not([orientation=vertical])){
   ::slotted(s-tab-item){
     flex-basis: 100%;
     flex-shrink: 1;
   }
 }
-:host([itemsOrientation=vertical]){
-  --s_item-font-size: 12px;
-  --s_item-layout-flex-direction: column;
-  --s_item-layout-padding: 12px 0;
-  --s_item-layout-gap: 4px;
-  --s_item-icon-display: flex;
-  --s_item-badge-position: absolute;
-  --s_item-badge-transform: translate(50%, -50%);
-}
-@media (orientation: portrait){
-  :host(:not([itemsOrientation])){
-    --s_item-font-size: 12px;
-    --s_item-layout-flex-direction: column;
-    --s_item-layout-padding: 12px 0;
-    --s_item-layout-gap: 4px;
-    --s_item-icon-display: flex;
-    --s_item-badge-position: absolute;
-    --s_item-badge-transform: translate(50%, -50%);
+:host([orientation=vertical]){
+  max-height: 300px;
+  width: fit-content;
+  box-shadow: 1px 0 0 ${scheme.color.surfaceVariant} inset;
+  --s_tab-item-indicator-height: 100%;
+  --s_tab-item-indicator-width: 3px;
+  --s_tab-item-indicator-inset: auto auto auto -16px;
+  --s_tab-item-indicator-border-radius: 0px 3px 3px 0;
+  .layout{
+    flex-direction: column;
+    max-height: inherit;
   }
+  ::slotted(s-tab-item){
+    justify-content: flex-start;
+    height: 48px;
+  }
+}
+:host([item-vertical]:not([orientation])){
+  --s_tab-item-font-size: 12px;
+  --s_tab-item-layout-flex-direction: column;
+  --s_tab-item-layout-padding: 12px 0;
+  --s_tab-item-layout-gap: 4px;
+  --s_tab-item-icon-display: flex;
+  --s_tab-item-badge-position: absolute;
+  --s_tab-item-badge-transform: translate(50%, -50%);
 }
 `
 
@@ -76,6 +90,7 @@ const itemStyle = /*css*/`
   flex-shrink: 0;
   outline-offset: -3px;
   border-radius: 12px;
+  color: ${scheme.color.onSurfaceVariant};
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
 }
@@ -98,33 +113,33 @@ const itemStyle = /*css*/`
     }
   }
   &.has-icon.has-text{
-    flex-direction: var(--s_item-layout-flex-direction, row);
-    padding: var(--s_item-layout-padding, 0);
-    gap: var(--s_item-layout-gap, 6px);
+    flex-direction: var(--s_tab-item-layout-flex-direction, row);
+    padding: var(--s_tab-item-layout-padding, 0);
+    gap: var(--s_tab-item-layout-gap, 6px);
     .icon{
-      display: var(--s_item-icon-display, contents);
+      display: var(--s_tab-item-icon-display, contents);
     }
     ::slotted([slot=text]){
-      font-size: calc(var(--s-font-size, 1) * var(--s_item-font-size, 14px));
+      font-size: calc(var(--s-font-size, 1) * var(--s_tab-item-font-size, 14px));
     }
     ::slotted(s-badge){
-      position: var(--s_item-badge-position, static);
-      transform: var(--s_item-badge-transform, none);
+      position: var(--s_tab-item-badge-position, static);
+      transform: var(--s_tab-item-badge-transform, none);
     }
   }
-  .indicator{
-    position: absolute;
-    opacity: 0;
-    inset: auto auto 0 auto;
-    width: 100%;
-    height: 3px;
-    border-radius: 3px 3px 0 0;
-    background: ${scheme.color.primary};
-  }
-  .icon{
-    display: contents;
-    position: relative;
-  }
+}
+.indicator{
+  position: absolute;
+  opacity: 0;
+  inset: var(--s_tab-item-indicator-inset, auto auto 0 auto);
+  width: var(--s_tab-item-indicator-width, 100%);
+  height: var(--s_tab-item-indicator-height, 3px);
+  border-radius: var(--s_tab-item-indicator-border-radius, 3px 3px 0 0);
+  background: ${scheme.color.primary};
+}
+.icon{
+  display: contents;
+  position: relative;
 }
 .ripple{
   border-radius: 0;
@@ -204,24 +219,27 @@ const getOrientation = (orientation: typeof props.values.orientation) => orienta
 
 export class Tab extends useElement({
   style, props, template,
-  states: ['formAssociated'],
+  states: ['formable'],
   setup(shadowRoot, info) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const selector = new Selector(this, slot, TabItem)
-    const computedStyle = useComputedStyle(layout)
+    const mediaQueryer = new MediaQueryer(this.media)
+    const computedStyle = useComputedStyle(this)
     const getAnimateOptions = () => {
       const easing = computedStyle.getValue('transition-timing-function')
       const duration = computedStyle.getDuration('transition-duration')
       return { easing, duration }
     }
+    mediaQueryer.on((v) => this.itemsOrientation === 'auto' && this.toggleAttribute('item-vertical', v))
     selector.onValueChange = () => info.internals.setFormValue(selector.getFormData())
-    selector.onRender = (olds) => {
+    selector.onRender = (olds, initial) => {
       const orientation = getOrientation(this.orientation)
+      const animateOptions = getAnimateOptions()
       if (info.isConnected && selector.selectedItems.length > 0 && layout[orientation.scrollWidth] !== layout[orientation.offsetWidth]) {
         const selected = selector.selectedItems[0]
         const left = (selected[orientation.offsetLeft] - layout[orientation.offsetLeft]) - (layout[orientation.offsetWidth] / 2 - selected[orientation.offsetWidth] / 2)
-        layout.scrollTo({ left, behavior: olds.length === 0 ? 'instant' : 'smooth' })
+        initial ? (layout.scrollTo({ [orientation.left]: left })) : scrollElement({ element: layout, [orientation.left]: left, ...animateOptions })
       }
       if (olds.length === 0) return
       if (!this.multiple) {
@@ -235,7 +253,7 @@ export class Tab extends useElement({
         indicator.animate({
           transform: [`${orientation.translateX}(${offset}px)`, `${orientation.translateX}(0)`],
           [orientation.width]: [`${oldRect[orientation.width]}px`, `${rect[orientation.width]}px`]
-        }, getAnimateOptions())
+        }, animateOptions)
       }
     }
     return {
@@ -258,6 +276,11 @@ export class Tab extends useElement({
       },
       value: (v) => selector.value = v,
       onFormReset: () => this.value = this.defaultValue,
+      media: (v) => mediaQueryer.replace(v),
+      itemsOrientation: (v) => {
+        if (v === 'auto') return mediaQueryer.call()
+        this.toggleAttribute('item-vertical', v === 'vertical')
+      }
     }
   }
 }) { }
@@ -266,14 +289,15 @@ export class TabItem extends useElement({
   style: itemStyle,
   props: itemProps,
   template: itemTemplate,
-  states: ['keydown-focused'],
+  events: itemEvents,
+  states: ['focusable'],
   setup(shadowRoot) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const iconSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=icon]')!
     const textSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=text]')!
     iconSlot.addEventListener('slotchange', () => layout.classList.toggle('has-icon', iconSlot.assignedElements().length > 0))
     textSlot.addEventListener('slotchange', () => layout.classList.toggle('has-text', textSlot.assignedElements().length > 0))
-    this.addEventListener('click', () => this.dispatchEvent(new Event(`${name}:toggle`, { bubbles: true })))
+    this.addEventListener('click', () => this.dispatchEvent(new Event(`${name}:change`, { bubbles: true })))
     return {
       selected: () => this.dispatchEvent(new Event(`${name}:selected`, { bubbles: true })),
       value: (_, old) => this.dispatchEvent(new CustomEvent(`${name}:valued`, { bubbles: true, detail: { old } })),

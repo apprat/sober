@@ -6,11 +6,17 @@ const duration = (value: string) => {
   return number
 }
 
+const number = (value: string) => {
+  return Number(value.trim().match(/^([\d\.]+)(px)?$/)?.[1])
+}
+
 export const useComputedStyle = (el: HTMLElement) => {
   const declaration = getComputedStyle(el)
   const getValue = (key: string) => declaration.getPropertyValue(key)
+  const getNumber = (key: string) => number(getValue(key))
   return {
     getValue,
+    getNumber,
     getDuration(key: string) {
       const val = getValue(key)
       return val === '' ? 0 : duration(val)

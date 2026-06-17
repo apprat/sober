@@ -50,7 +50,7 @@ const template = /*html*/`
 
 export class Slider extends useElement({
   style, props, events, template,
-  states: ['focused', 'pressed', 'hovered', 'formAssociated'],
+  states: ['focusableOnly', 'pressable', 'hoverable', 'formable'],
   setup(shadowRoot, info) {
     const slider = shadowRoot.querySelector<BaseSlider>('.slider')!
   }

@@ -148,7 +148,7 @@ const template = /*html*/`
 `
 
 export class Card extends useElement({
-  states: ['keydown-focused'],
+  states: ['focusable'],
   props, style, template,
 }) { }
 

@@ -155,7 +155,7 @@ const template = /*html*/`
 `
 
 export class Rating extends useElement({
-  states: ['focused', 'pressed', 'hovered', 'formAssociated'],
+  states: ['focusable', 'pressable', 'hoverable', 'formable'],
   style, props, template,
   setup(shadowRoot, info) {
     const baseSlider = shadowRoot.querySelector<BaseSlider>('s-base-slider')!

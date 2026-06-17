@@ -1,14 +1,11 @@
 # split-button
 
-分割按钮，拆分按钮打开一个菜单，为用户提供与操作相关的更多选项，大多数情况下你应该搭配 [`Menu`](./menu.md) 一起使用。
+分割按钮，拆分按钮打开一个菜单，为用户提供与操作相关的更多选项。
 
 ```html preview
 <s-split-button>
   <s-icon name="star" slot="start"></s-icon>
   label
-  <s-menu>
-    <s-menu-item>Item 1</s-menu-item>
-  </s-menu>
 </s-split-button>
 ```
 
@@ -116,31 +113,6 @@
 </s-split-button>
 ```
 
-## 预览
-
-```html preview-only
-<s-split-button> 
-  <s-icon name="star" slot="start"></s-icon>
-  button
-</s-split-button>
-<hr>
-variant =
-<s-radio name="split-button-variant" onchange="this.parentElement.querySelector('s-split-button').variant=this.textContent" checked>filled</s-radio>
-<s-radio name="split-button-variant" onchange="this.parentElement.querySelector('s-split-button').variant=this.textContent">elevated</s-radio>
-<s-radio name="split-button-variant" onchange="this.parentElement.querySelector('s-split-button').variant=this.textContent">tonal</s-radio>
-<s-radio name="split-button-variant" onchange="this.parentElement.querySelector('s-split-button').variant=this.textContent">outlined</s-radio>
-<hr>
-size =
-<s-radio name="split-button-size" onchange="this.parentElement.querySelector('s-split-button').size=this.textContent" checked>small</s-radio>
-<s-radio name="split-button-size" onchange="this.parentElement.querySelector('s-split-button').size=this.textContent">extra-small</s-radio>
-<s-radio name="split-button-size" onchange="this.parentElement.querySelector('s-split-button').size=this.textContent">medium</s-radio>
-<s-radio name="split-button-size" onchange="this.parentElement.querySelector('s-split-button').size=this.textContent">large</s-radio>
-<s-radio name="split-button-size" onchange="this.parentElement.querySelector('s-split-button').size=this.textContent">extra-large</s-radio>
-<hr>
-disabled =
-<s-checkbox onchange="this.parentElement.querySelector('s-split-button').disabled=this.checked"></s-checkbox>
-```
-
 ---
 
 ## 属性
@@ -160,12 +132,12 @@ disabled =
 
 ## 插槽
 
-| 名称   | 说明                                                               |
-| ------ | ------------------------------------------------------------------ |
-| 匿名   | 按钮文本                                                           |
-| start  | 开始，默认支持 svg, s-icon, s-loading, s-circular-progressn        |
-| end    | 结束，默认支持 svg, s-icon, s-loading, s-circular-progress         |
-| toggle | 切换按钮图标，默认支持 svg, s-icon, s-loading, s-circular-progress |
+| 名称      | 说明                                                               |
+| --------- | ------------------------------------------------------------------ |
+| 匿名      | 按钮文本                                                           |
+| start     | 开始，默认支持 svg, s-icon, s-loading, s-circular-progressn        |
+| end       | 结束，默认支持 svg, s-icon, s-loading, s-circular-progress         |
+| togg-icon | 切换按钮图标，默认支持 svg, s-icon, s-loading, s-circular-progress |
 
 ## 键盘快捷键
 

@@ -188,7 +188,7 @@ export class Page extends useElement({
   setup() {
     const computedStyle = useComputedStyle(this)
     const mediaQueryer = new MediaQueryer(this.media)
-    mediaQueryer.on((v) => this.theme === 'auto' && this.toggleAttribute('dark', v))
+    mediaQueryer.onChange = (v) => this.theme === 'auto' && this.toggleAttribute('dark', v)
     const getTheme = () => this.theme === 'auto' ? (mediaQueryer.matches ? 'dark' : 'light') : this.theme
     const toggle = async (theme: typeof props.values.theme, anchor?: HTMLElement) => {
       if (this.theme === theme) return

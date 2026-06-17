@@ -231,7 +231,7 @@ export class Tab extends useElement({
       const duration = computedStyle.getDuration('transition-duration')
       return { easing, duration }
     }
-    mediaQueryer.on((v) => this.itemsOrientation === 'auto' && this.toggleAttribute('item-vertical', v))
+    mediaQueryer.onChange = (v) => this.itemsOrientation === 'auto' && this.toggleAttribute('item-vertical', v)
     selector.onValueChange = () => info.internals.setFormValue(selector.getFormData())
     selector.onRender = (olds, initial) => {
       const orientation = getOrientation(this.orientation)

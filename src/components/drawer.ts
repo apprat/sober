@@ -119,7 +119,7 @@ export class Drawer extends useElement({
       const duration = computedStyle.getDuration('transition-duration')
       return { easing, duration }
     }
-    mediaQueryer.on((v) => this.mode === 'auto' && this.toggleAttribute('modal', v))
+    mediaQueryer.onChange = (v) => this.mode === 'auto' && this.toggleAttribute('modal', v)
     scrim.onclick = () => {
       this.startModalOpen = false
       this.endModalOpen = false

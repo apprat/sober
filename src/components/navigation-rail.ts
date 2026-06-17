@@ -290,7 +290,7 @@ export class NavigationRail extends useElement({
     const mediaQueryer = new MediaQueryer(this.media)
     const selector = new Selector(this, slot, NavigationRailItem)
     selector.onValueChange = () => info.internals.setFormValue(selector.getFormData())
-    mediaQueryer.on((v) => this.mode === 'auto' && this.toggleAttribute('collapsed', v))
+    mediaQueryer.onChange = (v) => this.mode === 'auto' && this.toggleAttribute('collapsed', v)
     return {
       expose: {
         get items() {

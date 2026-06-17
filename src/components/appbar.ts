@@ -122,7 +122,7 @@ export class Appbar extends useElement({
   props, style, template,
   setup() {
     const mediaQueryer = new MediaQueryer(this.media)
-    mediaQueryer.on((v) => this.size === 'auto' && this.toggleAttribute('small', v))
+    mediaQueryer.onChange = (v) => this.size === 'auto' && this.toggleAttribute('small', v)
     const getSize = () => this.size === 'auto' ? (mediaQueryer.matches ? 'small' : 'medium') : this.size
     return {
       expose: { getSize },

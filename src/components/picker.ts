@@ -182,7 +182,7 @@ export class Picker extends useElement({
     const selector = new Selector(this, slot, PickerItem)
     const mediaQueryer = new MediaQueryer(this.media)
     selector.onValueChange = () => info.internals.setFormValue(selector.getFormData())
-    mediaQueryer.on((v) => this.itemsOrientation === 'auto' && this.toggleAttribute('item-vertical', v))
+    mediaQueryer.onChange = (v) => this.itemsOrientation === 'auto' && this.toggleAttribute('item-vertical', v)
     return {
       expose: {
         get items() {

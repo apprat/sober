@@ -1,6 +1,6 @@
 {
   "name": "sober",
-  "version": "2.0.0-alpha.11",
+  "version": "2.0.0-alpha.12",
   "description": "Sober is a library of UI components designed with reference to Material You.",
   "type": "module",
   "scripts": {
@@ -8,7 +8,9 @@
     "preview": "node dev/dev-preview.js",
     "build": "node dev/build.js",
     "check": "npx tsc --noEmit",
-    "test": "node dev/test.js"
+    "test": "node dev/test.js",
+    "update": "pnpm update",
+    "publish:alpha": "npm publish --tag alpha"
   },
   "keywords": [
     "sober",

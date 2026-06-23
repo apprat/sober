@@ -22,7 +22,8 @@
     "ui library",
     "vue",
     "react",
-    "angular"
+    "angular",
+    "tools"
   ],
   "exports": {
     ".": "./dist/main.js",
@@ -30,7 +31,7 @@
     "./styles/*": "./styles/*",
     "./*": "./dist/components/*.js"
   },
-  "author": "apprat",
+  "author": "unreal-space",
   "repository": "unreal-space/sober",
   "homepage": "https://soberjs.com",
   "license": "MIT",

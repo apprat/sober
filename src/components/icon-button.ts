@@ -21,7 +21,7 @@ const style = /*css*/`
   border-radius: 20px;
   width: 40px;
   height: 40px;
-  font-size: calc(var(--s-font-size) * 24px);
+  font-size: calc(var(--s-font-size, 1) * 24px);
   transition-property: height, width, color, background-color, padding, border-radius;
   color: ${scheme.color.onSurfaceVariant};
 }
@@ -86,14 +86,14 @@ const style = /*css*/`
   width: 32px;
   height: 32px;
   border-radius: 16px;
-  font-size: calc(var(--s-font-size) * 20px);
+  font-size: calc(var(--s-font-size, 1) * 20px);
   &:host([pressed]){
     border-radius: 8px;
   }
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: 12px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 20px;
   }
 }
@@ -112,14 +112,14 @@ const style = /*css*/`
   height: 96px;
   width: 96px;
   border-radius: 48px;
-  font-size: calc(var(--s-font-size) * 32px);
+  font-size: calc(var(--s-font-size, 1) * 32px);
   &:host([pressed]){
     border-radius: 16px;
   }
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: 28px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 32px;
   }
 }
@@ -127,14 +127,14 @@ const style = /*css*/`
   height: 136px;
   width: 136px;
   border-radius: 68px;
-  font-size: calc(var(--s-font-size) * 40px);
+  font-size: calc(var(--s-font-size, 1) * 40px);
   &:host([pressed]){
     border-radius: 16px;
   }
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: 28px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 40px;
   }
 }
@@ -175,7 +175,7 @@ const style = /*css*/`
     height: 136px;
   }
 }
-::slotted(:is(svg, s-icon, s-loading, s-circular-progress)) {
+::slotted(:is(svg, s-icon, s-loading, s-spinner)) {
   flex-shrink: 1;
 }
 ::slotted(s-badge){

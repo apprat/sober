@@ -3,11 +3,11 @@ export class MediaQueryer {
   declare _callback: (v: boolean) => void
   replace(query: string) {
     this.mediaQueryList = matchMedia(query)
-    this.mediaQueryList.onchange = () => this.call()
+    this.mediaQueryList.onchange = () => this._callback(this.matches)
     this.call()
   }
   call() {
-    this.matches && this._callback?.(this.matches)
+    this._callback?.(this.matches)
   }
   get matches() {
     return this.mediaQueryList.matches

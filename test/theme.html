@@ -106,7 +106,7 @@
     </s-alert>
     <s-loading></s-loading>
     <s-loading variant="contained"></s-loading>
-    <s-circular-progress indeterminate></s-circular-progress>
+    <s-spinner indeterminate></s-spinner>
     <s-progress value="50"></s-progress>
     <hr>
     <s-slider marks="all" step="10"></s-slider>
@@ -174,7 +174,7 @@
       </s-tab-item>
     </s-tab>
     <hr>
-    <s-appbar>
+    <s-app-bar>
       <s-icon-button slot="nav">
         <s-icon name="menu"></s-icon>
       </s-icon-button>
@@ -185,52 +185,52 @@
       </svg>
       <span slot="title">Material 3</span>
       <span slot="subtitle">Google M3 Expressive</span>
-      <s-navigation-responsive>
+      <s-nav-responsive>
         <s-icon-button slot="toggle" width="narrow">
           <s-icon name="more_vert"></s-icon>
           <s-tooltip> More </s-tooltip>
         </s-icon-button>
-        <s-navigation-responsive-item selected>
+        <s-nav-responsive-item selected>
           <s-icon name="home" slot="icon"></s-icon>
           <div slot="text"> Home </div>
           <s-tooltip> home </s-tooltip>
-        </s-navigation-responsive-item>
-        <s-navigation-responsive-item>
+        </s-nav-responsive-item>
+        <s-nav-responsive-item>
           <s-icon name="star" slot="icon"></s-icon>
           <div slot="text"> Find </div>
           <s-badge></s-badge>
           <s-tooltip> find </s-tooltip>
-        </s-navigation-responsive-item>
-        <s-navigation-responsive-item>
+        </s-nav-responsive-item>
+        <s-nav-responsive-item>
           <s-icon name="favorite" slot="icon"></s-icon>
           <div slot="text"> Favorite </div>
           <s-badge>3</s-badge>
           <s-tooltip> favorite </s-tooltip>
-        </s-navigation-responsive-item>
-        <s-navigation-responsive-item>
+        </s-nav-responsive-item>
+        <s-nav-responsive-item>
           <s-icon name="dark_mode" slot="icon"></s-icon>
           <div slot="text"> Help </div>
           <s-badge>99</s-badge>
           <s-tooltip> help </s-tooltip>
-        </s-navigation-responsive-item>
-      </s-navigation-responsive>
-    </s-appbar>
-    <s-navigation-bar>
-      <s-navigation-bar-item>
+        </s-nav-responsive-item>
+      </s-nav-responsive>
+    </s-app-bar>
+    <s-nav-bar>
+      <s-nav-bar-item>
         <s-icon slot="icon" name="home"></s-icon>
         <div slot="text"> Home </div>
-      </s-navigation-bar-item>
-      <s-navigation-bar-item selected>
+      </s-nav-bar-item>
+      <s-nav-bar-item selected>
         <s-icon slot="icon" name="light_mode"></s-icon>
         <s-badge></s-badge>
         <div slot="text"> Find </div>
-      </s-navigation-bar-item>
-      <s-navigation-bar-item>
+      </s-nav-bar-item>
+      <s-nav-bar-item>
         <s-icon slot="icon" name="favorite"></s-icon>
         <s-badge>3</s-badge>
         <div slot="text"> Help </div>
-      </s-navigation-bar-item>
-    </s-navigation-bar>
+      </s-nav-bar-item>
+    </s-nav-bar>
     <s-button id="toggleDesign">Fluent</s-button>
   </s-page>
   <script type="module" src="../dist/main.js"></script>

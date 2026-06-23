@@ -1,201 +1,201 @@
-# NavigationRail
+# NavRail
 
 导航轨道
 
 ```html preview block
-<s-navigation-rail>
-  <s-navigation-rail-item>
+<s-nav-rail>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="home"></s-icon>
     <div slot="text"> 首页 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item selected>
+  </s-nav-rail-item>
+  <s-nav-rail-item selected>
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="star"></s-icon>
     <s-badge>99</s-badge>
     <div slot="text"> 帮助 </div>
-  </s-navigation-rail-item>
+  </s-nav-rail-item>
   <s-divider></s-divider>
   <label>其他</label>
-  <s-navigation-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="home"></s-icon>
     <s-badge>99</s-badge>
     <div slot="text"> 帮助 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="light_mode"></s-icon>
     <div slot="text"> 协议 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="star"></s-icon>
     <div slot="text"> 关于 </div>
-  </s-navigation-rail-item>
-</s-navigation-rail>
+  </s-nav-rail-item>
+</s-nav-rail>
 ```
 
 纯文本
 
 ```html preview block
-<s-navigation-rail>
-  <s-navigation-rail-item>
+<s-nav-rail>
+  <s-nav-rail-item>
     <div slot="text"> 首页 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item selected>
+  </s-nav-rail-item>
+  <s-nav-rail-item selected>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
-  </s-navigation-rail-item>
+  </s-nav-rail-item>
   <s-divider></s-divider>
   <label>其他</label>
-  <s-navigation-rail-item>
+  <s-nav-rail-item>
     <s-badge>99</s-badge>
     <div slot="text"> 帮助 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <div slot="text"> 协议 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <div slot="text"> 关于 </div>
-  </s-navigation-rail-item>
-</s-navigation-rail>
+  </s-nav-rail-item>
+</s-nav-rail>
 ```
 
 纯图标+工具提示
 
 ```html preview block
-<s-navigation-rail>
-  <s-navigation-rail-item>
+<s-nav-rail>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="home"></s-icon>
     <s-tooltip gravity="right"> 首页 </s-tooltip>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item selected>
+  </s-nav-rail-item>
+  <s-nav-rail-item selected>
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-badge></s-badge>
     <s-tooltip gravity="right"> 发现 </s-tooltip>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-badge>3</s-badge>
     <s-tooltip gravity="right"> 我的 </s-tooltip>
-  </s-navigation-rail-item>
+  </s-nav-rail-item>
   <s-divider></s-divider>
-  <s-navigation-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="star"></s-icon>
     <s-badge>99</s-badge>
     <s-tooltip gravity="right"> 帮助 </s-tooltip>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-tooltip gravity="right"> 协议 </s-tooltip>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-tooltip gravity="right"> 帮助 </s-tooltip>
-  </s-navigation-rail-item>
-</s-navigation-rail>
+  </s-nav-rail-item>
+</s-nav-rail>
 ```
 
 ## 设置选中
 
 你可以使用以下两种方式来设置选中。
 
-在 `s-navigation-rail-item` 上设置 `selected` 属性来设置选中。  
+在 `s-nav-rail-item` 上设置 `selected` 属性来设置选中。  
 
 ```html preview
-<s-navigation-rail>
-  <s-navigation-rail-item>
+<s-nav-rail>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="home"></s-icon>
     <div slot="text"> 首页 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item selected> <!-- [!code highlight] -->
+  </s-nav-rail-item>
+  <s-nav-rail-item selected> <!-- [!code highlight] -->
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
-  </s-navigation-rail-item>
-</s-navigation-rail>
+  </s-nav-rail-item>
+</s-nav-rail>
 ```
 
-在 `s-navigation-rail` 上设置 `value` 属性，然后在 `s-navigation-rail-item` 上设置相同的 `value` 值来设置选中。
+在 `s-nav-rail` 上设置 `value` 属性，然后在 `s-nav-rail-item` 上设置相同的 `value` 值来设置选中。
 
 ```html preview
-<s-navigation-rail value="a2"> <!-- [!code highlight] -->
-  <s-navigation-rail-item value="a1">
+<s-nav-rail value="a2"> <!-- [!code highlight] -->
+  <s-nav-rail-item value="a1">
     <s-icon slot="icon" name="home"></s-icon>
     <div slot="text"> 首页 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item value="a2"> <!-- [!code highlight] -->
+  </s-nav-rail-item>
+  <s-nav-rail-item value="a2"> <!-- [!code highlight] -->
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item value="a3">
+  </s-nav-rail-item>
+  <s-nav-rail-item value="a3">
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
-  </s-navigation-rail-item>
-</s-navigation-rail>
+  </s-nav-rail-item>
+</s-nav-rail>
 ```
 
 ## 模式
 
-默认情况下，带有图标+文本的 `s-navigation-rail-item` 会根据**窗口比例**选择尽可能折叠或是横向展示（横屏或竖屏）。  
+默认情况下，带有图标+文本的 `s-nav-rail-item` 会根据**窗口比例**选择尽可能折叠或是横向展示（横屏或竖屏）。  
 
 固定展开：
 
 ```html preview
-<s-navigation-rail mode="expanded"> <!-- [!code highlight] -->
-  <s-navigation-rail-item>
+<s-nav-rail mode="expanded"> <!-- [!code highlight] -->
+  <s-nav-rail-item>
     <s-icon slot="icon" name="home"></s-icon>
     <div slot="text"> 首页 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item selected>
+  </s-nav-rail-item>
+  <s-nav-rail-item selected>
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
-  </s-navigation-rail-item>
-</s-navigation-rail>
+  </s-nav-rail-item>
+</s-nav-rail>
 ```
 
 固定折叠：
 
 ```html preview
-<s-navigation-rail mode="collapsed"> <!-- [!code highlight] -->
-  <s-navigation-rail-item>
+<s-nav-rail mode="collapsed"> <!-- [!code highlight] -->
+  <s-nav-rail-item>
     <s-icon slot="icon" name="home"></s-icon>
     <div slot="text"> 首页 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item selected>
+  </s-nav-rail-item>
+  <s-nav-rail-item selected>
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
-  </s-navigation-rail-item>
-</s-navigation-rail>
+  </s-nav-rail-item>
+</s-nav-rail>
 ```
 
 ## 子轨道和插槽
@@ -203,108 +203,108 @@
 使用 `action` 插槽放置操作，使用 `sub-rail` 插槽放置子轨道
 
 ```html preview block
-<s-navigation-rail>
-  <s-navigation-rail-item>
+<s-nav-rail>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="home"></s-icon>
     <div slot="text"> 首页 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item selected>
+  </s-nav-rail-item>
+  <s-nav-rail-item selected>
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item>
+  </s-nav-rail-item>
+  <s-nav-rail-item>
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
-  </s-navigation-rail-item>
+  </s-nav-rail-item>
   <s-divider></s-divider>
-  <s-navigation-rail-item selectable="false" onbeforechange="this.querySelector('s-radio').click()">
+  <s-nav-rail-item selectable="false" onbeforechange="this.querySelector('s-radio').click()">
     <s-icon slot="icon" name="done"></s-icon>
     <div slot="text"> 开启 </div>
     <s-radio name="nav-radio" slot="action" readonly></s-radio>
-  </s-navigation-rail-item>
-    <s-navigation-rail-item selectable="false" onbeforechange="this.querySelector('s-radio').click()">
+  </s-nav-rail-item>
+    <s-nav-rail-item selectable="false" onbeforechange="this.querySelector('s-radio').click()">
     <s-icon slot="icon" name="close"></s-icon>
     <div slot="text"> 关闭 </div>
     <s-radio name="nav-radio" slot="action" readonly></s-radio>
-  </s-navigation-rail-item>
+  </s-nav-rail-item>
   <s-divider></s-divider>
   <label>多选</label>
-  <s-navigation-rail-item selectable="false" onbeforechange="this.querySelector('s-checkbox').click()">
+  <s-nav-rail-item selectable="false" onbeforechange="this.querySelector('s-checkbox').click()">
     <s-icon slot="icon" name="light_mode"></s-icon>
     <div slot="text"> 启用 </div>
     <s-checkbox slot="action" readonly></s-checkbox>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item selectable="false">
+  </s-nav-rail-item>
+  <s-nav-rail-item selectable="false">
     <s-icon slot="icon" name="star"></s-icon>
     <div slot="text"> 更多 </div>
     <!--子轨道-->
-    <s-navigation-rail slot="sub-rail">
-      <s-navigation-rail-item>
+    <s-nav-rail slot="sub-rail">
+      <s-nav-rail-item>
         <s-icon slot="icon" name="home"></s-icon>
         <div slot="text"> 首页 </div>
-      </s-navigation-rail-item>
-      <s-navigation-rail-item selected>
+      </s-nav-rail-item>
+      <s-nav-rail-item selected>
         <s-icon slot="icon" name="light_mode"></s-icon>
         <s-badge></s-badge>
         <div slot="text"> 发现 </div>
-      </s-navigation-rail-item>
-      <s-navigation-rail-item>
+      </s-nav-rail-item>
+      <s-nav-rail-item>
         <s-icon slot="icon" name="favorite"></s-icon>
         <s-badge>3</s-badge>
         <div slot="text"> 我的 </div>
-      </s-navigation-rail-item>
-    </s-navigation-rail>
-  </s-navigation-rail-item>
-</s-navigation-rail>
+      </s-nav-rail-item>
+    </s-nav-rail>
+  </s-nav-rail-item>
+</s-nav-rail>
 ```
 
 ## 多选支持
 
 设置 `multiple` 属性，即可开启多选功能。  
-如果在 `s-navigation-rail` 设置 `value` 来选中，需要使用 `,` 分割多个值。  
+如果在 `s-nav-rail` 设置 `value` 来选中，需要使用 `,` 分割多个值。  
 你可以通过 `.selectedIndexes` 获取当前选中的下标合集，也可以通过 `.selectedItems` 获取当前选中的元素合集。
 
 ```html preview
-<s-navigation-rail multiple value="a1,a2" onchange="console.log('selected', this.selectedIndexes)"> <!-- [!code highlight] -->
-  <s-navigation-rail-item value="a1"> <!-- [!code highlight] -->
+<s-nav-rail multiple value="a1,a2" onchange="console.log('selected', this.selectedIndexes)"> <!-- [!code highlight] -->
+  <s-nav-rail-item value="a1"> <!-- [!code highlight] -->
     <s-icon slot="icon" name="home"></s-icon>
     <div slot="text"> 首页 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item value="a2"> <!-- [!code highlight] -->
+  </s-nav-rail-item>
+  <s-nav-rail-item value="a2"> <!-- [!code highlight] -->
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
-  </s-navigation-rail-item>
-  <s-navigation-rail-item value="a3">
+  </s-nav-rail-item>
+  <s-nav-rail-item value="a3">
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
-  </s-navigation-rail-item>
-</s-navigation-rail>
+  </s-nav-rail-item>
+</s-nav-rail>
 ```
 
 ## 表单支持
 
-该组件支持表单，你需要在为 `s-navigation-rail` 设置一个唯一的 `name` 属性作为表单的键，在 `s-navigation-rail-item` 设置 `value` 属性作为表单的提交值。  
+该组件支持表单，你需要在为 `s-nav-rail` 设置一个唯一的 `name` 属性作为表单的键，在 `s-nav-rail-item` 设置 `value` 属性作为表单的提交值。  
 
 ```html preview
 <form method="get" action="http://coolaf.com/tool/params">
-  <s-navigation-rail name="navigation" value="a1,a2" defaultValue="a1,a2" multiple> <!-- [!code highlight] -->
-    <s-navigation-rail-item value="a1"> 
+  <s-nav-rail name="navigation" value="a1,a2" defaultValue="a1,a2" multiple> <!-- [!code highlight] -->
+    <s-nav-rail-item value="a1"> 
       <s-icon slot="icon" name="home"></s-icon>
       <div slot="text"> 首页 </div>
-    </s-navigation-rail-item>
-    <s-navigation-rail-item value="a2"> 
+    </s-nav-rail-item>
+    <s-nav-rail-item value="a2"> 
       <s-icon slot="icon" name="light_mode"></s-icon>
       <div slot="text"> 发现 </div>
-    </s-navigation-rail-item>
-    <s-navigation-rail-item value="a3"> 
+    </s-nav-rail-item>
+    <s-nav-rail-item value="a3"> 
       <s-icon slot="icon" name="favorite"></s-icon>
       <div slot="text"> 我的 </div>
-    </s-navigation-rail-item>
-  </s-navigation-rail>
+    </s-nav-rail-item>
+  </s-nav-rail>
   <hr>
   <s-button type="reset" variant="outlined"> 重置 </s-button>
   <s-button type="submit"> 提交 </s-button>
@@ -351,9 +351,9 @@
 
 ---
 
-## NavigationRailItem
+## NavRailItem
 
-该组件仅作为 `NavigationRail` 的子元素使用，单独使用时只是普通容器。
+该组件仅作为 `NavRail` 的子元素使用，单独使用时只是普通容器。
 
 ## Item 属性
 
@@ -365,10 +365,9 @@
 
 ## Item 事件
 
-| 名称         | 参数  | 冒泡 | 可取消 | 说明             |
-| ------------ | ----- | ---- | ------ | ---------------- |
-| beforechange | Event | ×    | ×      | 选中切换之前触发 |
-| change       | Event | ×    | ×      | 选中切换后触发   |
+| 名称  | 参数  | 冒泡 | 可取消 | 说明               |
+| ----- | ----- | ---- | ------ | ------------------ |
+| input | Event | ×    | ×      | 点击元素选中后触发 |
 
 ## Item 插槽
 

@@ -107,7 +107,7 @@ const style = /*css*/`
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: 12px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 16px;
   }
 }
@@ -122,7 +122,7 @@ const style = /*css*/`
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: 16px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 24px;
   }
 }
@@ -138,7 +138,7 @@ const style = /*css*/`
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: 28px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 32px;
   }
 }
@@ -154,11 +154,11 @@ const style = /*css*/`
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: 28px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 40px;
   }
 }
-::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+::slotted(:is(svg, s-icon, s-loading, s-spinner)){
   width: 20px;
 }
 `

@@ -1,9 +1,9 @@
-# circular progress
+# Spinner
 
-圆形进度条。
+环形进度条。
 
 ```html preview
-<s-circular-progress value="60"></s-circular-progress>
+<s-spinner value="60"></s-spinner>
 ```
 
 ## 尺寸
@@ -11,7 +11,7 @@
 设置 `size="large"` 定义较大的进度条。
 
 ```html preview
-<s-circular-progress size="large" value="60"></s-circular-progress>
+<s-spinner size="large" value="60"></s-spinner>
 ```
 
 ## 未知的
@@ -19,14 +19,14 @@
 设置 `indeterminate` 属性定义未知的进度条。
 
 ```html preview
-<s-circular-progress indeterminate></s-circular-progress>
-<s-circular-progress size="large" indeterminate></s-circular-progress>
+<s-spinner indeterminate></s-spinner>
+<s-spinner size="large" indeterminate></s-spinner>
 ```
 
 进度条会有过渡动画，如果你希望实时的变更进度，可以使用CSS `transition: none` 来禁用过渡。
 
 ```html preview
-<s-circular-progress value="80" style="transition: none"></s-circular-progress>
+<s-spinner value="80" style="transition: none"></s-spinner>
 <input type="range" min="0" max="100" value="80" oninput="this.previousElementSibling.value=this.value" />
 ```
 

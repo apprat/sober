@@ -1,6 +1,6 @@
 import { useProps, useElement } from '../core/elements.js'
 import { Selector } from '../core/utils/selector.js'
-import { MediaQueryer } from '../core/utils/mediaQueryer.js'
+import { MediaQueryer } from '../core/utils/media-queryer.js'
 import * as scheme from '../core/scheme.js'
 import './ripple.js'
 
@@ -34,12 +34,12 @@ const style = /*css*/`
   background: ${scheme.color.surfaceContainer};
 }
 :host([item-vertical]){
-  --s_navigation-bar-item-font-size: 12px;
-  --s_navigation-bar-item-layout-flex-direction: column;
-  --s_navigation-bar-item-layout-gap: 2px;
-  --s_navigation-bar-item-indicator-inset: auto;
-  --s_navigation-bar-item-indicator-height: 32px;
-  --s_navigation-bar-item-indicator-width: 56px;
+  --s_nav-bar-item-font-size: 12px;
+  --s_nav-bar-item-layout-flex-direction: column;
+  --s_nav-bar-item-layout-gap: 2px;
+  --s_nav-bar-item-indicator-inset: auto;
+  --s_nav-bar-item-indicator-height: 32px;
+  --s_nav-bar-item-indicator-width: 56px;
 }
 `
 
@@ -75,23 +75,23 @@ const itemStyle = /*css*/`
     }
   }
   &.has-icon.has-text{
-    flex-direction: var(--s_navigation-bar-item-layout-flex-direction, row);
-    gap: var(--s_navigation-bar-item-layout-gap, 8px);
-    padding: var(--s_navigation-bar-item-layout-padding, 0 16px);
+    flex-direction: var(--s_nav-bar-item-layout-flex-direction, row);
+    gap: var(--s_nav-bar-item-layout-gap, 8px);
+    padding: var(--s_nav-bar-item-layout-padding, 0 16px);
     .ripple{
       display: flex;
-      height: var(--s_navigation-bar-item-indicator-height, 100%);
+      height: var(--s_nav-bar-item-indicator-height, 100%);
       &::part(container),
       &::before,
       &::after {
-        inset: var(--s_navigation-bar-item-indicator-inset, auto 0);
-        border-radius: calc(var(--s_navigation-bar-item-indicator-height, 40px) / 2);
-        width: var(--s_navigation-bar-item-indicator-width, 100%);
-        height: var(--s_navigation-bar-item-indicator-height, 40px);
+        inset: var(--s_nav-bar-item-indicator-inset, auto 0);
+        border-radius: calc(var(--s_nav-bar-item-indicator-height, 40px) / 2);
+        width: var(--s_nav-bar-item-indicator-width, 100%);
+        height: var(--s_nav-bar-item-indicator-height, 40px);
       }
     }
     ::slotted([slot=text]){
-      font-size: calc(var(--s-font-size, 1) * var(--s_navigation-bar-item-font-size, 14px));
+      font-size: calc(var(--s-font-size, 1) * var(--s_nav-bar-item-font-size, 14px));
     }
   }
 }
@@ -182,12 +182,12 @@ const itemTemplate = /*html*/`
 </div>
 `
 
-export class NavigationBar extends useElement({
+export class NavBar extends useElement({
   style, props, template,
   states: ['formable'],
   setup(shadowRoot, info) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot:not([name])')!
-    const selector = new Selector(this, slot, NavigationBarItem)
+    const selector = new Selector(this, slot, NavBarItem)
     const mediaQueryer = new MediaQueryer(this.media)
     selector.onValueChange = () => info.internals.setFormValue(selector.getFormData())
     mediaQueryer.onChange = (v) => this.itemsOrientation === 'auto' && this.toggleAttribute('item-vertical', v)
@@ -220,7 +220,7 @@ export class NavigationBar extends useElement({
   }
 }) { }
 
-export class NavigationBarItem extends useElement({
+export class NavBarItem extends useElement({
   style: itemStyle,
   props: itemProps,
   template: itemTemplate,
@@ -241,13 +241,13 @@ export class NavigationBarItem extends useElement({
   }
 }) { }
 
-const name = NavigationBar.define('s-navigation-bar')
-const itemName = NavigationBarItem.define('s-navigation-bar-item')
+const name = NavBar.define('s-nav-bar')
+const itemName = NavBarItem.define('s-nav-bar-item')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: NavigationBar
-    [itemName]: NavigationBarItem
+    [name]: NavBar
+    [itemName]: NavBarItem
   }
   namespace React {
     namespace JSX {
@@ -271,13 +271,13 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & NavigationBar
+    } & NavBar
     [itemName]: new () => {
       /**
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof itemProps.values>
-    } & NavigationBarItem
+    } & NavBarItem
   }
 }
 //@ts-ignore

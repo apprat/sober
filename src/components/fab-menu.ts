@@ -93,7 +93,7 @@ const itemTemplate = /*html*/`
 <s-ripple part="ripple"></s-ripple>
 `
 
-export class FloatingActionButtonMenu extends useElement({
+export class FabMenu extends useElement({
   props, template, events, style,
   setup(shadowRoot) {
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
@@ -108,27 +108,25 @@ export class FloatingActionButtonMenu extends useElement({
   }
 }) { }
 
-export class FloatingActionButtonMenuItem extends useElement({
+export class FabMenuItem extends useElement({
   props: itemProps,
   template: itemTemplate,
   style: [buttonStyle, itemStyle]
 }) { }
 
-export { FloatingActionButtonMenu as FABMenu, FloatingActionButtonMenuItem as FABMenuItem }
-
-const name = FloatingActionButtonMenu.define('s-fab-menu')
-const itemName = FloatingActionButtonMenuItem.define('s-fab-menu-item')
+const name = FabMenu.define('s-fab-menu')
+const itemName = FabMenuItem.define('s-fab-menu-item')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: FloatingActionButtonMenu
-    [itemName]: FloatingActionButtonMenuItem
+    [name]: FabMenu
+    [itemName]: FabMenuItem
   }
   namespace React {
     namespace JSX {
       interface IntrinsicElements {
         //@ts-ignore
-        [FloatingActionButtonMenu.name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.value>
+        [FabMenu.name]: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & Partial<typeof props.value>
       }
     }
   }
@@ -144,7 +142,7 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & FloatingActionButtonMenu
+    } & FabMenu
   }
 }
 //@ts-ignore

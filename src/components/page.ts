@@ -1,7 +1,7 @@
 import { useElement, useProps } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
-import { MediaQueryer } from '../core/utils/mediaQueryer.js'
+import { MediaQueryer } from '../core/utils/media-queryer.js'
 
 const props = useProps({
   $theme: ['auto', 'light', 'dark'],
@@ -14,12 +14,12 @@ const style = /*css*/`
   height: -moz-available;
   height: -webkit-fill-available;
   overflow: auto;
-  font-family: sans-serif, system-ui;
+  font-family: "Google Sans Text", sans-serif;
   color: var(--s-color-on-background);
   background: var(--s-color-background);
   animation-timing-function: var(--s-motion-easing-standard-accelerate);
   animation-duration: var(--s-motion-duration-long4);
-  font-size: calc(var(--s-font-size) * 15px);
+  font-size: calc(var(--s-font-size) * 16px);
   --s-font-size: 1;
   --s-color-scrim: ${scheme.$color.scrim};
   --s-color-primary: ${scheme.$color.primary};

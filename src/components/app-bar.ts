@@ -1,5 +1,5 @@
 import { useProps, useElement } from '../core/elements.js'
-import { MediaQueryer } from '../core/utils/mediaQueryer.js'
+import { MediaQueryer } from '../core/utils/media-queryer.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
@@ -69,13 +69,13 @@ const style = /*css*/`
   transition-duration: inherit;
 }
 ::slotted([slot=title]){
-  font-size: calc(var(--s-font-size) * 24px);
+  font-size: calc(var(--s-font-size, 1) * 24px);
   font-weight: 600;
   text-transform: capitalize;
   color: ${scheme.color.primary};
 }
 ::slotted([slot=subtitle]){
-  font-size: calc(var(--s-font-size) * 12px);
+  font-size: calc(var(--s-font-size, 1) * 12px);
   font-weight: 400;
   color: ${scheme.color.onSurfaceVariant};
 }
@@ -91,10 +91,10 @@ const style = /*css*/`
   padding: 0 20px;
   .headline{
     ::slotted([slot=title]){
-      font-size: calc(var(--s-font-size) * 20px);
+      font-size: calc(var(--s-font-size, 1) * 20px);
     }
     ::slotted([slot=subtitle]){
-      font-size: calc(var(--s-font-size) * 10px);
+      font-size: calc(var(--s-font-size, 1) * 10px);
     }
   }
   .layout{
@@ -118,7 +118,7 @@ const template = /*html*/`
 </div>
 `
 
-export class Appbar extends useElement({
+export class AppBar extends useElement({
   props, style, template,
   setup() {
     const mediaQueryer = new MediaQueryer(this.media)
@@ -135,11 +135,11 @@ export class Appbar extends useElement({
   }
 }) { }
 
-const name = Appbar.define('s-appbar')
+const name = AppBar.define('s-app-bar')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Appbar
+    [name]: AppBar
   }
   namespace React {
     namespace JSX {
@@ -161,7 +161,7 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & Appbar
+    } & AppBar
   }
 }
 //@ts-ignore

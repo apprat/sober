@@ -1,7 +1,7 @@
 import { useElement, useProps } from '../core/elements.js'
 import { device } from '../core/device.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
-import { oneEvent } from '../core/utils/oneEvent.js'
+import { oneEvent } from '../core/utils/one-event.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({

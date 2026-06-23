@@ -1,7 +1,7 @@
 import { useElement, useProps } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
-import { MediaQueryer } from '../core/utils/mediaQueryer.js'
+import { MediaQueryer } from '../core/utils/media-queryer.js'
 
 const props = useProps({
   startOpen: true,
@@ -81,6 +81,7 @@ const style = /*css*/`
   height: 100%;
   right: 0;
   overflow: hidden;
+  flex-shrink: 0;
   contain: layout;
 }
 .start{

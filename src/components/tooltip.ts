@@ -1,9 +1,10 @@
 import { useElement, useProps } from '../core/elements.js'
 import { device } from '../core/device.js'
-import { getStackingContext } from '../core/utils/getStackingContext.js'
+import { getStackingContext } from '../core/utils/get-stacking-context.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
-import { oneEvent } from '../core/utils/oneEvent.js'
+import { oneEvent } from '../core/utils/one-event.js'
 import { popup } from '../core/utils/popup.js'
+import { ResizeWatcher } from '../core/utils/resize-watcher.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
@@ -69,10 +70,22 @@ export class Tooltip extends useElement({
       const duration = computedStyle.getDuration('transition-duration')
       return { easing, duration }
     }
-    const state: { opened: boolean, timer?: number } = { opened: false }
+    const resizer = new ResizeWatcher(popover)
+    resizer.onChange = () => updatePopover()
+    const state: { open: boolean, timer?: number } = { open: false }
+    const updatePopover = () => {
+      if (!info.parentNode) return
+      const cssGravity = computedStyle.getValue('--s-tooltip-gravity') as typeof this.gravity
+      const gravity = props.metadata.gravity.types?.includes(cssGravity) ? cssGravity : this.gravity
+      const gap = computedStyle.getNumber('outline-offset')
+      const position = popup({ anchor: info.parentNode, popover, gravity, gap })
+      popover.style.top = `${position.top}px`
+      popover.style.left = `${position.left}px`
+      popover.style.transformOrigin = position.origin.join(' ')
+    }
     const open = async () => {
-      if (!this.isConnected || !info.parentNode || state.opened) return
-      state.opened = true
+      if (!this.isConnected || !info.parentNode || state.open) return
+      state.open = true
       popover.style.display = 'block'
       popover.style.removeProperty('top')
       popover.style.removeProperty('left')
@@ -82,21 +95,17 @@ export class Tooltip extends useElement({
         popover.style.marginTop = `${-rect.top}px`
       }
       popover.showPopover?.()
-      const cssGravity = computedStyle.getValue('--s-tooltip-gravity') as typeof this.gravity
-      const gravity = props.metadata.gravity.types?.includes(cssGravity) ? cssGravity : this.gravity
-      const gap = computedStyle.getNumber('outline-offset')
-      const position = popup({ anchor: info.parentNode, popover, gravity, gap })
-      popover.style.top = `${position.top}px`
-      popover.style.left = `${position.left}px`
-      popover.style.transformOrigin = position.origin.join(' ')
+      updatePopover()
+      resizer.run()
       await popover.animate({ opacity: [0, 1], transform: ['scale(.8)', 'scale(1)'] }, getAnimateOptions()).finished
       this.dispatchEvent(new Event('opened'))
     }
     const close = async () => {
-      if (!this.isConnected || !state.opened) return
-      state.opened = false
+      if (!this.isConnected || !state.open) return
+      state.open = false
       await popover.animate({ opacity: [1, 0], transform: ['scale(1)', 'scale(.8)'] }, getAnimateOptions()).finished
-      if (state.opened) return
+      if (state.open) return
+      resizer.stop()
       popover.hidePopover?.()
       popover.style.removeProperty('display')
       this.dispatchEvent(new Event('closed'))
@@ -131,7 +140,7 @@ export class Tooltip extends useElement({
         { element: window, events: ['resize'] }
       ], () => {
         clearTimeout(state.timer)
-        state.opened && hide()
+        state.open && hide()
       })
     }
     const addEvent = () => {

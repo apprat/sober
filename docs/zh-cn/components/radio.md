@@ -28,7 +28,7 @@
 
 在 **Vue** 框架中使用 `v-model` 语法时，可以省略 `name` 属性。
 
-```vue
+```vue preview
 <template>
   <s-radio value="male" v-model.lazy="group" type="radio">男</s-radio>
   <s-radio value="female" v-model.lazy="group" type="radio">女</s-radio>
@@ -36,6 +36,7 @@
   当前选中：{{ group }}
 </template>
 <script setup>
+  import { ref } from 'vue'
   const group = ref('male')
 </script>
 ```
@@ -57,7 +58,7 @@
 
 如果你需要单独设置选中前后的颜色，可以使用 CSS 选择器；
 
-```html preview
+```html
 <style>
   .radio{
     color: #336699;
@@ -66,8 +67,10 @@
     color: #009688;
   }
 </style>
-<s-radio class="radio" name="other">其他 A</s-radio>
-<s-radio class="radio" name="other">其他 B</s-radio>
+<template>
+  <s-radio class="radio" name="other">其他 A</s-radio>
+  <s-radio class="radio" name="other">其他 B</s-radio>
+</template>
 ```
 
 ## 表单支持

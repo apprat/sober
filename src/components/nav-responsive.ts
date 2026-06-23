@@ -1,6 +1,7 @@
 import { useProps, useElement } from '../core/elements.js'
 import { Selector } from '../core/utils/selector.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
+import { ResizeWatcher } from '../core/utils/resize-watcher.js'
 import { popup } from '../core/utils/popup.js'
 import * as scheme from '../core/scheme.js'
 import './ripple.js'
@@ -25,24 +26,31 @@ const style = /*css*/`
 :host{
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 8px;
   min-width: 40px;
   outline-offset: 4px;
+  transition-property: none;
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
 }
+.wrap{
+  display: inline-flex;
+  align-items: inherit;
+  gap: inherit;
+}
 .layout{
-  display: flex;
-  position: static;
+  display: contents;
+  position: fixed;
   border: none;
   background: none;
   padding: 0;
+  gap: inherit;
   flex-shrink: 0;
-  gap: 8px;
   min-width: 0;
   height: auto;
   inset: auto;
   margin: 0;
-  overflow: hidden;
 }
 .container{
   display: contents;
@@ -51,27 +59,37 @@ const style = /*css*/`
   display: none;
 }
 :host([icon-only]){
-  .layout{
-    gap: 4px;
-    --s_navigation-responsive-item-text-display: none;
-    ::slotted(s-navigation-responsive-item){
-      padding: 14px;
-    }
+  .wrap{
+    --s_nav-responsive-item-text-display: none;
+    --s_nav-responsive-item-layout-padding: 0;
+    --s_nav-responsive-item-indicator-transform: scale(0, 0);
   }
 }
 :host([collapsed]){
+  .wrap{
+    --s_nav-responsive-item-icon-display: contents;
+    --s_nav-responsive-item-badge-position: relative;
+    --s_nav-responsive-item-badge-transform: none;
+    --s_nav-responsive-item-layout-padding: 0 16px;
+    --s_nav-responsive-item-layout-pressed-border-radius: 0px;
+  }
   .layout{
-    position: fixed;
     display: none;
-    opacity: 0;
     pointer-events: none;
-    --s_navigation-responsive-item-icon-display: contents;
-    --s_navigation-responsive-item-badge-position: relative;
-    --s_navigation-responsive-item-badge-transform: none;
+    .container{
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      border-radius: 4px;
+      gap: inherit;
+      padding: 8px 0;
+      contain: layout;
+      background: ${scheme.color.surfaceContainer};
+      box-shadow: ${scheme.elevation.level3};
+    }
     &.open{
       display: flex;
       pointer-events: auto;
-      opacity: 1;
       width: 100%;
       height: 100%;
       max-width: 100%;
@@ -84,17 +102,6 @@ const style = /*css*/`
     &::backdrop{
       background: none;
     }
-    .container{
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      border-radius: 8px;
-      gap: 4px;
-      padding: 8px 0;
-      contain: layout;
-      background: ${scheme.color.surfaceContainer};
-      box-shadow: ${scheme.elevation.level3};
-    }
   }
   .toggle{
     display: block;
@@ -105,14 +112,12 @@ const style = /*css*/`
 const itemStyle = /*css*/`
 :host{
   display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
   height: 40px;
-  padding: 0 16px;
   flex-shrink: 0;
-  gap: 8px;
   min-width: 0;
+  gap: 8px;
+  min-width: 40px;
   border-radius: 20px;
   position: relative;
   white-space: nowrap;
@@ -124,8 +129,17 @@ const itemStyle = /*css*/`
   color: ${scheme.color.onSurfaceVariant};
 }
 .layout{
-  display: contents;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: inherit;
+  gap: inherit;
+  padding: 0 16px;
+  min-width: inherit;
+  transition-property: border-radius;
+  &[pressed]{
+    border-radius: var(--s_nav-responsive-item-layout-pressed-border-radius, 8px);
+  }
   &::before,
   &::after{
     content: '';
@@ -139,7 +153,7 @@ const itemStyle = /*css*/`
     filter: opacity(.1);
   }
   &::before{
-    transform: scaleX(.5);
+    transform: scale(.5, 1);
     transition-property: transform, opacity;
     transition-duration: inherit;
     background: ${scheme.color.secondaryContainer};
@@ -147,7 +161,6 @@ const itemStyle = /*css*/`
   &.has-icon{
     .icon{
       display: flex;
-      position: relative;
     }
     ::slotted(s-badge){
       position: absolute;
@@ -156,21 +169,33 @@ const itemStyle = /*css*/`
       transform: translate(50%, -50%);
     }
   }
+  &.has-icon:not(.has-text){
+    width: 40px;
+    padding: var(--s_nav-responsive-item-layout-padding, 0);
+    &::before{
+      transform: scale(0, 0);
+    }
+  }
   &.has-icon.has-text{
+    padding: var(--s_nav-responsive-item-layout-padding, 0 16px);
+    &::before{
+      transform: var(--s_nav-responsive-item-indicator-transform, scale(.5, 1));
+    }
     .icon{
-      display: var(--s_navigation-responsive-item-icon-display, flex);
+      display: var(--s_nav-responsive-item-icon-display, flex);
     }
     ::slotted([slot=text]){
-      display: var(--s_navigation-responsive-item-text-display, block);
+      display: var(--s_nav-responsive-item-text-display, block);
     }
     ::slotted(s-badge){
-      position: var(--s_navigation-responsive-item-badge-position, absolute);
-      transform: var(--s_navigation-responsive-item-badge-transform, translate(50%, -50%));
+      position: var(--s_nav-responsive-item-badge-position, absolute);
+      transform: var(--s_nav-responsive-item-badge-transform, translate(50%, -50%));
     }
   }
 }
 .icon{
   display: contents;
+  position: relative;
 }
 ::slotted(:is(s-icon, svg)[slot=icon]){
   width: 24px;
@@ -199,18 +224,21 @@ const itemStyle = /*css*/`
   color: ${scheme.color.primary};
   .layout::before{
     opacity: 1;
-    transform: scaleX(1);
+    transform: scale(1, 1);
   }
 }
 `
 
 const template = /*html*/`
-<slot name="toggle" class="toggle" part="toggle"></slot>
-<dialog class="layout" part="layout" role="navigation">
-  <div class="container" part="container">
-    <slot></slot>
-  </div>
-</dialog>
+<div class="wrap" part="wrap">
+  <dialog class="layout" part="layout" role="navigation">
+    <div class="container" part="container">
+      <slot></slot>
+    </div>
+  </dialog>
+  <slot name="action"></slot>
+  <slot name="toggle" class="toggle" part="toggle"></slot>
+</div>
 `
 
 const itemTemplate = /*html*/`
@@ -220,47 +248,22 @@ const itemTemplate = /*html*/`
     <slot></slot>
   </div>
   <slot name="text"></slot>
+  <s-ripple class="ripple" part="ripple"></s-ripple>
 </div>
-<s-ripple class="ripple" part="ripple"></s-ripple>
 `
 
-class Resizer {
-  private firsts: Element[] = []
-  private obs: ResizeObserver
-  on?: () => void
-  constructor(private root: Element, private layout: Element) {
-    this.obs = new ResizeObserver((entries) => {
-      let through = false
-      entries.forEach((entry) => {
-        if (!this.firsts.includes(entry.target)) return this.firsts.push(entry.target)
-        through = true
-      })
-      if (!through) return
-      this.on?.()
-    })
-  }
-  stop() {
-    this.firsts = []
-    this.obs.disconnect()
-  }
-  run(soon = false) {
-    if (soon) this.firsts = [this.root, this.layout]
-    this.obs.observe(this.root)
-    this.obs.observe(this.layout)
-  }
-}
-
-export class NavigationResponsive extends useElement({
+export class NavResponsive extends useElement({
   style, props, template,
   states: ['formable'],
   setup(shadowRoot, info) {
+    const wrap = shadowRoot.querySelector<HTMLDialogElement>('.wrap')!
     const layout = shadowRoot.querySelector<HTMLDialogElement>('.layout')!
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot:not([name])')!
     const toggleSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=toggle]')!
     const computedStyle = useComputedStyle(this)
-    const selector = new Selector(this, slot, NavigationResponsiveItem)
-    const resizer = new Resizer(this, layout)
+    const selector = new Selector(this, slot, NavResponsiveItem)
+    const resizer = new ResizeWatcher(this, wrap)
     const getAnimateOptions = () => {
       const easing = computedStyle.getValue('transition-timing-function')
       const duration = computedStyle.getDuration('transition-duration')
@@ -276,14 +279,13 @@ export class NavigationResponsive extends useElement({
       this.removeAttribute('collapsed')
       this.removeAttribute('icon-only')
     }
-    const render = () => {
+    resizer.onChange = () => {
       resizer.stop()
       this.removeAttribute('collapsed')
       this.setAttribute('icon-only', '')
-      const a = window.getComputedStyle(layout).gap
-      const onlyIconWidth = layout.offsetWidth
+      const onlyIconWidth = wrap.offsetWidth
       this.removeAttribute('icon-only')
-      const width = layout.offsetWidth
+      const width = wrap.offsetWidth
       if (this.offsetWidth < width) {
         if (this.offsetWidth < width && onlyIconWidth <= this.offsetWidth) {
           this.setAttribute('icon-only', '')
@@ -296,7 +298,6 @@ export class NavigationResponsive extends useElement({
       }
       resizer.run()
     }
-    resizer.on = render
     toggleSlot.onclick = async (e) => {
       if (e.target === toggleSlot || !this.hasAttribute('collapsed') || layout.open) return
       layout.classList.add('open')
@@ -312,13 +313,15 @@ export class NavigationResponsive extends useElement({
         e.preventDefault()
         close()
       }
-      selector.onChange = () => close()
       layout.onclick = () => close()
-      container.onclick = (e) => e.stopPropagation()
+      container.onclick = (e) => {
+        e.stopPropagation()
+        if (e.target === container) return
+        close()
+      }
       const close = async () => {
         layout.onclick = null
         container.onclick = null
-        delete selector.onChange
         window.removeEventListener('resize', close)
         await container.animate({ opacity: [1, 0], transform: ['scale(1)', 'scale(.8)'] }, getAnimateOptions()).finished
         layout.close()
@@ -352,7 +355,7 @@ export class NavigationResponsive extends useElement({
   }
 }) { }
 
-export class NavigationResponsiveItem extends useElement({
+export class NavResponsiveItem extends useElement({
   style: itemStyle,
   props: itemProps,
   template: itemTemplate,
@@ -373,13 +376,13 @@ export class NavigationResponsiveItem extends useElement({
   }
 }) { }
 
-const name = NavigationResponsive.define('s-navigation-responsive')
-const itemName = NavigationResponsiveItem.define('s-navigation-responsive-item')
+const name = NavResponsive.define('s-nav-responsive')
+const itemName = NavResponsiveItem.define('s-nav-responsive-item')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: NavigationResponsive
-    [itemName]: NavigationResponsiveItem
+    [name]: NavResponsive
+    [itemName]: NavResponsiveItem
   }
   namespace React {
     namespace JSX {
@@ -403,13 +406,13 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & NavigationResponsive
+    } & NavResponsive
     [itemName]: new () => {
       /**
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof itemProps.values>
-    } & NavigationResponsiveItem
+    } & NavResponsiveItem
   }
 }
 //@ts-ignore

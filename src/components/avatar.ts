@@ -10,7 +10,7 @@ const style = /*css*/`
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
   position: relative;
-  font-size: calc(var(--s-font-size) * 24px);
+  font-size: calc(var(--s-font-size, 1) * 24px);
   font-weight: 500;
   width: 40px;
   border-radius: 50%;

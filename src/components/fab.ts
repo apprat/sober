@@ -66,7 +66,7 @@ const style = /*css*/`
   border-radius: 20px;
   font-size: calc(var(--s-font-size, 1) * 22px);
   padding: 0 26px;
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 28px;
   }
 }
@@ -77,7 +77,7 @@ const style = /*css*/`
   border-radius: 28px;
   font-size: calc(var(--s-font-size, 1) * 24px);
   padding: 0 28px;
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 36px;
   }
 }
@@ -90,17 +90,17 @@ const template = /*html*/`
 <s-ripple class="ripple" part="ripple"></s-ripple>
 `
 
-export class FloatingActionButton extends useElement({
+export class Fab extends useElement({
   style: [buttonStyle, style],
   states: ['focusable'],
   props, template,
 }) { }
 
-const name = FloatingActionButton.define('s-floating-action-button')
+const name = Fab.define('s-fab')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: FloatingActionButton
+    [name]: Fab
   }
   namespace React {
     namespace JSX {
@@ -122,7 +122,7 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & FloatingActionButton
+    } & Fab
   }
 }
 //@ts-ignore

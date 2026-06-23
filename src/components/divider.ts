@@ -17,7 +17,9 @@ const style = /*css*/`
   &::after{
     content: '';
     flex-grow: 1;
-    border-top: solid 1px ${scheme.color.outlineVariant};
+    border-top-style: solid;
+    border-width: 1px;
+    border-color: ${scheme.color.outlineVariant};
   }
 }
 :host(:empty){

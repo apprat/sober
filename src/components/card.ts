@@ -4,8 +4,8 @@ import './ripple.js'
 
 const props = useProps({
   variant: ['elevated', 'filled', 'outlined'],
-  clickable: false,
-  disabled: false
+  disabled: false,
+  readOnly: false
 })
 
 const style = /*css*/`
@@ -15,6 +15,7 @@ const style = /*css*/`
   position: relative;
   width: 360px;
   border-radius: 12px;
+  cursor: pointer;
   overflow: hidden;
   transition-property: box-shadow, background-color, color, opacity;
   background: ${scheme.color.surfaceContainerLow};
@@ -39,10 +40,6 @@ const style = /*css*/`
   gap: 8px;
   padding: 0 16px;
 }
-.ripple{
-  --s-ripple-disabled: true;
-  --s-ripple-hover-disabled: true;
-}
 ::slotted(*){
   flex-shrink: 0;
 }
@@ -50,11 +47,11 @@ const style = /*css*/`
   margin: 16px;
 }
 ::slotted([slot=header-title]){
-  font-size: calc(var(--s-font-size) * 14px);
+  font-size: calc(var(--s-font-size, 1) * 14px);
   line-height: calc(100% + 4px);
 }
 ::slotted([slot=header-subtitle]){
-  font-size: calc(var(--s-font-size) * 12px);
+  font-size: calc(var(--s-font-size, 1) * 12px);
   line-height: calc(100% + 4px);
   color: ${scheme.color.onSurfaceVariant};
 }
@@ -68,17 +65,17 @@ const style = /*css*/`
 ::slotted([slot=title]){
   margin: 16px;
   line-height: calc(100% + 4px);
-  font-size: calc(var(--s-font-size) * 24px);
+  font-size: calc(var(--s-font-size, 1) * 24px);
 }
 ::slotted([slot=subtitle]){
   margin: 16px;
   line-height: calc(100% + 4px);
-  font-size: calc(var(--s-font-size) * 14px);
+  font-size: calc(var(--s-font-size, 1) * 14px);
   color: ${scheme.color.onSurfaceVariant};
 }
 ::slotted([slot=text]){
   margin: 16px;
-  font-size: calc(var(--s-font-size) * 14px);
+  font-size: calc(var(--s-font-size, 1) * 14px);
   line-height: calc(100% + 8px);
 }
 ::slotted([slot=action]){
@@ -114,14 +111,11 @@ const style = /*css*/`
     }
   }
 }
-:host([clickable]){
-  cursor: pointer;
-  &:host([pressed]){
-    box-shadow: none;
-  }
+:host([readOnly]){
+  cursor: auto;
   .ripple{
-    --s-ripple-disabled: none;
-    --s-ripple-hover-disabled: none;
+    --s-ripple-disabled: true;
+    --s-ripple-hover-disabled: true;
   }
 }
 `
@@ -150,6 +144,11 @@ const template = /*html*/`
 export class Card extends useElement({
   states: ['focusable'],
   props, style, template,
+  setup(shadowRoot) {
+    const headerAction = shadowRoot.querySelector<HTMLSlotElement>('slot[name=header-action]')!
+    const action = shadowRoot.querySelector<HTMLSlotElement>('slot[name=action]')!
+    action.onpointerdown = headerAction.onpointerdown = (e) => e.stopPropagation()
+  }
 }) { }
 
 const name = Card.define('s-card')

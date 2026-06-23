@@ -4,7 +4,7 @@ table {
   max-width: -moz-available;
   max-width: -webkit-fill-available;
   overflow: auto;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: calc(var(--s-font-size, 1) * 14px);
   white-space: nowrap;
   position: relative;

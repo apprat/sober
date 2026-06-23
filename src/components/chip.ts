@@ -8,6 +8,7 @@ const props = useProps({
   type: ['chip', 'checkbox'],
   disabled: false,
   checked: false,
+  readOnly: false,
   $name: '',
   $defualtChecked: false,
   $value: '',
@@ -37,19 +38,19 @@ const style = /*css*/`
     }
   }
 }
-::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+::slotted(:is(svg, s-icon, s-loading, s-spinner)){
   width: 18px;
 }
-::slotted(:is(svg, s-icon, s-loading, s-circular-progress)[slot=start]){
+::slotted(:is(svg, s-icon, s-loading, s-spinner)[slot=start]){
   margin-left: -8px;
 }
-::slotted(:is(svg, s-icon, s-loading, s-circular-progress)[slot=end]){
+::slotted(:is(svg, s-icon, s-loading, s-spinner)[slot=end]){
   margin-right: -8px;
 }
 ::slotted(s-avatar){
   width: 24px;
   height: 24px;
-  font-size: calc(var(--s-font-size) * 12px);
+  font-size: calc(var(--s-font-size, 1) * 12px);
 }
 ::slotted(s-avatar[slot=start]){
   margin-left: -12px;

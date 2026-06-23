@@ -3,40 +3,40 @@
 浮动操作按钮（FAB）帮助用户采取主要操作。
 
 ```html preview
-<s-floating-action-button>
+<s-fab>
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button variant="secondary">
+<s-fab variant="secondary">
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button variant="tertiary">
+<s-fab variant="tertiary">
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button variant="tonal-primary">
+<s-fab variant="tonal-primary">
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button variant="tonal-secondary">
+<s-fab variant="tonal-secondary">
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button variant="tonal-tertiary">
+<s-fab variant="tonal-tertiary">
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 ```
 
 使用其他组件作为插槽。
 
 ```html preview
-<s-floating-action-button>
+<s-fab>
   <s-loading></s-loading> <!-- [!code highlight] -->
-</s-floating-action-button>
-<s-floating-action-button>
-  <s-circular-progress indeterminate></s-circular-progress> <!-- [!code highlight] -->
-</s-floating-action-button>
+</s-fab>
+<s-fab>
+  <s-spinner indeterminate></s-spinner> <!-- [!code highlight] -->
+</s-fab>
 ```
 
 ## 禁用
@@ -44,29 +44,29 @@
 设置 `disbled` 属性禁用按钮
 
 ```html preview
-<s-floating-action-button disabled> <!-- [!code highlight] -->
+<s-fab disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button variant="secondary" disabled> <!-- [!code highlight] -->
+<s-fab variant="secondary" disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button variant="tertiary" disabled> <!-- [!code highlight] -->
+<s-fab variant="tertiary" disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button variant="tonal-primary" disabled> <!-- [!code highlight] -->
+<s-fab variant="tonal-primary" disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button variant="tonal-secondary" disabled> <!-- [!code highlight] -->
+<s-fab variant="tonal-secondary" disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button variant="tonal-tertiary" disabled> <!-- [!code highlight] -->
+<s-fab variant="tonal-tertiary" disabled> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 ```
 
 ## 隐藏的
@@ -74,9 +74,9 @@
 设置 `hidden` 属性隐藏
 
 ```html preview
-<s-floating-action-button>
+<s-fab>
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 <s-button onclick="this.previousElementSibling.hidden=!this.previousElementSibling.hidden">切换</s-button>
 ```
 
@@ -85,17 +85,17 @@
 设置 `size` 属性改变按钮大小。
 
 ```html preview
-<s-floating-action-button>
+<s-fab>
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button size="medium"> <!-- [!code highlight] -->
+<s-fab size="medium"> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button size="large"> <!-- [!code highlight] -->
+<s-fab size="large"> <!-- [!code highlight] -->
   <s-icon name="add"></s-icon>
-</s-floating-action-button>
+</s-fab>
 ```
 
 ## 扩展
@@ -103,23 +103,23 @@
 可以使用文本和 `start`、`end` 插槽添加其他内容。
 
 ```html preview
-<s-floating-action-button>
+<s-fab>
   <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
   提交信息
   <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button size="medium" variant="secondary">
+<s-fab size="medium" variant="secondary">
   <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
   提交信息
   <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
-</s-floating-action-button>
+</s-fab>
 
-<s-floating-action-button size="large" variant="tertiary">
+<s-fab size="large" variant="tertiary">
   <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
   提交信息
   <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
-</s-floating-action-button>
+</s-fab>
 ```
 
 ---

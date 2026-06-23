@@ -1,6 +1,6 @@
 import { useProps, useElement } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
-import { MediaQueryer } from '../core/utils/mediaQueryer.js'
+import { MediaQueryer } from '../core/utils/media-queryer.js'
 import { Selector } from '../core/utils/selector.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
 import './ripple.js'
@@ -20,9 +20,6 @@ const itemProps = useProps({
   selectable: true,
   open: false
 })
-const itemEvents = {
-  beforechange: Event
-}
 
 const style = /*css*/`
 :host{
@@ -40,8 +37,9 @@ const style = /*css*/`
   align-items: center;
   min-width: 0;
   gap: 8px;
+  min-height: 100%;
 }
-::slotted(:is(label, s-divider, s-navigation-rail-item)){
+::slotted(:is(label, s-divider, s-nav-rail-item)){
   align-self: stretch;
 }
 ::slotted(label){
@@ -53,19 +51,19 @@ const style = /*css*/`
   color: ${scheme.color.outline};
 }
 :host([collapsed]){
-  --s_navigation-rail-item-font-size: 12px;
-  --s_navigation-rail-item-text-min-width: auto;
-  --s_navigation-rail-item-badge-margin-left: 0;
-  --s_navigation-rail-item-badge-inset: 6px 2px auto auto;
-  --s_navigation-rail-item-badge-position: absolute;
-  --s_navigation-rail-item-badge-transform: translate(50%, -50%);
-  --s_navigation-rail-item-indicator-display: flex;
-  --s_navigation-rail-item-indicator-width: 56px;
-  --s_navigation-rail-item-indicator-height: 32px;
-  --s_navigation-rail-item-indicator-inset: auto;
-  --s_navigation-rail-item-layout-padding: 6px 0;
-  --s_navigation-rail-item-layout-flex-direction: column;
-  --s_navigation-rail-item-layout-gap: 2px;
+  --s_nav-rail-item-font-size: 12px;
+  --s_nav-rail-item-text-min-width: auto;
+  --s_nav-rail-item-badge-margin-left: 0;
+  --s_nav-rail-item-badge-inset: 6px 2px auto auto;
+  --s_nav-rail-item-badge-position: absolute;
+  --s_nav-rail-item-badge-transform: translate(50%, -50%);
+  --s_nav-rail-item-indicator-display: flex;
+  --s_nav-rail-item-indicator-width: 56px;
+  --s_nav-rail-item-indicator-height: 32px;
+  --s_nav-rail-item-indicator-inset: auto;
+  --s_nav-rail-item-layout-padding: 6px 0;
+  --s_nav-rail-item-layout-flex-direction: column;
+  --s_nav-rail-item-layout-gap: 2px;
 }
 `
 
@@ -84,7 +82,7 @@ const itemStyle = /*css*/`
   display: contents;
   &.has-text{
     ::slotted([slot=text]){
-      min-width: var(--s_navigation-rail-item-text-min-width, 80px);
+      min-width: var(--s_nav-rail-item-text-min-width, 80px);
     }
   }
   &.has-icon:not(.has-text){
@@ -112,28 +110,28 @@ const itemStyle = /*css*/`
   }
   &.has-icon.has-text:not(.has-action):not(.has-sub-rail){
     .layout{
-      flex-direction: var(--s_navigation-rail-item-layout-flex-direction, row);
-      padding: var(--s_navigation-rail-item-layout-padding, 0 16px);
-      gap: var(--s_navigation-rail-item-layout-gap, 8px);
+      flex-direction: var(--s_nav-rail-item-layout-flex-direction, row);
+      padding: var(--s_nav-rail-item-layout-padding, 0 16px);
+      gap: var(--s_nav-rail-item-layout-gap, 8px);
     }
     .ripple{
-      display: var(--s_navigation-rail-item-indicator-display, contents);
-      height: var(--s_navigation-rail-item-indicator-height, 100%);
+      display: var(--s_nav-rail-item-indicator-display, contents);
+      height: var(--s_nav-rail-item-indicator-height, 100%);
       &::part(container),
       &::before,
       &::after{
-        inset: var(--s_navigation-rail-item-indicator-inset, auto 0);
-        width: var(--s_navigation-rail-item-indicator-width, 100%);
-        height: var(--s_navigation-rail-item-indicator-height, 100%);
+        inset: var(--s_nav-rail-item-indicator-inset, auto 0);
+        width: var(--s_nav-rail-item-indicator-width, 100%);
+        height: var(--s_nav-rail-item-indicator-height, 100%);
       }
     }
     ::slotted([slot=text]){
-      font-size: calc(var(--s-font-size, 1) * var(--s_navigation-rail-item-font-size, 14px));
+      font-size: calc(var(--s-font-size, 1) * var(--s_nav-rail-item-font-size, 14px));
     }
     ::slotted(s-badge){
-      position: var(--s_navigation-rail-item-badge-position, relative);
-      inset: var(--s_navigation-rail-item-badge-inset, auto);
-      transform: var(--s_navigation-rail-item-badge-transform, none);
+      position: var(--s_nav-rail-item-badge-position, relative);
+      inset: var(--s_nav-rail-item-badge-inset, auto);
+      transform: var(--s_nav-rail-item-badge-transform, none);
     }
   }
   &.has-sub-rail{
@@ -225,7 +223,7 @@ const itemStyle = /*css*/`
   transition-duration: inherit;
   transition-timing-function: inherit;
 }
-::slotted(s-navigation-rail){
+::slotted(s-nav-rail){
   width: 100%;
   margin-top: 8px;
   background: ${scheme.color.surfaceContainer};
@@ -282,13 +280,13 @@ const itemTemplate = /*html*/`
 </div>
 `
 
-export class NavigationRail extends useElement({
+export class NavRail extends useElement({
   props, style, template,
   states: ['formable'],
   setup(shadowRoot, info) {
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot:not([name])')!
     const mediaQueryer = new MediaQueryer(this.media)
-    const selector = new Selector(this, slot, NavigationRailItem)
+    const selector = new Selector(this, slot, NavRailItem)
     selector.onValueChange = () => info.internals.setFormValue(selector.getFormData())
     mediaQueryer.onChange = (v) => this.mode === 'auto' && this.toggleAttribute('collapsed', v)
     return {
@@ -320,12 +318,11 @@ export class NavigationRail extends useElement({
   }
 }) { }
 
-export class NavigationRailItem extends useElement({
+export class NavRailItem extends useElement({
   states: ['focusable', 'pressable', 'hoverable'],
   props: itemProps,
   style: itemStyle,
   template: itemTemplate,
-  events: itemEvents,
   setup(shadowRoot) {
     const wrap = shadowRoot.querySelector<HTMLDivElement>('.wrap')!
     const iconSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=icon]')!
@@ -362,12 +359,13 @@ export class NavigationRailItem extends useElement({
   }
 }) { }
 
-const name = NavigationRail.define('s-navigation-rail')
-const itemName = NavigationRailItem.define('s-navigation-rail-item')
+const name = NavRail.define('s-nav-rail')
+const itemName = NavRailItem.define('s-nav-rail-item')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: NavigationRail
+    [name]: NavRail
+    [itemName]: NavRailItem
   }
   namespace React {
     namespace JSX {
@@ -391,13 +389,13 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & NavigationRail
+    } & NavRail
     [itemName]: new () => {
       /**
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof itemProps.values>
-    } & NavigationRailItem
+    } & NavRailItem
   }
 }
 //@ts-ignore

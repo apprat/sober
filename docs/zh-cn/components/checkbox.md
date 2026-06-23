@@ -46,13 +46,15 @@
 
 如果你需要单独设置选中的颜色，可以使用 CSS 选择器；
 
-```html preview
+```vue preview
 <style>
   .checkbox[checked]{
     color: #009688;
   }
 </style>
-<s-checkbox class="checkbox">已阅读用户协议</s-checkbox>
+<template>
+  <s-checkbox class="checkbox">已阅读用户协议</s-checkbox>
+</template>
 ```
 
 ## 表单支持

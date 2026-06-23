@@ -55,16 +55,16 @@ export class Selector<C extends Component, CI extends ComponentItem> {
     component.addEventListener(`${name}:change`, (event) => {
       event.stopPropagation()
       const target = event.target as CI
-      target.dispatchEvent(new Event('beforechange'))
-      if (target.disabled || !target.selectable || !this.component.selectable) return
-      const selected = target.selected
-      const old = [...this.selectedItems]
-      target.selected = component.multiple ? !selected : true
-      if (selected !== target.selected) {
-        this.onChange?.(old)
-        target.dispatchEvent(new Event('change'))
-        component.dispatchEvent(new Event('change'))
+      if (!target.disabled && target.selectable && this.component.selectable) {
+        const selected = target.selected
+        const old = [...this.selectedItems]
+        target.selected = component.multiple ? !selected : true
+        if (selected !== target.selected) {
+          this.onChange?.(old)
+          component.dispatchEvent(new Event('change'))
+        }
       }
+      target.dispatchEvent(new Event('input'))
     })
     component.addEventListener(`${name}:selected`, (event) => {
       event.stopPropagation()

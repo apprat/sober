@@ -2,8 +2,8 @@ import { useProps, useElement } from '../core/elements.js'
 import { Selector } from '../core/utils/selector.js'
 import * as scheme from '../core/scheme.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
-import { scrollElement } from '../core/utils/scrollElement.js'
-import { MediaQueryer } from '../core/utils/mediaQueryer.js'
+import { scrollElement } from '../core/utils/scroll-element.js'
+import { MediaQueryer } from '../core/utils/media-queryer.js'
 
 const props = useProps({
   name: '',

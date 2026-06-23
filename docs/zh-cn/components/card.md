@@ -66,26 +66,26 @@
 </s-card>
 ```
 
-## 可点击的
+## 只读的
 
-设置 `clickable` 属性，卡片可以点击交互，如果卡片中有其他可以触发波纹的组件，可以监听 `pointerdown` 事件阻止波纹传播。
+设置 `readOnly` 属性，卡片禁用点击交互，如果卡片中有其他可以触发波纹的组件。
 
 ```html preview
-<s-card clickable>
+<s-card readOnly>
   <s-avatar slot="header-avatar">U</s-avatar>
   <div slot="header-title">Header Title</div>
   <div slot="header-subtitle">Header SubTitle</div>
-  <s-icon-button slot="header-action" width="narrow" onpointerdown="event.stopPropagation()"> 
+  <s-icon-button slot="header-action" width="narrow"> 
     <s-icon name="more_vert"></s-icon>
   </s-icon-button>
   <div slot="media"></div>
   <div slot="title">Title</div>
   <div slot="subtitle">subTitle</div>
   <div slot="text">Color values are implemented through design tokens. For design, this means working with color values that correspond with tokens. </div>
-  <s-button slot="action" variant="outlined" onpointerdown="event.stopPropagation()">
+  <s-button slot="action" variant="outlined">
     Secondary
   </s-button>
-  <s-button slot="action" onpointerdown="event.stopPropagation()">
+  <s-button slot="action">
     Primary
   </s-button>
 </s-card>
@@ -95,11 +95,11 @@
 
 ## 属性
 
-| 名称      | 类型                       | 默认值   | 同步 | 说明     |
-| --------- | -------------------------- | -------- | ---- | -------- |
-| variant   | elevated, filled, outlined | elevated | √    | 变体     |
-| clickable | boolean                    | false    | √    | 可点击的 |
-| disabled  | boolean                    | false    | √    | 禁用的   |
+| 名称     | 类型                       | 默认值   | 同步 | 说明   |
+| -------- | -------------------------- | -------- | ---- | ------ |
+| variant  | elevated, filled, outlined | elevated | √    | 变体   |
+| readOnly | boolean                    | false    | √    | 只读的 |
+| disabled | boolean                    | false    | √    | 禁用的 |
 
 ## 插槽
 
@@ -121,9 +121,7 @@
 | 名称    | 说明           |
 | ------- | -------------- |
 | pressed | 按下时设置     |
-| hovered | 鼠标移入时设置 |
-
-> 标记属性在一些情况下被设置到 HTML 属性上，以便于外部定义样式。
+| hover   | 鼠标移入时设置 |
 
 ## 键盘快捷键
 

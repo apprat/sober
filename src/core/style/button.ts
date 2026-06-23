@@ -32,7 +32,7 @@ export const buttonStyle = /*css*/`
   background: color-mix(in srgb, ${scheme.color.onSurface} 12%, transparent) !important;
   color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
 }
-::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+::slotted(:is(svg, s-icon, s-loading, s-spinner)){
   fill: currentColor;
   color: currentColor;
   flex-shrink: 0;

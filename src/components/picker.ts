@@ -1,6 +1,6 @@
 import { useProps, useElement } from '../core/elements.js'
 import { Selector } from '../core/utils/selector.js'
-import { MediaQueryer } from '../core/utils/mediaQueryer.js'
+import { MediaQueryer } from '../core/utils/media-queryer.js'
 import * as scheme from '../core/scheme.js'
 import './ripple.js'
 

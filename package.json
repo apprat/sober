@@ -1,6 +1,6 @@
 {
   "name": "sober",
-  "version": "2.0.0-alpha.12",
+  "version": "2.0.0-alpha.13",
   "description": "Sober is a library of UI components designed with reference to Material You.",
   "type": "module",
   "scripts": {
@@ -27,7 +27,7 @@
   "exports": {
     ".": "./dist/main.js",
     "./theme": "./dist/theme.js",
-    "./style/*": "./style/*",
+    "./styles/*": "./styles/*",
     "./*": "./dist/components/*.js"
   },
   "author": "apprat",
@@ -48,5 +48,11 @@
   },
   "dependencies": {
     "@material/material-color-utilities": "^0.4.0"
-  }
+  },
+  "funding": [
+    "https://mangotool.cn",
+    "https://www.bplewiki.top",
+    "https://www.qiaoxh.com",
+    "https://uoice.com"
+  ]
 }

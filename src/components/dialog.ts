@@ -78,7 +78,7 @@ const style = /*css*/`
     max-width: -moz-available;
     max-width: -webkit-fill-available;
     ::slotted(:is([slot=title], [slot=center-title])){
-      font-size: calc(var(--s-font-size) * 24px);
+      font-size: calc(var(--s-font-size, 1) * 24px);
       font-weight: 600;
       padding: 24px 24px 0;
       line-height: 1.6;

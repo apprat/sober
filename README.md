@@ -76,4 +76,4 @@ scheme.apply(page)
 | ----------------- | ------------ |
 | Chromium (Chrome) | 88+          |
 | Gecko (Firefox)   | 78+          |
-| Webkit (Safari)   | 14+          |
+| Webkit (Safari)   | 15.4+        |

@@ -88,7 +88,7 @@ svg,
 ::slotted(*){
   flex-shrink: 0;
 }
-::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+::slotted(:is(svg, s-icon, s-loading, s-spinner)){
   fill: currentColor;
   color: currentColor;
   width: 20px;
@@ -171,7 +171,7 @@ svg,
   .layout{
     padding: 0 24px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 24px;
   }
   svg,
@@ -202,7 +202,7 @@ svg,
       border-bottom-left-radius: 20px;
     }
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 32px;
   }
   svg,
@@ -233,7 +233,7 @@ svg,
       border-bottom-left-radius: 20px;
     }
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-circular-progress)){
+  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
     width: 40px;
   }
   svg,

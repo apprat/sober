@@ -68,7 +68,7 @@ const style = /*css*/`
       cursor: pointer;
       position: relative;
       border-radius: 8px;
-      font-size: calc(var(--s-font-size) * 57px);
+      font-size: calc(var(--s-font-size, 1) * 57px);
       transition-property: background-color, color;
       background: ${scheme.color.surfaceContainerHighest};
       color: ${scheme.color.onSurface};
@@ -111,7 +111,7 @@ const style = /*css*/`
       font-weight: 500;
       cursor: pointer;
       transition-property: background-color, color;
-      font-size: calc(var(--s-font-size) * 16px);
+      font-size: calc(var(--s-font-size, 1) * 16px);
       color: ${scheme.color.onSurfaceVariant};
       border-color: ${scheme.color.outline};
       &:focus-visible{

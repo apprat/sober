@@ -113,7 +113,7 @@ const template = /*html*/`
 </div>
 `
 
-export class CircularProgress extends useElement({
+export class Spinner extends useElement({
   style, props, template,
   setup(shadowRoot) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
@@ -127,11 +127,11 @@ export class CircularProgress extends useElement({
   }
 }) { }
 
-const name = CircularProgress.define('s-circular-progress')
+const name = Spinner.define('s-spinner')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: CircularProgress
+    [name]: Spinner
   }
   namespace React {
     namespace JSX {
@@ -153,7 +153,7 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & CircularProgress
+    } & Spinner
   }
 }
 //@ts-ignore

@@ -29,7 +29,7 @@ const style = /*css*/`
   transition-duration: ${scheme.motion.duration.short4};
 }
 .layout{
-  --s_value: 50%;
+  --s_rating-value: 50%;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -44,10 +44,10 @@ const style = /*css*/`
 .fill{
   position: relative;
   top: -100%;
-  clip-path: polygon(0 0, 0 100%, var(--s_value) 100%, var(--s_value) 0);
+  clip-path: polygon(0 0, 0 100%, var(--s_rating-value) 100%, var(--s_rating-value) 0);
 }
 .track{
-  clip-path: polygon(var(--s_value) 0, var(--s_value) 100%, 100% 100%, 100% 0);
+  clip-path: polygon(var(--s_rating-value) 0, var(--s_rating-value) 100%, 100% 100%, 100% 0);
   color: ${scheme.color.secondaryContainer};
 }
 .slider{
@@ -69,7 +69,7 @@ const style = /*css*/`
     border-radius: 1px;
     height: 100%;
     transform: translateX(-50%);
-    left: var(--s_value);
+    left: var(--s_rating-value);
     opacity: 0;
     transition-property: opacity;
   }
@@ -105,14 +105,14 @@ svg,
 :host([reversed]){
   .indicator{
     left: auto;
-    right: var(--s_value);
+    right: var(--s_rating-value);
     transform: translateX(50%);
   }
   .track{
-    clip-path: polygon(0 0, calc(100% - var(--s_value)) 0, calc(100% - var(--s_value)) 100%, 0 100%);
+    clip-path: polygon(0 0, calc(100% - var(--s_rating-value)) 0, calc(100% - var(--s_rating-value)) 100%, 0 100%);
   }
   .fill{
-    clip-path: polygon(calc(100% - var(--s_value)) 0, calc(100% - var(--s_value)) 100%, 100% 100%, 100% 0);
+    clip-path: polygon(calc(100% - var(--s_rating-value)) 0, calc(100% - var(--s_rating-value)) 100%, 100% 100%, 100% 0);
   }
 }
 :host([readonly]){
@@ -163,7 +163,7 @@ export class Rating extends useElement({
     const updateFrom = () => info.internals.setFormValue(this.disabled ? null : String(baseSlider.end))
     const render = () => {
       const v = ((baseSlider.end - this.min) / (this.max - this.min)) * 100
-      layout.style.setProperty('--s_value', `${v}%`)
+      layout.style.setProperty('--s_rating-value', `${v}%`)
     }
     baseSlider.oninput = () => {
       this.dispatchEvent(new Event('input'))

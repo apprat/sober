@@ -282,7 +282,9 @@ export const useElement = <
         Object.defineProperty(this, key, desc)
       }
       //组件未初始化前的赋值调用
-      for (const key in beforeAttrs) this[key as keyof this] = beforeAttrs[key] as never
+      Promise.resolve().then(() => {
+        for (const key in beforeAttrs) this[key as keyof this] = beforeAttrs[key] as never
+      })
       //自定义属性事件绑定
       const events: RawoObject<((e: Event) => void) | null> = {}
       for (const key in options.events) {

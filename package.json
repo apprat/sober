@@ -1,6 +1,6 @@
 {
   "name": "sober",
-  "version": "2.0.0-alpha.13",
+  "version": "2.0.0-alpha.14",
   "description": "Sober is a library of UI components designed with reference to Material You.",
   "type": "module",
   "scripts": {
@@ -29,6 +29,7 @@
     ".": "./dist/main.js",
     "./theme": "./dist/theme.js",
     "./styles/*": "./styles/*",
+    "./utils/*": "./dist/core/utils/*.js",
     "./*": "./dist/components/*.js"
   },
   "author": "unreal-space",

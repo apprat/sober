@@ -11,15 +11,18 @@
 
 可以调用 `showModal` 静态方法显示一个全屏加载（如果已经存在一个全屏加载，则会关闭原有的）。
 
-```js
-import { Loading } from 'sober'
+```vue preview
+<script setup>
+  import { Loading } from 'sober'
 
-Loading.showModal()
-setTimeout(() => Loading.hideModal(), 3000)
-```
-
-```html preview
-<s-button onclick="customElements.get('s-loading').showModal(); setTimeout(() => customElements.get('s-loading').hideModal(), 3000)"> 显示 3 秒加载 </s-button>
+  const showLoading = () => {
+    Loading.showModal()
+    setTimeout(() => Loading.hideModal(), 3000)
+  }
+</script>
+<template>
+  <s-button @click="showLoading"> 显示 3 秒加载 </s-button>
+</template>
 ```
 
 ---
@@ -35,8 +38,8 @@ setTimeout(() => Loading.hideModal(), 3000)
 ## 原型
 
 ```ts
-class Loading extends HTMLElement {
-  //显示加载框
+class Loading extends HTMLElement implements Props {
+  //显示一个加载框
   static showModal(options: {
     root?: Element //插入的目标元素，为空则寻找 document.body 下第一个 <s-page> 元素
   }): void

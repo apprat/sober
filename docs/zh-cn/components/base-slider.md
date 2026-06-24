@@ -60,8 +60,8 @@
 
 ### 音量操作滑块
 
-```html preview
-<style>
+```vue preview
+<style scoped>
   .volume-slider{
     height: 150px;
     width: 64px;
@@ -83,29 +83,32 @@
     outline: none;
   }
   .light-icon{
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
     position: absolute;
     bottom: 20px;
     color: var(--s-color-on-primary);
   }
 </style>
-<!--亮度操作滑块-->
-<s-base-slider class="volume-slider" orientation="vertical" slidingMode="all-cumulative">
-  <s-icon name="light_mode" class="light-icon"></s-icon>
-</s-base-slider>
-<!--音量操作滑块-->
-<s-base-slider class="volume-slider" orientation="vertical" slidingMode="all-cumulative" end="70">
-  <s-icon class="light-icon">
-    <svg viewBox="0 -960 960 960">
+<template>
+  <!--亮度操作滑块-->
+  <s-base-slider class="volume-slider" orientation="vertical" slidingMode="all-cumulative">
+    <s-icon name="light_mode" class="light-icon"></s-icon>
+  </s-base-slider>
+  <!--音量操作滑块-->
+  <s-base-slider class="volume-slider" orientation="vertical" slidingMode="all-cumulative" end="70">
+    <svg viewBox="0 -960 960 960" class="light-icon">
       <path d="M560-131v-82q90-26 145-100t55-168q0-94-55-168T560-749v-82q124 28 202 125.5T840-481q0 127-78 224.5T560-131ZM120-360v-240h160l200-200v640L280-360H120Zm440 40v-322q47 22 73.5 66t26.5 96q0 51-26.5 94.5T560-320ZM400-606l-86 86H200v80h114l86 86v-252ZM300-480Z"></path>
     </svg>
-  </s-icon>
-</s-base-slider>
+  </s-base-slider>
+</template>
 ```
 
 ### 音乐播放器进度条
 
-```html preview
-<style>
+```vue preview
+<style scoped>
   .player-slider{
     --s-base-slider-thumb-size: 14px;
   }
@@ -113,9 +116,12 @@
     position: absolute;
     bottom: 24px;
     font-size: 12px;
-    padding: 3px 5px;
+    padding: 6px 8px;
+    font-family: system-ui;
     border-radius: 16px;
+    font-weight: 600;
     transform: scale(.5);
+    line-height: 1;
     opacity: 0;
     transform-origin: bottom;
     transition-property: transform, opacity;
@@ -128,10 +134,12 @@
     opacity: 1;
   }
 </style>
-<s-base-slider class="player-slider" slidingMode="all-cumulative" end="60" max="180" oninput="this.querySelector('.time').innerText = `${Math.floor(this.end/60).toString().padStart(2,'0')}:${(this.end%60).toString().padStart(2,'0')}`">
-  <!--时间-->
-  <div class="time" slot="thumb-end">01:00</div>
-</s-base-slider>
+<template>
+  <s-base-slider class="player-slider" slidingMode="all-cumulative" end="60" max="180" oninput="this.querySelector('.time').innerText = `${Math.floor(this.end/60).toString().padStart(2,'0')}:${(this.end%60).toString().padStart(2,'0')}`">
+    <!--时间-->
+    <div class="time" slot="thumb-end">01:00</div>
+  </s-base-slider>
+</template>
 ```
 
 ## 表单支持

@@ -5,7 +5,7 @@
 ```html preview block
 <s-drawer style="height: 500px" endOpen="false">
   <div slot="start"> </div>
-  <s-s-app-bar>
+  <s-app-bar>
     <s-icon-button slot="nav" onclick="this.closest('s-drawer').toggle('start')">
       <s-icon name="menu"></s-icon>
       <s-tooltip>切换抽屉 Start</s-tooltip>
@@ -15,7 +15,7 @@
       <s-icon name="menu"></s-icon>
       <s-tooltip>切换抽屉 End</s-tooltip>
     </s-icon-button>
-  </s-s-app-bar>
+  </s-app-bar>
   <div slot="end"></div>
 </s-drawer>
 ```
@@ -29,7 +29,7 @@
 ```html preview block
 <s-drawer style="height: 500px" mode="standard" endOpen="false">
   <div slot="start"> </div>
-  <s-s-app-bar>
+  <s-app-bar>
     <s-icon-button slot="nav" onclick="this.closest('s-drawer').toggle('start')">
       <s-icon name="menu"></s-icon>
       <s-tooltip>切换抽屉 Start</s-tooltip>
@@ -39,7 +39,7 @@
       <s-icon name="menu"></s-icon>
       <s-tooltip>切换抽屉 End</s-tooltip>
     </s-icon-button>
-  </s-s-app-bar>
+  </s-app-bar>
   <div slot="end"> </div>
 </s-drawer>
 ```
@@ -49,7 +49,7 @@
 ```html preview block
 <s-drawer style="height: 500px" mode="modal" endModalOpen>
   <div slot="start"> </div>
-  <s-s-app-bar>
+  <s-app-bar>
     <s-icon-button slot="nav" onclick="this.closest('s-drawer').toggle('start')">
       <s-icon name="menu"></s-icon>
       <s-tooltip>切换抽屉 Start</s-tooltip>
@@ -59,7 +59,7 @@
       <s-icon name="menu"></s-icon>
       <s-tooltip>切换抽屉 End</s-tooltip>
     </s-icon-button>
-  </s-s-app-bar>
+  </s-app-bar>
   <div slot="end"> </div>
 </s-drawer>
 ```
@@ -71,7 +71,7 @@
 ```html preview block
 <s-drawer style="height: 500px" endOpen="false" media="(max-width: 1024px)">
   <div slot="start"> </div>
-  <s-s-app-bar>
+  <s-app-bar>
     <s-icon-button slot="nav" onclick="this.closest('s-drawer').toggle('start')">
       <s-icon name="menu"></s-icon>
       <s-tooltip>切换抽屉 Start</s-tooltip>
@@ -81,7 +81,7 @@
       <s-icon name="menu"></s-icon>
       <s-tooltip>切换抽屉 End</s-tooltip>
     </s-icon-button>
-  </s-s-app-bar>
+  </s-app-bar>
   <div slot="end"> </div>
 </s-drawer>
 ```

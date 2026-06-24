@@ -60,18 +60,18 @@ const style = /*css*/`
 }
 :host([icon-only]){
   .wrap{
-    --s_nav-responsive-item-text-display: none;
-    --s_nav-responsive-item-layout-padding: 0;
-    --s_nav-responsive-item-indicator-transform: scale(0, 0);
+    --s_nav-adaptive-item-text-display: none;
+    --s_nav-adaptive-item-layout-padding: 0;
+    --s_nav-adaptive-item-indicator-transform: scale(0, 0);
   }
 }
 :host([collapsed]){
   .wrap{
-    --s_nav-responsive-item-icon-display: contents;
-    --s_nav-responsive-item-badge-position: relative;
-    --s_nav-responsive-item-badge-transform: none;
-    --s_nav-responsive-item-layout-padding: 0 16px;
-    --s_nav-responsive-item-layout-pressed-border-radius: 0px;
+    --s_nav-adaptive-item-icon-display: contents;
+    --s_nav-adaptive-item-badge-position: relative;
+    --s_nav-adaptive-item-badge-transform: none;
+    --s_nav-adaptive-item-layout-padding: 0 16px;
+    --s_nav-adaptive-item-layout-pressed-border-radius: 0px;
   }
   .layout{
     display: none;
@@ -138,7 +138,7 @@ const itemStyle = /*css*/`
   min-width: inherit;
   transition-property: border-radius;
   &[pressed]{
-    border-radius: var(--s_nav-responsive-item-layout-pressed-border-radius, 8px);
+    border-radius: var(--s_nav-adaptive-item-layout-pressed-border-radius, 8px);
   }
   &::before,
   &::after{
@@ -171,25 +171,25 @@ const itemStyle = /*css*/`
   }
   &.has-icon:not(.has-text){
     width: 40px;
-    padding: var(--s_nav-responsive-item-layout-padding, 0);
+    padding: var(--s_nav-adaptive-item-layout-padding, 0);
     &::before{
       transform: scale(0, 0);
     }
   }
   &.has-icon.has-text{
-    padding: var(--s_nav-responsive-item-layout-padding, 0 16px);
+    padding: var(--s_nav-adaptive-item-layout-padding, 0 16px);
     &::before{
-      transform: var(--s_nav-responsive-item-indicator-transform, scale(.5, 1));
+      transform: var(--s_nav-adaptive-item-indicator-transform, scale(.5, 1));
     }
     .icon{
-      display: var(--s_nav-responsive-item-icon-display, flex);
+      display: var(--s_nav-adaptive-item-icon-display, flex);
     }
     ::slotted([slot=text]){
-      display: var(--s_nav-responsive-item-text-display, block);
+      display: var(--s_nav-adaptive-item-text-display, block);
     }
     ::slotted(s-badge){
-      position: var(--s_nav-responsive-item-badge-position, absolute);
-      transform: var(--s_nav-responsive-item-badge-transform, translate(50%, -50%));
+      position: var(--s_nav-adaptive-item-badge-position, absolute);
+      transform: var(--s_nav-adaptive-item-badge-transform, translate(50%, -50%));
     }
   }
 }
@@ -252,7 +252,7 @@ const itemTemplate = /*html*/`
 </div>
 `
 
-export class NavResponsive extends useElement({
+export class NavAdaptive extends useElement({
   style, props, template,
   states: ['formable'],
   setup(shadowRoot, info) {
@@ -262,7 +262,7 @@ export class NavResponsive extends useElement({
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot:not([name])')!
     const toggleSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=toggle]')!
     const computedStyle = useComputedStyle(this)
-    const selector = new Selector(this, slot, NavResponsiveItem)
+    const selector = new Selector(this, slot, NavAdaptiveItem)
     const resizer = new ResizeWatcher(this, wrap)
     const getAnimateOptions = () => {
       const easing = computedStyle.getValue('transition-timing-function')
@@ -355,7 +355,7 @@ export class NavResponsive extends useElement({
   }
 }) { }
 
-export class NavResponsiveItem extends useElement({
+export class NavAdaptiveItem extends useElement({
   style: itemStyle,
   props: itemProps,
   template: itemTemplate,
@@ -376,13 +376,13 @@ export class NavResponsiveItem extends useElement({
   }
 }) { }
 
-const name = NavResponsive.define('s-nav-responsive')
-const itemName = NavResponsiveItem.define('s-nav-responsive-item')
+const name = NavAdaptive.define('s-nav-adaptive')
+const itemName = NavAdaptive.define('s-nav-adaptive-item')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: NavResponsive
-    [itemName]: NavResponsiveItem
+    [name]: NavAdaptive
+    [itemName]: NavAdaptive
   }
   namespace React {
     namespace JSX {
@@ -406,13 +406,13 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & NavResponsive
+    } & NavAdaptive
     [itemName]: new () => {
       /**
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof itemProps.values>
-    } & NavResponsiveItem
+    } & NavAdaptiveItem
   }
 }
 //@ts-ignore

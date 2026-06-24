@@ -1,28 +1,28 @@
-# NavResponsive
+# NavAdaptive
 
-响应式导航栏，它会监听自身宽度在“完整显示”、“仅显示图标”、“折叠”三种模式中切换。
+自适应导航栏，它会监听自身宽度在“完整显示”、“仅显示图标”、“折叠”三种模式中切换。
 
 ```html preview
-<s-nav-responsive>
-  <s-nav-responsive-item selected>
+<s-nav-adaptive>
+  <s-nav-adaptive-item selected>
     <s-icon name="home" slot="icon"></s-icon>
     <div slot="text"> 首页 </div>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item>
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item>
     <s-icon name="star" slot="icon"></s-icon>
     <div slot="text"> 动态 </div>
     <s-badge></s-badge>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item>
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item>
     <s-icon name="favorite" slot="icon"></s-icon>
     <div slot="text"> 发现 </div>
     <s-badge>3</s-badge>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item>
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item>
     <s-icon name="dark_mode" slot="icon"></s-icon>
     <div slot="text"> 帮助 </div>
     <s-badge>99</s-badge>
-  </s-nav-responsive-item>
+  </s-nav-adaptive-item>
   <s-icon-button slot="action">
     <s-icon name="search"></s-icon>
   </s-icon-button>
@@ -30,63 +30,63 @@
     <s-icon name="more_vert"></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
-</s-nav-responsive>
+</s-nav-adaptive>
 ```
 
 纯文本
 
 ```html preview
-<s-nav-responsive>
+<s-nav-adaptive>
   <s-icon-button slot="toggle" width="narrow"> 
     <s-icon name="more_vert"></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
-  <s-nav-responsive-item selected>
+  <s-nav-adaptive-item selected>
     <div slot="text"> 首页 </div>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item>
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item>
     <div slot="text"> 动态 </div>
     <s-badge></s-badge>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item>
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item>
     <div slot="text"> 发现 </div>
     <s-badge>3</s-badge>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item>
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item>
     <div slot="text"> 帮助 </div>
     <s-badge>99</s-badge>
-  </s-nav-responsive-item>
-</s-nav-responsive>
+  </s-nav-adaptive-item>
+</s-nav-adaptive>
 ```
 
 纯图标+工具提示
 
 ```html preview
-<s-nav-responsive>
+<s-nav-adaptive>
   <s-icon-button slot="toggle" width="narrow"> 
     <s-icon name="more_vert"></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
-  <s-nav-responsive-item selected>
+  <s-nav-adaptive-item selected>
     <s-icon name="home" slot="icon"></s-icon>
     <s-tooltip> 首页 </s-tooltip>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item>
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item>
     <s-icon name="star" slot="icon"></s-icon>
     <s-tooltip> 动态 </s-tooltip>
     <s-badge></s-badge>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item>
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item>
     <s-icon name="favorite" slot="icon"></s-icon>
     <s-tooltip> 发现 </s-tooltip>
     <s-badge>3</s-badge>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item>
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item>
     <s-icon name="dark_mode" slot="icon"></s-icon>
     <s-tooltip> 帮助 </s-tooltip>
     <s-badge>99</s-badge>
-  </s-nav-responsive-item>
-</s-nav-responsive>
+  </s-nav-adaptive-item>
+</s-nav-adaptive>
 ```
 
 在 [AppBar](./app-bar.md) 组件中使用。
@@ -97,31 +97,31 @@
     <s-icon name="menu"></s-icon>
   </s-icon-button>
   <span slot="title"> Material Sober </span>
-  <s-nav-responsive>
+  <s-nav-adaptive>
     <s-icon-button slot="toggle" width="narrow"> 
       <s-icon name="more_vert"></s-icon>
       <s-tooltip> 更多 </s-tooltip>
     </s-icon-button>
-    <s-nav-responsive-item selected>
+    <s-nav-adaptive-item selected>
       <s-icon name="home" slot="icon"></s-icon>
       <div slot="text"> 首页 </div>
-    </s-nav-responsive-item>
-    <s-nav-responsive-item>
+    </s-nav-adaptive-item>
+    <s-nav-adaptive-item>
       <s-icon name="star" slot="icon"></s-icon>
       <div slot="text"> 动态 </div>
       <s-badge></s-badge>
-    </s-nav-responsive-item>
-    <s-nav-responsive-item>
+    </s-nav-adaptive-item>
+    <s-nav-adaptive-item>
       <s-icon name="favorite" slot="icon"></s-icon>
       <div slot="text"> 发现 </div>
       <s-badge>3</s-badge>
-    </s-nav-responsive-item>
-    <s-nav-responsive-item>
+    </s-nav-adaptive-item>
+    <s-nav-adaptive-item>
       <s-icon name="dark_mode" slot="icon"></s-icon>
       <div slot="text"> 帮助 </div>
       <s-badge>99</s-badge>
-    </s-nav-responsive-item>
-  </s-nav-responsive>
+    </s-nav-adaptive-item>
+  </s-nav-adaptive>
 </s-app-bar>
 ```
 
@@ -129,109 +129,109 @@
 
 你可以使用以下两种方式来设置选中。
 
-在 `s-nav-responsive-item` 上设置 `selected` 属性来设置选中。  
+在 `s-nav-adaptive-item` 上设置 `selected` 属性来设置选中。  
 
 ```html preview
-<s-nav-responsive>
+<s-nav-adaptive>
   <s-icon-button slot="toggle" width="narrow"> 
     <s-icon name="more_vert"></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
-  <s-nav-responsive-item>
+  <s-nav-adaptive-item>
     <s-icon slot="icon" name="home"></s-icon>
     <div slot="text"> 首页 </div>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item selected> <!-- [!code highlight] -->
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item selected> <!-- [!code highlight] -->
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item>
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item>
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
-  </s-nav-responsive-item>
-</s-nav-responsive>
+  </s-nav-adaptive-item>
+</s-nav-adaptive>
 ```
 
-在 `s-nav-responsive` 上设置 `value` 属性，然后在 `s-nav-responsive-item` 上设置相同的 `value` 值来设置选中。
+在 `s-nav-adaptive` 上设置 `value` 属性，然后在 `s-nav-adaptive-item` 上设置相同的 `value` 值来设置选中。
 
 ```html preview
-<s-nav-responsive value="a2"> <!-- [!code highlight] -->
+<s-nav-adaptive value="a2"> <!-- [!code highlight] -->
   <s-icon-button slot="toggle" width="narrow"> 
     <s-icon name="more_vert"></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
-  <s-nav-responsive-item value="a1">
+  <s-nav-adaptive-item value="a1">
     <s-icon slot="icon" name="home"></s-icon>
     <div slot="text"> 首页 </div>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item value="a2"> <!-- [!code highlight] -->
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item value="a2"> <!-- [!code highlight] -->
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item value="a3">
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item value="a3">
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
-  </s-nav-responsive-item>
-</s-nav-responsive>
+  </s-nav-adaptive-item>
+</s-nav-adaptive>
 ```
 
 ## 多选支持
 
 设置 `multiple` 属性，即可开启多选功能。  
-如果在 `s-nav-responsive` 设置 `value` 来选中，需要使用 `,` 分割多个值。  
+如果在 `s-nav-adaptive` 设置 `value` 来选中，需要使用 `,` 分割多个值。  
 你可以通过 `.selectedIndexes` 获取当前选中的下标合集，也可以通过 `.selectedItems` 获取当前选中的元素合集。
 
 ```html preview
-<s-nav-responsive multiple value="a1,a2" onchange="console.log('selected', this.selectedIndexes)"> <!-- [!code highlight] -->
+<s-nav-adaptive multiple value="a1,a2" onchange="console.log('selected', this.selectedIndexes)"> <!-- [!code highlight] -->
   <s-icon-button slot="toggle" width="narrow"> 
     <s-icon name="more_vert"></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
-  <s-nav-responsive-item value="a1"> <!-- [!code highlight] -->
+  <s-nav-adaptive-item value="a1"> <!-- [!code highlight] -->
     <s-icon slot="icon" name="home"></s-icon>
     <div slot="text"> 首页 </div>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item value="a2"> <!-- [!code highlight] -->
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item value="a2"> <!-- [!code highlight] -->
     <s-icon slot="icon" name="light_mode"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
-  </s-nav-responsive-item>
-  <s-nav-responsive-item value="a3">
+  </s-nav-adaptive-item>
+  <s-nav-adaptive-item value="a3">
     <s-icon slot="icon" name="favorite"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
-  </s-nav-responsive-item>
-</s-nav-responsive>
+  </s-nav-adaptive-item>
+</s-nav-adaptive>
 ```
 
 ## 表单支持
 
-该组件支持表单，你需要在为 `s-nav-responsive` 设置一个唯一的 `name` 属性作为表单的键，在 `s-nav-responsive-item` 设置 `value` 属性作为表单的提交值。  
+该组件支持表单，你需要在为 `s-nav-adaptive` 设置一个唯一的 `name` 属性作为表单的键，在 `s-nav-adaptive-item` 设置 `value` 属性作为表单的提交值。  
 
 ```html preview
 <form method="get" action="http://coolaf.com/tool/params">
-  <s-nav-responsive name="navigation" value="a1,a2" defaultValue="a1,a2" multiple> <!-- [!code highlight] -->
+  <s-nav-adaptive name="navigation" value="a1,a2" defaultValue="a1,a2" multiple> <!-- [!code highlight] -->
     <s-icon-button slot="toggle" width="narrow"> 
       <s-icon name="more_vert"></s-icon>
       <s-tooltip> 更多 </s-tooltip>
     </s-icon-button>
-    <s-nav-responsive-item value="a1"> 
+    <s-nav-adaptive-item value="a1"> 
       <s-icon slot="icon" name="home"></s-icon>
       <div slot="text"> 首页 </div>
-    </s-nav-responsive-item>
-    <s-nav-responsive-item value="a2"> 
+    </s-nav-adaptive-item>
+    <s-nav-adaptive-item value="a2"> 
       <s-icon slot="icon" name="light_mode"></s-icon>
       <div slot="text"> 发现 </div>
-    </s-nav-responsive-item>
-    <s-nav-responsive-item value="a3"> 
+    </s-nav-adaptive-item>
+    <s-nav-adaptive-item value="a3"> 
       <s-icon slot="icon" name="favorite"></s-icon>
       <div slot="text"> 我的 </div>
-    </s-nav-responsive-item>
-  </s-nav-responsive>
+    </s-nav-adaptive-item>
+  </s-nav-adaptive>
   <hr>
   <s-button type="reset" variant="outlined"> 重置 </s-button>
   <s-button type="submit"> 提交 </s-button>
@@ -275,9 +275,9 @@
 
 ---
 
-## NavResponsiveItem
+## NavAdaptiveItem
 
-该组件仅作为 `NavResponsive` 的子元素使用，单独使用时只是普通容器。
+该组件仅作为 `NavAdaptive` 的子元素使用，单独使用时只是普通容器。
 
 ## Item 属性
 

@@ -10,7 +10,7 @@ const props = useProps({
   $step: 1,
   $min: 0,
   reversed: false,
-  $name: '',
+  name: '',
   $defualtValue: 0
 })
 

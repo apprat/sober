@@ -10,7 +10,7 @@ import * as scheme from '../core/scheme.js'
 const props = useProps({
   gravity: ['bottom', 'top', 'left', 'right'],
   disabled: false,
-  $ancestorLevel: -1,
+  $parentDepth: -1,
 })
 const events = {
   opened: Event,
@@ -146,9 +146,9 @@ export class Tooltip extends useElement({
     const addEvent = () => {
       if (!info.parentNode) return
       let parent = info.parentNode
-      if (this.ancestorLevel > -1 && this.parentNode) {
+      if (this.parentDepth > -1 && this.parentNode) {
         let ancestor: HTMLElement = this
-        for (let i = -1; i < this.ancestorLevel; i++) {
+        for (let i = -1; i < this.parentDepth; i++) {
           if (ancestor.assignedSlot) {
             ancestor = ancestor.assignedSlot
             continue

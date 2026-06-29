@@ -21,7 +21,7 @@
 
 <s-icon-button> 
   <!--使用其他组件-->
-  <s-circular-progress indeterminate></s-circular-progress>
+  <s-spinner indeterminate></s-spinner>
 </s-icon-button>
 
 <s-icon-button> 
@@ -163,7 +163,7 @@
 
 该组件可以作为表单元素使用，可以作为复选框、表单重置、提交按钮。
 
-```html preview
+```html preview block
 <form action="http://coolaf.com/tool/params" method="get">
   选择标签：
   <s-icon-button name="tag" type="checkbox" value="star">
@@ -200,8 +200,8 @@
 | disabled       | boolean                                        | false       | √    | 禁用的                                             |
 | checked        | boolean                                        | false       | √    | 选中的                                             |
 | defualtChecked | boolean                                        | false       | √    | 默认选中，表单重置时的默认值，仅表单重置时生效     |
-| name           | string                                         |             | ×    | 名称，表单提交时的 `key` 值                        |
-| value          | string                                         |             | ×    | 值，表单提交时有效                                 |
+| name           | string                                         | ''          | √    | 名称，表单提交时的 `key` 值                        |
+| value          | string                                         | ''          | ×    | 值，表单提交时有效                                 |
 
 ## 事件
 
@@ -211,9 +211,9 @@
 
 ## 插槽
 
-| 名称 | 说明                                                       |
-| ---- | ---------------------------------------------------------- |
-| 匿名 | 图标，默认支持 svg, s-icon, s-loading, s-circular-progress |
+| 名称 | 说明                                             |
+| ---- | ------------------------------------------------ |
+| 匿名 | 图标，默认支持 svg, s-icon, s-loading, s-spinner |
 
 ## HTML 标记属性
 

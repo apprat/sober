@@ -9,12 +9,12 @@ const props = useProps({
   $step: 1,
   $min: 0,
   $max: 100,
-  $name: '',
-  $steps: '',
-  $defualtStart: 0,
-  $defualtEnd: 0,
+  name: '',
+  $stepMarks: '',
+  $defaultStart: 0,
+  $defaultEnd: 0,
   clickable: true,
-  scrollPriority: false,
+  touchScrollPriority: false,
   mode: ['single', 'reversed', 'range'],
   slidingMode: ['thumb', 'all', 'all-cumulative'],
   variant: ['standard', 'segmented'],
@@ -22,10 +22,10 @@ const props = useProps({
 })
 
 const events = {
-  press: CustomEvent<{ name: 'start' | 'end' }>,
-  pressout: CustomEvent<{ name: 'start' | 'end' }>,
-  hover: CustomEvent<{ name: 'start' | 'end' }>,
-  hoverout: CustomEvent<{ name: 'start' | 'end' }>,
+  pressstart: CustomEvent<{ name: 'start' | 'end' }>,
+  pressend: CustomEvent<{ name: 'start' | 'end' }>,
+  hoverstart: CustomEvent<{ name: 'start' | 'end' }>,
+  hoverend: CustomEvent<{ name: 'start' | 'end' }>,
 }
 
 const style = /*css*/`
@@ -49,7 +49,6 @@ const style = /*css*/`
 }
 .layout{
   display: contents;
-  --s_base-slider-gap: 0;
   --s_base-slider-gap: var(--base-slider-gap, 4px);
   --s_base-slider-thumb-size: var(--s-base-slider-thumb-size, 18px);
   --s_base-slider-thumb-width: var(--s-base-slider-thumb-width, var(--s_base-slider-thumb-size));
@@ -81,17 +80,20 @@ slot:is([name=track-start], [name=track-fill], [name=track-end]){
   left: 0;
 }
 slot[name=track-start]{
-  width: var(--s_base-slider-track-start-size);
+  width: calc(var(--s_base-slider-track-start-size) + var(--s-base-slider-track-edge-offset, 0px));
+  margin-left: calc(var(--s-base-slider-track-edge-offset, 0px) * -1);
   display: none;
 }
 slot[name=track-fill]{
-  width: var(--s_base-slider-track-fill-size);
+  width: calc(var(--s_base-slider-track-fill-size) + var(--s-base-slider-track-edge-offset, 0px));
   left: var(--s_base-slider-track-fill-position);
+  margin-left: calc(var(--s-base-slider-track-edge-offset, 0px) * -1);
   background: currentColor;
 }
 slot[name=track-end]{
-  width: var(--s_base-slider-track-end-size);
+  width: calc(var(--s_base-slider-track-end-size) + var(--s-base-slider-track-edge-offset, 0px));
   right: 0;
+  margin-right: calc(var(--s-base-slider-track-edge-offset, 0px) * -1);
   left: auto;
 }
 slot:is([name=thumb-start], [name=thumb-end]){
@@ -112,6 +114,7 @@ slot:is([name=thumb-start], [name=thumb-end]){
   }
   &::before{
     opacity: 0;
+    filter: opacity(.12);
     transform: scale(.5);
     background: currentColor;
     transition-property: opacity, transform;
@@ -136,17 +139,21 @@ slot[name=thumb-end]{
 }
 :host(:is([start-hover], [start-pressed])) slot[name=thumb-start]::before,
 :host(:is([end-hover], [end-pressed])) slot[name=thumb-end]::before{
-  opacity: .12;
+  opacity: 1;
   transform: scale(1);
 }
 :host([mode=reversed]){
   slot[name=track-fill]{
     left: auto;
     right: var(--s_base-slider-track-fill-position);
+    margin-right: calc(var(--s-base-slider-track-edge-offset, 0px) * -1);
+    margin-left: 0;
   }
   slot[name=track-end]{
     left: 0;
     right: auto;
+    margin-left: calc(var(--s-base-slider-track-edge-offset, 0px) * -1);
+    margin-right: 0;
   }
   slot[name=thumb-end]{
     left: auto;
@@ -158,6 +165,10 @@ slot[name=thumb-end]{
   .layout{
     --s_base-slider-track-fill-position: calc(var(--s_base-slider-start) * 1% + var(--s_base-slider-start-offset));
     --s_base-slider-track-fill-size: calc(var(--s_base-slider-diff) * 1% - var(--s_base-slider-start-offset) + var(--s_base-slider-end-offset));
+  }
+  slot[name=track-fill]{
+    margin-left: 0;
+    width: calc(var(--s_base-slider-track-fill-size) + var(--s_base-slider-track-edge-offset, 0px));
   }
   slot[name=thumb-start],
   slot[name=track-start]{
@@ -192,15 +203,21 @@ slot[name=thumb-end]{
     width: calc(100% / 3);
     left: auto;
     bottom: 0;
+    margin: 0;
+  }
+  slot[name=track-start]{
+    margin-bottom: calc(var(--s-base-slider-track-edge-offset, 0px) * -1);
   }
   slot[name=track-fill]{
     bottom: var(--s_base-slider-track-fill-position);
-    height: var(--s_base-slider-track-fill-size);
+    height: calc(var(--s_base-slider-track-fill-size) + var(--s-base-slider-track-edge-offset, 0px));
+    margin-bottom: calc(var(--s-base-slider-track-edge-offset, 0px) * -1);
   }
   slot[name=track-end]{
     inset: auto;
     top: 0;
-    height: var(--s_base-slider-track-end-size);
+    height: calc(var(--s_base-slider-track-end-size) + var(--s-base-slider-track-edge-offset, 0px));
+    margin-top: calc(var(--s-base-slider-track-edge-offset, 0px) * -1);
   }
   slot:is([name=thumb-start], [name=thumb-end]){
     left: auto;
@@ -223,15 +240,21 @@ slot[name=thumb-end]{
     slot[name=track-fill]{
       right: auto;
       top: var(--s_base-slider-track-fill-position);
+      margin-top: calc(var(--s-base-slider-track-edge-offset, 0px) * -1);
     }
     slot[name=track-end]{
       inset: auto;
       bottom: 0;
+      margin-bottom: calc(var(--s-base-slider-track-edge-offset, 0px) * -1);
     }
   }
   &:host([mode=range]){
     slot[name=track-start]{
-      height: var(--s_base-slider-track-start-size);
+      height: calc(var(--s_base-slider-track-start-size) + var(--s-base-slider-track-edge-offset, 0px));
+    }
+    slot[name=track-fill]{
+      bottom: calc(var(--s_base-slider-track-fill-position) + var(--s-base-slider-track-edge-offset, 0px));
+      height: var(--s_base-slider-track-fill-size);
     }
   }
 }
@@ -250,20 +273,6 @@ const template = /*html*/`
 </div>
 `
 
-const whichIsCloser = (v: number, start: number, end: number) => {
-  const toSatart = Math.abs(v - start)
-  const toEnd = Math.abs(v - end)
-  return toSatart < toEnd ? 1 : toEnd < toSatart ? 2 : 0
-}
-const findClosestStep = (num: number, step: number, max: number) => Math.max(0, Math.min(max / step, Math.round(num / step))) * step
-const findClosestStepFromArray = (num: number, arr: number[], min: number, max: number) => {
-  return arr.reduce((closest, current) => {
-    if (current < min || current > max) return closest
-    const currentDiff = Math.abs(current - num)
-    const closestDiff = Math.abs(closest - num)
-    return currentDiff < closestDiff ? current : closest
-  })
-}
 const orientation = {
   horizontal: { offsetWidth: 'offsetWidth', clientX: 'clientX', clientY: 'clientY', left: 'left' },
   vertical: { offsetWidth: 'offsetHeight', clientX: 'clientY', clientY: 'clientX', left: 'top' }
@@ -311,6 +320,34 @@ const onKeydown = (el: BaseSlider, key: string, steps: number[]) => {
   return false
 }
 
+const whichIsCloser = (v: number, start: number, end: number) => {
+  const toSatart = Math.abs(v - start)
+  const toEnd = Math.abs(v - end)
+  return toSatart < toEnd ? 1 : toEnd < toSatart ? 2 : 0
+}
+
+const findClosestStep = (value: number, min: number, max: number, step: number) => {
+  let result = min + (value / 100) * (max - min)
+  result = Math.round(result / step) * step
+  result = Math.max(min, Math.min(max, result))
+  return result
+}
+
+const findClosestArray = (value: number, arr: number[], min: number, max: number) => {
+  const uniqueSorted = [...new Set([min, ...arr, max])].sort((a, b) => a - b)
+  const mappedValue = min + (value / 100) * (max - min)
+  let closest = uniqueSorted[0]
+  let minDiff = Math.abs(uniqueSorted[0] - mappedValue)
+  for (let i = 1; i < uniqueSorted.length; i++) {
+    const diff = Math.abs(uniqueSorted[i] - mappedValue)
+    if (diff < minDiff) {
+      minDiff = diff
+      closest = uniqueSorted[i]
+    }
+  }
+  return closest
+}
+
 export class BaseSlider extends useElement({
   props, template, style, events,
   states: ['focusableOnly', 'pressable', 'hoverable', 'formable'],
@@ -335,8 +372,8 @@ export class BaseSlider extends useElement({
       return ['thumb', 'all', 'all-cumulative'].includes(cssSlidingMode) ? cssSlidingMode : this.slidingMode
     }
     const getScrollPriority = () => {
-      const cssScrollPriority = computedStyle.getValue('--s-base-slider-sliding-priority')
-      return ['', 'none'].includes(cssScrollPriority) ? this.scrollPriority : Boolean(cssScrollPriority)
+      const cssScrollPriority = computedStyle.getValue('--s-base-slider-touch-scroll-priority')
+      return ['', 'none'].includes(cssScrollPriority) ? this.touchScrollPriority : Boolean(cssScrollPriority)
     }
     const getClickable = () => {
       const cssClickChanged = computedStyle.getValue('--s-base-slider-clickable')
@@ -355,10 +392,8 @@ export class BaseSlider extends useElement({
       if ((this.orientation === 'horizontal' && this.mode === 'reversed') || (this.orientation === 'vertical' && this.mode !== 'reversed')) left = size - left
       const offset = Math.min(Math.max(0 + thumbSize / 2, (left / size * 100)), 100 - thumbSize / 2)
       const percent = ((offset - thumbSize / 2) / (100 - thumbSize)) * 100
-      const max = this.max - this.min
-      const val = percent / 100 * max
-      const newValue = steps.length > 0 ? findClosestStepFromArray(val, steps, this.min, this.max) : findClosestStep(val, this.step, max) + this.min
-      return newValue
+      if (steps.length === 0) return findClosestStep(percent, this.min, this.max, this.step)
+      return findClosestArray(percent, steps, this.min, this.max)
     }
     let touched = false
     this.addEventListener('click', (event) => {
@@ -381,7 +416,7 @@ export class BaseSlider extends useElement({
     const setPress = (name: 'start' | 'end') => {
       if (this.hasAttribute(`${name}-pressed`)) return
       this.setAttribute(`${name}-pressed`, '')
-      this.dispatchEvent(new CustomEvent('press', { detail: { name } }))
+      this.dispatchEvent(new CustomEvent('pressstart', { detail: { name } }))
     }
     const down = (event: PointerEvent, name?: 'start' | 'end') => {
       const ori = orientation[this.orientation]
@@ -427,7 +462,7 @@ export class BaseSlider extends useElement({
         this.removeAttribute('start-pressed')
         this.removeAttribute('end-pressed')
         this.removeAttribute('sliding')
-        this.dispatchEvent(new CustomEvent('pressout', { detail: { name } }))
+        this.dispatchEvent(new CustomEvent('pressend', { detail: { name } }))
         if (startValue !== this.start || endValue !== this.end) this.dispatchEvent(new Event('change'))
       }
       const eventNames = getEventNames(event.pointerType)
@@ -453,23 +488,28 @@ export class BaseSlider extends useElement({
     const hover = (name: 'start' | 'end' = 'end') => {
       if (!device.mouseEnabled || this.hasAttribute(`${name}-hover`)) return
       this.setAttribute(`${name}-hover`, '')
-      this.dispatchEvent(new CustomEvent('hover', { detail: { name } }))
+      this.dispatchEvent(new CustomEvent('hoverstart', { detail: { name } }))
     }
-    const hoverOut = (name: 'start' | 'end' = 'end') => {
+    const hoverEnd = (name: 'start' | 'end' = 'end') => {
       if (!device.mouseEnabled || !this.hasAttribute(`${name}-hover`)) return
       this.removeAttribute(`${name}-hover`)
-      this.dispatchEvent(new CustomEvent('hoverout', { detail: { name } }))
+      this.dispatchEvent(new CustomEvent('hoverend', { detail: { name } }))
     }
     thumbStartSlot.onmouseenter = () => hover('start')
-    thumbStartSlot.onmouseleave = () => hoverOut('start')
+    thumbStartSlot.onmouseleave = () => hoverEnd('start')
     thumbEndSlot.onmouseenter = () => hover()
-    thumbEndSlot.onmouseleave = () => hoverOut()
+    thumbEndSlot.onmouseleave = () => hoverEnd()
     const keydown = (key: string) => onKeydown(this as never, key, steps)
     this.addEventListener('keydown', (e) => {
       if (!keydown(e.key)) return
       e.preventDefault()
     })
-    const updateFrom = () => info.internals.setFormValue(String(this.mode !== 'range' ? this.end : `${this.start}-this.end`))
+    const updateFrom = () => {
+      const formdata = new FormData()
+      if (this.mode === 'range') formdata.append(this.name, String(this.start))
+      formdata.append(this.name, String(this.end))
+      info.internals.setFormValue(formdata)
+    }
     useThrottle(render)
     updateFrom()
     return {
@@ -488,20 +528,18 @@ export class BaseSlider extends useElement({
         get min() {
           if (info.props.min > info.props.max) return 0
           return info.props.min % info.props.step === 0 ? info.props.min : 0
-        },
-        get getSteps() {
-          return steps.join()
         }
       },
       onAttributeChanged: (name) => {
-        if (['start', 'end', 'max', 'min', 'step', 'mode'].includes(name)) useThrottle(render)
-        if (['start', 'end', 'mode'].includes(name)) updateFrom()
+        const arr = ['start', 'end', 'mode']
+        if ([...arr, 'max', 'min', 'step'].includes(name)) useThrottle(render)
+        if (arr.includes(name)) updateFrom()
       },
       onFormReset: () => {
-        this.start = this.defualtStart
-        this.end = this.defualtEnd
+        this.start = this.defaultStart
+        this.end = this.defaultEnd
       },
-      steps: (v) => {
+      stepMarks: (v) => {
         if (v === '') return steps = []
         steps = v.split(',').map((v) => Number(v)).sort((a, b) => a - b)
       }

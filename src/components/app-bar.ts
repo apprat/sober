@@ -82,7 +82,7 @@ const style = /*css*/`
 ::slotted(s-icon-button){
   flex-shrink: 0;
 }
-::slotted(s-nav-responsive){
+::slotted(s-nav-adaptive){
   justify-content: flex-end;
   flex-grow: 1;
 }

@@ -7,7 +7,7 @@ import * as scheme from '../core/scheme.js'
 import './ripple.js'
 
 const props = useProps({
-  $name: '',
+  name: '',
   $value: '',
   $defaultValue: '',
   multiple: false,
@@ -94,7 +94,7 @@ const style = /*css*/`
       height: 100%;
       max-width: 100%;
       max-height: 100%;
-      ::slotted(s-navigation-responsive-item){
+      ::slotted(s-nav-adaptive-item){
         border-radius: 0;
         justify-content: flex-start;
       }
@@ -377,7 +377,7 @@ export class NavAdaptiveItem extends useElement({
 }) { }
 
 const name = NavAdaptive.define('s-nav-adaptive')
-const itemName = NavAdaptive.define('s-nav-adaptive-item')
+const itemName = NavAdaptiveItem.define('s-nav-adaptive-item')
 
 declare global {
   interface HTMLElementTagNameMap {

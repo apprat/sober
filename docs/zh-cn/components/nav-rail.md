@@ -219,19 +219,19 @@
     <div slot="text"> 我的 </div>
   </s-nav-rail-item>
   <s-divider></s-divider>
-  <s-nav-rail-item selectable="false" onbeforechange="this.querySelector('s-radio').click()">
+  <s-nav-rail-item selectable="false" oninput="this.querySelector('s-radio').click()">
     <s-icon slot="icon" name="done"></s-icon>
     <div slot="text"> 开启 </div>
     <s-radio name="nav-radio" slot="action" readonly></s-radio>
   </s-nav-rail-item>
-    <s-nav-rail-item selectable="false" onbeforechange="this.querySelector('s-radio').click()">
+    <s-nav-rail-item selectable="false" oninput="this.querySelector('s-radio').click()">
     <s-icon slot="icon" name="close"></s-icon>
     <div slot="text"> 关闭 </div>
     <s-radio name="nav-radio" slot="action" readonly></s-radio>
   </s-nav-rail-item>
   <s-divider></s-divider>
   <label>多选</label>
-  <s-nav-rail-item selectable="false" onbeforechange="this.querySelector('s-checkbox').click()">
+  <s-nav-rail-item selectable="false" oninput="this.querySelector('s-checkbox').click()">
     <s-icon slot="icon" name="light_mode"></s-icon>
     <div slot="text"> 启用 </div>
     <s-checkbox slot="action" readonly></s-checkbox>
@@ -289,7 +289,7 @@
 
 该组件支持表单，你需要在为 `s-nav-rail` 设置一个唯一的 `name` 属性作为表单的键，在 `s-nav-rail-item` 设置 `value` 属性作为表单的提交值。  
 
-```html preview
+```html preview block
 <form method="get" action="http://coolaf.com/tool/params">
   <s-nav-rail name="navigation" value="a1,a2" defaultValue="a1,a2" multiple> <!-- [!code highlight] -->
     <s-nav-rail-item value="a1"> 

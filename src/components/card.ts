@@ -115,7 +115,7 @@ const style = /*css*/`
   cursor: auto;
   .ripple{
     --s-ripple-disabled: true;
-    --s-ripple-hover-disabled: true;
+    --s-ripple-disabled-hover: true;
   }
 }
 `

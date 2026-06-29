@@ -6,7 +6,7 @@ import { useComputedStyle } from '../core/utils/CSS.js'
 import './ripple.js'
 
 const props = useProps({
-  $name: '',
+  name: '',
   $value: '',
   $defaultValue: '',
   multiple: false,

@@ -7,20 +7,13 @@
 <s-base-slider></s-base-slider>
 ```
 
-设置 `step` 属性来设置滑块的间隔，或者使用 `steps` 属性来设置间隔值（优先级更高）。
-
-```html preview
-<s-base-slider step="10" end="50" min="20" max="200"></s-base-slider>
-<s-base-slider steps="0,20,50,80,100" end="50"></s-base-slider>
-```
-
 ## 模式
 
 设置 `mode` 属性来设置不同滑块；`reversed`：反向滑块，`range`：范围滑块。
 
 ```html preview
-<s-base-slider mode="reversed" end="80"></s-base-slider>
-<s-base-slider mode="range" end="80"></s-base-slider>
+<s-base-slider mode="reversed"></s-base-slider>
+<s-base-slider mode="range"></s-base-slider>
 ```
 
 ## 变体
@@ -29,6 +22,8 @@
 
 ```html preview
 <s-base-slider variant="segmented"></s-base-slider>
+<s-base-slider mode="reversed"></s-base-slider>
+<s-base-slider mode="range"></s-base-slider>
 ```
 
 ## 竖向
@@ -37,6 +32,17 @@
 
 ```html preview
 <s-base-slider orientation="vertical"></s-base-slider>
+<s-base-slider orientation="vertical" mode="reversed" ></s-base-slider>
+<s-base-slider orientation="vertical" mode="range"></s-base-slider>
+```
+
+## 间隔
+
+设置 `step` 属性来设置滑块的间隔，或者使用 `stepMarks` 属性来设置间隔值（优先级更高）。
+
+```html preview
+<s-base-slider step="10" end="50" min="20" max="200"></s-base-slider>
+<s-base-slider stepMarks="50,60,70,80,90" end="50"></s-base-slider>
 ```
 
 ## 滑动模式
@@ -48,10 +54,10 @@
 <s-base-slider slidingMode="all-cumulative"></s-base-slider>
 ```
 
-设置 `slidingMode` 属性后，可以同时启用属性 `scrollPriority` ，在触屏设备上会优先响应滚动（上下滑动时不会触发滑动）。
+设置 `slidingMode` 属性后，可以同时启用属性 `touchScrollPriority` ，在触屏设备上会优先响应滚动（上下滑动时不会触发滑动）。
 
 ```html preview
-<s-base-slider scrollPriority slidingMode="all"></s-base-slider>
+<s-base-slider touchScrollPriority slidingMode="all"></s-base-slider>
 ```
 
 ## 自定义样式
@@ -149,7 +155,7 @@
 ```html preview
 <form action="http://coolaf.com/tool/params" method="get">
   选择标签：
-  <s-base-slider name="tag" defualtEnd="50"></s-base-slider>
+  <s-base-slider name="tag" defaultEnd="50"></s-base-slider>
   <hr>
   <s-button type="reset" variant="outlined"> 重置表单 </s-button>
   <s-button type="submit"> 提交结果 </s-button>
@@ -160,34 +166,34 @@
 
 ## 属性
 
-| 名称           | 类型                       | 默认值     | 同步 | 说明                                                                                     |
-| -------------- | -------------------------- | ---------- | ---- | ---------------------------------------------------------------------------------------- |
-| mode           | single, reversed, range    | single     | √    | 模式，single=单选选择，reversed=反向单选择,range=范围选择                                |
-| slidingMode    | thumb, all, all-cumulative | thumb      | √    | 滑动模式，thumb=仅指示器滑动，all=所有滑动，all-cumulative=所有滑动且累计值              |
-| variant        | standard, segmented        | standard   | √    | 变体                                                                                     |
-| orientation    | horizontal, vertical       | horizontal | √    | 方向                                                                                     |
-| clickable      | boolean                    | true       | √    | 可单击切换的                                                                             |
-| scrollPriority | boolean                    | false      | √    | 滚动优先，启用该属性时会在触屏设备上优先执行滚动                                         |
-| steps          | string                     |            | ×    | 步进值，使用 `,` 分割，例如：`0,40,80,100`，如果提供了该值，操作滑块时只会在步进值上切换 |
-| step           | number                     | 1          | ×    | 步进，请确保能被 (max - min) 整除                                                        |
-| min            | number                     | 0          | ×    | 最小值                                                                                   |
-| max            | number                     | 100        | ×    | 最大值                                                                                   |
-| start          | number                     | 0          | ×    | 开始值（仅mode=range模式生效）                                                           |
-| end            | number                     | 50         | ×    | 结束值（单滑块或反向单滑块模式下，该值用于设置进度）                                     |
-| name           | string                     |            | ×    | 名称，表单提交时的 `key` 值                                                              |
-| defualtStart   | number                     | 0          | ×    | 默认开始值，表单重置时的默认值，仅表单重置时生效                                         |
-| defualtEnd     | number                     | 0          | ×    | 默认结束值，表单重置时的默认值，仅表单重置时生效                                         |
+| 名称                | 类型                       | 默认值     | 同步 | 说明                                                                                        |
+| ------------------- | -------------------------- | ---------- | ---- | ------------------------------------------------------------------------------------------- |
+| mode                | single, reversed, range    | single     | √    | 模式，single=单选选择，reversed=反向单选择,range=范围选择                                   |
+| slidingMode         | thumb, all, all-cumulative | thumb      | √    | 滑动模式，thumb=仅指示器滑动，all=所有滑动，all-cumulative=所有滑动且累计值                 |
+| variant             | standard, segmented        | standard   | √    | 变体                                                                                        |
+| orientation         | horizontal, vertical       | horizontal | √    | 方向                                                                                        |
+| clickable           | boolean                    | true       | √    | 可单击切换的                                                                                |
+| touchScrollPriority | boolean                    | false      | √    | 触屏滚动优先，启用该属性时会在触屏设备上优先执行滚动                                        |
+| stepMarks           | string                     | ''         | ×    | 步进标记，使用 `,` 分割，例如：`20,30,50`(不需要提供最大值和最小值)，滑块时只会在标记上切换 |
+| name                | string                     | ''         | √    | 名称，表单提交时的 `key` 值                                                                 |
+| step                | number                     | 1          | ×    | 步进，请确保能被 (max - min) 整除                                                           |
+| min                 | number                     | 0          | ×    | 最小值                                                                                      |
+| max                 | number                     | 100        | ×    | 最大值                                                                                      |
+| start               | number                     | 0          | ×    | 开始值（仅mode=range模式生效）                                                              |
+| end                 | number                     | 50         | ×    | 结束值（单滑块或反向单滑块模式下，该值用于设置进度）                                        |
+| defaultStart        | number                     | 0          | ×    | 默认开始值，表单重置时的默认值，仅表单重置时生效                                            |
+| defaultEnd          | number                     | 0          | ×    | 默认结束值，表单重置时的默认值，仅表单重置时生效                                            |
 
 ## 事件
 
-| 名称     | 参数                                   | 冒泡 | 可取消 | 说明                         |
-| -------- | -------------------------------------- | ---- | ------ | ---------------------------- |
-| input    | Event                                  | ×    | ×      | 值发生改变后触发             |
-| change   | Event                                  | ×    | ×      | 值发生改变后，失去焦点时触发 |
-| press    | CustomEvent<{ name: 'start' \| 'end' } | ×    | ×      | 按下指示器时触发             |
-| pressout | CustomEvent<{ name: 'start' \| 'end' } | ×    | ×      | 松开指示器时触发             |
-| hover    | CustomEvent<{ name: 'start' \| 'end' } | ×    | ×      | 鼠标移入指示器时触发         |
-| hoverout | CustomEvent<{ name: 'start' \| 'end' } | ×    | ×      | 鼠标移出指示器时触发         |
+| 名称       | 参数                                   | 冒泡 | 可取消 | 说明                     |
+| ---------- | -------------------------------------- | ---- | ------ | ------------------------ |
+| input      | Event                                  | ×    | ×      | 值发生改变后触发         |
+| change     | Event                                  | ×    | ×      | 值发生改变后，松手时触发 |
+| pressstart | CustomEvent<{ name: 'start' \| 'end' } | ×    | ×      | 按下指示器时触发         |
+| pressend   | CustomEvent<{ name: 'start' \| 'end' } | ×    | ×      | 松开指示器时触发         |
+| hoverstart | CustomEvent<{ name: 'start' \| 'end' } | ×    | ×      | 鼠标移入指示器时触发     |
+| hoverend   | CustomEvent<{ name: 'start' \| 'end' } | ×    | ×      | 鼠标移出指示器时触发     |
 
 ## 插槽
 
@@ -211,19 +217,20 @@
 
 ## CSS 样式变量
 
-| 名称                               | 说明                                                             |
-| ---------------------------------- | ---------------------------------------------------------------- |
-| --s-base-slider-gap                | 间距（仅变体为 `segmented` 时有效）                              |
-| --s-base-slider-thumb-size         | 指示器大小                                                       |
-| --s-base-slider-thumb-width        | 指示器宽度                                                       |
-| --s-base-slider-thumb-height       | 指示器高度                                                       |
-| --s-base-slider-thumb-start-width  | thumb-start 指示器宽度                                           |
-| --s-base-slider-thumb-start-height | thumb-start 指示器高度                                           |
-| --s-base-slider-thumb-end-width    | thumb-end 指示器宽度                                             |
-| --s-base-slider-thumb-end-height   | thumb-end 指示器高度                                             |
-| --s-base-slider-sliding-mode       | 该 CSS 变量和 `slidingMode` 属性一致，区别是该变量优先级更高     |
-| --s-base-slider-sliding-priority   | 该 CSS 变量和 `slidingPriority` 属性一致，区别是该变量优先级更高 |
-| --s-base-slider-clickable          | 该 CSS 变量和 `clickable` 属性一致，区别是该变量优先级更高       |
+| 名称                                  | 说明                                                                 |
+| ------------------------------------- | -------------------------------------------------------------------- |
+| --s-base-slider-gap                   | 间距（仅变体为 `segmented` 时有效）                                  |
+| --s-base-slider-track-edge-offset     | 轨道边界偏移，设置该变量可控制距离边界偏移距离                       |
+| --s-base-slider-thumb-size            | 指示器大小                                                           |
+| --s-base-slider-thumb-width           | 指示器宽度                                                           |
+| --s-base-slider-thumb-height          | 指示器高度                                                           |
+| --s-base-slider-thumb-start-width     | thumb-start 指示器宽度                                               |
+| --s-base-slider-thumb-start-height    | thumb-start 指示器高度                                               |
+| --s-base-slider-thumb-end-width       | thumb-end 指示器宽度                                                 |
+| --s-base-slider-thumb-end-height      | thumb-end 指示器高度                                                 |
+| --s-base-slider-sliding-mode          | 该 CSS 变量和 `slidingMode` 属性一致，区别是该变量优先级更高         |
+| --s-base-slider-touch-scroll-priority | 该 CSS 变量和 `touchScrollPriority` 属性一致，区别是该变量优先级更高 |
+| --s-base-slider-clickable             | 该 CSS 变量和 `clickable` 属性一致，区别是该变量优先级更高           |
 
 > 注意：CSS 变量参与了尺寸的计算，你应该优先使用 CSS 变量来调整组件样式，如果直接使用 ::part() 选择器去调整尺寸，除非你明确知道你在做什么，否则可能会尺寸计算异常。
 

@@ -6,8 +6,8 @@ import * as scheme from '../core/scheme.js'
 
 const props = useProps({
   disabled: false,
-  hoverDisabled: false,
-  $ancestorLevel: -1,
+  disabledHover: false,
+  $parentDepth: -1,
   $delay: 0
 })
 
@@ -139,8 +139,8 @@ export class Ripple extends useElement({
     const hovering = (event: MouseEvent) => {
       if (!device.mouseEnabled) return
       const force = event.type === 'mouseenter'
-      const cssDisabled = computedStyle.getValue('--s-ripple-hover-disabled')
-      const hover = ['', 'none'].includes(cssDisabled) ? this.hoverDisabled : Boolean(cssDisabled)
+      const cssDisabled = computedStyle.getValue('--s-ripple-disabled-hover')
+      const hover = ['', 'none'].includes(cssDisabled) ? this.disabledHover : Boolean(cssDisabled)
       !hover && mask.classList.toggle('hover', force)
       info.parentNode?.toggleAttribute('hover', force)
     }
@@ -153,9 +153,9 @@ export class Ripple extends useElement({
     const addEvent = () => {
       if (!info.parentNode) return
       let parent = info.parentNode
-      if (this.ancestorLevel > -1 && this.parentNode) {
+      if (this.parentDepth > -1 && this.parentNode) {
         let ancestor: HTMLElement = this
-        for (let i = -1; i < this.ancestorLevel; i++) {
+        for (let i = -1; i < this.parentDepth; i++) {
           if (ancestor.assignedSlot) {
             ancestor = ancestor.assignedSlot
             continue

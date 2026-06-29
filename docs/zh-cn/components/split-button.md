@@ -1,4 +1,4 @@
-# split-button
+# SplitButton
 
 分割按钮，拆分按钮打开一个菜单，为用户提供与操作相关的更多选项。
 
@@ -70,15 +70,7 @@
   <s-icon name="star" slot="start"></s-icon>
   label
   <s-icon name="arrow_downward" slot="toggle-icon"></s-icon>
-  <s-tooltip slot="toggle" slotLayer="1">展开</s-tooltip>
-  <s-dialog slot="toggle" slotLayer="1" onclose="this.parentNode.checked=false">
-    <div slot="title">标题</div>
-    <div slot="text">
-      问人生、头白京国，算来何事消得。不如罨画清溪上，蓑笠扁舟一只。人不识，且笑煮、鲈鱼趁著莼丝碧。无端酸鼻，向岐路消魂，征轮驿骑，断雁西风急。 英雄辈，事业东西南北。临风因甚泣。酬知有愿频挥手，零雨凄其此日。休太息，须信道、诸公衮衮皆虚掷。年来踪迹。有多少雄心，几翻恶梦，泪点霜华织。
-    </div>
-    <s-button slot="action" variant="text">取消</s-button>
-    <s-button slot="action" variant="text">确定</s-button>
-  </s-dialog>
+  <s-tooltip slot="toggle" parentDepth="1">展开</s-tooltip>
 </s-split-button>
 ```
 
@@ -132,12 +124,13 @@
 
 ## 插槽
 
-| 名称      | 说明                                                               |
-| --------- | ------------------------------------------------------------------ |
-| 匿名      | 按钮文本                                                           |
-| start     | 开始，默认支持 svg, s-icon, s-loading, s-circular-progressn        |
-| end       | 结束，默认支持 svg, s-icon, s-loading, s-circular-progress         |
-| togg-icon | 切换按钮图标，默认支持 svg, s-icon, s-loading, s-circular-progress |
+| 名称        | 说明                                                     |
+| ----------- | -------------------------------------------------------- |
+| 匿名        | 按钮文本                                                 |
+| start       | 开始，默认支持 svg, s-icon, s-loading, s-spinner         |
+| end         | 结束，默认支持 svg, s-icon, s-loading, s-spinner         |
+| toggle      | 切换按钮内容                                             |
+| toggle-icon | 切换按钮图标，默认支持 svg, s-icon, s-loading, s-spinner |
 
 ## 键盘快捷键
 

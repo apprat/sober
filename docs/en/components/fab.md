@@ -1,6 +1,6 @@
 # FloatingActionButton
 
-浮动操作按钮（FAB）帮助用户采取主要操作。
+The Floating Action Button (FAB) assists users in performing primary actions.
 
 ```html preview
 <s-fab>
@@ -28,7 +28,7 @@
 </s-fab>
 ```
 
-使用其他组件作为插槽。
+Use other components as slots.
 
 ```html preview
 <s-fab>
@@ -39,9 +39,9 @@
 </s-fab>
 ```
 
-## 禁用
+## Disable
 
-设置 `disbled` 属性禁用按钮
+Set the `disabled` attribute to disable the button
 
 ```html preview
 <s-fab disabled> <!-- [!code highlight] -->
@@ -69,9 +69,9 @@
 </s-fab>
 ```
 
-## 隐藏的
+## Hidden
 
-设置 `hidden` 属性隐藏
+Set the `hidden` attribute to hide
 
 ```vue preview
 <script setup>
@@ -83,13 +83,13 @@
   <s-fab :hidden="visible">
     <s-icon name="add"></s-icon>
   </s-fab>
-  <s-button @click="visible=!visible">切换</s-button>
+  <s-button @click="visible=!visible">Toggle</s-button>
 </template>
 ```
 
-## 尺寸
+## Dimensions
 
-设置 `size` 属性改变按钮大小。
+Set the `size` property to change the button size.
 
 ```html preview
 <s-fab>
@@ -105,62 +105,62 @@
 </s-fab>
 ```
 
-## 扩展
+## Extension
 
-可以使用文本和 `start`、`end` 插槽添加其他内容。
+Additional content can be added using text and `start` and `end` slots.
 
 ```html preview
 <s-fab>
   <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
-  提交信息
+commit message
   <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
 </s-fab>
 
 <s-fab size="medium" variant="secondary">
   <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
-  提交信息
+commit message
   <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
 </s-fab>
 
 <s-fab size="large" variant="tertiary">
   <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
-  提交信息
+commit message
   <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
 </s-fab>
 ```
 
 ---
 
-## 属性
+## Attributes
 
-| 名称     | 类型                                                                         | 默认值  | 同步 | 说明   |
-| -------- | ---------------------------------------------------------------------------- | ------- | ---- | ------ |
-| variant  | primary, secondary, tertiary, tonal-primary, tonal-secondary, tonal-tertiary | primary | √    | 变体   |
-| size     | small, medium, large                                                         | small   | √    | 尺寸   |
-| disabled | boolean                                                                      | false   | √    | 禁用的 |
-| hidden   | boolean                                                                      | false   | √    | 隐藏的 |
+| Name     | Type                                                                         | Default | Sync | Description |
+| -------- | ---------------------------------------------------------------------------- | ------- | ---- | ----------- |
+| variant  | primary, secondary, tertiary, tonal-primary, tonal-secondary, tonal-tertiary | primary | √    | Variant     |
+| size     | small, medium, large                                                         | small   | √    | Size        |
+| disabled | boolean                                                                      | false   | √    | Disabled    |
+| hidden   | boolean                                                                      | false   | √    | Hidden      |
 
-## 插槽
+## Slot
 
-| 名称  | 说明                                             |
-| ----- | ------------------------------------------------ |
-| 匿名  | 按钮文本                                         |
-| start | 开始，默认支持 svg, s-icon, s-loading, s-spinner |
-| end   | 结束，默认支持 svg, s-icon, s-loading, s-spinner |
+| Name      | Description                                                  |
+| --------- | ------------------------------------------------------------ |
+| Anonymous | Button Text                                                  |
+| start     | Start, supports svg, s-icon, s-loading, s-spinner by default |
+| end       | End, supports svg, s-icon, s-loading, s-spinner by default   |
 
-## HTML 标记属性
+## HTML tag attributes
 
-| 名称    | 说明           |
-| ------- | -------------- |
-| pressed | 按下时设置     |
-| hover   | 鼠标移入时设置 |
+| Name    | Description                    |
+| ------- | ------------------------------ |
+| pressed | Set when pressed               |
+| hover   | Set when the mouse hovers over |
 
-## 键盘快捷键
+## Keyboard Shortcuts
 
-使用 `Tab` 键切换焦点，使用 `Space` 或者 `Enter` 键触发点击事件。
+Use the `Tab` key to switch focus, and use the `Space` or `Enter` key to trigger a click event.
 
-## 依赖
+## Dependencies
 
-该组件在被引入时会自动引入以下组件：
+When this component is introduced, the following components will be automatically imported:
 
 - [Ripple](./ripple.md)

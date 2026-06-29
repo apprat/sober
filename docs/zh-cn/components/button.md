@@ -157,7 +157,7 @@
 
 该组件可以作为表单元素使用，可以作为复选框(`type=checkbox`)、表单重置按钮(`type=reset`)、提交按钮(`type=submit`)。
 
-```html preview
+```html preview block
 <form action="http://coolaf.com/tool/params" method="get">
   选择标签：
   <s-button name="tag" type="checkbox" value="java"> Java </s-button>
@@ -180,9 +180,9 @@
 | type           | button, checkbox, reset, submit                | button | √    | 类型，支持将组件作为复选框，提交按钮，或者重置按钮 |
 | disabled       | boolean                                        | false  | √    | 禁用的                                             |
 | checked        | boolean                                        | false  | √    | 选中的                                             |
-| name           | string                                         |        | ×    | 名称，表单提交时的 `key` 值                        |
 | defualtChecked | boolean                                        | false  | ×    | 默认选中，表单重置时的默认值，仅表单重置时生效     |
-| value          | string                                         |        | ×    | 值，表单提交时有效                                 |
+| name           | string                                         | ''     | √    | 名称，表单提交时的 `key` 值                        |
+| value          | string                                         | ''     | ×    | 值，表单提交时有效                                 |
 
 ## 事件
 
@@ -192,11 +192,11 @@
 
 ## 插槽
 
-| 名称  | 说明                                                       |
-| ----- | ---------------------------------------------------------- |
-| 匿名  | 按钮文本                                                   |
-| start | 开始，默认支持 svg, s-icon, s-loading, s-circular-progress |
-| end   | 结束，默认支持 svg, s-icon, s-loading, s-circular-progress |
+| 名称  | 说明                                             |
+| ----- | ------------------------------------------------ |
+| 匿名  | 按钮文本                                         |
+| start | 开始，默认支持 svg, s-icon, s-loading, s-spinner |
+| end   | 结束，默认支持 svg, s-icon, s-loading, s-spinner |
 
 ## HTML 标记属性
 

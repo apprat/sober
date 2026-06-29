@@ -281,15 +281,13 @@ export const useElement = <
         desc.get = () => setup.expose?.[key]
         Object.defineProperty(this, key, desc)
       }
-      //组件未初始化前的赋值调用
-      Promise.resolve().then(() => {
-        for (const key in beforeAttrs) this[key as keyof this] = beforeAttrs[key] as never
-      })
       //自定义属性事件绑定
       const events: RawoObject<((e: Event) => void) | null> = {}
       for (const key in options.events) {
         const name = `on${key}`
         if (name in HTMLElement.prototype) continue
+        const beforeValue = this[name as keyof this] as never
+        if (beforeValue !== undefined) beforeAttrs[name] = beforeValue
         Object.defineProperty(this, name, {
           configurable: true,
           get: () => events[key] ?? null,
@@ -297,6 +295,10 @@ export const useElement = <
         })
         this.addEventListener(key, (e) => events[key] && events[key].bind(this)(e))
       }
+      //组件未初始化前的赋值调用
+      Promise.resolve().then(() => {
+        for (const key in beforeAttrs) this[key as keyof this] = beforeAttrs[key] as never
+      })
       map.set(this, { setup, info, customStyle, shadowRoot } as never)
       //绑定状态
       if (options.states?.includes('hoverable')) {

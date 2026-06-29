@@ -1,4 +1,4 @@
-# checkbox
+# Checkbox
 
 复选框允许用户从列表中选择一个或多个项目，或者打开或关闭项目。
 
@@ -82,11 +82,12 @@
 | 名称           | 类型    | 默认值 | 同步 | 说明                         |
 | -------------- | ------- | ------ | ---- | ---------------------------- |
 | disabled       | boolean | false  | √    | 禁用的                       |
+| readOnly       | boolean | false  | √    | 只读的                       |
 | indeterminate  | boolean | false  | √    | 未知的                       |
 | checked        | boolean | false  | √    | 选中的                       |
 | defualtChecked | boolean | false  | √    | 默认选中，表单重置时的默认值 |
-| name           | string  |        | √    | 名称，表单提交时的 `key` 值  |
-| value          | string  |        | ×    | 值，表单提交时有效           |
+| name           | string  | ''     | √    | 名称，表单提交时的 `key` 值  |
+| value          | string  | ''     | ×    | 值，表单提交时有效           |
 
 ## 事件
 

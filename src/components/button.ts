@@ -9,7 +9,7 @@ const props = useProps({
   type: ['button', 'checkbox', 'submit', 'reset'],
   disabled: false,
   checked: false,
-  $name: '',
+  name: '',
   $defualtChecked: false,
   $value: '',
 })

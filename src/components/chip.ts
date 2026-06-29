@@ -9,7 +9,7 @@ const props = useProps({
   disabled: false,
   checked: false,
   readOnly: false,
-  $name: '',
+  name: '',
   $defualtChecked: false,
   $value: '',
 })

@@ -5,7 +5,7 @@ import * as scheme from '../core/scheme.js'
 import './ripple.js'
 
 const props = useProps({
-  $name: '',
+  name: '',
   $value: '',
   $defaultValue: '',
   multiple: false,
@@ -172,7 +172,7 @@ const template = /*html*/`
 
 const itemTemplate = /*html*/`
 <div class="layout" part="layout">
-  <s-ripple class="ripple" part="ripple" ancestorLevel="1">
+  <s-ripple class="ripple" part="ripple" parentDepth="1">
     <div class="icon">
       <slot name="icon"></slot>
       <slot></slot>

@@ -1,4 +1,4 @@
-# ripple
+# Ripple
 
 你可以将该组件添加到任意元素内来添加波纹效果，但请注意，你必须为父元素或祖先元素设置 CSS `position` 不为 `static`，因为它依赖 `position` 进行定位。
 
@@ -37,8 +37,8 @@
 | 名称          | 类型    | 默认值 | 同步 | 说明                                                                                                   |
 | ------------- | ------- | ------ | ---- | ------------------------------------------------------------------------------------------------------ |
 | disabled      | boolean | false  | √    | 禁用波纹的                                                                                             |
-| hoverDisabled | boolean | false  | √    | 禁用悬停的                                                                                             |
-| ancestorLevel | number  | -1     | ×    | 父级层数，该属性会设置在**祖先元素第几层**触发。如果组件作为其他组件的插槽插入，会查找插槽内的祖先元素 |
+| disabledHover | boolean | false  | √    | 禁用悬停的                                                                                             |
+| parentDepth   | number  | -1     | ×    | 父级层数，该属性会设置在**祖先元素第几层**触发。如果组件作为其他组件的插槽插入，会查找插槽内的祖先元素 |
 | delay         | number  | 0      | √    | 延迟时间，单位为毫秒                                                                                   |
 
 ## 事件
@@ -59,11 +59,11 @@
 
 ## 样式变量
 
-| 名称                      | 说明                                                           |
-| ------------------------- | -------------------------------------------------------------- |
-| --s-ripple-disabled       | 该 CSS 变量和 `disabled` 属性一致，区别是该变量优先级更高      |
-| --s-ripple-delay          | 该 CSS 变量和 `delay` 属性一致，区别是该变量优先级更高         |
-| --s-ripple-opacity        | 波纹不透明度，默认为 0.1                                       |
-| --s-ripple-color          | 波纹颜色，默认情况下使用 color 颜色                            |
-| --s-ripple-hover-opacity  | 悬停不透明度，默认为 0.08                                      |
-| --s-ripple-hover-disabled | 该 CSS 变量和 `hoverDisabled` 属性一致，区别是该变量优先级更高 |
+| 名称                      | 说明                                                            |
+| ------------------------- | --------------------------------------------------------------- |
+| --s-ripple-disabled       | 该 CSS 变量和 `disabled` 属性一致，区别是该变量优先级更高       |
+| --s-ripple-disabled-hover | 该 CSS 变量和 `disabled-hover` 属性一致，区别是该变量优先级更高 |
+| --s-ripple-delay          | 该 CSS 变量和 `delay` 属性一致，区别是该变量优先级更高          |
+| --s-ripple-opacity        | 波纹不透明度，默认为 0.1                                        |
+| --s-ripple-color          | 波纹颜色，默认情况下使用 color 颜色                             |
+| --s-ripple-hover-opacity  | 悬停不透明度，默认为 0.08                                       |

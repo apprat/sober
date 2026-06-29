@@ -2,7 +2,7 @@
 
 导航栏，固定数量的导航项目。
 
-```html preview
+```html preview block
 <s-nav-bar>
   <s-nav-bar-item>
     <s-icon slot="icon" name="home"></s-icon>
@@ -23,7 +23,7 @@
 
 纯文本
 
-```html preview
+```html preview block
 <s-nav-bar>
   <s-nav-bar-item>
     <div slot="text"> 首页 </div>
@@ -41,7 +41,7 @@
 
 纯图标+工具提示
 
-```html preview
+```html preview block
 <s-nav-bar>
   <s-nav-bar-item>
     <s-icon slot="icon" name="home"></s-icon>
@@ -66,7 +66,7 @@
 
 在 `s-nav-bar-item` 上设置 `selected` 属性来设置选中。  
 
-```html preview
+```html preview block
 <s-nav-bar>
   <s-nav-bar-item>
     <s-icon slot="icon" name="home"></s-icon>
@@ -87,7 +87,7 @@
 
 在 `s-nav-bar` 上设置 `value` 属性，然后在 `s-nav-bar-item` 上设置相同的 `value` 值来设置选中。
 
-```html preview
+```html preview block
 <s-nav-bar value="a2"> <!-- [!code highlight] -->
   <s-nav-bar-item value="a1">
     <s-icon slot="icon" name="home"></s-icon>
@@ -113,7 +113,7 @@
 
 固定横向：
 
-```html preview
+```html preview block
 <s-nav-bar itemsOrientation="horizontal"> <!-- [!code highlight] -->
   <s-nav-bar-item>
     <s-icon slot="icon" name="home"></s-icon>
@@ -134,7 +134,7 @@
 
 固定竖向：
 
-```html preview
+```html preview block
 <s-nav-bar itemsOrientation="vertical"> <!-- [!code highlight] -->
   <s-nav-bar-item>
     <s-icon slot="icon" name="home"></s-icon>
@@ -159,7 +159,7 @@
 如果在 `s-nav-bar` 设置 `value` 来选中，需要使用 `,` 分割多个值。  
 你可以通过 `.selectedIndexes` 获取当前选中的下标合集，也可以通过 `.selectedItems` 获取当前选中的元素合集。
 
-```html preview
+```html preview block
 <s-nav-bar multiple value="a1,a2" onchange="console.log('selected', this.selectedIndexes)"> <!-- [!code highlight] -->
   <s-nav-bar-item value="a1"> <!-- [!code highlight] -->
     <s-icon slot="icon" name="home"></s-icon>
@@ -182,7 +182,7 @@
 
 该组件支持表单，你需要在为 `s-nav-bar` 设置一个唯一的 `name` 属性作为表单的键，在 `s-nav-bar-item` 设置 `value` 属性作为表单的提交值。  
 
-```html preview
+```html preview block
 <form method="get" action="http://coolaf.com/tool/params">
   <s-nav-bar name="navigation" value="a1,a2" defaultValue="a1,a2" multiple> <!-- [!code highlight] -->
     <s-nav-bar-item value="a1"> 

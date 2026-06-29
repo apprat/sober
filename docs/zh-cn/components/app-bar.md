@@ -2,7 +2,7 @@
 
 应用栏，常用于顶部导航。
 
-```html preview
+```html preview block
 <s-app-bar>
   <span slot="title">Material 3</span>
 </s-app-bar>
@@ -10,7 +10,7 @@
 
 使用更多插槽
 
-```html preview
+```html preview block
 <s-app-bar>
   <s-icon-button slot="nav">
     <s-icon name="menu"></s-icon>
@@ -19,7 +19,7 @@
 </s-app-bar>
 ```
 
-```html preview
+```html preview block
 <s-app-bar>
   <s-icon-button slot="nav">
     <s-icon name="menu"></s-icon>
@@ -31,7 +31,7 @@
 </s-app-bar>
 ```
 
-```html preview
+```html preview block
 <s-app-bar>
   <s-icon-button slot="nav">
     <s-icon name="menu"></s-icon>
@@ -62,7 +62,7 @@
 
 固定 small:
 
-```html preview
+```html preview block
 <s-app-bar size="small">
   <s-icon-button slot="nav">
     <s-icon name="menu"></s-icon>
@@ -77,7 +77,7 @@
 
 固定 medium:
 
-```html preview
+```html preview block
 <s-app-bar size="medium">
   <s-icon-button slot="nav">
     <s-icon name="menu"></s-icon>

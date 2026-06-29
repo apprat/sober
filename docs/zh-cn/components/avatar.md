@@ -14,12 +14,12 @@
 </s-avatar>
 
 <s-avatar>
-  <img src="/test/images/avatar.jpg" />
+  <img src="/images/avatar.jpg" />
   <s-badge>8</s-badge>
 </s-avatar>
 
 <s-avatar>
-  <object data="/test/images/avatar.jpg"></object>
+  <object data="/images/avatar.jpg"></object>
   <s-badge>8</s-badge>
 </s-avatar>
 ```

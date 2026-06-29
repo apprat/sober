@@ -4,7 +4,7 @@ import './ripple.js'
 
 const props = useProps({
   orientation: ['auto', 'horizontal', 'vertical'],
-  $name: '',
+  name: '',
   $value: '',
   $defualtValue: ''
 })

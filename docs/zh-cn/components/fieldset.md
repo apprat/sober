@@ -67,7 +67,7 @@
 
 通过 CSS 变量自定义边框圆角。
 
-```html preview
+```vue preview
 <style>
  .fieldset{
     --s-fieldset-border-top-left-radius: 12px;
@@ -76,13 +76,15 @@
     --s-fieldset-border-bottom-left-radius: 0px;
   }
 </style>
-<s-fieldset class="fieldset">
-  <div slot="title">浣溪沙·谁念西风独自凉</div>
-  <div>
-    谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。<br>
-    被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
-  </div>
-</s-fieldset>
+<template>
+  <s-fieldset class="fieldset">
+    <div slot="title">浣溪沙·谁念西风独自凉</div>
+    <div>
+      谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。<br>
+      被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
+    </div>
+  </s-fieldset>
+</template>
 ```
 
 ---

@@ -1,6 +1,6 @@
 # Icon
 
-Icon 是一个容器，出于体积的考虑，该组件自带了一些图标，你可以使用 `name` 属性来指定一个图标
+Icon is a container. For volume considerations, this component comes with some icons, and you can use the `name` attribute to specify an icon
 
 ```html preview
 <s-icon name="home"></s-icon>
@@ -29,9 +29,9 @@ Icon 是一个容器，出于体积的考虑，该组件自带了一些图标，
 <s-icon name="favorite"></s-icon>
 ```
 
-## 自定义图标
+## Custom Icons
 
-可以使用 `src` 加载一个图标，或者在内部放置 SVG 图标。
+You can load an icon using `src`, or place an SVG icon inside.
 
 ```html preview
 <s-icon src="/images/search.svg"></s-icon>
@@ -43,9 +43,9 @@ Icon 是一个容器，出于体积的考虑，该组件自带了一些图标，
 </s-icon>
 ```
 
-## 其他组件中使用
+## Usage in other components
 
-如果你使用了 `svg`，你并不需要使用该组件去包装一层，因为其他组件均支持直接使用 `svg` 插槽；
+If you use `svg`, you don't need to wrap it with a component, as other components support direct use of the `svg` slot;
 
 ```html preview
 <s-icon-button>
@@ -55,17 +55,17 @@ Icon 是一个容器，出于体积的考虑，该组件自带了一些图标，
 </s-icon-button>
 ```
 
-## 自定义样式
+## Custom Style
 
-设置颜色和尺寸
+Set color and size
 
 ```html preview
 <s-icon name="home" style="color: #336699; width: 48px;"></s-icon>
 ```
 
-## 使用第三方图标库
+## Using third-party icon libraries
 
-使用第三方图标库非常简单，例如 `react-material-icon-svg`
+Using third-party icon libraries, such as `react-material-icon-svg`, is quite straightforward
 
 ```js
 import CheckboxMarkedIcon from 'react-material-icon-svg/dist/CheckboxMarked'
@@ -81,22 +81,22 @@ function App() {
 
 ---
 
-## 属性
+## Attributes
 
-| 名称 | 类型   | 默认值 | 同步 | 说明                              |
-| ---- | ------ | ------ | ---- | --------------------------------- |
-| name | string | none   | √    | 名称                              |
-| src  | string | ''     | ×    | 图标路径，注意使用 svg 时无法跨域 |
+| Name | Type   | Default Value | Synchronization | Description                                                      |
+| ---- | ------ | ------------- | --------------- | ---------------------------------------------------------------- |
+| name | string | none          | √               | Name                                                             |
+| src  | string | ''            | ×               | Icon path, note that cross-domain is not possible when using svg |
 
-## 事件
+## Event
 
-| 名称  | 参数       | 冒泡 | 可取消 | 说明                    |
-| ----- | ---------- | ---- | ------ | ----------------------- |
-| load  | Event      | ×    | ×      | 图标设置 src 成功时触发 |
-| error | ErrorEvent | ×    | ×      | 图标设置 src 失败时触发 |
+| Name  | Parameter  | Bubble | Cancelable | Description                                      |
+| ----- | ---------- | ------ | ---------- | ------------------------------------------------ |
+| load  | Event      | ×      | ×          | Emitted when the icon setting src is successful. |
+| error | ErrorEvent | ×      | ×          | Emitted when the icon setting src fails          |
 
-## 插槽
+## Slot
 
-| 名称 | 说明     |
-| ---- | -------- |
-| 匿名 | svg 图标 |
+| Name      | Description |
+| --------- | ----------- |
+| Anonymous | svg icon    |

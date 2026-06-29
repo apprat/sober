@@ -1,4 +1,4 @@
-# radio
+# Radio
 
 单选按钮允许用户从一组选项中选择一个选项。（需要设置一个唯一的 `name` 作为分组才能执行单选）。
 
@@ -58,8 +58,8 @@
 
 如果你需要单独设置选中前后的颜色，可以使用 CSS 选择器；
 
-```html
-<style>
+```vue preview
+<style scoped>
   .radio{
     color: #336699;
   }
@@ -98,10 +98,11 @@
 | 名称           | 类型    | 默认值 | 同步 | 说明                         |
 | -------------- | ------- | ------ | ---- | ---------------------------- |
 | disabled       | boolean | false  | √    | 禁用的                       |
+| readOnly       | boolean | false  | √    | 只读的                       |
 | checked        | boolean | false  | √    | 选中的                       |
 | defualtChecked | boolean | false  | √    | 默认选中，表单重置时的默认值 |
-| value          | string  |        | ×    | 值，表单提交时有效           |
-| name           | string  |        | √    | 名称，表单提交时的 `key` 值  |
+| value          | string  | ''     | ×    | 值，表单提交时有效           |
+| name           | string  | ''     | √    | 名称，表单提交时的 `key` 值  |
 
 ## 事件
 

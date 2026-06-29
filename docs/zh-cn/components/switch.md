@@ -1,4 +1,4 @@
-# switch
+# Switch
 
 开关用于打开或关闭项目的选择。
 
@@ -35,7 +35,7 @@
 
 ## 只读
 
-设置 `readOnly` 属性来只读复选框。
+设置 `readOnly` 属性来只读。
 
 ```html preview
 <s-switch readOnly>
@@ -61,7 +61,7 @@
 该组件可以作为表单元素使用。
 
 ```html preview
-<form action="/link" method="get">
+<form action="http://coolaf.com/tool/params" method="get">
   选择标签：
   <label> Java <s-switch name="tag" value="java"></s-switch> </label>
   <label> Rust <s-switch name="tag" value="rust"></s-switch> </label>
@@ -81,10 +81,11 @@
 | 名称           | 类型    | 默认值 | 同步 | 说明                         |
 | -------------- | ------- | ------ | ---- | ---------------------------- |
 | disabled       | boolean | false  | √    | 禁用的                       |
+| readOnly       | boolean | false  | √    | 只读的                       |
 | checked        | boolean | false  | √    | 选中的                       |
 | defualtChecked | boolean | false  | √    | 默认选中，表单重置时的默认值 |
-| value          | string  |        | ×    | 值，表单提交时有效           |
-| name           | string  |        | √    | 名称，表单提交时的 `key` 值  |
+| name           | string  | ''     | √    | 名称，表单提交时的 `key` 值  |
+| value          | string  | ''     | ×    | 值，表单提交时有效           |
 
 ## 事件
 

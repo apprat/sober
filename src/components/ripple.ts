@@ -1,4 +1,4 @@
-import { useElement, useProps } from '../core/elements.js'
+import { useElement, useProps, getParentDepth } from '../core/elements.js'
 import { device } from '../core/device.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
 import { oneEvent } from '../core/utils/one-event.js'
@@ -26,9 +26,9 @@ const style = /*css*/`
   border-radius: inherit;
   overflow: hidden;
   transition-property: none;
-  animation-timing-function: ${scheme.motion.easing.standard};
-  animation-duration: ${scheme.motion.duration.long4};
   transition-duration: ${scheme.motion.duration.short4};
+  animation-duration: ${scheme.motion.duration.long4};
+  animation-timing-function: ${scheme.motion.easing.standard};
 }
 .mask,
 .container,
@@ -51,6 +51,12 @@ const style = /*css*/`
   border-radius: 50%;
   background: var(--s-ripple-color, currentColor);
   filter: opacity(var(--s-ripple-opacity, .1));
+}
+@media (prefers-reduced-motion: reduce) {
+  :host{
+    animation-duration: 0s;
+    transition-duration: 0s;
+  }
 }
 `
 
@@ -119,73 +125,63 @@ export class Ripple extends useElement({
     }
     const start = (event: PointerEvent) => {
       const cssDisabled = computedStyle.getValue('--s-ripple-disabled')
-      const rippled = ['', 'none'].includes(cssDisabled) ? this.disabled : Boolean(cssDisabled)
-      if (rippled || event.button !== 0) return
+      const disabled = ['', 'none'].includes(cssDisabled) ? this.disabled : Boolean(cssDisabled)
+      if (disabled) return
       const run = (event: PointerEvent) => startRipple({ root: this, ripple, container, event, animateOptions: getAnimateOptions() })
-      if (event.pointerType === 'mouse') return document.addEventListener('pointerup', run(event), { once: true })
+      if (event.pointerType === 'mouse') return oneEvent([{ element: document, events: ['pointerup', 'pointercancel'] }], run(event))
       const cssDelay = computedStyle.getValue('--s-ripple-delay')
       const delay = ['', 'none'].includes(cssDelay) ? this.delay : Number(cssDelay)
-      if (delay <= 0) return document.addEventListener('touchend', run(event), { once: true })
+      if (delay <= 0) return oneEvent([{ element: document, events: ['touchcancel', 'touchend'] }], run(event))
       let stop: Function | null = null
       const timer = setTimeout(() => stop = run(event), delay)
-      const calcel = (e: TouchEvent) => {
+      const cancel = (e: TouchEvent) => {
         clearTimeout(timer)
         stop && stop()
         if (e.type === 'touchmove') return
         !stop && run(event)()
       }
-      oneEvent([{ element: document, events: ['touchcancel', 'touchmove', 'touchend'] }], calcel)
+      oneEvent([{ element: document, events: ['touchcancel', 'touchmove', 'touchend'] }], cancel)
     }
-    const hovering = (event: MouseEvent) => {
-      if (!device.mouseEnabled) return
-      const force = event.type === 'mouseenter'
+    const hovering = (event: PointerEvent) => {
+      if (!device.mouseEnabled || event.pointerType !== 'mouse') return
+      const force = event.type === 'pointerenter'
       const cssDisabled = computedStyle.getValue('--s-ripple-disabled-hover')
       const hover = ['', 'none'].includes(cssDisabled) ? this.disabledHover : Boolean(cssDisabled)
       !hover && mask.classList.toggle('hover', force)
       info.parentNode?.toggleAttribute('hover', force)
     }
     const down = (event: PointerEvent) => {
-      if (!info.parentNode) return
-      event.button === 0 && info.parentNode?.setAttribute('pressed', '')
-      document.addEventListener(event.pointerType === 'mouse' ? 'mouseup' : 'touchend', () => info.parentNode?.removeAttribute('pressed'), { once: true })
+      if (!info.parentNode || event.button !== 0) return
+      info.parentNode?.setAttribute('pressed', '')
+      const remove = () => {
+        info.parentNode?.removeAttribute('pressed')
+        document.removeEventListener('pointerup', remove)
+        document.removeEventListener('pointercancel', remove)
+      }
+      document.addEventListener('pointerup', remove)
+      document.addEventListener('pointercancel', remove)
+      if (event.pointerType === 'mouse' && !device.mouseEnabled) return
       start(event)
     }
     const addEvent = () => {
       if (!info.parentNode) return
-      let parent = info.parentNode
-      if (this.parentDepth > -1 && this.parentNode) {
-        let ancestor: HTMLElement = this
-        for (let i = -1; i < this.parentDepth; i++) {
-          if (ancestor.assignedSlot) {
-            ancestor = ancestor.assignedSlot
-            continue
-          }
-          if (!ancestor.parentNode) return
-          if (ancestor.parentNode instanceof ShadowRoot) {
-            const host = ancestor.parentNode.host
-            if (!(host instanceof HTMLElement)) return
-            ancestor = host
-            continue
-          }
-          if (!(ancestor.parentNode instanceof HTMLElement)) return
-          ancestor = ancestor.parentNode
-        }
-        parent = ancestor
-      }
-      parent.addEventListener('mouseenter', hovering)
-      parent.addEventListener('mouseleave', hovering)
+      let parent = getParentDepth(this) || info.parentNode
+      parent.addEventListener('pointerenter', hovering)
+      parent.addEventListener('pointerleave', hovering)
+      parent.addEventListener('pointercancel', hovering)
       parent.addEventListener('pointerdown', down)
       info.parentNode = parent
     }
     const removeEvent = () => {
-      info.parentNode?.removeEventListener('mouseenter', hovering)
-      info.parentNode?.removeEventListener('mouseleave', hovering)
+      info.parentNode?.removeEventListener('pointerenter', hovering)
+      info.parentNode?.removeEventListener('pointerleave', hovering)
+      info.parentNode?.removeEventListener('pointercancel', hovering)
       info.parentNode?.removeEventListener('pointerdown', down)
     }
     return {
       onMounted: addEvent,
       onUnmounted: removeEvent,
-      ancestorLevel: () => {
+      parentDepth: () => {
         removeEvent()
         addEvent()
       }

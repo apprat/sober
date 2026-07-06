@@ -1,4 +1,4 @@
-import { useProps, useElement, useThrottle } from '../core/elements.js'
+import { useProps, useElement } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 
 const props = useProps({
@@ -8,10 +8,6 @@ const props = useProps({
   $value: 0,
 })
 
-const config = {
-  dasharray: Math.PI * 100
-}
-
 const style = /*css*/`
 :host{
   display: inline-block;
@@ -20,8 +16,6 @@ const style = /*css*/`
   height: auto;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
-  border-radius: 50%;
-  transition-property: none;
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
   color: ${scheme.color.primary};
@@ -30,11 +24,12 @@ const style = /*css*/`
   display: block;
   width: 100%;
   height: 100%;
-  padding: 2px;
-}
-.layout.zero{
-  .track{
-    --s_track-offset: 0px !important;
+  padding: 4.6%;
+  --s_spinner-gap: calc(var(--s_spinner-max) * 0.05);
+  &.zero{
+    .track{
+      stroke-dasharray: var(--s_spinner-max) 0px;
+    }
   }
 }
 .icon{
@@ -43,6 +38,8 @@ const style = /*css*/`
   overflow: visible;
   fill: none;
   display: block;
+  transition-timing-function: inherit;
+  transition-duration: inherit;
 }
 .track,
 .indicator{
@@ -52,31 +49,21 @@ const style = /*css*/`
   stroke-linecap: round;
   shape-rendering: geometricPrecision;
   transform-origin: center;
-  transform: rotate(-90deg);
-  stroke-dasharray: var(--s_max);
+  transition-timing-function: inherit;
+  transition-duration: inherit;
 }
 .track{
-  --s_track-offset: 35px;
-  transform: rotate(250deg);
+  transform: rotate(252deg);
+  stroke-dasharray: var(--s_spinner-max) calc(var(--s_spinner-value) + var(--s_spinner-gap) * 2);
+  stroke-dashoffset: var(--s_spinner-max);
+  transition-property: stroke-dasharray;
   stroke: ${scheme.color.secondaryContainer};
-  stroke-dashoffset: calc(min(var(--s_max), var(--s_max) / 100 * var(--s_value) + var(--s_track-offset)) * -1);
 }
 .indicator{
-  stroke-dashoffset: calc(var(--s_max) - var(--s_max) / 100 * var(--s_value));
-}
-:host([size=large]){
-  width: 44px;
-  .layout{
-    padding: 4px;
-    .track,
-    .indicator{
-      stroke-width: 20px;
-    }
-    .track{
-      --s_track-offset: 52px;
-      transform: rotate(240deg);
-    }
-  }
+  transform: rotate(270deg);
+  stroke-dasharray: var(--s_spinner-max);
+  stroke-dashoffset: calc(var(--s_spinner-max) - var(--s_spinner-value));
+  transition-property: stroke-dashoffset;
 }
 @keyframes circular{
   0%{ transform: rotate(0deg); }
@@ -88,8 +75,8 @@ const style = /*css*/`
   50%, 62.5%{ transform: rotate(450deg); }
   75%, 87.5%{ transform: rotate(720deg); }
   100%{ transform: rotate(990deg); }
-  0%, 25%, 50%, 75%, 100%{ stroke-dashoffset: var(--s_max); }
-  12.5%, 37.5%, 37.5%, 62.5%, 87.5%{ stroke-dashoffset: calc(var(--s_max) / 4); }
+  0%, 25%, 50%, 75%, 100%{ stroke-dashoffset: var(--s_spinner-max); }
+  12.5%, 37.5%, 37.5%, 62.5%, 87.5%{ stroke-dashoffset: calc(var(--s_spinner-max) / 4); }
 }
 :host([indeterminate]){
   .layout{
@@ -102,10 +89,26 @@ const style = /*css*/`
     animation: circular2 6s infinite cubic-bezier(0.4, 0, 0.2, 1), steps(4), linear;
   }
 }
+:host([size=large]){
+  width: 44px;
+  .layout{
+    padding: 7.7%;
+    --s_spinner-gap: calc(var(--s_spinner-max) * 0.07);
+  }
+  .track,
+  .indicator{
+    stroke-width: calc(8px / (44px / 100px));
+  }
+  .track{
+    transform: rotate(245deg);
+  }
+}
 `
 
+const circumference = Math.PI * 100
+
 const template = /*html*/`
-<div class="layout zero" part="layout" style="--s_value: 0;--s_max: ${config.dasharray}px">
+<div class="layout zero" part="layout" style="--s_spinner-value: 0; --s_spinner-max: ${circumference}px">
   <svg viewBox="0 0 100 100" class="icon" part="icon">
     <circle class="track" cx="50" cy="50" r="50" part="track" />
     <circle class="indicator" cx="50" cy="50" r="50" part="indicator" />
@@ -119,10 +122,10 @@ export class Spinner extends useElement({
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const rander = () => {
       layout.classList.toggle('zero', this.value === 0)
-      layout.style.setProperty('--s_value', `${Math.min(this.value, this.max) / this.max * 100}`)
+      layout.style.setProperty('--s_spinner-value', `${(Math.min(this.value, this.max) / this.max) * circumference}px`)
     }
     return {
-      value: () => useThrottle(rander)
+      value: rander
     }
   }
 }) { }

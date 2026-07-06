@@ -66,7 +66,7 @@
   选择标签：
   <s-checkbox name="tag" value="java"> Java </s-checkbox>
   <s-checkbox name="tag" value="rust"> Rust </s-checkbox>
-  <s-checkbox name="tag" value="python" defualtChecked checked> Python </s-checkbox>
+  <s-checkbox name="tag" value="python" defaultChecked checked> Python </s-checkbox>
   <hr>
   <s-button type="reset" variant="outlined"> 重置 </s-button>
   <s-button type="submit"> 提交结果 </s-button>
@@ -85,7 +85,7 @@
 | readOnly       | boolean | false  | √    | 只读的                       |
 | indeterminate  | boolean | false  | √    | 未知的                       |
 | checked        | boolean | false  | √    | 选中的                       |
-| defualtChecked | boolean | false  | √    | 默认选中，表单重置时的默认值 |
+| defaultChecked | boolean | false  | √    | 默认选中，表单重置时的默认值 |
 | name           | string  | ''     | √    | 名称，表单提交时的 `key` 值  |
 | value          | string  | ''     | ×    | 值，表单提交时有效           |
 

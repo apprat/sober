@@ -64,7 +64,7 @@ export class Selector<C extends Component, CI extends ComponentItem> {
           component.dispatchEvent(new Event('change'))
         }
       }
-      target.dispatchEvent(new Event('input'))
+      target.dispatchEvent(new InputEvent('input'))
     })
     component.addEventListener(`${name}:selected`, (event) => {
       event.stopPropagation()

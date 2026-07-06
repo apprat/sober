@@ -1,21 +1,21 @@
-# fieldset
+# FieldSet
 
-字段组，该组件可作为容器或者表单容器使用。
+字段集，该组件可作为容器或者表单容器使用。
 
 ```html preview
-<s-fieldset>
+<s-field-set>
   <div slot="title"> 浣溪沙·谁念西风独自凉时只道是寻常时只道是寻常</div>
   <div>
     谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。<br>
     被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
   </div>
-</s-fieldset>
+</s-field-set>
 ```
 
 使用插槽。
 
 ```html preview
-<s-fieldset>
+<s-field-set>
   <s-icon slot="start" name="star" style="margin-left: 8px"></s-icon>
   <div slot="title">浣溪沙·谁念西风独自凉</div>
   <div>
@@ -23,18 +23,18 @@
     被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
   </div>
   <s-icon slot="end" name="star" style="margin-right: 8px"></s-icon>
-</s-fieldset>
+</s-field-set>
 ```
 
 不定义标题是个普通容器。
 
 ```html preview
-<s-fieldset>
+<s-field-set>
   <div>
     谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。<br>
     被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
   </div>
-</s-fieldset>
+</s-field-set>
 ```
 
 ## 聚焦
@@ -42,14 +42,14 @@
 设置 `focused` 属性聚焦。
 
 ```html preview
-<s-fieldset focused>
+<s-field-set focused>
   <div slot="title">浣溪沙·谁念西风独自凉</div>
   <div>
     浣溪沙·谁念西风独自凉<br>
     谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。<br>
     被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
   </div>
-</s-fieldset>
+</s-field-set>
 ```
 
 ## 浮动
@@ -57,9 +57,9 @@
 设置 `floating` 切换为浮动。
 
 ```html preview
-<s-fieldset floating>
+<s-field-set floating>
   <div slot="title">浣溪沙·谁念西风独自凉</div>
-</s-fieldset>
+</s-field-set>
 <s-button onclick="this.previousElementSibling.floating=!this.previousElementSibling.floating"> 切换 </s-button>
 ```
 
@@ -68,22 +68,22 @@
 通过 CSS 变量自定义边框圆角。
 
 ```vue preview
-<style>
- .fieldset{
-    --s-fieldset-border-top-left-radius: 12px;
-    --s-fieldset-border-top-right-radius: 0px;
-    --s-fieldset-border-bottom-right-radius: 12px;
-    --s-fieldset-border-bottom-left-radius: 0px;
+<style scoped>
+ .field-set{
+    --s-field-set-border-top-left-radius: 12px;
+    --s-field-set-border-top-right-radius: 0px;
+    --s-field-set-border-bottom-right-radius: 12px;
+    --s-field-set-border-bottom-left-radius: 0px;
   }
 </style>
 <template>
-  <s-fieldset class="fieldset">
+  <s-field-set class="field-set">
     <div slot="title">浣溪沙·谁念西风独自凉</div>
     <div>
       谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。<br>
       被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
     </div>
-  </s-fieldset>
+  </s-field-set>
 </template>
 ```
 
@@ -107,20 +107,22 @@
 
 ## CSS 样式变量
 
-| 名称                                    | 说明                         |
-| --------------------------------------- | ---------------------------- |
-| --s-fieldset-title-gap                  | 标题的间距                   |
-| --s-fieldset-padding                    | 内间距，控制上下左右四个方向 |
-| --s-fieldset-padding-top                | 顶部内间距                   |
-| --s-fieldset-padding-right              | 右侧内间距                   |
-| --s-fieldset-padding-bottom             | 底部内间距                   |
-| --s-fieldset-padding-left               | 左侧内间距                   |
-| --s-fieldset-border-width               | 边框宽度                     |
-| --s-fieldset-border-focused-width       | 聚焦的边框宽度               |
-| --s-fieldset-border-radius              | 圆角，控制四个方向           |
-| --s-fieldset-border-top-left-radius     | 左上角圆角                   |
-| --s-fieldset-border-top-right-radius    | 右上角圆角                   |
-| --s-fieldset-border-bottom-left-radius  | 左下角圆角                   |
-| --s-fieldset-border-bottom-right-radius | 右下角圆角                   |
+| 名称                                     | 说明                                       |
+| ---------------------------------------- | ------------------------------------------ |
+| --s-field-set-title-gap                  | 标题的间距                                 |
+| --s-field-set-padding                    | 内间距，仅支持单数值，控制上下左右四个方向 |
+| --s-field-set-padding-top                | 顶部内间距                                 |
+| --s-field-set-padding-right              | 右侧内间距                                 |
+| --s-field-set-padding-bottom             | 底部内间距                                 |
+| --s-field-set-padding-left               | 左侧内间距                                 |
+| --s-field-set-border-color               | 边框颜色                                   |
+| --s-field-set-border-color-focused       | 边框聚焦颜色                               |
+| --s-field-set-border-width               | 边框宽度                                   |
+| --s-field-set-border-width-focused       | 聚焦的边框宽度                             |
+| --s-field-set-border-radius              | 圆角，仅支持单数值，控制四个方向           |
+| --s-field-set-border-top-left-radius     | 左上角圆角                                 |
+| --s-field-set-border-top-right-radius    | 右上角圆角                                 |
+| --s-field-set-border-bottom-left-radius  | 左下角圆角                                 |
+| --s-field-set-border-bottom-right-radius | 右下角圆角                                 |
 
 > 注意：CSS 变量参与了尺寸的计算，你应该优先使用 CSS 变量来调整组件样式，如果直接使用 ::part() 选择器去调整尺寸，除非你明确知道你在做什么，否则可能会尺寸计算异常。

@@ -41,7 +41,7 @@ const style = /*css*/`
 }
 .indicator{
   background: currentColor;
-  width: var(--s_value, 0);
+  width: var(--s_progress-value, 0);
 }
 :host(:not([indeterminate])){
   .zero>.indicator{
@@ -121,7 +121,7 @@ export class Progress extends useElement({
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const rander = () => {
       layout.classList.toggle('zero', this.value === 0)
-      layout.style.setProperty('--s_value', `${Math.min(this.value, this.max) / this.max * 100}%`)
+      layout.style.setProperty('--s_progress-value', `${Math.min(this.value, this.max) / this.max * 100}%`)
     }
     return {
       value: () => useThrottle(rander)

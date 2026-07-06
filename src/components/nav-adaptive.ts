@@ -76,6 +76,7 @@ const style = /*css*/`
   .layout{
     display: none;
     pointer-events: none;
+    inset: 0;
     .container{
       position: absolute;
       display: flex;
@@ -88,6 +89,7 @@ const style = /*css*/`
       box-shadow: ${scheme.elevation.level3};
     }
     &.open{
+      position: fixed;
       display: flex;
       pointer-events: auto;
       width: 100%;
@@ -135,6 +137,7 @@ const itemStyle = /*css*/`
   border-radius: inherit;
   gap: inherit;
   padding: 0 16px;
+  outline: none;
   min-width: inherit;
   transition-property: border-radius;
   &[pressed]{
@@ -231,13 +234,15 @@ const itemStyle = /*css*/`
 
 const template = /*html*/`
 <div class="wrap" part="wrap">
-  <dialog class="layout" part="layout" role="navigation">
+  <dialog class="layout" part="layout" role="navigation" tabindex="-1">
     <div class="container" part="container">
       <slot></slot>
     </div>
   </dialog>
   <slot name="action"></slot>
-  <slot name="toggle" class="toggle" part="toggle"></slot>
+  <div class="toggle" part="toggle">
+    <slot name="toggle"></slot>
+  </div>
 </div>
 `
 
@@ -260,7 +265,7 @@ export class NavAdaptive extends useElement({
     const layout = shadowRoot.querySelector<HTMLDialogElement>('.layout')!
     const container = shadowRoot.querySelector<HTMLDivElement>('.container')!
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot:not([name])')!
-    const toggleSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=toggle]')!
+    const toggle = shadowRoot.querySelector<HTMLDivElement>('.toggle')!
     const computedStyle = useComputedStyle(this)
     const selector = new Selector(this, slot, NavAdaptiveItem)
     const resizer = new ResizeWatcher(this, wrap)
@@ -298,38 +303,52 @@ export class NavAdaptive extends useElement({
       }
       resizer.run()
     }
-    toggleSlot.onclick = async (e) => {
-      if (e.target === toggleSlot || !this.hasAttribute('collapsed') || layout.open) return
+    toggle.onclick = async (e) => {
+      if (e.target === toggle || !this.hasAttribute('collapsed') || layout.open) return
+      const rootNode = this.getRootNode()
+      const focus = rootNode instanceof Document ? rootNode.querySelector(':focus-visible') : null
+      const focusElement = focus instanceof HTMLElement ? focus : null
       layout.classList.add('open')
       layout.showModal()
       resizer.stop()
-      const gap = computedStyle.getNumber('outline-offset')
-      const position = popup({ anchor: toggleSlot, popover: container, gap, gravity: 'bottom' })
-      container.style.top = `${position.top}px`
-      container.style.left = `${position.left}px`
-      container.style.transformOrigin = position.origin.join(' ')
-      layout.onkeydown = (e) => {
+      const obs = new ResizeWatcher(container)
+      obs.onChange = () => {
+        const gap = computedStyle.getNumber('outline-offset')
+        const position = popup({ anchor: toggle, popover: container, gap, gravity: 'bottom' })
+        container.style.top = `${position.top}px`
+        container.style.left = `${position.left}px`
+        container.style.transformOrigin = position.origin.join(' ')
+      }
+      obs.onChange()
+      const dialogClose = (e: KeyboardEvent) => {
         if (e.key !== 'Escape') return
         e.preventDefault()
         close()
       }
-      layout.onclick = () => close()
-      container.onclick = (e) => {
-        e.stopPropagation()
-        if (e.target === container) return
-        close()
-      }
+      layout.addEventListener('keydown', dialogClose)
+      layout.onpointerdown = () => close()
+      container.onpointerdown = (e) => e.stopPropagation()
+      container.onclick = (e) => e.target !== container && close()
       const close = async () => {
-        layout.onclick = null
+        layout.onpointerdown = null
+        container.onpointerdown = null
         container.onclick = null
+        layout.removeEventListener('keydown', dialogClose)
         window.removeEventListener('resize', close)
+        obs.stop()
         await container.animate({ opacity: [1, 0], transform: ['scale(1)', 'scale(.8)'] }, getAnimateOptions()).finished
-        layout.close()
         layout.classList.remove('open')
+        layout.close()
+        if (focusElement) {
+          focusElement.focus()
+        } else if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur()
+        }
         resizer.run(true)
       }
       window.addEventListener('resize', close)
       await container.animate({ opacity: [0, 1], transform: ['scale(.8)', 'scale(1)'] }, getAnimateOptions()).finished
+      obs.run()
     }
     return {
       expose: {

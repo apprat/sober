@@ -6,7 +6,7 @@ const props = useProps({
   disabled: false,
   checked: false,
   readOnly: false,
-  defualtChecked: false,
+  defaultChecked: false,
   name: '',
   $value: ''
 })
@@ -132,7 +132,9 @@ const template = /*html*/`
   </slot>
   <div class="ripple" part="ripple"></div>
 </div>
-<slot part="text" class="text"></slot>
+<div part="text" class="text">
+  <slot></slot>
+</div>
 `
 
 export class Radio extends useElement({
@@ -149,7 +151,7 @@ export class Radio extends useElement({
       })
     })
     return {
-      onFormReset: () => this.checked = this.defualtChecked,
+      onFormReset: () => this.checked = this.defaultChecked,
       onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom()
     }
   }

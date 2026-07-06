@@ -10,7 +10,7 @@ const props = useProps({
   checked: false,
   readOnly: false,
   name: '',
-  $defualtChecked: false,
+  $defaultChecked: false,
   $value: '',
 })
 
@@ -89,7 +89,7 @@ export class Chip extends useElement({
       this.dispatchEvent(new Event('change'))
     })
     return {
-      onFormReset: () => this.checked = this.defualtChecked,
+      onFormReset: () => this.checked = this.defaultChecked,
       onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom(),
     }
   }

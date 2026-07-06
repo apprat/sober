@@ -10,7 +10,7 @@ const props = useProps({
   disabled: false,
   checked: false,
   type: ['icon-button', 'checkbox', 'submit', 'reset'],
-  defualtChecked: false,
+  defaultChecked: false,
   name: '',
   $value: '',
   $requiring: ''
@@ -207,7 +207,7 @@ export class IconButton extends useElement({
       this.dispatchEvent(new Event('change'))
     })
     return {
-      onFormReset: () => this.checked = this.defualtChecked,
+      onFormReset: () => this.checked = this.defaultChecked,
       onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom()
     }
   }

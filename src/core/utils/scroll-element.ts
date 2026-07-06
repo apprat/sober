@@ -59,8 +59,8 @@ export const scrollElement = (options: { element: HTMLElement, left?: number, to
     const time = performance.now() - startTime
     const progress = Math.min(time / options.duration, 1)
     const ease = bezierFunction(progress)
-    if (options.top) element.scrollTop = startY + distanceY * ease
-    if (options.left) element.scrollLeft = startX + distanceX * ease
+    if (options.top !== undefined) element.scrollTop = startY + distanceY * ease
+    if (options.left !== undefined) element.scrollLeft = startX + distanceX * ease
     if (progress < 1) {
       element._animationId = requestAnimationFrame(animate)
       return

@@ -6,7 +6,7 @@ const props = useProps({
   orientation: ['auto', 'horizontal', 'vertical'],
   name: '',
   $value: '',
-  $defualtValue: ''
+  $defaultValue: ''
 })
 
 const style = /*css*/`
@@ -464,7 +464,7 @@ export class DockedTimePicker extends useElement({
           return `${getHoursText(date.getHours())}:${getMinutesText(date.getMinutes())}`
         }
       },
-      onFormReset: () => this.value = this.defualtValue,
+      onFormReset: () => this.value = this.defaultValue,
       value: (v) => {
         const [h, m] = v.split(':')
         date.setHours(Number(h), Number(m))

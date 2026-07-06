@@ -40,6 +40,7 @@ const style = /*css*/`
   position: relative;
   height: 100%;
   flex-shrink: 0;
+  transition-property: none;
 }
 .fill{
   position: relative;
@@ -130,24 +131,28 @@ svg,
 `
 const template = /*html*/`
 <div class="layout" part="layout">
-  <slot class="track" name="track" part="track">
-    <svg viewBox="0 -960 960 960" id="track">
-      <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"></path>
-    </svg>
-    <svg><use xlink:href="#track"></use></svg>
-    <svg><use xlink:href="#track"></use></svg>
-    <svg><use xlink:href="#track"></use></svg>
-    <svg><use xlink:href="#track"></use></svg>
-  </slot>
-  <slot class="fill" name="fill" part="fill">
-    <svg viewBox="0 -960 960 960" id="fill">
-      <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"></path>
-    </svg>
-    <svg><use xlink:href="#fill"></use></svg>
-    <svg><use xlink:href="#fill"></use></svg>
-    <svg><use xlink:href="#fill"></use></svg>
-    <svg><use xlink:href="#fill"></use></svg>
-  </slot>
+  <div class="track" part="track">
+    <slot name="track">
+      <svg viewBox="0 -960 960 960" id="track">
+        <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"></path>
+      </svg>
+      <svg><use xlink:href="#track"></use></svg>
+      <svg><use xlink:href="#track"></use></svg>
+      <svg><use xlink:href="#track"></use></svg>
+      <svg><use xlink:href="#track"></use></svg>
+    </slot>
+  </div>
+  <div class="fill" part="fill">
+    <slot name="fill">
+      <svg viewBox="0 -960 960 960" id="fill">
+        <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"></path>
+      </svg>
+      <svg><use xlink:href="#fill"></use></svg>
+      <svg><use xlink:href="#fill"></use></svg>
+      <svg><use xlink:href="#fill"></use></svg>
+      <svg><use xlink:href="#fill"></use></svg>
+    </slot>
+  </div>
   <s-base-slider tabindex="-1" class="slider" part="slider" slidingMode="all" end="${props.values.value}" max="${props.values.max}" min="${props.values.min}" step="${props.values.step}">
     <div class="indicator" part="indicator"></div>
   </s-base-slider>

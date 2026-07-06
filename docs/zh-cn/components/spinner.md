@@ -26,8 +26,8 @@
 进度条会有过渡动画，如果你希望实时的变更进度，可以使用CSS `transition: none` 来禁用过渡。
 
 ```html preview
-<s-spinner value="80" style="transition: none"></s-spinner>
-<input type="range" min="0" max="100" value="80" oninput="this.previousElementSibling.value=this.value" />
+<s-spinner value="84" style="transition: none"></s-spinner>
+<input type="range" min="0" max="100" value="84" oninput="this.previousElementSibling.value=this.value" />
 ```
 
 ---

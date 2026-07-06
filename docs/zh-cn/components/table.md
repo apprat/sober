@@ -4,14 +4,14 @@
 
 ```js
 //使用构建工具（推荐）
-import 'sober/style/table.css'
+import 'sober/styles/table.css'
 ```
 
 直接在浏览器中引入。
 
 ```html
 <!-- 直接在浏览器中引入-->
-<link rel="stylesheet" href="https://unpkg.com/sober/style/table.css">
+<link rel="stylesheet" href="https://unpkg.com/sober/styles/table.css">
 ```
 
 它会为所有 `<table>` 元素添加样式和允许滚动。

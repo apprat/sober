@@ -70,7 +70,8 @@ const style = /*css*/`
 }
 ::slotted([slot=title]){
   font-size: calc(var(--s-font-size, 1) * 24px);
-  font-weight: 600;
+  font-weight: bold;
+  font-family: system-ui;
   text-transform: capitalize;
   color: ${scheme.color.primary};
 }

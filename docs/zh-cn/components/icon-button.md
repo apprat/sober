@@ -169,10 +169,10 @@
   <s-icon-button name="tag" type="checkbox" value="star">
     <s-icon name="star"></s-icon>
   </s-icon-button>
-  <s-icon-button name="tag" type="checkbox" value="home"">
+  <s-icon-button name="tag" type="checkbox" value="home">
     <s-icon name="home"></s-icon>
   </s-icon-button>
-  <s-icon-button name="tag" type="checkbox" value="favorite" defualtChecked checked>
+  <s-icon-button name="tag" type="checkbox" value="favorite" defaultChecked checked>
     <s-icon name="favorite"></s-icon> 
   </s-icon-button>
   <hr>
@@ -199,7 +199,7 @@
 | type           | icon-button, checkbox, reset, submit           | icon-button | √    | 类型，支持将组件作为复选框，提交按钮，或者重置按钮 |
 | disabled       | boolean                                        | false       | √    | 禁用的                                             |
 | checked        | boolean                                        | false       | √    | 选中的                                             |
-| defualtChecked | boolean                                        | false       | √    | 默认选中，表单重置时的默认值，仅表单重置时生效     |
+| defaultChecked | boolean                                        | false       | √    | 默认选中，表单重置时的默认值，仅表单重置时生效     |
 | name           | string                                         | ''          | √    | 名称，表单提交时的 `key` 值                        |
 | value          | string                                         | ''          | ×    | 值，表单提交时有效                                 |
 

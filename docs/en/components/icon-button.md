@@ -169,7 +169,7 @@ This component can be used as a form element, functioning as a checkbox, form re
   <s-icon-button name="tag" type="checkbox" value="star">
     <s-icon name="star"></s-icon>
   </s-icon-button>
-  <s-icon-button name="tag" type="checkbox" value="home"">
+  <s-icon-button name="tag" type="checkbox" value="home">
     <s-icon name="home"></s-icon>
   </s-icon-button>
   <s-icon-button name="tag" type="checkbox" value="favorite" defualtChecked checked>

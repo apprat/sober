@@ -173,7 +173,7 @@ const template = /*html*/`
 const itemTemplate = /*html*/`
 <div class="layout" part="layout">
   <s-ripple class="ripple" part="ripple" parentDepth="1">
-    <div class="icon">
+    <div class="icon" part="icon">
       <slot name="icon"></slot>
       <slot></slot>
     </div>

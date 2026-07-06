@@ -101,18 +101,28 @@ const style = /*css*/`
 }
 `
 const template = /*html*/`
-<slot class="view" part="view"></slot>
+<div class="view" part="view">
+  <slot></slot>
+</div>
 <div class="scrim" part="scrim"></div>
-<slot class="start" part="start" name="start"></slot>
-<slot class="end" part="end" name="end"></slot>
+<div class="start" part="start">
+  <slot name="start"></slot>
+</div>
+<div class="end" part="end">
+  <slot name="end"></slot>
+</div>
 `
 
 export class Drawer extends useElement({
   style, template, props,
   setup(shadowRoot, info) {
     const scrim = shadowRoot.querySelector<HTMLDivElement>('.scrim')!
-    const start = shadowRoot.querySelector<HTMLSlotElement>('.start')!
-    const end = shadowRoot.querySelector<HTMLSlotElement>('.end')!
+    const start = shadowRoot.querySelector<HTMLDivElement>('.start')!
+    const end = shadowRoot.querySelector<HTMLDivElement>('.end')!
+    const slots = {
+      start: shadowRoot.querySelector<HTMLSlotElement>('slot[name=start]')!,
+      end: shadowRoot.querySelector<HTMLSlotElement>('slot[name=end]')!
+    }
     const mediaQueryer = new MediaQueryer(this.media)
     const computedStyle = useComputedStyle(this)
     const getAnimateOptions = () => {
@@ -147,14 +157,15 @@ export class Drawer extends useElement({
     }
     const modalAnimate = async (started: boolean, open: boolean) => {
       if (!info.isConnected || getMode() === 'standard') return
-      const target = started ? start : end
+      const wrap = started ? start : end
+      const target = started ? slots.start : slots.end
       const [el] = target.assignedElements()
       if (!el) return
       const transform = ['translateX(0)', `translateX(${started ? '-' : ''}100%)`]
       if (open) transform.reverse()
-      target.style.display = 'contents'
+      wrap.style.display = 'contents'
       await el.animate({ transform, top: [0, 0] }, getAnimateOptions()).finished
-      target.style.removeProperty('display')
+      wrap.style.removeProperty('display')
     }
     return {
       expose: { toggle, getMode },

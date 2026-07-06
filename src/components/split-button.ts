@@ -254,7 +254,9 @@ svg,
 const template = /*html*/`
 <div class="layout btn" part="layout" tabindex="0" role="button">
   <slot name="start"></slot>
-  <slot class="text" part="text"></slot>
+  <div class="text" part="text">
+    <slot></slot>
+  </div>
   <slot name="end"></slot>
   <s-ripple></s-ripple>
 </div>

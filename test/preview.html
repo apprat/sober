@@ -26,99 +26,9 @@
       height: 100%;
       overflow: auto;
       margin: 0 auto;
-      padding: 32px;
       max-width: 1440px;
       box-shadow: var(--s-elevation-level1);
       user-select: text;
-    }
-
-    .page>* {
-      margin: 16px 0;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      margin: 0;
-      text-transform: capitalize;
-    }
-
-    p {
-      margin: 0;
-      line-height: 2;
-    }
-
-    a {
-      color: var(--s-color-primary);
-    }
-
-    pre {
-      white-space: pre-wrap;
-      background: var(--s-color-surface-container-high);
-      margin: 0;
-      padding: 8px;
-      border-radius: 4px;
-      overflow: auto;
-      white-space: revert;
-      font-family: monospace;
-    }
-
-    pre>code {
-      background: none;
-      padding: 0;
-      font-family: monospace;
-      display: block;
-      line-height: calc(100% + 6px);
-    }
-
-    pre>code .highlighted {
-      border-bottom: solid 1px rgba(255, 255, 255, .2);
-    }
-
-    details>summary {
-      cursor: pointer;
-      background: var(--s-color-surface-container-low);
-      padding: 8px 12px;
-      border-radius: 4px;
-    }
-
-    blockquote {
-      border-left: 4px solid var(--s-color-on-surface-variant);
-      padding-left: 12px;
-      margin: 0;
-      color: var(--s-color-on-primary-container);
-      font-style: italic;
-      font-size: 14px;
-      background: var(--s-color-primary-container);
-      padding: 8px 12px;
-      border-radius: 4px;
-    }
-
-    hr {
-      border: none;
-      border-top: solid 1px var(--s-color-surface-variant);
-      width: -webkit-fill-available;
-    }
-
-    code {
-      background: rgba(0, 0, 0, 0.08);
-      padding: 3px 5px;
-      border-radius: 4px;
-      font-family: monospace;
-    }
-
-    ol,
-    ul {
-      padding: 0;
-      margin: 0;
-      line-height: 2;
-    }
-
-    :is(ol, ul)>li {
-      margin-left: 20px;
     }
 
     .preview {
@@ -199,7 +109,7 @@
 
 <body>
   <s-page class="page">
-    {% content %}
+    <main>{% content %}</main>
     <s-fab class="toggle-style" onclick="toggleStyle()">
       <s-icon name="add"></s-icon>
       <s-tooltip gravity="left">切换Fluent设计</s-tooltip>

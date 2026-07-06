@@ -202,13 +202,13 @@ const template = /*html*/`
 const itemTemplate = /*html*/`
 <div class="layout" part="layout">
   <div class="indicator"></div>
-  <div class="icon">
+  <div class="icon" part="icon">
     <slot name="icon"></slot>
     <slot></slot>
   </div>
   <slot name="text"></slot>
 </div>
-<s-ripple class="ripple"></s-ripple>
+<s-ripple class="ripple" part="ripple"></s-ripple>
 `
 
 const orientationOptions = {

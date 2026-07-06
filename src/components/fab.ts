@@ -85,7 +85,9 @@ const style = /*css*/`
 
 const template = /*html*/`
 <slot name="start"></slot>
-<slot class="text" part="text"></slot>
+<div class="text" part="text">
+  <slot></slot>
+</div>
 <slot name="end"></slot>
 <s-ripple class="ripple" part="ripple"></s-ripple>
 `

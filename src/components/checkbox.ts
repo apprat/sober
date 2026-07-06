@@ -6,7 +6,7 @@ const props = useProps({
   checked: false,
   readOnly: false,
   indeterminate: false,
-  defualtChecked: false,
+  defaultChecked: false,
   name: '',
   $value: '',
 })
@@ -136,7 +136,9 @@ const template = /*html*/`
   </slot>
   <div class="ripple" part="ripple"></div>
 </div>
-<slot class="text" part="text"></slot>
+<div class="text" part="text">
+  <slot></slot>
+</div>
 `
 
 export class Checkbox extends useElement({
@@ -150,7 +152,7 @@ export class Checkbox extends useElement({
       this.dispatchEvent(new Event('change'))
     })
     return {
-      onFormReset: () => this.checked = this.defualtChecked,
+      onFormReset: () => this.checked = this.defaultChecked,
       onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom()
     }
   }

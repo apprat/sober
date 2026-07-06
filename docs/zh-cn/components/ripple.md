@@ -30,6 +30,15 @@
 
 > 所有依赖该组件的其他组件，都可以使用该方式来设置延迟，例如 `s-button` 组件。
 
+## 在 A 标签使用
+
+```html preview
+<a href="http://baidu.com/xxxx" style="position: relative;">
+  Back Home
+  <s-ripple></s-ripple>
+</a>
+```
+
 ---
 
 ## 属性

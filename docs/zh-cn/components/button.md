@@ -157,12 +157,12 @@
 
 该组件可以作为表单元素使用，可以作为复选框(`type=checkbox`)、表单重置按钮(`type=reset`)、提交按钮(`type=submit`)。
 
-```html preview block
+```html preview
 <form action="http://coolaf.com/tool/params" method="get">
   选择标签：
   <s-button name="tag" type="checkbox" value="java"> Java </s-button>
   <s-button name="tag" type="checkbox" value="rust"> Rust </s-button>
-  <s-button name="tag" type="checkbox" value="python" checked defualtChecked> Python </s-button>
+  <s-button name="tag" type="checkbox" value="python" checked defaultChecked> Python </s-button>
   <hr>
   <s-button type="reset" variant="outlined"> 重置表单 </s-button>
   <s-button type="submit"> 提交结果 </s-button>
@@ -180,7 +180,7 @@
 | type           | button, checkbox, reset, submit                | button | √    | 类型，支持将组件作为复选框，提交按钮，或者重置按钮 |
 | disabled       | boolean                                        | false  | √    | 禁用的                                             |
 | checked        | boolean                                        | false  | √    | 选中的                                             |
-| defualtChecked | boolean                                        | false  | ×    | 默认选中，表单重置时的默认值，仅表单重置时生效     |
+| defaultChecked | boolean                                        | false  | ×    | 默认选中，表单重置时的默认值，仅表单重置时生效     |
 | name           | string                                         | ''     | √    | 名称，表单提交时的 `key` 值                        |
 | value          | string                                         | ''     | ×    | 值，表单提交时有效                                 |
 

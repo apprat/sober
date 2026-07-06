@@ -25,13 +25,13 @@ const style = /*css*/`
     border-style: none;
     box-sizing: border-box;
     transition-property: opacity;
-    border-width: var(--s_fieldset-border-width);
-    border-color: ${scheme.color.outline};
+    border-width: var(--s_field-set-border-width);
+    border-color: var(--s_field-set-border-color);
   }
   &::after{
-    border-width: var(--s_fieldset-border-focused-width);
     opacity: 0;
-    border-color: ${scheme.color.primary};
+    border-width: var(--s_field-set-border-width-focused);
+    border-color: var(--s_field-set-border-color-focused);
   }
 }
 .layout{
@@ -39,19 +39,21 @@ const style = /*css*/`
   align-items: center;
   flex-grow: 1;
   max-height: inherit;
-  --s_fieldset-padding: var(--s-fieldset-padding);
-  --s_fieldset-padding-top: var(--s-fieldset-padding-top, var(--s_fieldset-padding, 14px));
-  --s_fieldset-padding-bottom: var(--s-fieldset-padding-bottom, var(--s_fieldset-padding, 14px));
-  --s_fieldset-padding-left: var(--s-fieldset-padding-left, var(--s_fieldset-padding, 16px));
-  --s_fieldset-padding-right: var(--s-fieldset-padding-right, var(--s_fieldset-padding, 16px));
-  --s_fieldset-border-width: var(--s-fieldset-border-width, 1px);
-  --s_fieldset-border-focused-width: var(--s-fieldset-border-focused-width, 2px);
-  --s_fieldset-border-radius: var(--s-fieldset-border-radius, 4px);
-  --s_fieldset-border-top-left-radius: var(--s-fieldset-border-top-left-radius, var(--s_fieldset-border-radius));
-  --s_fieldset-border-top-right-radius: var(--s-fieldset-border-top-right-radius, var(--s_fieldset-border-radius));
-  --s_fieldset-border-bottom-left-radius: var(--s-fieldset-border-bottom-left-radius, var(--s_fieldset-border-radius));
-  --s_fieldset-border-bottom-right-radius: var(--s-fieldset-border-bottom-right-radius, var(--s_fieldset-border-radius));
-  --s_fieldset-title_gap: var(--s-fieldset-title-gap, 4px);
+  --s_field-set-padding: var(--s-field-set-padding);
+  --s_field-set-padding-top: var(--s-field-set-padding-top, var(--s_field-set-padding, 12px));
+  --s_field-set-padding-bottom: var(--s-field-set-padding-bottom, var(--s_field-set-padding, 12px));
+  --s_field-set-padding-left: var(--s-field-set-padding-left, var(--s_field-set-padding, 16px));
+  --s_field-set-padding-right: var(--s-field-set-padding-right, var(--s_field-set-padding, 16px));
+  --s_field-set-border-color: var(--s-field-set-border-color, ${scheme.color.outline});
+  --s_field-set-border-color-focused: var(--s-field-set-border-color-focused, ${scheme.color.primary});
+  --s_field-set-border-width: var(--s-field-set-border-width, 1px);
+  --s_field-set-border-width-focused: var(--s-field-set-border-width-focused, 2px);
+  --s_field-set-border-radius: var(--s-field-set-border-radius, 4px);
+  --s_field-set-border-top-left-radius: var(--s-field-set-border-top-left-radius, var(--s_field-set-border-radius));
+  --s_field-set-border-top-right-radius: var(--s-field-set-border-top-right-radius, var(--s_field-set-border-radius));
+  --s_field-set-border-bottom-left-radius: var(--s-field-set-border-bottom-left-radius, var(--s_field-set-border-radius));
+  --s_field-set-border-bottom-right-radius: var(--s-field-set-border-bottom-right-radius, var(--s_field-set-border-radius));
+  --s_field-set-title-gap: var(--s-field-set-title-gap, 4px);
 }
 .start,
 .end{
@@ -62,23 +64,23 @@ const style = /*css*/`
   height: 100%;
 }
 .start{
-  min-width: max(var(--s_fieldset-border-top-left-radius), var(--s_fieldset-border-bottom-left-radius));
+  min-width: max(var(--s_field-set-border-top-left-radius), var(--s_field-set-border-bottom-left-radius));
   &::before,
   &::after{
     border-style: solid;
     border-right: none;
-    border-top-left-radius: var(--s_fieldset-border-top-left-radius);
-    border-bottom-left-radius: var(--s_fieldset-border-bottom-left-radius);
+    border-top-left-radius: var(--s_field-set-border-top-left-radius);
+    border-bottom-left-radius: var(--s_field-set-border-bottom-left-radius);
   }
 }
 .end{
-  min-width: max(var(--s_fieldset-border-top-right-radius), var(--s_fieldset-border-bottom-right-radius));
+  min-width: max(var(--s_field-set-border-top-right-radius), var(--s_field-set-border-bottom-right-radius));
   &::before,
   &::after{
     border-style: solid;
     border-left: none;
-    border-top-right-radius: var(--s_fieldset-border-top-right-radius);
-    border-bottom-right-radius: var(--s_fieldset-border-bottom-right-radius);
+    border-top-right-radius: var(--s_field-set-border-top-right-radius);
+    border-bottom-right-radius: var(--s_field-set-border-bottom-right-radius);
   }
 }
 .wrapper{
@@ -95,8 +97,8 @@ const style = /*css*/`
 .head,
 .body{
   grid-area: a;
-  margin-left: calc(max(var(--s_fieldset-border-top-left-radius), var(--s_fieldset-border-bottom-left-radius)) * -1);
-  margin-right: calc(max(var(--s_fieldset-border-top-right-radius), var(--s_fieldset-border-bottom-right-radius)) * -1);
+  margin-left: calc(max(var(--s_field-set-border-top-left-radius), var(--s_field-set-border-bottom-left-radius)) * -1);
+  margin-right: calc(max(var(--s_field-set-border-top-right-radius), var(--s_field-set-border-bottom-right-radius)) * -1);
 }
 .head{
   transform: translateY(-50%);
@@ -113,16 +115,16 @@ const style = /*css*/`
   flex-shrink: 0;
 }
 .left{
-  width: calc(var(--s_fieldset-padding-left) - var(--s_fieldset-title_gap) - var(--s_fieldset-border-top-left-radius));
-  margin-left: var(--s_fieldset-border-top-left-radius);
+  width: calc(var(--s_field-set-padding-left) - var(--s_field-set-title-gap) - var(--s_field-set-border-top-left-radius));
+  margin-left: var(--s_field-set-border-top-left-radius);
   &::before,
   &::after{
     border-top-style: solid;
   }
 }
 .right{
-  width: calc(var(--s_fieldset-padding-right) - var(--s_fieldset-title_gap) - var(--s_fieldset-border-top-right-radius));
-  margin-right: var(--s_fieldset-border-top-right-radius);
+  width: calc(var(--s_field-set-padding-right) - var(--s_field-set-title-gap) - var(--s_field-set-border-top-right-radius));
+  margin-right: var(--s_field-set-border-top-right-radius);
   &::before,
   &::after{
     border-top-style: solid;
@@ -149,7 +151,7 @@ const style = /*css*/`
   max-height: inherit;
 }
 ::slotted(div:not([slot])){
-  padding: var(--s_fieldset-padding-top) var(--s_fieldset-padding-right) var(--s_fieldset-padding-bottom) var(--s_fieldset-padding-left);
+  padding: var(--s_field-set-padding-top) var(--s_field-set-padding-right) var(--s_field-set-padding-bottom) var(--s_field-set-padding-left);
 }
 ::slotted([slot=title]){
   max-width: -moz-available;
@@ -158,13 +160,12 @@ const style = /*css*/`
   overflow: hidden;
   overflow: clip visible;
   text-overflow: ellipsis;
-  padding-top: var(--s_fieldset-padding-top);
-  padding-bottom: var(--s_fieldset-padding-bottom);
-  margin-left: min(var(--s_fieldset-title_gap), var(--s_fieldset-padding-left));
-  margin-right: min(var(--s_fieldset-title_gap), var(--s_fieldset-padding-right));
-  font-size: calc(var(--s-font-size, 1) * 12px);
+  padding-top: var(--s_field-set-padding-top);
+  padding-bottom: var(--s_field-set-padding-bottom);
+  margin-left: min(var(--s_field-set-title-gap), var(--s_field-set-padding-left));
+  margin-right: min(var(--s_field-set-title-gap), var(--s_field-set-padding-right));
+  font-size: calc(1em * .75);
   transition-property: all;
-  line-height: 1;
   transition-duration: inherit;
   transition-timing-function: inherit;
   box-sizing: border-box;
@@ -216,15 +217,15 @@ const template = /*html*/`
 </div>
 `
 
-export class Fieldset extends useElement({
+export class FieldSet extends useElement({
   props, style, template,
 }) { }
 
-const name = Fieldset.define('s-fieldset')
+const name = FieldSet.define('s-field-set')
 
 declare global {
   interface HTMLElementTagNameMap {
-    [name]: Fieldset
+    [name]: FieldSet
   }
   namespace React {
     namespace JSX {
@@ -246,7 +247,7 @@ declare module 'vue' {
       * @deprecated
       **/
       $props: HTMLAttributes & Partial<typeof props.values>
-    } & Fieldset
+    } & FieldSet
   }
 }
 //@ts-ignore

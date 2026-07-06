@@ -14,7 +14,6 @@ const pathFrames = [
 ]
 
 const tweenCurve = '0.5, 0.2, 0, 0.8'
-const animDur = '6s'
 const smilKeyTimes = '0; 0.14; 0.29; 0.43; 0.57; 0.71; 0.86; 1'
 const smilSplines = Array(7).fill(tweenCurve).join(';')
 const smilPathValues = pathFrames.join(';')
@@ -73,8 +72,9 @@ const style = /*css*/`
   background: ${scheme.color.secondaryContainer};
 }
 svg{
+  aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
   width: 100%;
-  height: 100%;
   overflow: visible;
   path{
     fill: currentColor;
@@ -82,40 +82,17 @@ svg{
 }
 `
 
-const animeTemplate = /*html*/`
-<animate
-  attributeName="d"
-  dur="${animDur}" 
-  repeatCount="indefinite" 
-  calcMode="spline"
-  keySplines="${smilSplines}"
-  keyTimes="${smilKeyTimes}"
-  values="${smilPathValues}"
-/>
-<animateTransform 
-  attributeName="transform" 
-  type="rotate" 
-  dur="${animDur}" 
-  repeatCount="indefinite" 
-  calcMode="spline"
-  keySplines="${smilSplines}"
-  keyTimes="${smilKeyTimes}"
-  values="0 80 80; 154 80 80; 309 80 80; 463 80 80; 617 80 80; 771 80 80; 926 80 80; 1080 80 80"
-/>
+const animeTemplate = /*html*/ `
+<animate attributeName="d" dur="6s" repeatCount="indefinite" calcMode="spline" keySplines="${smilSplines}" keyTimes="${smilKeyTimes}" values="${smilPathValues}"></animate>
+<animateTransform attributeName="transform" type="rotate" dur="6s" repeatCount="indefinite" calcMode="spline" keySplines="${smilSplines}" keyTimes="${smilKeyTimes}" values="0 80 80; 154 80 80; 309 80 80; 463 80 80; 617 80 80; 771 80 80; 926 80 80; 1080 80 80"></animateTransform>
 `
 
 const template = /*html*/`
 <svg viewBox="0 0 160 160">
-  <path d="${pathFrame}">${!support ? animeTemplate : ''}</path>
+  <path d="${pathFrame}"> ${support ? '' : animeTemplate} </path>
 </svg>
 `
 
-const state = {
-  div: document.createElement('div'),
-  dialog: document.createElement('dialog'),
-  loading: document.createElement('s-loading') as Loading
-}
-state.div.attachShadow({ mode: 'open' })
 const css = /*css*/`
 dialog{
   border: none;
@@ -127,29 +104,31 @@ dialog::backdrop{
   background: var(--s-color-scrim, ${scheme.color.scrim});
 }
 `
-state.div.shadowRoot!.innerHTML = `<style>${css}</style>`
-state.loading.variant = 'contained'
-state.dialog.appendChild(state.loading)
-state.div.shadowRoot!.appendChild(state.dialog)
 
-type builderOptions = {
-  root?: HTMLElement
-}
-
-const showModal = (options: builderOptions = {}) => {
-  if (state.div.isConnected) hideModal()
-  let root: Element = document.body
-  const page = document.body.firstElementChild
-  if (page && page.tagName === 'S-PAGE') root = page
-  if (options.root) root = options.root
-  root.appendChild(state.div)
-  state.dialog.showModal()
-}
-
-const hideModal = () => {
-  if (!state.div.isConnected) return
-  state.dialog.close()
-  state.div.remove()
+const showModal = (options: { root?: HTMLElement } = {}) => {
+  const div = document.createElement('div')
+  const shadowRoot = div.attachShadow({ mode: 'open' })
+  shadowRoot.innerHTML = `<style>${css}</style>`
+  const dialog = document.createElement('dialog')
+  dialog.onkeydown = (e) => e.key === 'Escape' && e.preventDefault()
+  shadowRoot.appendChild(dialog)
+  const loading = document.createElement(name)
+  loading.variant = 'contained'
+  dialog.appendChild(loading)
+  const root = options.root ?? (document.querySelector('s-page') || document.body)
+  const focus = document.querySelector(':focus-visible')
+  const focusElement = focus instanceof HTMLElement ? focus : null
+  root.appendChild(div)
+  dialog.showModal()
+  return () => {
+    dialog.close()
+    div.remove()
+    if (focusElement) {
+      focusElement.focus()
+    } else if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
+  }
 }
 
 export class Loading extends useElement({
@@ -158,7 +137,6 @@ export class Loading extends useElement({
   template
 }) {
   static showModal = showModal
-  static hideModal = hideModal
 }
 
 const name = Loading.define('s-loading')

@@ -10,7 +10,7 @@ const props = useProps({
   disabled: false,
   checked: false,
   name: '',
-  $defualtChecked: false,
+  $defaultChecked: false,
   $value: '',
 })
 
@@ -165,7 +165,9 @@ const style = /*css*/`
 
 const template = /*html*/`
 <slot name="start"></slot>
-<slot class="text" part="text"></slot>
+<div class="text" part="text">
+  <slot></slot>
+</div>
 <slot name="end"></slot>
 <s-ripple part="ripple"></s-ripple>
 `
@@ -184,7 +186,7 @@ export class Button extends useElement({
       this.dispatchEvent(new Event('change'))
     })
     return {
-      onFormReset: () => this.checked = this.defualtChecked,
+      onFormReset: () => this.checked = this.defaultChecked,
       onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom(),
     }
   }

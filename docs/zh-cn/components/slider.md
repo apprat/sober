@@ -15,6 +15,20 @@
 <s-slider mode="range" end="80"></s-slider>
 ```
 
+## 滑动模式
+
+设置 `slidingMode` 属性为 `all` 点击滑块任意位置都会触发滑动。
+
+```html preview
+<s-slider slidingMode="all"></s-slider>
+```
+
+设置 `slidingMode` 属性为 `all-cumulative"` 点击滑块任意位置都会触发滑动，并且累计值。
+
+```html preview
+<s-slider slidingMode="all-cumulative"></s-slider>
+```
+
 ## 禁用
 
 设置 `disabled` 禁用滑块。
@@ -95,15 +109,6 @@
 <s-slider size="extra-large"></s-slider>
 ```
 
-## 滑动模式
-
-设置 `slidingMode` 属性为 `all` 或者 `all-cumulative`，点击滑块任意位置都会触发滑动。
-
-```html preview
-<s-slider slidingMode="all"></s-slider>
-<s-slider slidingMode="all-cumulative"></s-slider>
-```
-
 ## 表单支持
 
 该组件可以作为表单元素使用。
@@ -130,7 +135,6 @@
 | orientation         | horizontal, vertical                           | horizontal  | √    | 方向                                                                                      |
 | disabled            | boolean                                        | false       | √    | 禁用的                                                                                    |
 | readOnly            | boolean                                        | false       | √    | 只读的                                                                                    |
-| clickable           | boolean                                        | true        | √    | 可单击切换的                                                                              |
 | touchScrollPriority | boolean                                        | false       | √    | 触屏滚动优先，启用该属性时会在触屏设备上优先执行滚动                                      |
 | showValue           | boolean                                        | false       | √    | 显示值，启用该属性时，滑块会显示当前值                                                    |
 | showDivisions       | boolean                                        | false       | √    | 显示刻度分段的，启用该属性时滑块会显示刻度分段，可与 `step` 或 `stepMarks` 搭配使用       |

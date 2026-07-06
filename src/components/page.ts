@@ -11,10 +11,10 @@ const props = useProps({
 const style = /*css*/`
 :host{
   display: flow-root;
-  height: -moz-available;
-  height: -webkit-fill-available;
+  height: 100%;
   overflow: auto;
   font-family: "Google Sans Text", sans-serif;
+  color-scheme: light;
   color: var(--s-color-on-background);
   background: var(--s-color-background);
   animation-timing-function: var(--s-motion-easing-standard-accelerate);
@@ -131,6 +131,7 @@ const style = /*css*/`
   --s-motion-easing-standard-accelerate: ${scheme.$motion.easing.standardAccelerate};
 }
 :host([dark]){
+  color-scheme: dark;
   --s-color-primary: var(--s-color-dark-primary) !important;
   --s-color-on-primary: var(--s-color-dark-on-primary) !important;
   --s-color-primary-container: var(--s-color-dark-primary-container) !important;
@@ -181,7 +182,10 @@ const getTransitionStyle = (name: string) => `
 ::view-transition-new(${name}){ 
   animation: none;
   mix-blend-mode: normal;
-}`
+  contain: content;
+  will-change: clip-path;
+}
+`
 
 export class Page extends useElement({
   props, template, style,
@@ -190,6 +194,7 @@ export class Page extends useElement({
     const mediaQueryer = new MediaQueryer(this.media)
     mediaQueryer.onChange = (v) => this.theme === 'auto' && this.toggleAttribute('dark', v)
     const getTheme = () => this.theme === 'auto' ? (mediaQueryer.matches ? 'dark' : 'light') : this.theme
+    const styleNode = document.createElement('style')
     const toggle = async (theme: typeof props.values.theme, anchor?: HTMLElement) => {
       if (this.theme === theme) return
       const old = getTheme()
@@ -200,7 +205,7 @@ export class Page extends useElement({
       }
       const transitionName = `page-${Math.random().toString(36).substring(2, 10)}`
       this.style.setProperty('view-transition-name', transitionName)
-      const keyframes = { clipPath: [`circle(0px at 50%)`, `circle(${Math.hypot(this.offsetWidth, this.offsetWidth)}px at 50%)`] }
+      let keyframes: any = { clipPath: [`circle(0px at 50%)`, `circle(${Math.hypot(this.offsetWidth, this.offsetWidth)}px at 50%)`] }
       if (this.isConnected && anchor && anchor.isConnected) {
         const rect = this.getBoundingClientRect()
         const anchorRect = anchor.getBoundingClientRect()
@@ -212,7 +217,6 @@ export class Page extends useElement({
         keyframes.clipPath[0] = `circle(0px at ${x}% ${y}%)`
         keyframes.clipPath[1] = `circle(${diameter}px at ${x}% ${y}%)`
       }
-      const styleNode = document.createElement('style')
       const transition = document.startViewTransition(() => {
         styleNode.textContent = getTransitionStyle(transitionName)
         document.head.appendChild(styleNode)

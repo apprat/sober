@@ -26,7 +26,7 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
   height: 100%;
-  padding: 8px 0;
+  overflow: auto;
   max-height: -moz-available;
   max-height: -webkit-fill-available;
   background: ${scheme.color.surfaceContainerLow};
@@ -37,6 +37,7 @@ const style = /*css*/`
   align-items: center;
   min-width: 0;
   gap: 8px;
+  padding: 8px 0;
   min-height: 100%;
 }
 ::slotted(:is(label, s-divider, s-nav-rail-item)){
@@ -226,6 +227,7 @@ const itemStyle = /*css*/`
 ::slotted(s-nav-rail){
   width: 100%;
   margin-top: 8px;
+  overflow: visible;
   background: ${scheme.color.surfaceContainer};
 }
 ::slotted(s-tooltip){
@@ -267,16 +269,20 @@ const itemTemplate = /*html*/`
 <div class="wrap" part="wrap">
   <div class="layout" part="layout">
     <s-ripple class="ripple" part="ripple">
-      <slot name="icon"></slot>
+      <slot name="icon" part="icon"></slot>
       <slot></slot>
     </s-ripple>
     <slot name="text"></slot>
     <slot name="action"></slot>
-    <slot name="toggle-icon" class="toggle-icon" part="toggle-icon">
-      <svg viewBox="0 -960 960 960"><path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z" transform="rotate(180 480 -480)"></path></svg>
-    </slot>
+    <div class="toggle-icon" part="toggle-icon">
+      <slot name="toggle-icon">
+        <svg viewBox="0 -960 960 960"><path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z" transform="rotate(180 480 -480)"></path></svg>
+      </slot>
+    </div>
   </div>
-  <slot class="sub-rail" part="sub-rail" name="sub-rail"></slot>
+  <div class="sub-rail" part="sub-rail">
+    <slot name="sub-rail"></slot>
+  </div>
 </div>
 `
 
@@ -328,7 +334,8 @@ export class NavRailItem extends useElement({
     const iconSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=icon]')!
     const textSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=text]')!
     const actionSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=action]')!
-    const subRailSlot = shadowRoot.querySelector<HTMLSlotElement>('.sub-rail')!
+    const subRail = shadowRoot.querySelector<HTMLDivElement>('.sub-rail')!
+    const subRailSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=sub-rail]')!
     const computedStyle = useComputedStyle(this)
     iconSlot.addEventListener('slotchange', () => wrap.classList.toggle('has-icon', iconSlot.assignedElements().length > 0))
     textSlot.addEventListener('slotchange', () => wrap.classList.toggle('has-text', textSlot.assignedElements().length > 0))
@@ -346,14 +353,14 @@ export class NavRailItem extends useElement({
       disabled: () => this.dispatchEvent(new Event(`${name}:disabled`, { bubbles: true })),
       open: async (v) => {
         if (!wrap.classList.contains('has-sub-rail')) return
-        const [old] = subRailSlot.getAnimations()
+        const [old] = subRail.getAnimations()
         if (old) return old.reverse()
-        subRailSlot.style.display = 'block'
-        const height = subRailSlot.offsetHeight
+        subRail.style.display = 'block'
+        const height = subRail.offsetHeight
         const keyframe = { height: ['0px', `${height}px`] }
         if (!v) keyframe.height.reverse()
-        await subRailSlot.animate(keyframe, { easing: computedStyle.getValue('transition-timing-function'), duration: computedStyle.getDuration('transition-duration') }).finished
-        subRailSlot.style.removeProperty('display')
+        await subRail.animate(keyframe, { easing: computedStyle.getValue('transition-timing-function'), duration: computedStyle.getDuration('transition-duration') }).finished
+        subRail.style.removeProperty('display')
       }
     }
   }

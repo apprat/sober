@@ -3,10 +3,16 @@ import fs from 'fs'
 import path from 'path'
 import markdownIt from 'markdown-it'
 import url from 'url'
+import childProcess from 'child_process'
 import * as shiki from 'shiki'
 import { transformerNotationHighlight } from '@shikijs/transformers'
+import { watch } from './esbuild.js'
 
-const __dirname = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), '../')
+watch()
+//const tsc = childProcess.exec('npx tsc -w', { cwd: './', windowsHide: true })
+//tsc.stdout.on('data', buf => process.stdout.write(buf))
+//tsc.stderr.on('data', buf => process.stderr.write(buf))
+
 const highlighter = await shiki.createHighlighter({
   themes: ['github-dark'],
   langs: ['shell', 'json', 'js', 'javascript', 'jsx', 'ts', 'typescript', 'tsx', 'css', 'xml', 'html', 'vue'],
@@ -51,22 +57,30 @@ md.renderer.rules.fence = (tokens, idx) => {
   return highlight(token.content, lang)
 }
 
-const template = fs.readFileSync(path.resolve(__dirname, './test/preview.html'), 'utf-8')
+const root = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), '../')
+const virtualDir = ['docs', 'dist', 'styles']
 
-export const useServer = (port) => {
-  const server = http.createServer((_, res) => {
-    const uri = new URL(res.req.url, 'http://localhost')
-    const filename = path.resolve(__dirname, uri.pathname.slice(1))
-    const extname = path.extname(filename).slice(1)
-    if (!fs.existsSync(filename) || !fs.lstatSync(filename).isFile()) return res.end()
-    if (extname === 'md') {
-      const content = md.render(fs.readFileSync(filename, 'utf-8'))
-      const value = template.replace('{% title %}', filename).replace('{% content %}', content)
-      res.setHeader('Content-Type', 'text/html; charset=utf-8')
-      return res.end(value)
+const port = process.env.PORT || 1996
+const server = http.createServer((_, res) => {
+  const url = new URL(res.req.url, 'http://localhost')
+  let filename = path.resolve(root, 'test', url.pathname.slice(1))
+  for (const dir of virtualDir) {
+    if (url.pathname.startsWith(`/${dir}/`)) {
+      filename = path.resolve(root, url.pathname.slice(1))
+      break
     }
-    if (mineTypeMap[extname]) res.setHeader('Content-Type', mineTypeMap[extname])
-    return fs.createReadStream(filename).pipe(res)
-  })
-  server.listen(port, () => console.info(`➜Local: http://localhost:${port}/test/index.html`))
-}
+  }
+  const extname = path.extname(filename).slice(1)
+  if (!fs.existsSync(filename) || !fs.lstatSync(filename).isFile()) return res.end('404')
+  if (mineTypeMap[extname]) res.setHeader('Content-Type', mineTypeMap[extname])
+  if (extname === 'md') {
+    //{% content %}
+    const content = md.render(fs.readFileSync(filename, 'utf-8'))
+    const template = fs.readFileSync(path.resolve(root, 'test', 'preview.html'), 'utf-8')
+    const t = template.replace('{% content %}', content).replace('{% title %}', filename)
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
+    return res.end(t)
+  }
+  fs.createReadStream(filename).pipe(res)
+})
+server.listen(port, () => console.info(`➜Local: http://localhost:${port}/index.html`))

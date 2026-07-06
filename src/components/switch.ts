@@ -174,8 +174,12 @@ const template = /*html*/`
 <div class="track" part="track"></div>
 <div class="handle" part="handle">
   <div class="thumb" part="thumb">
-    <slot name="unselected" class="unselected" part="unselected"></slot>
-    <slot name="selected" class="selected" part="selected"></slot>
+    <div class="unselected" part="unselected">
+      <slot name="unselected"></slot>
+    </div>
+    <div class="selected" part="selected">
+      <slot name="selected"></slot>
+    </div>
   </div>
 </div>
 `

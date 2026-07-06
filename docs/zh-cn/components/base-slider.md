@@ -22,8 +22,8 @@
 
 ```html preview
 <s-base-slider variant="segmented"></s-base-slider>
-<s-base-slider mode="reversed"></s-base-slider>
-<s-base-slider mode="range"></s-base-slider>
+<s-base-slider variant="segmented" mode="reversed"></s-base-slider>
+<s-base-slider variant="segmented" mode="range"></s-base-slider>
 ```
 
 ## 竖向
@@ -172,7 +172,6 @@
 | slidingMode         | thumb, all, all-cumulative | thumb      | √    | 滑动模式，thumb=仅指示器滑动，all=所有滑动，all-cumulative=所有滑动且累计值                 |
 | variant             | standard, segmented        | standard   | √    | 变体                                                                                        |
 | orientation         | horizontal, vertical       | horizontal | √    | 方向                                                                                        |
-| clickable           | boolean                    | true       | √    | 可单击切换的                                                                                |
 | touchScrollPriority | boolean                    | false      | √    | 触屏滚动优先，启用该属性时会在触屏设备上优先执行滚动                                        |
 | stepMarks           | string                     | ''         | ×    | 步进标记，使用 `,` 分割，例如：`20,30,50`(不需要提供最大值和最小值)，滑块时只会在标记上切换 |
 | name                | string                     | ''         | √    | 名称，表单提交时的 `key` 值                                                                 |
@@ -230,7 +229,6 @@
 | --s-base-slider-thumb-end-height      | thumb-end 指示器高度                                                 |
 | --s-base-slider-sliding-mode          | 该 CSS 变量和 `slidingMode` 属性一致，区别是该变量优先级更高         |
 | --s-base-slider-touch-scroll-priority | 该 CSS 变量和 `touchScrollPriority` 属性一致，区别是该变量优先级更高 |
-| --s-base-slider-clickable             | 该 CSS 变量和 `clickable` 属性一致，区别是该变量优先级更高           |
 
 > 注意：CSS 变量参与了尺寸的计算，你应该优先使用 CSS 变量来调整组件样式，如果直接使用 ::part() 选择器去调整尺寸，除非你明确知道你在做什么，否则可能会尺寸计算异常。
 

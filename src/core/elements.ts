@@ -24,18 +24,15 @@ const baseStyle = /*css*/`
 :host(:focus-visible){
   outline-style: solid;
 }
-slot,
 div,
 div::before,
-div::after,
-slot::before,
-slot::after{
-  transition-property: none;
+div::after{
   transition-timing-function: inherit;
   transition-duration: inherit;
 }
 slot{
-  border-radius: inherit;
+  all: inherit;
+  display: contents;
 }
 :host, *{
   box-sizing: border-box;
@@ -57,6 +54,11 @@ slot{
       scrollbar-width: thin;
       scrollbar-color: var(--s-scrollbar-thumb-color, ${scheme.color.outlineVariant}) var(--s-scrollbar-color, transparent);
     }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host{
+    transition-duration: 0s !important;
   }
 }
 `
@@ -243,9 +245,11 @@ export const useElement = <
       const beforeAttrs: RawoObject = {}
       //getter and setter
       for (const key in info.props) {
-        const beforeValue = this[key as keyof this] as never
-        if (beforeValue !== undefined) beforeAttrs[key] = beforeValue
-        this[key as keyof this] = info.props[key] as never
+        if (!(key in HTMLElement.prototype)) {
+          const beforeValue = this[key as keyof this] as never
+          if (beforeValue !== undefined) beforeAttrs[key] = beforeValue
+          this[key as keyof this] = info.props[key] as never
+        }
         Object.defineProperty(this, key, {
           configurable: true,
           get: () => info.props[key],
@@ -303,18 +307,26 @@ export const useElement = <
       //绑定状态
       if (options.states?.includes('hoverable')) {
         const name = 'hover'
-        this.addEventListener('pointerenter', () => {
-          if (!device.mouseEnabled) return
-          this.setAttribute(name, '')
-          this.addEventListener('pointerleave', () => this.removeAttribute(name), { once: true })
-        })
+        const hovering = (e: PointerEvent) => {
+          if (!device.mouseEnabled || e.pointerType !== 'mouse') return
+          this.toggleAttribute(name, e.type === 'pointerenter')
+        }
+        this.addEventListener('pointerenter', hovering)
+        this.addEventListener('pointerleave', hovering)
+        this.addEventListener('pointercancel', hovering)
       }
       if (options.states?.includes('pressable')) {
         const name = 'pressed'
         this.addEventListener('pointerdown', (e) => {
           if (e.button !== 0) return
           this.setAttribute(name, '')
-          document.addEventListener(e.pointerType === 'mouse' ? 'mouseup' : 'touchend', () => this.removeAttribute(name), { once: true })
+          const remove = () => {
+            this.removeAttribute(name)
+            document.removeEventListener('pointerup', remove)
+            document.removeEventListener('pointercancel', remove)
+          }
+          document.addEventListener('pointerup', remove)
+          document.addEventListener('pointercancel', remove)
         })
       }
       if (options.states?.includes('focusable')) focusKeydownClick(this)
@@ -401,4 +413,39 @@ export const focusKeydownClick = (...nodes: HTMLElement[]) => {
       e.preventDefault()
     })
   })
+}
+
+export const getParentDepth = (el: HTMLElement & { parentDepth: number }) => {
+  if (el.parentDepth <= -1 || !el.parentNode) return
+  let ancestor: HTMLElement = el
+  for (let i = -1; i < el.parentDepth; i++) {
+    if (ancestor.assignedSlot) {
+      ancestor = ancestor.assignedSlot
+      continue
+    }
+    if (!ancestor.parentNode) return
+    if (ancestor.parentNode instanceof ShadowRoot) {
+      const host = ancestor.parentNode.host
+      if (!(host instanceof HTMLElement)) return
+      ancestor = host
+      continue
+    }
+    if (!(ancestor.parentNode instanceof HTMLElement)) return
+    ancestor = ancestor.parentNode
+  }
+  return ancestor
+}
+
+const div = document.createElement('div')
+div.setAttribute('style', `position: fixed;font-size: 12px; width: 100%;top: 0;left: 0; pointer-events: none;z-index: 99;color: #fff;background: rgba(0,0,0,0.8);`)
+document.body.appendChild(div)
+
+export const print = (...values: any[]) => {
+  const fragment = document.createDocumentFragment()
+  values.forEach((value) => {
+    const text = document.createTextNode(`${String(value)},`)
+    fragment.appendChild(text)
+  })
+  div.appendChild(fragment)
+  div.appendChild(document.createElement('hr'))
 }

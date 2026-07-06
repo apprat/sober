@@ -3,52 +3,22 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>单个元素 View Transition</title>
+  <title>dashoffset 滑块控制演示</title>
   <style>
     body {
-      min-height: 100vh;
-      background: #f5f5f5;
-      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 30px;
     }
 
-    .test {
-      background-color: blue;
-      height: 16px;
-      background-repeat: no-repeat;
-
-      /* 圆点1 */
-      background-image:
-        radial-gradient(circle, red 2px, transparent 2px),
-        /* 圆点2 */
-        radial-gradient(circle, red 2px, transparent 2px),
-        /* 圆点3 */
-        radial-gradient(circle, red 2px, transparent 2px);
-
-      /* 每个圆点尺寸，和上面顺序对应 */
-      background-size:
-        4px 4px,
-        4px 4px,
-        4px 4px;
-
-      /* 每个圆点位置，和上面顺序对应 */
-      background-position:
-        10% center,
-        20% center,
-        30% center;
-    }
-
-    .xx {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background-color: red;
-    }
+    textarea {}
   </style>
 </head>
 
 <body>
-  <div class="test"></div>
-  <div class="xx"></div>
+  <textarea name="" id=""></textarea>
 </body>
 
 </html>

@@ -18,7 +18,6 @@ const props = useProps({
   readOnly: false,
   showValue: false,
   showDivisions: false,
-  clickable: true,
   touchScrollPriority: false,
   mode: ['single', 'reversed', 'range'],
   slidingMode: ['thumb', 'all', 'all-cumulative'],
@@ -54,8 +53,8 @@ const style = /*css*/`
     border-radius: 2px;
   }
   &::part(thumb-start)::before,
-  &::part(thumb-start)::after,
   &::part(thumb-end)::before,
+  &::part(thumb-start)::after,
   &::part(thumb-end)::after{
     aspect-ratio: 1;
     -webkit-aspect-ratio: 1;
@@ -98,6 +97,7 @@ const style = /*css*/`
     inset: 0;
     position: absolute;
     pointer-events: none;
+    transition-property: none;
     &.fill{
       display: none;
       color: ${scheme.color.onPrimary};
@@ -117,7 +117,7 @@ const style = /*css*/`
 }
 :host(:not([orientation=vertical])){
   .slider{
-    --s_slider-thumb-height: calc(100% + 4px);
+    --s_slider-thumb-height: 100%;
     --s-base-slider-thumb-width: var(--s_slider-thumb-size);
     --s-base-slider-thumb-height: var(--s_slider-size);
     height: var(--s_slider-size);
@@ -198,7 +198,7 @@ const style = /*css*/`
   vertical-align: middle;
   padding: 4px 0;
   .slider{
-    --s_slider-thumb-width: calc(100% + 4px);
+    --s_slider-thumb-width: 100%;
     --s-base-slider-thumb-height: var(--s_slider-thumb-size);
     --s-base-slider-thumb-width: var(--s_slider-size);
     margin: var(--s-base-slider-track-edge-offset) 0;
@@ -441,7 +441,7 @@ export class Slider extends useElement({
     return {
       onAttributeChanged: (name, value) => {
         const marks = ['stepMarks', 'step', 'min', 'max', 'showDivisions']
-        if (['mode', 'slidingMode', 'orientation', 'clickable', 'touchScrollPriority', ...marks].includes(name)) (slider as any)[name] = value
+        if (['mode', 'slidingMode', 'orientation', 'touchScrollPriority', ...marks].includes(name)) (slider as any)[name] = value
         if (marks.includes(name)) useThrottle(setDivisions)
         if (['value', 'start', 'end'].includes(name)) setValue()
       },

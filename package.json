@@ -1,11 +1,10 @@
 {
   "name": "sober",
-  "version": "2.0.0-alpha.15",
+  "version": "2.0.0-alpha.16",
   "description": "Sober is a library of UI components designed with reference to Material You.",
   "type": "module",
   "scripts": {
-    "dev": "node dev/dev-server.js",
-    "preview": "node dev/dev-preview.js",
+    "dev": "node dev/server.js",
     "build": "node dev/build.js",
     "check": "npx tsc --noEmit",
     "test": "node dev/test.js",
@@ -38,6 +37,7 @@
   "license": "MIT",
   "main": "./dist/main.js",
   "devDependencies": {
+    "@shikijs/transformers": "^4.2.0",
     "cssnano": "^8.0.2",
     "esbuild": "^0.28.1",
     "html-minifier": "^4.0.0",
@@ -46,7 +46,7 @@
     "postcss-nested": "^7.0.2",
     "shiki": "^4.2.0",
     "typescript": "^6.0.3",
-    "@shikijs/transformers": "^4.2.0"
+    "postcss-safe-parser": "^7.0.1"
   },
   "dependencies": {
     "@material/material-color-utilities": "^0.4.0"

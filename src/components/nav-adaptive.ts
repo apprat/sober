@@ -81,7 +81,7 @@ const style = /*css*/`
       position: absolute;
       display: flex;
       flex-direction: column;
-      border-radius: 4px;
+      border-radius: 12px;
       gap: inherit;
       padding: 8px 0;
       contain: layout;

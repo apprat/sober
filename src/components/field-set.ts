@@ -169,7 +169,7 @@ const style = /*css*/`
   transition-duration: inherit;
   transition-timing-function: inherit;
   box-sizing: border-box;
-  color: ${scheme.color.outline};
+  color: var(--s_field-set-border-color);
 }
 ::slotted([slot=title]:empty){
   display: none;
@@ -189,7 +189,7 @@ const style = /*css*/`
     opacity: 1;
   }
   ::slotted([slot=title]){
-    color: ${scheme.color.primary};
+    color: var(--s_field-set-border-color-focused);
   }
 }
 `

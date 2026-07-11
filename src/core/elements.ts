@@ -1,5 +1,22 @@
 import * as scheme from './scheme.js'
-import { device } from './device.js'
+
+const pointerMedia = matchMedia('(any-pointer: coarse)')
+const pointerMedia2 = matchMedia('(any-pointer: fine)')
+const orientationMedia = matchMedia('(orientation: portrait)')
+
+export const device = {
+  get touchEnabled() {
+    return pointerMedia.matches
+  },
+  get mouseEnabled() {
+    return pointerMedia2.matches
+  },
+  orientation: {
+    get portrait() {
+      return orientationMedia.matches
+    }
+  }
+}
 
 export const supports = {
   CSS: { StyleSheet: true }
@@ -16,12 +33,16 @@ const baseStyle = /*css*/`
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
+}
+:host,
+div{
   outline-width: 3px;
   outline-offset: 2px;
   outline-style: none;
   outline-color: ${scheme.color.onSurfaceVariant};
 }
-:host(:focus-visible){
+:host(:focus-visible),
+div:focus-visible{
   outline-style: solid;
 }
 div,
@@ -202,9 +223,7 @@ export const useElement = <
   let customStyleStr: string | undefined
   const attributes = Object.keys(options.props?.caseKeys ?? {})
   for (const key in options.events) {
-    const name = `on${key}`
-    if (name in HTMLElement.prototype) continue
-    attributes.push(name)
+    attributes.push(`on${key}`)
   }
   class Component extends HTMLElement {
     declare disabled?: boolean
@@ -289,9 +308,8 @@ export const useElement = <
       const events: RawoObject<((e: Event) => void) | null> = {}
       for (const key in options.events) {
         const name = `on${key}`
-        if (name in HTMLElement.prototype) continue
-        const beforeValue = this[name as keyof this] as never
-        if (beforeValue !== undefined) beforeAttrs[name] = beforeValue
+        const beforeFun = this[name as keyof this] as never
+        if (typeof beforeFun === 'function') events[key] = beforeFun
         Object.defineProperty(this, name, {
           configurable: true,
           get: () => events[key] ?? null,

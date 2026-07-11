@@ -1,8 +1,8 @@
 # Sober (Material 3 Expressive)
 
 [![npm version](https://badge.fury.io/js/sober.svg)](https://badge.fury.io/js/sober)
-![Static Badge](https://img.shields.io/badge/complete%20build-139kb-blue)
-![Static Badge](https://img.shields.io/badge/gzip-33kb-wheat)
+![Static Badge](https://img.shields.io/badge/complete%20build-192kb-blue)
+![Static Badge](https://img.shields.io/badge/gzip-52kb-wheat)
 
 Sober 是实现 Google Material 3 Expressive 设计规范轻量级的响应式 UI 组件库。  
 
@@ -11,6 +11,8 @@ Sober 支持所有前端框架，如 Vue、React、Svelte、Solid-js 等，并�
 (Sober is a lightweight responsive UI component library that implements Google Material 3 Expressive design specifications.)
 
 (Sober supports all front-end frameworks including Vue, React, Svelte, Solid-js and more, and provides TypeScript type hints and autocompletion for both templates and JSX.)
+
+<img src="./docs/images/preview.png" style="width: 100%;max-width: 480px" alt="preview">
 
 ## 安装 (Installation)
 

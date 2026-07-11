@@ -1,5 +1,4 @@
-import { useElement, useProps, getParentDepth } from '../core/elements.js'
-import { device } from '../core/device.js'
+import { useElement, useProps, getParentDepth, device } from '../core/elements.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
 import { oneEvent } from '../core/utils/one-event.js'
 import * as scheme from '../core/scheme.js'
@@ -43,14 +42,14 @@ const style = /*css*/`
   transition-property: opacity;
   background: var(--s-ripple-color, currentColor);
   &.hover{
-    opacity: var(--s-ripple-hover-opacity, .08);
+    opacity: var(--s-ripple-hover-opacity, .1);
   }
 }
 .ripple{
   opacity: 0;
   border-radius: 50%;
   background: var(--s-ripple-color, currentColor);
-  filter: opacity(var(--s-ripple-opacity, .1));
+  filter: opacity(var(--s-ripple-opacity, .12));
 }
 @media (prefers-reduced-motion: reduce) {
   :host{

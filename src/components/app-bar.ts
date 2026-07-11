@@ -41,7 +41,7 @@ const style = /*css*/`
   gap: inherit;
   height: 100%;
 }
-::slotted(:is([slot=nav], [slot=logo]):first-child){
+::slotted([slot=nav]:first-child){
   margin-left: -8px;
 }
 ::slotted(:not(:is([slot=title], [slot=subtitle])):last-child){

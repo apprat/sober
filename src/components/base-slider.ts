@@ -1,6 +1,5 @@
-import { useElement, useProps, useThrottle } from '../core/elements.js'
+import { useElement, useProps, useThrottle, device } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
-import { device } from '../core/device.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
 
 const props = useProps({

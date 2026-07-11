@@ -146,7 +146,7 @@ pre {
   color: var(--s-color-on-surface);
   box-sizing: border-box;
   overflow: auto;
-  border-radius: 4px;
+  border-radius: 12px;
   padding: 8px 16px;
   line-height: calc(100% + 8px);
   user-select: text;

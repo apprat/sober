@@ -1,5 +1,4 @@
-import { useElement, useProps, getParentDepth } from '../core/elements.js'
-import { device } from '../core/device.js'
+import { useElement, useProps, getParentDepth, device } from '../core/elements.js'
 import { getStackingContext } from '../core/utils/get-stacking-context.js'
 import { useComputedStyle } from '../core/utils/CSS.js'
 import { oneEvent } from '../core/utils/one-event.js'

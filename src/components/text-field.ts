@@ -7,7 +7,9 @@ const props = useProps({
   disabled: false,
   readOnly: false,
   showError: false,
+  showSearch: false,
   showClear: false,
+  showNumberSpin: false,
   showCount: false,
   showPasswordToggle: false,
   showMic: false,
@@ -19,14 +21,18 @@ const props = useProps({
   $label: '',
   $placeholder: '',
   maxLength: -1,
-  type: ['text', 'password', 'number', 'email', 'tel', 'multiline'],
+  type: ['text', 'password', 'number', 'email', 'tel', 'search', 'multiline'],
   $inputMode: ['', 'text', 'tel', 'url', 'email', 'numeric', 'decimal', 'search'],
   size: ['medium', 'small', 'large'],
 })
+const events = {
+  search: Event
+}
 
 const style = /*css*/`
 :host{
-  display: block;
+  display: flex;
+  flex-direction: column;
   min-height: 48px;
   font-size: calc(var(--s-font-size) * 16px);
   line-height: calc(100% + 8px);
@@ -35,6 +41,25 @@ const style = /*css*/`
   transition-timing-function: ${scheme.motion.easing.standardDecelerate};
   transition-duration: ${scheme.motion.duration.short4};
 }
+.wrap{
+  all: inherit;
+  display: contents;
+  --s_text-field-padding: var(--s-text-field-padding);
+  --s_text-field-padding-top: var(--s-text-field-padding-top, var(--s-text-field-padding, 12px));
+  --s_text-field-padding-bottom: var(--s-text-field-padding-bottom, var(--s-text-field-padding, 12px));
+  --s_text-field-padding-right: var(--s-text-field-padding-right, var(--s-text-field-padding, 16px));
+  --s_text-field-padding-left: var(--s-text-field-padding-left, var(--s-text-field-padding, 16px));
+  --s_text-field-border-color: var(--s-text-field-border-color, ${scheme.color.outline});
+  --s_text-field-border-color-focused: var(--s-text-field-border-color-focused, ${scheme.color.primary});
+  --s_text-field-border-width: var(--s-text-field-border-width, 1px);
+  --s_text-field-border-focused-width: var(--s-text-field-border-focused-width, 2px);
+  --s_text-field-border-radius: var(--s-text-field-border-radius);
+  --s_text-field-border-top-left-radius: var(--s-text-field-border-top-left-radius, var(--s-text-field-border-radius, 4px));
+  --s_text-field-border-top-right-radius: var(--s-text-field-border-top-right-radius, var(--s-text-field-border-radius, 4px));
+  --s_text-field-border-bottom-left-radius: var(--s-text-field-border-bottom-left-radius, var(--s-text-field-border-radius, 4px));
+  --s_text-field-border-bottom-right-radius: var(--s-text-field-border-bottom-right-radius, var(--s-text-field-border-radius, 4px));
+  --s_text-field-label-gap: var(--s-text-field-label-gap, 4px);
+}
 .field-set{
   line-height: inherit;
   font-size: inherit;
@@ -42,27 +67,29 @@ const style = /*css*/`
   max-height: inherit;
   transition-timing-function: inherit;
   transition-duration: inherit;
-  --s-field-set-padding: var(--s-text-field-padding);
-  --s-field-set-padding-top: var(--s-text-field-padding-top, var(--s-text-field-padding));
-  --s-field-set-padding-bottom: var(--s-text-field-padding-bottom, var(--s-text-field-padding));
-  --s-field-set-padding-right: var(--s-text-field-padding-right, var(--s-text-field-padding));
-  --s-field-set-padding-left: var(--s-text-field-padding-left, var(--s-text-field-padding));
-  --s_field-set-border-color: var(--s-text-field-border-color);
-  --s_field-set-border-color-focused: var(--s-text-field-border-color-focused);
-  --s-field-set-border-width: var(--s-text-field-border-width);
-  --s-field-set-border-focused-width: var(--s-text-field-border-focused-width);
-  --s-field-set-border-radius: var(--s-text-field-border-radius);
-  --s-field-set-border-top-left-radius: var(--s-text-field-border-top-left-radius, var(--s-text-field-border-radius));
-  --s-field-set-border-top-right-radius: var(--s-text-field-border-top-right-radius, var(--s-text-field-border-radius));
-  --s-field-set-border-bottom-left-radius: var(--s-text-field-border-bottom-left-radius, var(--s-text-field-border-radius));
-  --s-field-set-border-bottom-right-radius: var(--s-text-field-border-bottom-right-radius, var(--s-text-field-border-radius));
-  --s-field-set-title-gap: var(--s-text-field-label-gap);
+  --s-field-set-padding-top: var(--s_text-field-padding-top);
+  --s-field-set-padding-bottom: var(--s_text-field-padding-bottom);
+  --s-field-set-padding-right: var(--s_text-field-padding-right);
+  --s-field-set-padding-left: var(--s_text-field-padding-left);
+  --s-field-set-border-color: var(--s_text-field-border-color);
+  --s-field-set-border-color-focused: var(--s_text-field-border-color-focused);
+  --s-field-set-border-width: var(--s_text-field-border-width);
+  --s-field-set-border-focused-width: var(--s_text-field-border-focused-width);
+  --s-field-set-border-radius: var(--s_text-field-border-radius);
+  --s-field-set-border-top-left-radius: var(--s_text-field-border-top-left-radius);
+  --s-field-set-border-top-right-radius: var(--s_text-field-border-top-right-radius);
+  --s-field-set-border-bottom-left-radius: var(--s_text-field-border-bottom-left-radius);
+  --s-field-set-border-bottom-right-radius: var(--s_text-field-border-bottom-right-radius);
+  --s-field-set-title-gap: var(--s_text-field-label-gap);
   &.multi-line{
     input{
       display: none;
     }
     .layout{
       display: grid;
+    }
+    .actions{
+      flex-direction: column;
     }
   }
   &:not(.multi-line){
@@ -88,11 +115,23 @@ const style = /*css*/`
     line-height: normal;
   }
 }
+.start{
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
 .layout{
   padding: 0;
   max-height: inherit;
   height: 100%;
   display: none;
+}
+input{
+  -moz-appearance: textfield;
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    display: none;
+  }
 }
 input,
 textarea,
@@ -109,8 +148,8 @@ textarea,
   resize: none;
   padding: 0;
   margin: 0;
-  padding-left: var(--s_field-set-padding-left);
-  padding-right: var(--s_field-set-padding-right);
+  padding-left: var(--s_text-field-padding-left);
+  padding-right: var(--s_text-field-padding-right);
   box-sizing: border-box;
   caret-color: inherit;
   &::placeholder{
@@ -122,10 +161,10 @@ textarea,
 .shadow{
   grid-area: 1 / 1 / 2 / 2;
   overflow: auto;
-  padding: var(--s_field-set-padding-top) var(--s_field-set-padding-right) var(--s_field-set-padding-bottom) var(--s_field-set-padding-left);
+  padding-top: var(--s_text-field-padding-top);
+  padding-bottom: var(--s_text-field-padding-bottom);
   max-width: 100%;
   overflow-wrap: break-word;
-  word-break: break-all;
   white-space: pre-wrap;
   max-height: inherit;
   field-sizing: content;
@@ -139,36 +178,90 @@ textarea,
 }
 .actions{
   display: flex;
+  padding: 4px 0;
   margin: 0 4px 0 -8px;
+  height: 100%;
+  .action{
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    border-radius: 50%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    outline-width: 3px;
+    outline-offset: 2px;
+    outline-color: currentColor;
+    &:focus-visible{
+      outline-style: solid;
+    }
+    &[pressed]{
+      border-radius: 8px;
+    }
+    &.password-toggle .on{
+      display: none;
+    }
+    &.mic.supported{
+      &.monitoring{
+        .on{
+          display: none;
+        }
+        .off{
+          display: block;
+          animation: scaleLoop 1.5s ease-in-out infinite;
+        }
+      }
+      .off{
+        display: none;
+      }
+    }
+  }
 }
-.action{
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  position: relative;
-  border-radius: 50%;
+@keyframes scaleLoop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.supporting{
   display: flex;
-  justify-content: center;
   align-items: center;
-  cursor: pointer;
-  display: none;
-  &[pressed]{
-    border-radius: 8px;
+  gap: 4px;
+  justify-content: flex-end;
+  font-size: calc(var(--s-font-size) * 12px);
+  line-height: 1;
+  padding-left: var(--s_text-field-padding-left);
+  padding-right: var(--s_text-field-padding-right);
+  color: ${scheme.color.onSurfaceVariant};
+  .count{
+    margin-top: 8px;
+    &:not(.enabled){
+      display: none;
+    }
   }
 }
 svg,
 ::slotted(:is(svg, s-icon)){
   width: 24px;
   height: 24px;
-  color: currentColor;
+  font-size: 24px;
+  color: ${scheme.color.onSurfaceVariant};
   fill: currentColor;
   flex-shrink: 0;
 }
-::slotted(:is(svg, s-icon)[slot=start]){
-  margin-left: 16px;
+::slotted([slot=start]:not(s-icon-button)){
+  margin-left: var(--s_text-field-padding-left);
 }
-::slotted([slot=end]){
-  margin-right: 4px;
+::slotted([slot=helper]){
+  margin-top: 8px;
+  flex-grow: 1;
 }
 :host(:focus-visible){
   outline: none;
@@ -176,50 +269,146 @@ svg,
 :host([size=small]){
   font-size: calc(var(--s-font-size) * 14px);
   min-height: 40px;
-  .field-set{
-    --s-field-set-padding-top: var(--s-text-field-padding-top, var(--s-text-field-padding, 8px));
-    --s-field-set-padding-bottom: var(--s-text-field-padding-bottom, var(--s-text-field-padding, 8px));
-    --s-field-set-padding-left: var(--s-text-field-padding-left, var(--s-text-field-padding, 12px));
-    --s-field-set-padding-right: var(--s-text-field-padding-right, var(--s-text-field-padding, 12px));
+  .wrap{
+    --s_text-field-padding-top: var(--s-text-field-padding-top, var(--s-text-field-padding, 8px));
+    --s_text-field-padding-bottom: var(--s-text-field-padding-bottom, var(--s-text-field-padding, 8px));
+    --s_text-field-padding-left: var(--s-text-field-padding-left, var(--s-text-field-padding, 12px));
+    --s_text-field-padding-right: var(--s-text-field-padding-right, var(--s-text-field-padding, 12px));
+  }
+  .actions{
+    margin: 0 0 0 -8px;
   }
 }
 :host([size=large]){
   font-size: calc(var(--s-font-size) * 18px);
   min-height: 56px;
-  .field-set{
-    --s-field-set-padding-top: var(--s-text-field-padding-top, var(--s-text-field-padding, 16px));
-    --s-field-set-padding-bottom: var(--s-text-field-padding-bottom, var(--s-text-field-padding, 16px));
-    --s-field-set-padding-left: var(--s-text-field-padding-left, var(--s-text-field-padding, 20px));
-    --s-field-set-padding-right: var(--s-text-field-padding-right, var(--s-text-field-padding, 20px));
+  .wrap{
+    --s_text-field-padding-top: var(--s-text-field-padding-top, var(--s-text-field-padding, 16px));
+    --s_text-field-padding-bottom: var(--s-text-field-padding-bottom, var(--s-text-field-padding, 16px));
+    --s_text-field-padding-left: var(--s-text-field-padding-left, var(--s-text-field-padding, 20px));
+    --s_text-field-padding-right: var(--s-text-field-padding-right, var(--s-text-field-padding, 20px));
+  }
+  .actions{
+    margin: 0 8px 0 -8px;
+  }
+}
+:host([type=number][showNumberSpin]){
+  .number-spin{
+    display: flex;
+  }
+}
+:host([type=password][showPasswordToggle]){
+  .password-toggle{
+    display: flex;
+  }
+  input[type=password]+.actions>.password-toggle{
+    .off{
+      display: none;
+    }
+    .on{
+      display: block;
+    }
+  }
+}
+:host([type=search][showSearch]){
+  .search{
+    display: flex;
+  }
+}
+:host([showClear]){
+  .field-set.no-empty .clear{
+    display: flex;
+  }
+}
+:host([showMic]){
+  .mic.supported{
+    display: flex;
+  }
+}
+:host([showError]){
+  .wrap{
+    --s_text-field-border-color: var(--s-text-field-border-color, ${scheme.color.error});
+    --s_text-field-border-color-focused: var(--s-text-field-border-color-focused, ${scheme.color.error});
+    --s_text-field-border-width: var(--s-text-field-border-width, 2px);
+  }
+  .supporting{
+    color: ${scheme.color.error};
   }
 }
 `
 const template = /*html*/`
-<s-field-set class="field-set" floating>
-  <slot name="start" slot="start"></slot>
-  <input type="text" part="input" name="input" autocomplete="${props.values.autoComplete}" tabindex="-1">
-  <div slot="title" class="label" part="label" data-label=""></div>
-  <div class="layout" part="layout">
-    <textarea name="textarea" part="textarea" rows="1" autocomplete="${props.values.autoComplete}" tabindex="-1"></textarea>
-  </div>
-  <div slot="end" class="actions" part="actions">
-    <div class="action clear" tabindex="0" part="action">
-      <svg viewBox="0 -960 960 960"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"></path></svg>
-      <s-ripple></s-ripple>
+<div class="wrap" part="wrap">
+  <s-field-set class="field-set" floating>
+    <div class="start" part="start" slot="start">
+      <slot name="start"></slot>
     </div>
-    <div class="action password-toggle" tabindex="0" part="action">
-      <svg viewBox="0 -960 960 960"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"></path></svg>
-      <s-ripple></s-ripple>
+    <div slot="title" class="label" part="label" data-label=""></div>
+    <div class="layout" part="layout">
+      <textarea name="textarea" part="textarea" rows="1" autocomplete="${props.values.autoComplete}" tabindex="-1"></textarea>
     </div>
-    <slot name="end"></slot>
+    <input type="text" part="input" name="input" autocomplete="${props.values.autoComplete}" tabindex="-1">
+    <div slot="end" class="actions" part="actions">
+      <div class="action clear" tabindex="0" part="action">
+        <svg viewBox="0 -960 960 960"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"></path></svg>
+        <s-ripple></s-ripple>
+      </div>
+      <div class="action mic" tabindex="0" part="action">
+        <svg viewBox="0 -960 960 960" class="on"><path d="M480-400q-50 0-85-35t-35-85v-240q0-50 35-85t85-35q50 0 85 35t35 85v240q0 50-35 85t-85 35Zm0-240Zm-40 520v-123q-104-14-172-93t-68-184h80q0 83 58.5 141.5T480-320q83 0 141.5-58.5T680-520h80q0 105-68 184t-172 93v123h-80Zm40-360q17 0 28.5-11.5T520-520v-240q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760v240q0 17 11.5 28.5T480-480Z"></path></svg>
+        <svg viewBox="0 -960 960 960" class="off"><path d="M680-80q-62 0-101.5-31T518-202q-17-50-32.5-70T414-336q-62-50-98-113t-36-151q0-119 80.5-199.5T560-880q119 0 199.5 80.5T840-600h-80q0-85-57.5-142.5T560-800q-85 0-142.5 57.5T360-600q0 68 27 116t77 86q52 38 81 74t43 78q14 44 33.5 65t58.5 21q33 0 56.5-23.5T760-240h80q0 66-47 113T680-80ZM248-290q-59-60-93.5-139.5T120-600q0-92 34.5-172T248-912l58 56q-50 50-78 115.5T200-600q0 74 28 139t78 115l-58 56Zm312-210q-42 0-71-29.5T460-600q0-42 29-71t71-29q42 0 71 29t29 71q0 41-29 70.5T560-500Z"></path></svg>
+        <s-ripple></s-ripple>
+      </div>
+      <div class="action password-toggle" tabindex="0" part="action">
+        <svg viewBox="0 -960 960 960" class="on"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"></path></svg>
+        <svg viewBox="0 -960 960 960" class="off"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"></path></svg>
+        <s-ripple></s-ripple>
+      </div>
+      <div class="action search" tabindex="0" part="action">
+      <svg viewBox="0 -960 960 960"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"></path></svg>
+        <s-ripple></s-ripple>
+      </div>
+      <slot name="end"></slot>
+    </div>
+  </s-field-set>
+  <div class="supporting" part="supporting">
+    <slot name="helper"></slot>
+    <div class="count">20/16</div>
   </div>
-</s-field-set>
+</div>
 `
+//@ts-ignore
+const SpeechRecognition = (window.SpeechRecognition || window.webkitSpeechRecognition)
 
-const support = CSS.supports('field-sizing: content')
+const support = {
+  fieldSizing: CSS.supports('field-sizing: content'),
+  //@ts-ignore
+  speechRecognition: !!SpeechRecognition
+}
+
+class Recognition {
+  private recognition: any
+  constructor() {
+    this.recognition = new SpeechRecognition()
+    this.recognition.interimResults = true
+    this.recognition.continuous = true
+  }
+  start(options: { lang?: string, onResult: (res: SpeechRecognitionResult) => void, onError: (err: any) => void }) {
+    this.recognition.lang = options.lang ?? navigator.language
+    this.recognition.onresult = (e: SpeechRecognitionEvent) => options.onResult(e.results[e.results.length - 1])
+    this.recognition.onerror = (e: any) => {
+      this.recognition.stop()
+      options.onError(e)
+    }
+    try {
+      this.recognition.start()
+    } catch (e) { }
+  }
+  stop() {
+    this.recognition.stop()
+  }
+}
 
 export class TextField extends useElement({
-  style, template, props,
+  style, template, props, events,
   states: ['focusableOnly', 'formable'],
   setup(shadowRoot) {
     const fieldSet = shadowRoot.querySelector<FieldSet>('.field-set')!
@@ -228,35 +417,94 @@ export class TextField extends useElement({
     const textarea = shadowRoot.querySelector('textarea')!
     const actions = shadowRoot.querySelector<HTMLDivElement>('.actions')!
     const clearAction = shadowRoot.querySelector<HTMLDivElement>('.action.clear')!
-    const getEditor = () => this.type !== 'multiline' ? input : textarea
+    const pwdToggleAction = shadowRoot.querySelector<HTMLDivElement>('.action.password-toggle')!
+    const searchAction = shadowRoot.querySelector<HTMLDivElement>('.action.search')!
+    const micAction = shadowRoot.querySelector<HTMLDivElement>('.action.mic')!
+    const count = shadowRoot.querySelector<HTMLDivElement>('.count')!
+    const getEditor = () => this.type === 'multiline' ? textarea : input
+    const setAttribute = (name: string, value?: string) => {
+      if (value === undefined) {
+        input.removeAttribute(name)
+        textarea.removeAttribute(name)
+        return
+      }
+      input.setAttribute(name, value)
+      textarea.setAttribute(name, value)
+    }
     const shadow = document.createElement('div')
+    const setValue = (v: string, dispatched?: true) => {
+      fieldSet.classList.toggle('no-empty', v !== '')
+      const editor = getEditor()
+      editor.value = v
+      fieldSet.floating = v === '' && !this.showError && editor.validity.valid && !this.matches(':focus')
+      setCount()
+      if (dispatched) {
+        this.dispatchEvent(new InputEvent('input'))
+        this.dispatchEvent(new Event('change'))
+      }
+    }
     const focus = () => {
-      fieldSet.focused = true
       const editor = getEditor()
       fieldSet.floating = false
+      fieldSet.focused = true
       editor.focus()
     }
     const blur = () => {
       const editor = getEditor()
-      if (editor.value === '' && editor.validity.valid) fieldSet.floating = true
+      if (!this.showError && editor.value === '' && editor.validity.valid) fieldSet.floating = true
       fieldSet.focused = false
     }
-    input.onfocus = focus
-    input.onblur = blur
-    textarea.onfocus = focus
-    textarea.onblur = blur
-    input.oninput = (e) => {
+    const setCount = () => {
+      if (this.showCount && this.maxLength > -1) count.textContent = `${getEditor().value.length}/${this.maxLength}`
+    }
+    input.onfocus = textarea.onfocus = focus
+    input.onblur = textarea.onblur = blur
+    input.oninput = textarea.oninput = (e) => {
+      e.stopPropagation()
+      fieldSet.classList.toggle('no-empty', this.value !== '')
+      setCount()
       this.dispatchEvent(new InputEvent('input'))
     }
-    input.onchange = (e) => {
+    input.onchange = textarea.onchange = (e) => {
+      e.stopPropagation()
       this.dispatchEvent(new Event('change'))
     }
     this.addEventListener('focus', focus)
     this.addEventListener('blur', blur)
     actions.onpointerdown = (e) => e.preventDefault()
-    clearAction.onclick = () => this.value = ''
-    focusKeydownClick(clearAction)
-    if (!support) {
+    clearAction.onclick = () => {
+      if (this.type === 'number') setValue('0')
+      setValue('', true)
+    }
+    pwdToggleAction.onclick = () => input.type = input.type === 'password' ? 'text' : 'password'
+    searchAction.onclick = () => this.dispatchEvent(new Event('search'))
+    if (support.speechRecognition) {
+      micAction.classList.add('supported')
+      const rec = new Recognition()
+      micAction.onclick = () => {
+        const is = micAction.classList.toggle('monitoring')
+        if (!is) return rec.stop()
+        const texts: string[] = []
+        rec.start({
+          lang: this.micLang,
+          onResult: (res) => {
+            const text = res[0].transcript
+            if (res.isFinal) return texts.push(text)
+            setValue(texts.join('') + text, true)
+          },
+          onError: () => {
+            micAction.classList.remove('monitoring')
+          }
+        })
+      }
+    }
+    const showCount = () => {
+      const is = this.maxLength > -1 && this.showCount
+      count.classList.toggle('enabled', is)
+      setCount()
+    }
+    focusKeydownClick(clearAction, pwdToggleAction, searchAction, micAction)
+    if (!support.fieldSizing) {
       shadow.className = 'shadow'
       shadow.part = 'textarea-shadow'
       textarea.before(shadow)
@@ -270,24 +518,27 @@ export class TextField extends useElement({
         }
       },
       label: (v) => label.setAttribute('data-label', v),
-      type: (v) => {
+      type: (v, old) => {
         input.type = v
-        fieldSet.classList.toggle('multi-line', v === 'multiline')
+        const multi = 'multiline'
+        fieldSet.classList.toggle('multi-line', v === multi)
+        if (v === multi) textarea.value = input.value
+        if (old === multi) input.value = textarea.value
       },
-      placeholder: (v) => {
-        input.placeholder = v
-        textarea.placeholder = v
+      value: (v) => setValue(v),
+      placeholder: (v) => setAttribute('placeholder', v),
+      autoComplete: (v) => setAttribute('autocomplete', v),
+      inputMode: (v) => setAttribute('inputmode', v),
+      maxLength: (v) => {
+        setAttribute('maxlength', v < 0 ? undefined : String(v))
+        showCount()
       },
-      autoComplete: (v) => {
-        input.autocomplete = v as AutoFill
-        textarea.autocomplete = v as AutoFill
+      showCount: showCount,
+      showError: (v) => {
+        fieldSet.floating = false
       },
-      inputMode: (v) => input.inputMode = v,
-      value: (v) => {
-        input.value = v
-        textarea.value = v
-        shadow.textContent = v
-        fieldSet.floating = v === '' && !this.matches(':focus')
+      showPasswordToggle: (v) => {
+        if (!v && this.type === 'password') input.type = 'password'
       }
     }
   }

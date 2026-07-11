@@ -15,7 +15,7 @@ const style = /*css*/`
   padding: 12px 16px;
   font-weight: 500;
   min-height: 48px;
-  border-radius: 4px;
+  border-radius: 12px;
   word-break: break-all;
   line-height: calc(100% + 8px);
   font-size: calc(var(--s-font-size, 1) * 14px);

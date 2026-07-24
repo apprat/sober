@@ -18,98 +18,26 @@ export const device = {
   }
 }
 
-export const supports = {
-  CSS: { StyleSheet: true }
+const supports = {
+  CSS: { CSSStyleSheet: false }
 }
 
 try {
   new CSSStyleSheet()
-} catch (error) {
-  supports.CSS.StyleSheet = false
-}
+  if ('adoptedStyleSheets' in ShadowRoot.prototype && 'replaceSync' in CSSStyleSheet.prototype) {
+    supports.CSS.CSSStyleSheet = true
+  }
+} catch (error) { }
 
-const baseStyle = /*css*/`
-:host{
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-:host,
-div{
-  outline-width: 3px;
-  outline-offset: 2px;
-  outline-style: none;
-  outline-color: ${scheme.color.onSurfaceVariant};
-}
-:host(:focus-visible),
-div:focus-visible{
-  outline-style: solid;
-}
-div,
-div::before,
-div::after{
-  transition-timing-function: inherit;
-  transition-duration: inherit;
-}
-slot{
-  all: inherit;
-  display: contents;
-}
-:host, *{
-  box-sizing: border-box;
-  touch-action: pan-y pan-x;
-}
-@media (any-pointer: fine) {
-  ::-webkit-scrollbar{
-    background: var(--s-scrollbar-color, transparent);
-    width: var(--s-scrollbar-width, 6px);
-    height: var(--s-scrollbar-height, 6px);
-    border-radius: var(--s-scrollbar-radius, 0);
+const createStyleSheet = (css: string) => {
+  if (supports.CSS.CSSStyleSheet && 'adoptedStyleSheets' in ShadowRoot.prototype) {
+    const sheet = new CSSStyleSheet()
+    sheet.replaceSync(css)
+    return sheet
   }
-  ::-webkit-scrollbar-thumb{
-    background: var(--s-scrollbar-thumb-color, ${scheme.color.outlineVariant});
-    border-radius: var(--s-scrollbar-thumb-radius, 3px);
-  }
-  @supports not selector(::-webkit-scrollbar) {
-    *{
-      scrollbar-width: thin;
-      scrollbar-color: var(--s-scrollbar-thumb-color, ${scheme.color.outlineVariant}) var(--s-scrollbar-color, transparent);
-    }
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  :host{
-    transition-duration: 0s !important;
-  }
-}
-`
-
-class StyleTools {
-  static setStyle(shadowRoot: ShadowRoot, css: string | string[]) {
-    const list = Array.isArray(css) ? css : [css]
-    const out: (HTMLStyleElement | CSSStyleSheet)[] = []
-    for (const item of list) {
-      if (!supports.CSS.StyleSheet) {
-        const el = document.createElement('style')
-        el.textContent = item
-        shadowRoot.appendChild(el)
-        out.push(el)
-        continue
-      }
-      const sheet = new CSSStyleSheet()
-      sheet.replaceSync(item)
-      shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, sheet]
-      out.push(sheet)
-    }
-    return out
-  }
-  static removeStyle(shadowRoot: ShadowRoot, target: HTMLStyleElement | CSSStyleSheet) {
-    if (target instanceof HTMLStyleElement) {
-      shadowRoot.removeChild(target)
-      return
-    }
-    shadowRoot.adoptedStyleSheets = shadowRoot.adoptedStyleSheets.filter((sheet) => sheet !== target)
-  }
+  const el = document.createElement('style')
+  el.textContent = css
+  return el
 }
 
 type TransformProps<T> = {
@@ -151,7 +79,7 @@ type MapValue<S, P, States extends RawStates[]> = {
   setup: S
   info: SetupCallInfo<P, States>
   shadowRoot: ShadowRoot
-  customStyle?: HTMLStyleElement | CSSStyleSheet
+  customStyles: (HTMLStyleElement | CSSStyleSheet)[]
 }
 type UseProps<T> = {
   values: TransformProps<T>
@@ -163,6 +91,71 @@ type UseProps<T> = {
   }>
   caseKeys: RawoObject<string>
 }
+
+const baseStyle = /*css*/`
+:host{
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+:host,
+div{
+  outline-width: 3px;
+  outline-offset: 2px;
+  outline-style: none;
+  outline-color: currentColor;
+}
+:host(:focus-visible),
+div:focus-visible{
+  outline-style: solid;
+}
+div,
+svg,
+div::before,
+div::after{
+  transition-timing-function: inherit;
+  transition-duration: inherit;
+}
+slot{
+  all: inherit;
+  display: contents;
+}
+:host, *{
+  box-sizing: border-box;
+  touch-action: pan-y pan-x;
+}
+svg,
+::slotted(svg){
+  fill: currentColor;
+  transition-timing-function: inherit;
+  transition-duration: inherit;
+}
+@media (any-pointer: fine) {
+  ::-webkit-scrollbar{
+    background: var(--s-scrollbar-color, transparent);
+    width: var(--s-scrollbar-width, 6px);
+    height: var(--s-scrollbar-height, 6px);
+    border-radius: var(--s-scrollbar-radius, 0);
+  }
+  ::-webkit-scrollbar-thumb{
+    background: var(--s-scrollbar-thumb-color, ${scheme.color.outlineVariant});
+    border-radius: var(--s-scrollbar-thumb-radius, 3px);
+  }
+  @supports not selector(::-webkit-scrollbar) {
+    *{
+      scrollbar-width: thin;
+      scrollbar-color: var(--s-scrollbar-thumb-color, ${scheme.color.outlineVariant}) var(--s-scrollbar-color, transparent);
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host{
+    transition-duration: 0s !important;
+  }
+}
+`
+
+const baseSheet = createStyleSheet(baseStyle)
 
 export const useProps = <const T extends RawProps = {}>(data: T): UseProps<T> => {
   const values: RawoObject = {}
@@ -214,16 +207,31 @@ export const useElement = <
   prototype: HTMLElement
   connectedNodes: (El<Props, Expose, Events> & HTMLElement)[]
   define<T extends string>(name: T): T
-  setStyle(css?: string): void
+  addStyle(css: string): number
+  removeStyle(index?: number): void
 } => {
   const map = new WeakMap<HTMLElement, MapValue<SetupReturn<Props, Expose>, Props, States>>()
   const templateNode = document.createElement('template')
   templateNode.innerHTML = options.template ?? ''
   const template = templateNode.content
-  let customStyleStr: string | undefined
+  const styles: (HTMLStyleElement | CSSStyleSheet)[] = [baseSheet]
+  const customStyles: (HTMLStyleElement | CSSStyleSheet)[] = []
+  if (options.style) {
+    const css = Array.isArray(options.style) ? options.style : [options.style]
+    css.forEach((item) => styles.push(createStyleSheet(item)))
+  }
   const attributes = Object.keys(options.props?.caseKeys ?? {})
   for (const key in options.events) {
     attributes.push(`on${key}`)
+  }
+  const addCustomStyles = (mapValue: MapValue<SetupReturn<Props, Expose>, Props, States>, item: HTMLStyleElement | CSSStyleSheet) => {
+    if (item instanceof HTMLStyleElement) {
+      const node = item.cloneNode(true) as HTMLStyleElement
+      mapValue.customStyles.push(node)
+      return mapValue.shadowRoot.appendChild(node)
+    }
+    mapValue.shadowRoot.adoptedStyleSheets = [...mapValue.shadowRoot.adoptedStyleSheets, item]
+    mapValue.customStyles.push(item)
   }
   class Component extends HTMLElement {
     declare disabled?: boolean
@@ -235,23 +243,39 @@ export const useElement = <
       if (!customElements.get(name)) customElements.define(name, this)
       return name
     }
-    static setStyle(css?: string) {
-      customStyleStr = css
+    static addStyle(css: string) {
+      const sheet = createStyleSheet(css)
+      const index = customStyles.length
+      customStyles.push(sheet)
+      this.connectedNodes.forEach((el) => {
+        const mapValue = map.get(el)
+        if (mapValue) addCustomStyles(mapValue, sheet)
+      })
+      return index
+    }
+    static removeStyle(index?: number) {
+      customStyles.splice(index ?? 0, index === undefined ? customStyles.length : 1)
       this.connectedNodes.forEach((el) => {
         const mapValue = map.get(el)
         if (!mapValue) return
-        if (mapValue.customStyle) StyleTools.removeStyle(mapValue.shadowRoot, mapValue.customStyle)
-        mapValue.customStyle = css ? StyleTools.setStyle(mapValue.shadowRoot, css)[0] : undefined
+        mapValue.customStyles.forEach((item, key) => {
+          if (index !== undefined && key !== index) return
+          mapValue.customStyles.splice(key, 1)
+          if (item instanceof HTMLStyleElement) return item.remove()
+          const idx = mapValue.shadowRoot.adoptedStyleSheets.indexOf(item)
+          mapValue.shadowRoot.adoptedStyleSheets.splice(idx, 1)
+          mapValue.shadowRoot.adoptedStyleSheets = mapValue.shadowRoot.adoptedStyleSheets
+        })
       })
     }
     constructor() {
       super()
       const shadowRoot = this.attachShadow({ mode: 'open', serializable: true })
       //布局和样式
-      const styles = Array.isArray(options.style) ? options.style : [options.style ?? '']
-      StyleTools.setStyle(shadowRoot, [baseStyle, ...styles])
-      let customStyle: HTMLStyleElement | CSSStyleSheet | undefined
-      if (customStyleStr) customStyle = StyleTools.setStyle(shadowRoot, customStyleStr)[0]
+      styles.forEach((item) => {
+        if (item instanceof HTMLStyleElement) return shadowRoot.appendChild(item.cloneNode(true))
+        shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, item]
+      })
       shadowRoot.appendChild(template.cloneNode(true))
       //数据
       const props = options.props
@@ -321,7 +345,7 @@ export const useElement = <
       Promise.resolve().then(() => {
         for (const key in beforeAttrs) this[key as keyof this] = beforeAttrs[key] as never
       })
-      map.set(this, { setup, info, customStyle, shadowRoot } as never)
+      map.set(this, { setup, info, customStyles: [], shadowRoot } as never)
       //绑定状态
       if (options.states?.includes('hoverable')) {
         const name = 'hover'
@@ -373,11 +397,7 @@ export const useElement = <
       const mapValue = map.get(this)
       if (!mapValue) return
       mapValue.info.isConnected = true
-      if (customStyleStr && !mapValue.customStyle) mapValue.customStyle = StyleTools.setStyle(mapValue.shadowRoot, customStyleStr)[0]
-      if (!customStyleStr && mapValue.customStyle) {
-        StyleTools.removeStyle(mapValue.shadowRoot, mapValue.customStyle)
-        delete mapValue.customStyle
-      }
+      customStyles.forEach((item) => addCustomStyles(mapValue, item))
       if (options.states?.includes('focusable') || options.states?.includes('focusableOnly')) {
         if (!this.disabled && !this.readOnly && !this.hasAttribute('tabindex')) this.tabIndex = 0
       }
@@ -454,16 +474,16 @@ export const getParentDepth = (el: HTMLElement & { parentDepth: number }) => {
   return ancestor
 }
 
-const div = document.createElement('div')
-div.setAttribute('style', `position: fixed;font-size: 12px; width: 100%;top: 0;left: 0; pointer-events: none;z-index: 99;color: #fff;background: rgba(0,0,0,0.8);`)
-document.body.appendChild(div)
+// const div = document.createElement('div')
+// div.setAttribute('style', `position: fixed;font-size: 12px; width: 100%;top: 0;left: 0; pointer-events: none;z-index: 99;color: #fff;background: rgba(0,0,0,0.8);`)
+// document.body.appendChild(div)
 
-export const print = (...values: any[]) => {
-  const fragment = document.createDocumentFragment()
-  values.forEach((value) => {
-    const text = document.createTextNode(`${String(value)},`)
-    fragment.appendChild(text)
-  })
-  div.appendChild(fragment)
-  div.appendChild(document.createElement('hr'))
-}
+// export const print = (...values: any[]) => {
+//   const fragment = document.createDocumentFragment()
+//   values.forEach((value) => {
+//     const text = document.createTextNode(`${String(value)},`)
+//     fragment.appendChild(text)
+//   })
+//   div.appendChild(fragment)
+//   div.appendChild(document.createElement('hr'))
+// }

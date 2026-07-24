@@ -76,8 +76,7 @@ export const watch = async () => {
 const data = {
   './dev/bundle-main.js': 'dist/sober.min.js',
   './dev/bundle-theme.js': 'dist/theme.min.js',
-  './dev/bundle-fluent.js': 'dist/design/fluent.min.js',
-  './dev/bundle-material.js': 'dist/design/material.min.js'
+  './dev/bundle-fluent.js': 'dist/designs/fluent.min.js'
 }
 
 export const build = async () => {

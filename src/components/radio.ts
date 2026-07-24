@@ -1,5 +1,6 @@
 import { useElement, useProps } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
+import { useComputedStyle } from '../core/utils/CSS.js'
 import './ripple.js'
 
 const props = useProps({
@@ -14,86 +15,77 @@ const props = useProps({
 const style = /*css*/`
 :host{
   display: inline-flex;
+  gap: 8px;
   vertical-align: middle;
   align-items: center;
   cursor: pointer;
   position: relative;
-  height: 40px;
-  border-radius: 4px;
+  height: 24px;
+  line-height: calc(100% + 4px);
   max-width: -moz-available;
   max-width: -webkit-fill-available;
   outline-color: currentColor;
   color: ${scheme.color.onSurfaceVariant};
-  transition-timing-function: ${scheme.motion.easing.emphasized};
+  transition-timing-function: ${scheme.motion.easing.standardAccelerate};
   transition-duration: ${scheme.motion.duration.short4};
 }
-.text{
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-}
 .layout{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   height: 100%;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
-  border-radius: 50%;
-  overflow: hidden;
   flex-shrink: 0;
-  outline-offset: inherit;
-  outline-color: inherit;
+  outline-offset: 6px;
+  border-radius: 50%;
+  &::before,
   .ripple{
+    content: '';
+    position: absolute;
     aspect-ratio: 1;
     -webkit-aspect-ratio: 1;
-    height: 100%;
+    height: calc(100% + 16px);
     width: auto;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0;
-    transform: scale(.5);
-    transition-property: opacity, transform;
-  }
-}
-.unchecked,
-.checked{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-}
-.checked{
-  position: absolute;
-  transform: scale(.5);
-  opacity: 0;
-  transition-property: opacity, transform;
-  transition-timing-function: cubic-bezier(.5, .5, .5, 2);
-  .dot{
-    width: 60%;
-    height: 60%;
-    transform: scale(0.4);
-    background: currentColor;
+    inset: auto;
     border-radius: 50%;
   }
 }
-:host([checked]:not([indeterminate])) .checked{
-  opacity: 1;
-  transform: scale(1);
-}
-svg,
-::slotted(:is([slot=checked], [slot=unchecked])){
-  color: currentColor;
-  fill: currentColor;
-  width: 60%;
-  height: 60%;
+.icon{
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  svg{
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transition-timing-function: inherit;
+    transition-duration: inherit;
+    contain: size layout;
+    circle{
+      stroke: currentColor;
+      transform-box: view-box;
+      transform-origin: center;
+      transition-timing-function: inherit;
+      transition-duration: inherit;
+    }
+    .outline{
+      stroke-width: 2px;
+      fill: transparent;
+    }
+    .fill{
+      fill: currentColor;
+      opacity: 0;
+      transform: scale(2);
+    }
+  }
 }
 :host([checked]){
   color: ${scheme.color.primary};
+  .fill{
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 :host([readOnly]){
   pointer-events: none;
@@ -105,42 +97,34 @@ svg,
     opacity: .38 !important;
   }
 }
-:host(:is([pressed], [hover])){
-  .layout>.ripple{
-    opacity: .12;
-    transform: scale(1);
-  }
-}
 :host(:focus-visible){
   outline-style: none;
   .layout{
     outline-style: solid;
-    outline-width: 3px;
   }
 }
 `
 
 const template = /*html*/`
 <div class="layout" part="layout">
-  <slot class="unchecked" name="unchecked">
-    <svg viewBox="0 -960 960 960">
-      <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"></path>
+  <div class="icon" part="icon">
+    <svg viewBox="0 0 20 20" shape-rendering="geometricPrecision">
+      <circle class="outline" cx="10" cy="10" r="9" />
+      <circle class="fill" cx="10" cy="10" r="5" />
     </svg>
-  </slot>
-  <slot class="checked" name="checked">
-    <div class="dot"></div>
-  </slot>
-  <div class="ripple" part="ripple"></div>
+  </div>
+  <s-ripple class="ripple" part="ripple" parentDepth="1"></s-ripple>
 </div>
-<div part="text" class="text">
-  <slot></slot>
-</div>
+<slot></slot>
 `
 
 export class Radio extends useElement({
   states: ['focusable', 'pressable', 'hoverable', 'formable'],
   style, template, props,
-  setup(_, info) {
+  setup(shadowRoot, info) {
+    const icon = shadowRoot.querySelector<HTMLDivElement>('.icon')!
+    const outline = shadowRoot.querySelector<SVGCircleElement>('.outline')!
+    const fill = shadowRoot.querySelector<SVGCircleElement>('.fill')!
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)
     this.addEventListener('click', () => {
       this.checked = true
@@ -152,7 +136,16 @@ export class Radio extends useElement({
     })
     return {
       onFormReset: () => this.checked = this.defaultChecked,
-      onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom()
+      onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom(),
+      checked: (v) => {
+        if (!info.isConnected) return
+        if (v) {
+          const dur = 400
+          //icon.animate([{ transform: 'scale(1)' }, { transform: 'scale(1)' }], { duration: dur })
+          //outline.animate([{ offset: 0, storkeWidth: 4 }, { offset: 0.5, strokeWidth: 18 }, { offset: 0.5, strokeWidth: 4 }, { offset: 1, strokeWidth: 4 }], { duration: dur })
+          //fill.animate([{ offset: 0, transform: 'scale(0)' }, { offset: 0.5, transform: 'scale(0)' }, { offset: 0.5, transform: 'scale(1)' }, { offset: 1, transform: 'scale(.5)' }], { duration: dur })
+        }
+      }
     }
   }
 }) { }

@@ -13,19 +13,17 @@ export const buttonStyle = /*css*/`
   font-weight: 500;
   max-width: -moz-available;
   max-width: -webkit-fill-available;
-  outline-color: currentColor;
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
-  .text{
-    display: block;
-    overflow: hidden;
-    overflow: clip visible;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    min-width: 0;
-    border-radius: 0;
-    line-height: 1;
-  }
+}
+.text{
+  overflow: hidden;
+  overflow: clip visible;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  border-radius: 0;
+  line-height: 1;
 }
 :host([disabled]){
   pointer-events: none;
@@ -33,14 +31,14 @@ export const buttonStyle = /*css*/`
   color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
 }
 ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
-  fill: currentColor;
-  color: currentColor;
-  flex-shrink: 0;
   width: 24px;
-  aspect-ratio: 1;
-  -webkit-aspect-ratio: 1;
-  transition-timing-function: inherit;
-  transition-duration: inherit;
+  font-size: 24px;
+  flex-shrink: 0;
+  color: currentColor;
+}
+::slotted(s-spinner){
+  stroke : currentColor;
+  --s-spinner-track-opacity: .18;
 }
 @supports not (color: color-mix(in srgb, black, white)){
   :host([disabled]){

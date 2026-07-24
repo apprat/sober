@@ -185,6 +185,32 @@ export const enum elevation {
   level5 = `var(--s-elevation-level5, ${$elevation.level5})`,
 }
 
+export namespace $shape {
+  export const enum corner {
+    extraSmall = '4px',
+    small = '8px',
+    medium = '12px',
+    large = '16px',
+    largeIncreased = '20px',
+    extraLarge = '28px',
+    extraLargeIncreased = '32px',
+    extraExtraLarge = '48px'
+  }
+}
+
+export namespace shape {
+  export const enum corner {
+    extraSmall = `var(--s-shape-corner-extra-small, ${$shape.corner.extraSmall})`,
+    small = `var(--s-shape-corner-small, ${$shape.corner.small})`,
+    medium = `var(--s-shape-corner-medium, ${$shape.corner.medium})`,
+    large = `var(--s-shape-corner-large, ${$shape.corner.large})`,
+    largeIncreased = `var(--s-shape-corner-large-increased, ${$shape.corner.largeIncreased})`,
+    extraLarge = `var(--s-shape-corner-extra-large, ${$shape.corner.extraLarge})`,
+    extraLargeIncreased = `var(--s-shape-corner-extra-large-increased, ${$shape.corner.extraLargeIncreased})`,
+    extraExtraLarge = `var(--s-shape-corner-extra-extra-large, ${$shape.corner.extraExtraLarge})`
+  }
+}
+
 export namespace $motion {
   export const enum duration {
     short1 = '50ms',

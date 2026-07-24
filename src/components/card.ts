@@ -34,7 +34,7 @@ const style = /*css*/`
     flex-grow: 1;
   }
 }
-.action{
+.actions{
   display: flex;
   justify-content: flex-end;
   gap: 8px;
@@ -59,24 +59,24 @@ const style = /*css*/`
   margin: 16px 8px;
 }
 ::slotted([slot=media]){
-  height: 188px;
+  height: 120px;
   background: ${scheme.color.surfaceContainerHigh};
 }
 ::slotted([slot=title]){
-  margin: 16px;
-  line-height: calc(100% + 4px);
-  font-size: calc(var(--s-font-size, 1) * 24px);
+  margin: 12px 16px;
+  line-height: calc(100% + 8px);
+  font-size: calc(var(--s-font-size, 1) * 20px);
 }
 ::slotted([slot=subtitle]){
-  margin: 16px;
-  line-height: calc(100% + 4px);
+  margin: 12px 16px;
+  line-height: calc(100% + 8px);
   font-size: calc(var(--s-font-size, 1) * 14px);
-  color: ${scheme.color.onSurfaceVariant};
 }
 ::slotted([slot=text]){
-  margin: 16px;
+  margin: 12px 16px;
   font-size: calc(var(--s-font-size, 1) * 14px);
   line-height: calc(100% + 8px);
+  color: ${scheme.color.onSurfaceVariant};
 }
 ::slotted([slot=action]){
   margin: 16px 0;
@@ -96,7 +96,7 @@ const style = /*css*/`
 :host([variant=outlined]){
   box-shadow: none;
   background: none;
-  &::before{
+  &::after{
     content: '';
     position: absolute;
     pointer-events: none;
@@ -105,7 +105,7 @@ const style = /*css*/`
     border: solid 1px ${scheme.color.outlineVariant};
   }
   &:host([disabled]){
-    &::before{
+    &::after{
       opacity: .12;
       border-color: ${scheme.color.outline};
     }
@@ -135,7 +135,7 @@ const template = /*html*/`
 <slot name="title"></slot>
 <slot name="subtitle"></slot>
 <slot name="text"></slot>
-<div class="action" part="action">
+<div class="actions" part="actions">
   <slot name="action"></slot>
 </div>
 <s-ripple class="ripple" part="ripple"></s-ripple>

@@ -1,3 +1,5 @@
+import { bezier } from './bezier.js'
+
 const parseEasing = (easing: string): readonly [number, number, number, number] => {
   const keywords = {
     linear: [0, 0, 1, 1],
@@ -10,34 +12,6 @@ const parseEasing = (easing: string): readonly [number, number, number, number] 
   const match = easing.match(/cubic-bezier\(([^)]+)\)/)
   if (match) return match[1].split(',').map(Number).filter(n => !isNaN(n)) as never
   return keywords.ease
-}
-
-const bezier = (p1: number, p2: number, p3: number, p4: number) => {
-  const epsilon = 1e-6
-  const maxIterations = 10
-  const bezierX = (t: number): number => {
-    const mt = 1 - t
-    return mt * mt * mt * 0 + 3 * mt * mt * t * p1 + 3 * mt * t * t * p2 + t * t * t * 1
-  }
-  const bezierY = (t: number): number => {
-    const mt = 1 - t
-    return mt * mt * mt * 0 + 3 * mt * mt * t * p3 + 3 * mt * t * t * p4 + t * t * t * 1
-  }
-  return (x: number): number => {
-    if (x <= 0) return 0
-    if (x >= 1) return 1
-    let t = x
-    for (let i = 0; i < maxIterations; i++) {
-      const currentX = bezierX(t)
-      const diff = currentX - x
-      if (Math.abs(diff) < epsilon) break
-      const derivative = 3 * (1 - t) * (1 - t) * p1 + 6 * (1 - t) * t * (p2 - p1) + 3 * t * t * (1 - p2)
-      if (Math.abs(derivative) < epsilon) break
-      t = t - diff / derivative
-      t = Math.max(0, Math.min(1, t))
-    }
-    return bezierY(t)
-  }
 }
 
 export const scrollElement = (options: { element: HTMLElement, left?: number, top?: number, duration: number, easing?: string }) => {

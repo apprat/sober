@@ -6,21 +6,12 @@
 <s-spinner value="60"></s-spinner>
 ```
 
-## 尺寸
-
-设置 `size="large"` 定义较大的进度条。
-
-```html preview
-<s-spinner size="large" value="60"></s-spinner>
-```
-
 ## 未知的
 
 设置 `indeterminate` 属性定义未知的进度条。
 
 ```html preview
 <s-spinner indeterminate></s-spinner>
-<s-spinner size="large" indeterminate></s-spinner>
 ```
 
 进度条会有过渡动画，如果你希望实时的变更进度，可以使用CSS `transition: none` 来禁用过渡。
@@ -34,9 +25,17 @@
 
 ## 属性
 
-| 名称          | 类型          | 默认值 | 同步 | 说明   |
-| ------------- | ------------- | ------ | ---- | ------ |
-| size          | medium, large | medium | √    | 尺寸   |
-| indeterminate | boolean       | 未知的 | √    | 禁用的 |
-| max           | number        | 100    | ×    | 最大值 |
-| value         | number        | 0      | ×    | 当前值 |
+| 名称          | 类型    | 默认值 | 同步 | 说明   |
+| ------------- | ------- | ------ | ---- | ------ |
+| indeterminate | boolean | 未知的 | √    | 禁用的 |
+| max           | number  | 100    | ×    | 最大值 |
+| value         | number  | 0      | ×    | 当前值 |
+
+## 样式变量
+
+| 名称                          | 说明                            |
+| ----------------------------- | ------------------------------- |
+| --s-spinner-track-color       | 轨道颜色，默认使用 stroke 的值  |
+| --s-spinner-indicator-color   | 指示器颜色，默认使用 color 的值 |
+| --s-spinner-track-opacity     | 轨道不透明的                    |
+| --s-spinner-indicator-opacity | 指示器不透明的                  |

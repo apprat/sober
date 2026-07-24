@@ -1,8 +1,8 @@
 import { useProps, useElement, useThrottle } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
+import { bezier } from '../core/utils/bezier.js'
 
 const props = useProps({
-  size: ['medium', 'large'],
   indeterminate: false,
   $max: 100,
   $value: 0,
@@ -12,11 +12,11 @@ const style = /*css*/`
 :host{
   display: flex;
   align-items: center;
-  gap: 4px;
   height: 4px;
   position: relative;
   overflow: hidden;
   border-radius: 2px;
+  overflow: hidden;
   color: ${scheme.color.primary};
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
@@ -24,103 +24,87 @@ const style = /*css*/`
 .layout{
   display: contents;
   border-radius: inherit;
-}
-.track,
-.indicator{
-  height: 100%;
-  flex-shrink: 0;
-  border-radius: inherit;
-  position: relative;
-  display: flex;
-  align-items: center;
-  will-change: width;
-}
-.track{
-  flex-grow: 1;
-  background: ${scheme.color.secondaryContainer};
-}
-.indicator{
-  background: currentColor;
-  width: var(--s_progress-value, 0);
-}
-:host(:not([indeterminate])){
-  .zero>.indicator{
-    display: none;
+  border-color: inherit;
+  &::before,
+  &::after,
+  .track,
+  .indicator{
+    position: absolute;
+    border-radius: inherit;
+    contain: strict;
+    inset: 0;
+    will-change: transform;
+    background: ${scheme.color.secondaryContainer};
+  }
+  .indicator{
+    background: currentColor;
+  }
+  .late{
+    transform: translateX(-100%);
+  }
+  .early{
+    transform: translateX(calc(var(--s_progress-value) + 4px));
+  }
+  .between{
+    transform: translateX(calc((100% - var(--s_progress-value)) * -1));
+  }
+  &.min .early{
+    transform: translateX(0%);
   }
 }
-span{
+.stop{
   position: absolute;
-  width: 4px;
-  height: 4px;
+  aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
+  height: 100%;
   right: 0;
   border-radius: 50%;
   background: currentColor;
 }
-:host([size=large]){
-  height: 8px;
-  border-radius: 4px;
-  span{
-    right: 2px;
-  }
-}
-@keyframes linears{
-  0%{ 
-    transform: translateX(0);
-  }
-  100%{ 
-    transform: translateX(250%);
-  }
-}
 :host([indeterminate]){
+  .stop{
+    display: none;
+  }
   .layout{
-    display: flex;
-    height: 100%;
-    gap: inherit;
-    flex-grow: 1;
-    justify-content: flex-end;
-    animation: cubic-bezier(0.4, 0, 1, 1) 2s infinite linears;
-    .track,
-    .indicator,
     &::before,
     &::after,
-    span{
-      flex-shrink: 0;
-      width: 100%;
-      height: 100%;
-      will-change: width;
-      border-radius: inherit;
-      position: static;
-    }
-    &::before,
-    &::after{
-      content: '';
-      background: ${scheme.color.secondaryContainer};
-    }
-    .indicator{
-      width: 30%;
-    }
     .track,
-    span{
-      width: 60%;
+    .indicator{
+      content: '';
+      transform: none;
+      height: 100%;
+      contain: strict;
+      width: 20px;
+      left: 0;
+    }
+    .late{
+      --width: 30%;
+    }
+    .early{
+      --animation-name: indeterminate-early;
+    }
+    .between{
+      --animation-name: indeterminate-between;
     }
   }
 }
 `
 
 const template = /*html*/`
-<div class="layout zero" part="layout">
-  <div class="indicator" part="indicator"></div>
-  <div class="track" part="track"></div>
-  <span class="dot" part="dot"></span>
+<div class="layout min" part="layout">
+  <div class="indicator late" part="late"></div>
+  <div class="track early" part="early"></div>
+  <div class="indicator between" part="between"></div>
 </div>
+<div class="stop" part="stop"></div>
 `
 
 export class Progress extends useElement({
-  style, props, template,
+  style: [style], props, template,
   setup(shadowRoot) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const rander = () => {
-      layout.classList.toggle('zero', this.value === 0)
+      layout.classList.toggle('min', this.value === 0)
       layout.style.setProperty('--s_progress-value', `${Math.min(this.value, this.max) / this.max * 100}%`)
     }
     return {

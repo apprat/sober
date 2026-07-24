@@ -4,23 +4,19 @@
 
 ```html preview
 <s-icon-button> 
-  <s-icon name="star"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button>
   <!--使用 svg-->
-  <svg viewBox="0 -960 960 960">
-    <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"></path>
-  </svg>
+  <svg viewBox="0 -960 960 960"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"></path></svg>
 </s-icon-button>
 
 <s-icon-button> 
-  <!--使用其他组件-->
   <s-loading></s-loading>
 </s-icon-button>
 
 <s-icon-button> 
-  <!--使用其他组件-->
   <s-spinner indeterminate></s-spinner>
 </s-icon-button>
 
@@ -35,18 +31,18 @@
 
 ```html preview
 <s-icon-button> 
-  <s-icon name="star"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 <s-icon-button variant="filled">
-  <s-icon name="star"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button variant="tonal"> 
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button variant="outlined">
-  <s-icon name="favorite"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 ```
 
@@ -56,19 +52,19 @@
 
 ```html preview
 <s-icon-button disabled> 
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button disabled variant="filled">
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button disabled variant="tonal"> 
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button disabled variant="outlined">
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 ```
 
@@ -78,19 +74,19 @@
 
 ```html preview
 <s-icon-button type="checkbox" checked>
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button type="checkbox" checked variant="filled">
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button type="checkbox" checked variant="tonal">
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button type="checkbox" checked variant="outlined">
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 ```
 
@@ -100,23 +96,23 @@
 
 ```html preview
 <s-icon-button size="extra-small" variant="filled">
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button size="small" variant="filled">
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button size="medium" variant="filled">
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button size="large" variant="filled">
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button size="extra-large" variant="filled">
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 ```
 
@@ -126,15 +122,15 @@
 
 ```html preview
 <s-icon-button variant="filled" width="wide">
-  <s-icon name="more_horiz"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button variant="tonal"> 
-  <s-icon name="star"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button>
 
 <s-icon-button variant="outlined" width="narrow">
-  <s-icon name="more_vert"></s-icon>
+  <s-icon></s-icon>
 </s-icon-button><br>
 ```
 
@@ -144,17 +140,17 @@
 
 ```html preview
 <s-icon-button variant="filled">
-  <s-icon name="star"></s-icon>
+  <s-icon></s-icon>
   <s-badge></s-badge>
 </s-icon-button>
 
 <s-icon-button variant="tonal"> 
-  <s-icon name="home"></s-icon>
+  <s-icon></s-icon>
   <s-badge>6</s-badge>
 </s-icon-button>
 
 <s-icon-button variant="outlined">
-  <s-icon name="favorite"></s-icon>
+  <s-icon></s-icon>
   <s-badge>99</s-badge>
 </s-icon-button>
 ```
@@ -167,23 +163,17 @@
 <form action="http://coolaf.com/tool/params" method="get">
   选择标签：
   <s-icon-button name="tag" type="checkbox" value="star">
-    <s-icon name="star"></s-icon>
+    <s-icon></s-icon>
   </s-icon-button>
   <s-icon-button name="tag" type="checkbox" value="home">
-    <s-icon name="home"></s-icon>
+    <s-icon></s-icon>
   </s-icon-button>
   <s-icon-button name="tag" type="checkbox" value="favorite" defaultChecked checked>
-    <s-icon name="favorite"></s-icon> 
+    <s-icon></s-icon> 
   </s-icon-button>
   <hr>
-  <s-icon-button type="reset" variant="outlined">
-    <s-icon name="close"></s-icon>
-    <s-tooltip>重置</s-tooltip>
-  </s-icon-button>
-  <s-icon-button type="submit" variant="filled">
-    <s-icon name="done"></s-icon>
-    <s-tooltip>提交</s-tooltip>
-  </s-icon-button>
+  <s-button type="reset" variant="outlined"> 重置表单 </s-button>
+  <s-button type="submit" variant="filled"> 提交结果 </s-button>
 </form>
 ```
 
@@ -191,17 +181,17 @@
 
 ## 属性
 
-| 名称           | 类型                                           | 默认值      | 同步 | 说明                                               |
-| -------------- | ---------------------------------------------- | ----------- | ---- | -------------------------------------------------- |
-| variant        | standard, filled, tonal, outlined              | standard    | √    | 变体                                               |
-| size           | extra-small, small, medium, large, extra-large | medium      | √    | 尺寸                                               |
-| width          | default, narrow, wide                          | default     | √    | 宽度，wide=较宽的，narrow=较窄的                   |
-| type           | icon-button, checkbox, reset, submit           | icon-button | √    | 类型，支持将组件作为复选框，提交按钮，或者重置按钮 |
-| disabled       | boolean                                        | false       | √    | 禁用的                                             |
-| checked        | boolean                                        | false       | √    | 选中的                                             |
-| defaultChecked | boolean                                        | false       | √    | 默认选中，表单重置时的默认值，仅表单重置时生效     |
-| name           | string                                         | ''          | √    | 名称，表单提交时的 `key` 值                        |
-| value          | string                                         | ''          | ×    | 值，表单提交时有效                                 |
+| 名称           | 类型                                                     | 默认值        | 同步 | 说明                                               |
+| -------------- | -------------------------------------------------------- | ------------- | ---- | -------------------------------------------------- |
+| variant        | `standard`, `filled`, `tonal`, `outlined`                | `standard`    | √    | 变体                                               |
+| size           | `extra-small`, `small`, `medium`, `large`, `extra-large` | `medium`      | √    | 尺寸                                               |
+| width          | `default`, `narrow`, `wide`                              | `default`     | √    | 宽度，`wide`=较宽的，`narrow`=较窄的               |
+| type           | `icon-button`, `checkbox`, `reset`, `submit`             | `icon-button` | √    | 类型，支持将组件作为复选框，提交按钮，或者重置按钮 |
+| disabled       | `boolean`                                                | `false`       | √    | 禁用的                                             |
+| checked        | `boolean`                                                | `false`       | √    | 选中的                                             |
+| defaultChecked | `boolean`                                                | `false`       | √    | 默认选中，表单重置时的默认值，仅表单重置时生效     |
+| name           | `string`                                                 | `''`          | √    | 名称，表单提交时的 `key` 值                        |
+| value          | `string`                                                 | `''`          | ×    | 值，表单提交时有效                                 |
 
 ## 事件
 

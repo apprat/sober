@@ -1,4 +1,4 @@
-export const Button = /*css*/`
+export default /*css*/`
 :host{
   height: 32px;
   gap: 4px;
@@ -10,12 +10,5 @@ export const Button = /*css*/`
   s-ripple{
     --s-ripple-disabled: true;
   }
-}
-:host(:not([variant])){
-  background: #036ac4;
-  color: #fff;
-}
-:host([pressed]){
-  border-radius: 4px;
 }
 `

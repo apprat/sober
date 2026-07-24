@@ -90,20 +90,15 @@
   </style>
   <script type="module">
     import * as components from '/dist/main.js'
-    import { material } from '/dist/design/material.js'
-    import { fluent } from '/dist/design/fluent.js'
+    import { Fluent } from '/dist/designs/fluent.js'
 
     window.sober = {
       components,
-      design: { material, fluent }
+      designs: { Fluent }
     }
     const page = document.querySelector('.page')
     window.toggleTheme = (el) => page.toggle(page.hasAttribute('dark') ? 'light' : 'dark', el)
-    let isFluent = false
-    window.toggleStyle = () => {
-      isFluent ? material(components) : fluent(components)
-      isFluent = !isFluent
-    }
+    window.toggleStyle = () => Fluent.toggle(components)
   </script>
 </head>
 

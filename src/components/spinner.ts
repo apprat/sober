@@ -1,8 +1,53 @@
 import { useProps, useElement } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
+import { bezier } from '../core/utils/bezier.js'
+
+const config = {
+  path: 100,
+  stroke: 4,
+  gap: 4,
+  duration: 5400,
+  segment: 667,
+  expand: [0, 1350, 2700, 4050],
+  collapse: [667, 2017, 3367, 4717],
+  tail: -20,
+  extra: 250,
+  rotate: 1520
+} as const
+
+const gap = ((config.stroke + config.gap) / (Math.PI * (40 - config.stroke))) * config.path
+let indicatorStr = ''
+let trackStr = ''
+{
+  const ease = bezier(.4, 0, .2, 1)
+  const fraction = (time: number, delay: number) => {
+    if (time <= delay) return 0
+    if (time >= delay + config.segment) return 1
+    return ease((time - delay) / config.segment)
+  }
+  const step = 80
+  const times = [...new Set([0, config.duration,
+    ...[...config.expand, ...config.collapse].flatMap((start) => Array.from({ length: Math.ceil(config.segment / step) + 1 }, (_, i) => Math.min(start + i * step, start + config.segment)))
+  ])].sort((a, b) => a - b)
+  for (const play of times) {
+    let s = config.rotate * play / config.duration + config.tail
+    let e = config.rotate * play / config.duration
+    for (let i = 0; i < 4; i++) {
+      e += fraction(play, config.expand[i]) * config.extra
+      s += fraction(play, config.collapse[i]) * config.extra
+    }
+    s = s / 360
+    e = e / 360
+    const len = (e - s) * 100
+    const off = s * 100
+    const t = play / config.duration * 100
+    indicatorStr += `${t}%{stroke-dasharray: ${len} ${100 - len}; stroke-dashoffset: ${-off};}`
+    trackStr += `${t}%{stroke-dasharray: ${100 - len - gap * 2} ${len + gap * 2};stroke-dashoffset: ${-(off + len + gap)};}`
+  }
+}
+const indeterminateStyle = `@keyframes indicator{${indicatorStr}}@keyframes track{${trackStr}}`
 
 const props = useProps({
-  size: ['medium', 'large'],
   indeterminate: false,
   $max: 100,
   $value: 0,
@@ -19,17 +64,23 @@ const style = /*css*/`
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
   color: ${scheme.color.primary};
+  stroke: ${scheme.color.secondaryContainer};
 }
 .layout{
   display: block;
   width: 100%;
   height: 100%;
-  padding: 4.6%;
-  --s_spinner-gap: calc(var(--s_spinner-max) * 0.05);
-  &.zero{
+  &.min{
     .track{
-      stroke-dasharray: var(--s_spinner-max) 0px;
+      stroke-dasharray: 100px 0px;
+      stroke-dashoffset: 0px;
     }
+    .indicator{
+      filter: opacity(0);
+    }
+  }
+  &.max .track{
+    filter: opacity(0);
   }
 }
 .icon{
@@ -43,86 +94,64 @@ const style = /*css*/`
 }
 .track,
 .indicator{
-  stroke: currentColor;
-  stroke-width: 10px;
+  transform: rotate(-90deg);
+  stroke: var(--s-spinner-indicator-color, currentColor);
+  opacity: var(--s-spinner-indicator-opacity, 1);
   fill: none;
   stroke-linecap: round;
-  shape-rendering: geometricPrecision;
   transform-origin: center;
   transition-timing-function: inherit;
   transition-duration: inherit;
+  transition-property: stroke-dasharray, stroke-dashoffset;
 }
 .track{
-  transform: rotate(252deg);
-  stroke-dasharray: var(--s_spinner-max) calc(var(--s_spinner-value) + var(--s_spinner-gap) * 2);
-  stroke-dashoffset: var(--s_spinner-max);
-  transition-property: stroke-dasharray;
-  stroke: ${scheme.color.secondaryContainer};
+  opacity: var(--s-spinner-track-opacity, 1);
+  stroke-dasharray: var(--s_spinner-track-dasharray);
+  stroke-dashoffset: var(--s_spinner-track-dashoffset);
+  stroke: var(--s-spinner-track-color, inherit);
 }
 .indicator{
-  transform: rotate(270deg);
-  stroke-dasharray: var(--s_spinner-max);
-  stroke-dashoffset: calc(var(--s_spinner-max) - var(--s_spinner-value));
-  transition-property: stroke-dashoffset;
-}
-@keyframes circular{
-  0%{ transform: rotate(0deg); }
-  100%{ transform: rotate(360deg); }
-}
-@keyframes circular2{
-  0%, 12.5%{transform: rotate(-90deg);}
-  25%, 37.5%{ transform: rotate(180deg); }
-  50%, 62.5%{ transform: rotate(450deg); }
-  75%, 87.5%{ transform: rotate(720deg); }
-  100%{ transform: rotate(990deg); }
-  0%, 25%, 50%, 75%, 100%{ stroke-dashoffset: var(--s_spinner-max); }
-  12.5%, 37.5%, 37.5%, 62.5%, 87.5%{ stroke-dashoffset: calc(var(--s_spinner-max) / 4); }
+  stroke-dasharray: var(--s_spinner-indicator-dasharray);
 }
 :host([indeterminate]){
-  .layout{
-    animation: circular 2s infinite linear;
-  }
-  .track{
-    display: none;
-  }
-  .indicator{
-    animation: circular2 6s infinite cubic-bezier(0.4, 0, 0.2, 1), steps(4), linear;
-  }
-}
-:host([size=large]){
-  width: 44px;
-  .layout{
-    padding: 7.7%;
-    --s_spinner-gap: calc(var(--s_spinner-max) * 0.07);
-  }
   .track,
   .indicator{
-    stroke-width: calc(8px / (44px / 100px));
+    filter: opacity(1);
+    animation-duration: ${config.duration}ms;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
   }
   .track{
-    transform: rotate(245deg);
+    animation-name: track;
+  }
+  .indicator{
+    animation-name: indicator;
   }
 }
 `
 
-const circumference = Math.PI * 100
-
 const template = /*html*/`
-<div class="layout zero" part="layout" style="--s_spinner-value: 0; --s_spinner-max: ${circumference}px">
-  <svg viewBox="0 0 100 100" class="icon" part="icon">
-    <circle class="track" cx="50" cy="50" r="50" part="track" />
-    <circle class="indicator" cx="50" cy="50" r="50" part="indicator" />
+<div class="layout min" part="layout">
+  <svg viewBox="0 0 40 40" class="icon" part="icon">
+    <circle cx="20" cy="20" r="18" stroke-width="${config.stroke}" pathLength="${config.path}" class="track" part="track"></circle>
+    <circle cx="20" cy="20" r="18" stroke-width="${config.stroke}" pathLength="${config.path}" class="indicator" part="indicator"></circle>
   </svg>
 </div>
 `
 
 export class Spinner extends useElement({
-  style, props, template,
+  style: [style, indeterminateStyle], props, template,
   setup(shadowRoot) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const rander = () => {
-      layout.classList.toggle('zero', this.value === 0)
-      layout.style.setProperty('--s_spinner-value', `${(Math.min(this.value, this.max) / this.max) * circumference}px`)
+      const v = Math.min(this.value, this.max) / this.max * 100
+      const double = gap * 2
+      const offset = v + gap
+      layout.classList.toggle('min', v === 0)
+      layout.classList.toggle('max', offset + gap > 100)
+      layout.style.setProperty('--s_spinner-track-dasharray', `${100 - v - double}px ${v + double}px`)
+      layout.style.setProperty('--s_spinner-track-dashoffset', `${offset * -1}px`)
+      layout.style.setProperty('--s_spinner-indicator-dasharray', `${v}px ${100 - v}px`)
     }
     return {
       value: rander

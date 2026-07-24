@@ -1,5 +1,5 @@
-import { fluent } from '../dist/design/fluent.js'
+import { Fluent } from '../dist/designs/fluent.js'
 
 if (!globalThis.sober) globalThis.sober = {}
-if (!globalThis.sober.design) globalThis.sober.design = {}
-globalThis.sober.design.fluent = fluent
+if (!globalThis.sober.designs) globalThis.sober.designs = {}
+globalThis.sober.designs.Fluent = Fluent

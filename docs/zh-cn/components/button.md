@@ -4,15 +4,9 @@
 
 ```html preview
 <s-button>
-  <s-icon name="star" slot="start"></s-icon>
-  Button
-  <s-icon name="close" slot="end"></s-icon>
-</s-button>
-
-<s-button>
   <s-loading slot="start"></s-loading>
   Button
-  <s-circular-progress slot="end" indeterminate></s-circular-progress>
+  <s-spinner slot="end" indeterminate></s-spinner>
 </s-button>
 ```
 
@@ -22,27 +16,27 @@
 
 ```html preview
 <s-button variant="filled"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button variant="elevated"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button variant="tonal"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button variant="outlined"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button variant="text"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 ```
@@ -53,27 +47,27 @@
 
 ```html preview
 <s-button disabled> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button disabled variant="elevated"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button disabled variant="tonal"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button disabled variant="outlined"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button disabled variant="text"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 ```
@@ -84,27 +78,27 @@
 
 ```html preview
 <s-button type="checkbox" checked> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button type="checkbox" checked variant="elevated"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button type="checkbox" checked variant="tonal"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button type="checkbox" checked variant="outlined"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 
 <s-button type="checkbox" checked variant="text"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-button>
 ```
@@ -115,27 +109,27 @@
 
 ```html preview
 <s-button size="extra-small"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   button
 </s-button>
 
 <s-button size="small"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   button
 </s-button>
 
 <s-button size="medium"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   button
 </s-button>
 
 <s-button size="large"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   button
 </s-button>
 
 <s-button size="extra-large"> <!-- [!code highlight] -->
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   button
 </s-button>
 ```
@@ -173,16 +167,16 @@
 
 ## 属性
 
-| 名称           | 类型                                           | 默认值 | 同步 | 说明                                               |
-| -------------- | ---------------------------------------------- | ------ | ---- | -------------------------------------------------- |
-| variant        | filled, elevated, tonal, outlined, text        | filled | √    | 变体                                               |
-| size           | small, extra-small, medium, large, extra-large | small  | √    | 尺寸                                               |
-| type           | button, checkbox, reset, submit                | button | √    | 类型，支持将组件作为复选框，提交按钮，或者重置按钮 |
-| disabled       | boolean                                        | false  | √    | 禁用的                                             |
-| checked        | boolean                                        | false  | √    | 选中的                                             |
-| defaultChecked | boolean                                        | false  | ×    | 默认选中，表单重置时的默认值，仅表单重置时生效     |
-| name           | string                                         | ''     | √    | 名称，表单提交时的 `key` 值                        |
-| value          | string                                         | ''     | ×    | 值，表单提交时有效                                 |
+| 名称           | 类型                                                     | 默认值   | 同步 | 说明                                               |
+| -------------- | -------------------------------------------------------- | -------- | ---- | -------------------------------------------------- |
+| variant        | `filled`, `elevated`, `tonal`, `outlined`, `text`        | `filled` | √    | 变体                                               |
+| size           | `small`, `extra-small`, `medium`, `large`, `extra-large` | `small`  | √    | 尺寸                                               |
+| type           | `button`, `checkbox`, `reset`, `submit`                  | `button` | √    | 类型，支持将组件作为复选框，提交按钮，或者重置按钮 |
+| disabled       | `boolean`                                                | `false`  | √    | 禁用的                                             |
+| checked        | `boolean`                                                | `false`  | √    | 选中的                                             |
+| defaultChecked | `boolean`                                                | `false`  | ×    | 默认选中，表单重置时的默认值，仅表单重置时生效     |
+| name           | `string`                                                 | `''`     | √    | 名称，表单提交时的 `key` 值                        |
+| value          | `string`                                                 | `''`     | ×    | 值，表单提交时有效                                 |
 
 ## 事件
 

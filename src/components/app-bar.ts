@@ -17,6 +17,13 @@ const style = /*css*/`
   background: ${scheme.color.surfaceContainer};
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
+  &::before{
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-bottom: solid 1px ${scheme.color.surfaceVariant};
+  }
 }
 .layout{
   height: 100%;

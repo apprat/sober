@@ -4,7 +4,7 @@
 
 ```html preview
 <s-split-button>
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   label
 </s-split-button>
 ```
@@ -15,22 +15,22 @@
 
 ```html preview
 <s-split-button variant="filled">
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-split-button>
 
 <s-split-button variant="elevated">
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-split-button>
 
 <s-split-button variant="tonal">
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-split-button>
 
 <s-split-button variant="outlined">
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-split-button>
 ```
@@ -41,22 +41,22 @@
 
 ```html preview
 <s-split-button disabled> 
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-split-button>
 
 <s-split-button disabled variant="elevated">
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-split-button>
 
 <s-split-button disabled variant="tonal"> 
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-split-button>
 
 <s-split-button disabled variant="outlined">
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   Button
 </s-split-button>
 ```
@@ -67,9 +67,9 @@
 
 ```html preview
 <s-split-button>
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   label
-  <s-icon name="arrow_downward" slot="toggle-icon"></s-icon>
+  <svg slot="toggle-icon" viewBox="0 -960 960 960"><path d="M480-360 280-560h400L480-360Z"></path></svg>
   <s-tooltip slot="toggle" parentDepth="1">展开</s-tooltip>
 </s-split-button>
 ```
@@ -80,27 +80,27 @@
 
 ```html preview
 <s-split-button size="extra-small"> 
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   button
 </s-split-button>
 
 <s-split-button size="small"> 
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   button
 </s-split-button>
 
 <s-split-button size="medium"> 
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   button
 </s-split-button>
 
 <s-split-button size="large"> 
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   button
 </s-split-button>
 
 <s-split-button size="extra-large"> 
-  <s-icon name="star" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
   button
 </s-split-button>
 ```
@@ -109,12 +109,12 @@
 
 ## 属性
 
-| 名称     | 类型                                           | 默认值 | 同步 | 说明   |
-| -------- | ---------------------------------------------- | ------ | ---- | ------ |
-| variant  | filled, elevated, tonal, outlined              | filled | √    | 变体   |
-| size     | small, extra-small, medium, large, extra-large | small  | √    | 尺寸   |
-| disabled | boolean                                        | false  | √    | 禁用的 |
-| checked  | boolean                                        | false  | √    | 选中的 |
+| 名称     | 类型                                                     | 默认值   | 同步 | 说明   |
+| -------- | -------------------------------------------------------- | -------- | ---- | ------ |
+| variant  | `filled`, `elevated`, `tonal`, `outlined`                | `filled` | √    | 变体   |
+| size     | `small`, `extra-small`, `medium`, `large`, `extra-large` | `small`  | √    | 尺寸   |
+| disabled | `boolean`                                                | `false`  | √    | 禁用的 |
+| checked  | `boolean`                                                | `false`  | √    | 选中的 |
 
 ## 事件
 

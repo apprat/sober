@@ -4,27 +4,27 @@
 
 ```html preview
 <s-fab>
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab variant="secondary">
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab variant="tertiary">
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab variant="tonal-primary">
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab variant="tonal-secondary">
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab variant="tonal-tertiary">
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 ```
 
@@ -45,27 +45,27 @@
 
 ```html preview
 <s-fab disabled> <!-- [!code highlight] -->
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab variant="secondary" disabled> <!-- [!code highlight] -->
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab variant="tertiary" disabled> <!-- [!code highlight] -->
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab variant="tonal-primary" disabled> <!-- [!code highlight] -->
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab variant="tonal-secondary" disabled> <!-- [!code highlight] -->
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab variant="tonal-tertiary" disabled> <!-- [!code highlight] -->
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 ```
 
@@ -81,7 +81,7 @@
 </script>
 <template>
   <s-fab :hidden="visible">
-    <s-icon name="add"></s-icon>
+    <s-icon></s-icon>
   </s-fab>
   <s-button @click="visible=!visible">切换</s-button>
 </template>
@@ -93,15 +93,15 @@
 
 ```html preview
 <s-fab>
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab size="medium"> <!-- [!code highlight] -->
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 
 <s-fab size="large"> <!-- [!code highlight] -->
-  <s-icon name="add"></s-icon>
+  <s-icon></s-icon>
 </s-fab>
 ```
 
@@ -111,21 +111,21 @@
 
 ```html preview
 <s-fab>
-  <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
+  <s-icon slot="start"></s-icon> <!-- [!code highlight] -->
   提交信息
-  <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
+  <s-icon slot="end"></s-icon> <!-- [!code highlight] -->
 </s-fab>
 
 <s-fab size="medium" variant="secondary">
-  <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
+  <s-icon slot="start"></s-icon> <!-- [!code highlight] -->
   提交信息
-  <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
+  <s-icon slot="end"></s-icon> <!-- [!code highlight] -->
 </s-fab>
 
 <s-fab size="large" variant="tertiary">
-  <s-icon name="add" slot="start"></s-icon> <!-- [!code highlight] -->
+  <s-icon slot="start"></s-icon> <!-- [!code highlight] -->
   提交信息
-  <s-icon name="done" slot="end"></s-icon> <!-- [!code highlight] -->
+  <s-icon slot="end"></s-icon> <!-- [!code highlight] -->
 </s-fab>
 ```
 
@@ -133,12 +133,12 @@
 
 ## 属性
 
-| 名称     | 类型                                                                         | 默认值  | 同步 | 说明   |
-| -------- | ---------------------------------------------------------------------------- | ------- | ---- | ------ |
-| variant  | primary, secondary, tertiary, tonal-primary, tonal-secondary, tonal-tertiary | primary | √    | 变体   |
-| size     | small, medium, large                                                         | small   | √    | 尺寸   |
-| disabled | boolean                                                                      | false   | √    | 禁用的 |
-| hidden   | boolean                                                                      | false   | √    | 隐藏的 |
+| 名称     | 类型                                                                                     | 默认值    | 同步 | 说明   |
+| -------- | ---------------------------------------------------------------------------------------- | --------- | ---- | ------ |
+| variant  | `primary`, `secondary`, `tertiary`, `tonal-primary`, `tonal-secondary`, `tonal-tertiary` | `primary` | √    | 变体   |
+| size     | `small`, `medium`, `large`                                                               | `small`   | √    | 尺寸   |
+| disabled | `boolean`                                                                                | `false`   | √    | 禁用的 |
+| hidden   | `boolean`                                                                                | `false`   | √    | 隐藏的 |
 
 ## 插槽
 

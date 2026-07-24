@@ -1,5 +1,6 @@
 import { useProps, useElement, focusKeydownClick } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
+import { buttonStyle } from '../core/style/button.js'
 import './ripple.js'
 
 const props = useProps({
@@ -10,38 +11,23 @@ const props = useProps({
 })
 const style = /*css*/`
 :host{
-  display: inline-flex;
-  vertical-align: middle;
   height: 40px;
   gap: 2px;
   border-radius: 20px;
-  pointer-events: none;
-  text-transform: capitalize;
-  cursor: pointer;
-  font-size: calc(var(--s-font-size, 1) * 14px);
-  font-weight: 500;
-  max-width: -moz-available;
-  max-width: -webkit-fill-available;
-  transition-property: height, font-size, color;
-  transition-timing-function: ${scheme.motion.easing.standard};
-  transition-duration: ${scheme.motion.duration.short4};
+  visibility: hidden;
+  outline-color: currentColor;
 }
 .btn{
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  position: relative;
+  display: inherit;
+  align-items: inherit;
+  justify-content: inherit;
+  height: inherit;
+  position: inherit;
   cursor: inherit;
-  outline-offset: inherit;
-  outline-width: 3px;
-  outline-color: currentColor;
-  overflow: hidden;
-  transition-property: padding, gap, border-radius, background-color, box-shadow;
-  &:focus-visible{
-    outline-style: solid;
-  }
+  outline-color: inherit;
+  visibility: visible;
+  background: inherit;
+  box-shadow: inherit;
 }
 .layout{
   padding: 0 12px 0 16px;
@@ -54,13 +40,6 @@ const style = /*css*/`
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
   }
-  .text{
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    min-width: 0;
-  }
 }
 .toggle{
   border-top-left-radius: 4px;
@@ -69,33 +48,27 @@ const style = /*css*/`
   border-bottom-right-radius: inherit;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
+  svg{
+    width: 20px;
+  }
   &:is([hover], [pressed]){
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
   }
 }
-svg,
-::slotted(:is(svg, s-icon)[slot=toggle-icon]){
-  fill: currentColor;
-  color: currentColor;
-  width: 22px;
-  aspect-ratio: 1;
-  -webkit-aspect-ratio: 1;
-  transition-duration: inherit;
-  transition-timing-function: inherit;
-  margin-left: -1px;
+
+::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  width: 20px;
+  font-size: 20px;
 }
-::slotted(*){
-  flex-shrink: 0;
+::slotted(:is(svg, s-icon)[slot=toggle-icon]){
+  width: 20px;
+  margin-left: -1px;
 }
 ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
   fill: currentColor;
   color: currentColor;
   width: 20px;
-  aspect-ratio: 1;
-  -webkit-aspect-ratio: 1;
-  transition-timing-function: inherit;
-  transition-duration: inherit;
 }
 :host([disabled]) .btn{
   pointer-events: none;
@@ -114,28 +87,22 @@ svg,
 /**Variant**/
 :host(:not([variant])){
   color: ${scheme.color.onPrimary};
-  .btn{
-    background: ${scheme.color.primary};
-    outline-color: ${scheme.color.primary};
-  }
+  background: ${scheme.color.primary};
+  outline-color: ${scheme.color.primary};
 }
 :host([variant=elevated]){
   color: ${scheme.color.primary};
-  .btn{
-    background: ${scheme.color.surfaceContainerLow};
-    box-shadow: ${scheme.elevation.level1};
-  }
+  background: ${scheme.color.surfaceContainerLow};
+  box-shadow: ${scheme.elevation.level1};
 }
 :host([variant=tonal]){
   color: ${scheme.color.onSecondaryContainer};
-  .btn{
-    background: ${scheme.color.secondaryContainer};
-  }
+  background: ${scheme.color.secondaryContainer};
 }
 :host([variant=outlined]){
   color: ${scheme.color.onSurfaceVariant};
+  background: none;
   .btn{
-    background: none;
     &::before{
       content: '';
       position: absolute;
@@ -272,7 +239,7 @@ const template = /*html*/`
 `
 
 export class SplitButton extends useElement({
-  props, template, style,
+  props, template, style: [buttonStyle, style],
   setup(shadowRoot) {
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const toggle = shadowRoot.querySelector<HTMLDivElement>('.toggle')!

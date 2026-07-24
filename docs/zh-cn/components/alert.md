@@ -97,7 +97,7 @@
   衣裳已施行看尽，针线犹存未忍开。<br>
   尚想旧情怜婢仆，也曾因梦送钱财。<br>
   诚知此恨人人有，贫贱夫妻百事哀。
-  <s-button slot="toggle-button" variant="outlined" size="extra-small">
+  <s-button slot="toggle-button" variant="text" size="extra-small">
     切换
   </s-button>
 </s-alert>
@@ -112,7 +112,7 @@
   衣裳已施行看尽，针线犹存未忍开。<br>
   尚想旧情怜婢仆，也曾因梦送钱财。<br>
   诚知此恨人人有，贫贱夫妻百事哀。
-  <s-tooltip slot="toggle" ancestorLevel="1">切换</s-tooltip> <!-- [!code highlight] -->
+  <s-tooltip slot="toggle" parentDepth="1">切换</s-tooltip> <!-- [!code highlight] -->
 </s-alert>
 ```
 

@@ -99,7 +99,7 @@
 </style>
 <template>
   <!--亮度操作滑块-->
-  <s-base-slider class="volume-slider" orientation="vertical" slidingMode="all-cumulative">
+  <s-base-slider class="volume-slider" orientation="vertical" slidingMode="all-cumulative" style="color: #009688">
     <s-icon name="light_mode" class="light-icon"></s-icon>
   </s-base-slider>
   <!--音量操作滑块-->

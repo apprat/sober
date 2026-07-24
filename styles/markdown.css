@@ -31,18 +31,10 @@ a::before {
   transition-timing-function: var(--s-motion-easing-standard);
 }
 
-:is(h1, h2, h3) {
+:is(h1, h2, h3, h4, h5, h6) {
   position: relative;
-}
-
-:is(h1, h2, h3)::before {
-  content: '#';
-  font-family: fantasy;
-  position: absolute;
-  inset: auto auto auto 0;
-  transform: translateX(calc(-100% - 4px));
-  opacity: 0;
-  pointer-events: none;
+  cursor: pointer;
+  line-height: calc(100% + 12px);
 }
 
 h1 {
@@ -181,10 +173,6 @@ blockquote>p {
 @media (any-pointer: fine) {
   a:hover::before {
     transform: scaleX(1);
-    opacity: 1;
-  }
-
-  :is(h1, h2, h3):hover::before {
     opacity: 1;
   }
 }

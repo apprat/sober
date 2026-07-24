@@ -115,11 +115,6 @@ const style = /*css*/`
     line-height: normal;
   }
 }
-.start{
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
 .layout{
   padding: 0;
   max-height: inherit;
@@ -176,46 +171,48 @@ textarea,
     content: '\u200B';
   }
 }
+.start,
 .actions{
   display: flex;
-  padding: 4px 0;
-  margin: 0 4px 0 -8px;
+  align-items: center;
   height: 100%;
-  .action{
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    position: relative;
-    border-radius: 50%;
+  padding: 4px 0;
+}
+.start{
+  margin: 0 -8px 0 4px;
+}
+.actions{
+  margin: 0 4px 0 -8px;
+}
+.action{
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  border-radius: 50%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  outline-color: currentColor;
+  &[pressed]{
+    border-radius: 8px;
+  }
+  &.password-toggle .on{
     display: none;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    outline-width: 3px;
-    outline-offset: 2px;
-    outline-color: currentColor;
-    &:focus-visible{
-      outline-style: solid;
-    }
-    &[pressed]{
-      border-radius: 8px;
-    }
-    &.password-toggle .on{
-      display: none;
-    }
-    &.mic.supported{
-      &.monitoring{
-        .on{
-          display: none;
-        }
-        .off{
-          display: block;
-          animation: scaleLoop 1.5s ease-in-out infinite;
-        }
-      }
-      .off{
+  }
+  &.mic.supported{
+    &.monitoring{
+      .on{
         display: none;
       }
+      .off{
+        display: block;
+        animation: scaleLoop 1.5s ease-in-out infinite;
+      }
+    }
+    .off{
+      display: none;
     }
   }
 }
@@ -256,8 +253,8 @@ svg,
   fill: currentColor;
   flex-shrink: 0;
 }
-::slotted([slot=start]:not(s-icon-button)){
-  margin-left: var(--s_text-field-padding-left);
+::slotted(:is(svg, s-icon)){
+  margin: 0 8px;
 }
 ::slotted([slot=helper]){
   margin-top: 8px;
@@ -287,6 +284,9 @@ svg,
     --s_text-field-padding-bottom: var(--s-text-field-padding-bottom, var(--s-text-field-padding, 16px));
     --s_text-field-padding-left: var(--s-text-field-padding-left, var(--s-text-field-padding, 20px));
     --s_text-field-padding-right: var(--s-text-field-padding-right, var(--s-text-field-padding, 20px));
+  }
+  .start{
+    margin: 0 -8px 0 8px;
   }
   .actions{
     margin: 0 8px 0 -8px;
@@ -333,6 +333,16 @@ svg,
   }
   .supporting{
     color: ${scheme.color.error};
+  }
+}
+:host([readOnly]){
+  pointer-events: none;
+}
+:host([disabled]){
+  pointer-events: none;
+  color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
+  .wrap{
+    --s_text-field-border-color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
   }
 }
 `

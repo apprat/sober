@@ -52,9 +52,37 @@
     "@material/material-color-utilities": "^0.4.0"
   },
   "funding": [
+    {
+      "type": "individual",
+      "url": "https://ifdian.net/a/apprat"
+    }
+  ],
+  "sponsorsx": [
     "https://mangotool.cn",
-    "https://www.bplewiki.top",
+    "https://waterx.top",
     "https://www.qiaoxh.com",
     "https://uoice.com"
+  ],
+  "sponsors": [
+    {
+      "name": "MangoTool",
+      "logo": "mangotool.png",
+      "url": "https://mangotool.cn"
+    },
+    {
+      "name": "WaterPage",
+      "logo": "waterx.svg",
+      "url": "https://waterx.top"
+    },
+    {
+      "name": "乔星欢",
+      "logo": "qiaoxh.png",
+      "url": "https://www.qiaoxh.com"
+    },
+    {
+      "name": "千变语音",
+      "logo": "uoice.png",
+      "url": "https://uoice.com"
+    }
   ]
 }

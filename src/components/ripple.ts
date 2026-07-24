@@ -49,7 +49,7 @@ const style = /*css*/`
   opacity: 0;
   border-radius: 50%;
   background: var(--s-ripple-color, currentColor);
-  filter: opacity(var(--s-ripple-opacity, .12));
+  filter: opacity(var(--s-ripple-opacity, .24));
 }
 @media (prefers-reduced-motion: reduce) {
   :host{
@@ -152,8 +152,10 @@ export class Ripple extends useElement({
     const down = (event: PointerEvent) => {
       if (!info.parentNode || event.button !== 0) return
       info.parentNode?.setAttribute('pressed', '')
+      container.classList.add('pressed')
       const remove = () => {
         info.parentNode?.removeAttribute('pressed')
+        container.classList.remove('pressed')
         document.removeEventListener('pointerup', remove)
         document.removeEventListener('pointercancel', remove)
       }

@@ -6,6 +6,7 @@
 <s-checkbox>已阅读用户协议</s-checkbox>
 <s-checkbox checked></s-checkbox>
 <s-checkbox indeterminate></s-checkbox>
+<s-checkbox indeterminate checked></s-checkbox>
 ```
 
 ## 禁用
@@ -16,6 +17,7 @@
 <s-checkbox disabled></s-checkbox>
 <s-checkbox disabled checked></s-checkbox>
 <s-checkbox disabled indeterminate></s-checkbox>
+<s-checkbox disabled indeterminate checked></s-checkbox>
 ```
 
 ## 只读
@@ -26,6 +28,7 @@
 <s-checkbox readOnly></s-checkbox>
 <s-checkbox readOnly checked></s-checkbox>
 <s-checkbox readOnly indeterminate></s-checkbox>
+<s-checkbox readOnly indeterminate checked></s-checkbox>
 ```
 
 ## 自定义样式

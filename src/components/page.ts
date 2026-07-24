@@ -13,7 +13,8 @@ const style = /*css*/`
   display: flow-root;
   height: 100%;
   overflow: auto;
-  font-family: "Google Sans Text", sans-serif;
+  font-weight: 400;
+  font-family: "Google Sans Flex", -apple-system, BlinkMacSystemFont, sans-serif;
   color-scheme: light;
   color: var(--s-color-on-background);
   background: var(--s-color-background);
@@ -107,6 +108,14 @@ const style = /*css*/`
   --s-elevation-level3: ${scheme.$elevation.level3};
   --s-elevation-level4: ${scheme.$elevation.level4};
   --s-elevation-level5: ${scheme.$elevation.level5};
+  --s-shape-corner-extra-small: ${scheme.$shape.corner.extraSmall};
+  --s-shape-corner-small: ${scheme.$shape.corner.small};
+  --s-shape-corner-medium: ${scheme.$shape.corner.medium};
+  --s-shape-corner-large: ${scheme.$shape.corner.large};
+  --s-shape-corner-large-increased: ${scheme.$shape.corner.largeIncreased};
+  --s-shape-corner-extra-large: ${scheme.$shape.corner.extraLarge};
+  --s-shape-corner-extra-large-increased: ${scheme.$shape.corner.extraLargeIncreased};
+  --s-shape-corner-extra-extra-large: ${scheme.$shape.corner.extraExtraLarge};
   --s-motion-duration-short1: ${scheme.$motion.duration.short1};
   --s-motion-duration-short2: ${scheme.$motion.duration.short2};
   --s-motion-duration-short3: ${scheme.$motion.duration.short3};
@@ -181,9 +190,10 @@ const getTransitionStyle = (name: string) => `
 ::view-transition-old(${name}),
 ::view-transition-new(${name}){ 
   animation: none;
-  mix-blend-mode: normal;
-  contain: content;
-  will-change: clip-path;
+  mix-blend-mode: nomral;
+}
+*{
+  transition: none !important;
 }
 `
 
@@ -199,6 +209,7 @@ export class Page extends useElement({
       if (this.theme === theme) return
       const old = getTheme()
       const val = theme === 'auto' ? mediaQueryer.matches ? 'dark' : 'light' : theme
+      //@ts-ignore
       if (old === val || !document.startViewTransition) {
         this.theme = theme
         return
@@ -217,11 +228,13 @@ export class Page extends useElement({
         keyframes.clipPath[0] = `circle(0px at ${x}% ${y}%)`
         keyframes.clipPath[1] = `circle(${diameter}px at ${x}% ${y}%)`
       }
-      const transition = document.startViewTransition(() => {
+      const callback = () => {
         styleNode.textContent = getTransitionStyle(transitionName)
         document.head.appendChild(styleNode)
         this.theme = val
-      })
+      }
+      //@ts-ignore
+      const transition = document.startViewTransition(callback)
       await transition.ready
       transition.finished.then(() => {
         styleNode.remove()
@@ -230,7 +243,9 @@ export class Page extends useElement({
       return document.documentElement.animate(keyframes, {
         easing: computedStyle.getValue('animation-timing-function'),
         duration: computedStyle.getDuration('animation-duration'),
-        pseudoElement: `::view-transition-new(${transitionName})`
+        //duration: 20000,
+        pseudoElement: `::view-transition-new(${transitionName})`,
+        fill: 'forwards'
       })
     }
     return {

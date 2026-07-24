@@ -14,83 +14,73 @@ const props = useProps({
 const style = /*css*/`
 :host{
   display: inline-flex;
-  align-items: center;
+  gap: 8px;
   vertical-align: middle;
+  align-items: center;
   cursor: pointer;
   position: relative;
-  height: 40px;
+  height: 24px;
+  line-height: calc(100% + 4px);
   max-width: -moz-available;
   max-width: -webkit-fill-available;
   outline-color: currentColor;
   color: ${scheme.color.onSurfaceVariant};
-  transition-timing-function: ${scheme.motion.easing.emphasized};
+  transition-timing-function: ${scheme.motion.easing.standardDecelerate};
   transition-duration: ${scheme.motion.duration.short4};
 }
 .layout{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   height: 100%;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
-  border-radius: 50%;
-  overflow: hidden;
   flex-shrink: 0;
-  outline-offset: inherit;
-  outline-color: inherit;
+  outline-offset: 6px;
+  border-radius: 50%;
+  &::before,
   .ripple{
+    content: '';
+    position: absolute;
     aspect-ratio: 1;
     -webkit-aspect-ratio: 1;
-    height: 100%;
+    height: calc(100% + 16px);
     width: auto;
+    inset: auto;
     border-radius: 50%;
-    background: currentColor;
-    opacity: 0;
-    transform: scale(.5);
-    transition-property: opacity, transform;
   }
 }
-.unchecked,
-.checked,
-.indeterminate{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  inset: 0;
+.icon{
   width: 100%;
   height: 100%;
+  svg{
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    position: absolute;
+    inset: 0;
+    contain: size layout;
+  }
 }
-.checked,
-.indeterminate{
-  position: absolute;
+.checked{
+  opacity: 0;
   transform: scale(.5);
+}
+.indeterminate{
   opacity: 0;
-  transition-property: transform, opacity;
-  transition-timing-function: cubic-bezier(.5, .5, .5, 2);
-}
-:host([indeterminate]) .unchecked{
-  opacity: 0;
-}
-:host([checked]:not([indeterminate])) .checked,
-:host([indeterminate]) .indeterminate{
-  opacity: 1;
-  transform: scale(1);
-}
-.text{
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-}
-svg,
-::slotted(:is([slot=checked], [slot=unchecked], [slot=indeterminate])){
-  color: currentColor;
-  fill: currentColor;
-  width: 60%;
-  height: 60%;
 }
 :host([checked]){
   color: ${scheme.color.primary};
+  &:host(:not([indeterminate])) .checked{
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+:host([indeterminate]){
+  .indeterminate{
+    opacity: 1;
+  }
 }
 :host([readOnly]){
   pointer-events: none;
@@ -102,49 +92,37 @@ svg,
     opacity: .38 !important;
   }
 }
-:host(:is([pressed], [hover])){
-  .layout>.ripple{
-    opacity: .12;
-    transform: scale(1);
-  }
-}
 :host(:focus-visible){
   outline-style: none;
   .layout{
     outline-style: solid;
-    outline-width: 3px;
   }
 }
 `
 
 const template = /*html*/`
 <div class="layout" part="layout">
-  <slot class="unchecked" name="unchecked">
-    <svg viewBox="0 -960 960 960">
+  <div class="icon" part="icon">
+    <svg viewBox="0 -960 960 960" class="unchecked">
       <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Z"></path>
     </svg>
-  </slot>
-  <slot class="checked" name="checked">
-    <svg viewBox="0 -960 960 960">
+    <svg viewBox="0 -960 960 960" class="checked">
       <path d="m424-312 282-282-56-56-226 226-114-114-56 56 170 170ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Z"></path>
     </svg>
-  </slot>
-  <slot class="indeterminate" name="indeterminate">
-    <svg viewBox="0 -960 960 960">
+    <svg viewBox="0 -960 960 960" class="indeterminate">
       <path d="M280-440h400v-80H280v80Zm-80 320q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Z"></path>
     </svg>
-  </slot>
-  <div class="ripple" part="ripple"></div>
+  </div>
+  <s-ripple class="ripple" part="ripple" parentDepth="1"></s-ripple>
 </div>
-<div class="text" part="text">
-  <slot></slot>
-</div>
+<slot></slot>
 `
 
 export class Checkbox extends useElement({
   states: ['focusable', 'formable', 'hoverable', 'pressable'],
   style, template, props,
-  setup(_, info) {
+  setup(shadowRoot, info) {
+    const animate = shadowRoot.querySelector<SVGAnimateElement>('#animate')!
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)
     this.addEventListener('click', () => {
       if (this.indeterminate) this.indeterminate = false
@@ -153,7 +131,21 @@ export class Checkbox extends useElement({
     })
     return {
       onFormReset: () => this.checked = this.defaultChecked,
-      onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom()
+      onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom(),
+      indeterminate: (v) => {
+
+      },
+      checked: (v) => {
+        if (!info.isConnected) return
+        // if (v) {
+        //   animate.setAttribute('from', paths.unchecked)
+        //   animate.setAttribute('to', paths.checked)
+        //   animate.beginElement()
+        //   console.log('checked', v)
+        // } else {
+
+        // }
+      }
     }
   }
 }) { }

@@ -29,16 +29,25 @@ const itemEvents = {
 
 const style = /*css*/`
 :host{
-  display: block;
-  box-shadow: 0 -1px 0 ${scheme.color.surfaceVariant} inset;
+  display: flex;
+  position: relative;
   background: ${scheme.color.surface};
   color: ${scheme.color.onSurfaceVariant};
   transition-property: none;
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.medium4};
+  &::after{
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-bottom: solid 1px ${scheme.color.surfaceVariant};
+  }
 }
 .layout{
+  flex-grow: 1;
   display: flex;
+  justify-content: inherit;
   height: 100%;
   overflow: auto;
   scrollbar-width: none;
@@ -131,6 +140,7 @@ const itemStyle = /*css*/`
 .indicator{
   position: absolute;
   opacity: 0;
+  transition-property: none;
   inset: var(--s_tab-item-indicator-inset, auto auto 0 auto);
   width: var(--s_tab-item-indicator-width, 100%);
   height: var(--s_tab-item-indicator-height, 3px);

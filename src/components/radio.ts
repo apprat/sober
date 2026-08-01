@@ -121,15 +121,12 @@ const template = /*html*/`
 export class Radio extends useElement({
   states: ['focusable', 'pressable', 'hoverable', 'formable'],
   style, template, props,
-  setup(shadowRoot, info) {
-    const icon = shadowRoot.querySelector<HTMLDivElement>('.icon')!
-    const outline = shadowRoot.querySelector<SVGCircleElement>('.outline')!
-    const fill = shadowRoot.querySelector<SVGCircleElement>('.fill')!
+  setup(_, info) {
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)
     this.addEventListener('click', () => {
       this.checked = true
       this.dispatchEvent(new Event('change'))
-      this.name && (this.getRootNode() as ShadowRoot).querySelectorAll<typeof this>(`${this.tagName}[name='${this.name}']`).forEach((item) => {
+      this.name && (this.getRootNode() as HTMLElement).querySelectorAll<typeof this>(`${this.tagName}[name='${this.name}']`).forEach((item) => {
         if (item === this || !item.checked) return
         item.checked = false
       })
@@ -137,15 +134,6 @@ export class Radio extends useElement({
     return {
       onFormReset: () => this.checked = this.defaultChecked,
       onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom(),
-      checked: (v) => {
-        if (!info.isConnected) return
-        if (v) {
-          const dur = 400
-          //icon.animate([{ transform: 'scale(1)' }, { transform: 'scale(1)' }], { duration: dur })
-          //outline.animate([{ offset: 0, storkeWidth: 4 }, { offset: 0.5, strokeWidth: 18 }, { offset: 0.5, strokeWidth: 4 }, { offset: 1, strokeWidth: 4 }], { duration: dur })
-          //fill.animate([{ offset: 0, transform: 'scale(0)' }, { offset: 0.5, transform: 'scale(0)' }, { offset: 0.5, transform: 'scale(1)' }, { offset: 1, transform: 'scale(.5)' }], { duration: dur })
-        }
-      }
     }
   }
 }) { }

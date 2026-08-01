@@ -68,24 +68,34 @@
 </s-icon-button>
 ```
 
-## 复选框
+## 单选和复选框
 
-设置 `type` 属性为 `checkbox`，按钮会允许选中，同时你可以设置 `checked` 属性来默认选中，选中切换时触发 `change` 事件。
+设置 `type` 属性为 `checkbox` 或 `radio`，按钮会允许选中，同时你可以设置 `checked` 属性来默认选中，选中切换时触发 `change` 事件。
 
 ```html preview
-<s-icon-button type="checkbox" checked>
+<s-icon-button type="checkbox">
   <s-icon></s-icon>
 </s-icon-button>
-
-<s-icon-button type="checkbox" checked variant="filled">
+<s-icon-button type="checkbox" variant="filled">
   <s-icon></s-icon>
 </s-icon-button>
-
-<s-icon-button type="checkbox" checked variant="tonal">
+<s-icon-button type="checkbox" variant="tonal">
   <s-icon></s-icon>
 </s-icon-button>
-
-<s-icon-button type="checkbox" checked variant="outlined">
+<s-icon-button type="checkbox" variant="outlined">
+  <s-icon></s-icon>
+</s-icon-button>
+<hr>
+<s-icon-button type="radio" name="select">
+  <s-icon></s-icon>
+</s-icon-button>
+<s-icon-button type="radio" name="select" variant="filled">
+  <s-icon></s-icon>
+</s-icon-button>
+<s-icon-button type="radio" name="select" variant="tonal">
+  <s-icon></s-icon>
+</s-icon-button>
+<s-icon-button type="radio" name="select" variant="outlined">
   <s-icon></s-icon>
 </s-icon-button>
 ```
@@ -186,7 +196,7 @@
 | variant        | `standard`, `filled`, `tonal`, `outlined`                | `standard`    | √    | 变体                                               |
 | size           | `extra-small`, `small`, `medium`, `large`, `extra-large` | `medium`      | √    | 尺寸                                               |
 | width          | `default`, `narrow`, `wide`                              | `default`     | √    | 宽度，`wide`=较宽的，`narrow`=较窄的               |
-| type           | `icon-button`, `checkbox`, `reset`, `submit`             | `icon-button` | √    | 类型，支持将组件作为复选框，提交按钮，或者重置按钮 |
+| type           | `icon-button`, `checkbox`, `radio`, `reset`, `submit`    | `icon-button` | √    | 类型，支持将组件作为复选框，提交按钮，或者重置按钮 |
 | disabled       | `boolean`                                                | `false`       | √    | 禁用的                                             |
 | checked        | `boolean`                                                | `false`       | √    | 选中的                                             |
 | defaultChecked | `boolean`                                                | `false`       | √    | 默认选中，表单重置时的默认值，仅表单重置时生效     |

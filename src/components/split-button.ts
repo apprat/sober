@@ -57,18 +57,13 @@ const style = /*css*/`
   }
 }
 
-::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
   width: 20px;
   font-size: 20px;
 }
-::slotted(:is(svg, s-icon)[slot=toggle-icon]){
+::slotted([slot=toggle-icon]){
   width: 20px;
   margin-left: -1px;
-}
-::slotted(:is(svg, s-icon, s-loading, s-spinner)){
-  fill: currentColor;
-  color: currentColor;
-  width: 20px;
 }
 :host([disabled]) .btn{
   pointer-events: none;
@@ -130,6 +125,14 @@ const style = /*css*/`
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
   }
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
+    width: 16px;
+  }
+  svg,
+  ::slotted([slot=toggle-icon]){
+    width: 18px;
+    margin-left: -2px;
+  }
 }
 :host([size=medium]){
   height: 56px;
@@ -138,11 +141,11 @@ const style = /*css*/`
   .layout{
     padding: 0 24px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 24px;
   }
   svg,
-  ::slotted(:is(svg, s-icon)[slot=toggle-icon]){
+  ::slotted([slot=toggle-icon]){
     width: 26px;
     margin-left: -2px;
   }
@@ -169,11 +172,11 @@ const style = /*css*/`
       border-bottom-left-radius: 20px;
     }
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 32px;
   }
   svg,
-  ::slotted(:is(svg, s-icon)[slot=toggle-icon]){
+  ::slotted([slot=toggle-icon]){
     width: 38px;
     margin-left: -3px;
   }
@@ -200,11 +203,11 @@ const style = /*css*/`
       border-bottom-left-radius: 20px;
     }
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 40px;
   }
   svg,
-  ::slotted(:is(svg, s-icon)[slot=toggle-icon]){
+  ::slotted([slot=toggle-icon]){
     width: 50px;
     margin-left: -6px;
   }

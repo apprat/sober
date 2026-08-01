@@ -14,6 +14,15 @@
 <s-spinner indeterminate></s-spinner>
 ```
 
+## 较大的尺寸
+
+设置 `size="large"` 属性定义较大的尺寸。
+
+```html preview
+<s-spinner size="large" value="60"></s-spinner>
+<s-spinner size="large" indeterminate></s-spinner>
+```
+
 进度条会有过渡动画，如果你希望实时的变更进度，可以使用CSS `transition: none` 来禁用过渡。
 
 ```html preview
@@ -25,11 +34,12 @@
 
 ## 属性
 
-| 名称          | 类型    | 默认值 | 同步 | 说明   |
-| ------------- | ------- | ------ | ---- | ------ |
-| indeterminate | boolean | 未知的 | √    | 禁用的 |
-| max           | number  | 100    | ×    | 最大值 |
-| value         | number  | 0      | ×    | 当前值 |
+| 名称          | 类型              | 默认值   | 同步 | 说明   |
+| ------------- | ----------------- | -------- | ---- | ------ |
+| size          | `medium`, `large` | `medium` | √    | 尺寸   |
+| indeterminate | `boolean`         | `false`  | √    | 未知的 |
+| max           | `number`          | `100`    | ×    | 最大值 |
+| value         | `number`          | `0`      | ×    | 当前值 |
 
 ## 样式变量
 

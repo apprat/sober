@@ -15,7 +15,7 @@
 设置 `variant` 来设置不同的变体：`filled`、`elevated`、`tonal`、`outlined`、`text`。
 
 ```html preview
-<s-button variant="filled"> <!-- [!code highlight] -->
+<s-button> <!-- [!code highlight] -->
   <s-icon slot="start"></s-icon>
   Button
 </s-button>
@@ -72,32 +72,49 @@
 </s-button>
 ```
 
-## 复选框
+## 单选和复选框
 
-设置 `type` 属性为 `checkbox`，按钮会允许选中，同时你可以设置 `checked` 属性来默认选中，选中切换时触发 `change` 事件。
+设置 `type` 属性为 `checkbox` 或 `radio`，按钮会允许选中，你可以同时设置 `checked` 属性来默认选中，选中切换时触发 `change` 事件。
 
 ```html preview
-<s-button type="checkbox" checked> <!-- [!code highlight] -->
+<s-button type="checkbox">
   <s-icon slot="start"></s-icon>
   Button
 </s-button>
-
-<s-button type="checkbox" checked variant="elevated"> <!-- [!code highlight] -->
+<s-button type="checkbox" variant="elevated">
   <s-icon slot="start"></s-icon>
   Button
 </s-button>
-
-<s-button type="checkbox" checked variant="tonal"> <!-- [!code highlight] -->
+<s-button type="checkbox" variant="tonal">
   <s-icon slot="start"></s-icon>
   Button
 </s-button>
-
-<s-button type="checkbox" checked variant="outlined"> <!-- [!code highlight] -->
+<s-button type="checkbox" variant="outlined">
   <s-icon slot="start"></s-icon>
   Button
 </s-button>
-
-<s-button type="checkbox" checked variant="text"> <!-- [!code highlight] -->
+<s-button type="checkbox" variant="text"> 
+  <s-icon slot="start"></s-icon>
+  Button
+</s-button>
+<hr>
+<s-button type="radio" name="select">
+  <s-icon slot="start"></s-icon>
+  Button
+</s-button>
+<s-button type="radio" name="select" variant="elevated">
+  <s-icon slot="start"></s-icon>
+  Button
+</s-button>
+<s-button type="radio" name="select" variant="tonal">
+  <s-icon slot="start"></s-icon>
+  Button
+</s-button>
+<s-button type="radio" name="select" variant="outlined">
+  <s-icon slot="start"></s-icon>
+  Button
+</s-button>
+<s-button type="radio" name="select" variant="text"> 
   <s-icon slot="start"></s-icon>
   Button
 </s-button>
@@ -167,16 +184,16 @@
 
 ## 属性
 
-| 名称           | 类型                                                     | 默认值   | 同步 | 说明                                               |
-| -------------- | -------------------------------------------------------- | -------- | ---- | -------------------------------------------------- |
-| variant        | `filled`, `elevated`, `tonal`, `outlined`, `text`        | `filled` | √    | 变体                                               |
-| size           | `small`, `extra-small`, `medium`, `large`, `extra-large` | `small`  | √    | 尺寸                                               |
-| type           | `button`, `checkbox`, `reset`, `submit`                  | `button` | √    | 类型，支持将组件作为复选框，提交按钮，或者重置按钮 |
-| disabled       | `boolean`                                                | `false`  | √    | 禁用的                                             |
-| checked        | `boolean`                                                | `false`  | √    | 选中的                                             |
-| defaultChecked | `boolean`                                                | `false`  | ×    | 默认选中，表单重置时的默认值，仅表单重置时生效     |
-| name           | `string`                                                 | `''`     | √    | 名称，表单提交时的 `key` 值                        |
-| value          | `string`                                                 | `''`     | ×    | 值，表单提交时有效                                 |
+| 名称           | 类型                                                     | 默认值   | 同步 | 说明                                                       |
+| -------------- | -------------------------------------------------------- | -------- | ---- | ---------------------------------------------------------- |
+| variant        | `filled`, `elevated`, `tonal`, `outlined`, `text`        | `filled` | √    | 变体                                                       |
+| size           | `small`, `extra-small`, `medium`, `large`, `extra-large` | `small`  | √    | 尺寸                                                       |
+| type           | `button`, `checkbox`, `radio`, `reset`, `submit`         | `button` | √    | 类型，支持将组件作为复选框，单选框，提交按钮，或者重置按钮 |
+| disabled       | `boolean`                                                | `false`  | √    | 禁用的                                                     |
+| checked        | `boolean`                                                | `false`  | √    | 选中的                                                     |
+| defaultChecked | `boolean`                                                | `false`  | ×    | 默认选中，表单重置时的默认值，仅表单重置时生效             |
+| name           | `string`                                                 | `''`     | √    | 名称，表单提交时的 `key` 值                                |
+| value          | `string`                                                 | `''`     | ×    | 值，表单提交时有效                                         |
 
 ## 事件
 

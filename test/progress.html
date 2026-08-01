@@ -116,50 +116,48 @@
       [0, 750, cubicBezier(.1, 0, .45, 1)],
     ];
     function value(elapsed, delay, duration, easing) {
-      if (elapsed <= delay) return 0;
-      if (elapsed >= delay + duration) return 1;
-      return easing((elapsed - delay) / duration);
+      if (elapsed <= delay) return 0
+      if (elapsed >= delay + duration) return 1
+      return easing((elapsed - delay) / duration)
     }
     function number(value) {
-      return +value.toFixed(5);
+      return +value.toFixed(5)
     }
     function segment(start, end, startGap = 0, endGap = 0) {
-      if (end <= start) return "left:0;width:0;visibility:hidden;";
-      const left = `calc(${number(start * 100)}% + ${startGap}px)`;
-      const width = `max(0px,calc(${number((end - start) * 100)}% - ${startGap + endGap}px))`;
-      return `left:${left};width:${width};visibility:visible;`;
+      if (end <= start) return "left:0;width:0;visibility:hidden;"
+      const left = `calc(${number(start * 100)}% + ${startGap}px)`
+      const width = `max(0px,calc(${number((end - start) * 100)}% - ${startGap + endGap}px))`
+      return `left:${left};width:${width};visibility:visible;`
     }
     function frame(elapsed) {
-      const [lateStart, lateEnd, earlyStart, earlyEnd] = animations.map(
-        ([delay, duration, easing]) => value(elapsed, delay, duration, easing)
-      );
+      const [lateStart, lateEnd, earlyStart, earlyEnd] = animations.map(([delay, duration, easing]) => value(elapsed, delay, duration, easing))
       return [
         segment(0, lateStart, 0, GAP_PX),
         segment(lateStart, lateEnd),
         segment(lateEnd, earlyStart, lateEnd > 0 ? GAP_PX : 0, earlyStart < 1 ? GAP_PX : 0),
         segment(earlyStart, earlyEnd),
         segment(earlyEnd, 1, earlyEnd > 0 ? GAP_PX : 0),
-      ];
+      ]
     }
     function keyframes() {
-      const count = Math.round(ANIMATION_DURATION / 1000 * FPS);
-      const rules = segments.map((_, i) => `@keyframes aui-progress-${i}{`);
+      const count = Math.round(ANIMATION_DURATION / 1000 * FPS)
+      const rules = segments.map((_, i) => `@keyframes aui-progress-${i}{`)
       for (let i = 0; i <= count; i++) {
-        const progress = i / count;
-        const percentage = number(progress * 100);
+        const progress = i / count
+        const percentage = number(progress * 100)
         frame(progress * ANIMATION_DURATION).forEach((style, index) => {
-          rules[index] += `${percentage}%{${style}}`;
-        });
+          rules[index] += `${percentage}%{${style}}`
+        })
       }
-      return rules.map((rule) => `${rule}}`).join("");
+      return rules.map((rule) => `${rule}}`).join("")
     }
     function insertStyle() {
-      const style = document.createElement("style");
-      const rules = segments.map((_, i) => `#progress .segment:nth-child(${i + 1}){animation:aui-progress-${i} ${ANIMATION_DURATION}ms linear infinite both;}`).join("");
-      style.textContent = keyframes() + rules;
-      document.head.append(style);
+      const style = document.createElement("style")
+      const rules = segments.map((_, i) => `#progress .segment:nth-child(${i + 1}){animation:aui-progress-${i} ${ANIMATION_DURATION}ms linear infinite both;}`).join("")
+      style.textContent = keyframes() + rules
+      document.head.append(style)
     }
-    insertStyle();
+    insertStyle()
   </script>
 
 </body>

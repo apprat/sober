@@ -6,7 +6,7 @@ import './ripple.js'
 const props = useProps({
   variant: ['filled', 'elevated', 'tonal', 'outlined', 'text'],
   size: ['small', 'extra-small', 'medium', 'large', 'extra-large'],
-  type: ['button', 'checkbox', 'submit', 'reset'],
+  type: ['button', 'checkbox', 'radio', 'submit', 'reset'],
   disabled: false,
   checked: false,
   name: '',
@@ -59,7 +59,7 @@ const style = /*css*/`
 :host([variant=text]){
   color: ${scheme.color.primary};
 }
-:host([type=checkbox]){
+:host(:is([type=checkbox], [type=radio])){
   &:host(:not([variant])){
     background: ${scheme.color.surfaceContainer};
     color: ${scheme.color.onSurfaceVariant};
@@ -94,7 +94,7 @@ const style = /*css*/`
     }
   }
 }
-::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
   width: 20px;
   font-size: 20px;
 }
@@ -111,7 +111,7 @@ const style = /*css*/`
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: ${scheme.shape.corner.medium};
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 16px;
     font-size: 16px;
   }
@@ -127,7 +127,7 @@ const style = /*css*/`
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: ${scheme.shape.corner.large};
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 24px;
     font-size: 24px;
   }
@@ -144,7 +144,7 @@ const style = /*css*/`
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: ${scheme.shape.corner.extraLarge};
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 32px;
     font-size: 32px;
   }
@@ -161,7 +161,7 @@ const style = /*css*/`
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: ${scheme.shape.corner.extraLarge};
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 40px;
     font-size: 40px;
   }
@@ -184,10 +184,18 @@ export class Button extends useElement({
   setup(_, info) {
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)
     this.addEventListener('click', () => {
+      if (this.type === 'button') return
       if (this.type === 'reset') return info.internals.form?.reset()
       if (this.type === 'submit') return info.internals.form?.requestSubmit()
-      if (this.type !== 'checkbox') return
-      this.checked = !this.checked
+      if (this.type === 'checkbox') this.checked = !this.checked
+      if (this.type === 'radio') {
+        this.checked = true
+        const root = this.getRootNode() as HTMLElement
+        this.name && root.querySelectorAll<typeof this>(`${this.tagName}[name='${this.name}']`).forEach((item) => {
+          if (item === this || !item.checked) return
+          item.checked = false
+        })
+      }
       this.dispatchEvent(new Event('change'))
     })
     return {

@@ -9,7 +9,7 @@ const props = useProps({
   width: ['default', 'wide', 'narrow'],
   disabled: false,
   checked: false,
-  type: ['icon-button', 'checkbox', 'submit', 'reset'],
+  type: ['icon-button', 'checkbox', 'radio', 'submit', 'reset'],
   defaultChecked: false,
   name: '',
   $value: '',
@@ -48,7 +48,7 @@ const style = /*css*/`
     border-radius: inherit;
   }
 }
-:host([type=checkbox]){
+:host(:is([type=checkbox], [type=radio])){
   &:host(:is(:not([variant]), [variant=filled])){
     background: ${scheme.color.surfaceContainer};
     color: ${scheme.color.onSurfaceVariant};
@@ -93,7 +93,7 @@ const style = /*css*/`
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: 12px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 20px;
   }
 }
@@ -119,7 +119,7 @@ const style = /*css*/`
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: 28px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 32px;
   }
 }
@@ -134,7 +134,7 @@ const style = /*css*/`
   &:host([type=checkbox][checked]:not([pressed])){
     border-radius: 28px;
   }
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 40px;
   }
 }
@@ -200,10 +200,18 @@ export class IconButton extends useElement({
   setup(_, info) {
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)
     this.addEventListener('click', () => {
+      if (this.type === 'icon-button') return
       if (this.type === 'reset') return info.internals.form?.reset()
       if (this.type === 'submit') return info.internals.form?.requestSubmit()
-      if (this.type !== 'checkbox') return
-      this.checked = !this.checked
+      if (this.type === 'checkbox') this.checked = !this.checked
+      if (this.type === 'radio') {
+        this.checked = true
+        const root = this.getRootNode() as HTMLElement
+        this.name && root.querySelectorAll<typeof this>(`${this.tagName}[name='${this.name}']`).forEach((item) => {
+          if (item === this || !item.checked) return
+          item.checked = false
+        })
+      }
       this.dispatchEvent(new Event('change'))
     })
     return {

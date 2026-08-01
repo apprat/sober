@@ -1,39 +1,83 @@
-# chip
+# Chip
 
 纸片用于输入信息、进行选择、过滤内容或触发操作。
 
 ```html preview
 <s-chip>
-  <s-icon name="home" slot="start"></s-icon>
-  chip 1
-</s-chip>
-
-<s-chip>
-  <s-circular-progress indeterminate slot="start"></s-circular-progress>
-  chip 2
-</s-chip>
-
-<s-chip>
-  <s-loading indeterminate slot="start"></s-loading>
-  chip 3
-</s-chip>
-
-<s-chip>
-  <s-avatar slot="start">U</s-avatar>
-  chip 3
-  <s-icon name="done" slot="end"></s-icon>
+  <s-loading slot="start"></s-loading>
+  Chip
+  <s-spinner indeterminate slot="end"></s-spinner>
 </s-chip>
 ```
 
-使用 `action` 插槽放置操作按钮
+## 变体
+
+设置 `variant` 来设置不同的变体：`outlined`、`elevated`、`surface`。
 
 ```html preview
-
 <s-chip>
+  <s-icon slot="start"></s-icon>
+  outlined
+</s-chip>
+<s-chip variant="surface">
+  <s-icon slot="start"></s-icon>
+  elevated
+</s-chip>
+<s-chip variant="elevated">
+  <s-icon slot="start"></s-icon>
+  elevated
+</s-chip>
+```
+
+## 可交互的
+
+设置 `clickable` 属性为纸片增加交互。
+
+```html preview
+<s-chip clickable>
+  <s-icon slot="start"></s-icon>
+  outlined
+</s-chip>
+<s-chip variant="surface" clickable>
+  <s-icon slot="start"></s-icon>
+  surface
+</s-chip>
+<s-chip variant="elevated" clickable>
+  <s-icon slot="start"></s-icon>
+  elevated
+</s-chip>
+```
+
+## 单选和复选框
+
+设置 `type` 属性为 `checkbox` 或 `radio`，纸片会允许选中，你可以同时设置 `checked` 属性来默认选中，选中切换时触发 `change` 事件，可设置 `showCheckmark` 属性来显示复选框或单选框的选中图标。
+
+```html preview
+<s-chip type="checkbox" showCheckmark>Java</s-chip>
+<s-chip variant="surface" type="checkbox" showCheckmark checked>Kotlin</s-chip>
+<s-chip variant="elevated" type="checkbox" showCheckmark>JavaScript</s-chip>
+<hr>
+<s-chip type="radio" name="lang">Java</s-chip>
+<s-chip type="radio" name="lang" variant="surface" checked>Kotlin</s-chip>
+<s-chip type="radio" name="lang" variant="elevated">JavaScript</s-chip>
+```
+
+## 可删除的
+
+设置 `deletable` 属性来增加删除按钮，点击删除按钮会触发 `delete` 事件。
+
+```html preview
+<s-chip deletable ondelete="this.remove()"> 
+  <s-icon slot="start"></s-icon>
   chip 1
-  <s-icon-button slot="action">
-    <s-icon name="close"></s-icon>
-  </s-icon-button>
+</s-chip>
+<s-chip deletable variant="surface" ondelete="this.remove()"> 
+  <s-icon slot="start"></s-icon>
+  chip 2
+</s-chip>
+<s-chip deletable variant="elevated" ondelete="this.remove()"> 
+  <s-icon slot="start"></s-icon>
+  chip 3
 </s-chip>
 ```
 
@@ -43,37 +87,52 @@
 
 ```html preview
 <s-chip disabled> 
-  <s-icon name="home" slot="start"></s-icon>
+  <s-icon slot="start"></s-icon>
+  chip 1
+</s-chip>
+<s-chip disabled variant="surface"> 
+  <s-icon slot="start"></s-icon>
+  chip 1
+</s-chip>
+<s-chip disabled variant="elevated"> 
+  <s-icon slot="start"></s-icon>
   chip 1
 </s-chip>
 ```
 
-## 复选框
-
-设置 `type` 属性为 `checkbox`，纸片会允许选中，同时你可以设置 `checked` 属性来默认选中，选中切换时触发 `change` 事件。
+## 使用插槽
 
 ```html preview
-<s-chip type="checkbox">
-  <s-icon name="star" slot="start"></s-icon>
-  chckbox 1
+<s-chip> Actions </s-chip>
+<s-chip>
+  <svg viewBox="0 -960 960 960" slot="start"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"></path></svg>
+  Andorid
 </s-chip>
-
-<s-chip type="checkbox" checked>
-  <s-icon name="star" slot="start"></s-icon>
-  chckbox 2
+<s-chip>
+  <s-loading slot="start"></s-loading>
+  Audio & Video
+</s-chip>
+<s-chip>
+  <s-avatar slot="start">S</s-avatar>
+  Business
+</s-chip>
+<s-chip>
+  <s-spinner indeterminate slot="start"></s-spinner>
+  Business
+  <svg slot="end" viewBox="0 -960 960 960"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path></svg>
 </s-chip>
 ```
 
 ## 表单支持
 
-该组件可以作为表单元素使用，可以作为复选框、表单重置、提交按钮。
+该组件可以作为表单元素使用。
 
 ```html preview
 <form action="/link" method="get">
   选择标签：
   <s-chip name="tag" type="checkbox" value="java"> Java </s-chip>
   <s-chip name="tag" type="checkbox" value="rust"> Rust </s-chip>
-  <s-chip name="tag" type="checkbox" value="python" checked defualtChecked> Python </s-chip>
+  <s-chip name="tag" type="checkbox" value="python" checked defaultChecked> Python </s-chip>
   <hr>
   <s-button type="reset" variant="outlined"> 重置表单 </s-button>
   <s-button type="submit"> 提交结果 </s-button>
@@ -84,29 +143,33 @@
 
 ## 属性
 
-| 名称           | 类型           | 默认值 | 同步 | 说明                                           |
-| -------------- | -------------- | ------ | ---- | ---------------------------------------------- |
-| type           | chip, checkbox | button | √    | 类型，支持将组件作为复选框                     |
-| disabled       | boolean        | false  | √    | 禁用的                                         |
-| checked        | boolean        | false  | √    | 选中的                                         |
-| name           | string         |        | ×    | 名称，表单提交时的 `key` 值                    |
-| defualtChecked | boolean        | false  | ×    | 默认选中，表单重置时的默认值，仅表单重置时生效 |
-| value          | string         |        | ×    | 值，表单提交时有效                             |
+| 名称           | 类型                             | 默认值     | 同步 | 说明                                           |
+| -------------- | -------------------------------- | ---------- | ---- | ---------------------------------------------- |
+| variant        | `outlined`,`elevated`, `surface` | `outlined` | √    | 变体                                           |
+| type           | `chip`, `checkbox`, `radio`      | `chip`     | √    | 类型，支持将组件作为复选框、单选框             |
+| clickable      | `boolean`                        | `false`    | √    | 可交互状态                                     |
+| deletable      | `boolean`                        | `false`    | √    | 可删除状态                                     |
+| disabled       | `boolean`                        | `false`    | √    | 禁用状态                                       |
+| showCheckmark  | `boolean`                        | `false`    | √    | 显示复选框或单选框的选中图标                   |
+| checked        | `boolean`                        | `false`    | √    | 选中状态                                       |
+| name           | `string`                         | `''`       | √    | 名称，表单提交时的 `key` 值                    |
+| defaultChecked | `boolean`                        | `false`    | ×    | 默认选中，表单重置时的默认值，仅表单重置时生效 |
+| value          | `string`                         | `''`       | ×    | 值，表单提交时有效                             |
 
 ## 事件
 
-| 名称   | 参数  | 冒泡 | 可取消 | 说明           |
-| ------ | ----- | ---- | ------ | -------------- |
-| change | Event | ×    | ×      | 选中变更时触发 |
+| 名称   | 参数  | 冒泡 | 可取消 | 说明               |
+| ------ | ----- | ---- | ------ | ------------------ |
+| change | Event | ×    | ×      | 选中变更时触发     |
+| delete | Event | ×    | ×      | 删除按钮点击后触发 |
 
 ## 插槽
 
-| 名称   | 说明                                                                 |
-| ------ | -------------------------------------------------------------------- |
-| 匿名   | 文本                                                                 |
-| start  | 开始，默认支持 svg, s-icon, s-loading, s-circular-progress, s-avatar |
-| end    | 结束，默认支持 svg, s-icon, s-loading, s-circular-progress, s-avatar |
-| action | 操作按钮，默认支持 s-icon-button                                     |
+| 名称  | 说明                                                              |
+| ----- | ----------------------------------------------------------------- |
+| 匿名  | 文本                                                              |
+| start | 开始，默认支持 .icon, svg, s-icon, s-loading, s-spinner, s-avatar |
+| end   | 结束，默认支持 .icon, svg, s-icon, s-loading, s-spinner, s-avatar |
 
 ## HTML 标记属性
 

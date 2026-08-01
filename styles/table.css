@@ -13,11 +13,6 @@ table {
   position: relative;
 }
 
-table>thead {
-  position: sticky;
-  top: 0;
-}
-
 table>thead>tr {
   border-top-style: solid;
   background-color: var(--s-color-surface-container, #edeef0);

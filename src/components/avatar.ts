@@ -12,6 +12,7 @@ const style = /*css*/`
   position: relative;
   font-size: calc(var(--s-font-size, 1) * 24px);
   font-weight: 500;
+  line-height: 1;
   width: 40px;
   border-radius: 50%;
   color: ${scheme.color.onTertiary};

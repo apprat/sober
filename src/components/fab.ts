@@ -4,7 +4,7 @@ import * as scheme from '../core/scheme.js'
 import './ripple.js'
 
 const props = useProps({
-  variant: ['primary', 'secondary', 'tertiary', 'tonal-primary', 'tonal-secondary', 'tonal-tertiary'],
+  variant: ['primary', 'secondary', 'tertiary', 'surface', 'tonal-primary', 'tonal-secondary', 'tonal-tertiary'],
   size: ['small', 'medium', 'large'],
   disabled: false,
   hidden: false
@@ -36,6 +36,10 @@ const style = /*css*/`
   color: ${scheme.color.onTertiary};
   outline-color: ${scheme.color.tertiary};
 }
+:host([variant=surface]){
+  background: ${scheme.color.surfaceContainerHigh};
+  color: ${scheme.color.onSurface};
+}
 :host([variant=tonal-primary]){
   background: ${scheme.color.primaryContainer};
   color: ${scheme.color.onPrimaryContainer};
@@ -66,7 +70,7 @@ const style = /*css*/`
   border-radius: 20px;
   font-size: calc(var(--s-font-size, 1) * 22px);
   padding: 0 26px;
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 28px;
   }
 }
@@ -77,7 +81,7 @@ const style = /*css*/`
   border-radius: 28px;
   font-size: calc(var(--s-font-size, 1) * 24px);
   padding: 0 28px;
-  ::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 36px;
   }
 }

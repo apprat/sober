@@ -11,12 +11,12 @@
 
 ```html preview
 <s-switch>
-  <s-icon name="close" slot="unselected"></s-icon>
-  <s-icon name="done" slot="selected"></s-icon>
+  <s-icon slot="unselected"></s-icon>
+  <s-icon slot="selected"></s-icon>
 </s-switch>
 <s-switch checked>
-  <s-icon name="close" slot="unselected"></s-icon>
-  <s-icon name="done" slot="selected"></s-icon>
+  <s-icon slot="unselected"></s-icon>
+  <s-icon slot="selected"></s-icon>
 </s-switch>
 ```
 
@@ -24,12 +24,12 @@
 
 ```html preview
 <s-switch disabled>
-  <s-icon name="close" slot="unselected"></s-icon>
-  <s-icon name="done" slot="selected"></s-icon>
+  <s-icon slot="unselected"></s-icon>
+  <s-icon slot="selected"></s-icon>
 </s-switch>
 <s-switch checked disabled>
-  <s-icon name="close" slot="unselected"></s-icon>
-  <s-icon name="done" slot="selected"></s-icon>
+  <s-icon slot="unselected"></s-icon>
+  <s-icon slot="selected"></s-icon>
 </s-switch>
 ```
 
@@ -39,12 +39,12 @@
 
 ```html preview
 <s-switch readOnly>
-  <s-icon name="close" slot="unselected"></s-icon>
-  <s-icon name="done" slot="selected"></s-icon>
+  <s-icon slot="unselected"></s-icon>
+  <s-icon slot="selected"></s-icon>
 </s-switch>
 <s-switch checked readOnly>
-  <s-icon name="close" slot="unselected"></s-icon>
-  <s-icon name="done" slot="selected"></s-icon>
+  <s-icon slot="unselected"></s-icon>
+  <s-icon slot="selected"></s-icon>
 </s-switch>
 ```
 

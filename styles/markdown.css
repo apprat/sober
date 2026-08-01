@@ -16,6 +16,7 @@ a {
   color: var(--s-color-primary);
   text-decoration: none;
   position: relative;
+  font-family: system-ui;
 }
 
 a::before {

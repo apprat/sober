@@ -1,93 +1,188 @@
-import { useElement, useProps } from '../core/elements.js'
+import { useElement, useProps, focusKeydownClick } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { buttonStyle } from '../core/style/button.js'
 import './ripple.js'
 
 const props = useProps({
-  variant: ['assist', 'filter', 'input'],
-  type: ['chip', 'checkbox'],
+  variant: ['outlined', 'elevated', 'surface'],
+  type: ['chip', 'checkbox', 'radio'],
   disabled: false,
   checked: false,
-  readOnly: false,
+  clickable: false,
+  showCheckmark: false,
+  deletable: false,
   name: '',
   $defaultChecked: false,
   $value: '',
 })
+const events = {
+  delete: Event
+}
 
 const style = /*css*/`
 :host{
   gap: 8px;
   height: 32px;
-  border-radius: 8px;
   padding: 0 16px;
-  &::before{
+  cursor: auto;
+  color: ${scheme.color.onSurface};
+  border-radius: ${scheme.shape.corner.small};
+  .ripple{
+    --s-ripple-disabled: true;
+    --s-ripple-disabled-hover: true;
+  }
+}
+:host(:not([variant])){
+  &::after{
     content: '';
     position: absolute;
     border-radius: inherit;
     inset: 0;
+    pointer-events: none;
     border: 1px solid ${scheme.color.outlineVariant};
   }
 }
-:host([type=checkbox]){
+:host([variant=elevated]){
+  background: ${scheme.color.surfaceContainerLow};
+  box-shadow: ${scheme.elevation.level1};
+}
+:host([variant=surface]){
+  background: ${scheme.color.surfaceContainerHigh};
+}
+:host(:is([clickable], [type])){
+  cursor: pointer;
+  .ripple{
+    --s-ripple-disabled: none;
+    --s-ripple-disabled-hover: none;
+  }
+}
+:host(:is([type=checkbox], [type=radio])){
   &:host([checked]){
     background: ${scheme.color.secondaryContainer};
     color: ${scheme.color.onSecondaryContainer};
     outline-color: ${scheme.color.primary};
-    &::before{
+    &::after{
       content: none;
     }
   }
+  &:host([showCheckmark]){
+    &:host([checked]) .icon-checked{
+      width: 18px;
+      margin-left: -8px;
+      margin-right: 0px;
+    }
+    .icon-checked{
+      display: block;
+      width: 0px;
+      margin-right: -8px;
+      contain: layout style;
+    }
+  }
 }
-::slotted(:is(svg, s-icon, s-loading, s-spinner)){
+:host([deletable]){
+  .delete{
+    display: flex;
+    width: 24px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    margin-right: -11px;
+    margin-left: -3px;
+    outline-offset: 0;
+    svg{
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+.delete,
+.icon-checked{
+  display: none;
+}
+:host([disabled]){
+  svg,
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
+    color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
+  }
+}
+::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
   width: 18px;
+  font-size: 18px;
+  color: ${scheme.color.primary};
 }
-::slotted(:is(svg, s-icon, s-loading, s-spinner)[slot=start]){
-  margin-left: -8px;
+::slotted([slot=start]){
+  margin-left: -4px;
 }
-::slotted(:is(svg, s-icon, s-loading, s-spinner)[slot=end]){
-  margin-right: -8px;
+::slotted([slot=end]){
+  margin-right: -4px;
 }
 ::slotted(s-avatar){
   width: 24px;
-  height: 24px;
   font-size: calc(var(--s-font-size, 1) * 12px);
 }
 ::slotted(s-avatar[slot=start]){
-  margin-left: -12px;
+  margin-left: -10px;
 }
 ::slotted(s-avatar[slot=end]){
-  margin-right: -12px;
+  margin-right: -10px;
 }
-::slotted(s-icon-button[slot=action]){
-  width: 24px;
-  height: 24px;
-  margin-right: -11px;
-  margin-left: -3px;
-  padding: 3px;
+@supports not (color: color-mix(in srgb, black, white)){
+  :host([disabled]){
+    svg,
+    ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
+      color: ${scheme.color.outline} !important;
+    }
+  }
 }
 `
 
 const template = /*html*/`
+<svg viewBox="0 -960 960 960" class="icon-checked" part="icon-checked">
+  <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path>
+</svg>
 <slot name="start"></slot>
-<slot></slot>
+<div class="text" part="text">
+  <slot></slot>
+</div>
 <slot name="end"></slot>
-<slot name="action"></slot>
-<s-ripple></s-ripple>
+<div class="delete" part="delete" tabindex="0">
+  <slot name="delete-icon">
+    <svg viewBox="0 -960 960 960">
+      <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"></path>
+    </svg>
+  </slot>
+  <s-ripple></s-ripple>
+</div>
+<s-ripple class="ripple" part="ripple"></s-ripple>
 `
 
 export class Chip extends useElement({
   style: [buttonStyle, style],
   states: ['focusable', 'formable'],
-  template, props,
+  template, props, events,
   setup(shadowRoot, info) {
-    const action = shadowRoot.querySelector<HTMLSlotElement>('slot[name=action]')!
-    action.onpointerdown = (e) => e.stopPropagation()
+    const deleteEl = shadowRoot.querySelector<HTMLSlotElement>('.delete')!
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)
     this.addEventListener('click', () => {
-      if (this.type !== 'checkbox') return
-      this.checked = !this.checked
+      if (!['checkbox', 'radio'].includes(this.type)) return
+      if (this.type === 'checkbox') {
+        this.checked = !this.checked
+        this.dispatchEvent(new Event('change'))
+        return
+      }
+      this.checked = true
       this.dispatchEvent(new Event('change'))
+      this.name && (this.getRootNode() as HTMLElement).querySelectorAll<typeof this>(`${this.tagName}[name='${this.name}']`).forEach((item) => {
+        if (item === this || !item.checked) return
+        item.checked = false
+      })
     })
+    deleteEl.onpointerdown = (e) => e.stopPropagation()
+    deleteEl.onclick = () => this.dispatchEvent(new CustomEvent('delete'))
+    focusKeydownClick(deleteEl)
     return {
       onFormReset: () => this.checked = this.defaultChecked,
       onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom(),

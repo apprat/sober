@@ -26,6 +26,10 @@
 <s-fab variant="tonal-tertiary">
   <s-icon></s-icon>
 </s-fab>
+
+<s-fab variant="surface">
+  <s-icon></s-icon>
+</s-fab>
 ```
 
 使用其他组件作为插槽。
@@ -65,6 +69,10 @@
 </s-fab>
 
 <s-fab variant="tonal-tertiary" disabled> <!-- [!code highlight] -->
+  <s-icon></s-icon>
+</s-fab>
+
+<s-fab variant="surface" disabled> <!-- [!code highlight] -->
   <s-icon></s-icon>
 </s-fab>
 ```
@@ -133,12 +141,12 @@
 
 ## 属性
 
-| 名称     | 类型                                                                                     | 默认值    | 同步 | 说明   |
-| -------- | ---------------------------------------------------------------------------------------- | --------- | ---- | ------ |
-| variant  | `primary`, `secondary`, `tertiary`, `tonal-primary`, `tonal-secondary`, `tonal-tertiary` | `primary` | √    | 变体   |
-| size     | `small`, `medium`, `large`                                                               | `small`   | √    | 尺寸   |
-| disabled | `boolean`                                                                                | `false`   | √    | 禁用的 |
-| hidden   | `boolean`                                                                                | `false`   | √    | 隐藏的 |
+| 名称     | 类型                                                                                                | 默认值    | 同步 | 说明   |
+| -------- | --------------------------------------------------------------------------------------------------- | --------- | ---- | ------ |
+| variant  | `primary`, `secondary`, `tertiary`, `surface`, `tonal-primary`, `tonal-secondary`, `tonal-tertiary` | `primary` | √    | 变体   |
+| size     | `small`, `medium`, `large`                                                                          | `small`   | √    | 尺寸   |
+| disabled | `boolean`                                                                                           | `false`   | √    | 禁用的 |
+| hidden   | `boolean`                                                                                           | `false`   | √    | 隐藏的 |
 
 ## 插槽
 

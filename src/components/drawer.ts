@@ -30,9 +30,11 @@ const style = /*css*/`
     position: absolute;
     max-width: 80%;
     transition-property: box-shadow;
+    border-radius: 0 ${scheme.shape.corner.large} ${scheme.shape.corner.large} 0;
   }
   ::slotted([slot=end]){
     right: 0;
+    border-radius: ${scheme.shape.corner.large} 0 0 ${scheme.shape.corner.large};
   }
   &:host(:is([startModalOpen], [endModalOpen])) .scrim{
     pointer-events: auto;

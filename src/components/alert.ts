@@ -4,25 +4,39 @@ import { useComputedStyle } from '../core/utils/CSS.js'
 import './ripple.js'
 
 const props = useProps({
-  variant: ['info', 'success', 'warning', 'error'],
+  variant: ['surface', 'info', 'success', 'warning', 'error'],
   collapsed: false,
-  open: false
+  open: false,
+  closable: false
 })
 
 const style = /*css*/`
 :host{
   display: flex;
+  flex-wrap: wrap;
   padding: 12px 16px;
-  font-weight: 500;
   min-height: 48px;
-  border-radius: 12px;
-  word-break: break-all;
+  position: relative;
   line-height: calc(100% + 8px);
   font-size: calc(var(--s-font-size, 1) * 14px);
-  color: ${scheme.color.onSecondaryContainer};
-  background: ${scheme.color.secondaryContainer};
+  border-radius: ${scheme.shape.corner.small};
+  background: ${scheme.color.surfaceContainerHigh};
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
+}
+:host(:not([variant])){
+  &::after{
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    border: solid var(--s-border-min, 1px) ${scheme.color.surfaceVariant};
+  }
+}
+:host([variant=info]){
+  color: ${scheme.color.onSecondaryContainer};
+  background: ${scheme.color.secondaryContainer};
 }
 :host([variant=success]){
   color: ${scheme.color.onSuccessContainer};
@@ -36,158 +50,165 @@ const style = /*css*/`
   color: ${scheme.color.onErrorContainer};
   background: ${scheme.color.errorContainer};
 }
-.icon{
-  display: none;
-  margin-right: 14px;
-}
-svg{
-  width: 24px;
-  height: 24px;
-  fill: currentColor;
+.btn{
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
   flex-shrink: 0;
+  &[pressed]{
+    border-radius: ${scheme.shape.corner.small};
+  }
+  svg,
+  ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
+    width: 20px;
+    font-size: 20px;
+  }
+  ::slotted(:is(.icon, svg, s-icon, ms-icon)){
+    transition-duration: inherit;
+    transition-timing-function: inherit;
+  }
 }
-:host(:not([variant])) .info,
-:host([variant=success]) .success,
-:host([variant=warning]) .warning,
-:host([variant=error]) .error{
-  display: block;
+.layout{
+  display: contents;
 }
 .text{
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 4px;
   flex-grow: 1;
   min-width: 0;
-  text-align: left;
+  flex-basis: 0;
   user-select: text;
   -webkit-user-select: text;
+  .title{
+    display: contents;
+    min-width: 0;
+  }
   .content{
-    display: block;
     overflow: hidden;
     contain: layout;
   }
 }
-.toggle{
-  display: none;
+.actions{
+  display: flex;
+  gap: 0;
+  height: fit-content;
+  margin-top: -4px;
+  margin-bottom: -4px;
   position: relative;
-  cursor: pointer;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  margin: -4px -8px -4px 4px;
-  transition-property: border-radius;
-  color: ${scheme.color.primary};
-  &[pressed]{
-    border-radius: 8px;
-  }
-  svg,
-  ::slotted(:is(s-icon, svg)[slot=toggle-icon]){
-    transition-duration: inherit;
-    transition-timing-function: inherit;
-    width: 20px;
-    height: 20px;
-  }
+  right: -8px;
 }
 :host([collapsed]){
-  &:host(:not([open])) .text>.content{
+  .has-title{
+    .text{
+      display: contents;
+    }
+    .title{
+      display: flex;
+      flex-grow: 1;
+      flex-basis: 0;
+    }
+    .content{
+      flex-basis: 100%;
+      order: 1;
+      .content-wrap{
+        padding-top: 4px;
+      }
+    }
+    .toggle{
+      display: flex;
+    }
+  }
+  &:host(:not([open])) .has-title .content{
     display: none;
   }
-  &:host([open]) .toggle{
-    svg,
-    ::slotted(:is(s-icon, svg)[slot=toggle-icon]){
+  &:host([open]){
+    .toggle svg,
+    ::slotted(:is(.icon, svg, s-icon, ms-icon)[slot=toggle-icon]){
       transform: rotate(-180deg);
     }
   }
-  .toggle{
+}
+:host([closable]){
+  .close{
     display: flex;
   }
-}
-::slotted(*){
-  flex-shrink: 0;
-}
-::slotted(:is(svg, s-icon)){
-  fill: currentColor;
-  color: currentColor;
-  width: 24px;
-  height: 24px;
-}
-::slotted(:is(svg, s-icon)[slot=icon]){
-  margin-right: 14px;
 }
 ::slotted([slot=title]){
   font-weight: 500;
   font-size: calc(var(--s-font-size, 1) * 16px);
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  overflow: clip visible;
-  line-height: 1;
-  padding: 16px 0;
+  padding: 12px 0;
   margin: -12px 0;
 }
-::slotted(s-button){
-  min-width: 0;
-  padding: 0 8px;
-  margin: -4px -8px -4px 8px;
+::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
+  width: 24px;
+  font-size: 24px;
 }
-::slotted(s-icon-button){
-  margin: -4px -8px -4px 4px;
-  color: ${scheme.color.primary};
+::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)[slot=start]){
+  margin-right: 8px;
 }
 `
 const template = /*html*/`
-<slot name="start"></slot>
-<slot name="icon">
-  <svg viewBox="0 0 24 24" class="icon info">
-    <path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20, 12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10, 10 0 0,0 12,2M11,17H13V11H11V17Z"></path>
-  </svg>
-  <svg viewBox="0 0 24 24" class="icon success">
-    <path d="M20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4C12.76,4 13.5,4.11 14.2, 4.31L15.77,2.74C14.61,2.26 13.34,2 12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0, 0 22,12M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"></path>
-  </svg>
-  <svg viewBox="0 0 24 24" class="icon warning">
-    <path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"></path>
-  </svg>
-  <svg viewBox="0 0 24 24" class="icon error">
-    <path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path>
-  </svg>
-</slot>
-<div class="text" part="text">
-  <slot name="title"></slot>
-  <slot class="content" part="content"></slot>
-</div>
-<slot name="toggle-button">
-  <div class="toggle" part="toggle" tabindex="0" role="button" aria-label="toggle">
-    <slot name="toggle"></slot>
-    <slot name="toggle-icon">
-      <svg viewBox="0 -960 960 960">
-        <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"></path>
-      </svg>
-    </slot>
-    <s-ripple></s-ripple>
+<div class="layout" part="layout">
+  <slot name="start"></slot>
+  <div class="text" part="text">
+    <div class="title" part="title">
+      <slot name="title"></slot>
+    </div>
+    <div class="content" part="content">
+      <div class="content-wrap" part="content-wrap">
+        <slot></slot>
+      </div>
+    </div>
   </div>
-</slot>
-<slot name="action"></slot>
-<slot name="end"></slot>
+  <div class="actions hide" part="actions">
+    <div class="btn toggle hide" part="toggle" tabindex="0" role="button" aria-label="toggle">
+      <slot name="toggle-icon">
+        <svg viewBox="0 -960 960 960">
+          <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"></path>
+        </svg>
+      </slot>
+      <s-ripple></s-ripple>
+    </div>
+    <div class="btn close hide" part="close" tabindex="0" role="button" aria-label="close">
+      <slot name="close-icon">
+        <svg viewBox="0 -960 960 960">
+          <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"></path>
+        </svg>
+      </slot>
+      <s-ripple></s-ripple>
+    </div>
+  </div>
+  <slot name="end"></slot>
+</div>
 `
 
 export class Alert extends useElement({
   style, props, template,
   setup(shadowRoot, info) {
-    const toggleBtn = shadowRoot.querySelector<HTMLSlotElement>('slot[name=toggle-button]')!
+    const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
+    const titleSlot = shadowRoot.querySelector<HTMLSlotElement>('[name=title]')!
     const toggle = shadowRoot.querySelector<HTMLSlotElement>('.toggle')!
+    const close = shadowRoot.querySelector<HTMLSlotElement>('.close')!
     const content = shadowRoot.querySelector<HTMLSlotElement>('.content')!
     const computedStyle = useComputedStyle(this)
-    toggleBtn.onclick = () => {
+    toggle.onclick = () => {
       this.open = !this.open
       this.dispatchEvent(new Event('toggle'))
     }
-    focusKeydownClick(toggle)
+    close.onclick = () => {
+      this.dispatchEvent(new Event('close'))
+    }
+    focusKeydownClick(toggle, close)
+    titleSlot.addEventListener('slotchange', () => layout.classList.toggle('has-title', titleSlot.assignedNodes().length > 0))
     return {
       open: async (v) => {
-        if (!info.isConnected || !this.collapsed) return
+        if (!info.isConnected || !this.collapsed || !layout.classList.contains('has-title')) return
         const [old] = content.getAnimations()
         if (old) return old.reverse()
         content.style.display = 'block'

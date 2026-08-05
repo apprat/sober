@@ -58,6 +58,12 @@ const style = /*css*/`
   &:host([endOpen=false]) .end{
     display: none;
   }
+  ::slotted([slot=start]){
+    border-right-style: solid;
+  }
+  ::slotted([slot=end]){
+    border-left-style: solid;
+  }
 }
 .view{
   display: block;
@@ -100,6 +106,8 @@ const style = /*css*/`
   align-self: stretch;
   overflow: auto;
   background: ${scheme.color.surfaceContainerLow};
+  border-width: 1px;
+  border-color: ${scheme.color.surfaceVariant};
 }
 `
 const template = /*html*/`

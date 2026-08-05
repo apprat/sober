@@ -52,8 +52,8 @@ const style = /*css*/`
     position: absolute;
     pointer-events: none;
     inset: 0;
-    border: solid 1px ${scheme.color.outlineVariant};
     border-radius: inherit;
+    border: solid var(--s-border-min, 1px) ${scheme.color.outlineVariant};
   }
 }
 :host([variant=text]){

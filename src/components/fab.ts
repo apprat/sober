@@ -17,7 +17,7 @@ const style = /*css*/`
   padding: 0 16px;
   gap: 8px;
   font-size: calc(var(--s-font-size, 1) * 16px);
-  border-radius: 16px;
+  border-radius: ${scheme.shape.corner.large};
   transition-property: height, min-width, color, background-color, box-shadow, padding, gap, border-radius, font-size, transform;
   box-shadow: ${scheme.elevation.level3};
 }

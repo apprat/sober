@@ -66,12 +66,12 @@
 </s-card>
 ```
 
-## 只读的
+## 可交互的
 
-设置 `readOnly` 属性，卡片禁用点击交互，如果卡片中有其他可以触发波纹的组件。
+设置 `clickable` 属性为纸片增加交互。
 
 ```html preview
-<s-card readOnly>
+<s-card clickable>
   <s-avatar slot="header-avatar">U</s-avatar>
   <div slot="header-title">Header Title</div>
   <div slot="header-subtitle">Header SubTitle</div>
@@ -95,11 +95,11 @@
 
 ## 属性
 
-| 名称     | 类型                       | 默认值   | 同步 | 说明   |
-| -------- | -------------------------- | -------- | ---- | ------ |
-| variant  | elevated, filled, outlined | elevated | √    | 变体   |
-| readOnly | boolean                    | false    | √    | 只读的 |
-| disabled | boolean                    | false    | √    | 禁用的 |
+| 名称      | 类型                             | 默认值     | 同步 | 说明     |
+| --------- | -------------------------------- | ---------- | ---- | -------- |
+| variant   | `elevated`, `filled`, `outlined` | `elevated` | √    | 变体     |
+| clickable | `boolean`                        | `false`    | √    | 可交互的 |
+| disabled  | `boolean`                        | `false`    | √    | 禁用的   |
 
 ## 插槽
 

@@ -63,14 +63,14 @@
 
 ## 使用插槽
 
-使用插槽放置其他组件，`toggle-icon` 插槽的 `svg`、`s-icon` 会在切换时旋转 `-180` 度。
+使用插槽放置其他组件，`toggle-icon` 插槽的会在切换时旋转 `-180` 度。
 
 ```html preview
 <s-split-button>
   <s-icon slot="start"></s-icon>
   label
   <svg slot="toggle-icon" viewBox="0 -960 960 960"><path d="M480-360 280-560h400L480-360Z"></path></svg>
-  <s-tooltip slot="toggle" parentDepth="1">展开</s-tooltip>
+  <s-tooltip slot="toggle-icon" parentDepth="1">展开</s-tooltip>
 </s-split-button>
 ```
 
@@ -124,13 +124,12 @@
 
 ## 插槽
 
-| 名称        | 说明                                                     |
-| ----------- | -------------------------------------------------------- |
-| 匿名        | 按钮文本                                                 |
-| start       | 开始，默认支持 svg, s-icon, s-loading, s-spinner         |
-| end         | 结束，默认支持 svg, s-icon, s-loading, s-spinner         |
-| toggle      | 切换按钮内容                                             |
-| toggle-icon | 切换按钮图标，默认支持 svg, s-icon, s-loading, s-spinner |
+| 名称        | 说明                                                                                  |
+| ----------- | ------------------------------------------------------------------------------------- |
+| 匿名        | 按钮文本，默认支持文本, `.icon`, `svg`, `s-icon`, `s-loading`, `s-spinner`, `ms-icon` |
+| start       | 开始，默认同匿名                                                                      |
+| end         | 结束，默认支持同匿名                                                                  |
+| toggle-icon | 切换按钮图标，默认支持同匿名                                                          |
 
 ## 键盘快捷键
 

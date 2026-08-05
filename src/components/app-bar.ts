@@ -22,7 +22,7 @@ const style = /*css*/`
     position: absolute;
     inset: 0;
     pointer-events: none;
-    border-bottom: solid 1px ${scheme.color.surfaceVariant};
+    border-bottom: solid var(--s-border-min, 1px) ${scheme.color.surfaceVariant};
   }
 }
 .layout{

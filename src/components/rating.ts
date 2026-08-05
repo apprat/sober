@@ -81,13 +81,12 @@ const style = /*css*/`
   }
 }
 svg,
-::slotted(:is(svg, s-icon)){
+::slotted(:is(.icon, svg, s-icon, ms-icon)){
   flex-shrink: 0;
   height: 100%;
   width: auto;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
-  fill: currentColor;
   color: currentColor;
 }
 :host(:focus-visible){

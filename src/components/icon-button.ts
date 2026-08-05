@@ -22,11 +22,10 @@ const style = /*css*/`
   width: 40px;
   height: 40px;
   font-size: calc(var(--s-font-size, 1) * 24px);
-  transition-property: height, width, color, background-color, padding, border-radius;
   color: ${scheme.color.onSurfaceVariant};
 }
 :host([pressed]){
-  border-radius: 8px;
+  border-radius: ${scheme.shape.corner.small};
 }
 :host([variant=filled]){
   background: ${scheme.color.primary};
@@ -44,7 +43,7 @@ const style = /*css*/`
     position: absolute;
     pointer-events: none;
     inset: 0;
-    border: solid 1px ${scheme.color.outlineVariant};
+    border: solid var(--s-border-min, 1px) ${scheme.color.outlineVariant};
     border-radius: inherit;
   }
 }
@@ -55,7 +54,7 @@ const style = /*css*/`
   }
   &:host([checked]){
     &:host(:not([pressed])){
-      border-radius: 12px;
+      border-radius: ${scheme.shape.corner.medium};
     }
     &:host(:not([variant])){
       background: ${scheme.color.primaryContainer};
@@ -88,10 +87,10 @@ const style = /*css*/`
   border-radius: 16px;
   font-size: calc(var(--s-font-size, 1) * 20px);
   &:host([pressed]){
-    border-radius: 8px;
+    border-radius: ${scheme.shape.corner.small};
   }
   &:host([type=checkbox][checked]:not([pressed])){
-    border-radius: 12px;
+    border-radius: ${scheme.shape.corner.medium};
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 20px;
@@ -102,10 +101,10 @@ const style = /*css*/`
   width: 56px;
   border-radius: 28px;
   &:host([pressed]){
-    border-radius: 12px;
+    border-radius: ${scheme.shape.corner.medium};
   }
   &:host([type=checkbox][checked]:not([pressed])){
-    border-radius: 16px;
+    border-radius: ${scheme.shape.corner.large};
   }
 }
 :host([size=large]){
@@ -114,10 +113,10 @@ const style = /*css*/`
   border-radius: 48px;
   font-size: calc(var(--s-font-size, 1) * 32px);
   &:host([pressed]){
-    border-radius: 16px;
+    border-radius: ${scheme.shape.corner.large};
   }
   &:host([type=checkbox][checked]:not([pressed])){
-    border-radius: 28px;
+    border-radius: ${scheme.shape.corner.extraLarge};
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 32px;
@@ -129,10 +128,10 @@ const style = /*css*/`
   border-radius: 68px;
   font-size: calc(var(--s-font-size, 1) * 40px);
   &:host([pressed]){
-    border-radius: 16px;
+    border-radius: ${scheme.shape.corner.small};
   }
   &:host([type=checkbox][checked]:not([pressed])){
-    border-radius: 28px;
+    border-radius: ${scheme.shape.corner.medium};
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 40px;
@@ -175,7 +174,7 @@ const style = /*css*/`
     height: 136px;
   }
 }
-::slotted(:is(svg, s-icon, s-loading, s-spinner)) {
+::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)) {
   flex-shrink: 1;
 }
 ::slotted(s-badge){

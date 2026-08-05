@@ -37,16 +37,16 @@
   "license": "MIT",
   "main": "./dist/main.js",
   "devDependencies": {
-    "@shikijs/transformers": "^4.2.0",
+    "@shikijs/transformers": "^4.4.1",
     "cssnano": "^8.0.2",
     "esbuild": "^0.28.1",
     "html-minifier": "^4.0.0",
-    "markdown-it": "^14.2.0",
-    "postcss": "^8.5.15",
+    "markdown-it": "^14.3.0",
+    "postcss": "^8.5.25",
     "postcss-nested": "^7.0.2",
-    "shiki": "^4.2.0",
-    "typescript": "^6.0.3",
-    "postcss-safe-parser": "^7.0.1"
+    "postcss-safe-parser": "^7.0.1",
+    "shiki": "^4.4.1",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "@material/material-color-utilities": "^0.4.0"

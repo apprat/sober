@@ -74,7 +74,7 @@ const style = /*css*/`
 :host([checked]) .toggle{
   border-radius: inherit;
   svg,
-  ::slotted(:is(s-icon, svg)[slot=toggle-icon]){
+  ::slotted(:is(.icon, s-icon, svg, ms-icon)[slot=toggle-icon]){
     transform: rotate(-180deg);
     margin-left: 0;
   }
@@ -103,7 +103,7 @@ const style = /*css*/`
       position: absolute;
       pointer-events: none;
       inset: 0;
-      border: solid 1px ${scheme.color.outlineVariant};
+      border: solid var(--s-border-min, 1px) ${scheme.color.outlineVariant};
       border-radius: inherit;
     }
   }
@@ -231,7 +231,6 @@ const template = /*html*/`
   <s-ripple></s-ripple>
 </div>
 <div class="toggle btn" part="toggle" tabindex="0" role="toggle">
-  <slot name="toggle"></slot>
   <slot name="toggle-icon">
     <svg viewBox="0 -960 960 960">
       <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"></path>

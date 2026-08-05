@@ -26,7 +26,7 @@ a::before {
   width: 100%;
   transform: scaleX(0);
   opacity: 0;
-  border-bottom: solid 1px currentColor;
+  border-bottom: solid var(--s-border-min, 1px) currentColor;
   transition-property: transform, opacity;
   transition-duration: var(--s-motion-duration-short4);
   transition-timing-function: var(--s-motion-easing-standard);
@@ -118,7 +118,7 @@ ol>li::before {
 
 hr {
   border: none;
-  border-top: solid 1px var(--s-color-surface-container-highest);
+  border-top: solid var(--s-border-min, 1px) var(--s-color-surface-container-highest);
 }
 
 code {
@@ -135,7 +135,7 @@ code {
 pre {
   display: block;
   background: var(--s-color-surface-container);
-  border: solid 1px var(--s-color-surface-container-highest);
+  border: solid var(--s-border-min, 1px) var(--s-color-surface-container-highest);
   color: var(--s-color-on-surface);
   box-sizing: border-box;
   overflow: auto;

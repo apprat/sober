@@ -10,43 +10,49 @@ table {
   font-size: calc(var(--s-font-size, 1) * 14px);
   line-height: calc(100% + 8px);
   white-space: nowrap;
+  overscroll-behavior-x: none;
   position: relative;
-}
-
-table>thead>tr {
+  border-width: var(--s-border-min, 1px);
+  border-color: var(--s-color-surface-variant, #dde3ea);
   border-top-style: solid;
-  background-color: var(--s-color-surface-container, #edeef0);
-}
-
-
-tbody tr:nth-child(even) {
-  background: var(--s-color-surface-container-low);
-}
-
-table tr {
-  border-width: 1px;
   border-bottom-style: solid;
-  border-color: var(--s-color-surface-variant, #dce3e9);
-  background-color: var(--s-color-background, #fafbfc);
 }
 
-table tr>th {
+thead>tr>th {
   text-align: left;
   font-weight: 500;
   padding-top: 16px;
   padding-bottom: 16px;
   font-size: calc(var(--s-font-size, 1) * 15px);
+  background-color: var(--s-color-surface-container, #edeef0);
 }
 
-table :is(td, th):first-child {
+td {
+  position: relative;
+}
+
+td::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-width: c;
+  border-color: var(--s-color-surface-variant, #dde3ea);
+  border-top-style: solid;
+}
+
+tbody>tr:nth-child(even)>td {
+  background: var(--s-color-surface-container-low);
+}
+
+:is(td, th):first-child {
   padding-left: 16px;
 }
 
-table :is(td, th):last-child {
+:is(td, th):last-child {
   width: 100%;
   padding-right: 16px;
 }
 
-table :is(th, td) {
+:is(th, td) {
   padding: 12px 8px;
 }

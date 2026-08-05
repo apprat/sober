@@ -15,21 +15,28 @@
     }
 
     .test {
-      height: 4px;
-      padding: 0 2px;
-      background: #eee;
+      display: flex;
+      flex-wrap: wrap;
+      background: #114922;
+    }
 
-      svg {
-        display: block;
-        height: 100%;
-        overflow: visible;
+    .b {
+      display: contents;
+      background: #841010;
 
-        line {
-          stroke: #009688;
-          stroke-width: 4;
-          stroke-linecap: round;
-        }
+      .ba {
+        flex-grow: 1;
       }
+
+      .bb {
+        flex-basis: 100%;
+        order: 1;
+        background: #2d0a4f;
+      }
+    }
+
+    .c {
+      background: #0a4f2d;
     }
   </style>
 </head>
@@ -37,11 +44,12 @@
 <body>
 
   <div class="test">
-    <svg width="100%" height="4" xmlns="http://www.w3.org/2000/svg">
-      <line x1="0" y1="2" x2="100%" y2="2" pathLength="100" />
-      <line x1="0" y1="2" x2="100%" y2="2" pathLength="100"
-        style="stroke:#336699; stroke-dasharray: 100;stroke-dashoffset: -50;" />
-    </svg>
+    <div class="a">a</div>
+    <div class="b">
+      <div class="ba">ba</div>
+      <div class="bb">bb</div>
+    </div>
+    <div class="c">c</div>
   </div>
 </body>
 

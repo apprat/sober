@@ -8,16 +8,13 @@ const props = useProps({
   type: ['chip', 'checkbox', 'radio'],
   disabled: false,
   checked: false,
+  closable: false,
   clickable: false,
   showCheckmark: false,
-  deletable: false,
   name: '',
   $defaultChecked: false,
   $value: '',
 })
-const events = {
-  delete: Event
-}
 
 const style = /*css*/`
 :host{
@@ -28,8 +25,7 @@ const style = /*css*/`
   color: ${scheme.color.onSurface};
   border-radius: ${scheme.shape.corner.small};
   .ripple{
-    --s-ripple-disabled: true;
-    --s-ripple-disabled-hover: true;
+    display: none;
   }
 }
 :host(:not([variant])){
@@ -39,7 +35,7 @@ const style = /*css*/`
     border-radius: inherit;
     inset: 0;
     pointer-events: none;
-    border: 1px solid ${scheme.color.outlineVariant};
+    border: solid var(--s-border-min, 1px) ${scheme.color.outlineVariant};
   }
 }
 :host([variant=elevated]){
@@ -52,8 +48,7 @@ const style = /*css*/`
 :host(:is([clickable], [type])){
   cursor: pointer;
   .ripple{
-    --s-ripple-disabled: none;
-    --s-ripple-disabled-hover: none;
+    display: block;
   }
 }
 :host(:is([type=checkbox], [type=radio])){
@@ -79,8 +74,8 @@ const style = /*css*/`
     }
   }
 }
-:host([deletable]){
-  .delete{
+:host([closable]){
+  .close{
     display: flex;
     width: 24px;
     height: 24px;
@@ -94,13 +89,8 @@ const style = /*css*/`
     outline-offset: 0;
     svg{
       width: 18px;
-      height: 18px;
     }
   }
-}
-.delete,
-.icon-checked{
-  display: none;
 }
 :host([disabled]){
   svg,
@@ -112,6 +102,9 @@ const style = /*css*/`
   width: 18px;
   font-size: 18px;
   color: ${scheme.color.primary};
+}
+::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)[slot=close-icon]){
+  color: currentColor;
 }
 ::slotted([slot=start]){
   margin-left: -4px;
@@ -133,14 +126,14 @@ const style = /*css*/`
   :host([disabled]){
     svg,
     ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
-      color: ${scheme.color.outline} !important;
+      color: inherit !important;
     }
   }
 }
 `
 
 const template = /*html*/`
-<svg viewBox="0 -960 960 960" class="icon-checked" part="icon-checked">
+<svg viewBox="0 -960 960 960" class="icon-checked hide" part="icon-checked">
   <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path>
 </svg>
 <slot name="start"></slot>
@@ -148,8 +141,8 @@ const template = /*html*/`
   <slot></slot>
 </div>
 <slot name="end"></slot>
-<div class="delete" part="delete" tabindex="0">
-  <slot name="delete-icon">
+<div class="close hide" part="close" tabindex="0">
+  <slot name="close-icon">
     <svg viewBox="0 -960 960 960">
       <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"></path>
     </svg>
@@ -162,9 +155,9 @@ const template = /*html*/`
 export class Chip extends useElement({
   style: [buttonStyle, style],
   states: ['focusable', 'formable'],
-  template, props, events,
+  template, props,
   setup(shadowRoot, info) {
-    const deleteEl = shadowRoot.querySelector<HTMLSlotElement>('.delete')!
+    const close = shadowRoot.querySelector<HTMLSlotElement>('.close')!
     const updateFrom = () => info.internals.setFormValue(this.disabled || !this.checked ? null : this.value)
     this.addEventListener('click', () => {
       if (!['checkbox', 'radio'].includes(this.type)) return
@@ -180,9 +173,9 @@ export class Chip extends useElement({
         item.checked = false
       })
     })
-    deleteEl.onpointerdown = (e) => e.stopPropagation()
-    deleteEl.onclick = () => this.dispatchEvent(new CustomEvent('delete'))
-    focusKeydownClick(deleteEl)
+    close.onpointerdown = (e) => e.stopPropagation()
+    close.onclick = () => this.dispatchEvent(new CustomEvent('close'))
+    focusKeydownClick(close)
     return {
       onFormReset: () => this.checked = this.defaultChecked,
       onAttributeChanged: (name) => ['disabled', 'checked', 'value'].includes(name) && updateFrom(),

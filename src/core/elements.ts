@@ -93,42 +93,40 @@ type UseProps<T> = {
 }
 
 const baseStyle = /*css*/`
-:host{
+:host,
+*{
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
-}
-:host,
-div{
   outline-width: 3px;
   outline-offset: 2px;
   outline-style: none;
   outline-color: currentColor;
+  box-sizing: border-box;
+  touch-action: pan-y pan-x;
 }
 :host(:focus-visible),
-div:focus-visible{
+*:focus-visible{
   outline-style: solid;
 }
-div,
-svg,
-div::before,
-div::after{
+*,
+::before,
+::after,
+::slotted(svg){
   transition-timing-function: inherit;
   transition-duration: inherit;
+}
+svg,
+::slotted(svg){
+  flex-shrink: 0;
+  fill: currentColor;
 }
 slot{
   all: inherit;
   display: contents;
 }
-:host, *{
-  box-sizing: border-box;
-  touch-action: pan-y pan-x;
-}
-svg,
-::slotted(svg){
-  fill: currentColor;
-  transition-timing-function: inherit;
-  transition-duration: inherit;
+.hide{
+  display: none;
 }
 @media (any-pointer: fine) {
   ::-webkit-scrollbar{

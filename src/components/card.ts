@@ -5,7 +5,7 @@ import './ripple.js'
 const props = useProps({
   variant: ['elevated', 'filled', 'outlined'],
   disabled: false,
-  readOnly: false
+  clickable: false,
 })
 
 const style = /*css*/`
@@ -14,8 +14,6 @@ const style = /*css*/`
   vertical-align: middle;
   position: relative;
   width: 360px;
-  border-radius: 12px;
-  cursor: pointer;
   overflow: hidden;
   transition-property: box-shadow, background-color, color, opacity;
   background: ${scheme.color.surfaceContainerLow};
@@ -23,7 +21,10 @@ const style = /*css*/`
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
   color: ${scheme.color.onSurface};
-  outline-color: ${scheme.color.secondary};
+  border-radius: ${scheme.shape.corner.medium};
+}
+.ripple{
+  display: none;
 }
 .header{
   display: flex;
@@ -81,6 +82,12 @@ const style = /*css*/`
 ::slotted([slot=action]){
   margin: 16px 0;
 }
+:host([clickable]){
+  cursor: pointer;
+  .ripple{
+    display: block;
+  }
+}
 :host([disabled]){
   opacity: .38 !important;
   pointer-events: none;
@@ -102,20 +109,13 @@ const style = /*css*/`
     pointer-events: none;
     inset: 0;
     border-radius: inherit;
-    border: solid 1px ${scheme.color.outlineVariant};
+    border: solid var(--s-border-min, 1px) ${scheme.color.outlineVariant};
   }
   &:host([disabled]){
     &::after{
       opacity: .12;
       border-color: ${scheme.color.outline};
     }
-  }
-}
-:host([readOnly]){
-  cursor: auto;
-  .ripple{
-    --s-ripple-disabled: true;
-    --s-ripple-disabled-hover: true;
   }
 }
 `

@@ -18,7 +18,7 @@ const style = /*css*/`
     content: '';
     flex-grow: 1;
     border-top-style: solid;
-    border-width: 1px;
+    border-width: var(--s-border-min, 1px);
     border-color: ${scheme.color.outlineVariant};
   }
 }

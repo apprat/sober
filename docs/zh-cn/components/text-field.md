@@ -72,9 +72,9 @@
 
 ```html preview
 <s-text-field label="请输入文本内容">
-  <s-icon slot="start" name="star"></s-icon>
+  <s-icon slot="start"></s-icon>
   <s-icon-button slot="end">
-    <s-icon name="home"></s-icon>
+    <s-icon></s-icon>
   </s-icon-button>
 </s-text-field>
 <hr>
@@ -111,28 +111,28 @@
 
 ## 属性
 
-| 名称               | 类型                                                  | 默认值 | 同步 | 说明                                              |
-| ------------------ | ----------------------------------------------------- | ------ | ---- | ------------------------------------------------- |
-| type               | text, password, number, search, email, tel, multiline | text   | √    | 输入框类型，multiline=多行输入框，其他值同原生    |
-| size               | small, medium, large                                  | medium | √    | 尺寸                                              |
-| disabled           | boolean                                               | false  | √    | 禁用的                                            |
-| readOnly           | boolean                                               | false  | √    | 只读的                                            |
-| showError          | boolean                                               | false  | √    | 显示错误框                                        |
-| showClear          | boolean                                               | false  | √    | 显示清空按钮                                      |
-| showCount          | boolean                                               | false  | √    | 显示字数统计（需要同时设置 `maxLength` 生效）     |
-| showPasswordToggle | boolean                                               | false  | √    | 显示密码明文切换按钮，（仅 `type=password` 生效） |
-| showNumberSpin     | boolean                                               | false  | √    | 显示数字切换按钮，（仅 `type=number` 生效）       |
-| showSearch         | boolean                                               | false  | √    | 显示搜索按钮，（仅 `type=search` 生效）           |
-| showMic            | boolean                                               | false  | √    | 显示语音输入按钮（需要浏览器同时支持生效）        |
-| micLang            | string                                                | ''     | ×    | 语音输入语言，为空则使用系统语言）                |
-| name               | string                                                | ''     | √    | 名称，表单提交时的 `key` 值                       |
-| autoComplete       | string                                                | off    | ×    | 自动补全，同原生                                  |
-| inputMode          | string                                                | ''     | ×    | 输入模式，同原生                                  |
-| defaultValue       | string                                                | ''     | ×    | 默认值，表单重置时的默认值                        |
-| value              | string                                                | ''     | ×    | 值                                                |
-| label              | string                                                | ''     | ×    | 浮动标签                                          |
-| placeholder        | string                                                | ''     | ×    | 占位提示，同原生                                  |
-| maxLength          | string                                                | -1     | ×    | 最大长度                                          |
+| 名称               | 类型                                                                | 默认值   | 同步 | 说明                                              |
+| ------------------ | ------------------------------------------------------------------- | -------- | ---- | ------------------------------------------------- |
+| type               | `text`, `password`, `number`, `search`, `email`, `tel`, `multiline` | `text`   | √    | 输入框类型，multiline=多行输入框，其他值同原生    |
+| size               | `small`, `medium`, `large`                                          | `medium` | √    | 尺寸                                              |
+| disabled           | `boolean`                                                           | `false`  | √    | 禁用的                                            |
+| readOnly           | `boolean`                                                           | `false`  | √    | 只读的                                            |
+| showError          | `boolean`                                                           | `false`  | √    | 显示错误框                                        |
+| showClear          | `boolean`                                                           | `false`  | √    | 显示清空按钮                                      |
+| showCount          | `boolean`                                                           | `false`  | √    | 显示字数统计（需要同时设置 `maxLength` 生效）     |
+| showPasswordToggle | `boolean`                                                           | `false`  | √    | 显示密码明文切换按钮，（仅 `type=password` 生效） |
+| showNumberSpin     | `boolean`                                                           | `false`  | √    | 显示数字切换按钮，（仅 `type=number` 生效）       |
+| showSearch         | `boolean`                                                           | `false`  | √    | 显示搜索按钮，（仅 `type=search` 生效）           |
+| showMic            | `boolean`                                                           | `false`  | √    | 显示语音输入按钮（需要浏览器同时支持生效）        |
+| micLang            | `string`                                                            | `''`     | ×    | 语音输入语言，为空则使用系统语言）                |
+| name               | `string`                                                            | `''`     | √    | 名称，表单提交时的 `key` 值                       |
+| autoComplete       | `string`                                                            | `off`    | ×    | 自动补全，同原生                                  |
+| inputMode          | `string`                                                            | `''`     | ×    | 输入模式，同原生                                  |
+| defaultValue       | `string`                                                            | `''`     | ×    | 默认值，表单重置时的默认值                        |
+| value              | `string`                                                            | `''`     | ×    | 值                                                |
+| label              | `string`                                                            | `''`     | ×    | 浮动标签                                          |
+| placeholder        | `string`                                                            | `''`     | ×    | 占位提示，同原生                                  |
+| maxLength          | `string`                                                            | `-1`     | ×    | 最大长度                                          |
 
 ## 事件
 

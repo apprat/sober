@@ -1,4 +1,4 @@
-# rating
+# Rating
 
 评分组件
 
@@ -32,16 +32,16 @@
 
 ```html preview
 <s-rating>
-  <s-icon name="favorite" slot="track"></s-icon>
-  <s-icon name="favorite" slot="track"></s-icon>
-  <s-icon name="favorite" slot="track"></s-icon>
-  <s-icon name="favorite" slot="track"></s-icon>
-  <s-icon name="favorite" slot="track"></s-icon>
-  <s-icon name="favorite" slot="fill"></s-icon>
-  <s-icon name="favorite" slot="fill"></s-icon>
-  <s-icon name="favorite" slot="fill"></s-icon>
-  <s-icon name="favorite" slot="fill"></s-icon>
-  <s-icon name="favorite" slot="fill"></s-icon>
+  <s-icon slot="track"></s-icon>
+  <s-icon slot="track"></s-icon>
+  <s-icon slot="track"></s-icon>
+  <s-icon slot="track"></s-icon>
+  <s-icon slot="track"></s-icon>
+  <s-icon slot="fill"></s-icon>
+  <s-icon slot="fill"></s-icon>
+  <s-icon slot="fill"></s-icon>
+  <s-icon slot="fill"></s-icon>
+  <s-icon slot="fill"></s-icon>
 </s-rating>
 ```
 
@@ -72,17 +72,17 @@
 
 ## 属性
 
-| 名称         | 类型    | 默认值 | 同步 | 说明                                           |
-| ------------ | ------- | ------ | ---- | ---------------------------------------------- |
-| disabled     | boolean | false  | √    | 禁用的                                         |
-| readOnly     | boolean | false  | √    | 只读的                                         |
-| reversed     | boolean | false  | √    | 反向的                                         |
-| value        | number  | 5      | √    | 值                                             |
-| step         | number  | 1      | √    | 步进，请确保能被 (max - min) 整除              |
-| max          | number  | 10     | √    | 最大值                                         |
-| min          | number  | 0      | √    | 最小值                                         |
-| name         | string  |        | ×    | 名称，表单提交时的 `key` 值                    |
-| defualtValue | number  | 0      | ×    | 默认选中，表单重置时的默认值，仅表单重置时生效 |
+| 名称         | 类型      | 默认值  | 同步 | 说明                                           |
+| ------------ | --------- | ------- | ---- | ---------------------------------------------- |
+| disabled     | `boolean` | `false` | √    | 禁用的                                         |
+| readOnly     | `boolean` | `false` | √    | 只读的                                         |
+| reversed     | `boolean` | `false` | √    | 反向的                                         |
+| value        | `number`  | `5`     | √    | 值                                             |
+| step         | `number`  | `1`     | √    | 步进，请确保能被 (max - min) 整除              |
+| max          | `number`  | `10`    | √    | 最大值                                         |
+| min          | `number`  | `0`     | √    | 最小值                                         |
+| name         | `string`  | `''`    | ×    | 名称，表单提交时的 `key` 值                    |
+| defualtValue | `number`  | `0`     | ×    | 默认选中，表单重置时的默认值，仅表单重置时生效 |
 
 ## 事件
 
@@ -93,10 +93,10 @@
 
 ## 插槽
 
-| 名称  | 说明                     |
-| ----- | ------------------------ |
-| track | 轨道，默认支持 svg, icon |
-| fill  | 填充，默认支持 svg, icon |
+| 名称  | 说明                                               |
+| ----- | -------------------------------------------------- |
+| track | 轨道，默认支持 `.icon`, `svg`, `s-icon`, `ms-icon` |
+| fill  | 填充，默认支持同 track                             |
 
 ## HTML 属性
 

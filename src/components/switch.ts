@@ -21,7 +21,7 @@ const style = /*css*/`
   width: 52px;
   aspect-ratio: 1.625;
   -webkit-aspect-ratio: 1.625;
-  border-radius: 16px;
+  border-radius: ${scheme.shape.corner.large};
   position: relative;
   color: ${scheme.color.primary};
   outline-color: ${scheme.color.onSurface};
@@ -67,7 +67,7 @@ const style = /*css*/`
     position: relative;
     padding: 10%;
     background: ${scheme.color.outline};
-    ::slotted(:is(svg, s-icon)){
+    ::slotted(:is(.icon, svg, s-icon, ms-icon)){
       color: currentColor;
       fill: currentColor;
       width: 100%;
@@ -75,19 +75,19 @@ const style = /*css*/`
     }
   }
 }
-.unselected{
+.inactive{
   display: flex;
   color: ${scheme.color.surfaceVariant};
 }
-.selected{
+.active{
   display: none;
 }
 :host([checked]){
   outline-color: currentColor;
-  .unselected{
+  .inactive{
     display: none;
   }
-  .selected{
+  .active{
     display: flex;
   }
   .track{
@@ -114,7 +114,7 @@ const style = /*css*/`
   .thumb{
     box-shadow: none !important;
     background: color-mix(in srgb, ${scheme.color.onSurface} 12%, transparent) !important;
-    .unselected{
+    .inactive{
       color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
     }
   }
@@ -125,7 +125,7 @@ const style = /*css*/`
     }
     .thumb{
       background: ${scheme.color.surface} !important;
-      .selected{
+      .active{
         color: color-mix(in srgb, currentColor 38%, transparent) !important;
       }
     }
@@ -152,7 +152,7 @@ const style = /*css*/`
     }
     .thumb{
       background: ${scheme.color.outlineVariant} !important;
-      .unselected{
+      .inactive{
         color: ${scheme.color.surfaceContainerHighest} !important;
       }
     }
@@ -161,7 +161,7 @@ const style = /*css*/`
         background: ${scheme.color.surfaceContainerHighest} !important;
       }
       .thumb{
-        .selected{
+        .active{
           color: ${scheme.color.outlineVariant} !important;
         }
       }
@@ -174,11 +174,11 @@ const template = /*html*/`
 <div class="track" part="track"></div>
 <div class="handle" part="handle">
   <div class="thumb" part="thumb">
-    <div class="unselected" part="unselected">
-      <slot name="unselected"></slot>
+    <div class="inactive" part="inactive">
+      <slot name="inactive-icon"></slot>
     </div>
-    <div class="selected" part="selected">
-      <slot name="selected"></slot>
+    <div class="active" part="active">
+      <slot name="active-icon"></slot>
     </div>
   </div>
 </div>

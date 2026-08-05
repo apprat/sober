@@ -62,22 +62,45 @@
 <s-chip type="radio" name="lang" variant="elevated">JavaScript</s-chip>
 ```
 
-## 可删除的
+## 可关闭的
 
-设置 `deletable` 属性来增加删除按钮，点击删除按钮会触发 `delete` 事件。
+设置 `closable` 属性会显示关闭按钮，点击删除按钮会触发 `close` 事件。
 
 ```html preview
-<s-chip deletable ondelete="this.remove()"> 
+<s-chip closable onclose="this.remove()"> 
   <s-icon slot="start"></s-icon>
   chip 1
 </s-chip>
-<s-chip deletable variant="surface" ondelete="this.remove()"> 
+<s-chip closable variant="surface" onclose="this.remove()"> 
   <s-icon slot="start"></s-icon>
   chip 2
 </s-chip>
-<s-chip deletable variant="elevated" ondelete="this.remove()"> 
+<s-chip closable variant="elevated" onclose="this.remove()"> 
   <s-icon slot="start"></s-icon>
   chip 3
+</s-chip>
+```
+
+可使用 `close-icon` 插槽自定义关闭按钮图标，或插入 `s-tooltip`。
+
+```html preview
+<s-chip closable onclose="this.remove()"> 
+  <s-icon slot="start"></s-icon>
+  chip 1
+  <s-tooltip slot="close-icon" parentDepth="1">关闭</s-tooltip> 
+  <svg viewBox="0 -960 960 960" slot="close-icon"><path d="M280-200v-80h284q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l104 104-56 56-200-200 200-200 56 56-104 104h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H280Z"></path></svg>
+</s-chip>
+<s-chip closable variant="surface" onclose="this.remove()"> 
+  <s-icon slot="start"></s-icon>
+  chip 2
+  <s-tooltip slot="close-icon" parentDepth="1">关闭</s-tooltip> 
+  <svg viewBox="0 -960 960 960" slot="close-icon"><path d="M280-200v-80h284q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l104 104-56 56-200-200 200-200 56 56-104 104h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H280Z"></path></svg>
+</s-chip>
+<s-chip closable variant="elevated" onclose="this.remove()"> 
+  <s-icon slot="start"></s-icon>
+  chip 3
+  <s-tooltip slot="close-icon" parentDepth="1">关闭</s-tooltip> 
+  <svg viewBox="0 -960 960 960" slot="close-icon"><path d="M280-200v-80h284q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l104 104-56 56-200-200 200-200 56 56-104 104h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H280Z"></path></svg>
 </s-chip>
 ```
 
@@ -148,7 +171,7 @@
 | variant        | `outlined`,`elevated`, `surface` | `outlined` | √    | 变体                                           |
 | type           | `chip`, `checkbox`, `radio`      | `chip`     | √    | 类型，支持将组件作为复选框、单选框             |
 | clickable      | `boolean`                        | `false`    | √    | 可交互状态                                     |
-| deletable      | `boolean`                        | `false`    | √    | 可删除状态                                     |
+| closable       | `boolean`                        | `false`    | √    | 可关闭状态                                     |
 | disabled       | `boolean`                        | `false`    | √    | 禁用状态                                       |
 | showCheckmark  | `boolean`                        | `false`    | √    | 显示复选框或单选框的选中图标                   |
 | checked        | `boolean`                        | `false`    | √    | 选中状态                                       |
@@ -161,15 +184,16 @@
 | 名称   | 参数  | 冒泡 | 可取消 | 说明               |
 | ------ | ----- | ---- | ------ | ------------------ |
 | change | Event | ×    | ×      | 选中变更时触发     |
-| delete | Event | ×    | ×      | 删除按钮点击后触发 |
+| close  | Event | ×    | ×      | 删除按钮点击后触发 |
 
 ## 插槽
 
-| 名称  | 说明                                                              |
-| ----- | ----------------------------------------------------------------- |
-| 匿名  | 文本                                                              |
-| start | 开始，默认支持 .icon, svg, s-icon, s-loading, s-spinner, s-avatar |
-| end   | 结束，默认支持 .icon, svg, s-icon, s-loading, s-spinner, s-avatar |
+| 名称       | 说明                                                                         |
+| ---------- | ---------------------------------------------------------------------------- |
+| 匿名       | 文本                                                                         |
+| start      | 开始，默认支持 `.icon`, `svg`, `s-icon`, `s-loading`, `s-spinner`, `ms-icon` |
+| end        | 结束，默认支持同 start                                                       |
+| close-icon | 关闭图标，默认支持同 start                                                   |
 
 ## HTML 标记属性
 

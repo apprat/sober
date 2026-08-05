@@ -101,8 +101,6 @@ const style = /*css*/`
   transition-duration: inherit;
   stroke-width: 4px;
   transition-property: stroke-dasharray, stroke-dashoffset;
-  cx: 20;
-  cy: 20;
 }
 .track{
   opacity: var(--s-spinner-track-opacity, 1);
@@ -133,8 +131,6 @@ const style = /*css*/`
   .track,
   .indicator{
     stroke-width: 8px;
-    cx: 22;
-    cy: 22;
   }
 }
 `
@@ -142,8 +138,8 @@ const style = /*css*/`
 const template = /*html*/`
 <div class="layout min" part="layout">
   <svg viewBox="0 0 40 40" class="icon" part="icon">
-    <circle pathLength="${config.path}" r="18" class="track" part="track"></circle>
-    <circle pathLength="${config.path}" r="18" class="indicator" part="indicator"></circle>
+    <circle pathLength="${config.path}" cx="20" cy="20" r="18" class="track" part="track"></circle>
+    <circle pathLength="${config.path}" cx="20" cy="20" r="18" class="indicator" part="indicator"></circle>
   </svg>
 </div>
 `
@@ -173,7 +169,7 @@ export class Spinner extends useElement({
       size: (v) => {
         const isMedium = v === 'medium'
         gap = isMedium ? getGapPerimeter(40, 4) : getGapPerimeter(44, 8)
-        svg.setAttribute('viewBox', isMedium ? '0 0 40 40' : '0 0 44 44')
+        svg.setAttribute('viewBox', isMedium ? '0 0 40 40' : '-2 2 44 44')
         updateDashGap()
         render()
       }

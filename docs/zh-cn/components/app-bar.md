@@ -13,7 +13,7 @@
 ```html preview block
 <s-app-bar>
   <s-icon-button slot="nav">
-    <s-icon name="menu"></s-icon>
+    <svg viewBox="0 -960 960 960"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path></svg>
   </s-icon-button>
   <span slot="title">Material 3</span>
 </s-app-bar>
@@ -22,7 +22,7 @@
 ```html preview block
 <s-app-bar>
   <s-icon-button slot="nav">
-    <s-icon name="menu"></s-icon>
+    <svg viewBox="0 -960 960 960"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path></svg>
   </s-icon-button>
   <svg viewBox="0 0 1024 1024" slot="logo">
     <path d="M913.4 757.4c-105-16-113-31.4-113-31.4 21.6-129.8-45.4-294.2-154.8-383.2-145.6-118.4-367-32.4-539.4-212.4-40.2-42-16.8 471 199 665.4 157.8 142 343.6 98.4 394.6 75.2 46.2-21.2 78.6-59.8 78.6-59.8 84.2 26 125.8 24.4 125.8 24.4C933.8 839.2 948.8 762.8 913.4 757.4zM721.2 766.2c-276.4-81.8-484.2-369-484.2-369s182.4 215.4 504 320.4C741.4 733.8 731.8 757 721.2 766.2z"></path>
@@ -34,23 +34,21 @@
 ```html preview block
 <s-app-bar>
   <s-icon-button slot="nav">
-    <s-icon name="menu"></s-icon>
+    <svg viewBox="0 -960 960 960"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path></svg>
   </s-icon-button>
-  <svg viewBox="0 0 1024 1024" slot="logo">
-    <path d="M913.4 757.4c-105-16-113-31.4-113-31.4 21.6-129.8-45.4-294.2-154.8-383.2-145.6-118.4-367-32.4-539.4-212.4-40.2-42-16.8 471 199 665.4 157.8 142 343.6 98.4 394.6 75.2 46.2-21.2 78.6-59.8 78.6-59.8 84.2 26 125.8 24.4 125.8 24.4C933.8 839.2 948.8 762.8 913.4 757.4zM721.2 766.2c-276.4-81.8-484.2-369-484.2-369s182.4 215.4 504 320.4C741.4 733.8 731.8 757 721.2 766.2z"></path>
-  </svg>
+  <svg viewBox="0 0 1024 1024" slot="logo"><path d="M913.4 757.4c-105-16-113-31.4-113-31.4 21.6-129.8-45.4-294.2-154.8-383.2-145.6-118.4-367-32.4-539.4-212.4-40.2-42-16.8 471 199 665.4 157.8 142 343.6 98.4 394.6 75.2 46.2-21.2 78.6-59.8 78.6-59.8 84.2 26 125.8 24.4 125.8 24.4C933.8 839.2 948.8 762.8 913.4 757.4zM721.2 766.2c-276.4-81.8-484.2-369-484.2-369s182.4 215.4 504 320.4C741.4 733.8 731.8 757 721.2 766.2z"></path></svg>
   <span slot="title">Material 3</span>
   <span slot="subtitle">Google M3 Expressive</span>
   <s-icon-button>
-    <s-icon name="search"></s-icon>
+    <s-icon></s-icon>
     <s-tooltip>搜索</s-tooltip>
   </s-icon-button>
   <s-icon-button>
-    <s-icon name="star"></s-icon>
+    <s-icon></s-icon>
     <s-tooltip>收藏</s-tooltip>
   </s-icon-button>
   <s-icon-button width="narrow">
-    <s-icon name="more_vert"></s-icon>
+    <s-icon></s-icon>
     <s-tooltip>更多</s-tooltip>
   </s-icon-button>
 </s-app-bar>
@@ -65,11 +63,11 @@
 ```html preview block
 <s-app-bar size="small">
   <s-icon-button slot="nav">
-    <s-icon name="menu"></s-icon>
+    <s-icon></s-icon>
   </s-icon-button>
   <span slot="title">Material 3</span>
   <s-icon-button>
-    <s-icon name="search"></s-icon>
+    <s-icon></s-icon>
     <s-tooltip>搜索</s-tooltip>
   </s-icon-button>
 </s-app-bar>
@@ -80,11 +78,11 @@
 ```html preview block
 <s-app-bar size="medium">
   <s-icon-button slot="nav">
-    <s-icon name="menu"></s-icon>
+    <s-icon></s-icon>
   </s-icon-button>
   <span slot="title">Material 3</span>
   <s-icon-button>
-    <s-icon name="search"></s-icon>
+    <s-icon></s-icon>
     <s-tooltip>搜索</s-tooltip>
   </s-icon-button>
 </s-app-bar>
@@ -94,10 +92,10 @@
 
 ## 属性
 
-| 名称    | 类型                | 默认值                  | 同步 | 说明                                                               |
-| ------- | ------------------- | ----------------------- | ---- | ------------------------------------------------------------------ |
-| size    | auto, medium, small | auto                    | ×    | 尺寸，默认为 auto 会根据 `media` 属性匹配选择 `small`，或 `medium` |
-| media   | string              | (orientation: portrait) | ×    | 媒体查询，屏幕处于纵向，设置该属性可控制 `size` 的切换时机         |
+| 名称  | 类型                      | 默认值                    | 同步 | 说明                                                               |
+| ----- | ------------------------- | ------------------------- | ---- | ------------------------------------------------------------------ |
+| size  | `auto`, `medium`, `small` | `auto`                    | ×    | 尺寸，默认为 auto 会根据 `media` 属性匹配选择 `small`，或 `medium` |
+| media | `string`                  | `(orientation: portrait)` | ×    | 媒体查询，屏幕处于纵向，设置该属性可控制 `size` 的切换时机         |
 
 ## 插槽
 

@@ -127,28 +127,28 @@
 
 ## 属性
 
-| 名称                | 类型                                           | 默认值      | 同步 | 说明                                                                                      |
-| ------------------- | ---------------------------------------------- | ----------- | ---- | ----------------------------------------------------------------------------------------- |
-| size                | small, extra-small, medium, large, extra-large | extra-small | √    | 尺寸                                                                                      |
-| mode                | single, reversed, range                        | single      | √    | 模式，single=单选选择，reversed=反向单选择,range=范围选择                                 |
-| slidingMode         | thumb, all, all-cumulative                     | thumb       | √    | 滑动模式，thumb=仅指示器滑动，all=所有滑动，all-cumulative=所有滑动且累计值               |
-| orientation         | horizontal, vertical                           | horizontal  | √    | 方向                                                                                      |
-| disabled            | boolean                                        | false       | √    | 禁用的                                                                                    |
-| readOnly            | boolean                                        | false       | √    | 只读的                                                                                    |
-| touchScrollPriority | boolean                                        | false       | √    | 触屏滚动优先，启用该属性时会在触屏设备上优先执行滚动                                      |
-| showValue           | boolean                                        | false       | √    | 显示值，启用该属性时，滑块会显示当前值                                                    |
-| showDivisions       | boolean                                        | false       | √    | 显示刻度分段的，启用该属性时滑块会显示刻度分段，可与 `step` 或 `stepMarks` 搭配使用       |
-| stepMarks           | string                                         | ''          | ×    | 步进标记，使用 , 分割，例如：`20,30,50`(不需要提供最大值和最小值)，滑块时只会在标记上切换 |
-| step                | number                                         | 1           | ×    | 步进，请确保能被 (max - min) 整除                                                         |
-| min                 | number                                         | 0           | ×    | 最小值                                                                                    |
-| max                 | number                                         | 100         | ×    | 最大值                                                                                    |
-| value               | number                                         | 50          | ×    | 当前值 （单滑块的值）                                                                     |
-| start               | number                                         | 0           | ×    | 开始值（`mode=range` 范围选择的开始值）                                                   |
-| end                 | number                                         | 50          | ×    | 结束值（`mode=range` 范围选择的结束值）                                                   |
-| name                | string                                         | ''          | √    | 名称，表单提交时的 `key` 值                                                               |
-| defaultValue        | number                                         | 50          | ×    | 默认值，表单重置时的默认值，仅表单重置时生效                                              |
-| defaultStart        | number                                         | 0           | ×    | 默认开始值（仅 `mode=range` 模式生效），表单重置时的默认值，仅表单重置时生效              |
-| defaulttEnd         | number                                         | 0           | ×    | 默认结束值（仅 `mode=range` 模式生效），表单重置时的默认值，仅表单重置时生效              |
+| 名称                | 类型                                                     | 默认值        | 同步 | 说明                                                                                      |
+| ------------------- | -------------------------------------------------------- | ------------- | ---- | ----------------------------------------------------------------------------------------- |
+| size                | `small`, `extra-small`, `medium`, `large`, `extra-large` | `extra-small` | √    | 尺寸                                                                                      |
+| mode                | `single`, `reversed`, `range`                            | `single`      | √    | 模式，single=单选选择，reversed=反向单选择,range=范围选择                                 |
+| slidingMode         | `thumb`, `all`, `all-cumulative`                         | `thumb`       | √    | 滑动模式，thumb=仅指示器滑动，all=所有滑动，all-cumulative=所有滑动且累计值               |
+| orientation         | `horizontal`, `vertical`                                 | `horizontal`  | √    | 方向                                                                                      |
+| disabled            | `boolean`                                                | `false`       | √    | 禁用的                                                                                    |
+| readOnly            | `boolean`                                                | `false`       | √    | 只读的                                                                                    |
+| touchScrollPriority | `boolean`                                                | `false`       | √    | 触屏滚动优先，启用该属性时会在触屏设备上优先执行滚动                                      |
+| showValue           | `boolean`                                                | `false`       | √    | 显示值，启用该属性时，滑块会显示当前值                                                    |
+| showDivisions       | `boolean`                                                | `false`       | √    | 显示刻度分段的，启用该属性时滑块会显示刻度分段，可与 `step` 或 `stepMarks` 搭配使用       |
+| stepMarks           | `string`                                                 | `''`          | ×    | 步进标记，使用 , 分割，例如：`20,30,50`(不需要提供最大值和最小值)，滑块时只会在标记上切换 |
+| step                | `number`                                                 | `1`           | ×    | 步进，请确保能被 (max - min) 整除                                                         |
+| min                 | `number`                                                 | `0`           | ×    | 最小值                                                                                    |
+| max                 | `number`                                                 | `100`         | ×    | 最大值                                                                                    |
+| value               | `number`                                                 | `50`          | ×    | 当前值 （单滑块的值）                                                                     |
+| start               | `number`                                                 | `0`           | ×    | 开始值（`mode=range` 范围选择的开始值）                                                   |
+| end                 | `number`                                                 | `50`          | ×    | 结束值（`mode=range` 范围选择的结束值）                                                   |
+| name                | `string`                                                 | `''`          | √    | 名称，表单提交时的 `key` 值                                                               |
+| defaultValue        | `number`                                                 | `50`          | ×    | 默认值，表单重置时的默认值，仅表单重置时生效                                              |
+| defaultStart        | `number`                                                 | `0`           | ×    | 默认开始值（仅 `mode=range` 模式生效），表单重置时的默认值，仅表单重置时生效              |
+| defaulttEnd         | `number`                                                 | `0`           | ×    | 默认结束值（仅 `mode=range` 模式生效），表单重置时的默认值，仅表单重置时生效              |
 
 ## 事件
 

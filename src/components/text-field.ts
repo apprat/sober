@@ -131,7 +131,6 @@ input{
 input,
 textarea,
 .shadow{
-  outline: none;
   border: none;
   background: transparent;
   color: inherit;
@@ -150,6 +149,9 @@ textarea,
   &::placeholder{
     color: ${scheme.color.outline};
     line-height: inherit;
+  }
+  &:focus-visible{
+    outline: none;
   }
 }
 textarea,
@@ -215,6 +217,10 @@ textarea,
       display: none;
     }
   }
+  svg{
+    width: 24px;
+    color: ${scheme.color.onSurfaceVariant};
+  }
 }
 @keyframes scaleLoop {
   0% {
@@ -244,24 +250,18 @@ textarea,
     }
   }
 }
-svg,
-::slotted(:is(svg, s-icon)){
+::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
   width: 24px;
-  height: 24px;
   font-size: 24px;
-  color: ${scheme.color.onSurfaceVariant};
-  fill: currentColor;
-  flex-shrink: 0;
-}
-::slotted(:is(svg, s-icon)){
   margin: 0 8px;
+  color: ${scheme.color.onSurfaceVariant};
 }
 ::slotted([slot=helper]){
   margin-top: 8px;
   flex-grow: 1;
 }
 :host(:focus-visible){
-  outline: none;
+  outline-style: none;
 }
 :host([size=small]){
   font-size: calc(var(--s-font-size) * 14px);

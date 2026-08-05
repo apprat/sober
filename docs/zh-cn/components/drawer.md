@@ -7,12 +7,12 @@
   <div slot="start"> </div>
   <s-app-bar>
     <s-icon-button slot="nav" onclick="this.closest('s-drawer').toggle('start')">
-      <s-icon name="menu"></s-icon>
+      <s-icon></s-icon>
       <s-tooltip>切换抽屉 Start</s-tooltip>
     </s-icon-button>
     <span slot="title">Drawer</span>
     <s-icon-button onclick="this.closest('s-drawer').toggle('end')">
-      <s-icon name="menu"></s-icon>
+      <s-icon></s-icon>
       <s-tooltip>切换抽屉 End</s-tooltip>
     </s-icon-button>
   </s-app-bar>
@@ -31,12 +31,12 @@
   <div slot="start"> </div>
   <s-app-bar>
     <s-icon-button slot="nav" onclick="this.closest('s-drawer').toggle('start')">
-      <s-icon name="menu"></s-icon>
+      <s-icon></s-icon>
       <s-tooltip>切换抽屉 Start</s-tooltip>
     </s-icon-button>
     <span slot="title">Drawer</span>
     <s-icon-button onclick="this.closest('s-drawer').toggle('end')">
-      <s-icon name="menu"></s-icon>
+      <s-icon></s-icon>
       <s-tooltip>切换抽屉 End</s-tooltip>
     </s-icon-button>
   </s-app-bar>
@@ -51,12 +51,12 @@
   <div slot="start"> </div>
   <s-app-bar>
     <s-icon-button slot="nav" onclick="this.closest('s-drawer').toggle('start')">
-      <s-icon name="menu"></s-icon>
+      <s-icon></s-icon>
       <s-tooltip>切换抽屉 Start</s-tooltip>
     </s-icon-button>
     <span slot="title">Drawer</span>
     <s-icon-button onclick="this.closest('s-drawer').toggle('end')">
-      <s-icon name="menu"></s-icon>
+      <s-icon></s-icon>
       <s-tooltip>切换抽屉 End</s-tooltip>
     </s-icon-button>
   </s-app-bar>
@@ -73,12 +73,12 @@
   <div slot="start"> </div>
   <s-app-bar>
     <s-icon-button slot="nav" onclick="this.closest('s-drawer').toggle('start')">
-      <s-icon name="menu"></s-icon>
+      <s-icon></s-icon>
       <s-tooltip>切换抽屉 Start</s-tooltip>
     </s-icon-button>
     <span slot="title">Drawer</span>
     <s-icon-button onclick="this.closest('s-drawer').toggle('end')">
-      <s-icon name="menu"></s-icon>
+      <s-icon></s-icon>
       <s-tooltip>切换抽屉 End</s-tooltip>
     </s-icon-button>
   </s-app-bar>
@@ -90,14 +90,14 @@
 
 ## 属性
 
-| 名称           | 类型                  | 默认值                  | 同步 | 说明                                                       |
-| -------------- | --------------------- | ----------------------- | ---- | ---------------------------------------------------------- |
-| mode           | auto, standard, modal | auto                    | ×    | 模式，auto=自动，standard=标准，modal=模态框               |
-| startOpen      | boolean               | true                    | √    | 标准 start 抽屉展开的                                      |
-| endOpen        | boolean               | true                    | √    | 标准 end 抽屉展开的                                        |
-| startModalOpen | boolean               | false                   | √    | 模态 start 抽屉展开的                                      |
-| endModalOpen   | boolean               | false                   | √    | 模态 end 抽屉展开的                                        |
-| media          | string                | (orientation: portrait) | ×    | 媒体查询，屏幕处于纵向，设置该属性可控制 `mode` 的切换时机 |
+| 名称           | 类型                        | 默认值                    | 同步 | 说明                                                       |
+| -------------- | --------------------------- | ------------------------- | ---- | ---------------------------------------------------------- |
+| mode           | `auto`, `standard`, `modal` | `auto`                    | ×    | 模式，auto=自动，standard=标准，modal=模态框               |
+| startOpen      | `boolean`                   | `true`                    | √    | 标准 start 抽屉展开的                                      |
+| endOpen        | `boolean`                   | `true`                    | √    | 标准 end 抽屉展开的                                        |
+| startModalOpen | `boolean`                   | `false`                   | √    | 模态 start 抽屉展开的                                      |
+| endModalOpen   | `boolean`                   | `false`                   | √    | 模态 end 抽屉展开的                                        |
+| media          | `string`                    | `(orientation: portrait)` | ×    | 媒体查询，屏幕处于纵向，设置该属性可控制 `mode` 的切换时机 |
 
 ## 插槽
 

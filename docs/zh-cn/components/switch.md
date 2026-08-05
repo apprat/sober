@@ -11,12 +11,12 @@
 
 ```html preview
 <s-switch>
-  <s-icon slot="unselected"></s-icon>
-  <s-icon slot="selected"></s-icon>
+  <svg viewBox="0 -960 960 960" slot="inactive-icon"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"></path></svg>
+  <svg viewBox="0 -960 960 960" slot="active-icon"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path></svg>
 </s-switch>
 <s-switch checked>
-  <s-icon slot="unselected"></s-icon>
-  <s-icon slot="selected"></s-icon>
+  <svg viewBox="0 -960 960 960" slot="inactive-icon"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"></path></svg>
+  <svg viewBox="0 -960 960 960" slot="active-icon"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path></svg>
 </s-switch>
 ```
 
@@ -24,12 +24,12 @@
 
 ```html preview
 <s-switch disabled>
-  <s-icon slot="unselected"></s-icon>
-  <s-icon slot="selected"></s-icon>
+  <svg viewBox="0 -960 960 960" slot="inactive-icon"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"></path></svg>
+  <svg viewBox="0 -960 960 960" slot="active-icon"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path></svg>
 </s-switch>
 <s-switch checked disabled>
-  <s-icon slot="unselected"></s-icon>
-  <s-icon slot="selected"></s-icon>
+  <svg viewBox="0 -960 960 960" slot="inactive-icon"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"></path></svg>
+  <svg viewBox="0 -960 960 960" slot="active-icon"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path></svg>
 </s-switch>
 ```
 
@@ -38,14 +38,8 @@
 设置 `readOnly` 属性来只读。
 
 ```html preview
-<s-switch readOnly>
-  <s-icon slot="unselected"></s-icon>
-  <s-icon slot="selected"></s-icon>
-</s-switch>
-<s-switch checked readOnly>
-  <s-icon slot="unselected"></s-icon>
-  <s-icon slot="selected"></s-icon>
-</s-switch>
+<s-switch readOnly></s-switch>
+<s-switch checked readOnly></s-switch>
 ```
 
 ## 自定义样式
@@ -78,20 +72,27 @@
 
 ## 属性
 
-| 名称           | 类型    | 默认值 | 同步 | 说明                         |
-| -------------- | ------- | ------ | ---- | ---------------------------- |
-| disabled       | boolean | false  | √    | 禁用的                       |
-| readOnly       | boolean | false  | √    | 只读的                       |
-| checked        | boolean | false  | √    | 选中的                       |
-| defualtChecked | boolean | false  | √    | 默认选中，表单重置时的默认值 |
-| name           | string  | ''     | √    | 名称，表单提交时的 `key` 值  |
-| value          | string  | ''     | ×    | 值，表单提交时有效           |
+| 名称           | 类型      | 默认值  | 同步 | 说明                         |
+| -------------- | --------- | ------- | ---- | ---------------------------- |
+| disabled       | `boolean` | `false` | √    | 禁用的                       |
+| readOnly       | `boolean` | `false` | √    | 只读的                       |
+| checked        | `boolean` | `false` | √    | 选中的                       |
+| defualtChecked | `boolean` | `false` | √    | 默认选中，表单重置时的默认值 |
+| name           | `string`  | `''`    | √    | 名称，表单提交时的 `key` 值  |
+| value          | `string`  | `''`    | ×    | 值，表单提交时有效           |
 
 ## 事件
 
 | 名称   | 参数  | 冒泡 | 可取消 | 说明           |
 | ------ | ----- | ---- | ------ | -------------- |
 | change | Event | ×    | ×      | 选中变更时触发 |
+
+## 插槽
+
+| 名称          | 说明                                                        |
+| ------------- | ----------------------------------------------------------- |
+| inactive-icon | 未选中时的图标，默认支持`.icon`, `svg`, `s-icon`, `ms-icon` |
+| active-icon   | 选中时的图标，默认支持同 inactive-icon                      |
 
 ## 键盘快捷键
 

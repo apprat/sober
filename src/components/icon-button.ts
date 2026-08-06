@@ -43,7 +43,7 @@ const style = /*css*/`
     position: absolute;
     pointer-events: none;
     inset: 0;
-    border: solid var(--s-border-min, 1px) ${scheme.color.outlineVariant};
+    border: solid 1px ${scheme.color.outlineVariant};
     border-radius: inherit;
   }
 }
@@ -94,6 +94,8 @@ const style = /*css*/`
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 20px;
+    height: 20px;
+    font-size: 20px;
   }
 }
 :host([size=medium]){
@@ -120,6 +122,8 @@ const style = /*css*/`
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 32px;
+    height: 32px;
+    font-size: 32px;
   }
 }
 :host([size=extra-large]){
@@ -135,6 +139,8 @@ const style = /*css*/`
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 40px;
+    height: 40px;
+    font-size: 40px;
   }
 }
 /*Width*/
@@ -173,9 +179,6 @@ const style = /*css*/`
     width: 184px;
     height: 136px;
   }
-}
-::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)) {
-  flex-shrink: 1;
 }
 ::slotted(s-badge){
   position: absolute;

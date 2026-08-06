@@ -120,7 +120,6 @@ const style = /*css*/`
 }
 `
 
-
 const template = /*html*/`
 <div class="header" part="header">
   <slot name="header-avatar"></slot>

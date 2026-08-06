@@ -32,6 +32,7 @@ export const buttonStyle = /*css*/`
 }
 ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
   width: 24px;
+  height: 24px;
   font-size: 24px;
   flex-shrink: 0;
   color: currentColor;

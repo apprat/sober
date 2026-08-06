@@ -30,11 +30,16 @@ const style = /*css*/`
     position: absolute;
     max-width: 80%;
     transition-property: box-shadow;
-    border-radius: 0 ${scheme.shape.corner.large} ${scheme.shape.corner.large} 0;
+    border-radius: ${scheme.shape.corner.large};
+  }
+  ::slotted([slot=start]){
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
   ::slotted([slot=end]){
     right: 0;
-    border-radius: ${scheme.shape.corner.large} 0 0 ${scheme.shape.corner.large};
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
   &:host(:is([startModalOpen], [endModalOpen])) .scrim{
     pointer-events: auto;
@@ -106,8 +111,8 @@ const style = /*css*/`
   align-self: stretch;
   overflow: auto;
   background: ${scheme.color.surfaceContainerLow};
-  border-width: 1px;
-  border-color: ${scheme.color.surfaceVariant};
+  border-width: var(--s-border-min, 1px);
+  border-color: ${scheme.color.surfaceContainerHighest};
 }
 `
 const template = /*html*/`

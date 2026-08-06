@@ -1,18 +1,21 @@
 @media (any-pointer: fine) {
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: var(--s-color-outline-variant, #c0c8cc);
-    border-radius: 3px;
-  }
-
-  @supports not selector(::-webkit-scrollbar) {
+  @-moz-document url-prefix() {
     * {
-      scrollbar-color: var(--s-color-outline-variant, #c0c8cc) transparent;
+      scrollbar-color: var(--s-color-outline-variant, #71787e) transparent;
+      scrollbar-width: thin;
+    }
+  }
+
+  @supports selector(::-webkit-scrollbar) {
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--s-color-outline-variant, #71787e);
+      border-radius: 3px;
     }
   }
 }

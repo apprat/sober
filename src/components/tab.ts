@@ -36,12 +36,14 @@ const style = /*css*/`
   transition-property: none;
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.medium4};
-  &::after{
+  &::before{
     content: '';
     pointer-events: none;
     position: absolute;
     inset: 0;
-    border-bottom: solid var(--s-border-min, 1px) ${scheme.color.surfaceVariant};
+    border-width: var(--s-border-min, 1px);
+    border-color: ${scheme.color.outlineVariant};
+    border-bottom-style: solid;
   }
 }
 .layout{
@@ -61,11 +63,14 @@ const style = /*css*/`
 :host([orientation=vertical]){
   max-height: 300px;
   width: fit-content;
-  box-shadow: 1px 0 0 ${scheme.color.surfaceVariant} inset;
   --s_tab-item-indicator-height: 100%;
   --s_tab-item-indicator-width: 3px;
   --s_tab-item-indicator-inset: auto auto auto -16px;
   --s_tab-item-indicator-border-radius: 0px 3px 3px 0;
+  &::before{
+    border-bottom-style: none;
+    border-left-style: solid;
+  }
   .layout{
     flex-direction: column;
     max-height: inherit;

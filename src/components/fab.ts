@@ -72,6 +72,8 @@ const style = /*css*/`
   padding: 0 26px;
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 28px;
+    height: 28px;
+    font-size: 28px;
   }
 }
 :host([size=large]){
@@ -83,6 +85,8 @@ const style = /*css*/`
   padding: 0 28px;
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 36px;
+    height: 36px;
+    font-size: 36px;
   }
 }
 `

@@ -10,7 +10,6 @@ const style = /*css*/`
   padding: 48px 16px;
   gap: 12px;
   font-size: calc(var(--s-font-size, 1) * 12px);
-  border-radius: 4px;
   color: ${scheme.color.outline};
 }
 .shadow{
@@ -22,10 +21,10 @@ const style = /*css*/`
 .border{
   stroke: ${scheme.color.outline};
 }
-::slotted(:is(svg, s-icon)){
+::slotted(:is(.icon, svg, s-icon, ms-icon)){
   color: currentColor;
-  fill: currentColor;
   width: 40px;
+  height: 40px;
 }
 `
 const template = /*html*/`

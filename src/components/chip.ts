@@ -29,13 +29,13 @@ const style = /*css*/`
   }
 }
 :host(:not([variant])){
-  &::after{
+  &::before{
     content: '';
     position: absolute;
     border-radius: inherit;
     inset: 0;
     pointer-events: none;
-    border: solid var(--s-border-min, 1px) ${scheme.color.outlineVariant};
+    border: solid 1px ${scheme.color.outlineVariant};
   }
 }
 :host([variant=elevated]){
@@ -95,11 +95,12 @@ const style = /*css*/`
 :host([disabled]){
   svg,
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
-    color: color-mix(in srgb, ${scheme.color.onSurface} 38%, transparent) !important;
+    color: inherit;
   }
 }
 ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
   width: 18px;
+  height: 18px;
   font-size: 18px;
   color: ${scheme.color.primary};
 }
@@ -114,6 +115,7 @@ const style = /*css*/`
 }
 ::slotted(s-avatar){
   width: 24px;
+  height: 24px;
   font-size: calc(var(--s-font-size, 1) * 12px);
 }
 ::slotted(s-avatar[slot=start]){
@@ -121,14 +123,6 @@ const style = /*css*/`
 }
 ::slotted(s-avatar[slot=end]){
   margin-right: -10px;
-}
-@supports not (color: color-mix(in srgb, black, white)){
-  :host([disabled]){
-    svg,
-    ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
-      color: inherit !important;
-    }
-  }
 }
 `
 

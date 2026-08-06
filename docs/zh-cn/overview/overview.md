@@ -15,7 +15,7 @@
 如果你使用 **Webpack**、**Vite** 等构建工具，我们更推荐你使用 **npm** 包安装方式、或者 **pnpm** 等安装方式。
 
 ```shell
-npm i sober
+npm i sober@2.0.0-alpha.15
 ```
 
 ### 完全引入

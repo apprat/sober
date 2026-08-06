@@ -65,6 +65,7 @@ const style = /*css*/`
   svg,
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 20px;
+    height: 20px;
     font-size: 20px;
   }
   ::slotted(:is(.icon, svg, s-icon, ms-icon)){
@@ -147,9 +148,10 @@ const style = /*css*/`
 }
 ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
   width: 24px;
+  height: 24px;
   font-size: 24px;
 }
-::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)[slot=start]){
+::slotted([slot=start]){
   margin-right: 8px;
 }
 `

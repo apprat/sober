@@ -47,13 +47,13 @@ const style = /*css*/`
 }
 :host([variant=outlined]){
   color: ${scheme.color.onSurfaceVariant};
-  &::after{
+  &::before{
     content: '';
     position: absolute;
     pointer-events: none;
     inset: 0;
     border-radius: inherit;
-    border: solid var(--s-border-min, 1px) ${scheme.color.outlineVariant};
+    border: solid 1px ${scheme.color.outlineVariant};
   }
 }
 :host([variant=text]){
@@ -96,6 +96,7 @@ const style = /*css*/`
 }
 ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
   width: 20px;
+  height: 20px;
   font-size: 20px;
 }
 /**Size**/
@@ -113,6 +114,7 @@ const style = /*css*/`
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 16px;
+    height: 16px;
     font-size: 16px;
   }
 }
@@ -129,6 +131,7 @@ const style = /*css*/`
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 24px;
+    height: 24px;
     font-size: 24px;
   }
 }
@@ -146,6 +149,7 @@ const style = /*css*/`
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 32px;
+    height: 32px;
     font-size: 32px;
   }
 }
@@ -163,6 +167,7 @@ const style = /*css*/`
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 40px;
+    height: 40px;
     font-size: 40px;
   }
 }

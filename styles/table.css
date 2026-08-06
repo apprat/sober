@@ -13,7 +13,7 @@ table {
   overscroll-behavior-x: none;
   position: relative;
   border-width: var(--s-border-min, 1px);
-  border-color: var(--s-color-surface-variant, #dde3ea);
+  border-color: var(--s-color-surface-container-highest, #e2e2e5);
   border-top-style: solid;
   border-bottom-style: solid;
 }
@@ -35,9 +35,10 @@ td::after {
   content: '';
   position: absolute;
   inset: 0;
-  border-width: c;
-  border-color: var(--s-color-surface-variant, #dde3ea);
+  border-width: var(--s-border-min, 1px);
+  border-color: var(--s-color-surface-container-highest, #e2e2e5);
   border-top-style: solid;
+  pointer-events: none;
 }
 
 tbody>tr:nth-child(even)>td {

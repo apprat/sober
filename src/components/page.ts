@@ -22,7 +22,7 @@ const style = /*css*/`
   animation-duration: var(--s-motion-duration-long4);
   font-size: calc(var(--s-font-size) * 16px);
   --s-font-size: 1;
-  --s-border-min: ${Number(1 / window.devicePixelRatio).toFixed(4)}px;
+  --s-border-min: ${Number(1 / window.devicePixelRatio).toFixed(6)}px;
   --s-color-scrim: var(--s-color-light-scrim);
   --s-color-primary: var(--s-color-light-primary);
   --s-color-on-primary: var(--s-color-light-on-primary);

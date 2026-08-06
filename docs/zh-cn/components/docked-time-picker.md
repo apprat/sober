@@ -3,7 +3,7 @@
 基础时间组件，设置 `value` 属性设置值，如果提供空字符串或不提供该值，则使用当前时间(组件创建的时间)。
 
 ```html preview
-<s-base-time></s-base-time>
+<s-docked-time-picker></s-docked-time-picker>
 ```
 
 ## 方向
@@ -11,8 +11,8 @@
 设置 `orientation` 属性设置方向，默认为 `auto` 它会根据**窗口宽高比例**选择横向还是竖向显示，你也可以设置该属性固定方向。
 
 ```html preview
-<s-base-time orientation="vertical"></s-base-time>
-<s-base-time orientation="horizontal"></s-base-time>
+<s-docked-time-picker orientation="vertical"></s-docked-time-picker>
+<s-docked-time-picker orientation="horizontal"></s-docked-time-picker>
 ```
 
 ## 表单支持
@@ -21,7 +21,7 @@
 
 ```html preview
 <form action="http://coolaf.com/tool/params" method="get">
-  <s-base-time name="tag" defualtValue="06:00"></s-base-time>
+  <s-docked-time-picker name="tag" defualtValue="06:00"></s-docked-time-picker>
   <hr>
   <s-button type="reset" variant="outlined"> 重置表单 </s-button>
   <s-button type="submit"> 提交结果 </s-button>

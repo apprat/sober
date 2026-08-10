@@ -18,7 +18,7 @@
 - 新增：Alert、Avatar、Date、DatePicker，Pagination 组件。
 - 新增：Switch 新增 icon 插槽，默认图标被移除。
 - 新增：BottomSheet 组件新增手势滑动，新增属性 `disabledGesture` 属性。
-- 新增：Checkbox 新增 **unckecked**、**checked**、**indeterminate** 插槽，用于自定义切换图标。
+- 新增：Checkbox 新增 **unchecked**、**checked**、**indeterminate** 插槽，用于自定义切换图标。
 - 更新：Chip 外观更新，新增属性 `checked`，`disabled`，type 属性值 elevated, filled-tonal 已弃用。
 - 新增组件：DatePicier 日期选择器。
 - 新增组件：Date 日期选择面板。
@@ -31,7 +31,7 @@
 - 新增组件：Pagination 分页选择器。
 - 更新：Picker 组件弹出层宽度抖动问题，新增 `show()`、`close()`、`toggle()` 方法，参数同 Popup 组件。
 - 更新：PopupMenu 组件新增 `show()`、`close()`、`toggle()` 方法，参数同 Popup 组件。
-- 新增：RadioButton 新增 **unckecked**、**checked** 插槽，用于自定义切换图标。
+- 新增：RadioButton 新增 **unchecked**、**checked** 插槽，用于自定义切换图标。
 - 更新：Search 组件样式更新。
 - 更新：SegmentedButton 组件 UI 更新，新增属性 `mode`。
 - 修复：Slider 组件设置 `min` 属性时指示器错位问题。

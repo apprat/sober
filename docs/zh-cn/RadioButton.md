@@ -71,7 +71,7 @@ s-radio-button[checked=true] {
 
 | 名称      | 介绍    |
 | --------- | ------ |
-| unckecked | 未选中 |
+| unchecked | 未选中 |
 | checked   | 已选中 |
 
 ---

@@ -6,7 +6,7 @@
 <s-text-field label="请输入文本"></s-text-field>
 <s-text-field label="请输入数字" type="number"></s-text-field>
 <s-text-field label="请输入密码" type="password"></s-text-field>
-<s-text-field label="请输入多行文本" type="multiLine" style="min-height: 96px"></s-text-field>
+<s-text-field label="请输入多行文本" type="multiline" style="min-height: 96px"></s-text-field>
 ```
 
 使用 `start` 和 `end` 插槽来添加图标或者图标按钮。

@@ -4,8 +4,8 @@
 
 ```html preview
 <s-field-set>
-  <div slot="title"> 浣溪沙·谁念西风独自凉时只道是寻常时只道是寻常</div>
-  <div>
+  <div slot="legend"> 浣溪沙·谁念西风独自凉时只道是寻常时只道是寻常</div>
+  <div slot="body">
     谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。<br>
     被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
   </div>
@@ -16,13 +16,13 @@
 
 ```html preview
 <s-field-set>
-  <s-icon slot="start" name="star" style="margin-left: 8px"></s-icon>
-  <div slot="title">浣溪沙·谁念西风独自凉</div>
-  <div>
+  <s-icon slot="start" name="star" style="margin-left: 16px"></s-icon>
+  <div slot="legend">浣溪沙·谁念西风独自凉</div>
+  <div slot="body">
     谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。<br>
     被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
   </div>
-  <s-icon slot="end" name="star" style="margin-right: 8px"></s-icon>
+  <s-icon slot="end" name="star" style="margin-right: 16px"></s-icon>
 </s-field-set>
 ```
 
@@ -30,7 +30,7 @@
 
 ```html preview
 <s-field-set>
-  <div>
+  <div slot="body">
     谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。<br>
     被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
   </div>
@@ -43,8 +43,8 @@
 
 ```html preview
 <s-field-set focused>
-  <div slot="title">浣溪沙·谁念西风独自凉</div>
-  <div>
+  <div slot="legend">浣溪沙·谁念西风独自凉</div>
+  <div slot="body">
     浣溪沙·谁念西风独自凉<br>
     谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。<br>
     被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
@@ -58,7 +58,7 @@
 
 ```html preview
 <s-field-set floating>
-  <div slot="title">浣溪沙·谁念西风独自凉</div>
+  <div slot="legend">浣溪沙·谁念西风独自凉</div>
 </s-field-set>
 <s-button onclick="this.previousElementSibling.floating=!this.previousElementSibling.floating"> 切换 </s-button>
 ```
@@ -78,8 +78,8 @@
 </style>
 <template>
   <s-field-set class="field-set">
-    <div slot="title">浣溪沙·谁念西风独自凉</div>
-    <div>
+    <div slot="legend">浣溪沙·谁念西风独自凉</div>
+    <div slot="body">
       谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。<br>
       被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常
     </div>
@@ -98,18 +98,19 @@
 
 ## 插槽
 
-| 名称  | 说明       |
-| ----- | ---------- |
-| 匿名  | 自定义内容 |
-| title | 标题       |
-| start | 开始       |
-| end   | 结尾       |
+| 名称   | 说明       |
+| ------ | ---------- |
+| 匿名   | 自定义内容 |
+| legend | 标题       |
+| body   | 主体内容   |
+| start  | 开始       |
+| end    | 结尾       |
 
 ## CSS 样式变量
 
 | 名称                                     | 说明                                       |
 | ---------------------------------------- | ------------------------------------------ |
-| --s-field-set-title-gap                  | 标题的间距                                 |
+| --s-field-set-legend-gap                 | 标题的间距                                 |
 | --s-field-set-padding                    | 内间距，仅支持单数值，控制上下左右四个方向 |
 | --s-field-set-padding-top                | 顶部内间距                                 |
 | --s-field-set-padding-right              | 右侧内间距                                 |

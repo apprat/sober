@@ -38,7 +38,7 @@ const style = /*css*/`
 }
 :host([variant=surface]){
   background: ${scheme.color.surfaceContainerHigh};
-  color: ${scheme.color.onSurface};
+  color: ${scheme.color.onSurfaceVariant};
 }
 :host([variant=tonal-primary]){
   background: ${scheme.color.primaryContainer};

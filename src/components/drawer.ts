@@ -17,6 +17,7 @@ const style = /*css*/`
   display: flex;
   overflow: hidden;
   position: relative;
+  isolation: isolate;
   transition-property: none;
   transition-timing-function: ${scheme.motion.easing.standardDecelerate};
   transition-duration: ${scheme.motion.duration.medium2};
@@ -77,6 +78,7 @@ const style = /*css*/`
   min-width: 0;
   overflow: auto;
   position: relative;
+  isolation: isolate;
 }
 .scrim{
   position: absolute;
@@ -100,7 +102,6 @@ const style = /*css*/`
 .start{
   left: 0;
   right: auto;
-  order: -1;
 }
 ::slotted(:is([slot=start], [slot=end])){
   width: 260px;
@@ -110,19 +111,20 @@ const style = /*css*/`
   box-sizing: border-box;
   align-self: stretch;
   overflow: auto;
+  z-index: 1;
   background: ${scheme.color.surfaceContainerLow};
   border-width: var(--s-border-min, 1px);
   border-color: ${scheme.color.surfaceContainerHighest};
 }
 `
 const template = /*html*/`
+<div class="start" part="start">
+  <slot name="start"></slot>
+</div>
 <div class="view" part="view">
   <slot></slot>
 </div>
 <div class="scrim" part="scrim"></div>
-<div class="start" part="start">
-  <slot name="start"></slot>
-</div>
 <div class="end" part="end">
   <slot name="end"></slot>
 </div>

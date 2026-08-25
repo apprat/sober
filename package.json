@@ -1,6 +1,6 @@
 {
   "name": "sober",
-  "version": "2.0.0-alpha.17",
+  "version": "2.0.0-alpha.18",
   "description": "Sober is a library of UI components designed with reference to Material You.",
   "type": "module",
   "scripts": {
@@ -31,8 +31,8 @@
     "./utils/*": "./dist/core/utils/*.js",
     "./*": "./dist/components/*.js"
   },
-  "author": "unreal-space",
-  "repository": "unreal-space/sober",
+  "author": "miralm",
+  "repository": "miralm/sober",
   "homepage": "https://soberjs.com",
   "license": "MIT",
   "main": "./dist/main.js",
@@ -65,9 +65,9 @@
   ],
   "sponsors": [
     {
-      "name": "MangoTool",
+      "name": "LeapStella",
       "logo": "mangotool.png",
-      "url": "https://mangotool.cn"
+      "url": "leapstella.com"
     },
     {
       "name": "WaterPage",

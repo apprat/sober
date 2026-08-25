@@ -84,7 +84,7 @@ export class Tooltip extends useElement({
       popover.style.transformOrigin = position.origin.join(' ')
     }
     const open = async () => {
-      if (!this.isConnected || !info.parentNode || state.open) return
+      if (!this.isConnected || !info.parentNode || state.open || computedStyle.getValue('display') === 'none') return
       state.open = true
       popover.style.display = 'block'
       popover.style.removeProperty('top')
@@ -101,7 +101,7 @@ export class Tooltip extends useElement({
       this.dispatchEvent(new Event('opened'))
     }
     const close = async () => {
-      if (!this.isConnected || !state.open) return
+      if (!this.isConnected || !state.open || computedStyle.getValue('display') === 'none') return
       state.open = false
       await popover.animate({ opacity: [1, 0], transform: ['scale(1)', 'scale(.8)'] }, getAnimateOptions()).finished
       if (state.open) return

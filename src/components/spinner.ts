@@ -1,10 +1,10 @@
-import { useProps, useElement } from '../core/elements.js'
+import { useProps, useElement, useThrottle, print } from '../core/elements.js'
 import * as scheme from '../core/scheme.js'
 import { bezier } from '../core/utils/bezier.js'
 
 const config = {
+  size: 40,
   path: 100,
-  gap: 4,
   duration: 5400,
   segment: 667,
   expand: [0, 1350, 2700, 4050],
@@ -47,7 +47,8 @@ const props = useProps({
   indeterminate: false,
   $max: 100,
   $value: 0,
-  size: ['medium', 'large']
+  strokeWidth: 4,
+  strokeGap: 4,
 })
 
 const style = /*css*/`
@@ -55,29 +56,33 @@ const style = /*css*/`
   display: inline-block;
   vertical-align: middle;
   width: 40px;
-  height: auto;
   aspect-ratio: 1;
   -webkit-aspect-ratio: 1;
+  transition-property: none;
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
   color: ${scheme.color.primary};
   stroke: ${scheme.color.secondaryContainer};
 }
 .layout{
-  display: block;
-  width: 100%;
-  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-grow: 1;
+  aspect-ratio: 1;
+  -webkit-aspect-ratio: 1;
   &.min{
     .track{
       stroke-dasharray: 100px 0px;
       stroke-dashoffset: 0px;
     }
     .indicator{
-      filter: opacity(0);
+      opacity: 0;
     }
   }
   &.max .track{
-    filter: opacity(0);
+    opacity: 0;
   }
 }
 .icon{
@@ -99,7 +104,7 @@ const style = /*css*/`
   transform-origin: center;
   transition-timing-function: inherit;
   transition-duration: inherit;
-  stroke-width: 4px;
+  stroke-width: var(--s_spinner-stroke-width, 4px);
   transition-property: stroke-dasharray, stroke-dashoffset;
 }
 .track{
@@ -111,68 +116,70 @@ const style = /*css*/`
 .indicator{
   stroke-dasharray: var(--s_spinner-indicator-dasharray);
 }
+.text{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 :host([indeterminate]){
   .track,
   .indicator{
-    filter: opacity(1);
     animation-duration: ${config.duration}ms;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
   }
   .track{
     animation-name: track;
+    opacity: var(--s-spinner-track-opacity, 1);
   }
   .indicator{
     animation-name: indicator;
-  }
-}
-:host([size=large]){
-  width: 44px;
-  .track,
-  .indicator{
-    stroke-width: 8px;
+    opacity: var(--s-spinner-indicator-opacity, 1);
   }
 }
 `
 
 const template = /*html*/`
 <div class="layout min" part="layout">
-  <svg viewBox="0 0 40 40" class="icon" part="icon">
+  <svg class="icon" part="icon" viewBox="0 0 ${config.size} ${config.size}">
     <circle pathLength="${config.path}" cx="20" cy="20" r="18" class="track" part="track"></circle>
     <circle pathLength="${config.path}" cx="20" cy="20" r="18" class="indicator" part="indicator"></circle>
   </svg>
+  <div class="text" part="text">
+    <slot></slot>
+  </div>
 </div>
 `
-
-const getGapPerimeter = (width: number, strokeWidth: number) => (strokeWidth + config.gap) / (Math.PI * (width - strokeWidth)) * config.path
 
 export class Spinner extends useElement({
   style: [style, indeterminateStyle], props, template,
   setup(shadowRoot) {
-    const svg = shadowRoot.querySelector<SVGSVGElement>('svg')!
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
-    let gap = getGapPerimeter(40, 4)
-    const updateDashGap = () => layout.style.setProperty('--s_spinner-dash-gap', `${gap}px`)
-    updateDashGap()
-    const render = () => {
+    const getGapPerimeter = () => (this.strokeWidth + this.strokeGap) / (Math.PI * (config.size - this.strokeWidth)) * config.path
+    const updateGap = () => layout.style.setProperty('--s_spinner-dash-gap', `${getGapPerimeter()}px`)
+    updateGap()
+    const renderValue = () => {
       const v = Math.min(this.value, this.max) / this.max * 100
-      const double = gap * 2
+      const gap = getGapPerimeter()
       const offset = v + gap
       layout.classList.toggle('min', v === 0)
       layout.classList.toggle('max', offset + gap > 100)
-      layout.style.setProperty('--s_spinner-track-dasharray', `${100 - v - double}px ${v + double}px`)
+      layout.style.setProperty('--s_spinner-track-dasharray', `${100 - v - gap * 2}px ${v + gap * 2}px`)
       layout.style.setProperty('--s_spinner-track-dashoffset', `${offset * -1}px`)
       layout.style.setProperty('--s_spinner-indicator-dasharray', `${v}px ${100 - v}px`)
     }
+    const updateStroke = () => {
+      console.log('set w', this.strokeWidth)
+      layout.style.setProperty('--s_spinner-stroke-width', `${this.strokeWidth}px`)
+      updateGap()
+      useThrottle(renderValue)
+    }
     return {
-      value: render,
-      size: (v) => {
-        const isMedium = v === 'medium'
-        gap = isMedium ? getGapPerimeter(40, 4) : getGapPerimeter(44, 8)
-        svg.setAttribute('viewBox', isMedium ? '0 0 40 40' : '-2 2 44 44')
-        updateDashGap()
-        render()
-      }
+      value: () => useThrottle(renderValue),
+      strokeWidth: updateStroke,
+      strokeGap: updateStroke
     }
   }
 }) { }

@@ -15,41 +15,35 @@
     }
 
     .test {
+      position: relative;
       display: flex;
-      flex-wrap: wrap;
-      background: #114922;
+    }
+
+    .a {
+      position: relative;
+      background-color: red;
     }
 
     .b {
-      display: contents;
-      background: #841010;
-
-      .ba {
-        flex-grow: 1;
-      }
-
-      .bb {
-        flex-basis: 100%;
-        order: 1;
-        background: #2d0a4f;
-      }
+      position: relative;
+      background-color: blue;
+      margin: 0 -24px;
+      opacity: 0.5;
     }
 
     .c {
-      background: #0a4f2d;
+      position: relative;
+      background-color: yellow;
     }
   </style>
 </head>
 
 <body>
-
   <div class="test">
-    <div class="a">a</div>
-    <div class="b">
-      <div class="ba">ba</div>
-      <div class="bb">bb</div>
-    </div>
-    <div class="c">c</div>
+    <div class="a">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
+    <div class="b">bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</div>
+
+    <div class="c">ccccccccccccccccccccccccccccccccccccccc</div>
   </div>
 </body>
 

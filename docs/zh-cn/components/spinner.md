@@ -14,32 +14,38 @@
 <s-spinner indeterminate></s-spinner>
 ```
 
-## 较大的尺寸
+## 自定义尺寸
 
-设置 `size="large"` 属性定义较大的尺寸。
+你可以通过 `strokeWidth` 和 `strokeGap` 来设置进度条的宽度和间距。
 
 ```html preview
-<s-spinner size="large" value="60"></s-spinner>
-<s-spinner size="large" indeterminate></s-spinner>
+<s-spinner strokeWidth="6" strokeGap="4" style="width: 80px" value="80">80%</s-spinner>
+<s-spinner indeterminate strokeWidth="2" style="width: 80px"></s-spinner>
 ```
+
+> 注意：该组件会始终保持缩放比例，所以 `strokeWidth` 和 `strokeGap` 的尺寸设置始终相对于原始尺寸(`40px`)。  
+> 例如：组件的宽高设置为 `80px`，那么 `strokeWidth=4`，实际上渲染为 `8px`。  
+> 你总是可以使用 `值 * 40 / 宽度` 计算公式来定义绝对值。
 
 进度条会有过渡动画，如果你希望实时的变更进度，可以使用CSS `transition: none` 来禁用过渡。
 
 ```html preview
-<s-spinner value="84" style="transition: none"></s-spinner>
-<input type="range" min="0" max="100" value="84" oninput="this.previousElementSibling.value=this.value" />
+<s-spinner value="84" style="transition: none; width: 60px"></s-spinner><hr>
+
+<s-base-slider end="84" oninput="this.previousElementSibling.previousElementSibling.value=this.end"></s-base-slider>
 ```
 
 ---
 
 ## 属性
 
-| 名称          | 类型              | 默认值   | 同步 | 说明   |
-| ------------- | ----------------- | -------- | ---- | ------ |
-| size          | `medium`, `large` | `medium` | √    | 尺寸   |
-| indeterminate | `boolean`         | `false`  | √    | 未知的 |
-| max           | `number`          | `100`    | ×    | 最大值 |
-| value         | `number`          | `0`      | ×    | 当前值 |
+| 名称          | 类型      | 默认值  | 同步 | 说明     |
+| ------------- | --------- | ------- | ---- | -------- |
+| indeterminate | `boolean` | `false` | √    | 未知的   |
+| max           | `number`  | `100`   | ×    | 最大值   |
+| value         | `number`  | `0`     | ×    | 当前值   |
+| strokeWidth   | `number`  | `4`     | ×    | 线条宽度 |
+| strokeGap     | `number`  | `4`     | ×    | 线条间距 |
 
 ## 样式变量
 

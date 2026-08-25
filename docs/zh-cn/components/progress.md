@@ -6,14 +6,6 @@
 <s-progress value="60"></s-progress>
 ```
 
-## 尺寸
-
-设置 `size="large"` 定义较大的进度条。
-
-```html preview
-<s-progress size="large" value="60"></s-progress>
-```
-
 ## 未知的
 
 设置 `indeterminate` 属性定义未知的进度条。
@@ -36,7 +28,6 @@
 
 | 名称          | 类型              | 默认值   | 同步 | 说明   |     |
 | ------------- | ----------------- | -------- | ---- | ------ | --- |
-| size          | `medium`, `large` | `medium` | √    | 尺寸   |     |
 | indeterminate | `boolean`         | `false`  | √    | 未知的 |     |
 | max           | `number`          | `100`    | ×    | 最大值 |     |
 | value         | `number`          | `0`      | ×    | 当前值 |     |

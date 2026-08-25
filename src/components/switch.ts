@@ -9,7 +9,6 @@ const props = useProps({
   defualtChecked: false,
   name: '',
   $value: '',
-  $requiring: ''
 })
 
 const style = /*css*/`
@@ -191,13 +190,10 @@ export class Switch extends useElement({
     const updateFrom = () => {
       if (!info.internals.form) return
       let value: string | null = null
-      let valueMissing = false
       if (!this.disabled && this.value !== '' && this.name !== '') {
         value = this.checked ? this.value : null
-        if (this.requiring !== '') valueMissing = !this.checked
       }
       info.internals.setFormValue(value)
-      info.internals.setValidity({ valueMissing }, this.requiring, this)
     }
     this.addEventListener('click', () => {
       this.checked = !this.checked

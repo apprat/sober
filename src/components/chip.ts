@@ -56,7 +56,7 @@ const style = /*css*/`
     background: ${scheme.color.secondaryContainer};
     color: ${scheme.color.onSecondaryContainer};
     outline-color: ${scheme.color.primary};
-    &::after{
+    &::before{
       content: none;
     }
   }

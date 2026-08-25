@@ -3,16 +3,17 @@ import { Selector } from '../core/utils/selector.js'
 import { MediaQueryer } from '../core/utils/media-queryer.js'
 import * as scheme from '../core/scheme.js'
 import './ripple.js'
+import './field-set.js'
 
 const props = useProps({
   $name: '',
   $value: '',
+  label: '',
   $defaultValue: '',
   multiple: false,
+  searchable: false,
   selectable: true,
-  media: '',
-  $itemsOrientation: ['auto', 'horizontal', 'vertical'],
-  $media: '(orientation: portrait)'
+  variant: ['outlined', 'text']
 })
 const itemProps = useProps({
   $value: '',
@@ -22,20 +23,56 @@ const itemProps = useProps({
 
 const style = /*css*/`
 :host{
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  height: 64px;
-  overflow: hidden;
-  background: ${scheme.color.surfaceContainer};
+  display: inline-flex;
+  height: 40px;
+  line-height: 1;
+  cursor: pointer;
+  transition-timing-function: ${scheme.motion.easing.standard};
+  transition-duration: ${scheme.motion.duration.short4};
 }
-:host([item-vertical]){
-  --s_navigation_bar_item_font-size: 12px;
-  --s_navigation_bar_item_layout_flex-direction: column;
-  --s_navigation_bar_item_layout_gap: 2px;
-  --s_navigation_bar_item_indicator_inset: auto;
-  --s_navigation_bar_item_indicator_height: 32px;
-  --s_navigation_bar_item_indicator_width: 56px;
+.field-set{
+  line-height: inherit;
+  flex-grow: 1;
+  --s-field-set-padding-top: 0px;
+  --s-field-set-padding-bottom: 0px;
+  --s-field-set-padding-left: var(--s_text-field-padding-left);
+  --s-field-set-padding-right: var(--s_text-field-padding-right);
+  --s-field-set-border-top-left-radius: var(--s_text-field-border-top-left-radius);
+  --s-field-set-border-top-right-radius: var(--s_text-field-border-top-right-radius);
+  --s-field-set-border-bottom-left-radius: var(--s_text-field-border-bottom-left-radius);
+  --s-field-set-border-bottom-right-radius: var(--s_text-field-border-bottom-right-radius);
+  --s-field-set-border-color: var(--s_text-field-border-color);
+  --s-field-set-border-color-focused: var(--s_text-field-border-color-focused);
+  --s-field-set-border-width: var(--s_text-field-border-width);
+  --s-field-set-border-width-focused: var(--s_text-field-border-width-focused);
+  --s-field-set-legend-gap: var(--s_text-field-label-gap);
+}
+.items{
+  display: none;
+}
+.layout{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.text{
+  flex-grow: 1;
+  height: fit-content;
+}
+svg{
+  width: 24px;
+  margin-right: -8px;
+  fill: ${scheme.color.onSurfaceVariant};
+}
+:host([variant=text]){
+  .field-set{
+    --s-field-set-border-width: 0px;
+  }
+  .label{
+    display: none;
+  }
 }
 `
 
@@ -50,127 +87,25 @@ const itemStyle = /*css*/`
   transition-timing-function: ${scheme.motion.easing.standard};
   transition-duration: ${scheme.motion.duration.short4};
 }
-.layout{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  height: 100%;
-  gap: 8px;
-  padding: 0 16px;
-  &.has-icon{
-    .ripple{
-      .icon{
-        display: flex;
-        position: relative;
-      }
-      ::slotted(s-badge){
-        position: absolute;
-        top: 2px;
-        right: 2px;
-        transform: translate(50%, -50%);
-      }
-    }
-  }
-  &.has-icon.has-text{
-    flex-direction: var(--s_navigation_bar_item_layout_flex-direction, row);
-    gap: var(--s_navigation_bar_item_layout_gap, 8px);
-    padding: var(--s_navigation_bar_item_layout_padding, 0 16px);
-    .ripple{
-      display: flex;
-      height: var(--s_navigation_bar_item_indicator_height, 100%);
-      &::part(container),
-      &::before,
-      &::after {
-        inset: var(--s_navigation_bar_item_indicator_inset, auto 0);
-        border-radius: calc(var(--s_navigation_bar_item_indicator_height, 40px) / 2);
-        width: var(--s_navigation_bar_item_indicator_width, 100%);
-        height: var(--s_navigation_bar_item_indicator_height, 40px);
-      }
-    }
-    ::slotted([slot=text]){
-      font-size: calc(var(--s-font-size, 1) * var(--s_navigation_bar_item_font-size, 14px));
-    }
-  }
-  .ripple{
-    display: contents;
-    position: static;
-    justify-content: center;
-    align-items: center;
-    overflow: visible;
-    &::part(container),
-    &::before,
-    &::after{
-      content: '';
-      position: absolute;
-      overflow: hidden;
-      inset: auto 0;
-      border-radius: 20px;
-      width: 100%;
-      height: 40px;
-    }
-    &::after{
-      background: currentColor;
-      filter: opacity(.1);
-      opacity: 0;
-    }
-    &::before{
-      opacity: 0;
-      transform: scaleX(.5);
-      transition-property: transform, opacity;
-      transition-duration: inherit;
-      background: ${scheme.color.secondaryContainer};
-    }
-    .icon{
-      display: contents;
-    }
-  }
-}
-::slotted(:is(s-icon, svg)[slot=icon]){
-  width: 24px;
-  height: 24px;
-  color: currentColor;
-  fill: currentColor;
-  position: relative;
-}
-::slotted([slot=text]){
-  position: relative;
-  line-height: 1;
-  font-weight: 500;
-  font-size: calc(var(--s-font-size, 1) * 14px);
-}
-::slotted(s-badge){
-  position: relative;
-  order: 1;
-}
-:host(:focus-visible){
-  outline: none;
-  .ripple::after{
-    opacity: 1;
-  }
-}
-:host([selected]){
-  color: ${scheme.color.primary};
-  .ripple::before{
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
 `
 
 const template = /*html*/`
-<slot></slot>
+<s-field-set class="field-set">
+  <div slot="legend" class="label" part="label"></div>
+  <div slot="body" class="layout" part="layout">
+    <div class="text" part="text">贵阳</div>
+    <svg viewBox="0 -960 960 960"><path d="M480-360 280-560h400L480-360Z"></path></svg>
+    <s-ripple></s-ripple>
+  </div>
+</s-field-set>
+<div class="items">
+  <slot></slot>
+</div>
 `
 
 const itemTemplate = /*html*/`
 <div class="layout" part="layout">
-  <s-ripple class="ripple" part="ripple" ancestorLevel="1">
-    <div class="icon">
-      <slot name="icon"></slot>
-      <slot></slot>
-    </div>
-  </s-ripple>
-  <slot name="text"></slot>
+  <slot>x</slot>
 </div>
 `
 
@@ -178,11 +113,12 @@ export class Picker extends useElement({
   style, props, template,
   states: ['formable'],
   setup(shadowRoot, info) {
+    const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const slot = shadowRoot.querySelector<HTMLSlotElement>('slot')!
+    const label = shadowRoot.querySelector<HTMLDivElement>('.label')!
     const selector = new Selector(this, slot, PickerItem)
-    const mediaQueryer = new MediaQueryer(this.media)
     selector.onValueChange = () => info.internals.setFormValue(selector.getFormData())
-    mediaQueryer.onChange = (v) => this.itemsOrientation === 'auto' && this.toggleAttribute('item-vertical', v)
+    //mediaQueryer.onChange = (v) => this.itemsOrientation === 'auto' && this.toggleAttribute('item-vertical', v)
     return {
       expose: {
         get items() {
@@ -203,11 +139,7 @@ export class Picker extends useElement({
       },
       onFormReset: () => this.value = this.defaultValue,
       value: (v) => selector.value = v,
-      media: (v) => mediaQueryer.replace(v),
-      itemsOrientation: (v) => {
-        if (v === 'auto') return mediaQueryer.call()
-        this.toggleAttribute('item-vertical', v === 'vertical')
-      }
+      label: (v) => label.textContent = v,
     }
   }
 }) { }
@@ -221,8 +153,8 @@ export class PickerItem extends useElement({
     const layout = shadowRoot.querySelector<HTMLDivElement>('.layout')!
     const iconSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=icon]')!
     const textSlot = shadowRoot.querySelector<HTMLSlotElement>('slot[name=text]')!
-    iconSlot.addEventListener('slotchange', () => layout.classList.toggle('has-icon', iconSlot.assignedElements().length > 0))
-    textSlot.addEventListener('slotchange', () => layout.classList.toggle('has-text', textSlot.assignedElements().length > 0))
+    //iconSlot.addEventListener('slotchange', () => layout.classList.toggle('has-icon', iconSlot.assignedElements().length > 0))
+    //textSlot.addEventListener('slotchange', () => layout.classList.toggle('has-text', textSlot.assignedElements().length > 0))
     this.addEventListener('click', () => this.dispatchEvent(new Event(`${name}:toggle`, { bubbles: true })))
     return {
       selected: () => this.dispatchEvent(new Event(`${name}:selected`, { bubbles: true })),

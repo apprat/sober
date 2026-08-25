@@ -5,29 +5,29 @@
 ```html preview
 <s-nav-adaptive>
   <s-nav-adaptive-item selected>
-    <s-icon name="home" slot="icon"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <div slot="text"> 首页 </div>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item>
-    <s-icon name="star" slot="icon"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <div slot="text"> 动态 </div>
     <s-badge></s-badge>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item>
-    <s-icon name="favorite" slot="icon"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <div slot="text"> 发现 </div>
     <s-badge>3</s-badge>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item>
-    <s-icon name="dark_mode" slot="icon"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <div slot="text"> 帮助 </div>
     <s-badge>99</s-badge>
   </s-nav-adaptive-item>
   <s-icon-button slot="action">
-    <s-icon name="search"></s-icon>
+    <s-icon></s-icon>
   </s-icon-button>
   <s-icon-button slot="toggle" width="narrow"> 
-    <s-icon name="more_vert"></s-icon>
+    <s-icon></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
 </s-nav-adaptive>
@@ -38,7 +38,7 @@
 ```html preview
 <s-nav-adaptive>
   <s-icon-button slot="toggle" width="narrow"> 
-    <s-icon name="more_vert"></s-icon>
+    <s-icon></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
   <s-nav-adaptive-item selected>
@@ -64,25 +64,25 @@
 ```html preview
 <s-nav-adaptive>
   <s-icon-button slot="toggle" width="narrow"> 
-    <s-icon name="more_vert"></s-icon>
+    <s-icon></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
   <s-nav-adaptive-item selected>
-    <s-icon name="home" slot="icon"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <s-tooltip> 首页 </s-tooltip>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item>
-    <s-icon name="star" slot="icon"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <s-tooltip> 动态 </s-tooltip>
     <s-badge></s-badge>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item>
-    <s-icon name="favorite" slot="icon"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <s-tooltip> 发现 </s-tooltip>
     <s-badge>3</s-badge>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item>
-    <s-icon name="dark_mode" slot="icon"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <s-tooltip> 帮助 </s-tooltip>
     <s-badge>99</s-badge>
   </s-nav-adaptive-item>
@@ -94,30 +94,30 @@
 ```html preview
 <s-app-bar>
   <s-icon-button slot="nav">
-    <s-icon name="menu"></s-icon>
+    <s-icon></s-icon>
   </s-icon-button>
   <span slot="title"> Material Sober </span>
   <s-nav-adaptive>
     <s-icon-button slot="toggle" width="narrow"> 
-      <s-icon name="more_vert"></s-icon>
+      <s-icon></s-icon>
       <s-tooltip> 更多 </s-tooltip>
     </s-icon-button>
     <s-nav-adaptive-item selected>
-      <s-icon name="home" slot="icon"></s-icon>
+      <s-icon slot="icon"></s-icon>
       <div slot="text"> 首页 </div>
     </s-nav-adaptive-item>
     <s-nav-adaptive-item>
-      <s-icon name="star" slot="icon"></s-icon>
+      <s-icon slot="icon"></s-icon>
       <div slot="text"> 动态 </div>
       <s-badge></s-badge>
     </s-nav-adaptive-item>
     <s-nav-adaptive-item>
-      <s-icon name="favorite" slot="icon"></s-icon>
+      <s-icon slot="icon"></s-icon>
       <div slot="text"> 发现 </div>
       <s-badge>3</s-badge>
     </s-nav-adaptive-item>
     <s-nav-adaptive-item>
-      <s-icon name="dark_mode" slot="icon"></s-icon>
+      <s-icon slot="icon"></s-icon>
       <div slot="text"> 帮助 </div>
       <s-badge>99</s-badge>
     </s-nav-adaptive-item>
@@ -134,20 +134,20 @@
 ```html preview
 <s-nav-adaptive>
   <s-icon-button slot="toggle" width="narrow"> 
-    <s-icon name="more_vert"></s-icon>
+    <s-icon></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
   <s-nav-adaptive-item>
-    <s-icon slot="icon" name="home"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <div slot="text"> 首页 </div>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item selected> <!-- [!code highlight] -->
-    <s-icon slot="icon" name="light_mode"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item>
-    <s-icon slot="icon" name="favorite"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
   </s-nav-adaptive-item>
@@ -159,20 +159,20 @@
 ```html preview
 <s-nav-adaptive value="a2"> <!-- [!code highlight] -->
   <s-icon-button slot="toggle" width="narrow"> 
-    <s-icon name="more_vert"></s-icon>
+    <s-icon></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
   <s-nav-adaptive-item value="a1">
-    <s-icon slot="icon" name="home"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <div slot="text"> 首页 </div>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item value="a2"> <!-- [!code highlight] -->
-    <s-icon slot="icon" name="light_mode"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item value="a3">
-    <s-icon slot="icon" name="favorite"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
   </s-nav-adaptive-item>
@@ -188,20 +188,20 @@
 ```html preview
 <s-nav-adaptive multiple value="a1,a2" onchange="console.log('selected', this.selectedIndexes)"> <!-- [!code highlight] -->
   <s-icon-button slot="toggle" width="narrow"> 
-    <s-icon name="more_vert"></s-icon>
+    <s-icon></s-icon>
     <s-tooltip> 更多 </s-tooltip>
   </s-icon-button>
   <s-nav-adaptive-item value="a1"> <!-- [!code highlight] -->
-    <s-icon slot="icon" name="home"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <div slot="text"> 首页 </div>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item value="a2"> <!-- [!code highlight] -->
-    <s-icon slot="icon" name="light_mode"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <s-badge></s-badge>
     <div slot="text"> 发现 </div>
   </s-nav-adaptive-item>
   <s-nav-adaptive-item value="a3">
-    <s-icon slot="icon" name="favorite"></s-icon>
+    <s-icon slot="icon"></s-icon>
     <s-badge>3</s-badge>
     <div slot="text"> 我的 </div>
   </s-nav-adaptive-item>
@@ -216,19 +216,19 @@
 <form method="get" action="http://coolaf.com/tool/params">
   <s-nav-adaptive name="navigation" value="a1,a2" defaultValue="a1,a2" multiple> <!-- [!code highlight] -->
     <s-icon-button slot="toggle" width="narrow"> 
-      <s-icon name="more_vert"></s-icon>
+      <s-icon></s-icon>
       <s-tooltip> 更多 </s-tooltip>
     </s-icon-button>
     <s-nav-adaptive-item value="a1"> 
-      <s-icon slot="icon" name="home"></s-icon>
+      <s-icon slot="icon"></s-icon>
       <div slot="text"> 首页 </div>
     </s-nav-adaptive-item>
     <s-nav-adaptive-item value="a2"> 
-      <s-icon slot="icon" name="light_mode"></s-icon>
+      <s-icon slot="icon"></s-icon>
       <div slot="text"> 发现 </div>
     </s-nav-adaptive-item>
     <s-nav-adaptive-item value="a3"> 
-      <s-icon slot="icon" name="favorite"></s-icon>
+      <s-icon slot="icon"></s-icon>
       <div slot="text"> 我的 </div>
     </s-nav-adaptive-item>
   </s-nav-adaptive>

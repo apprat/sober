@@ -118,7 +118,7 @@ ol>li::before {
 
 hr {
   border: none;
-  border-top: solid var(--s-border-min, 1px) var(--s-color-surface-container-highest);
+  border-top: solid var(--s-border-min, 1px) var(--s-color-outline-variant);
 }
 
 code {

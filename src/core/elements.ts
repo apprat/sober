@@ -472,16 +472,19 @@ export const getParentDepth = (el: HTMLElement & { parentDepth: number }) => {
   return ancestor
 }
 
-// const div = document.createElement('div')
-// div.setAttribute('style', `position: fixed;font-size: 12px; width: 100%;top: 0;left: 0; pointer-events: none;z-index: 99;color: #fff;background: rgba(0,0,0,0.8);`)
-// document.body.appendChild(div)
+const div = document.createElement('div')
+div.setAttribute('style', `position: fixed;font-size: 12px; width: 100%;max-height: 50%;padding: 0 12px;overflow: hidden;top: 0;left: 0; pointer-events: none;z-index: 99;color: #fff;background: rgba(0,0,0,0.5);`)
+if (['1996', '1104'].includes(window.location.port)) {
+  document.body.appendChild(div)
+}
 
-// export const print = (...values: any[]) => {
-//   const fragment = document.createDocumentFragment()
-//   values.forEach((value) => {
-//     const text = document.createTextNode(`${String(value)},`)
-//     fragment.appendChild(text)
-//   })
-//   div.appendChild(fragment)
-//   div.appendChild(document.createElement('hr'))
-// }
+export const print = (...values: any[]) => {
+  const fragment = document.createDocumentFragment()
+  const date = new Date()
+  values.forEach((value) => {
+    const text = document.createTextNode(`${date.getMinutes()}:${date.getMilliseconds()}: ${String(value)},`)
+    fragment.appendChild(text)
+  })
+  div.insertBefore(fragment, div.firstChild)
+  div.insertBefore(document.createElement('hr'), div.firstChild)
+}

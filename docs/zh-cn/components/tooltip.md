@@ -58,7 +58,8 @@
   <div slot="title"> 遣悲怀三首·其二 </div>
   昔日戏言身后意，今朝都到眼前来
   <!--设置插槽和层级-->
-  <s-tooltip slot="toggle" parentDepth="1"> <!-- [!code highlight] -->
+  <svg viewBox="0 -960 960 960" slot="toggle-icon"><path d="M480-345 240-585l56-56 184 183 184-183 56 56-240 240Z"></path></svg>
+  <s-tooltip slot="toggle-icon" parentDepth="1"> <!-- [!code highlight] -->
     提示信息
   </s-tooltip>
 </s-alert>

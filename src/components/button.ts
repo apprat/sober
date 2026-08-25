@@ -84,7 +84,7 @@ const style = /*css*/`
       background: ${scheme.color.inverseSurface};
       color: ${scheme.color.inverseOnSurface};
       outline-color: ${scheme.color.inverseSurface};
-      &::after{
+      &::before{
         content: none;
       }
     }

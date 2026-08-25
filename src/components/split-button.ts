@@ -16,6 +16,7 @@ const style = /*css*/`
   border-radius: 20px;
   visibility: hidden;
   outline-color: currentColor;
+  isolation: isolate;
 }
 .btn{
   display: inherit;
@@ -28,6 +29,9 @@ const style = /*css*/`
   visibility: visible;
   background: inherit;
   box-shadow: inherit;
+  &:focus-visible{
+    z-index: 1;
+  }
 }
 .layout{
   padding: 0 12px 0 16px;
@@ -50,6 +54,7 @@ const style = /*css*/`
   -webkit-aspect-ratio: 1;
   svg{
     width: 20px;
+    height: 20px;
   }
   &:is([hover], [pressed]){
     border-top-left-radius: 12px;
@@ -59,10 +64,13 @@ const style = /*css*/`
 
 ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
   width: 20px;
+  height: 20px;
   font-size: 20px;
 }
 ::slotted([slot=toggle-icon]){
   width: 20px;
+  height: 20px;
+  font-size: 20px;
   margin-left: -1px;
 }
 :host([disabled]) .btn{
@@ -127,10 +135,14 @@ const style = /*css*/`
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 16px;
+    height: 16px;
+    font-size: 16px;
   }
   svg,
   ::slotted([slot=toggle-icon]){
     width: 18px;
+    height: 18px;
+    font-size: 18px;
     margin-left: -2px;
   }
 }
@@ -143,10 +155,14 @@ const style = /*css*/`
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 24px;
+    height: 24px;
+    font-size: 24px;
   }
   svg,
   ::slotted([slot=toggle-icon]){
     width: 26px;
+    height: 26px;
+    font-size: 26px;
     margin-left: -2px;
   }
 }
@@ -174,10 +190,14 @@ const style = /*css*/`
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 32px;
+    height: 32px;
+    font-size: 32px;
   }
   svg,
   ::slotted([slot=toggle-icon]){
     width: 38px;
+    height: 38px;
+    font-size: 38px;
     margin-left: -3px;
   }
 }
@@ -205,10 +225,14 @@ const style = /*css*/`
   }
   ::slotted(:is(.icon, svg, s-icon, s-loading, s-spinner, ms-icon)){
     width: 40px;
+    height: 40px;
+    font-size: 40px;
   }
   svg,
   ::slotted([slot=toggle-icon]){
     width: 50px;
+    height: 50px;
+    font-size: 50px;
     margin-left: -6px;
   }
 }
